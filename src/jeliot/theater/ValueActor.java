@@ -48,11 +48,6 @@ public class ValueActor extends Actor {
     /**
 	 *
 	 */
-	private int swidth;
-
-    /**
-	 *
-	 */
 	private int margin = 2;
 
     /**

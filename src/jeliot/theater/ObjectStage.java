@@ -259,7 +259,7 @@ public class ObjectStage extends InstanceActor {
                 h = size.height;
                 full = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor) ObjectStage.this);
+                this.addActor(ObjectStage.this);
                 setLocation(loc);
                 setSize(size);
                 setLight(HIGHLIGHT);
@@ -285,7 +285,7 @@ public class ObjectStage extends InstanceActor {
             }
 
             public void finalFinish() {
-                this.passivate((Actor) ObjectStage.this);
+                this.passivate(ObjectStage.this);
             }
         };
     }
@@ -306,7 +306,7 @@ public class ObjectStage extends InstanceActor {
                 full = nheight + margin * 3;
                 h = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor) ObjectStage.this);
+                this.addActor(ObjectStage.this);
                 setSize(size);
                 paintVars = false;
                 repaint();
@@ -323,7 +323,7 @@ public class ObjectStage extends InstanceActor {
             }
 
             public void finish() {
-                this.removeActor((Actor) ObjectStage.this);
+                this.removeActor(ObjectStage.this);
             }
         };
     }

@@ -210,8 +210,8 @@ public class OMIActor extends Actor implements ActorContainer{
 	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
 	 */
 	public void paintActor(Graphics g) {
-        int w = getWidth();
-        int h = getHeight();
+        //int w = getWidth();
+        //int h = getHeight();
 
         // draw background
         //g.setColor(bgcolor);

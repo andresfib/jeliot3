@@ -1,6 +1,5 @@
 package jeliot.calltree;
 
-
 /**
  * @author Niko Myller
  */
@@ -10,10 +9,12 @@ public class TreeBuilder {
      * Comment for <code>nodeNumber</code>
      */
     protected int nodeNumber = 0;
+
     /**
      * Comment for <code>tree</code>
      */
     protected Tree tree;
+
     /**
      * Comment for <code>currentPosition</code>
      */
@@ -42,9 +43,7 @@ public class TreeBuilder {
             currentPosition.setProperty("element", node);
             currentPosition.setProperty("current", new Boolean(true));
         } else {
-            if (currentPosition == null) {
-                return false;
-            }
+            if (currentPosition == null) { return false; }
 
             TreeNode pos = new Node();
             pos.setProperty("element", node);
@@ -65,23 +64,24 @@ public class TreeBuilder {
     public boolean returnNode(String returnValue) {
         if (nodeNumber == 0 || currentPosition == null) {
             return false;
-        } else {
-            if (currentPosition == null) {
-                return false;
-            }
-
-            if (currentPosition.isRoot()) {
-                currentPosition.destroyProperty("current");
-                currentPosition.setProperty("return", returnValue);
-                currentPosition = null;
-            } else {
-                TreeNode pos = currentPosition.getParent();
-                currentPosition.destroyProperty("current");
-                currentPosition.setProperty("return", returnValue);
-                pos.setProperty("current", new Boolean(true));
-                currentPosition = pos;
-            }
         }
+        
+        if (currentPosition == null) {
+            return false;
+        }
+
+        if (currentPosition.isRoot()) {
+            currentPosition.destroyProperty("current");
+            currentPosition.setProperty("return", returnValue);
+            currentPosition = null;
+        } else {
+            TreeNode pos = currentPosition.getParent();
+            currentPosition.destroyProperty("current");
+            currentPosition.setProperty("return", returnValue);
+            pos.setProperty("current", new Boolean(true));
+            currentPosition = pos;
+        }
+
         return true;
     }
 }

@@ -151,11 +151,17 @@ public class Interpreter {
 
     /**
      * currentMethodInvocation keeps track of all the information that is
-     * collected during the method invocation. Cells: 0: Method name 1:
-     * Class/Object expression 2: Parameter values 3: Parameter types 4:
-     * Parameter names 5: Highlight info for invocation 6: Highlight info for
-     * declaration 7: Parameter expression references 8: Object reference if
-     * method is constructor or object method
+     * collected during the method invocation.
+     * Cells:
+     * 0: Method name
+     * 1: Class/Object expression
+     * 2: Parameter values
+     * 3: Parameter types
+     * 4: Parameter names
+     * 5: Highlight info for invocation
+     * 6: Highlight info for declaration
+     * 7: Parameter expression references
+     * 8: Object reference if method is constructor or object method
      */
     private Object[] currentMethodInvocation = null;
 
@@ -164,10 +170,6 @@ public class Interpreter {
      */
     private Stack objectCreation = new Stack();
 
-    /**
-     *  
-     */
-    private boolean readNew = true;
 
     /**
      * Related to Super method calls in constructor's first line in classes
@@ -231,7 +233,8 @@ public class Interpreter {
     public void initialize() {
         running = true;
         start = true;
-        Actor returnActor = null;
+        returnActor = null;
+        returnValue = null;
         currentMethodInvocation = null;
         currentClass = null;
         classes = new Hashtable();
@@ -240,8 +243,6 @@ public class Interpreter {
         values = new Hashtable();
         variables = new Hashtable();
         methodInvocation = new Stack();
-        Value returnValue = null;
-        Actor ReturnActor = null;
         postIncsDecs = new Hashtable();
         instances = new Hashtable();
         classes = new Hashtable();
@@ -1230,7 +1231,7 @@ public class Interpreter {
                                 director.beginBinaryExpression(val, operator,
                                         expressionReference, highlight);
                             } else if (command == Code.RIGHT) {
-                                ExpressionActor ea = (ExpressionActor) director
+                                ExpressionActor ea = director
                                         .getCurrentScratch().findActor(
                                                 expressionReference);
                                 if (ea != null) {
@@ -1681,7 +1682,7 @@ public class Interpreter {
 
                             } else if (command == Code.RIGHT) {
 
-                                ExpressionActor ea = (ExpressionActor) director
+                                ExpressionActor ea = director
                                         .getCurrentScratch().findActor(
                                                 expressionReference);
                                 if (ea != null) {
@@ -1779,9 +1780,10 @@ public class Interpreter {
                             methodInvocation.push(currentMethodInvocation);
                         }
                         currentMethodInvocation = new Object[9];
-
-                        int n = currentMethodInvocation.length;
+                        
                         /*
+                         * int n = currentMethodInvocation.length;
+                         *
                          * for (int i = 0; i < n; i++) {
                          * currentMethodInvocation[i] = null; }
                          */
@@ -2049,7 +2051,7 @@ public class Interpreter {
                             int i = 0;
                             while (i < parameterExpressionReferences.length) {
                                 Object[] postIncDec = (Object[]) postIncsDecs
-                                        .remove(((Long) parameterExpressionReferences[i]));
+                                        .remove(parameterExpressionReferences[i]);
                                 if (postIncDec != null) {
                                     doPostIncDec(postIncDec);
                                 }
@@ -2958,7 +2960,7 @@ public class Interpreter {
 
                             } else if (command == Code.RIGHT) {
 
-                                ExpressionActor ea = (ExpressionActor) director
+                                ExpressionActor ea = director
                                         .getCurrentScratch().findActor(
                                                 expressionReference);
                                 if (ea != null) {
@@ -3363,7 +3365,7 @@ public class Interpreter {
 
             } else if (command == Code.RIGHT) {
 
-                ExpressionActor ea = (ExpressionActor) director
+                ExpressionActor ea = director
                         .getCurrentScratch().findActor(expressionReference);
 
                 if (ea != null) {
@@ -3402,7 +3404,7 @@ public class Interpreter {
      */
     public void doPostIncDec(Object[] postIncDecInfo) {
 
-        Variable var = (Variable) variables.remove(((Long) postIncDecInfo[1]));
+        Variable var = (Variable) variables.remove(postIncDecInfo[1]);
 
         director.animatePreIncDec(((Long) postIncDecInfo[0]).intValue(), var,
                 ((Value) postIncDecInfo[2]), ((Highlight) postIncDecInfo[3]));

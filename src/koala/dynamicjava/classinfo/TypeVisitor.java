@@ -42,6 +42,7 @@ import koala.dynamicjava.tree.visitor.VisitorObject;
  */
 
 public class TypeVisitor extends VisitorObject {
+
     /**
      * The class finder for this class
      */
@@ -58,8 +59,8 @@ public class TypeVisitor extends VisitorObject {
      * @param ctx the context
      */
     public TypeVisitor(ClassFinder cf, ClassInfo ctx) {
-	classFinder = cf;
-	context     = ctx;
+        classFinder = cf;
+        context = ctx;
     }
 
     /**
@@ -68,7 +69,7 @@ public class TypeVisitor extends VisitorObject {
      * @return the representation of the visited type
      */
     public Object visit(PrimitiveType node) {
-	return new JavaClassInfo(node.getValue());
+        return new JavaClassInfo(node.getValue());
     }
 
     /**
@@ -78,7 +79,7 @@ public class TypeVisitor extends VisitorObject {
      * @exception NoClassDefFoundError if the class cannot be loaded
      */
     public Object visit(ReferenceType node) {
-	return lookupClass(node.getRepresentation(), context);
+        return lookupClass(node.getRepresentation(), context);
     }
 
     /**
@@ -88,8 +89,8 @@ public class TypeVisitor extends VisitorObject {
      * @exception NoClassDefFoundError if the class cannot be loaded
      */
     public Object visit(ArrayType node) {
-	ClassInfo ci = (ClassInfo)node.getElementType().acceptVisitor(this);
-	return ci.getArrayType();
+        ClassInfo ci = (ClassInfo) node.getElementType().acceptVisitor(this);
+        return ci.getArrayType();
     }
 
     /**
@@ -99,14 +100,18 @@ public class TypeVisitor extends VisitorObject {
      * @exception NoClassDefFoundError if the class cannot be loaded
      */
     private ClassInfo lookupClass(String s, ClassInfo c) {
-	try {
-	    if (c != null) {
-		return classFinder.lookupClass(s, c);
-	    } else {
-		return classFinder.lookupClass(s);
-	    }
-	} catch (ClassNotFoundException e) {
-	    throw new NoClassDefFoundError(e.getMessage());
-	}
+        try {
+            if (c != null) {
+                return classFinder.lookupClass(s, c);
+            } else {
+                return classFinder.lookupClass(s);
+            }
+        } catch (ClassNotFoundException e) {
+            //Jeliot 3
+            //System.out.println("String s = " + s);
+            //System.out.println("ClassInfo c = " + c); 
+            //System.out.println(c.getName());
+            throw new NoClassDefFoundError(e.getMessage());
+        }
     }
 }

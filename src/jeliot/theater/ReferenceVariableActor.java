@@ -162,9 +162,8 @@ public class ReferenceVariableActor extends VariableActor {
 	public Point reserve(ValueActor actor) {
         if (actor instanceof ReferenceActor) {
                return reserve((ReferenceActor) actor);
-        } else {
-               return super.reserve(actor);
         }
+        return super.reserve(actor);
     }
 
     /**
@@ -174,8 +173,8 @@ public class ReferenceVariableActor extends VariableActor {
 	public Point reserve(ReferenceActor actor) {
         this.reservedRefActor = actor;
         Point rp = getRootLocation();
-        int w = actor.width;
-        int h = actor.height;
+        //int w = actor.width;
+        //int h = actor.height;
         rp.translate(width - borderWidth - refWidth - 3,
                     (height - actor.height)/2 + borderWidth);
         return rp;

@@ -121,11 +121,6 @@ public class Director {
     /**
      *
      */
-    private LinesAndText lat;
-
-    /**
-     *
-     */
     private int runUntilLine = -1;
 
     /**
@@ -708,7 +703,7 @@ public class Director {
                 thisValueActor.setLocation(ai.getRootLocation());
             } else {
                 introduceLiteral(thisValue);
-                thisValueActor = (ValueActor) thisValue.getActor();
+                thisValueActor = thisValue.getActor();
             }
         }
 
@@ -947,9 +942,8 @@ public class Director {
 
         if (returnAct != null) {
             return (ValueActor) ((BubbleActor) returnAct).getActor();
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -2110,10 +2104,9 @@ public class Director {
             highlight(h);
             animator.animate(this);
             return animator.getReturnValue();
-        } else {
-            //TODO: Here should be an exception
-            return null;
         }
+        //TODO: Here should be an exception
+        return null;
     }
 
     /**

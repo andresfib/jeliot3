@@ -46,6 +46,7 @@ import koala.dynamicjava.util.ImportationManager;
  */
 
 public class TreeClassFinder implements ClassFinder {
+
     /**
      * The context
      */
@@ -68,31 +69,30 @@ public class TreeClassFinder implements ClassFinder {
      * @param cp  the class pool
      */
     public TreeClassFinder(Context ctx, Interpreter i, ClassPool cp) {
-	context     = ctx;
-	interpreter = i;
-	classPool   = cp;
+        context = ctx;
+        interpreter = i;
+        classPool = cp;
     }
 
-    
     /**
      * Returns the current interpreter
      */
     public Interpreter getInterpreter() {
-	return interpreter;
+        return interpreter;
     }
 
     /**
      * Returns the current package
      */
     public String getCurrentPackage() {
-	return context.getCurrentPackage();
+        return context.getCurrentPackage();
     }
 
     /**
      * Returns the importation manager
      */
     public ImportationManager getImportationManager() {
-	return context.getImportationManager();
+        return context.getImportationManager();
     }
 
     /**
@@ -102,14 +102,12 @@ public class TreeClassFinder implements ClassFinder {
      * @exception ClassNotFoundException if the class cannot be loaded
      */
     public ClassInfo lookupClass(String cname) throws ClassNotFoundException {
-	if (classPool.contains(cname)) {
-	    return classPool.get(cname);
-	}
-	try {
-	    return new JavaClassInfo(context.lookupClass(cname, null));
-	} catch (TreeCompiler.PseudoError e) {
-	    return e.getClassInfo();
-	}
+        if (classPool.contains(cname)) { return classPool.get(cname); }
+        try {
+            return new JavaClassInfo(context.lookupClass(cname, null));
+        } catch (TreeCompiler.PseudoError e) {
+            return e.getClassInfo();
+        }
     }
 
     /**
@@ -119,48 +117,42 @@ public class TreeClassFinder implements ClassFinder {
      * @return the class info
      * @exception ClassNotFoundException if the class cannot be loaded
      */
-    public ClassInfo lookupClass(String cname, ClassInfo cinfo)
-	throws ClassNotFoundException {
-	String name = cinfo.getName();
-	if (classPool.contains(cname)) {
-	    return classPool.get(cname);
-	} else {
-	    // cname represents perhaps an inner class
-	    String s = name + "$" + cname;
-	    if (classPool.contains(s)) {
-		return classPool.get(s);
-	    }
-	}
-	try {
-	    return new JavaClassInfo(context.lookupClass(cname, name));
-	} catch (ClassNotFoundException e) {
-	    // look after an inner class of the declaring class
-	    ClassInfo ci = cinfo.getDeclaringClass();
-	    try {
-		if (ci != null) {
-		    return new JavaClassInfo
-			(context.lookupClass(ci.getName() + "$" + cname));
-		}
-		throw new ClassNotFoundException(cname);
-	    } catch (ClassNotFoundException ex) {
-		// Look after an inner class of an ancestor
-		ci = cinfo;
-		while ((ci = ci.getSuperclass()) != null) {
-		    try {
-			return new JavaClassInfo
-			    (context.lookupClass(ci.getName() + "$" + cname));
-		    } catch (ClassNotFoundException e2) {
-		    } catch (TreeCompiler.PseudoError e2) {
-			return e2.getClassInfo();
-		    }
-		}
-	    } catch (TreeCompiler.PseudoError ex) {
-		return ex.getClassInfo();
-	    }
-	} catch (TreeCompiler.PseudoError e) {
-	    return e.getClassInfo();
-	}
-	throw new ClassNotFoundException(cname);
+    public ClassInfo lookupClass(String cname, ClassInfo cinfo) throws ClassNotFoundException {
+        String name = cinfo.getName();
+        if (classPool.contains(cname)) {
+            return classPool.get(cname);
+        } else {
+            // cname represents perhaps an inner class
+            String s = name + "$" + cname;
+            if (classPool.contains(s)) { return classPool.get(s); }
+        }
+        try {
+            return new JavaClassInfo(context.lookupClass(cname, name));
+        } catch (ClassNotFoundException e) {
+            // look after an inner class of the declaring class
+            ClassInfo ci = cinfo.getDeclaringClass();
+            try {
+                if (ci != null) { return new JavaClassInfo(context.lookupClass(ci.getName() + "$"
+                        + cname)); }
+                throw new ClassNotFoundException(cname);
+            } catch (ClassNotFoundException ex) {
+                // Look after an inner class of an ancestor
+                ci = cinfo;
+                while ((ci = ci.getSuperclass()) != null) {
+                    try {
+                        return new JavaClassInfo(context.lookupClass(ci.getName() + "$" + cname));
+                    } catch (ClassNotFoundException e2) {
+                    } catch (TreeCompiler.PseudoError e2) {
+                        return e2.getClassInfo();
+                    }
+                }
+            } catch (TreeCompiler.PseudoError ex) {
+                return ex.getClassInfo();
+            }
+        } catch (TreeCompiler.PseudoError e) {
+            return e.getClassInfo();
+        }
+        throw new ClassNotFoundException(cname);
     }
 
     /**
@@ -169,6 +161,6 @@ public class TreeClassFinder implements ClassFinder {
      * @param decl the type declaration
      */
     public ClassInfo addClassInfo(String cname, TypeDeclaration decl) {
-	return classPool.add(cname, new TreeClassInfo(decl, this));
+        return classPool.add(cname, new TreeClassInfo(decl, this));
     }
 }

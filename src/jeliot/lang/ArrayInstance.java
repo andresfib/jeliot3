@@ -158,9 +158,8 @@ public class ArrayInstance extends Instance {
         for (int i = 0; i < n; i++) {
             if (i == n - 1) {
                 return (VariableInArray) Array.get(tempArray, index[i]);
-            } else {
-                tempArray = Array.get(tempArray, index[i]);
             }
+            tempArray = Array.get(tempArray, index[i]);
         }
         return null;
     }

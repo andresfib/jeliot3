@@ -80,7 +80,7 @@ public class IndexActor extends Actor {
             double step;
 
             public void init() {
-                this.addActor((Actor)IndexActor.this);
+                this.addActor(IndexActor.this);
                 step = len / getDuration();
                 endPoint = new Point(startPoint);
             }
@@ -103,7 +103,7 @@ public class IndexActor extends Actor {
             }
 
             public void finalFinish() {
-                this.passivate((Actor)IndexActor.this);
+                this.passivate(IndexActor.this);
             }
         };
     }

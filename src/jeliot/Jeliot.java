@@ -491,7 +491,7 @@ public class Jeliot {
      * @param args
      * @throws IOException
      */
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) {
     	
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
@@ -532,7 +532,7 @@ public class Jeliot {
      * @return
      * @throws IOException
      */
-    public static Jeliot start(String args[]) throws IOException {
+    public static Jeliot start(String args[]) {
     	
         //Install a different look and feel; specifically, the Windows look and feel
     	/*
