@@ -11,7 +11,8 @@
 * Problems with memory when history view has a large images in store. (done, pictures saved on disk and users have a option to use history view or not)
 * Starting the animation with only a constructor (and not a method call) now works. setInside was peeking an empty stack. (done)
 * It is possible to choose a font of editor and code pane from Jeliot. (done)
-* Change properties to use property files and save some of the values to user default values in their home directory. (partially done, fonts should be saved.)
+* Change properties to use property files and save some of the values to user default values in their home directory. (done, although this could be for other properties as well.)
+* 2 and 3 -dimensional arrays (done partially, no support for array initializer)
 
 ----- JELIOT 3 TODO-LIST for next version 4.X:------
 
@@ -31,7 +32,6 @@ Language support:
 * Support other API classes and objects
 * Constructor calls highlighted correctly
 * super method calls go in the correct order
-* 2 -dimensional arrays
 * Super field access
 * Instance garbage collection
 * Support for inner classes
