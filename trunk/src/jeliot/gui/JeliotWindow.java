@@ -908,7 +908,7 @@ public class JeliotWindow {
             System.err.println(e.getMessage());
         }
     }
-
+/*
     public String replaceChar(String from, char c, String with) {
 
         int index = from.indexOf(c);
@@ -920,7 +920,7 @@ public class JeliotWindow {
         }
         return from;
     }
-
+*/
 
     /**
      * Tries to find the main method call from one of the classes.
@@ -928,9 +928,9 @@ public class JeliotWindow {
     public String findMainMethodCall(String programCode) {
 
         String commentsRemoved = removeComments(programCode);
-        commentsRemoved = replaceChar(commentsRemoved, '\n', " ");
-        commentsRemoved = replaceChar(commentsRemoved, '\r', " ");
-        commentsRemoved = replaceChar(commentsRemoved, '\t', " ");
+        commentsRemoved = ECodeUtilities.replace(commentsRemoved, "\n", " ");
+        commentsRemoved = ECodeUtilities.replace(commentsRemoved, "\r", " ");
+        commentsRemoved = ECodeUtilities.replace(commentsRemoved, "\t", " ");
 
         String mainMethod="static void main(";
         String classString = " class ";
@@ -954,7 +954,7 @@ public class JeliotWindow {
                     //System.out.println(classNameIndex);
                     if (classNameIndex > -1) {
                         String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main(new String[0]);";
-                        mainMethodCall = replaceChar(mainMethodCall, '{', "");
+                        mainMethodCall = ECodeUtilities.replace(mainMethodCall, "{", "");
                         //System.out.println(mainMethodCall);
                         return mainMethodCall;
                     }
@@ -965,7 +965,7 @@ public class JeliotWindow {
                         //System.out.println(classNameIndex);
                         if (classNameIndex > -1) {
                             String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main(new String[0]);";
-                            mainMethodCall = replaceChar(mainMethodCall, '{', "");
+                            mainMethodCall = ECodeUtilities.replace(mainMethodCall, "{", "");
                             //System.out.println(mainMethodCall);
                             return mainMethodCall;
                         }
@@ -999,7 +999,7 @@ public class JeliotWindow {
                     //System.out.println(classNameIndex);
                     if (classNameIndex > -1) {
                         String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main();";
-                        mainMethodCall = replaceChar(mainMethodCall, '{', "");
+                        mainMethodCall = ECodeUtilities.replace(mainMethodCall, "{", "");
                         //System.out.println(mainMethodCall);
                         return mainMethodCall;
                     }
@@ -1010,7 +1010,7 @@ public class JeliotWindow {
                         //System.out.println(classNameIndex);
                         if (classNameIndex > -1) {
                             String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main();";
-                            mainMethodCall = replaceChar(mainMethodCall, '{', "");
+                            mainMethodCall = ECodeUtilities.replace(mainMethodCall, "{", "");
                             //System.out.println(mainMethodCall);
                             return mainMethodCall;
                         }
@@ -1030,22 +1030,22 @@ public class JeliotWindow {
         String beginningComment = "/*";
         String endingComment = "*/";
 
-        int index = programCode.indexOf(lineComment);
-
-        while (index > -1) {
-            int endIndex = programCode.indexOf('\n', index);
-            programCode = programCode.substring(0, index) +
-            programCode.substring(endIndex, programCode.length());
-            index = programCode.indexOf(lineComment);
-        }
-
-        index = programCode.indexOf(beginningComment);
+        int index = programCode.indexOf(beginningComment);
 
         while (index > -1) {
             int endIndex = programCode.indexOf(endingComment, index);
             programCode = programCode.substring(0, index) +
             programCode.substring(endIndex, programCode.length());
             index = programCode.indexOf(beginningComment);
+        }
+
+        index = programCode.indexOf(lineComment);
+
+        while (index > -1) {
+            int endIndex = programCode.indexOf('\n', index);
+            programCode = programCode.substring(0, index) +
+            programCode.substring(endIndex, programCode.length());
+            index = programCode.indexOf(lineComment);
         }
 
         return programCode;

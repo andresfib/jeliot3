@@ -127,34 +127,35 @@ public class ECodeUtilities {
 
         }
     }
-
-//     public static int resolveType(Class type) {
-//         if (type.isPrimitive()) {
-//             if (type.toString().equals(boolean.class.toString())) {
-//                 return ECodeUtilities.BOOLEAN;
-//             } else if (type.toString().equals(byte.class.toString())) {
-//                 return ECodeUtilities.BYTE;
-//             } else if (type.toString().equals(short.class.toString())) {
-//                 return ECodeUtilities.SHORT;
-//             } else if (type.toString().equals(int.class.toString())) {
-//                 return ECodeUtilities.INT;
-//             } else if (type.toString().equals(long.class.toString())) {
-//                 return ECodeUtilities.LONG;
-//             } else if (type.toString().equals(char.class.toString())) {
-//                 return ECodeUtilities.CHAR;
-//             } else if (type.toString().equals(float.class.toString())) {
-//                 return ECodeUtilities.FLOAT;
-//             } else if (type.toString().equals(double.class.toString())) {
-//                 return ECodeUtilities.DOUBLE;
-//             } else {
-//                 return ECodeUtilities.VOID;
-//             }
-//         } else if (type.toString().equals("".getClass().toString())) {
-//             return ECodeUtilities.STRING;
-//         } else {
-//             return ECodeUtilities.REFERENCE;
-//         }
-//     }
+/*
+    public static int resolveType(Class type) {
+        if (type.isPrimitive()) {
+            if (type.toString().equals(boolean.class.toString())) {
+                return ECodeUtilities.BOOLEAN;
+            } else if (type.toString().equals(byte.class.toString())) {
+                return ECodeUtilities.BYTE;
+            } else if (type.toString().equals(short.class.toString())) {
+                return ECodeUtilities.SHORT;
+            } else if (type.toString().equals(int.class.toString())) {
+                return ECodeUtilities.INT;
+            } else if (type.toString().equals(long.class.toString())) {
+                return ECodeUtilities.LONG;
+            } else if (type.toString().equals(char.class.toString())) {
+                return ECodeUtilities.CHAR;
+            } else if (type.toString().equals(float.class.toString())) {
+                return ECodeUtilities.FLOAT;
+            } else if (type.toString().equals(double.class.toString())) {
+                return ECodeUtilities.DOUBLE;
+            } else {
+                return ECodeUtilities.VOID;
+            }
+        } else if (type.toString().equals("".getClass().toString())) {
+            return ECodeUtilities.STRING;
+        } else {
+            return ECodeUtilities.REFERENCE;
+        }
+    }
+*/
 
     public static boolean isPrimitive(String type) {
         if (resolveType(type) != ECodeUtilities.REFERENCE) {
@@ -226,10 +227,11 @@ public class ECodeUtilities {
 
     public static String replace(String from, String c, String with) {
         int index = from.indexOf(c);
+        int l = c.length();
         while(index != -1) {
             from = from.substring(0, index) +
             with +
-            from.substring(index + 1, from.length());
+            from.substring(index + l, from.length());
             index = from.indexOf(c);
         }
         return from;
@@ -545,8 +547,8 @@ public class ECodeUtilities {
     public static void write(String str){
         if ( !EvaluationVisitor.isSetPreparing() ) {
 
-            ECodeUtilities.replace(str, "\n", "\\n");
-            ECodeUtilities.replace(str, "\r", "");
+            str = ECodeUtilities.replace(str, "\n", "\\n");
+            str = ECodeUtilities.replace(str, "\r", "");
             writer.println(str); // connected to jeliot
 
             //System.out.println(str);// Output to stdout ; debugging only

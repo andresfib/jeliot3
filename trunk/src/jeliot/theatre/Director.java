@@ -1514,6 +1514,7 @@ public class Director {
     }
 
     public void output(String str) {
+        str = ECodeUtilities.replace(str, "\\n", "\n");
         jeliot.output(str);
     }
 

@@ -16,6 +16,7 @@ import javax.swing.text.*;
 //import jeliot.parser.*;
 import jeliot.theatre.*;
 import jeliot.gui.*;
+import jeliot.ecode.*;
 
 /**
   * The simple code editor for the users to make the code for the animation theater.
@@ -484,11 +485,11 @@ public class CodeEditor extends JComponent {
      */
     public String getProgram() {
         String programCode = area.getText() + "\n";
-        programCode = replace(programCode, "\t", "    ");
+        programCode = ECodeUtilities.replace(programCode, "\t", "    ");
         return programCode;
     }
 
-    //Jeliot 3
+/*  //Jeliot 3
     public String replace(String from, String c, String with) {
         int index = from.indexOf(c);
         while(index != -1) {
@@ -499,7 +500,7 @@ public class CodeEditor extends JComponent {
         }
         return from;
     }
-
+*/
 
     /**
      * Method highlights the specified Statement area by selecting it.
