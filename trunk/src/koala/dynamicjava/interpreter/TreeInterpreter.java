@@ -1179,9 +1179,9 @@ public class TreeInterpreter implements Interpreter {
         	if (inThisCall){
         		methodName = "this";
         	}else { //inSuperCall
+                int depth = ((Integer) MCodeUtilities.superClassesStack.pop()).intValue();
+                MCodeUtilities.superClassesStack.push(new Integer(++depth));
         		/*
-        		int depth = ((Integer) MCodeUtilities.superClassesStack.pop()).intValue();
-        		MCodeUtilities.superClassesStack.push(new Integer(++depth));
         		for (int k = 0; k < depth - 1; k++) {
         			methodName += "super.";
         		}
