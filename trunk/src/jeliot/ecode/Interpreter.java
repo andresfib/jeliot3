@@ -1687,7 +1687,7 @@ public class Interpreter {
 
                                 Value[] args = null;
 
-                                if (((String) currentMethodInvocation[1]).equals("")) {
+                                if (currentMethodInvocation[1] != null && ((String) currentMethodInvocation[1]).equals("")) {
                                     //System.out.println("CI: " + "new " + ((String) currentMethodInvocation[0]));
                                     args = director.animateOMInvocation(
                                             "new " + ((String) currentMethodInvocation[0]),
@@ -1714,11 +1714,13 @@ public class Interpreter {
 
                                 String call;
 
-                                if (((String) currentMethodInvocation[1]).equals("")) {
+                                if (currentMethodInvocation[1] != null && ((String) currentMethodInvocation[1]).equals("")) {
                                     call = ((String) currentMethodInvocation[0]);
                                 } else if (((String) currentMethodInvocation[0]).equals("this.super")) {
                                     call = (String) currentMethodInvocation[0];
-                                } else {
+                                } else if (currentMethodInvocation[1] == null ){
+                                    call = (String) currentMethodInvocation[1];
+                                }else{
                                     call = ((String) currentMethodInvocation[1]) +
                                            "." +((String) currentMethodInvocation[0]);
                                 }
