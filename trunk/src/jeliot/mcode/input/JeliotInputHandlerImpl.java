@@ -62,6 +62,8 @@ public class JeliotInputHandlerImpl extends InputHandler  {
              return MCodeUtilities.readShort();        
         if (aClass.equals(boolean.class))
              return MCodeUtilities.readBoolean();
+        if (aClass.equals(String.class))
+            return MCodeUtilities.readString();
         throw new NoSuchMethodError("Input Method for class '"+aClass+"' not supported!");
     }
 
