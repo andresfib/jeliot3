@@ -1,6 +1,8 @@
 JELIOT 3 TODO-LIST
 
 * Initialization of object when it inherits user made class
+* Super method call with parameters in object creation with inheritance
+* Bad user code crashes Jeliot "}", error not being read by Interpreter
 * Documentation
 * Reference actors needs to be fixed in instances and in short distances
 * Execute until feature
@@ -25,4 +27,3 @@ JELIOT 3 TODO-LIST
   parameters or default constructor (Done)
 * Object's fields initial values (Partially done, but should be changed)
 * Simple build (DONE)
-
