@@ -182,7 +182,7 @@ public class JeliotWindow {
 
     /** This ImageLoader will load all the images. */
     private ImageLoader iLoad;
-
+    
     /** This variable will control the panels. */
     private PanelController panelController;
 
@@ -752,8 +752,8 @@ public class JeliotWindow {
      */
     private JButton makeControlButton(String label, String iconName) {
 
-        ImageIcon icon = new ImageIcon(bundle.getString("directory.images")
-                + iconName);
+        ImageIcon icon = new ImageIcon(this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+iconName));
+        	//new ImageIcon(bundle.getString("directory.images")+ iconName);
         JButton b = new JButton(label, icon);
         b.setVerticalTextPosition(AbstractButton.BOTTOM);
         b.setHorizontalTextPosition(AbstractButton.CENTER);

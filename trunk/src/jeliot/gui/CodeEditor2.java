@@ -54,6 +54,13 @@ public class CodeEditor2 extends JComponent {
     static private ResourceBundle bundle = ResourceBundle.getBundle(
             "jeliot.gui.resources.properties", Locale.getDefault());
 
+	/**
+	 * Image loader
+	 * 
+	 */
+	
+	private ImageLoader iLoad;
+    
     /**
      * The String for the basic code template that is shown to the user in the
      * beginning.
@@ -294,10 +301,10 @@ public class CodeEditor2 extends JComponent {
      * @return The constructed button from the given parameters.
      */
     private JButton makeToolButton(String label, String iconName,
-            ActionListener listener) {
-
-        ImageIcon icon = new ImageIcon(bundle.getString("directory.images")
-                + iconName);
+            ActionListener listener) {    	
+        ImageIcon icon = new ImageIcon(this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+iconName));
+        		//bundle.getString("directory.images")              + iconName);//iLoad.getIconImage(iconName);
+        	//
         JButton b = new JButton(label, icon);
         b.setVerticalTextPosition(AbstractButton.BOTTOM);
         b.setHorizontalTextPosition(AbstractButton.CENTER);

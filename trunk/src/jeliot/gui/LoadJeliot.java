@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JWindow;
 
-import jeliot.theater.*;
 
 /**
  * This class is not used in the current version of Jeliot.
