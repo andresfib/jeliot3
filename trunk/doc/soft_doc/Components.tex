@@ -314,7 +314,7 @@ assignment. Those that implement \p{ExpressionContainer}
 \p{Constructor\-Invocation}, \p{ObjectFieldAccess},
 \p{ArrayAccess}, \p{UnaryExpression}) are those that need another
 expression to be complete and meaningful. For example, an array
-access (\tt{buffer[3]} needs a qualified name (\tt{buffer}) where to look for the data, that
+access ({\tt buffer[3]} needs a qualified name ({\tt buffer}) where to look for the data, that
 qualified name is the expression contained in \p{ArrayAccess}. The interface
 \p{ExpressionStatement} is used only when \djava{} parses the
 source code to build the \p{ForStatement} node.

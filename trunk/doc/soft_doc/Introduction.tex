@@ -62,39 +62,24 @@ history of \jel{}, see \citep{Benari2002a}.
 \subsection{Release Notes}
 \label{sec:Release_Notes}
 
-\paragraph{version 3.2} contains documentation and supports
-inheritance, supports: inheritance of classes and \p{super()}
-method calls at the beginning of a constructor.
+\paragraph{Version 3.2} contains documentation and supports inheritance, supports: inheritance of classes and \p{super()} method calls at the beginning of a constructor.
 
-\paragraph{version 3.1} supports objects creation and object method
-calls. Line numbering was added for source code editor and viewer.
-Supports:
-\begin{itemize} \item User made classes, however,
-inheritance is not yet supported. \item Constructor calls. \item
-Object method calls. \item Object field access.
-\end{itemize}
-
+\paragraph{Version 3.1} supports objects creation and object method calls. Line numbering was added for source code editor and viewer. Supports: User made classes (inheritance is not yet supported), constructor calls, object method calls, object field accesses.
 
 \paragraph{Version 3.01} is a maintenance release. Bugs of the initial
 release were fixed. Support for \p{switch} statement was added.
 
-\paragraph{Version 3.0} is the initial public release. Supports:
-\begin{itemize}
-\item Values of type \p{String}, all primitive types. \item
-One-dimensional arrays with primitive types or strings as its
-component type. \item Expressions including all unary and binary
-operations except \p{instanceof}. \item All the control statements
-(\p{if}, \p{while}, etc.) except \p{switch} statement and
-conditional expression (\p{exp?exp1:exp2}). \item Method
-invocation, including recursive invocation.
-\end{itemize}
+\paragraph{Version 3.0} is the initial public release. Supports: Values of type \p{String} and all primitive types, one-dimensional arrays with primitive types or strings as their
+component type, expressions including all unary and binary operations except \p{instanceof}, all the control statements (\p{if}, \p{while}, etc.) except \p{switch} statement and conditional expression (\p{exp?exp1:exp2}), method invocations, including recursive invocations.
 
 \paragraph{Not implemented:}
 \begin{itemize}
-\item Static variables. \item Calls to \p{super()} with
-parameters. \item Super field accesses. \item Arrays with
-components of reference type (except \p{String}). \item
-Conditional expressions (\p{exp?exp1:exp2}). \item Array
-initializers. \item Java 2 SDK API classes' methods cannot return
-object or array types.
+\item Static variables.
+\item Calls to \p{super(...)} method with parameters.
+\item Super field accesses.
+\item Arrays with components of reference type (except \p{String})
+\item Two ore more dimensional arrays.
+\item Conditional expressions (\p{exp?exp1:exp2}).
+\item Array initializers.
+\item Java 2 SDK API classes' methods cannot return object (except \p{String} type) or array types (e.g. \p{object.getClass()} that returns a \p{Class} instance).
 \end{itemize}
