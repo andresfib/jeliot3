@@ -77,7 +77,7 @@ public class JeliotWindow {
      * The version information about Jeliot from name and version from the
      * resource bundle.
      */
-    private String jeliotVersion = bundle.getString("name")
+    private String jeliotVersion = bundle.getString("name") + " "
             + bundle.getString("version");
 
     /**
