@@ -32,7 +32,6 @@ public class ConstantBox extends Actor {
 	 */
 	public void paintActor(Graphics g) {
         //g.drawImage(image, 0, 0, null);
-        //HACK: I do not know if this works properly if it does not use the previous line.
         g.drawImage(image, 0, 0, dummy);
     }
     
@@ -41,7 +40,6 @@ public class ConstantBox extends Actor {
 	 */
 	public void calculateSize() {
         //setSize(image.getWidth(null), image.getHeight(null));
-        //HACK: I do not know if this works properly if it does not use the previous line.
         setSize(image.getWidth(dummy), image.getHeight(dummy));
     }
 }

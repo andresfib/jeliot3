@@ -33,7 +33,6 @@ public class ImageValueActor extends ValueActor {
 	 */
 	public void paintValue(Graphics g) {
         //g.drawImage(image, 0, 0, null);
-        //HACK: I am not sure if this works if it does not use the line above.
         g.drawImage(image, 0, 0, dummy);
     }
 
@@ -47,7 +46,6 @@ public class ImageValueActor extends ValueActor {
 	 */
 	public void calculateSize() {
         //setSize(image.getWidth(null), image.getHeight(null));
-        //HACK: I am not sure if this works if it does not use the line above.
         setSize(image.getWidth(dummy), image.getHeight(dummy));
     }
 }
