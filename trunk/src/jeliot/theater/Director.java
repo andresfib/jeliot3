@@ -265,9 +265,6 @@ public class Director {
     /**
      * 
      */
-    /**
-     * 
-     */
     public void closeExpression() {}
 
     /** This method animates the first half of a binary expression.
