@@ -13,7 +13,7 @@ public class Point {
     }
 
     public boolean isAbove(Point p) {
-        if (y < p.y) {
+        if (y < p.y)
             return true;
         else
             return false;
@@ -51,7 +51,7 @@ public class Rectangle {
         bottom_right = br;
     }
 
-    public boolean cointains(Point p) {
+    public boolean contains(Point p) {
         if (top_left.isAbove(p) && top_left.isLeftTo(p) &&
             bottom_right.isBelow(p) && bottom_right.isRightTo(p))
             return true;
