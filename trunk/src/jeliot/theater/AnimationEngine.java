@@ -164,7 +164,7 @@ public class AnimationEngine implements Controlled {
             // If the engine is controlled, inform the controller.
             if (controller != null) {
                 try {
-                controller.checkPoint(this);
+                controller.checkPoint(this, false);
                 } catch (Exception e) {
                     //TODO: should something be done here?
                 }
