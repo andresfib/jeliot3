@@ -8,7 +8,6 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import jeliot.util.DebugUtil;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
 import koala.dynamicjava.tree.Node;
@@ -366,7 +365,7 @@ public class MCodeUtilities {
 
             return MCodeUtilities.DOUBLE;
 
-        } else if (type.equals(String.class.getName()) || type.equals("L".getClass().getName())) {
+        } else if (type.equals(String.class.getName()) || type.equals("L" + String.class.getName() + ";")) {
 
             return MCodeUtilities.STRING;
 
@@ -918,7 +917,7 @@ public class MCodeUtilities {
                     throw new StoppingRequestedError();
                 }
                 writer.println(str);
-                DebugUtil.printDebugInfo("    "+str);
+                //DebugUtil.printDebugInfo("    "+str);
             } else {
                 addToRedirectBuffer(str);
             }
