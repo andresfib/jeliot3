@@ -91,7 +91,6 @@ public class EvaluationVisitor extends VisitorObject {
 			       Code.DELIM+round+Code.DELIM+locationToString(node.getBody()));
 		    node.getBody().acceptVisitor(this);
 		    condcounter=counter;
-		    System.out.println("Condcounter="+condcounter);
 		    round++;
                 } catch (ContinueException e) {
 		    Code.write(""+Code.CONT+Code.DELIM+Code.WHI+Code.DELIM+locationToString(node.getBody()));
@@ -122,6 +121,10 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ForStatement node) {
+	long condcounter=counter;
+	long round=0;       // Number of iterations
+	boolean breakc=false;// Exiting while loop because of break
+		
         try {
             Set vars = (Set)node.getProperty(NodeProperties.VARIABLES);
             context.enterScope(vars);
@@ -136,13 +139,19 @@ public class EvaluationVisitor extends VisitorObject {
 
             // Interpret the loop
             try {
+
                 Expression cond   = node.getCondition();
                 List       update = node.getUpdate();
                 while (cond == null ||
                       ((Boolean)cond.acceptVisitor(this)).booleanValue()) {
                     try {
+			Code.write(""+Code.FOR+Code.DELIM+condcounter+Code.DELIM+Code.TRUE+
+				   Code.DELIM+round+Code.DELIM+locationToString(node.getBody()));
                         node.getBody().acceptVisitor(this);
+			condcounter=counter;
+			round++;
                     } catch (ContinueException e) {
+			condcounter=counter;
                         // 'continue' statement management
                         if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
                             throw e;
@@ -166,6 +175,10 @@ public class EvaluationVisitor extends VisitorObject {
             // Always leave the current scope
             context.leaveScope();
         }
+	if (!breakc)
+	    Code.write(""+Code.FOR+Code.DELIM+condcounter+Code.DELIM+Code.FALSE+
+		       Code.DELIM+round+Code.DELIM+locationToString(node.getBody()));
+
         return null;
     }
 
@@ -174,14 +187,25 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(DoStatement node) {
+	long condcounter=counter;
+	long round=0;       // Number of iterations
+	boolean breakc=false;// Exiting while loop because of break
+
         try {
             // Interpret the loop
             do {
+		
+		Code.write(""+Code.DO+Code.DELIM+condcounter+Code.DELIM+Code.TRUE+
+			   Code.DELIM+round+Code.DELIM+locationToString(node.getBody()));
+
                 try {
                     node.getBody().acceptVisitor(this);
+		    round++;
+		    condcounter=counter;
                 } catch (ContinueException e) {
                     // 'continue' statement management
                     if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
+			condcounter=counter;
                         throw e;
                     }
                 }
@@ -192,6 +216,10 @@ public class EvaluationVisitor extends VisitorObject {
                 throw e;
             }
         }
+	if (!breakc)
+	    Code.write(""+Code.DO+Code.DELIM+condcounter+Code.DELIM+Code.FALSE+
+		       Code.DELIM+round+Code.DELIM+locationToString(node.getBody()));
+
         return null;
     }
 
@@ -1019,7 +1047,7 @@ public class EvaluationVisitor extends VisitorObject {
         if (node.hasProperty(NodeProperties.VALUE)) {
             // The expression is constant
             Code.write(""+Code.NO+Code.DELIM+(counter++)+Code.DELIM+Code.NO_REFERENCE+Code.DELIM
-                +node.getProperty(NodeProperties.VALUE)+Code.DELIM+locationToString(node));
+		       +node.getProperty(NodeProperties.VALUE)+Code.DELIM+locationToString(node));
             return node.getProperty(NodeProperties.VALUE);
         } else {
             long notcounter=counter++;
@@ -1948,6 +1976,29 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(BitAndExpression node) {
+        Class c = NodeProperties.getType(node);
+        long bitAndcounter=counter++;
+        long auxcounter=counter;
+
+        Code.write(""+Code.BEGIN+Code.DELIM+Code.BITAND+Code.DELIM+bitAndcounter+
+                    Code.DELIM+locationToString(node));
+        Code.write(""+Code.LEFT+Code.DELIM+counter);
+
+        Object lobj = node.getLeftExpression().acceptVisitor(this);
+        long auxcounter2=counter;
+
+        Code.write(""+Code.RIGHT+Code.DELIM+counter);
+
+        Object robj = node.getRightExpression().acceptVisitor(this);
+        Object o = InterpreterUtilities.bitAnd(c, lobj, robj);
+
+        Code.write(""+Code.BITAND+Code.DELIM+bitAndcounter+Code.DELIM+auxcounter+
+            Code.DELIM+auxcounter2+Code.DELIM+o.toString()+
+            Code.DELIM+NodeProperties.getType(node).getName()+
+            Code.DELIM+locationToString(node));
+        return o;
+	/*
+
         if (node.hasProperty(NodeProperties.VALUE)) {
             // The expression is constant
             return node.getProperty(NodeProperties.VALUE);
@@ -1956,7 +2007,7 @@ public class EvaluationVisitor extends VisitorObject {
                 NodeProperties.getType(node),
                 node.getLeftExpression().acceptVisitor(this),
                 node.getRightExpression().acceptVisitor(this));
-        }
+		}*/
     }
 
     /**
@@ -1964,6 +2015,66 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(BitAndAssignExpression node) {
+	//Simulate that a&=b -->> a= a&b
+	//Added 2 evaluations to left hand side ...
+        long assigncounter=counter++;
+	long assignauxcounter=counter;
+	//Start assignment
+        Code.write("" + Code.BEGIN+Code.DELIM+Code.A+Code.DELIM+assigncounter+Code.DELIM+locationToString(node)); //
+	//Start bit and expression
+	long bitAndcounter=counter++;
+        long auxcounter=counter;
+
+	Code.write(""+Code.BEGIN+Code.DELIM+Code.BITAND+Code.DELIM+bitAndcounter+
+                    Code.DELIM+locationToString(node));
+	// Get left hand side for the bitand expression
+        Code.write(""+Code.LEFT+Code.DELIM+counter);
+
+        Node   left = node.getLeftExpression();
+        evaluating=false;
+        left.acceptVisitor(this);
+        evaluating=true;
+
+        LeftHandSideModifier mod = NodeProperties.getModifier(left);
+        Object lhs = mod.prepare(this, context);
+	long auxcounter2=counter;
+
+	// Get right hand side for the bitand expression
+	Code.write(""+Code.RIGHT+Code.DELIM+counter);
+        Object val  = node.getRightExpression().acceptVisitor(this);
+	
+
+        // Perform the operation
+        Object result = InterpreterUtilities.bitAnd(
+            NodeProperties.getType(node),
+            lhs,
+            node.getRightExpression().acceptVisitor(this));
+
+        // Cast the result
+        result = performCast(NodeProperties.getType(left), result);
+
+        Code.write(""+Code.BITAND+Code.DELIM+bitAndcounter+Code.DELIM+auxcounter+
+            Code.DELIM+auxcounter2+Code.DELIM+result.toString()+
+            Code.DELIM+NodeProperties.getType(node).getName()+
+            Code.DELIM+locationToString(node));
+
+	long assignauxcounter2=counter;
+	Code.write("" + Code.TO+Code.DELIM+counter);
+        evaluating=false;
+        left.acceptVisitor(this);
+        evaluating=true;
+
+
+        // Modify the variable and return
+        mod.modify(context, result);
+        Code.write("" + Code.A+Code.DELIM+assigncounter+Code.DELIM+assignauxcounter+
+		   Code.DELIM+assignauxcounter2+Code.DELIM+result.toString()+
+		   Code.DELIM+NodeProperties.getType(node).getName()+
+		   Code.DELIM+locationToString(node));
+	
+
+        return result;
+	/*
         Node   left = node.getLeftExpression();
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
         Object lhs = mod.prepare(this, context);
@@ -1980,7 +2091,7 @@ public class EvaluationVisitor extends VisitorObject {
         // Modify the variable and return
         NodeProperties.getModifier(left).modify(context, result);
 
-        return result;
+        return result;*/
     }
 
     /**
@@ -1988,17 +2099,27 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ExclusiveOrExpression node) {
+       Class c = NodeProperties.getType(node);
+        long xOrcounter=counter++;
+        long auxcounter=counter;
 
-        if (node.hasProperty(NodeProperties.VALUE)) {
+        Code.write(""+Code.BEGIN+Code.DELIM+Code.BITXOR+Code.DELIM+xOrcounter+
+                    Code.DELIM+locationToString(node));
+        Code.write(""+Code.LEFT+Code.DELIM+counter);
 
-            // The expression is constant
-            return node.getProperty(NodeProperties.VALUE);
-        } else {
-            return InterpreterUtilities.xOr(
-                    NodeProperties.getType(node),
-                    node.getLeftExpression().acceptVisitor(this),
-                    node.getRightExpression().acceptVisitor(this));
-        }
+        Object lobj = node.getLeftExpression().acceptVisitor(this);
+        long auxcounter2=counter;
+
+        Code.write(""+Code.RIGHT+Code.DELIM+counter);
+
+        Object robj = node.getRightExpression().acceptVisitor(this);
+        Object o = InterpreterUtilities.xOr(c, lobj, robj);
+
+        Code.write(""+Code.BITXOR+Code.DELIM+xOrcounter+Code.DELIM+auxcounter+
+		   Code.DELIM+auxcounter2+Code.DELIM+o.toString()+
+		   Code.DELIM+NodeProperties.getType(node).getName()+
+		   Code.DELIM+locationToString(node));
+        return o;
     }
 
     /**
@@ -2006,21 +2127,63 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ExclusiveOrAssignExpression node) {
+	//Simulate that a^=b -->> a= a^b
+	//Added 2 evaluations to left hand side ...
+        long assigncounter=counter++;
+	long assignauxcounter=counter;
+	//Start assignment
+        Code.write("" + Code.BEGIN+Code.DELIM+Code.A+Code.DELIM+assigncounter+Code.DELIM+locationToString(node)); //
+	//Start bit and expression
+	long xOrcounter=counter++;
+        long auxcounter=counter;
+
+	Code.write(""+Code.BEGIN+Code.DELIM+Code.BITXOR+Code.DELIM+xOrcounter+
+                    Code.DELIM+locationToString(node));
+	// Get left hand side for the bitand expression
+        Code.write(""+Code.LEFT+Code.DELIM+counter);
+
         Node   left = node.getLeftExpression();
+        evaluating=false;
+        left.acceptVisitor(this);
+        evaluating=true;
+
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
         Object lhs = mod.prepare(this, context);
+	long auxcounter2=counter;
+
+	// Get right hand side for the XOR expression
+	Code.write(""+Code.RIGHT+Code.DELIM+counter);
+        Object val  = node.getRightExpression().acceptVisitor(this);
+	
 
         // Perform the operation
         Object result = InterpreterUtilities.xOr(
-                NodeProperties.getType(node),
-                lhs,
-                node.getRightExpression().acceptVisitor(this));
+            NodeProperties.getType(node),
+            lhs,
+            node.getRightExpression().acceptVisitor(this));
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
 
+        Code.write(""+Code.BITXOR+Code.DELIM+xOrcounter+Code.DELIM+auxcounter+
+            Code.DELIM+auxcounter2+Code.DELIM+result.toString()+
+            Code.DELIM+NodeProperties.getType(node).getName()+
+            Code.DELIM+locationToString(node));
+
+	long assignauxcounter2=counter;
+	Code.write("" + Code.TO+Code.DELIM+counter);
+        evaluating=false;
+        left.acceptVisitor(this);
+        evaluating=true;
+
+
         // Modify the variable and return
         mod.modify(context, result);
+        Code.write("" + Code.A+Code.DELIM+assigncounter+Code.DELIM+assignauxcounter+
+		   Code.DELIM+assignauxcounter2+Code.DELIM+result.toString()+
+		   Code.DELIM+NodeProperties.getType(node).getName()+
+		   Code.DELIM+locationToString(node));
+	
 
         return result;
     }
@@ -2030,16 +2193,27 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(BitOrExpression node) {
+        Class c = NodeProperties.getType(node);
+        long bitOrcounter=counter++;
+        long auxcounter=counter;
 
-        if (node.hasProperty(NodeProperties.VALUE)) {
-            // The expression is constant
-            return node.getProperty(NodeProperties.VALUE);
-        } else {
-            return InterpreterUtilities.bitOr(
-                NodeProperties.getType(node),
-                node.getLeftExpression().acceptVisitor(this),
-                node.getRightExpression().acceptVisitor(this));
-        }
+        Code.write(""+Code.BEGIN+Code.DELIM+Code.BITOR+Code.DELIM+bitOrcounter+
+                    Code.DELIM+locationToString(node));
+        Code.write(""+Code.LEFT+Code.DELIM+counter);
+
+        Object lobj = node.getLeftExpression().acceptVisitor(this);
+        long auxcounter2=counter;
+
+        Code.write(""+Code.RIGHT+Code.DELIM+counter);
+
+        Object robj = node.getRightExpression().acceptVisitor(this);
+        Object o = InterpreterUtilities.bitOr(c, lobj, robj);
+
+        Code.write(""+Code.BITOR+Code.DELIM+bitOrcounter+Code.DELIM+auxcounter+
+            Code.DELIM+auxcounter2+Code.DELIM+o.toString()+
+            Code.DELIM+NodeProperties.getType(node).getName()+
+            Code.DELIM+locationToString(node));
+        return o;
     }
 
     /**
@@ -2047,9 +2221,34 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(BitOrAssignExpression node) {
+	//Simulate that a|=b -->> a= a|b
+	//Added 2 evaluations to left hand side ...
+        long assigncounter=counter++;
+	long assignauxcounter=counter;
+	//Start assignment
+        Code.write("" + Code.BEGIN+Code.DELIM+Code.A+Code.DELIM+assigncounter+Code.DELIM+locationToString(node)); //
+	//Start bitor expression
+	long bitOrcounter=counter++;
+        long auxcounter=counter;
+
+	Code.write(""+Code.BEGIN+Code.DELIM+Code.BITOR+Code.DELIM+bitOrcounter+
+                    Code.DELIM+locationToString(node));
+	// Get left hand side for the bitor expression
+        Code.write(""+Code.LEFT+Code.DELIM+counter);
+
         Node   left = node.getLeftExpression();
+        evaluating=false;
+        left.acceptVisitor(this);
+        evaluating=true;
+
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
         Object lhs = mod.prepare(this, context);
+	long auxcounter2=counter;
+
+	// Get right hand side for the bitor expression
+	Code.write(""+Code.RIGHT+Code.DELIM+counter);
+        Object val  = node.getRightExpression().acceptVisitor(this);
+	
 
         // Perform the operation
         Object result = InterpreterUtilities.bitOr(
@@ -2060,8 +2259,26 @@ public class EvaluationVisitor extends VisitorObject {
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
 
+        Code.write(""+Code.BITOR+Code.DELIM+bitOrcounter+Code.DELIM+auxcounter+
+            Code.DELIM+auxcounter2+Code.DELIM+result.toString()+
+            Code.DELIM+NodeProperties.getType(node).getName()+
+            Code.DELIM+locationToString(node));
+
+	long assignauxcounter2=counter;
+	Code.write("" + Code.TO+Code.DELIM+counter);
+        evaluating=false;
+        left.acceptVisitor(this);
+        evaluating=true;
+
+
         // Modify the variable and return
         mod.modify(context, result);
+        Code.write("" + Code.A+Code.DELIM+assigncounter+Code.DELIM+assignauxcounter+
+		   Code.DELIM+assignauxcounter2+Code.DELIM+result.toString()+
+		   Code.DELIM+NodeProperties.getType(node).getName()+
+		   Code.DELIM+locationToString(node));
+	
+
         return result;
     }
 
