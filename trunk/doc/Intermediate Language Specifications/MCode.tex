@@ -43,8 +43,11 @@ The usual \mcode{} sentence will consist of:
 
 \section{Grammar}
 
+The following grammar expresses the syntactic properties of the \mcode{}. It describes how to get a sintactically correct \mcode{} program, that can be parsed by the interpreter provided \jel{} to produce the right visualizations. This grammar has been obtained by modifying the Java BNF sintactic grammar.
 
-<program> ::= <classes info> <static method call> \p{END}
+Tokens within "<" and ">" are Non-Terminal symbols, capitalized words are Terminal symbols, basically \mcode{} commands; you will find a more detailed description of them in the follwing section."$?$" means that the preceeding symbol is optional, and "|" separates the different possibilities.
+
+<program> ::= <classes info> <static method call> \p{END}\footnote{The beginning Static Method Call it is supposed to call the Main method of the program}
 \begin{tabbing}
 <classes info> ::= \=<class info> \\
 				\> | <classes info> <class info>
@@ -271,7 +274,7 @@ It is worth to mention that compound assignments are decomposed into the operati
 
 \minstr{VD name NO\_REFERENCE/ir value type FINAL/NOT\_FINAL loc}
 
-When declaring a variable the corresponding the \mcode{} instruction needs to be complemented with its name, value, type and the modifier (\p{FINAL} or \p{NOT\_FINAL}). Instruction reference (\p{ir}) is given if the variable has an initializer otherwise a \p{NO\_REFENRENCE} is instruction is written. 
+When declaring a variable the corresponding the \mcode{} instruction needs to be complemented with its name, value, type and the modifier (\p{FINAL} or \p{NOT\_FINAL}). Instruction reference (\p{ir}) is given if the variable has an initializer otherwise a \p{NO\_REFERENCE} value is written. 
 
 \section{Binary Operations}
 
@@ -382,9 +385,9 @@ The \p{INPUT} instruction indicates the visualization engine to produce some dat
 
 \subsection{Output}
 
-\minstr{OUTPUT ir value type loc}
+\minstr{OUTPUT ir value type breakLine loc}
 
-\p{OUTPUT} instruction is the resulting one of a call to any of the Output methods provided by \jel{}. They only accept one argument, and it is reflected in the instruction by its value and its type.
+\p{OUTPUT} instruction is the resulting one of a call to any of the Output methods provided by \jel{} or System.out.print and System.out.println. They only accept one argument, and it is reflected in the instruction by its value and its type. A flag (\p{breakline} is added to indicate wheter to break the line (value \p{1}) or not (value \p{0}) in the output.
 
 \section{Array Handling}
 

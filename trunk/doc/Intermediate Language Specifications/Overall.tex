@@ -3,7 +3,7 @@
 
 \section{\jel{} System Structure}
 \label{sec:structure}
-
+\includegraphics[height=10cm]{communicationmodel.eps}
 \section{\mcode{} functions}
 \label{sec:functions}
 \mcode{} is the intermediate language used to communicate the visualization engine and the Java interpreter (\djava{}). It mainly flows from \djava{}to the Director.  The information that carries along within is not only the information about modified variables and modified method stacks, but also the operations that produce such changes. and the results of those operations. This is the biggest difference from normal compiler intermediate codes; they only indicate what operations to perform to the assembler. In our case all operations are performed and the every result is sent to the Director.
