@@ -175,9 +175,11 @@ To display the available targets type:
       <fileset dir="${src}/examples"/>
     </copy>
 
-    <copy file="${src}/docs/license.txt" todir="${dist}"/>
-    <copy file="${src}/docs/BSD_license.txt" todir="${dist}"/>
-    <copy file="${src}/jeliot.bat" todir="${dist}"/>
+    <copy file="${src}/docs/Jeliot_license.txt" todir="${dist}"/>
+    <copy file="${src}/docs/DJava_license.txt" todir="${dist}"/>
+    <copy file="${src}/docs/JEdit_license.txt" todir="${dist}"/>
+    <copy file="${src}/docs/KunstOffPLAF_license.txt" todir="${dist}"/>
+  	<copy file="${src}/jeliot.bat" todir="${dist}"/>
     <copy file="${src}/jeliot.ico" todir="${dist}"/>
     <copy file="${src}/properties.properties" todir="${dist}"/>
   </target>
