@@ -497,6 +497,7 @@ public class Director {
         if (returnAct != null) {
             engine.showAnimation(new Animation[] {stageDisappear,
                         returnAct.fly(returnAct.getRootLocation())});
+            returnAct.setShadow(4);
         } else {
             engine.showAnimation(stageDisappear);
         }
@@ -1537,6 +1538,10 @@ public class Director {
         );
     }
 
+    public void removeInstance(InstanceActor actor) {
+		manager.removeInstance(actor);
+    }
+    
 /*
     public void showArrayVariableAccess(VariableInArray var,
                                         Value indexVal) {

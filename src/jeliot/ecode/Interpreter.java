@@ -137,6 +137,8 @@ public class Interpreter {
                             director.openScratch();
                     }
 
+                    //checkInstancesForRemoval();
+                    
                     switch (token) {
 
                         //Gives a reference to the left hand side of the expression
@@ -191,6 +193,10 @@ public class Interpreter {
                                                          tokenizer.nextToken());
 
                             Variable toVariable = (Variable) variables.remove(new Integer(toExpression));
+                            
+                            //just to get rid of extra references
+                            variables.remove(new Integer(fromExpression));
+
                             Value fromValue = (Value) values.remove(new Integer(fromExpression));
                             Value casted = null;
                             Value expressionValue = null;
@@ -211,6 +217,7 @@ public class Interpreter {
                                         ECodeUtilities.getHashCode(value));
                                 if (inst != null) {
                                     casted = new Reference(inst);
+                                    ((Reference)casted).makeReference();
                                     expressionValue = new Reference(inst);
                                 } else {
                                     casted = new Reference();
@@ -1235,7 +1242,15 @@ public class Interpreter {
 
                             } else {
 
-                                Value rv = (Value) returnValue.clone();
+	                            Value rv = null;
+	                            
+	                            if (returnValue instanceof Reference) {
+		                            rv = (Value) ((Reference)returnValue).clone();
+	                            } else {
+		                                
+                                	rv = (Value) returnValue.clone();
+                            	}
+                            	
                                 ValueActor va = director.finishMethod(
                                                     returnActor,
                                                     returnExpressionCounter);
@@ -1771,13 +1786,15 @@ public class Interpreter {
 
                             Reference ref = new Reference(ai);
 
-                            director.arrayCreation(dimensionSize, h);
-
                             director.showArrayCreation(ai, ref, dimensionValues,
                                               expressionReference, h);
 
+                            director.arrayCreation(dimensionSize, h);
+                                                                                            
                             instances.put(hashCode, ai);
 
+                            ref.makeReference();
+                            
                             values.put(new Integer(expressionReference), ref);
 
                             break;
@@ -1832,6 +1849,7 @@ public class Interpreter {
                             }
 
                             //Finding the VariableInArray
+                            values.remove(new Integer(expressionReference));
                             Variable variable = (Variable) variables.remove(new Integer(expressionReference));
                             Reference varRef = (Reference) variable.getValue();
                             ArrayInstance ainst = (ArrayInstance) varRef.getInstance();
@@ -2075,12 +2093,49 @@ public class Interpreter {
 
             } else {
                 running = false;
+		        removeInstances();
             }
 
         }
         director.closeScratch();
     }
 
+    
+    public void checkInstancesForRemoval() {
+		Enumeration enum = instances.keys();
+		while (enum.hasMoreElements()) {
+			Object obj = enum.nextElement();
+			Instance inst = (Instance)instances.get(obj);
+			if (inst != null) {
+				//For testing
+				//System.out.println("number of references1: " + inst.getNumberOfReferences());
+				//System.out.println("number of references2: " + inst.getActor().getNumberOfReferences());				
+				if (inst.getNumberOfReferences() == 0 &&
+				    inst.getActor().getNumberOfReferences() == 0) {
+					    
+					instances.remove(obj);
+					director.removeInstance(inst.getActor());
+					inst = null;
+					//System.out.println("instance removed!");
+				}
+			}	
+		}
+    }
+    
+    public void removeInstances() {
+		Enumeration enum = instances.keys();
+		while (enum.hasMoreElements()) {
+			Object obj = enum.nextElement();
+			Instance inst = (Instance)instances.get(obj);
+			if (inst != null) {
+				instances.remove(obj);
+				director.removeInstance(inst.getActor());
+				inst.setActor(null);
+				inst = null;
+				//System.out.println("instance removed!");
+			}	
+		}
+    }
 
     private void handleExpression(Value val, int expressionCounter) {
 
