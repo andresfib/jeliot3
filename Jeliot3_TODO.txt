@@ -5,6 +5,7 @@
 * configure Jeliot through properties file (done)
 * Replace '\t' characters with spaces when saving (done)
   but fix the caret position after saving. (done)
+* dependencies between classes should not affect the compilation (done partially, circular dependencies are not handled correctly.)
 
 ----- JELIOT 3 TODO-LIST for next version 4.X:------
 
@@ -33,7 +34,7 @@ Graphical:
 
 Web:
 * Applet Jeliot (with predefined m-code or program).
-* Web Start Jeliot
+* Web Start Jeliot (how could it be utilized in courses and other places. An easy way to keep Jeliot updated)
 
 Connections to other softwares:
 * Control Jeliot outside Jeliot or from other Jeliot
