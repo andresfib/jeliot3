@@ -7,16 +7,22 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
-  * @author Niko Myller
-  */
+ * This actor draws the dashed lines and titles to separate explicitly the
+ * theater (animation frame) into four areas: constant area, method area,
+ * object and array area and expression evaluation area.
+ * 
+ * @author Niko Myller
+ */
 public class LinesAndText extends Actor {
 
     /**
-     * The resource bundle
+     * The resource bundle for theater package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
+
+//DOC: Document!                                      
 
     /**
 	 *

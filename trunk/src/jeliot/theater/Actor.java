@@ -22,7 +22,7 @@ import java.util.Vector;
  * @author Pekka Uronen
  * @author Niko Myller
  */
-public class Actor implements Cloneable {
+public abstract class Actor implements Cloneable {
 
 // DOC: Document!
 	/**

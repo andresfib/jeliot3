@@ -21,10 +21,13 @@ import jeliot.lang.Variable;
 import jeliot.lang.VariableInArray;
 
 /**
- * Directs the animation of the program.
+ * Directs the program animation. Contains the commands to handle
+ * all the expressions and statements that are visualized.
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
+ * @see jeliot.mcode.Intepreter
  */
 public class Director {
 
@@ -35,6 +38,8 @@ public class Director {
         ResourceBundle.getBundle(
             "jeliot.theater.resources.properties",
             Locale.getDefault());
+
+    //DOC: Document!
 
     /**
      *

@@ -1,11 +1,15 @@
 package jeliot.theater;
 
 /**
+ * Highlight represents a single highlight of the source code
+ * during the animation. This class contains the information 
+ * about the beginning and ending line and column.
  * 
  * @author Niko Myller
  */
 public class Highlight {
 
+//  DOC: Document!
     /**
 	 *
 	 */

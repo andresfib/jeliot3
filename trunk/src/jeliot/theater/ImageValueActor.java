@@ -4,10 +4,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         23.9.1999
-  */
+ * ImageValueActor is an actor that is used when a
+ * value actor should be an image. At the moment this only
+ * happens when the value of a variable is unknown visualized
+ * as "???". 
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class ImageValueActor extends ValueActor {
 
     /**
@@ -26,7 +30,9 @@ public class ImageValueActor extends ValueActor {
 	 * @see jeliot.theater.ValueActor#paintValue(java.awt.Graphics)
 	 */
 	public void paintValue(Graphics g) {
-        g.drawImage(image, 0, 0, null);
+        //g.drawImage(image, 0, 0, null);
+        //HACK: I am not sure if this works if it does not use the line above.
+        g.drawImage(image, 0, 0, dummy);
     }
 
     /* (non-Javadoc)
@@ -38,7 +44,8 @@ public class ImageValueActor extends ValueActor {
 	 * @see jeliot.theater.Actor#calculateSize()
 	 */
 	public void calculateSize() {
-        setSize(image.getWidth(null), image.getHeight(null));
+        //setSize(image.getWidth(null), image.getHeight(null));
+        //HACK: I am not sure if this works if it does not use the line above.
+        setSize(image.getWidth(dummy), image.getHeight(dummy));
     }
-
 }

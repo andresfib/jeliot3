@@ -6,11 +6,15 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         13.10.1999
-  */
+ * IndexActor shows the line between the array access' indexing
+ * expression result value and the array's actual index. 
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class IndexActor extends Actor {
+    
+//  DOC: Document!
 
     /**
 	 *
