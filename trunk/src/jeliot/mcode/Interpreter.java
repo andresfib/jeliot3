@@ -2551,13 +2551,16 @@ public class Interpreter {
                         Highlight highlight = MCodeUtilities
                                 .makeHighlight(tokenizer.nextToken());
 
-                        Value output = (Value) values.remove(new Long(
+                       /* Value output = (Value) values.remove(new Long(
                                 expressionReference));
-
+                       
                         if (output == null) {
                             output = new Value(value, type);
                         }
-
+                        */
+                        
+                        Value output = new Value(value, type);
+                        
                         director.output(output, highlight);
 
                         break;

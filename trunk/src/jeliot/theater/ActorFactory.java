@@ -648,6 +648,12 @@ public class ActorFactory {
                     //typeValWidth[type.getIndex()];
                 }
             }
+            //Stylistic change, not to show the line break char in the animation
+            if (label.lastIndexOf("\\n")!=-1 && 
+                label.lastIndexOf("\\n")==(label.length()-2)){
+               label=label.substring(0,label.length()-2);
+            }
+            
             actor.setLabel(label);
             //actor.setActor(val.getActor());
             actor.calculateSize();

@@ -1,4 +1,4 @@
-\\/*
+/*
  * DynamicJava - Copyright (C) 1999-2001
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -1281,7 +1281,7 @@ public class EvaluationVisitor extends VisitorObject {
                                    + auxcounter
                                    + Code.DELIM
                                    + args[i].toString()
-                                   + (m.getName().equals("println")?"\n":"")
+                                   + (m.getName().equals("println")?"\\n":"")
                                    + Code.DELIM
                                    + typs[i].getName()
                                    + Code.DELIM
@@ -1742,7 +1742,7 @@ public class EvaluationVisitor extends VisitorObject {
                             + auxcounter
                             + Code.DELIM
                             + args[i].toString()
-                            + "\n"
+                            + "\\n"
                             + Code.DELIM
                             + typs[i].getName()
                             + Code.DELIM
