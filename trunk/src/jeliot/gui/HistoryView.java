@@ -117,7 +117,7 @@ public class HistoryView extends JComponent implements ActionListener {
      */
     public HistoryView(final CodePane2 c, String udir) {
         this.codePane = c;
-        imageTemp = new File(udir, "JeliotTemp");
+        imageTemp = new File(System.getProperty("user.home"), ".jeliot");
         if (!imageTemp.exists()) {
             imageTemp.mkdir();
         }

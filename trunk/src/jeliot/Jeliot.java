@@ -660,7 +660,6 @@ public class Jeliot {
      * Third cell contains a String representation of a boolean value ("true" or "false") that tells that experimental settings should be loaded.
      */
     public static void main(String args[]) {
-
         Jeliot jeliot = new Jeliot("jeliot.io.*");
         jeliot.handleArgs(args);
         LoadJeliot.start(jeliot);
