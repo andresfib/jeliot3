@@ -30,8 +30,6 @@ package koala.dynamicjava.interpreter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 
@@ -1577,15 +1575,15 @@ public class ClassFactory extends ClassFile {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     try {
         write(out);
-
+        
         /*
          * Only for debugging.
          * This will produce a class file of each compiled class.
-         */
         File f = new File(name+"xxx.class");
         FileOutputStream fos = new FileOutputStream(f);
         fos.write(out.toByteArray());
         fos.close();
+        */
 
     } catch (IOException e) {
         // Should never append

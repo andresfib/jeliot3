@@ -41,6 +41,8 @@ public class TheaterManager implements ComponentListener {
                                          		new Point(25, 45)};
     private static int maxMethodStageInsetX = 30;
 
+    public static final int constantBoxPositionX = 10;
+    
 	/**
       * Reference to the current Theatre instance.
       * Reference is need for two reasons:
@@ -342,8 +344,8 @@ public class TheaterManager implements ComponentListener {
 	 */
     private void positionConstantBox() {
         if (constantBox != null) {
-            int x = 10; //theatre.getWidth() - 10 - cbox.getWidth();
-            int y = getConstantPositionY() + 10;
+            int x = constantBoxPositionX; //theatre.getWidth() - 10 - cbox.getWidth();
+            int y = getConstantBoxPositionY();
             constantBox.setLocation(x, y);
         }
     }
@@ -351,9 +353,9 @@ public class TheaterManager implements ComponentListener {
     /**
 	 * @return
 	 */
-	public static int getConstantPositionY() {
+	public static int getConstantBoxPositionY() {
         //Change this when static variables are visualized!
-        return 338;
+        return 348;
     }
 
     /**
