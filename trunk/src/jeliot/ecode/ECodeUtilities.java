@@ -18,26 +18,26 @@ public class ECodeUtilities {
     public static final int POSTPLUSPLUS = 6;   // PostIncrement
 
     //Binary expressions in Jeliot 3 visualization engine
-    public static final int AND = 15;           // Bit And
+    public static final int AND = 15;           // Bitwise And
     public static final int ANDAND = 18;        // Logical And
     public static final int DIV = 1;            // Division
     public static final int EQEQ = 13;          // Equality
     public static final int GT = 9;             // Greater Than
     public static final int GTEQ = 11;          // Greater Than Or Equal
     public static final int INSTANCEOF = 12;    // Instance Of
-    public static final int LSHIFT = 5;         // Bit Left Shift
+    public static final int LSHIFT = 5;         // Bitwise Left Shift
     public static final int LT = 8;             // Lesser Than
     public static final int LTEQ = 10;          // Lesser Than or Equal
     public static final int SUBSTRACT = 4;      // Substraction
     public static final int MOD = 2;            // Remainder
     public static final int MULT = 0;           // Multiplication
-    public static final int NOTEQ = 14;         // Not Equal
-    public static final int OR = 17;            // Bit Or
+    public static final int NOTEQ = 14;         // Not Equality
+    public static final int OR = 17;            // Bitwise Or
     public static final int OROR = 19;          // Logical Or
     public static final int ADD = 3;            // Addition
-    public static final int RSHIFT = 6;         // Bit Right Shift
-    public static final int URSHIFT = 7;        // Bit URight Shift
-    public static final int XOR = 16;           // Bit Xor
+    public static final int RSHIFT = 6;         // Bitwise Right Shift
+    public static final int URSHIFT = 7;        // Bitwise Unsigned Right Shift
+    public static final int XOR = 16;           // Bitwise Xor
 
     //Types
     public static final int VOID = -1;
@@ -197,26 +197,32 @@ public class ECodeUtilities {
                 return GTEQ;
             }
 
+            // Bitwise Or Expression (| sign)
             case Code.BITOR: {
                 return OR;
             }
 
+            // Bitwise Xor Expression (^ sign)
             case Code.BITXOR: {
                 return XOR;
             }
 
+            // Bitwise And Expression (& sign)
             case Code.BITAND: {
                 return AND;
             }
 
+            // Bitwise Left Shift Expression (<< sign)
             case Code.LSHIFT: {
                 return LSHIFT;
             }
 
+            // Bitwise Right Shift Expression (>> sign)
             case Code.RSHIFT: {
                 return RSHIFT;
             }
 
+            // Bitwise Unsigned Right Shift Expression (>>> sign)
             case Code.URSHIFT: {
                 return URSHIFT;
             }
@@ -266,6 +272,7 @@ public class ECodeUtilities {
                 return MINUSMINUS;
             }
 
+            //Complement expression (~ sign)
             case Code.COMP: {
                 return COMP;
             }
@@ -279,7 +286,7 @@ public class ECodeUtilities {
 
     public static boolean isUnary(int operator) {
         switch (operator) {
-            case Code.COMP:
+            case Code.COMP:     //Complement expression
             case Code.MINUS:    //Unary minus expression
             case Code.PLUS:     //Unary plus expression
             case Code.NO:       //Unary not expression
@@ -298,12 +305,12 @@ public class ECodeUtilities {
 
     public static boolean isBinary(int operator) {
         switch (operator) {
-            case Code.BITOR:
-            case Code.BITXOR:
-            case Code.BITAND:
-            case Code.LSHIFT:
-            case Code.RSHIFT:
-            case Code.URSHIFT:
+            case Code.BITOR:    // Bitwise Or Expression
+            case Code.BITXOR:   // Bitwise Xor Expression
+            case Code.BITAND:   // Bitwise And Expression
+            case Code.LSHIFT:   // Bitwise Left Shift Expression
+            case Code.RSHIFT:   // Bitwise Right Shift Expression
+            case Code.URSHIFT:  // Bitwise Unsigned Right Shift Expression
             case Code.OR:       // Or Expression
             case Code.EE:       // Equal Expression
             case Code.NE:       // Not Equal Expression

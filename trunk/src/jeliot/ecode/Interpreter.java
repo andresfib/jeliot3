@@ -271,12 +271,12 @@ public class Interpreter {
                         }
 
                         // Binary Expressions
-                        case Code.BITOR:
-                        case Code.BITXOR:
-                        case Code.BITAND:
-                        case Code.LSHIFT:
-                        case Code.RSHIFT:
-                        case Code.URSHIFT:
+                        case Code.BITOR:    // Bitwise Or
+                        case Code.BITXOR:   // Bitwise Xor
+                        case Code.BITAND:   // Bitwise And
+                        case Code.LSHIFT:   // Bitwise Left Shift
+                        case Code.RSHIFT:   // Bitwise Right Shift
+                        case Code.URSHIFT:  // Unsigned Right Shift
                         case Code.OR:       // Or Expression
                         case Code.EE:       // Equal Expression
                         case Code.NE:       // Not Equal Expression

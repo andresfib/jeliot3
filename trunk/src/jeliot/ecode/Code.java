@@ -34,6 +34,7 @@ public class Code{
     public static final int DE=9;           // Division Expression
     public static final int RE=10;          // Remainder Expression
 
+    // Bitwise binary operations
     public static final int BITOR=46;
     public static final int BITXOR=47;
     public static final int BITAND=48;
@@ -45,11 +46,13 @@ public class Code{
     public static final int PLUS=11;        // Plus Expression
     public static final int MINUS=12;       // Minus Expression
 
+    // unary arithmetic expressions (increments/decrements)
     public static final int PIE=13;         // Post Increment Expression
     public static final int PRIE=14;        // Pre Increment Expression
     public static final int PDE=15;         // Post Decrement Expression
     public static final int PRDE=16;        // Pre Decrement Expression
 
+    // Bitwise unary operations
     public static final int COMP=45;        // Complement Expression
 
     // binary boolean  exps
