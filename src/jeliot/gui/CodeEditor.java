@@ -496,6 +496,7 @@ public class CodeEditor extends JComponent {
             //e.printStackTrace();
             JOptionPane.showMessageDialog(masterFrame, "File could not be saved because "
             		+e.getMessage()+", please try to save it in a different location");
+            saveProgram();
         }
     }
 
