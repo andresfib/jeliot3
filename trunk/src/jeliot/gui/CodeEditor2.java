@@ -246,7 +246,7 @@ public class CodeEditor2 extends JComponent {
                         Font.PLAIN, Integer.parseInt(bundle
                                 .getString("font.code_editor.size"))));
         area.getDocument().getDocumentProperties().put(
-                PlainDocument.tabSizeAttribute, new Integer(3));
+                PlainDocument.tabSizeAttribute, new Integer(4));
         area.getDocument().addDocumentListener(dcl);
         area.setHorizontalOffset(5);
         ln = new LineNumbers(new Font(bundle

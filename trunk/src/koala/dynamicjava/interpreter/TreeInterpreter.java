@@ -188,6 +188,7 @@ public class TreeInterpreter implements Interpreter {
 			return result;
 
 		} catch (ExecutionError e) {
+            //e.printStackTrace();
 
 			InterpreterException ie = new InterpreterException(e);
 
@@ -219,6 +220,7 @@ public class TreeInterpreter implements Interpreter {
 			//throw new InterpreterException(e);
 
 		} catch (ParseError e) {
+            //e.printStackTrace();
 
 			InterpreterException ie = new InterpreterException(e);
 
@@ -252,6 +254,8 @@ public class TreeInterpreter implements Interpreter {
 			//throw new InterpreterException(e);
 
 		} catch (Error e) {
+            //e.printStackTrace();
+		    
 			String code = "" + Code.ERROR + Code.DELIM + "<H1>Error</H1><BR>";
 
 			if (e instanceof NoClassDefFoundError) {
@@ -290,7 +294,9 @@ public class TreeInterpreter implements Interpreter {
 
 			//e.printStackTrace();
 
-		} catch (Exception e) {		    
+		} catch (Exception e) {
+            //e.printStackTrace();
+		    
 			String code =
 				"" + Code.ERROR + Code.DELIM + "<H1>Exception</H1><BR>";
 
@@ -329,7 +335,6 @@ public class TreeInterpreter implements Interpreter {
 			MCodeUtilities.write(code);
 
 			//throw new InterpreterException(e);
-            //e.printStackTrace();
 		}
     	return null;
 	}
