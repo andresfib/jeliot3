@@ -53,6 +53,7 @@ import java.util.Vector;
 import jeliot.mcode.Code;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.mcode.StoppingRequestedError;
+import jeliot.util.DebugUtil;
 import koala.dynamicjava.interpreter.context.Context;
 import koala.dynamicjava.interpreter.context.GlobalContext;
 import koala.dynamicjava.interpreter.context.MethodContext;
@@ -223,7 +224,9 @@ public class TreeInterpreter implements Interpreter {
         } catch (StoppingRequestedError e) {
             return e;
         } catch (ExecutionError e) {
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
 
             InterpreterException ie = new InterpreterException(e);
 
@@ -243,7 +246,9 @@ public class TreeInterpreter implements Interpreter {
             //throw new InterpreterException(e);
             return e;
         } catch (ParseError e) {
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
 
             InterpreterException ie = new InterpreterException(e);
 
@@ -265,7 +270,9 @@ public class TreeInterpreter implements Interpreter {
             //throw new InterpreterException(e);
             return e;
         } catch (Error e) {
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
 
             String code = "" + Code.ERROR + Code.DELIM + "<H1>Error</H1><BR>";
 
@@ -300,8 +307,9 @@ public class TreeInterpreter implements Interpreter {
             //e.printStackTrace();
             return e;
         } catch (Exception e) {
-            e.printStackTrace();
-            e.toString();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
             String code = "" + Code.ERROR + Code.DELIM + "<H1>Exception</H1><BR>";
 
             if (e instanceof ClassNotFoundException) {
@@ -344,6 +352,7 @@ public class TreeInterpreter implements Interpreter {
         str = MCodeUtilities.replace(str, ">", "&gt;");
         return str;
     }
+    
     public String internalError(Throwable e) {
         String code = "";
         code += "<P>" + bundle.getString("j3.internal_error") + "</P>";
@@ -801,7 +810,7 @@ public class TreeInterpreter implements Interpreter {
                 MCodeUtilities.write("" + Code.OMC + Code.DELIM + superName + Code.DELIM
                         + numParameters + Code.DELIM + counter + Code.DELIM + "this" + Code.DELIM
                         + MCodeUtilities.locationToString(meth));
-                //TODO: Print out the parameters info 
+                //Print out the parameters info 
                 Vector redirectBuffer = (Vector) MCodeUtilities.redirectBufferStack.pop();
                 //MCodeUtilities.numParametersStack.pop();
                 MCodeUtilities.writeRedirectBuffer(redirectBuffer);
@@ -1059,7 +1068,9 @@ public class TreeInterpreter implements Interpreter {
                     .getClassLoader());
         } catch (ClassNotFoundException e) {
             // Should never happen
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
         }
 
         return cpd.interpreter.interpretArguments(c, cpd, args);
@@ -1136,13 +1147,12 @@ public class TreeInterpreter implements Interpreter {
             ListIterator it = cpd.arguments.listIterator();
             result = new Object[cpd.arguments.size()];
             int i = 0;
-            //TODO: Get data from node to be outputted later on
-            //TODO: Modify flag to get output to data strucuture
+            //Get data from node to be outputted later on
+            //Modify flag to get output to data strucuture
             MCodeUtilities.setRedirectOutput(true);
             int j = 0;
             while (it.hasNext()) {
                 long auxCounter = EvaluationVisitor.getCounter();
-                //TODO: increase parameter count (DONE)  
                 MCodeUtilities.incNumParameters();
                 MCodeUtilities.addToRedirectBuffer("" + Code.BEGIN + Code.DELIM + Code.P
                         + Code.DELIM + auxCounter + Code.DELIM + "0,0,0,0");

@@ -52,6 +52,7 @@ import jeliot.theater.ImageLoader;
 import jeliot.theater.Theater;
 import jeliot.theater.ThreadController;
 import jeliot.tracker.Tracker;
+import jeliot.util.DebugUtil;
 
 /**
  * This is the application class of Jeliot 3 that binds
@@ -256,7 +257,7 @@ public class Jeliot {
         }
 
         this.methodCall = methodCall;
-
+        codePane.installProgram(this.sourceCode);
         compiled = false;
     }
 
@@ -288,8 +289,6 @@ public class Jeliot {
             ecodeReader = launcher.getReader();
             inputWriter = launcher.getInputWriter();
             MCodeUtilities.clearRegisteredSecondaryMCodeConnections();
-
-            codePane.installProgram(this.sourceCode);
 
             compiled = true;
         }
@@ -331,17 +330,19 @@ public class Jeliot {
         return false;
     }
 
+    public void cleanUp() {
+        //clear the remnants of previous animation
+        theatre.cleanUp();
+        callTree.initialize();
+        hv.initialize();
+    }
+    
     /**
      * Initializes the compiled program to be animated.
      */
     public void rewind() {
 
         compiled = false;
-
-        //clear the remnants of previous animation
-        theatre.cleanUp();
-        callTree.initialize();
-        hv.initialize();
 
         //create director and the other equipment
         ActorFactory af = new ActorFactory(iLoad);
@@ -363,7 +364,9 @@ public class Jeliot {
                     callTree, gui.getProgram(), this, gui.getTabNumber(bundle2
                             .getString("tab.title.call_tree")));
         } catch (Exception e) {
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
         }
 
         // create the main loop for visualization
@@ -379,18 +382,24 @@ public class Jeliot {
                     //director.direct();
                     //gui.animationFinished();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    if (DebugUtil.DEBUGGING) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
 
+        controller.addPauseListener(gui);
+        
         callTreeThread = new Thread(new Runnable() {
 
             public void run() {
                 try {
                     mCodeInterpreterForCallTree.execute();
                 } catch (Exception e) {
-                    //e.printStackTrace();
+                    if (DebugUtil.DEBUGGING) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -575,7 +584,9 @@ public class Jeliot {
             try {
                 ecodeReader.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
             }
         }
         if (inputWriter != null) {
@@ -769,8 +780,16 @@ public class Jeliot {
         return "import " + getIOPackageName() + ";";
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean isHistoryViewVisible() {
         return hv.isVisible();
+    }
+    
+    public HistoryView getHistoryView() {
+        return this.hv;
     }
     
     /**

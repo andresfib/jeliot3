@@ -36,6 +36,7 @@ import javax.swing.event.DocumentListener;
 
 import jeliot.mcode.Highlight;
 import jeliot.mcode.MCodeUtilities;
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserPropertyResourceBundle;
 
@@ -530,7 +531,10 @@ public class CodeEditor extends JComponent {
             return buff.toString();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            //TODO: report to user that something went wrong!
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
             return null;
         }
     }

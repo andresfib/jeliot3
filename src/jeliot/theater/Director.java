@@ -23,6 +23,7 @@ import jeliot.mcode.InterpreterError;
 import jeliot.mcode.MCodeInterpreter;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.tracker.Tracker;
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 
 /**
@@ -197,7 +198,9 @@ public class Director {
         if (!errorOccured) {
             codePane.highlightStatement(new Highlight(0, 0, 0, 0));
         }
-        theatre.flush();
+        if (!interrupted) {
+            theatre.repaint();
+        }
         Tracker.writeToFile("AnimationEnded", System.currentTimeMillis());
         return interrupted;
     }
@@ -759,7 +762,8 @@ public class Director {
             manager.removeScratch(scratch);
             Point p = new Point(scratch.getX(), -scratch.getHeight());
             updateCapture();
-            engine.showAnimation(scratch.fly(p));
+            Animation a = scratch.fly(p);
+            engine.showAnimation(a);
             theatre.removePassive(scratch);
         }
         openScratch();
@@ -867,7 +871,12 @@ public class Director {
             manager.removeScratch(scratch);
             Point p = new Point(scratch.getX(), -scratch.getHeight());
             updateCapture();
-            engine.showAnimation(scratch.fly(p));
+            Animation a = scratch.fly(p);
+            //System.out.println(scratch.getHeight());
+            if (scratch.getHeight() < 5) {
+                a.setDuration(50);
+            }
+            engine.showAnimation(a);
             theatre.removePassive(scratch);
         }
         openScratch();
@@ -2269,7 +2278,6 @@ public class Director {
             try {
                 controller.checkPoint(c);
             } catch (Exception e) {
-                //TODO should here be done something?
             }
         } while (!validator.isOk());
 
@@ -2283,9 +2291,15 @@ public class Director {
                 }
             });
         } catch (java.lang.reflect.InvocationTargetException e) {
-            e.printStackTrace();
+            //TODO: report to user that something went wrong!
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //TODO: report to user that something went wrong!
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
         }
 
         Value val = validator.getValue();

@@ -59,6 +59,7 @@ import jeliot.theater.ImageLoader;
 import jeliot.theater.PanelController;
 import jeliot.theater.Theater;
 import jeliot.tracker.Tracker;
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserPropertyResourceBundle;
 import edu.unika.aifb.components.JFontChooser;
@@ -69,7 +70,7 @@ import edu.unika.aifb.components.JFontChooser;
  * @author Pekka Uronen
  * @author Niko Myller
  */
-public class JeliotWindow {
+public class JeliotWindow implements PauseListener {
 
     /**
      * The resource bundle for gui package
@@ -427,6 +428,10 @@ public class JeliotWindow {
 
                 this.tabbedPane.addTab(messageBundle.getString("tab.title.history"), hv);
                 this.tabbedPane.setMnemonicAt(2, KeyEvent.VK_Y);
+                this.tabbedPane.setEnabledAt(tabbedPane.indexOfTab(messageBundle
+                        .getString("tab.title.call_tree")), false);
+                this.tabbedPane.setEnabledAt(tabbedPane.indexOfTab(messageBundle
+                        .getString("tab.title.history")), false);
             }
 
             this.frame
@@ -555,22 +560,25 @@ public class JeliotWindow {
         editWidgets.addElement(programMenu);
 
         JMenu editMenu = editor.makeEditMenu();
-        
+
+        editMenu.addSeparator();
+
         menuItem = new JMenuItem(messageBundle.getString("menu.edit.font_select"));
         menuItem.setMnemonic(KeyEvent.VK_F);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-                Font f = JFontChooser.showDialog(frame, editor.getTextArea().getPainter().getFont());
+                Font f = JFontChooser
+                        .showDialog(frame, editor.getTextArea().getPainter().getFont());
                 if (f != null) {
                     editor.getTextArea().getPainter().setFont(f);
                     getCodePane().getTextArea().getPainter().setFont(f);
                 }
             }
         });
-        editMenu.add(menuItem);        
-        
+        editMenu.add(menuItem);
+
         menuBar.add(editMenu);
         editWidgets.addElement(editMenu);
 
@@ -747,6 +755,25 @@ public class JeliotWindow {
         });
         menu.add(menuItem);
 
+        menu.addSeparator();
+
+        final Jeliot j = jeliot;
+        final JTabbedPane jtp = this.tabbedPane;
+        final int index = jtp.indexOfTab(messageBundle.getString("tab.title.history"));
+        final JCheckBoxMenuItem cbmenuItem2 = new JCheckBoxMenuItem(messageBundle
+                .getString("menu.show_history_view"), jeliot.getHistoryView().isEnabled());
+        cbmenuItem2.setMnemonic(KeyEvent.VK_D);
+        cbmenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
+        cbmenuItem2.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                boolean state = cbmenuItem2.getState();
+                j.getHistoryView().setEnabled(state);
+                jtp.setEnabledAt(index, state);
+            }
+        });
+        menu.add(cbmenuItem2);
+
         return menu;
     }
 
@@ -850,7 +877,6 @@ public class JeliotWindow {
 
             public void actionPerformed(ActionEvent e) {
                 Tracker.writeToFile("EditButton", System.currentTimeMillis());
-
                 enterEdit();
             }
         });
@@ -1055,6 +1081,10 @@ public class JeliotWindow {
         changeTheatrePane(tabbedPane);
         unhighlightTabTitles();
         callTree.initialize();
+        int n = tabbedPane.getTabCount();
+        for (int i = 1; i < n; i++) {
+            tabbedPane.setEnabledAt(i, false);
+        }
         if (runningUntil) {
             jeliot.runUntil(0);
             runUntilFinished();
@@ -1149,15 +1179,26 @@ public class JeliotWindow {
 
                                 public void run() {
                                     enterAnimate();
-                                    //Buttons are enables just after the animation not before
+                                    //Buttons are enables just after the animation mode is not before
                                     enableWidgets(animWidgets.elements(), true);
                                     pauseButton.setEnabled(false);
                                     rewindButton.setEnabled(false);
+                                    
+                                    int index = tabbedPane.indexOfTab(messageBundle
+                                            .getString("tab.title.call_tree"));
+                                    if (index > 0) {
+                                        tabbedPane.setEnabledAt(index, true);
+                                    }
+                                    index = tabbedPane.indexOfTab(messageBundle
+                                            .getString("tab.title.history"));
+                                    if (index > 0) {
+                                        tabbedPane.setEnabledAt(index, jeliot.getHistoryView()
+                                                .isEnabled());
+                                    }
                                 }
                             });
                         }
                     }).start();
-
                 } else {
                     errorJEditorPane.setText(messageBundle
                             .getString("main_method_not_found.exception"));
@@ -1177,7 +1218,9 @@ public class JeliotWindow {
              */
         } catch (Exception e) {
             editButton.doClick();
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1441,28 +1484,20 @@ public class JeliotWindow {
      * @see jeliot.Jeliot#pause()
      */
     public void pauseAnimation() {
-
-        stepButton.setEnabled(true);
-        playButton.setEnabled(true);
+        
         pauseButton.setEnabled(false);
-        rewindButton.setEnabled(true);
-        editButton.setEnabled(true);
 
         String[] s1 = { messageBundle.getString("menu.animation.pause")};
-        setEnabledMenuItems(false, s1);
-        String[] s2 = { messageBundle.getString("menu.animation.step"),
-                messageBundle.getString("menu.animation.play"),
-                messageBundle.getString("menu.animation.rewind"),
-                messageBundle.getString("menu.control.edit"),
-                messageBundle.getString("menu.animation.run_until")};
-        setEnabledMenuItems(true, s2);
-
+        setEnabledMenuItems(false, s1);        
+        
         try {
             jeliot.pause();
         } catch (Exception e) {}
 
     }
 
+    
+    
     /**
      * Changes the user interface when animation is resumed, for example,
      * after input request.
@@ -1515,39 +1550,61 @@ public class JeliotWindow {
      */
     void rewindAnimation() {
 
+        String[] s1 = { messageBundle.getString("menu.animation.step"),
+                messageBundle.getString("menu.animation.play"),
+                messageBundle.getString("menu.animation.run_until"),
+                messageBundle.getString("menu.animation.rewind"),
+                messageBundle.getString("menu.animation.pause")};
+        setEnabledMenuItems(false, s1);
+
+        editButton.setEnabled(false);
+        stepButton.setEnabled(false);
+        playButton.setEnabled(false);
+        pauseButton.setEnabled(false);
+        rewindButton.setEnabled(false);
+        
         unhighlightTabTitles();
 
         errorOccured = false;
 
-        jeliot.stopThreads();
-
-        jeliot.compile();
-
-        /*
-         * try { Thread.sleep(25); } catch(InterruptedException e) { throw new
-         * RuntimeException(e); }
-         */
-
+        jeliot.cleanUp();
+        theatre.repaint();
+        
         if (runningUntil) {
             //TODO: Here ask if the user wants to continue with run until.
             jeliot.runUntil(0);
             runUntilFinished();
         }
-        jeliot.rewind();
-        theatre.repaint();
 
-        stepButton.setEnabled(true);
-        playButton.setEnabled(true);
-        pauseButton.setEnabled(false);
-        rewindButton.setEnabled(false);
+        SwingUtilities.invokeLater(new Runnable() {
 
-        String[] s2 = { messageBundle.getString("menu.animation.step"),
-                messageBundle.getString("menu.animation.play"),
-                messageBundle.getString("menu.animation.run_until")};
-        setEnabledMenuItems(true, s2);
-        String[] s3 = { messageBundle.getString("menu.animation.rewind"),
-                messageBundle.getString("menu.animation.pause")};
-        setEnabledMenuItems(false, s3);
+            public void run() {
+                jeliot.stopThreads();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                
+                jeliot.compile();
+
+                jeliot.rewind();
+                theatre.repaint();
+
+                stepButton.setEnabled(true);
+                playButton.setEnabled(true);
+                pauseButton.setEnabled(false);
+                rewindButton.setEnabled(false);
+
+                String[] s2 = { messageBundle.getString("menu.animation.step"),
+                        messageBundle.getString("menu.animation.play"),
+                        messageBundle.getString("menu.animation.run_until")};
+                setEnabledMenuItems(true, s2);
+                String[] s3 = { messageBundle.getString("menu.animation.rewind"),
+                        messageBundle.getString("menu.animation.pause")};
+                setEnabledMenuItems(false, s3);
+            }
+        });
     }
 
     /**
@@ -1750,5 +1807,22 @@ public class JeliotWindow {
 
     public JSlider getSpeedSlider() {
         return speedSlider;
+    }
+    
+    public void paused() {
+        stepButton.setEnabled(true);
+        playButton.setEnabled(true);
+        pauseButton.setEnabled(false);
+        rewindButton.setEnabled(true);
+        editButton.setEnabled(true);
+
+        String[] s1 = { messageBundle.getString("menu.animation.pause")};
+        setEnabledMenuItems(false, s1);
+        String[] s2 = { messageBundle.getString("menu.animation.step"),
+                messageBundle.getString("menu.animation.play"),
+                messageBundle.getString("menu.animation.rewind"),
+                messageBundle.getString("menu.control.edit"),
+                messageBundle.getString("menu.animation.run_until")};
+        setEnabledMenuItems(true, s2);
     }
 }

@@ -24,6 +24,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import jeliot.mcode.Highlight;
+import jeliot.util.DebugUtil;
 
 /**
  * @author nmyller
@@ -102,6 +103,11 @@ public class HistoryView extends JComponent implements ActionListener {
      */
     private boolean newImageAdded = false;
 
+    /**
+     * Comment for <code>enabled</code>
+     */
+    private boolean enabled = true;
+
     //TODO: Buffering of next and previous image could improve performance
     /**
      * Comment for <code>previousImageNumber</code>
@@ -156,87 +162,49 @@ public class HistoryView extends JComponent implements ActionListener {
         slider.addChangeListener(new ChangeListener() {
 
             public void stateChanged(ChangeEvent e) {
-                //previousImageNumber = imageNumber;
-                imageNumber = slider.getValue();
+                try {
+                    //previousImageNumber = imageNumber;
+                    imageNumber = slider.getValue();
 
-                if (imageNumber == slider.getMaximum()) {
-                    buttonR.setEnabled(false);
-                } else {
-                    buttonR.setEnabled(true);
-                }
-                if (imageNumber == slider.getMinimum()) {
-                    buttonL.setEnabled(false);
-                } else {
-                    buttonL.setEnabled(true);
-                }
-
-                /*
-                 if (imageNumber + 1 == previousImageNumber) {
-                 int n = imageFiles.size();
-                 if (imageNumber + 1 < n) {
-                 previous = current;
-                 current = next;
-                 if (imageNumber + 2 < n) {
-                 try {
-                 next = ImageIO.read((File) imageFiles
-                 .get(imageNumber + 2));
-                 } catch (IOException e1) {
-                 e1.printStackTrace();
-                 }
-                 }
-                 }
-                 } else if (imageNumber - 1 == previousImageNumber) {
-                 int n = imageFiles.size();
-                 if (imageNumber - 1 >= 0) {
-                 next = current;
-                 current = previous;
-                 if (imageNumber - 2 >= 0) {
-                 try {
-                 previous = ImageIO.read((File) imageFiles
-                 .get(imageNumber - 2));
-                 } catch (IOException e1) {
-                 e1.printStackTrace();
-                 }
-                 }
-                 }
-                 } else
-                 */
-                if (imageNumber < imageFiles.size() && imageNumber >= 0) {
-                    if (!(imageNumber == imageFiles.size() - 1 && newImageAdded)) {
-                        try {
-                            current = ImageIO.read((File) imageFiles.get(imageNumber));
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
+                    if (imageNumber == slider.getMaximum()) {
+                        buttonR.setEnabled(false);
+                    } else {
+                        buttonR.setEnabled(true);
+                    }
+                    if (imageNumber == slider.getMinimum()) {
+                        buttonL.setEnabled(false);
+                    } else {
+                        buttonL.setEnabled(true);
+                    }
+                    if (imageNumber < imageFiles.size() && imageNumber >= 0) {
+                        if (newImageAdded) {
+                            ic.setImage(current);
+                        } else {
+                            try {
+                                current = ImageIO.read((File) imageFiles.get(imageNumber));
+                            } catch (IOException e1) {
+                                //TODO: report to user that something went wrong!
+                                if (DebugUtil.DEBUGGING) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                            ic.setImage(current);
                         }
-                        /*
-                         if (imageNumber - 1 >= 0) {
-                         try {
-                         previous = ImageIO.read((File) imageFiles
-                         .get(imageNumber - 1));
-                         } catch (IOException e1) {
-                         e1.printStackTrace();
-                         }
-                         }
-                         if (imageNumber + 1 < imageFiles.size()) {
-                         try {
-                         next = ImageIO.read((File) imageFiles
-                         .get(imageNumber + 1));
-                         } catch (IOException e1) {
-                         e1.printStackTrace();
-                         }
-                         }
-                         */
                     }
-                    ic.setImage(current);
-                }
-                if (highlights.get(imageNumber) != null) {
-                    if (HistoryView.this.isVisible()) {
-                        c.highlightStatement((Highlight) highlights.get(imageNumber));
+                    
+                    if (highlights.size() > imageNumber && highlights.get(imageNumber) != null) {
+                        if (HistoryView.this.isVisible()) {
+                            c.highlightStatement((Highlight) highlights.get(imageNumber));
+                        }
+                    }
+                    newImageAdded = false;
+                    ic.repaint();
+                    validate();
+                } catch (Exception e1) {
+                    if (DebugUtil.DEBUGGING) {
+                        e1.printStackTrace();
                     }
                 }
-                newImageAdded = false;
-                ic.repaint();
-                validate();
             }
         });
     }
@@ -260,6 +228,7 @@ public class HistoryView extends JComponent implements ActionListener {
         buttonL.setEnabled(false);
         buttonR.setEnabled(false);
         ic.repaint();
+        validate();
     }
 
     /**
@@ -267,25 +236,32 @@ public class HistoryView extends JComponent implements ActionListener {
      * @param h
      */
     public void addImage(final Image i, final Highlight h) {
-        if (!slider.isEnabled()) {
-            slider.setEnabled(true);
-        }
-        int size = imageFiles.size();
-        BufferedImage newImage = getBufferedImage(i);
-        File imageFile = new File(imageTemp, "image" + size + ".png");
-        try {
-            ImageIO.write(newImage, "png", imageFile);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        imageFiles.add(imageFile);
-        highlights.add(h);
+        if (enabled) {
+            if (!slider.isEnabled()) {
+                slider.setEnabled(true);
+            }
+            int size = imageFiles.size();
+            BufferedImage newImage = getBufferedImage(i);
+            File imageFile = new File(imageTemp, "image" + size + ".png");
 
-        current = newImage;
-        newImageAdded = true;
-        size = imageFiles.size() - 1;
-        slider.setMaximum(size);
-        slider.setValue(size);
+            //TODO: This could be done in a thread to maybe increase the performance
+            try {
+                ImageIO.write(newImage, "png", imageFile);
+            } catch (IOException e1) {
+                //TODO: report to user that something went wrong!
+                if (DebugUtil.DEBUGGING) {
+                    e1.printStackTrace();
+                }
+            }
+            imageFiles.add(imageFile);
+            highlights.add(h);
+
+            current = newImage;
+            newImageAdded = true;
+            size = imageFiles.size() - 1;
+            slider.setMaximum(size);
+            slider.setValue(size);
+        }
     }
 
     /* (non-Javadoc)
@@ -316,5 +292,22 @@ public class HistoryView extends JComponent implements ActionListener {
         g2d.drawImage(img, 0, 0, w, h, null);
         g2d.dispose();
         return bi;
+    }
+
+    /**
+     * @return Returns the enabled.
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * @param enabled The enabled to set.
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (enabled) {
+            initialize();
+        }
     }
 }

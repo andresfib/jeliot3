@@ -358,7 +358,7 @@ public abstract class InputHandler extends KeyAdapter
 
 		// this shouldn't happen
 		System.err.println("BUG: getTextArea() returning null");
-		System.err.println("Report this to Slava Pestov <sp@gjt.org>");
+		System.err.println("Report this to Jeliot Team <jeliot@cs.joensuu.fi>");
 		return null;
 	}
 

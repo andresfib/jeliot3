@@ -7,6 +7,7 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserPropertyResourceBundle;
 
@@ -147,7 +148,6 @@ public abstract class MCodeInterpreter {
      */
     public boolean execute() {
 
-        //TODO: Take the next line out of the comments for the versions to be realeased
         try {
 
             beforeExecution();
@@ -203,14 +203,13 @@ public abstract class MCodeInterpreter {
 
         } catch (StoppingRequestedError e) {
             return false;
+        } catch (Exception e) {
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
+        	handleCodeERROR("<H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null);
+        	return true;
         }
-        /* TODO: Take this out of the comments for the versions to be
-         * realeased.
-         */
-        // catch (Exception e) {
-        //	 handleCodeERROR("<H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null);
-        //  return true;
-        //}
         return true;
     }
 

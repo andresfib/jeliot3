@@ -3,6 +3,8 @@
  */
 package jeliot.mcode;
 
+import jeliot.util.DebugUtil;
+
 /**
  * @author nmyller
  */
@@ -42,9 +44,11 @@ public class StoppingRequestedError extends Error {
     }
 
     public void printRequestStop() {
-        //TODO: comment next line on public releases. For debugging
-        //System.out.println("Stopping Requested: " + Thread.currentThread().getName());
-        //Thread.dumpStack();        
+        //For Debugging
+        if (DebugUtil.DEBUGGING) {
+            System.out.println("Stopping Requested: " + Thread.currentThread().getName());
+            //Thread.dumpStack();
+        }
     }
-    
+
 }

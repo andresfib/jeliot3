@@ -79,9 +79,15 @@ public class EvaluationVisitor extends VisitorObject {
 	 */
 	private static Stack constructorCallNames = new Stack();
 
-	//DOC: NIKO
+	/**
+     * Contains the superClasses
+	 */
 	private static Stack superClasses = new Stack();
 
+    /**
+     * Contains the all the constructorCallNumbers that are used to track the 
+     * constructor invocations.
+     */
 	private static Stack constructorCallNumbers = new Stack();
 
 	/**
@@ -125,10 +131,9 @@ public class EvaluationVisitor extends VisitorObject {
 	}
 
 	/**
-	 * shortCircuit will indicate if we evaluate && and || in shor circuit TODO:
-	 * place it somewhere more reasonable
+	 * shortCircuit will indicate if we evaluate && and || in shor circuit
+     * TODO: place it somewhere more reasonable
 	 */
-
 	public boolean shortCircuit = true;
 
 	/**

@@ -14,6 +14,7 @@ import java.awt.Shape;
 import java.util.Vector;
 
 import jeliot.tracker.Tracker;
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserPropertyResourceBundle;
 
@@ -428,7 +429,9 @@ public abstract class Actor implements Cloneable {
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
             return null;
         }
     }
