@@ -14,7 +14,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 /**
  * 
@@ -37,39 +40,62 @@ public class UserProperties {
      */
     String userPropertiesName;
 
-
     /**
      * @param userPropertiesName
      * @param defaultPropertiesName
      */
-    public UserProperties(String userPropertiesName,
-            String defaultPropertiesName) {
+    public UserProperties(String userPropertiesName, String defaultPropertiesName) {
+        String temp = defaultPropertiesName;
         this.userPropertiesName = userPropertiesName;
         Properties defaultProperties = null;
         File userPath = Util.createUserPath();
 
         if (defaultPropertiesName != null) {
             String defaultFileSeparator = System.getProperty("file.separator");
-            defaultPropertiesName = defaultPropertiesName.replace('.',
-                    defaultFileSeparator.charAt(0));
+            defaultPropertiesName = defaultPropertiesName.replace('.', defaultFileSeparator
+                    .charAt(0));
             defaultPropertiesName += ".properties";
             //DebugUtil.printDebugInfo(defaultPropertiesName);
-            InputStream is = this.getClass().getClassLoader()
-                    .getResourceAsStream(defaultPropertiesName);
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream(
+                    defaultPropertiesName);
             if (is == null) {
-                is = Thread.currentThread().getContextClassLoader()
-                        .getResourceAsStream(defaultPropertiesName);
+                is = Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                        defaultPropertiesName);
+            }
+            if (is == null) {
+                is = UserProperties.class.getClassLoader().getResourceAsStream(
+                        defaultPropertiesName);
             }
             defaultProperties = new Properties();
             try {
-                defaultProperties.load(is);
+                if (is == null) {
+                    //This is a hack because even though the resource is found in Eclipse it is not
+                    //found in command prompt for some mysterious reason.
+                    ResourceBundle rb = null;
+                    try {
+                        rb = ResourceBundle.getBundle(temp, Locale.getDefault(), this.getClass().getClassLoader());
+                    } catch (Exception e) {
+                        try {
+                            rb = ResourceBundle.getBundle(temp, Locale.getDefault(), Thread.currentThread().getContextClassLoader());
+                        } catch (Exception e1) {
+                            DebugUtil.handleThrowable(e1);
+                        }
+                    }
+                    Enumeration e = rb.getKeys();
+                    while (e.hasMoreElements()) {
+                        String str = (String) e.nextElement();
+                        //System.out.println(str + "=" + rb.getString(str));
+                        defaultProperties.setProperty(str, rb.getString(str));
+                    }
+                } else {
+                    defaultProperties.load(is);
+                }
             } catch (Exception e) {
                 DebugUtil.handleThrowable(e);
             }
         }
 
-        this.userPropertiesFile = new File(userPath, userPropertiesName
-                + ".properties");
+        this.userPropertiesFile = new File(userPath, userPropertiesName + ".properties");
         if (defaultProperties != null) {
             userProperties = new Properties(defaultProperties);
         } else {
@@ -78,15 +104,13 @@ public class UserProperties {
 
         if (userPropertiesFile.exists()) {
             try {
-                userProperties
-                        .load(new FileInputStream(this.userPropertiesFile));
+                userProperties.load(new FileInputStream(this.userPropertiesFile));
             } catch (FileNotFoundException e) {
                 DebugUtil.handleThrowable(e);
             } catch (IOException e) {
                 DebugUtil.handleThrowable(e);
             }
         }
-
     }
 
     /**
@@ -97,8 +121,8 @@ public class UserProperties {
             if (!userPropertiesFile.exists()) {
                 userPropertiesFile.createNewFile();
             }
-            userProperties.store(new FileOutputStream(userPropertiesFile),
-                    "User Properties for " + userPropertiesName);
+            userProperties.store(new FileOutputStream(userPropertiesFile), "User Properties for "
+                    + userPropertiesName);
         } catch (FileNotFoundException e) {
             DebugUtil.handleThrowable(e);
         } catch (IOException e) {
@@ -175,8 +199,7 @@ public class UserProperties {
      * @return
      */
     public Color getColorProperty(String key) {
-        return new Color(Integer.decode(userProperties.getProperty(key))
-                .intValue());
+        return new Color(Integer.decode(userProperties.getProperty(key)).intValue());
     }
 
     /**
@@ -198,10 +221,10 @@ public class UserProperties {
         int style = Font.PLAIN;
         try {
             style = getIntegerProperty(key + ".style");
-        } catch (Exception e) {            
+        } catch (Exception e) {
         }
         int size = getIntegerProperty(key + ".size");
-        
+
         return new Font(family, style, size);
     }
 
