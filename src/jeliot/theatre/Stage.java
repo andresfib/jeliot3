@@ -9,8 +9,6 @@ import java.util.*;
   * created         9.8.1999
   * revised         18.9.1999
   *
-  * The space allocation for variables need to be changed
-  * also parameters need to be handled somehow.
   */
 public class Stage extends Actor implements ActorContainer {
 
@@ -76,15 +74,7 @@ public class Stage extends Actor implements ActorContainer {
     }
 
     public Dimension calculateSizeDimensions() {
-
-        int w = borderWidth * 2 + insets.right + insets.left +
-            Math.max(actWidth, nwidth) + 2 * margin;
-
-        int h = borderWidth * 2 + insets.top + insets.bottom +
-            nheight + 2 * margin + actorMargin +
-            (actorMargin + actHeight) * this.varCount;
-
-        return new Dimension(w, h);
+        return calculateSizeDimensions(this.varCount);
     }
 
     public Dimension calculateSizeDimensions(int varCount) {

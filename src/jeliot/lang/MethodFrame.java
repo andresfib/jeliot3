@@ -20,7 +20,7 @@ public class MethodFrame {
 //  private int depth;
 
     private Stack vars;
-    private int vcount;
+    private int vcount = 0;
 
     private String name;
 
@@ -48,7 +48,8 @@ public class MethodFrame {
                 }
             }
         }
-        throw new RuntimeException("No Variable " + name);
+        //throw new RuntimeException("No Variable " + name);
+        return null;
     }
 
     public void openScope() {

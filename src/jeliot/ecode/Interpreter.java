@@ -1047,6 +1047,37 @@ public class Interpreter {
                             break;
                         }
 
+
+                        //Simple Allocation (Object Allocation)
+                        case Code.SA: {
+
+                            break;
+                        }
+
+                        // Simple class allocation close
+                        case Code.SAC: {
+
+                            break;
+                        }
+
+                        // Object field access
+                        case Code.OFA: {
+
+                            break;
+                        }
+
+                        // Object method call
+                        case Code.OMC: {
+
+                            break;
+                        }
+
+                        // Object method call close
+                        case Code.OMCC: {
+
+                            break;
+                        }
+
                         //Static Method Call
                         case Code.SMC: {
 
@@ -1162,6 +1193,8 @@ public class Interpreter {
 
                             if (!methodInvocation.empty()) {
                                 currentMethodInvocation = (Object[]) methodInvocation.pop();
+                            } else {
+                                currentMethodInvocation = null;
                             }
 
                             invokingMethod = false;
@@ -1258,6 +1291,7 @@ public class Interpreter {
 
                                 handleExpression(rv, returnExpressionCounter);
                             }
+
                             returned = false;
 
 /*
@@ -1354,7 +1388,6 @@ public class Interpreter {
                             }
                             returned = false;
 */
-
                             break;
                         }
 
@@ -1576,6 +1609,7 @@ public class Interpreter {
                             break;
                         }
 
+                        //Input needs to be read
                         case Code.INPUT: {
 
                             int expressionCounter = Integer.parseInt(
@@ -1595,6 +1629,7 @@ public class Interpreter {
                             break;
                         }
 
+                        //Inputted value is returned
                         case Code.INPUTTED: {
 
                             int expressionCounter = Integer.parseInt(
@@ -2010,6 +2045,7 @@ public class Interpreter {
                             break;
                         }
 
+                        //Class information starts for a class
                         case Code.CLASS: {
 
                             String name = tokenizer.nextToken();
@@ -2029,6 +2065,7 @@ public class Interpreter {
                             break;
                         }
 
+                        //Class information ends for a class
                         case Code.END_CLASS: {
 
                             if (currentClass != null) {
@@ -2040,6 +2077,7 @@ public class Interpreter {
                             break;
                         }
 
+                        //Class information for constructor
                         case Code.CONSTRUCTOR: {
 
                             String listOfParameters = "";
@@ -2052,6 +2090,7 @@ public class Interpreter {
                             break;
                         }
 
+                        //Class information for method
                         case Code.METHOD: {
 
                             String name = tokenizer.nextToken();
@@ -2069,6 +2108,7 @@ public class Interpreter {
                             break;
                         }
 
+                        //Class information for field
                         case Code.FIELD: {
 
                             String name = tokenizer.nextToken();
@@ -2082,6 +2122,7 @@ public class Interpreter {
                             break;
                         }
 
+                        //Error has occured during the execution
                         case Code.ERROR: {
 
                             String message = tokenizer.nextToken();
