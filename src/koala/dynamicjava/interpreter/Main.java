@@ -28,11 +28,14 @@
 
 package koala.dynamicjava.interpreter;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 
-import koala.dynamicjava.interpreter.*;
-import koala.dynamicjava.parser.wrapper.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.parser.wrapper.JavaCCParserFactory;
 
 /**
  * This file contains the entry point of the interpreter

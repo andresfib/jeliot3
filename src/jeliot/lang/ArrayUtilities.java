@@ -1,9 +1,6 @@
 package jeliot.lang;
 
-import java.lang.reflect.*;
-import java.util.*;
-import jeliot.FeatureNotImplementedException;
-import jeliot.theatre.*;
+import java.lang.reflect.Array;
 
 public class ArrayUtilities {
 

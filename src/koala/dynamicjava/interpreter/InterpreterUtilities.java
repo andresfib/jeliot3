@@ -28,11 +28,12 @@
 
 package koala.dynamicjava.interpreter;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
-import koala.dynamicjava.interpreter.throwable.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.util.AmbiguousFieldException;
+import koala.dynamicjava.util.ReflectionUtilities;
 
 /**
  * This class contains a collection of utility methods for interpretation

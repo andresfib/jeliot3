@@ -1,8 +1,7 @@
 package jeliot.lang;
 
 //import jeliot.parser.*;
-import jeliot.theatre.*;
-import jeliot.FeatureNotImplementedException;
+import jeliot.theatre.ValueActor;
 
 /**
   *

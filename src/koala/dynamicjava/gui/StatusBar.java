@@ -28,11 +28,15 @@
 
 package koala.dynamicjava.gui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
-import koala.dynamicjava.gui.resource.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+
+import koala.dynamicjava.gui.resource.ResourceManager;
 
 /**
  * The status bar

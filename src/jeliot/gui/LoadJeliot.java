@@ -1,11 +1,19 @@
 package jeliot.gui;
 
-import java.util.*;
-import java.io.*;
-import java.awt.*;
-import javax.swing.*;
-import jeliot.theatre.*;
-import jeliot.Jeliot;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.ResourceBundle;
+
+import javax.swing.JWindow;
+
+import jeliot.theatre.ImageLoader;
 
 /**
  * LoadJeliot displays a splash screen and starts the Jeliot application.

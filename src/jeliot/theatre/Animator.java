@@ -1,9 +1,6 @@
 package jeliot.theatre;
 
-import java.lang.reflect.*;
-import jeliot.lang.*;
-import jeliot.gui.*;
-import jeliot.*;
+import jeliot.lang.Value;
 
 /**
   * @author Pekka Uronen

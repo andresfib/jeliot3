@@ -28,7 +28,6 @@
 
 package koala.dynamicjava.tree;
 
-import koala.dynamicjava.tree.visitor.*;
 
 /**
  * This class represents the assign expression nodes of the syntax tree

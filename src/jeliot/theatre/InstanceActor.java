@@ -1,7 +1,7 @@
 package jeliot.theatre;
 
-import java.awt.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
   * @author Pekka Uronen

@@ -28,9 +28,9 @@
 
 package koala.dynamicjava.tree;
 
-import java.util.*;
-
-import koala.dynamicjava.tree.visitor.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class represents a type declaration

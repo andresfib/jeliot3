@@ -28,9 +28,11 @@
 
 package koala.dynamicjava.interpreter;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import koala.dynamicjava.classinfo.*;
+import koala.dynamicjava.classinfo.ClassInfo;
 
 /**
  * The instances of this class contains classinfos

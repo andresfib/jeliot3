@@ -1,8 +1,12 @@
 package jeliot.lang;
 
-import java.util.*;
-import jeliot.ecode.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import jeliot.ecode.Code;
 
 public class ClassInfo {
 

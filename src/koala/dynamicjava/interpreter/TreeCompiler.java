@@ -28,18 +28,33 @@
 
 package koala.dynamicjava.interpreter;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
-import koala.dynamicjava.classinfo.*;
-import koala.dynamicjava.interpreter.context.*;
-import koala.dynamicjava.interpreter.error.*;
-import koala.dynamicjava.parser.wrapper.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.tree.visitor.*;
-import koala.dynamicjava.util.*;
-
-import jeliot.ecode.*;
+import jeliot.ecode.Code;
+import jeliot.ecode.ECodeUtilities;
+import koala.dynamicjava.classinfo.ClassFinder;
+import koala.dynamicjava.classinfo.ClassInfo;
+import koala.dynamicjava.classinfo.TreeClassInfo;
+import koala.dynamicjava.interpreter.context.Context;
+import koala.dynamicjava.interpreter.context.GlobalContext;
+import koala.dynamicjava.interpreter.error.CatchedExceptionError;
+import koala.dynamicjava.interpreter.error.ExecutionError;
+import koala.dynamicjava.parser.wrapper.ParserFactory;
+import koala.dynamicjava.parser.wrapper.SourceCodeParser;
+import koala.dynamicjava.tree.ClassDeclaration;
+import koala.dynamicjava.tree.ImportDeclaration;
+import koala.dynamicjava.tree.InterfaceDeclaration;
+import koala.dynamicjava.tree.Node;
+import koala.dynamicjava.tree.PackageDeclaration;
+import koala.dynamicjava.tree.TypeDeclaration;
+import koala.dynamicjava.tree.visitor.Visitor;
+import koala.dynamicjava.tree.visitor.VisitorObject;
+import koala.dynamicjava.util.ImportationManager;
+import koala.dynamicjava.util.LibraryFinder;
 /**
  * This class contains methods to manage the creation of classes.
  *

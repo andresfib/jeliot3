@@ -28,13 +28,27 @@
 
 package koala.dynamicjava.interpreter.context;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.List;
 
-import koala.dynamicjava.interpreter.*;
-import koala.dynamicjava.interpreter.modifier.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.interpreter.ClassLoaderContainer;
+import koala.dynamicjava.interpreter.Interpreter;
+import koala.dynamicjava.interpreter.modifier.LeftHandSideModifier;
+import koala.dynamicjava.tree.ClassAllocation;
+import koala.dynamicjava.tree.Expression;
+import koala.dynamicjava.tree.IdentifierToken;
+import koala.dynamicjava.tree.MethodDeclaration;
+import koala.dynamicjava.tree.Node;
+import koala.dynamicjava.tree.ObjectFieldAccess;
+import koala.dynamicjava.tree.QualifiedName;
+import koala.dynamicjava.tree.SimpleAllocation;
+import koala.dynamicjava.tree.StaticFieldAccess;
+import koala.dynamicjava.tree.SuperFieldAccess;
+import koala.dynamicjava.tree.TypeDeclaration;
+import koala.dynamicjava.util.AmbiguousFieldException;
+import koala.dynamicjava.util.ImportationManager;
 
 /**
  * The classes that implements this interface represent

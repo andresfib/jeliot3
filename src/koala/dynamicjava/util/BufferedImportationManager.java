@@ -28,8 +28,8 @@
 
 package koala.dynamicjava.util;
 
-import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A buffered version of the importation manager

@@ -28,8 +28,11 @@
 
 package koala.dynamicjava.util;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * The instances of <code>LibraryFinder</code> are used to locate

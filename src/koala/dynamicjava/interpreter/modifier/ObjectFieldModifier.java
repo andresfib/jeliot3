@@ -28,14 +28,14 @@
 
 package koala.dynamicjava.interpreter.modifier;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.LinkedList;
+import java.util.List;
 
-import koala.dynamicjava.interpreter.error.*;
-import koala.dynamicjava.interpreter.context.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.tree.visitor.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.interpreter.context.Context;
+import koala.dynamicjava.interpreter.error.CatchedExceptionError;
+import koala.dynamicjava.tree.ObjectFieldAccess;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This interface represents the objets that modify an object field

@@ -28,7 +28,8 @@
 
 package koala.dynamicjava.parser.wrapper;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * This class implements a JavaCCParser factory

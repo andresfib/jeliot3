@@ -28,8 +28,8 @@
 
 package koala.dynamicjava.classfile;
 
-import java.io.*;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class represents a component of the bytecode 'ClassFile' format

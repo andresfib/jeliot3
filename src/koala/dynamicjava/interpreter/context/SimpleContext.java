@@ -28,7 +28,8 @@
 
 package koala.dynamicjava.interpreter.context;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * The classes that implements this interface represent

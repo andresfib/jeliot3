@@ -1,6 +1,6 @@
 package jeliot.parser;
 
-import jeliot.theatre.*;
+import jeliot.theatre.Highlight;
 
 /**
   * An exception caused by a syntax error in the program being parsed.

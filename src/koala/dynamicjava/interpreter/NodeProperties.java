@@ -28,9 +28,9 @@
 
 package koala.dynamicjava.interpreter;
 
-import koala.dynamicjava.classinfo.*;
-import koala.dynamicjava.interpreter.modifier.*;
-import koala.dynamicjava.tree.*;
+import koala.dynamicjava.classinfo.ClassInfo;
+import koala.dynamicjava.interpreter.modifier.LeftHandSideModifier;
+import koala.dynamicjava.tree.Node;
 
 /**
  * This interface contains the names of the syntax tree properties

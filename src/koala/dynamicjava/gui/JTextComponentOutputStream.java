@@ -28,8 +28,12 @@
 
 package koala.dynamicjava.gui;
 
-import java.io.*;
-import javax.swing.text.*;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 
 /**
  * An output stream that writes to a swing JTextComponent

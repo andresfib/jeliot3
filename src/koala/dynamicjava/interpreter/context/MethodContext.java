@@ -28,15 +28,45 @@
 
 package koala.dynamicjava.interpreter.context;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import koala.dynamicjava.classinfo.*;
-import koala.dynamicjava.interpreter.*;
-import koala.dynamicjava.interpreter.error.*;
-import koala.dynamicjava.interpreter.throwable.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.classinfo.JavaClassInfo;
+import koala.dynamicjava.classinfo.TreeClassInfo;
+import koala.dynamicjava.interpreter.Interpreter;
+import koala.dynamicjava.interpreter.InterpreterUtilities;
+import koala.dynamicjava.interpreter.NodeProperties;
+import koala.dynamicjava.interpreter.TreeCompiler;
+import koala.dynamicjava.interpreter.error.CatchedExceptionError;
+import koala.dynamicjava.interpreter.error.ExecutionError;
+import koala.dynamicjava.interpreter.throwable.ThrownException;
+import koala.dynamicjava.tree.ClassAllocation;
+import koala.dynamicjava.tree.ClassDeclaration;
+import koala.dynamicjava.tree.ConstructorDeclaration;
+import koala.dynamicjava.tree.ConstructorInvocation;
+import koala.dynamicjava.tree.Expression;
+import koala.dynamicjava.tree.FieldDeclaration;
+import koala.dynamicjava.tree.FormalParameter;
+import koala.dynamicjava.tree.Identifier;
+import koala.dynamicjava.tree.IdentifierToken;
+import koala.dynamicjava.tree.Node;
+import koala.dynamicjava.tree.ObjectFieldAccess;
+import koala.dynamicjava.tree.QualifiedName;
+import koala.dynamicjava.tree.ReferenceType;
+import koala.dynamicjava.tree.SimpleAllocation;
+import koala.dynamicjava.tree.SimpleAssignExpression;
+import koala.dynamicjava.tree.TreeUtilities;
+import koala.dynamicjava.tree.TypeDeclaration;
+import koala.dynamicjava.tree.TypeExpression;
+import koala.dynamicjava.util.ImportationManager;
+import koala.dynamicjava.util.ReflectionUtilities;
 
 /**
  * A method method context.

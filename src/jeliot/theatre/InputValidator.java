@@ -1,6 +1,6 @@
 package jeliot.theatre;
 
-import jeliot.lang.*;
+import jeliot.lang.Value;
 
 /**
   * @author Pekka Uronen

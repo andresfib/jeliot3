@@ -28,8 +28,8 @@
 
 package koala.dynamicjava.interpreter.throwable;
 
-import koala.dynamicjava.interpreter.error.*;
-import koala.dynamicjava.tree.*;
+import koala.dynamicjava.interpreter.error.ExecutionError;
+import koala.dynamicjava.tree.Node;
 
 /**
  * This error is thrown by an interpreted throw statement

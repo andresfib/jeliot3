@@ -28,14 +28,28 @@
 
 package koala.dynamicjava.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
-import koala.dynamicjava.gui.resource.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import koala.dynamicjava.gui.resource.ActionMap;
+import koala.dynamicjava.gui.resource.ButtonFactory;
+import koala.dynamicjava.gui.resource.MissingListenerException;
 
 /**
  * This component is used to manipulate a list of strings

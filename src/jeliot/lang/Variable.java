@@ -1,9 +1,7 @@
 package jeliot.lang;
 
 //import jeliot.parser.*;
-import jeliot.theatre.*;
-
-import jeliot.ecode.*;
+import jeliot.theatre.VariableActor;
 
 /**
   * Variable is an instance of a variable - a field or a local

@@ -28,7 +28,9 @@
 
 package koala.dynamicjava.classfile;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * This class represents a component of the bytecode 'ClassFile' format

@@ -28,9 +28,10 @@
 
 package koala.dynamicjava.tree;
 
-import java.util.*;
+import java.util.List;
+import java.util.ListIterator;
 
-import koala.dynamicjava.tree.visitor.*;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This class represents method declarations in an AST

@@ -1,10 +1,29 @@
 package jeliot.ecode;
 
-import java.util.*;
-import java.io.*;
-import java.lang.reflect.*;
-import jeliot.lang.*;
-import jeliot.theatre.*;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.lang.reflect.Modifier;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Stack;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import jeliot.lang.ArrayInstance;
+import jeliot.lang.ClassInfo;
+import jeliot.lang.Instance;
+import jeliot.lang.ObjectFrame;
+import jeliot.lang.Reference;
+import jeliot.lang.Value;
+import jeliot.lang.Variable;
+import jeliot.lang.VariableInArray;
+import jeliot.theatre.Actor;
+import jeliot.theatre.Director;
+import jeliot.theatre.ExpressionActor;
+import jeliot.theatre.Highlight;
+import jeliot.theatre.ValueActor;
 
 /*
 * Created by Niko Myller 10.12.2002

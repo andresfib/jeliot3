@@ -1,18 +1,18 @@
 package jeliot.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
+import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
-//import jeliot.parser.*;
-import jeliot.theatre.*;
-import jeliot.gui.*;
+import jeliot.theatre.Highlight;
 
 /** This is the component that shows and highlights the program while
   * Jeliot is animating.

@@ -1,12 +1,26 @@
 package jeliot.theatre;
 
-import java.awt.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.text.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Panel;
+import java.awt.Point;
+import java.lang.reflect.Array;
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import jeliot.lang.*;
-import jeliot.ecode.*;
+import jeliot.ecode.ECodeUtilities;
+import jeliot.lang.ArrayInstance;
+import jeliot.lang.ArrayUtilities;
+import jeliot.lang.Instance;
+import jeliot.lang.MethodFrame;
+import jeliot.lang.ObjectFrame;
+import jeliot.lang.Value;
+import jeliot.lang.Variable;
 
 
 /**

@@ -28,7 +28,11 @@
 
 package koala.dynamicjava.gui.resource;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.StringTokenizer;
 
 /**
  * This class offers convenience methods to decode

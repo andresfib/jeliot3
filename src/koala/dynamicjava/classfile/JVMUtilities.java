@@ -28,7 +28,8 @@
 
 package koala.dynamicjava.classfile;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This interface contains utility functions.

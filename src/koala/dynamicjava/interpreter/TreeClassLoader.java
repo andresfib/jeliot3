@@ -28,19 +28,15 @@
 
 package koala.dynamicjava.interpreter;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import koala.dynamicjava.parser.wrapper.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.util.*;
-
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.security.CodeSource;
 import java.security.SecureClassLoader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-import java.net.URL;
-import java.net.MalformedURLException;
+import koala.dynamicjava.tree.TypeDeclaration;
 
 /**
  * This class is responsible for loading bytecode classes

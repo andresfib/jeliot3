@@ -28,7 +28,8 @@
 
 package koala.dynamicjava.classfile;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * This class represents a constant field value

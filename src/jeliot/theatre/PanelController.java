@@ -1,7 +1,8 @@
 package jeliot.theatre;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Image;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
   * @author Pekka Uronen

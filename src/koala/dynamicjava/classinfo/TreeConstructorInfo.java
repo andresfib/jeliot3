@@ -28,10 +28,11 @@
 
 package koala.dynamicjava.classinfo;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 
-import koala.dynamicjava.tree.*;
+import koala.dynamicjava.tree.ConstructorDeclaration;
+import koala.dynamicjava.tree.FormalParameter;
 
 /**
  * The instances of this class provides informations about

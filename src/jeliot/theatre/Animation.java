@@ -1,6 +1,6 @@
 package jeliot.theatre;
 
-import java.awt.*;
+import java.awt.Point;
 
 /**
   * <p>

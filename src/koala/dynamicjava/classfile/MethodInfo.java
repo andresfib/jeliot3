@@ -28,9 +28,10 @@
 
 package koala.dynamicjava.classfile;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Modifier;
+import java.util.Iterator;
 
 /**
  * This class allows the creation of JVM bytecode method format outputs

@@ -1,10 +1,9 @@
 package jeliot.lang;
 
-import java.lang.reflect.*;
-import java.util.*;
-import jeliot.FeatureNotImplementedException;
-import jeliot.theatre.*;
-import jeliot.ecode.*;
+import java.lang.reflect.Array;
+
+import jeliot.ecode.ECodeUtilities;
+import jeliot.theatre.ArrayActor;
 
 /**
   * @author         Pekka Uronen

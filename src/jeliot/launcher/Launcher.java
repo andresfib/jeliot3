@@ -1,14 +1,18 @@
 package jeliot.launcher;
 
 
-import koala.dynamicjava.parser.wrapper.*;
-import koala.dynamicjava.interpreter.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PipedReader;
+import java.io.PipedWriter;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
 
-import java.io.*;
-import java.util.*;
-
-import jeliot.ecode.Code;
 import jeliot.ecode.ECodeUtilities;
+import koala.dynamicjava.interpreter.Interpreter;
+import koala.dynamicjava.interpreter.TreeInterpreter;
+import koala.dynamicjava.parser.wrapper.JavaCCParserFactory;
 
 //import jeliot.gui.JeliotWindow;
 

@@ -1,6 +1,6 @@
 package jeliot.io;
 
-import java.io.*;
+import java.io.PrintStream;
 
 /**
  * Nearly empty class.

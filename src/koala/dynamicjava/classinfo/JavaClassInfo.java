@@ -28,9 +28,10 @@
 
 package koala.dynamicjava.classinfo;
 
-import java.lang.reflect.*;
-
-import koala.dynamicjava.util.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * The instances of this class provides informations about

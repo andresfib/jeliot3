@@ -19,13 +19,23 @@
 */
 package jeliot;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.util.Properties;
 
-import jeliot.theatre.*;
-import jeliot.gui.*;
-import jeliot.launcher.*;
-import jeliot.ecode.*;
+import jeliot.ecode.InterpreterError;
+import jeliot.gui.CodePane;
+import jeliot.gui.JeliotWindow;
+import jeliot.launcher.Launcher;
+import jeliot.theatre.ActorFactory;
+import jeliot.theatre.AnimationEngine;
+import jeliot.theatre.Director;
+import jeliot.theatre.ImageLoader;
+import jeliot.theatre.Theatre;
+import jeliot.theatre.ThreadController;
 
 //import Lex.*;
 //import java_cup.runtime.*;

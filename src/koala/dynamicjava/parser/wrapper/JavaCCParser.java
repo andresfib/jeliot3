@@ -28,10 +28,12 @@
 
 package koala.dynamicjava.parser.wrapper;
 
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.List;
 
-import koala.dynamicjava.parser.*;
+import koala.dynamicjava.parser.ParseException;
+import koala.dynamicjava.parser.Parser;
 
 /**
  * The instances of this class represents a parser

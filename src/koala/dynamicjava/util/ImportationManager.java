@@ -28,8 +28,9 @@
 
 package koala.dynamicjava.util;
 
-import java.io.*;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * The instances of this class manages the importation clauses.

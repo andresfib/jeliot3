@@ -28,7 +28,6 @@
 
 package koala.dynamicjava.classinfo;
 
-import koala.dynamicjava.util.AmbiguousFieldException;
 
 /**
  * The instances of the classes that implement this interface provide
