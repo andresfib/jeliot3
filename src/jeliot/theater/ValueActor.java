@@ -9,9 +9,18 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * <code>ValueActor</code> is an actor that represents graphically
+ * the language construct <code>Value</code>. The <code>Value</code>'s type is
+ * represented by the colors of the ValueActor and the <code>Value</code>'s
+ * value is printed out as the String representation of the value.
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ * 
+ * @see jeliot.lang.Value
+ * @see jeliot.theater.ImageValueActor
+ * @see jeliot.theater.ActorFactory
+ */
 public class ValueActor extends Actor {
 
    /**

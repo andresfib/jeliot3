@@ -10,9 +10,20 @@ import java.util.Stack;
 import java.util.Vector;
 
 /**
+ * <code>TheaterManager</code> allocates the space for all
+ * <code>InstanceActor</code>s, <code>MethodStage</code>s,
+ * <code>Scratch</code>es and constants (<code>ConstantBox</code>), and also listens the <code>Theater</code>
+ * component for resizes so the the allocation of the space
+ * is valid after resizing of the <code>Theater</code> component.
  *
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
+ * @see jeliot.theater.InstanceActor
+ * @see jeliot.theater.MethodStage
+ * @see jeliot.theater.Scratch
+ * @see jeliot.theater.ConstantBox
+ * @see jeliot.theater.Theater
  */
 public class TheaterManager implements ComponentListener {
 

@@ -9,6 +9,8 @@ import java.util.Vector;
  * 
  * @author Pekka Uronen
  * @author Niko Myller 
+ * 
+ * @see jeliot.lang.Instance
  */
 public class InstanceActor extends Actor implements ActorContainer {
 

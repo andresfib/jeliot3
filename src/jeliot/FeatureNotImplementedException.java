@@ -17,7 +17,7 @@ public class FeatureNotImplementedException extends RuntimeException {
     /**
 	* The only constructor of the FeatureNoeImplementedException.
 	*
-	* @param	s	The info string of the exception.
+	* @param s The info string of the exception.
 	*
 	*/
     public FeatureNotImplementedException(String s) {

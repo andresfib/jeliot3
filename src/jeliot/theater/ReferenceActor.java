@@ -8,9 +8,14 @@ import java.awt.Point;
 import java.awt.Polygon;
 
 /**
+ * ReferenceActor shows the reference to some InstanceActor (e.g. ArrayActor or
+ * ObjectStage). They can be assigned to the ReferenceVariableActor instances or any
+ * other instance that is derived from the ReferenceVariableActor.
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
+ * @see jeliot.theater.ReferenceVariableActor
  */
 public class ReferenceActor extends ValueActor {
 
@@ -44,12 +49,30 @@ public class ReferenceActor extends ValueActor {
      */
     private int refWidthRandom = 12;
 
-    private boolean instVarConnect = false;
+    /**
+	 *
+	 */
+	private boolean instVarConnect = false;
 
-    private Point[] bend;
-    private Point[] arrowhead;
-    private Polygon arrowheadPolygon1;
-    private Polygon arrowheadPolygon2;
+    /**
+	 *
+	 */
+	private Point[] bend;
+    
+    /**
+	 *
+	 */
+	private Point[] arrowhead;
+    
+    /**
+	 *
+	 */
+	private Polygon arrowheadPolygon1;
+    
+    /**
+	 *
+	 */
+	private Polygon arrowheadPolygon2;
 
     /**
 	 * 

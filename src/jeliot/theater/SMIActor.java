@@ -5,9 +5,15 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
+ * SMIActor represents graphically the static method invocation. The
+ * actor shows the  method name and the parameters in a similar
+ * way as Java syntax just replaces the variable references with
+ * their actual values. 
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ *
+ * @see jeliot.theater.OMIActor 
  */
 public class SMIActor extends Actor implements ActorContainer{
 
