@@ -6,30 +6,36 @@ import jeliot.parser.*;
 import jeliot.lang.*;
 import jeliot.gui.*;
 
-/**
-  * @author Pekka Uronen
+/** This is the theatre component that added in the left pane of the
+  * user interface.
   *
-  * created         9.8.1999
+  * @author Pekka Uronen
+  * @author Niko Myller
   */
 public class Theatre extends javax.swing.JComponent implements ActorContainer {
 
-    /** Background image, drawn behind everything. */
+    /** Background image. */
     private Image backImage;
 
     /** Captured image of the screen, used on active mode for extra efficiency. */
     private Image captScreen;
 
-    /** Graphics object for captured image. */
+    /** Graphics object for captured image when the animation is going on. */
     private Graphics csg;
 
-    /** True, if the theatre is in active mode. */
+    /** True, if the theatre is in active mode or captured. Active mode
+      * means that something is or is going to be animated. This means
+      * that the extra efficiency is needed and needless painting of all
+      * the actors is not done.
+      * @see Animation
+      */
     private boolean active;
 
     /** Vector of passive actors which are drawn in passive mode. */
     private Vector pasAct = new Vector();
 
     /** Vector of active, moving actors which are drawn in active
-      * mode.
+      * mode (during animation).
       */
     private Vector actAct = new Vector();
 
@@ -38,39 +44,63 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
 
     private TheatreManager manager = new TheatreManager(this);
 
-    /** Set true if there are other JComponents on the theatre component.
-      * At the moment only when input is requested. This changes the
-      * operation of the paint method.
+    /** Variable is set true if there are other <code>JComponents</code>
+      * on the Theatre component. At the moment this happens only when
+      * input is requested. The state of the variable changes the
+      * operation of the <code>paint</code> method.
+      *
+      * @see #paint(Graphics g)
       */
     private boolean showComponents;
 
+
+    /** Sets the opaque of the component to be true.
+      *
+      * @see #setOpaque(boolean)
+      */
     public Theatre() {
         setOpaque(true);
     }
 
+    /** Returns the TheatreManager
+      * @return TheatreManager object
+      */
     public TheatreManager getManager() {
         return manager;
     }
 
-    /** Sets the background image of this theatre.
+    /** Sets the background image (<code>backImage</code>) of this theatre.
+      *
+      * @param backImage Image for background.
       */
     public void setBackground(Image backImage) {
         this.backImage = backImage;
     }
 
     /** Paints the theatre.
+      * If theatre is in active mode then a captured picture and only active
+      * actors are painted otherwise background, the passive, highlighted
+      * and active actors are painted.
+      *
+      * @param g Everything is painted on this Graphics object.
       */
     public void paintComponent(Graphics g) {
+        //Whether or not we are in the middle of animation.
         if (active) {
+            //We are in the middle of animation and the captured image
+            //is painted on the theatre.
             synchronized (csg) {
                 paintCapturedScreen(g);
             }
-        }
-        else {
+        } else {
+            //We are not in the middle of animation and
+            //background, the passive and highlighted
+            //actors are painted.
             paintBackground(g);
             paintActors(g, pasAct);
             paintHighlight(g);
         }
+        //Finally the active actors are painted.
         paintActors(g, actAct);
     }
 
@@ -112,7 +142,7 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
     private void paintActors(Graphics g, Vector actors) {
         synchronized(actors) {
             int n = actors.size();
-//            System.out.println(n);
+
             for (int i = 0; i < n; ++i) {
                 Actor act = (Actor)actors.elementAt(i);
                 int x = act.getX();
@@ -122,7 +152,9 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
                 act.paintActor(g);
                 g.translate(-x, -y);
             }
-           /* for (int i = 0; i < n; ++i) {
+
+            /* Old version.
+            for (int i = 0; i < n; ++i) {
                 Actor act = (Actor)actors.elementAt(i);
 
                 int x = act.getX();
@@ -130,7 +162,8 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
                 g.translate(x, y);
                 act.paintActor(g);
                 g.translate(-x, -y);
-            }*/
+            }
+            */
         }
     }
 

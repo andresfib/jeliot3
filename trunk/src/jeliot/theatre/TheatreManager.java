@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
-  * @author Pekka Uronen
   *
-  * created         18.9.1999
+  * @author Pekka Uronen
+  * @author Niko Myller
   */
 public class TheatreManager implements ComponentListener {
 
