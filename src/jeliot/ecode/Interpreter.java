@@ -38,9 +38,9 @@ public class Interpreter {
     private Hashtable postIncsDecs = new Hashtable();
 
     private ClassInfo currentClass = null;
-    
+
     private Hashtable classes = new Hashtable();
-    
+
     /**
     * currentMethodInvocation keeps track of all the information that
     * is collected during the method invocation.
@@ -138,7 +138,7 @@ public class Interpreter {
                     }
 
                     //checkInstancesForRemoval();
-                    
+
                     switch (token) {
 
                         //Gives a reference to the left hand side of the expression
@@ -193,7 +193,7 @@ public class Interpreter {
                                                          tokenizer.nextToken());
 
                             Variable toVariable = (Variable) variables.remove(new Integer(toExpression));
-                            
+
                             //just to get rid of extra references
                             variables.remove(new Integer(fromExpression));
 
@@ -1206,11 +1206,11 @@ public class Interpreter {
                             } else {
 
                                 Value ret = (Value) values.remove(new Integer(expressionReference));
-                                
+
                                 Value casted = null;
-                                
+
                                 if (ECodeUtilities.isPrimitive(type)) {
-	                                casted = new Value(value, type);
+                                    casted = new Value(value, type);
                                 } else {
                                     Instance inst = (Instance) instances.get(
                                                 ECodeUtilities.getHashCode(value));
@@ -1220,7 +1220,7 @@ public class Interpreter {
                                         casted = new Reference();
                                     }
                                 }
-                                
+
                                 returnActor = director.animateReturn(ret, casted, h);
                                 returnValue = (Value) casted.clone();
                                 returnExpressionCounter = expressionCounter;
@@ -1242,15 +1242,15 @@ public class Interpreter {
 
                             } else {
 
-	                            Value rv = null;
-	                            
-	                            if (returnValue instanceof Reference) {
-		                            rv = (Value) ((Reference)returnValue).clone();
-	                            } else {
-		                                
-                                	rv = (Value) returnValue.clone();
-                            	}
-                            	
+                                Value rv = null;
+
+                                if (returnValue instanceof Reference) {
+                                    rv = (Value) ((Reference)returnValue).clone();
+                                } else {
+
+                                    rv = (Value) returnValue.clone();
+                                }
+
                                 ValueActor va = director.finishMethod(
                                                     returnActor,
                                                     returnExpressionCounter);
@@ -1790,11 +1790,11 @@ public class Interpreter {
                                               expressionReference, h);
 
                             //director.arrayCreation(dimensionSize, h);
-                                                                                            
+
                             instances.put(hashCode, ai);
 
                             ref.makeReference();
-                            
+
                             values.put(new Integer(expressionReference), ref);
 
                             break;
@@ -2011,66 +2011,77 @@ public class Interpreter {
                         }
 
                         case Code.CLASS: {
-	                        
-	                        String name = tokenizer.nextToken();
-	                        currentClass = new ClassInfo(name);
-	                        
-	                    	break;   
+
+                            String name = tokenizer.nextToken();
+                            String extendedClass = "";
+
+                            if (tokenizer.hasMoreTokens()) {
+                                extendedClass = tokenizer.nextToken();
+                            }
+
+                            currentClass = new ClassInfo(name);
+                            ClassInfo ci = classes.get(extendedClass);
+
+                            if (ci != null) {
+                                currentClass.extendClass(ci);
+                            }
+
+                            break;
                         }
 
                         case Code.END_CLASS: {
-	                        
-	                        if (currentClass != null) {
-		                    	classes.put(currentClass.getName(), currentClass);   
-	                        }
-	                        
-	                        currentClass = null;
-	                        
-	                    	break;   
-                        }
-                        
-                        case Code.CONSTRUCTOR: {
-	                        
-	                        String listOfParameters = "";
-	                        if (tokenizer.hasMoreTokens()) {
-		                        listOfParameters = tokenizer.nextToken();
-							}
-	                        
-							currentClass.declareConstructor(currentClass.getName()+","+listOfParameters, "");
-							
-	                    	break;   
-                        }
-                        
-                        case Code.METHOD: {
-	                        
-	                        String name = tokenizer.nextToken();
-	                        String returnType = tokenizer.nextToken();
-	                        int modifiers = Integer.parseInt(tokenizer.nextToken());
 
-	                        String listOfParameters = "";
-	                        if (tokenizer.hasMoreTokens()) {
-		                        listOfParameters = tokenizer.nextToken();
-							}
-							                        
-	                        currentClass.declareMethod(name+","+listOfParameters,
-	                                                   "" + modifiers + Code.DELIM + returnType);
-	                        
-	                    	break;   
+                            if (currentClass != null) {
+                                classes.put(currentClass.getName(), currentClass);
+                            }
+
+                            currentClass = null;
+
+                            break;
                         }
-                        
+
+                        case Code.CONSTRUCTOR: {
+
+                            String listOfParameters = "";
+                            if (tokenizer.hasMoreTokens()) {
+                                listOfParameters = tokenizer.nextToken();
+                            }
+
+                            currentClass.declareConstructor(currentClass.getName()+","+listOfParameters, "");
+
+                            break;
+                        }
+
+                        case Code.METHOD: {
+
+                            String name = tokenizer.nextToken();
+                            String returnType = tokenizer.nextToken();
+                            int modifiers = Integer.parseInt(tokenizer.nextToken());
+
+                            String listOfParameters = "";
+                            if (tokenizer.hasMoreTokens()) {
+                                listOfParameters = tokenizer.nextToken();
+                            }
+
+                            currentClass.declareMethod(name+","+listOfParameters,
+                                                       "" + modifiers + Code.DELIM + returnType);
+
+                            break;
+                        }
+
                         case Code.FIELD: {
-	                        
-	                        String name = tokenizer.nextToken();
-	                        String type = tokenizer.nextToken();
-	                        int modifiers = Integer.parseInt(tokenizer.nextToken());
-	                        String value = tokenizer.nextToken();
-	                        
-	                        currentClass.declareField(name,
-	                                                   "" + modifiers + Code.DELIM + type + Code.DELIM + value);	                        
-	                        
-	                    	break;   
+
+                            String name = tokenizer.nextToken();
+                            String type = tokenizer.nextToken();
+                            int modifiers = Integer.parseInt(tokenizer.nextToken());
+                            String value = tokenizer.nextToken();
+
+                            currentClass.declareField(name,
+                                                       "" + modifiers + Code.DELIM + type + Code.DELIM + value);
+
+                            break;
                         }
-                                                
+
                         case Code.ERROR: {
 
                             String message = tokenizer.nextToken();
@@ -2093,48 +2104,48 @@ public class Interpreter {
 
             } else {
                 running = false;
-		        removeInstances();
+                removeInstances();
             }
 
         }
         director.closeScratch();
     }
 
-    
+
     public void checkInstancesForRemoval() {
-		Enumeration enum = instances.keys();
-		while (enum.hasMoreElements()) {
-			Object obj = enum.nextElement();
-			Instance inst = (Instance)instances.get(obj);
-			if (inst != null) {
-				//For testing
-				//System.out.println("number of references1: " + inst.getNumberOfReferences());
-				//System.out.println("number of references2: " + inst.getActor().getNumberOfReferences());				
-				if (inst.getNumberOfReferences() == 0 &&
-				    inst.getActor().getNumberOfReferences() == 0) {
-					    
-					instances.remove(obj);
-					director.removeInstance(inst.getActor());
-					inst = null;
-					//System.out.println("instance removed!");
-				}
-			}	
-		}
+        Enumeration enum = instances.keys();
+        while (enum.hasMoreElements()) {
+            Object obj = enum.nextElement();
+            Instance inst = (Instance)instances.get(obj);
+            if (inst != null) {
+                //For testing
+                //System.out.println("number of references1: " + inst.getNumberOfReferences());
+                //System.out.println("number of references2: " + inst.getActor().getNumberOfReferences());
+                if (inst.getNumberOfReferences() == 0 &&
+                    inst.getActor().getNumberOfReferences() == 0) {
+
+                    instances.remove(obj);
+                    director.removeInstance(inst.getActor());
+                    inst = null;
+                    //System.out.println("instance removed!");
+                }
+            }
+        }
     }
-    
+
     public void removeInstances() {
-		Enumeration enum = instances.keys();
-		while (enum.hasMoreElements()) {
-			Object obj = enum.nextElement();
-			Instance inst = (Instance)instances.get(obj);
-			if (inst != null) {
-				instances.remove(obj);
-				director.removeInstance(inst.getActor());
-				inst.setActor(null);
-				inst = null;
-				//System.out.println("instance removed!");
-			}	
-		}
+        Enumeration enum = instances.keys();
+        while (enum.hasMoreElements()) {
+            Object obj = enum.nextElement();
+            Instance inst = (Instance)instances.get(obj);
+            if (inst != null) {
+                instances.remove(obj);
+                director.removeInstance(inst.getActor());
+                inst.setActor(null);
+                inst = null;
+                //System.out.println("instance removed!");
+            }
+        }
     }
 
     private void handleExpression(Value val, int expressionCounter) {
