@@ -15,8 +15,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -46,8 +48,12 @@ import javax.swing.event.ChangeListener;
 
 import jeliot.FeatureNotImplementedException;
 import jeliot.Jeliot;
-import jeliot.mcode.*;
-import jeliot.theater.*;
+import jeliot.mcode.InterpreterError;
+import jeliot.mcode.MCodeUtilities;
+import jeliot.theater.AnimationEngine;
+import jeliot.theater.ImageLoader;
+import jeliot.theater.PanelController;
+import jeliot.theater.Theater;
 
 /**
  * The main window of the Jeliot 3.
@@ -115,7 +121,7 @@ public class JeliotWindow {
 	private CodePane codePane;
 
 	/** The code editor in which the users can write their code. */
-	private CodeEditor editor = new CodeEditor();
+	private CodeEditor editor;// = new CodeEditor();
 
 	/** The pane that splits the window. */
 	private JSplitPane codeNest;
@@ -272,7 +278,16 @@ public class JeliotWindow {
 					editor.saveProgram();
 				}
 			}
-			System.exit(0);
+            
+            Properties prop = System.getProperties();
+            File f = new File(udir);
+            prop.put("user.dir", f.toString());
+            
+            if (Jeliot.isSystemExit()) {
+                System.exit(0);
+            } else {
+                frame.dispose();
+            }
 		}
 	};
 
@@ -318,6 +333,7 @@ public class JeliotWindow {
 		this.udir = udir;
 
 		this.panelController = new PanelController(theatre, iLoad);
+        this.editor = new CodeEditor(this.udir);
 	}
 
 	/**
@@ -385,7 +401,16 @@ public class JeliotWindow {
 						editor.saveProgram();
 					}
 				}
-				System.exit(0);
+                
+                Properties prop = System.getProperties();
+                File f = new File(udir);
+                prop.put("user.dir", f.toString());
+                
+                if (Jeliot.isSystemExit()) {
+                    System.exit(0);
+                } else {
+                    frame.dispose();
+                }
 			}
 		});
 

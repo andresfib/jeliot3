@@ -165,6 +165,10 @@ public abstract class Actor implements Cloneable {
 	 */
 	private ActorContainer parent;
 
+    public Actor() {
+        super();
+    }
+
 	/**
 	 * @return
 	 */

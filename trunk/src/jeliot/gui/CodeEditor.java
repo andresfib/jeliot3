@@ -1,5 +1,5 @@
 /**
- * The package that contains Jeliot 2000's GUI
+ * The package that contains Jeliot 3's GUI
  */
 package jeliot.gui;
 
@@ -16,7 +16,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractButton;
@@ -35,8 +34,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import jeliot.mcode.*;
-import jeliot.theater.*;
+import jeliot.mcode.MCodeUtilities;
+import jeliot.theater.Highlight;
 
 /**
   * The simple code editor for the users to code their algorithm.
@@ -137,6 +136,8 @@ public class CodeEditor extends JComponent {
         }
 
     };
+
+    private String udir;
 
 	/**
      * Initialization of the text area for the user code.
@@ -245,7 +246,8 @@ public class CodeEditor extends JComponent {
      * JScrollPane with JTextArea area and JToolbar in it.
      * Initializes the FileChooser.
      */
-    public CodeEditor() {
+    public CodeEditor(String udir) {
+        this.udir = udir;
         initFileChooser();
         setLayout(new BorderLayout());
         add("Center", makeScrollPane());
@@ -276,9 +278,11 @@ public class CodeEditor extends JComponent {
     private void initFileChooser() {
         // set up the file chooser with user's working
         // directory as default directory
-        Properties prop = System.getProperties();
-        String wdname = prop.getProperty("user.dir");
-        File wd = new File(wdname);
+        //Properties prop = System.getProperties();
+        //String wdname = prop.getProperty("user.dir");
+        //File wd = new File(wdname);
+        File wd = new File(udir);
+        wd = new File(wd, "examples");
         fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(wd);
         fileChooser.setFileFilter(new JavaFileFilter());

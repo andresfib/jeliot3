@@ -20,17 +20,22 @@
 package jeliot;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Properties;
 
-import jeliot.mcode.*;
 import jeliot.gui.CodePane;
 import jeliot.gui.JeliotWindow;
 import jeliot.launcher.Launcher;
-import jeliot.theater.*;
+import jeliot.mcode.Interpreter;
+import jeliot.mcode.InterpreterError;
+import jeliot.theater.ActorFactory;
+import jeliot.theater.AnimationEngine;
+import jeliot.theater.Director;
+import jeliot.theater.ImageLoader;
+import jeliot.theater.Theater;
+import jeliot.theater.ThreadController;
 
 /**
 * This is the application class of Jeliot 3 that binds
@@ -42,375 +47,396 @@ import jeliot.theater.*;
 */
 public class Jeliot {
 
-//  DOC: Document!
+	//  DOC: Document!
 
-    /**
+	/**
+	 * 
+	 */
+	static boolean systemExit = true;
+
+	/**
 	 *
 	 */
 	Launcher launcher = null;
-    
-    /**
+
+	/**
 	 *
 	 */
 	BufferedReader ecode = null;
-    
-    /**
+
+	/**
 	 *
 	 */
 	PrintWriter pr = null;
-    
-    /**
+
+	/**
 	 *
 	 */
 	Interpreter mCodeInterpreter = null;
-     
-    /**
+
+	/**
 	 *
 	 */
 	String sourceCode = "";
-    
-    /**
+
+	/**
 	 *
 	 */
 	String methodCall = "";
-    
-    /**
+
+	/**
 	 *
 	 */
 	boolean compiled = false;
 
-    /**
-     * The graphical user inteface.
-     */
-    private JeliotWindow gui;
+	/**
+	 * The graphical user inteface.
+	 */
+	private JeliotWindow gui;
 
 	/**
-     * Theatre object for showing the animation.
-     */
-    private Theater theatre = new Theater();
+	 * Theatre object for showing the animation.
+	 */
+	private Theater theatre = new Theater();
 
 	/**
-     * A thread controller object for handling concurrency and
-     * starting and pausing the animation.
-     */
-    private ThreadController controller;
+	 * A thread controller object for handling concurrency and
+	 * starting and pausing the animation.
+	 */
+	private ThreadController controller;
 
 	/**
-     * Animation engine to show the animations.
-     */
-    private AnimationEngine engine = new AnimationEngine(theatre);
+	 * Animation engine to show the animations.
+	 */
+	private AnimationEngine engine = new AnimationEngine(theatre);
 
 	/**
-     * A code pane for showing and highlighting the program source
-     * while the program is being animated.
-     */
-    private CodePane codePane = new CodePane();
+	 * A code pane for showing and highlighting the program source
+	 * while the program is being animated.
+	 */
+	private CodePane codePane = new CodePane();
 
 	/**
-     * A director for animating the program.
-     */
-    private Director director;
+	 * A director for animating the program.
+	 */
+	private Director director;
 
 	/**
-     * An image loader that takes care of loading the required
-     * images.
-     */
-    private ImageLoader iLoad = new ImageLoader();
-
-
-	/**
-     * The only constructor of the Jeliot 3.
-     * Loads Theatre theatre -object's background.
-     * Initializes JeliotWindow gui -object with parameters this, CodePane codepane, Theatre theatre,
-     * AnimationEngine engine, ImageLoader iLoad
-     * 
-     * @param udir
-     * 
-     */
-    public Jeliot(String udir) {
-        theatre.setBackground(iLoad.getLogicalImage("image.panel"));
-        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir);
-    }
+	 * An image loader that takes care of loading the required
+	 * images.
+	 */
+	private ImageLoader iLoad = new ImageLoader();
 
 	/**
-     * Sets up the user interface.
-     */
-    public void run() {
-        gui.setUp();
-    }
+	 * The only constructor of the Jeliot 3.
+	 * Loads Theatre theatre -object's background.
+	 * Initializes JeliotWindow gui -object with parameters this, CodePane codepane, Theatre theatre,
+	 * AnimationEngine engine, ImageLoader iLoad
+	 * 
+	 * @param udir
+	 * 
+	 */
+	public Jeliot(String udir) {
+		theatre.setBackground(iLoad.getLogicalImage("image.panel"));
+		gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir);
+	}
 
-    /**
-     * Creates the Lexer and Java11Parser.
-     * Compiles a program that is given in a Reader object.
-     *
-     * @param sourceCode The program source code as a String.
-     * @param methodCall The main method call as a String.
-     */
-    public void setSourceCode(String sourceCode, String methodCall) {
-        // create the lexer and the parser
-        //Lex.Lexer l = new Lex.Lexer(r, false);
-        //Java11Parser g = new Java11Parser(l);
+	/**
+	 * @return
+	 */
+	public static boolean isSystemExit() {
+		return systemExit;
+	}
 
-        // parse the program
+	/**
+	 * Sets up the user interface.
+	 */
+	public void run() {
+		gui.setUp();
+	}
 
-        // the try-catch structure is because of the braindead habit of
-        // the lexer to report exceptions throwing ERRORS!
+	/**
+	 * Creates the Lexer and Java11Parser.
+	 * Compiles a program that is given in a Reader object.
+	 *
+	 * @param sourceCode The program source code as a String.
+	 * @param methodCall The main method call as a String.
+	 */
+	public void setSourceCode(String sourceCode, String methodCall) {
+		// create the lexer and the parser
+		//Lex.Lexer l = new Lex.Lexer(r, false);
+		//Java11Parser g = new Java11Parser(l);
 
-        //try {
-            //Symbol symbol = g.parse();
-            //this.program = (PCompilationUnit)symbol.value;
-        //}
-        //catch (Error error) {
-            //String msg = error.getMessage();
-            //throw new SyntaxErrorException(msg, 0, 0);
-        //}
+		// parse the program
 
-        // make a compile-time check
-        //NameSpace space = new NameSpace(program);
-        //TypeChecker check = new TypeChecker(space);
-        //program.acceptVisitor(check);
+		// the try-catch structure is because of the braindead habit of
+		// the lexer to report exceptions throwing ERRORS!
 
-        this.sourceCode = sourceCode;
-        this.methodCall = methodCall;
+		//try {
+		//Symbol symbol = g.parse();
+		//this.program = (PCompilationUnit)symbol.value;
+		//}
+		//catch (Error error) {
+		//String msg = error.getMessage();
+		//throw new SyntaxErrorException(msg, 0, 0);
+		//}
 
-        compiled = false;
+		// make a compile-time check
+		//NameSpace space = new NameSpace(program);
+		//TypeChecker check = new TypeChecker(space);
+		//program.acceptVisitor(check);
 
-        //recompile();
+		this.sourceCode = sourceCode;
+		this.methodCall = methodCall;
 
-/*
-        this.ecode = null;
+		compiled = false;
 
-        if (launcher != null) {
-            launcher.stopThread();
-            synchronized(launcher){
-                launcher.notify();
-            }
-            launcher = null;
-        }
+		//recompile();
 
-        launcher = new Launcher(new BufferedReader(
-                                new StringReader(this.sourceCode)));
+		/*
+		        this.ecode = null;
+		
+		        if (launcher != null) {
+		            launcher.stopThread();
+		            synchronized(launcher){
+		                launcher.notify();
+		            }
+		            launcher = null;
+		        }
+		
+		        launcher = new Launcher(new BufferedReader(
+		                                new StringReader(this.sourceCode)));
+		
+		        launcher.setCompiling(true);
+		        launcher.start();
+		        launcher.setMethodCall(this.methodCall);
+		        try {
+		            Thread.sleep(500);
+		        } catch (InterruptedException e) {
+		            e.printStackTrace();
+		        }
+		
+		        launcher.setCompiling(false);
+		        synchronized(launcher){
+		            launcher.notify();
+		        }
+		
+		        ecode = launcher.getReader();
+		        pr = launcher.getInputWriter();
+		
+		
+		        compiled = true;
+		*/
+	}
 
-        launcher.setCompiling(true);
-        launcher.start();
-        launcher.setMethodCall(this.methodCall);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        launcher.setCompiling(false);
-        synchronized(launcher){
-            launcher.notify();
-        }
-
-        ecode = launcher.getReader();
-        pr = launcher.getInputWriter();
-
-
-        compiled = true;
-*/
-    }
-
-    /**
+	/**
 	 * 
 	 */
 	public void compile() {
 
-        if (!compiled) {
+		if (!compiled) {
 
-            this.ecode = null;
+			this.ecode = null;
 
-            if (launcher != null) {
-                launcher.stopThread();
-                synchronized(launcher) {
-                    launcher.notify();
-                }
-                launcher = null;
-            }
+			if (launcher != null) {
+				launcher.stopThread();
+				synchronized (launcher) {
+					launcher.notify();
+				}
+				launcher = null;
+			}
 
-            launcher = new Launcher(new BufferedReader(
-                                   new StringReader(this.sourceCode)));
-            launcher.setMethodCall(this.methodCall);
+			launcher =
+				new Launcher(
+					new BufferedReader(new StringReader(this.sourceCode)));
+			launcher.setMethodCall(this.methodCall);
 
-            launcher.setCompiling(true);
-//            launcher.setExecuting(true);
+			launcher.setCompiling(true);
+			//            launcher.setExecuting(true);
 
-            launcher.start();
+			launcher.start();
 
-//             synchronized(launcher){
-//                 launcher.notify();
-//             }
+			//             synchronized(launcher){
+			//                 launcher.notify();
+			//             }
 
-            ecode = launcher.getReader();
-            pr = launcher.getInputWriter();
+			ecode = launcher.getReader();
+			pr = launcher.getInputWriter();
 
-            codePane.installProgram(this.sourceCode);
+			codePane.installProgram(this.sourceCode);
 
-            compiled = true;
-        }
+			compiled = true;
+		}
 
-    }
-
-	/**
-     * Initializes the compiled program to be animated.
-     */
-    public void rewind() {
-
-        compiled = false;
-
-        //clear the remnants of previous animation
-        theatre.cleanUp();
-
-        //create director and the other equipment
-        ActorFactory af = new ActorFactory(iLoad);
-
-        //ScriptWriter sw = new ScriptWriter(engine, theatre, af);
-
-        director = new Director(theatre, codePane, this, engine);
-        director.setActorFactory(af);
-        
-        mCodeInterpreter = new Interpreter(ecode, director, gui.getProgram(), pr);
-        
-        director.setInterpreter(mCodeInterpreter);
-
-        //find the main method
-        //Enumeration enum = program.getClasses();
-        //PClass c = (PClass)enum.nextElement();
-        //PMethod m = c.getMainMethod();
-        //director.setMainMethod(m);
-
-        // create the main loop for visualization
-        controller = new ThreadController(
-            new Runnable() {
-                public void run() {
-                    try {
-                        director.direct();
-                        gui.animationFinished();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        );
-
-        engine.setController(controller);
-        director.setController(controller);
-    }
+	}
 
 	/**
-     * Starts the animation in step mode.
-     * Called by gui. 
-     */
-    public void step() {
-        director.setStep(true);
-        controller.start();
-    }
+	 * Initializes the compiled program to be animated.
+	 */
+	public void rewind() {
+
+		compiled = false;
+
+		//clear the remnants of previous animation
+		theatre.cleanUp();
+
+		//create director and the other equipment
+		ActorFactory af = new ActorFactory(iLoad);
+
+		//ScriptWriter sw = new ScriptWriter(engine, theatre, af);
+
+		director = new Director(theatre, codePane, this, engine);
+		director.setActorFactory(af);
+
+		mCodeInterpreter =
+			new Interpreter(ecode, director, gui.getProgram(), pr);
+
+		director.setInterpreter(mCodeInterpreter);
+
+		//find the main method
+		//Enumeration enum = program.getClasses();
+		//PClass c = (PClass)enum.nextElement();
+		//PMethod m = c.getMainMethod();
+		//director.setMainMethod(m);
+
+		// create the main loop for visualization
+		controller = new ThreadController(new Runnable() {
+			public void run() {
+				try {
+					director.direct();
+					gui.animationFinished();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		engine.setController(controller);
+		director.setController(controller);
+	}
 
 	/**
-     * Starts the animation in play mode.
-     * Called by gui. 
-     */
-    public void play() {
-        director.setStep(false);
-        controller.start();
-    }
+	 * Starts the animation in step mode.
+	 * Called by gui. 
+	 */
+	public void step() {
+		director.setStep(true);
+		controller.start();
+	}
 
 	/**
-     * Pauses the animation.
-     * Called by gui. 
-     */
-    public void pause() {
-        controller.pause();
-    }
+	 * Starts the animation in play mode.
+	 * Called by gui. 
+	 */
+	public void play() {
+		director.setStep(false);
+		controller.start();
+	}
 
 	/**
-     * Called by director when a step is completed.
-     */
-    public void directorPaused() {
-        gui.pauseAnimation();
-    }
+	 * Pauses the animation.
+	 * Called by gui. 
+	 */
+	public void pause() {
+		controller.pause();
+	}
 
 	/**
-     * Called by director when it freezes to accept input.
-     */
-    public void directorFreezed() {
-        gui.freezeAnimation();
-    }
+	 * Called by director when a step is completed.
+	 */
+	public void directorPaused() {
+		gui.pauseAnimation();
+	}
 
 	/**
-     * Called by director when it resumes from waiting for input.
-     */
-    public void directorResumed() {
-        gui.resumeAnimation();
-    }
+	 * Called by director when it freezes to accept input.
+	 */
+	public void directorFreezed() {
+		gui.freezeAnimation();
+	}
 
 	/**
-     * Called by the director when user's program outputs a string.
-     *
-     * @param str String that is outputted.
-     */
-    public void output(String str) {
-        gui.output(str);
-    }
+	 * Called by director when it resumes from waiting for input.
+	 */
+	public void directorResumed() {
+		gui.resumeAnimation();
+	}
 
-    /**
+	/**
+	 * Called by the director when user's program outputs a string.
+	 *
+	 * @param str String that is outputted.
+	 */
+	public void output(String str) {
+		gui.output(str);
+	}
+
+	/**
 	 * @param e
 	 */
 	public void showErrorMessage(InterpreterError e) {
-        gui.showErrorMessage(e);
-    }
+		gui.showErrorMessage(e);
+	}
 
-    /**
+	/**
 	 * @return
 	 */
 	public boolean showMessagesInDialogs() {
-        return gui.showMessagesInDialogs();
-    }
+		return gui.showMessagesInDialogs();
+	}
 
-    /**
+	/**
 	 * @param line
 	 */
 	public void runUntil(int line) {
-        director.runUntil(line);
-    }
+		director.runUntil(line);
+	}
 
-    /**
+	/**
 	 * 
 	 */
 	public void runUntilDone() {
-        gui.runUntilDone();
-    }
+		gui.runUntilDone();
+	}
 
-    public void setProgram(String program) {
-        gui.setProgram(program);
-    }
+	public void setProgram(String program) {
+		gui.setProgram(program);
+	}
 
-    /**
+	/**
 	 * @param args
 	 * @throws IOException
 	 */
-    public static void main(String args[]) throws IOException {
+	public static void main(String args[]) throws IOException {
 
-        Properties prop = System.getProperties();
-        String udir = prop.getProperty("user.dir");
+		Properties prop = System.getProperties();
+		String udir = prop.getProperty("user.dir");
 
-        File f = new File(udir);
-        f = new File(f, "examples");
-        prop.put("user.dir", f.toString());
+		//File f = new File(udir);
+		//f = new File(f, "examples");
+		//prop.put("user.dir", f.toString());
 
-        final Jeliot jeliot = new Jeliot(udir);
+		final Jeliot jeliot = new Jeliot(udir);
 
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-               jeliot.run();
-            }
-        });
-        
-        if (args.length == 1) {
-             jeliot.setProgram(args[0]);
-        }
-    }
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				jeliot.run();
+			}
+		});
+
+		if (args.length >= 1) {
+			if (args.length >= 2) {
+				Jeliot.systemExit = Boolean.getBoolean(args[1]);
+			}
+			if (!args[0].equals("")) {
+				final String program = args[0];
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						jeliot.setProgram(program);
+					}
+				});
+			}
+		}
+	}
+
 }
