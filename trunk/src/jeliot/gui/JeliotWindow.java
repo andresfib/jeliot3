@@ -485,7 +485,7 @@ public class JeliotWindow {
         });
 
         enterEditTrue();
-        pane.setDividerLocation(300);
+        pane.setDividerLocation((jeliot.isExperiment())?512:300);
 
         //TheatrePopup popup = new TheatrePopup();
         //theatre.addMouseListener(popup);
