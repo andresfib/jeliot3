@@ -1071,7 +1071,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeR(long expressionCounter,
             long expressionReference, String value, String type, Highlight h) {
-        if (type.equals(Void.TYPE.getName())) {
+        if (type.equals(Void.TYPE.getName()) || type.equals("void")) {
 
             //director.finishMethod(null, expressionCounter);
             returned = false;
