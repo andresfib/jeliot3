@@ -1,6 +1,8 @@
 JELIOT 3 TODO-LIST
 
-* Initialization of object when it inherits user made class
+* use Fontmetrics getHeight -method instead of getAscent and getDescent 
+  in line numbering.
+* Initialization of object when it inherits user made class (super() call)
 * Super method call with parameters in object creation with inheritance
 * Bad user code crashes Jeliot "}", error not being read by Interpreter
 * Documentation
@@ -12,7 +14,7 @@ JELIOT 3 TODO-LIST
 * Array initializers
 * Array variables could be references
 * Command line parameters
-* 2+ -dimensional arrays
+* 2 -dimensional arrays
 * Default error message needs to be changed
 * Static field access
 * Super field access
@@ -30,4 +32,4 @@ JELIOT 3 TODO-LIST
 * Error message when super class, does not include constructor without 
   parameters or default constructor (Done)
 * Object's fields initial values (Partially done, but should be changed)
-* Simple build (DONE)
+* Simple enough build (DONE)
