@@ -1,18 +1,41 @@
-What's new in Jeliot 3.4.0
-
-+ Improved editor with Syntax Highlighting (thanks to JEdit)
-+ Array Initializers, speed up 
-+ Start Jeliot animation from any method in your class, useful if you don't have a main method
-+ History view, want to repeat the last part of the animation, use the History view
-+ Call Tree view, interested in how recursion works, have a look at the call tree view
-+ Logical operators && || now work in shortcircuit
-+ Improved object-oriented suppor, like Static Field Access
-+ Start Jeliot with a filename as a parameter like "jeliot If.java", it will look first in Examples
-
-
-Other new features
-
-+ Support for CASE statements
-+ Run until, just indicate a line and the animation will fast-forward to it
-+ System.out.println and System.out.print support, for the shake of being "standard"
-
+<html>
+<head>
+<title>Jeliot :: What's New</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<? 
+  include 'include/banner.php';
+?>
+<div class="menu"> 
+ <? include 'include/menu.php' ?>
+</div>	 
+<div class="content"> 
+  <div class="item"> 
+    <h3>What's new</h3>
+	<h4>Jeliot 3.4.0</h4>
+	<ul>
+		<li>Improved editor with Syntax Highlighting (thanks to JEdit).</li>
+		<li>Array Initializers, speed up.</li>
+		<li>Start Jeliot animation from any method in your class, useful if you don't have a main method.</li>
+		<li>History view, want to repeat the last part of the animation, use the History view.</li>
+		<li>Call Tree view, interested in how recursion works, have a look at the call tree view.</li>
+		<li>Logical operators && || now work in shortcircuit.</li>
+		<li>Improved object-oriented suppor, like Static Field Access.</li>
+		<li>Start Jeliot with a filename as a parameter like "jeliot If.java", it will look first in Examples.</li>
+	</ul>
+	
+	<h4>Other new features</h4>
+	<ul>
+		<li>Support for CASE statements</li>
+		<li>Run until, just indicate a line and the animation will fast-forward to it.</li>
+		<li>System.out.println and System.out.print support, for the shake of being "standard".</li>
+	</ul>
+    </div>
+</div>
+<div class="footer"> 
+  <? include 'include/footer.php' ?>
+</div>    
+</body>
+</html>

@@ -10,12 +10,10 @@ DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe
 OutputDir=Release
 [Dirs]
-Name: "{app}\images"
 Name: "{app}\examples"
 Name: "{app}\docs"
 Name: "{app}\docs\images"
 [Files]
-Source: "Jeliot3\images\*"; DestDir: "{app}\images\"
 Source: "Jeliot3\docs\*"; DestDir: "{app}\docs\"
 Source: "Jeliot3\docs\images\*"; DestDir: "{app}\docs\images\"
 Source: "Jeliot3\examples\*"; DestDir: "{app}\examples\"
