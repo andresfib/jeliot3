@@ -465,6 +465,10 @@ public class Jeliot {
         gui.setProgram(f);
     }
     
+    /**
+     * 
+     * @return
+     */
     public boolean isExperiment() {
         return experiment;
     }
@@ -478,8 +482,17 @@ public class Jeliot {
         gui.highlightTabTitle(highlight, tabNumber);
     }
     
+    /**
+     * 
+     * @param i
+     * @param h
+     */
     public void addImageToHistory(Image i, Highlight h) {
     	hv.addImage(i, h);
+    }
+    
+    public JeliotWindow getGUI() {
+        return gui;
     }
     
     /**

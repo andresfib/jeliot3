@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -310,6 +311,12 @@ public class JeliotWindow {
     private ActionListener exit = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            WindowListener[] wl = frame.getWindowListeners();
+            int n = wl.length;
+            for (int i = 0; i < n; i++) {
+                wl[i].windowClosing(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            }
+            /*
             if (editor.isChanged()) {
                 int n = JOptionPane.showConfirmDialog(frame, bundle
                         .getString("quit.without.saving.message"), bundle
@@ -331,6 +338,7 @@ public class JeliotWindow {
                 //frame.dispose();
                 System.exit(0);
             }
+            */
         }
     };
 
@@ -502,6 +510,10 @@ public class JeliotWindow {
         //System.out.println(theatre.getSize());
     }
 
+    public JFrame getFrame() {
+        return frame;
+    }
+    
     /**
      * Makes and returns the menubar for the main frame. Things for debugging.
      * 
