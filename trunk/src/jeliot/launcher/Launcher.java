@@ -27,6 +27,7 @@ public class Launcher extends Thread {
 	 *
 	 */
 	private PipedWriter pipedWriter = null;
+	
 	/**
 	 *
 	 */
@@ -36,10 +37,12 @@ public class Launcher extends Thread {
 	 *
 	 */
 	private PrintWriter writer = null;
+	
 	/**
 	 *
 	 */
 	private BufferedReader reader = null;
+	
 	/**
 	 *
 	 */

@@ -1,7 +1,5 @@
 package jeliot.mcode;
 
-
-
 /**
  * Currently this class is not used in Jeliot 3.
  * 

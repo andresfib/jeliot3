@@ -5,7 +5,7 @@ import java.awt.Point;
 
 /**
  * ExpressionActor represents a single line of a scratch the evaluation
- * area. It Can contain any number of different actors inside that it
+ * area. It can contain any number of different actors inside that it
  * renders.
  * 
  * @author Pekka Uronen

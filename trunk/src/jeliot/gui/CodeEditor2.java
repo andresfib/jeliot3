@@ -67,6 +67,9 @@ public class CodeEditor2 extends JComponent {
      */
     private String template = bundle2.getString("code_editor.template");
 
+    /**
+     * Comment for <code>title</code>
+     */
     private String title = bundle.getString("name") + " "
             + bundle.getString("version");
 
@@ -722,6 +725,9 @@ public class CodeEditor2 extends JComponent {
         }
     }
 
+	/**
+	 * @param line
+	 */
 	public void highlightLineNumber(int line) {
 		ln.setHighlightedLine(line);
 	}

@@ -34,8 +34,15 @@ public class ReferenceVariableInArrayActor extends VariableInArrayActor {
 	 */
 	private ReferenceActor reservedRefActor;
 
+	/**
+	 *
+	 */
 	public ReferenceVariableInArrayActor() { }
 	
+	/**
+	 * @param arrayActor
+	 * @param name
+	 */
 	public ReferenceVariableInArrayActor(ArrayActor arrayActor, String name) {
         setParent(arrayActor);
         this.name = name;
@@ -190,7 +197,7 @@ public class ReferenceVariableInArrayActor extends VariableInArrayActor {
     /**
 	 * 
 	 */
-	public void theatreResized() {
+	public void theaterResized() {
         if (refActor != null) {
             refActor.calculateBends();
         }

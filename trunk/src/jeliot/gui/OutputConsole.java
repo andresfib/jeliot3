@@ -23,17 +23,20 @@ import javax.swing.border.TitledBorder;
  * program is printed.
  *
  * @author Pekka Uronen
- *
- * created         3.10.1999
+ * @author Niko Myller
  */
 public class OutputConsole extends JTextArea {
 
-   /**
+    /**
      * The resource bundle for gui package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.gui.resources.properties",
                                       Locale.getDefault());
+    
+    /**
+     * The resource bundle for gui package
+     */
     static private ResourceBundle bundle2 = ResourceBundle.getBundle(
             "jeliot.gui.resources.messages",
             Locale.getDefault());

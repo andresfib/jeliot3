@@ -73,6 +73,10 @@ public class JeliotWindow {
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
             "jeliot.gui.resources.properties", Locale.getDefault());
+    
+    /**
+     * The resource bundle for gui package
+     */    
     static private ResourceBundle bundle2 = ResourceBundle.getBundle(
             "jeliot.gui.resources.messages", Locale.getDefault());
 
@@ -148,8 +152,8 @@ public class JeliotWindow {
     private CodePane2 codePane;
 
     /** The code editor in which the users can write their code. */
-    //private NewCodeEditor editor;
-    private CodeEditor2 editor /*  = new CodeEditor() */ ;
+    private CodeEditor2 editor;
+    //private CodeEditor editor = new CodeEditor();
 
     /** The pane that splits the window. */
     private JSplitPane codeNest;
@@ -520,7 +524,8 @@ public class JeliotWindow {
     }
     
     /**
-     * Makes and returns the menubar for the main frame. Things for debugging.
+     * Makes and returns the menubar for the main frame.
+     * Things for debugging.
      * 
      * @return The menubar for the main frame.
      */
@@ -1057,13 +1062,17 @@ public class JeliotWindow {
         return editor.getProgram();
     }
 
+    /**
+     *
+     */
     void tryToEnterAnimate() {
         tryToEnterAnimate(null);
     }
     
     /**
-     * Called when the user pushes the "Compile" button. Gets the code from the
-     * CodeEditor -object. Sends it to "compilation".
+     * Called when the user pushes the "Compile" button.
+     * Gets the code from the CodeEditor2 -object.
+     * Sends it to "compilation".
      */
     public void tryToEnterAnimate(String methodCall) {
 
@@ -1153,9 +1162,13 @@ public class JeliotWindow {
      * from.substring(0,index) + with + from.substring(index+1,from.length());
      * index = from.indexOf(c); } return from; }
      */
-
+    
     /**
-     * Tries to find the main method declaration from one of the classes.
+     * Tries to find the main method declaration
+     * from one of the classes.
+     * 
+     * @param programCode
+     * @return
      */
     public String findMainMethodCall(String programCode) {
 
@@ -1650,6 +1663,10 @@ public class JeliotWindow {
         }
     }
     
+    /**
+     * 
+     *
+     */
     public void runUntilFinished() {
         codePane.highlightLineNumber(-1);
         speedSlider.setValue(previousSpeed);
@@ -1715,10 +1732,19 @@ public class JeliotWindow {
         }
     }
 
+    /**
+     * 
+     * @param title
+     * @return
+     */
     public int getTabNumber(String title) {
         return tabbedPane.indexOfTab(title);
     }
     
+    /**
+     * 
+     *
+     */
     public void unhighlightTabTitles() {
         int n = tabbedPane.getTabCount();
         for (int i = 0; i < n; i++) {

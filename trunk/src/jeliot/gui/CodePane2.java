@@ -174,10 +174,16 @@ public class CodePane2 extends JComponent {
 		SwingUtilities.invokeLater(updateAComponent);
 	}
 
+	/**
+	 * @return
+	 */
 	public JEditTextArea getTextArea() {
 	    return area;
 	}
 	
+	/**
+	 * @param line
+	 */
 	public void highlightLineNumber(int line) {
 		ln.setHighlightedLine(line);
 	}

@@ -39,6 +39,9 @@ public class TreeDraw extends JComponent {
 
     }
 
+    /**
+     * 
+     */
     public void initialize() {
         tree = builder.buildTree();
         repaint();

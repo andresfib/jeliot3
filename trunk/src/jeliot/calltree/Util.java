@@ -6,6 +6,9 @@ package jeliot.calltree;
  */
 public class Util {
     
+    /**
+     * Comment for <code>nullObject</code>
+     */
     public static final Object nullObject = new Object();
     
 }

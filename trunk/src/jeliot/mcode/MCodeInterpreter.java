@@ -9,8 +9,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 /**
- * The MCode interpreter that interprets the MCode received during the
- * intepretation in DynamicJava.
+ * The MCode interpreter that interprets the MCode received
+ * during the intepretation in DynamicJava.
  * 
  * @author Niko Myller
  * @author Andrés Moreno

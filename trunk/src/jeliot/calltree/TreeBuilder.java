@@ -6,8 +6,17 @@ package jeliot.calltree;
  */
 public class TreeBuilder {
 
+    /**
+     * Comment for <code>nodeNumber</code>
+     */
     protected int nodeNumber = 0;
+    /**
+     * Comment for <code>tree</code>
+     */
     protected Tree tree;
+    /**
+     * Comment for <code>currentPosition</code>
+     */
     protected TreeNode currentPosition = null;
 
     /**
