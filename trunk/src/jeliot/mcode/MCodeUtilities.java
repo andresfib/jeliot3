@@ -1149,8 +1149,9 @@ public class MCodeUtilities {
 
             return o.toString();
         }
+       
+        return Integer.toHexString(System.identityHashCode(o));            
 
-        return Integer.toHexString(o.hashCode());
     }
 
     /**
