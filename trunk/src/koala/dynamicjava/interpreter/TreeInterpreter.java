@@ -326,9 +326,8 @@ public class TreeInterpreter implements Interpreter {
 
 			//throw new InterpreterException(e);
 
-		} finally {
-			return null;
 		}
+    	return null;
 	}
 
 	/**
