@@ -10,6 +10,9 @@ import javax.swing.event.*;
 import jeliot.theatre.*;
 import jeliot.parser.*;
 import jeliot.*;
+import jeliot.ecode.*;
+
+import koala.dynamicjava.interpreter.*;
 
 /**
  * This is the main window of the Jeliot 2000.
@@ -17,6 +20,8 @@ import jeliot.*;
  * @author Pekka Uronen
  */
 public class JeliotWindow {
+
+    boolean errorOccured = false;
 
     /** The frame in which all the action goes on. */
     private JFrame frame;
@@ -107,13 +112,15 @@ public class JeliotWindow {
         errorViewer.add("Center", errorPane);
         JPanel bp = new JPanel();
         bp.setOpaque(false);
+
         JButton ok = new JButton("OK");
         ok.addActionListener(
             new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     changeTheatrePane(theatre);
+                    editButton.setEnabled(true);
                 }
-            }
+           }
         );
         bp.add(ok);
         errorViewer.add("South", bp);
@@ -519,7 +526,6 @@ public class JeliotWindow {
      * This method is called when user clicks the "Edit" button.
      */
     void enterEdit() {
-
         panelController.slide(false,
             new Runnable() {
                 public void run() {
@@ -581,6 +587,7 @@ public class JeliotWindow {
                 //Reader s = new BufferedReader(new StringReader(methodCall));
 
                 jeliot.compile(programCode, methodCall);
+
                 changeTheatrePane(theatre);
 
                 panelController.slide(true,
@@ -597,11 +604,16 @@ public class JeliotWindow {
                     }
                 ).start();
             }
-            catch (SemanticException e) {
+
+            catch (FeatureNotImplementedException e) {
                 showErrorMessage(e);
                 return;
             }
-            catch (FeatureNotImplementedException e) {
+/*            catch (InterpreterException e) {
+                showErrorMessage(e);
+                return;
+            }
+            catch (SemanticException e) {
                 showErrorMessage(e);
                 return;
             }
@@ -609,6 +621,7 @@ public class JeliotWindow {
                 showErrorMessage(e);
                 return;
             }
+*/
         }
         catch (Exception e) {
             editButton.doClick();
@@ -633,10 +646,30 @@ public class JeliotWindow {
      *
      * @param   e   The exception that is wanted to show.
      */
-    public void showErrorMessage(SyntaxErrorException e) {
+/*    public void showErrorMessage(SyntaxErrorException e) {
         errorPane.setText(e.toString());
         changeTheatrePane(errorViewer);
         editor.highlight(e.getHighlight());
+    }
+*/
+
+    public void showErrorMessage(InterpreterError e) {
+        pauseButton.setEnabled(false);
+        errorOccured = true;
+        errorPane.setText(e.getMessage());
+        changeTheatrePane(errorViewer);
+        Component c = codeNest.getLeftComponent();
+
+        if (e.getHighlight() != null) {
+
+            if (c instanceof CodeEditor) {
+                ((CodeEditor)c).highlight(e.getHighlight());
+            }
+
+            if (c instanceof CodePane) {
+                ((CodePane)c).highlightStatement(e.getHighlight());
+            }
+        }
     }
 
     /**
@@ -734,10 +767,12 @@ public class JeliotWindow {
      */
     void rewindAnimation() {
 
+        errorOccured = false;
+
         jeliot.recompile();
 
         try {
-            Thread.sleep(50);
+            Thread.sleep(25);
         } catch(InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -755,11 +790,20 @@ public class JeliotWindow {
      * Changes the user interface when the animation is finished.
      */
     public void animationFinished() {
-        stepButton.setEnabled(false);
-        playButton.setEnabled(false);
-        pauseButton.setEnabled(false);
-        rewindButton.setEnabled(true);
-        editButton.setEnabled(true);
+        if (!errorOccured) {
+            stepButton.setEnabled(false);
+            playButton.setEnabled(false);
+            pauseButton.setEnabled(false);
+            rewindButton.setEnabled(true);
+            editButton.setEnabled(true);
+        } else {
+            editButton.setEnabled(false);
+            stepButton.setEnabled(false);
+            playButton.setEnabled(false);
+            pauseButton.setEnabled(false);
+            rewindButton.setEnabled(false);
+
+        }
     }
 
     /**

@@ -1118,6 +1118,16 @@ public class Interpreter {
                             break;
                         }
 
+                        case Code.ERROR: {
+
+                            String message = tokenizer.nextToken();
+                            Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+
+                            director.showErrorMessage(new InterpreterError(message, h));
+                        	running = false;
+                            break;
+                        }
+
                         //There is an error if the execution comes here.
                         default: {
                             System.out.println("Error! The feature not yet implemented or " +

@@ -1100,6 +1100,10 @@ public class Director {
         this.output(val.getValue());
     }
 
+    public void showErrorMessage(InterpreterError e) {
+        jeliot.showErrorMessage(e);
+    }
+
     public void output(String str) {
         jeliot.output(str);
     }
