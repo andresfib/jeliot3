@@ -127,6 +127,7 @@ public class HistoryView extends JComponent implements ActionListener {
      * @param udir
      */
     public HistoryView(final CodePane2 c, String udir) {
+        //TODO: add some of the literals below to a resourceBundle.
         this.codePane = c;
         //We take the first user home path as the one to be used.
         String userPath = System.getProperty("user.home").split(
@@ -135,7 +136,11 @@ public class HistoryView extends JComponent implements ActionListener {
         if (!imageTemp.exists()) {
             imageTemp.mkdir();
         }
-
+        imageTemp = new File(imageTemp, "images");
+        if (!imageTemp.exists()) {
+            imageTemp.mkdir();
+        }
+        
         initialize();
         setLayout(new BorderLayout());
 
