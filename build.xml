@@ -50,25 +50,25 @@ To display the available targets type:
   <target name="init" depends="init-args">
     <tstamp/>
 
-    <property name="version"         value="1.1.5"/>
-    <property name="dist"            value="DynamicJava-${version}"/>
-    <property name="package-prefix"  value="koala/dynamicjava"/>
+    <property name="version"         value="3"/>
+    <property name="dist"            value="Jeliot${version}"/>
+    <property name="package-prefix"  value=""/>
 
     <property name="src"             value="src"/>
     <property name="resources"       value="resources"/>
     <property name="dest"            value="classes"/>
+  
 
   </target>
 
   <!-- Help ==================================================== -->
   <target name="help">
     <echo message=""/>
-    <echo message="DynamicJava build usage."/>
+    <echo message="Jeliot build usage."/>
     <echo message=""/>
     <echo message="Available targets:"/>
     <echo message=" dist   : builds a distribution."/>
     <echo message=" compile: compiles the source code."/>
-    <echo message=" gui    : runs the GUI."/>
     <echo message=" clean  : cleans everything.."/>
     <echo message=""/>
   </target>
@@ -76,7 +76,7 @@ To display the available targets type:
   <!-- Compilation ==================================================== -->
   <target name="compile" depends="init">
     <mkdir dir="${dest}"/>
-    <javac srcdir="${src}" destdir="${dest}" deprecation="on"/>
+    <javac srcdir="${src}" destdir="${dest}" deprecation="on" debug="true"/>
   </target>
 
   <target name="clean-compile" depends="init">
@@ -84,19 +84,9 @@ To display the available targets type:
   </target>
  
   <!-- Applications ================================================= -->
-  <target name="gui" depends="compile">
-    <java fork="yes" classname="koala.dynamicjava.gui.Main">
-      <classpath>
-        <pathelement location="${dest}"/>
-        <pathelement location="resources"/>
-      </classpath>
-      <arg value="${args}"/>
-    </java>
-
-  </target>
 
   <!-- Distribution ================================================= -->
-  <target name="dist" depends="prepare-dist, jars, javadoc">
+  <target name="dist" depends="prepare-dist, jars">
     <zip zipfile="${dist}.zip" basedir="${dist}" includes="**/*"/>
   </target>
 
@@ -109,17 +99,15 @@ To display the available targets type:
         <include name="${package-prefix}/**/*"/>
       </fileset>
     </jar>
-    <jar manifest="${src}/djava.mf"
-         jarfile="${dist}/djava.jar"/>
-    <jar manifest="${src}/djgui.mf"
-         jarfile="${dist}/djgui.jar"/>
+    <jar manifest="${src}/jeliot.mf"
+         jarfile="${dist}/jeliot.jar"/>
   </target>
 
   <target name="prepare-dist" depends="init">
     <mkdir dir="${dist}"/>
     <mkdir dir="${dist}/lib"/>
-    <mkdir dir="${dist}/docs"/>
-    <mkdir dir="${dist}/docs/javadoc"/>
+   <!-- <mkdir dir="${dist}/docs"/>
+    <mkdir dir="${dist}/docs/javadoc"/> -->
     <copy todir="${dist}/docs">
       <fileset dir="docs"/>
     </copy>
