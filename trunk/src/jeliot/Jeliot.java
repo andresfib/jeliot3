@@ -123,8 +123,8 @@ public class Jeliot implements Runnable {
             launcher = null;
         }
 
-        launcher= new Launcher(new BufferedReader(
-                               new StringReader(sourceCode)));
+        launcher = new Launcher(new BufferedReader(
+                                new StringReader(this.sourceCode)));
 
         launcher.compile();
 
@@ -133,7 +133,7 @@ public class Jeliot implements Runnable {
 
         ecode = launcher.getReader();
 
-        codePane.installProgram(sourceCode);
+        codePane.installProgram(this.sourceCode);
 
         compiled = true;
     }

@@ -26,7 +26,6 @@ import jeliot.gui.*;
   */
 public class CodeEditor extends JComponent {
 
-
     /**
      * The String for the basic code template that is shown to the user on the start of the Jeliot 2000.
      */

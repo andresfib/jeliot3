@@ -88,7 +88,8 @@ public class OutputConsole extends JTextArea {
         );
     }
 
-    /** Checks if a mouse event should pop up the popup menu. A bit of
+    /**
+      * Checks if a mouse event should pop up the popup menu. A bit of
       * a hack, because InputEvent.isPopupTrigger() doesn't seem to
       * work on Windows95/jdk1.1.7a/swing1.1.1.
       *
@@ -105,7 +106,7 @@ public class OutputConsole extends JTextArea {
       * @param  evt The mouse event that is supposed to be a popup menu trigger.
       */
     private void maybeShowPopup(MouseEvent evt) {
-        System.err.println(evt);
+        //System.err.println(evt);
         if (!isPopupTrigger(evt)) {
             return;
         }
