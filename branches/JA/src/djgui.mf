@@ -1,0 +1,3 @@
+Manifest-Version: $Id$
+Main-Class: koala.dynamicjava.gui.Main
+Class-Path: lib/dynamicjava.jar
