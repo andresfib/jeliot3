@@ -55,6 +55,8 @@ public class EvaluationVisitor extends VisitorObject {
 		constructorInfoNames = new Stack();
 		constructorInfoParamTypes = new Stack();
 		MCodeUtilities.superClassesStack = new Stack();
+		domesticStack = new Stack();
+		returnExpressionCounterStack = new Stack();
 	}
 
 	/**
@@ -226,7 +228,7 @@ public class EvaluationVisitor extends VisitorObject {
 	 * Unset inside value to false.
 	 */
 	public static void unsetInside() {
-		//        inside = false;
+		//inside = false;
 		domesticStack.pop();
 	}
 
@@ -1788,6 +1790,7 @@ public class EvaluationVisitor extends VisitorObject {
 		pushConstructorInfo(consName, types);
 		MCodeUtilities.previousClassStack.push(consName);
 		MCodeUtilities.previousClassParametersStack.push(types);
+		
 		//Hack to avoid problems when jeliot is started with a constructor
 		returnExpressionCounterStack.push(new Long(0));
 		//}
@@ -1803,6 +1806,10 @@ public class EvaluationVisitor extends VisitorObject {
 			MCodeUtilities.previousClassParametersStack.pop();
 			//MCodeUtilities.superClassesStack.pop();
 			returnExpressionCounterStack.pop();
+			
+			//This is now done for all the simple allocations but once Java API allocations are allowed this should be changed.
+			unsetInside();
+			
 			return result;
 
 			/* Jeliot 3 addition begins */

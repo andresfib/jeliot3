@@ -43,6 +43,8 @@ public class TheaterManager implements ComponentListener {
 
     public static final int constantBoxPositionX = 10;
     
+    public static final int EXTRA_SPACE = 40;
+    
 	/**
       * Reference to the current Theatre instance.
       * Reference is need for two reasons:
@@ -177,7 +179,7 @@ public class TheaterManager implements ComponentListener {
 
         int x = objects.isEmpty() ?
                 getMinInstanceX() + 20 :
-                    ((Actor)objects.lastElement()).getX() +((Actor)objects.lastElement()).getWidth() + 47;
+                    ((Actor)objects.lastElement()).getX() + ((Actor)objects.lastElement()).getWidth() + 47;
         int y = getMinInstanceY() + 30;
         
         /*
@@ -215,11 +217,11 @@ public class TheaterManager implements ComponentListener {
         
         Dimension d = theatre.getSize();
         
-        if (d.width < loc.x + actor.getWidth() + 35) {
-            d.width = loc.x + actor.getWidth() + 35;
+        if (d.width < loc.x + actor.getWidth() + EXTRA_SPACE) {
+            d.width = loc.x + actor.getWidth() + EXTRA_SPACE;
         }
-        if (d.height < loc.y + actor.getHeight() + 35) {
-            d.height = loc.y + actor.getHeight() + 35;
+        if (d.height < loc.y + actor.getHeight() + EXTRA_SPACE) {
+            d.height = loc.y + actor.getHeight() + EXTRA_SPACE;
         }
         theatre.setPreferredSize(d);
         theatre.revalidate();
@@ -276,12 +278,12 @@ public class TheaterManager implements ComponentListener {
         
         Dimension d = theatre.getSize();
         
-        if (d.width < loc.x + actor.getWidth() + 35) {
-            d.width = loc.x + actor.getWidth() + 35;
+        if (d.width < loc.x + actor.getWidth() + EXTRA_SPACE) {
+            d.width = loc.x + actor.getWidth() + EXTRA_SPACE;
         }
         
-        if (d.height < loc.y + actor.getHeight() + 35) {
-            d.height = loc.y + actor.getHeight() + 35;
+        if (d.height < loc.y + actor.getHeight() + EXTRA_SPACE) {
+            d.height = loc.y + actor.getHeight() + EXTRA_SPACE;
         }
         
         theatre.setPreferredSize(d);

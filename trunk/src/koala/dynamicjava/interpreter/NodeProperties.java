@@ -138,28 +138,28 @@ public class NodeProperties {
      * Returns the type property of a node
      */
     public static Class getComponentType(Node n) {
-        return (Class)n.getProperty(COMPONENT_TYPE);
+        return (Class) n.getProperty(COMPONENT_TYPE);
     }
 
     /**
      * Returns the modifier property of a node
      */
     public static LeftHandSideModifier getModifier(Node n) {
-        return (LeftHandSideModifier)n.getProperty(MODIFIER);
+        return (LeftHandSideModifier) n.getProperty(MODIFIER);
     }
 
     /**
      * Returns the type property of a node
      */
     public static Class getType(Node n) {
-        return (Class)n.getProperty(TYPE);
+        return (Class) n.getProperty(TYPE);
     }
 
     /**
      * Returns the type property of a node when it is a class info
      */
     public static ClassInfo getClassInfo(Node n) {
-        return (ClassInfo)n.getProperty(TYPE);
+        return (ClassInfo) n.getProperty(TYPE);
     }
 
     /**
@@ -168,7 +168,7 @@ public class NodeProperties {
      */
     protected NodeProperties() {
     }
-    
+
     /**
      * Resolves the Class object out of a Type object.
      * 
@@ -178,13 +178,18 @@ public class NodeProperties {
         if (type instanceof PrimitiveType) {
             return ((PrimitiveType) type).getValue();
         } else if (type instanceof ArrayType) {
-            Class componentType = NodeProperties.resolveClass(((ArrayType) type).getElementType());
+            Class componentType = NodeProperties
+                    .resolveClass(((ArrayType) type).getElementType());
             return Array.newInstance(componentType, 1).getClass();
         } else if (type instanceof ReferenceType) {
             try {
                 return Class.forName(((ReferenceType) type).getRepresentation());
             } catch (ClassNotFoundException e) {
-                DebugUtil.handleThrowable(e);
+                try {
+                    return Class.forName("java.lang." + ((ReferenceType) type).getRepresentation());
+                } catch (ClassNotFoundException e1) {
+                    DebugUtil.handleThrowable(e1);
+                }
             }
         }
         return null;
