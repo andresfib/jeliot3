@@ -51,11 +51,11 @@ To display the available targets type:
     <tstamp/>
   	
     <!-- This properties modify the output of the build process-->
-    <property name="version"         value="3"/>
-    <property name="minor"         value=".5.0"/>
-  	
+    <property name="versionJ"         value="3"/>
+    <property name="minor"           value=".5.0"/>
+
   	<!-- dist: Used to create the folder where to place the binary distribuition, jar files and images-->
-    <property name="dist"            value="Jeliot${version}"/>
+    <property name="dist"            value="Jeliot${versionJ}"/>
   	
     <property name="package-prefix"  value=""/>
 
@@ -128,11 +128,11 @@ To display the available targets type:
   <!-- Installers for Windows ===================================-->
   <!-- Time consuming, moved out of dist -->
   <target name="createInstallers" depends="clean, prepare-dist, jars"> 	
-  	<exec dir="." executable="C:\temp\program files\Inno Setup 4\iscc.exe" output="output.txt">
+  	<exec dir="." executable="C:\program files\Inno Setup 4\iscc.exe" output="output.txt">
   		<arg line="jeliot.iss"/>
 	</exec>
     <move file="${release}/setup.exe" tofile="${release}/${dist}${minor}.exe"/>
-  	<exec dir="." executable="C:\temp\program files\Inno Setup 4\iscc.exe" output="outputJRE.txt">
+  	<exec dir="." executable="C:\program files\Inno Setup 4\iscc.exe" output="outputJRE.txt">
   		<arg line="jeliotJRE-Bundled.iss"/>
 	</exec>
     <move file="${release}/setup.exe" tofile="${release}/${dist}${minor}-JRE.exe"/>
