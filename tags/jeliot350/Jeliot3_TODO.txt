@@ -1,0 +1,137 @@
+----- JELIOT 3.4.X bugs and features: ------
+* null values caused crashing in constructors and methods (done)
+* maximize window when starting (done)
+* mnemonic for file menu (done)
+* configure Jeliot through properties file in Jeliot's main directory (done)
+* Replace '\t' characters with spaces when saving (done)
+* fix the caret position after saving when previous point is done. (done)
+* dependencies between classes should not affect the compilation (done partially, circular dependencies are not handled correctly.)
+* Problem handling static variables when DynamicJava thinks it is an object field access and with ++ operation. (done and added a expression stack handling expressions separately in each scope -> testing needed)
+* Problems with threads. The previous threads are left running when new threads are created. They should be cleaned before creating new ones. (done, testing needed)
+* Problems with memory when history view has a large images in store. (done, pictures saved on disk and users have a option to use history view or not)
+* Starting the animation with only a constructor (and not a method call) now works. setInside was peeking an empty stack. (done)
+* It is possible to choose a font of editor and code pane from Jeliot. (done)
+* Change properties to use property files and save some of the values to user default values in their home directory. (done, although this could be for other properties as well.)
+* 2 and 3 -dimensional arrays (done partially, no support for array initializer)
+
+----- JELIOT 3 TODO-LIST for next version 4.X:------
+
+Documentation:
+* Documentation of the tool (user guide, tutorial, examples etc.)
+* The guide to install and use Jeliot in Finnish / Suomenkieliset asennus- ja käyttöohjeet.
+
+Testing:
+* We need some kind of test environment to test Jeliot properly.
+
+Jeliot features:
+* Interaction mode (like BlueJ's object bench)
+
+Language support:
+* Support for Java 1.5.0 with the DrJava/DynamicJava.
+* Support for wrapper classes
+* Support other API classes and objects
+* Constructor calls highlighted correctly
+* super method calls go in the correct order
+* Super field access
+* Instance garbage collection
+* Support for inner classes
+
+Graphical:
+* Returned value should not stay in the return "bubble" after it has been used or should it? 
+* Zoomable canvas for Theater (see Piccolo project -> requires quite a lot of work to transform all the drawing in piccolo)
+* Customize the visualization (change visual attributes or change the granularity of visualization)
+	* Adaptable Jeliot
+
+Web:
+* Applet Jeliot (with predefined m-code or program).
+* Web Start Jeliot (how could it be utilized in courses and other places. An easy way to keep Jeliot updated)
+
+Connections to other softwares:
+* Control Jeliot outside Jeliot or from other Jeliot
+* Connection framework (extension API) for different kinds of connections
+	* New visualization (e.g. connecting Call tree viewer with this)
+	* New m-code inputs (e.g. read m-code from file or a stream or from other program (i.e. proxy object)
+* Using Vivaldi-kernel as a tool to visualize object oriented programming on more abstract level.
+* Combining Jeliot and JHave supporting self-assesment and explanations
+* Generating explanations from the intermediate code
+* Integrating Jeliot into Eclipse
+* Integrating Jeliot into BlueJ (partially done)
+
+JeCo:
+* Combining Jeliot and Woven Stories supporting collaborative working (partially done)
+* Concurrent editing
+
+
+*************************************************************************
+-------These should be done before freezing the "final" version 3.X:-----
+
+Urgent:
+
+* Problem with main method finding in the JeliotWindow class. (done)
+* Array initializers (but only for one dimensional arrays)(done)
+* Static field access (into the constant area)(done)
+* super(...) method should be made working in the beginning of the constructors. (done)
+* Documentation
+* Initialization of object when it inherits user made class (super() call) (should be done)
+* casting of primitive types doesn't work. (done)
+* Automatic addition of "import jeliot.io.*" if it does not exist / Automaattinen jeliot.io.* importointi (done)
+* Casting a reference type should have no animation / Luokkacasteja ei tarvii tarkastaa... (done)
+* Emulate the class Lue that is used in ViSCoS with Input class / Lue-luokan "emulointi" jeliotissa (done)
+* The guide to install and use Jeliot in Finnish / Suomenkieliset asennus- ja käyttöohjeet.
+
+Bugs regarding inheritance:
+
+* When using a non-static method as a static method and proper error message should be shown. (done)
+* ERROR Rectangle: method <init>()V not found (done)
+* Fix the problem with RuntimeException: 'No Variable bigSquare' when bigSquare does not exist in the classes MethodStage and ObjectStage. (done)
+* Instability in the animation engine, reporting unknown runtime exceptions randomly (Due to some bug in ThreadController??) (Should be fixed, problem was in Launcher class)
+* SuperClass variables with some kind of temp name(this$0) produced by DJava (Should be fixed)
+
+Technical:
+
+* getValue -method for EvaluationVisitor. It returns string representation of the value. If value is primitive type then the values String presentation otherwise the hashcode. (done)
+* Not implemented feature -message (Done, but needs to be added from comments to releases)
+* Use invokeLater method to build up the gui in the beginning of the program. (Should be done)
+* Default error message needs to be changed (Should be done)
+* Use resource bundles to help adaptation of the user interface and visualization. (done)
+
+Bugs:
+
+* Bad user code crashes Jeliot "}", error not being read by Interpreter (Done)
+
+Graphical:
+
+* Arrow heads or something to indicate that the reference ends to that specific object. (done)
+* Reference actors visualization needs to be fixed in instances and in short distances (done)
+* Explicit mentioning of different areas in the theater (e.g. constant area, expression evaluation area, instance and array area and method frame area). (done)
+* Some randomness to the placement of references to prevent overlapping (done)
+* Returned value should not stay in the return "bubble" after it has been used or should it? 
+
+-------These can be done later: ------------------------------------
+
+Otherwise low priority:
+* Array variables could be references (done)
+
+Speculative or not needed at all:
+* Command line parameters (done in "ask for method" menu item)
+
+Conceptually/Technically challenging:
+* Execute until feature (done partially)
+* Going backwards (done with history view)
+* New editor (e.g. from BlueJ or JEdit) (done taken from JEdit)
+* Instance garbage collection
+
+Ideas for next versions:
+* 2 -dimensional arrays
+* Super field access
+* Connection wizard for different kind of connections (e.g. DJava, Woven 
+  Stories etc.) also for different visualizers like Call Tree.
+* Call Tree (done)
+* Using Vivaldi-kernel as a tool to visualize object oriented programming 
+  on more abstract level.
+* Combining Jeliot and Woven Stories supporting collaborative working (partially done)
+* Combining Jeliot and JHave supporting self-assesment and explanations
+* Generating explanations from the intermediate code
+* Integrating Jeliot into BlueJ (partially done)
+* Integrating Jeliot into Eclipse
+* Extensible Canvas for Theater (zooming possible)
