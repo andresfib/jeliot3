@@ -199,6 +199,11 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
         return scratch;
     }
 
+    public void removeScratch(Scratch scratch) {
+        manager.removeScratch(scratch);
+        removeActor(scratch);
+    }
+
     public int getWidth() {
         return getSize().width;
     }
