@@ -1,4 +1,4 @@
-/* Jeliot 3.3 */
+/* Jeliot 3.4.1 */
 
 /*
  * This program is free software; you can redistribute it and/or modify
