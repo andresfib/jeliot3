@@ -26,7 +26,7 @@ public class TheatreManager implements ComponentListener {
 
     private ConstantBox cbox;
 
-    private ConstantBox input;
+    //private ConstantBox input;
 
     private int maxStagex;
 
@@ -94,11 +94,11 @@ public class TheatreManager implements ComponentListener {
     }
 
     public void removeInstance(InstanceActor actor) {
-	    objects.removeElement(actor);
-	    theatre.removePassive(actor);
-	    theatre.repaint();
+        objects.removeElement(actor);
+        theatre.removePassive(actor);
+        theatre.repaint();
     }
-    
+
     public void removeStage(Stage stage) {
         stages.removeElement(stage);
         theatre.removePassive(stage);
@@ -117,11 +117,11 @@ public class TheatreManager implements ComponentListener {
 
     public void addScratch(Scratch scratch) {
         scratches.addElement(scratch);
-		if (!stages.empty()) {
-			scratch.setLocation(maxStagex + 20, 10);
-		} else {
-			scratch.setLocation(ActorFactory.getTypeValueWidth(8) + 100, 10);
-		}
+        if (!stages.empty()) {
+            scratch.setLocation(maxStagex + 20, 10);
+        } else {
+            scratch.setLocation(ActorFactory.getTypeValueWidth(8) + 100, 10);
+        }
         theatre.addPassive(scratch);
     }
 
@@ -138,7 +138,7 @@ public class TheatreManager implements ComponentListener {
         }
     }
 
-    private void positionInputBox() {
+/*    private void positionInputBox() {
         if (input != null) {
             //There is now 50 pixels between constant box and input box
             int x = 60 + cbox.getWidth();
@@ -146,7 +146,7 @@ public class TheatreManager implements ComponentListener {
             input.setLocation(x, y);
         }
     }
-
+*/
     public void positionObjects(Point from, Point to) {
         Enumeration enum = objects.elements();
         while (enum.hasMoreElements()) {

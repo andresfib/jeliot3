@@ -483,14 +483,14 @@ public class ActorFactory {
         return cbox;
     }
 
-    //Added for Jeliot 3
+/*    //Added for Jeliot 3
     public ConstantBox produceInputBox() {
         ConstantBox cbox = new ConstantBox(
                 iLoad.getImage("input.gif"));
         cbox.calculateSize();
         return cbox;
     }
-
+*/
     public AnimatingActor produceHand() {
         AnimatingActor hand = new AnimatingActor(produceImage("Hand"));
         hand.calculateSize();
