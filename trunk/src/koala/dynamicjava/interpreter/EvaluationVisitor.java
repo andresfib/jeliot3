@@ -401,6 +401,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         try {
             Set vars = (Set) node.getProperty(NodeProperties.VARIABLES);
+            MCodeUtilities.write(Code.SCOPE+Code.DELIM+"1");
             context.enterScope(vars);
 
             // Interpret the initialization expressions
@@ -466,6 +467,7 @@ public class EvaluationVisitor extends VisitorObject {
         } finally {
             // Always leave the current scope
             context.leaveScope();
+            MCodeUtilities.write(Code.SCOPE+Code.DELIM+"0");
         }
         if (!breakc)
             MCodeUtilities.write(
