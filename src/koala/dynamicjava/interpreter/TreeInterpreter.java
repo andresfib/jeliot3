@@ -977,7 +977,7 @@ public class TreeInterpreter implements Interpreter {
     		
     	}
         
-    	if (!EvaluationVisitor.isSetConstructorCall() || inConstructorCall || !name.equals("<init>")){
+    	if (!name.equals("<clinit>") && (!EvaluationVisitor.isSetConstructorCall() || inConstructorCall || !name.equals("<init>"))){
         	
            	MCodeUtilities.write(Code.PARAMETERS + Code.DELIM + MCodeUtilities.argToString(argnames));
         	MCodeUtilities.write(Code.MD + Code.DELIM + MCodeUtilities.locationToString(meth));
