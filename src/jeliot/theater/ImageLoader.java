@@ -73,38 +73,29 @@ public class ImageLoader {
 
 
     /**
-	 * @param name
-	 * @return
-	 */
-	public Image getLogicalImage(String name) {
-        //String realName = (String)mapping.get(name);
-        //return getImage(realName);
-		//return getImage(bundle.getString(name));
-        URL imageURL = Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+bundle.getString(name));
-        if (imageURL == null) {
-            imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+bundle.getString(name)));
-        }
-        return getImage(imageURL); 
+     * 
+     * @param name logical name of the image in the resource bundle.
+     * @return
+     */
+    public Image getLogicalImage(String name) {
+        return getImage(bundle.getString(name));
     }
-
-
+    
     /**
 	 * @param name
 	 * @return
 	 */
-	public Image getImage(String name) {
-        Image image = (Image)images.get(name);
-        if (image == null) {
-            //image = toolkit.getImage(bundle.getString("directory.images")+name);
-            //System.out.println(imageURL);
-            //image = toolkit.getImage(imageURL);
-            URL imageURL = Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+name);
-            if (imageURL == null) {
-                imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+name));
-            }
-        	image = new ImageIcon(imageURL).getImage();
-            images.put(name, image);
+	public Image getImage(String filename) {
+        if (images.containsKey(filename)) {
+            return (Image) images.get(filename);
         }
+        
+        URL imageURL = Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+filename);
+        if (imageURL == null) {
+            imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+filename));
+        }
+        Image image = getImage(imageURL);
+        images.put(filename, image);
         return image;
     }
 
@@ -113,12 +104,7 @@ public class ImageLoader {
 	 * @return
 	 */
 	public Image getImage(URL name) {
-        Image image = (Image)images.get(name);
-        if (image == null) {
-        	//image = toolkit.getImage(name);
-        	image = new ImageIcon(name).getImage();
-            images.put(name, image);
-        }
+       	Image image = new ImageIcon(name).getImage();
         return image;
     }
 	

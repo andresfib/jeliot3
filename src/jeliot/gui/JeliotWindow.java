@@ -18,6 +18,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
@@ -73,10 +74,10 @@ public class JeliotWindow {
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
             "jeliot.gui.resources.properties", Locale.getDefault());
-    
+
     /**
      * The resource bundle for gui package
-     */    
+     */
     static private ResourceBundle bundle2 = ResourceBundle.getBundle(
             "jeliot.gui.resources.messages", Locale.getDefault());
 
@@ -84,8 +85,7 @@ public class JeliotWindow {
      * The version information about Jeliot from name and version from the
      * resource bundle.
      */
-    private String jeliotVersion = bundle.getString("name") + " "
-            + bundle.getString("version");
+    private String jeliotVersion = bundle.getString("name") + " " + bundle.getString("version");
 
     /**
      * Should the messages during the program visualization be shown as message
@@ -141,7 +141,7 @@ public class JeliotWindow {
     private Theater theatre;
 
     private JScrollPane theaterScrollPane;
-    
+
     /** The animation engine that that will animate the code. */
     private AnimationEngine engine;
 
@@ -153,6 +153,7 @@ public class JeliotWindow {
 
     /** The code editor in which the users can write their code. */
     private CodeEditor2 editor;
+
     //private CodeEditor editor = new CodeEditor();
 
     /** The pane that splits the window. */
@@ -190,19 +191,19 @@ public class JeliotWindow {
 
     /** This ImageLoader will load all the images. */
     private ImageLoader iLoad;
-    
+
     /** This variable will control the panels. */
     private PanelController panelController;
 
     /** Showing the history of the program execution */
     private HistoryView hv;
-    
+
     /** If a method call should be asked from the user */
     private boolean askForMethod = false;
-    
+
     /** If animation is running until certain line */
     private boolean runningUntil = false;
-    
+
     /**
      * This JEditorPane errorJEditorPane will show the error messages for the
      * users.
@@ -211,9 +212,8 @@ public class JeliotWindow {
     {
         errorJEditorPane.setEditable(false);
         errorJEditorPane.setContentType("text/html");
-        errorJEditorPane.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLoweredBevelBorder(), BorderFactory
-                        .createEmptyBorder(10, 10, 10, 10)));
+        errorJEditorPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+                .createLoweredBevelBorder(), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
     }
 
     /**
@@ -238,7 +238,7 @@ public class JeliotWindow {
             int w = d.width;
             int h = d.height;
             if (backImage == null) {
-                backImage = iLoad.getImage(bundle.getString("image.panel"));
+                backImage = iLoad.getLogicalImage("image.panel");
             }
             int biw = backImage.getWidth(this);
             int bih = backImage.getHeight(this);
@@ -327,28 +327,28 @@ public class JeliotWindow {
                 wl[i].windowClosing(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
             /*
-            if (editor.isChanged()) {
-                int n = JOptionPane.showConfirmDialog(frame, bundle
-                        .getString("quit.without.saving.message"), bundle
-                        .getString("quit.without.saving.title"),
-                        JOptionPane.YES_NO_OPTION);
-                if (n == JOptionPane.YES_OPTION) {
-                    editor.saveProgram();
-                }
-            }
+             if (editor.isChanged()) {
+             int n = JOptionPane.showConfirmDialog(frame, bundle
+             .getString("quit.without.saving.message"), bundle
+             .getString("quit.without.saving.title"),
+             JOptionPane.YES_NO_OPTION);
+             if (n == JOptionPane.YES_OPTION) {
+             editor.saveProgram();
+             }
+             }
 
-            Properties prop = System.getProperties();
-            File f = new File(udir);
-            prop.put("user.dir", f.toString());
-            Jeliot.close();
-            
-            if (Jeliot.isnoSystemExit()) {
-                frame.dispose();
-            } else {
-                //frame.dispose();
-                System.exit(0);
-            }
-            */
+             Properties prop = System.getProperties();
+             File f = new File(udir);
+             prop.put("user.dir", f.toString());
+             Jeliot.close();
+             
+             if (Jeliot.isnoSystemExit()) {
+             frame.dispose();
+             } else {
+             //frame.dispose();
+             System.exit(0);
+             }
+             */
         }
     };
 
@@ -369,7 +369,7 @@ public class JeliotWindow {
 
     /** Control panel */
     private JComponent conPan;
-    
+
     /**
      * Assigns the values of the parameters in the object values. Constructs the
      * panelController with theatre and iload.
@@ -387,8 +387,8 @@ public class JeliotWindow {
      * @param udir
      *            The user directory
      */
-    public JeliotWindow(Jeliot jeliot, CodePane2 codePane, Theater theatre,
-            AnimationEngine engine, ImageLoader iLoad, String udir, TreeDraw td, HistoryView hv) {
+    public JeliotWindow(Jeliot jeliot, CodePane2 codePane, Theater theatre, AnimationEngine engine,
+            ImageLoader iLoad, String udir, TreeDraw td, HistoryView hv) {
 
         this.jeliot = jeliot;
         this.codePane = codePane;
@@ -410,119 +410,116 @@ public class JeliotWindow {
      * window. (Panels, Panes, Menubars) Things for debugging.
      */
     public void setUp() {
+        try {
+            this.theaterScrollPane = new JScrollPane(this.theatre);
+            //theaterScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            //theaterScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-        this.theaterScrollPane = new JScrollPane(this.theatre);
-        //theaterScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        //theaterScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        
-        this.tabbedPane.addTab(bundle2.getString("tab.title.theater"), theaterScrollPane);
-        this.tabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
+            this.tabbedPane.addTab(bundle2.getString("tab.title.theater"), theaterScrollPane);
+            this.tabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
 
-        if (!jeliot.isExperiment()) {
-            this.tabbedPane.addTab(bundle2.getString("tab.title.call_tree"),
-                    callTree.getComponent());
-            this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
-        
-            this.tabbedPane.addTab(bundle2.getString("tab.title.history"),
-                    hv);
-            this.tabbedPane.setMnemonicAt(2, KeyEvent.VK_Y);        
-        }
-        
-        this.frame.setIconImage(iLoad
-                .getImage(bundle.getString("image.jeliot_icon")));
-            
-        frame.setJMenuBar(makeMenuBar());
-        editor.setMasterFrame(frame);
+            if (!jeliot.isExperiment()) {
+                this.tabbedPane.addTab(bundle2.getString("tab.title.call_tree"), callTree
+                        .getComponent());
+                this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
 
-        JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editor,
-                tabbedPane);
-        pane.setOneTouchExpandable(true);
-        codeNest = pane;
+                this.tabbedPane.addTab(bundle2.getString("tab.title.history"), hv);
+                this.tabbedPane.setMnemonicAt(2, KeyEvent.VK_Y);
+            }
 
-        Dimension minimumSize = new Dimension(0, 0);
-        codePane.setMinimumSize(minimumSize);
-        editor.setMinimumSize(minimumSize);
+            this.frame.setIconImage(iLoad.getImage(bundle.getString("image.jeliot_icon")));
 
-        JPanel bottomPane = new JPanel(new BorderLayout());
-        conPan = makeControlPanel();
-        bottomPane.add("West", conPan);
+            frame.setJMenuBar(makeMenuBar());
+            editor.setMasterFrame(frame);
 
-        OutputConsole oc = new OutputConsole(conPan);
-        this.outputConsole = oc;
+            JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editor, tabbedPane);
+            pane.setOneTouchExpandable(true);
+            codeNest = pane;
 
-        bottomPane.add("Center", oc.container);
+            Dimension minimumSize = new Dimension(0, 0);
+            codePane.setMinimumSize(minimumSize);
+            editor.setMinimumSize(minimumSize);
 
-        JPanel rootPane = new JPanel(new BorderLayout());
-        rootPane.add("Center", pane);
-        rootPane.add("South", bottomPane);
+            JPanel bottomPane = new JPanel(new BorderLayout());
+            conPan = makeControlPanel();
+            bottomPane.add("West", conPan);
 
-        frame.setContentPane(rootPane);
+            OutputConsole oc = new OutputConsole(conPan);
+            this.outputConsole = oc;
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        /*
-         * frame.setSize(screenSize.width, screenSize.height - 30); // To
-         * maximize the window
-         */
-        frame.setSize(800, 600);
+            bottomPane.add("Center", oc.container);
 
-        Dimension frameSize = frame.getSize();
-        if (frameSize.height > screenSize.height)
+            JPanel rootPane = new JPanel(new BorderLayout());
+            rootPane.add("Center", pane);
+            rootPane.add("South", bottomPane);
+
+            frame.setContentPane(rootPane);
+
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            /*
+             * frame.setSize(screenSize.width, screenSize.height - 30); // To
+             * maximize the window
+             */
+            frame.setSize(800, 600);
+
+            Dimension frameSize = frame.getSize();
+            if (frameSize.height > screenSize.height)
                 frameSize.height = screenSize.height;
-        if (frameSize.width > screenSize.width)
+            if (frameSize.width > screenSize.width)
                 frameSize.width = screenSize.width;
 
-        frame.setLocation((screenSize.width - frameSize.width) / 2,
-                (screenSize.height - frameSize.height) / 2);
+            frame.setLocation((screenSize.width - frameSize.width) / 2,
+                    (screenSize.height - frameSize.height) / 2);
 
-        frame.addWindowListener(new WindowAdapter() {
+            frame.addWindowListener(new WindowAdapter() {
 
-            public void windowClosing(WindowEvent e) {
-                if (editor.isChanged()) {
-                    int n = JOptionPane.showConfirmDialog(frame, bundle2
-                            .getString("quit.without.saving.message"), bundle2
-                            .getString("quit.without.saving.title"),
-                            JOptionPane.YES_NO_OPTION);
-                    if (n == JOptionPane.YES_OPTION) {
-                        editor.saveProgram();
+                public void windowClosing(WindowEvent e) {
+                    if (editor.isChanged()) {
+                        int n = JOptionPane.showConfirmDialog(frame, bundle2
+                                .getString("quit.without.saving.message"), bundle2
+                                .getString("quit.without.saving.title"), JOptionPane.YES_NO_OPTION);
+                        if (n == JOptionPane.YES_OPTION) {
+                            editor.saveProgram();
+                        }
+                    }
+
+                    Properties prop = System.getProperties();
+                    File f = new File(udir);
+                    prop.put("user.dir", f.toString());
+                    Jeliot.close();
+
+                    if (Jeliot.isnoSystemExit()) {
+                        frame.dispose();
+                    } else {
+                        //frame.dispose();
+                        System.exit(0);
                     }
                 }
+            });
 
-                Properties prop = System.getProperties();
-                File f = new File(udir);
-                prop.put("user.dir", f.toString());
-                Jeliot.close();
+            enterEditTrue();
+            pane.setDividerLocation((jeliot.isExperiment()) ? 512 : 300);
 
-                if (Jeliot.isnoSystemExit()) {
-                    frame.dispose();
-                } else {
-                    //frame.dispose();
-                    System.exit(0);
-                }
-            }
-        });
+            //TheatrePopup popup = new TheatrePopup();
+            //theatre.addMouseListener(popup);
+            //theatre.addMouseMotionListener(popup);
 
-        enterEditTrue();
-        pane.setDividerLocation((jeliot.isExperiment())?512:300);
+            hw = new HelpWindow(iLoad.getImage(bundle.getString("image.jeliot_icon")), udir);
+            aw = new AboutWindow(iLoad.getImage(bundle.getString("image.jeliot_icon")), udir);
 
-        //TheatrePopup popup = new TheatrePopup();
-        //theatre.addMouseListener(popup);
-        //theatre.addMouseMotionListener(popup);
-
-        hw = new HelpWindow(iLoad.getImage(bundle
-                .getString("image.jeliot_icon")), udir);
-        aw = new AboutWindow(iLoad.getImage(bundle
-                .getString("image.jeliot_icon")), udir);
-
-        frame.pack();
-        frame.show();
-        //editor.requestFocus();
-        //System.out.println(theatre.getSize());
+            frame.pack();
+            frame.show();
+            //editor.requestFocus();
+            //System.out.println(theatre.getSize());
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     public JFrame getFrame() {
         return frame;
     }
-    
+
     /**
      * Makes and returns the menubar for the main frame.
      * Things for debugging.
@@ -543,8 +540,7 @@ public class JeliotWindow {
 
         menuItem = new JMenuItem(bundle2.getString("menu.program.exit"));
         menuItem.setMnemonic(KeyEvent.VK_X);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(exit);
         programMenu.add(menuItem);
 
@@ -603,7 +599,7 @@ public class JeliotWindow {
             public void actionPerformed(ActionEvent e) {
                 if (hw != null) {
                     //hw.pack();
-                	hw.reload();
+                    hw.reload();
                     hw.show();
                 }
             }
@@ -641,8 +637,7 @@ public class JeliotWindow {
 
         menuItem = new JMenuItem(bundle2.getString("menu.animation.pause"));
         menuItem.setMnemonic(KeyEvent.VK_U);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -653,8 +648,7 @@ public class JeliotWindow {
 
         menuItem = new JMenuItem(bundle2.getString("menu.animation.play"));
         menuItem.setMnemonic(KeyEvent.VK_P);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -665,8 +659,7 @@ public class JeliotWindow {
 
         menuItem = new JMenuItem(bundle2.getString("menu.animation.rewind"));
         menuItem.setMnemonic(KeyEvent.VK_R);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -687,11 +680,9 @@ public class JeliotWindow {
         menu.add(menuItem);
 
         final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(bundle2
-                .getString("menu.animation.pause_on_message"),
-                showMessagesInDialogs);
+                .getString("menu.animation.pause_on_message"), showMessagesInDialogs);
         cbmenuItem.setMnemonic(KeyEvent.VK_D);
-        cbmenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
-                ActionEvent.CTRL_MASK));
+        cbmenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
         cbmenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -702,8 +693,7 @@ public class JeliotWindow {
 
         menuItem = new JMenuItem(bundle2.getString("menu.animation.faster"));
         menuItem.setMnemonic(KeyEvent.VK_F);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -714,8 +704,7 @@ public class JeliotWindow {
 
         menuItem = new JMenuItem(bundle2.getString("menu.animation.slower"));
         menuItem.setMnemonic(KeyEvent.VK_L);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -726,8 +715,7 @@ public class JeliotWindow {
 
         menuItem = new JMenuItem(bundle2.getString("menu.animation.run_until"));
         menuItem.setMnemonic(KeyEvent.VK_T);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -750,8 +738,7 @@ public class JeliotWindow {
 
         menuItem = new JMenuItem(bundle2.getString("menu.control.edit"));
         menuItem.setMnemonic(KeyEvent.VK_E);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -764,8 +751,7 @@ public class JeliotWindow {
 
         menuItem = new JMenuItem(bundle2.getString("menu.control.compile"));
         menuItem.setMnemonic(KeyEvent.VK_M);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -777,11 +763,9 @@ public class JeliotWindow {
         editWidgets.addElement(menuItem);
 
         final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(bundle2
-                .getString("menu.control.ask_for_method"),
-                false);
+                .getString("menu.control.ask_for_method"), false);
         cbmenuItem.setMnemonic(KeyEvent.VK_F);
-        cbmenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
-                ActionEvent.CTRL_MASK));
+        cbmenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, ActionEvent.CTRL_MASK));
         cbmenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -789,7 +773,7 @@ public class JeliotWindow {
             }
         });
         menu.add(cbmenuItem);
-        
+
         return menu;
     }
 
@@ -804,8 +788,14 @@ public class JeliotWindow {
      */
     private JButton makeControlButton(String label, String iconName) {
 
-        ImageIcon icon = new ImageIcon(this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+iconName));
-        	//new ImageIcon(bundle.getString("directory.images")+ iconName);
+        URL imageURL = this.getClass().getClassLoader().getResource(
+                bundle.getString("directory.images") + iconName);
+        if (imageURL == null) {
+            imageURL = Thread.currentThread().getContextClassLoader().getResource(
+                    bundle.getString("directory.images") + iconName);
+        }
+        ImageIcon icon = new ImageIcon(imageURL);
+        //new ImageIcon(bundle.getString("directory.images")+ iconName);
         JButton b = new JButton(label, icon);
         b.setVerticalTextPosition(AbstractButton.BOTTOM);
         b.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -824,8 +814,8 @@ public class JeliotWindow {
 
         editButton = makeControlButton(bundle2.getString("button.edit"), bundle
                 .getString("image.edit_icon"));
-        compileButton = makeControlButton(bundle2.getString("button.compile"),
-                bundle.getString("image.compile_icon"));
+        compileButton = makeControlButton(bundle2.getString("button.compile"), bundle
+                .getString("image.compile_icon"));
 
         editButton.setMnemonic(KeyEvent.VK_E);
         compileButton.setMnemonic(KeyEvent.VK_M);
@@ -837,7 +827,7 @@ public class JeliotWindow {
 
             public void actionPerformed(ActionEvent e) {
                 Tracker.writeToFile("EditButton", System.currentTimeMillis());
-                
+
                 enterEdit();
             }
         });
@@ -846,7 +836,7 @@ public class JeliotWindow {
 
             public void actionPerformed(ActionEvent e) {
                 Tracker.writeToFile("AnimationButton", System.currentTimeMillis());
-                
+
                 tryToEnterAnimate();
             }
         });
@@ -871,11 +861,11 @@ public class JeliotWindow {
         playButton = makeControlButton(bundle2.getString("button.play"), bundle
                 .getString("image.play_icon"));
         playButton.setMnemonic(KeyEvent.VK_P);
-        pauseButton = makeControlButton(bundle2.getString("button.pause"),
-                bundle.getString("image.pause_icon"));
+        pauseButton = makeControlButton(bundle2.getString("button.pause"), bundle
+                .getString("image.pause_icon"));
         pauseButton.setMnemonic(KeyEvent.VK_U);
-        rewindButton = makeControlButton(bundle2.getString("button.rewind"),
-                bundle.getString("image.rewind_icon"));
+        rewindButton = makeControlButton(bundle2.getString("button.rewind"), bundle
+                .getString("image.rewind_icon"));
         rewindButton.setMnemonic(KeyEvent.VK_R);
 
         stepButton.addActionListener(stepAction);
@@ -923,9 +913,14 @@ public class JeliotWindow {
         pl.setConstraints(statePane, c);
         p.add(statePane);
 
-        JLabel jicon = new JLabel(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(bundle
-                .getString("directory.images")
-                + bundle.getString("image.jeliot"))));
+        URL imageURL = this.getClass().getClassLoader().getResource(
+                bundle.getString("directory.images") + bundle.getString("image.jeliot"));
+        if (imageURL == null) {
+            imageURL = Thread.currentThread().getContextClassLoader().getResource(
+                    bundle.getString("directory.images") + bundle.getString("image.jeliot"));
+        }
+
+        JLabel jicon = new JLabel(new ImageIcon(imageURL));
         c.gridx = 0;
         c.gridy = 1;
         c.gridheight = 2;
@@ -961,9 +956,8 @@ public class JeliotWindow {
         pl.setConstraints(speedSlider, c);
         p.add(speedSlider);
 
-        p.setBorder(BorderFactory.createCompoundBorder(BorderFactory
-                .createEmptyBorder(5, 2, 2, 10), BorderFactory
-                .createEtchedBorder()));
+        p.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(5, 2, 2, 10), BorderFactory.createEtchedBorder()));
 
         return p;
     }
@@ -1028,9 +1022,9 @@ public class JeliotWindow {
         unhighlightTabTitles();
         callTree.initialize();
         if (runningUntil) {
-        	jeliot.runUntil(0);
-        	runUntilFinished();
-        }  
+            jeliot.runUntil(0);
+            runUntilFinished();
+        }
         panelController.slide(false, new Runnable() {
 
             public void run() {
@@ -1068,7 +1062,7 @@ public class JeliotWindow {
     void tryToEnterAnimate() {
         tryToEnterAnimate(null);
     }
-    
+
     /**
      * Called when the user pushes the "Compile" button.
      * Gets the code from the CodeEditor2 -object.
@@ -1087,7 +1081,7 @@ public class JeliotWindow {
 
         try {
             try {
-                
+
                 enableWidgets(editWidgets.elements(), false);
 
                 String programCode = editor.getProgram();
@@ -1101,9 +1095,9 @@ public class JeliotWindow {
                         if (inputValue != null && !inputValue.trim().equals("")) {
                             methodCall = inputValue + ";";
                         }
-                    } 
+                    }
                 }
-                
+
                 if (methodCall != null) {
 
                     //Reader r = new BufferedReader(new
@@ -1136,7 +1130,7 @@ public class JeliotWindow {
                 } else {
                     errorJEditorPane.setText(bundle2.getString("main_method_not_found.exception"));
                     changeTheatrePane(errorViewer);
-                    
+
                     enableWidgets(editWidgets.elements(), true);
                     enableWidgets(animWidgets.elements(), false);
                 }
@@ -1162,7 +1156,7 @@ public class JeliotWindow {
      * from.substring(0,index) + with + from.substring(index+1,from.length());
      * index = from.indexOf(c); } return from; }
      */
-    
+
     /**
      * Tries to find the main method declaration
      * from one of the classes.
@@ -1177,30 +1171,29 @@ public class JeliotWindow {
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\r", " ");
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\t", " ");
 
-        String[] method = programCode
-                .split(
-                        "\\s+?static\\s+?void\\s+?main\\s*?\\(\\s*?String.*?\\[\\]??\\s[^,]*?\\)",
-                        2);
+        String[] method = programCode.split(
+                "\\s+?static\\s+?void\\s+?main\\s*?\\(\\s*?String.*?\\[\\]??\\s[^,]*?\\)", 2);
         if (method.length > 1 && method[1].length() > 0) {
             String[] classes = method[0].split("\\s*?class\\s+?");
             String[] classNames = classes[classes.length - 1].split("\\s");
             String className = classNames[0].replace('{', ' ');
             className = className.trim();
             if (className.length() > 0) {
-            //System.out.println(className + ".main(new String[0]);");
-            return className + ".main(new String[0]);"; }
+                //System.out.println(className + ".main(new String[0]);");
+                return className + ".main(new String[0]);";
+            }
         }
 
-        method = programCode.split(
-                "\\s+?static\\s+?void\\s+?main\\s*?\\(\\s*?\\)", 2);
+        method = programCode.split("\\s+?static\\s+?void\\s+?main\\s*?\\(\\s*?\\)", 2);
         if (method.length > 1 && method[1].length() > 0) {
             String[] classes = method[0].split("\\s*?class\\s+?");
             String[] classNames = classes[classes.length - 1].split("\\s");
             String className = classNames[0].replace('{', ' ');
             className = className.trim();
             if (className.length() > 0) {
-            //System.out.println(className + ".main();");
-            return className + ".main();"; }
+                //System.out.println(className + ".main();");
+                return className + ".main();";
+            }
         }
         return null;
 
@@ -1426,8 +1419,7 @@ public class JeliotWindow {
         setEnabledMenuItems(true, s1);
         String[] s2 = { bundle2.getString("menu.animation.step"),
                 bundle2.getString("menu.animation.play"),
-                bundle2.getString("menu.animation.rewind"),
-                bundle2.getString("menu.control.edit"),
+                bundle2.getString("menu.animation.rewind"), bundle2.getString("menu.control.edit"),
                 bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
 
@@ -1452,8 +1444,7 @@ public class JeliotWindow {
         setEnabledMenuItems(true, s1);
         String[] s2 = { bundle2.getString("menu.animation.step"),
                 bundle2.getString("menu.animation.play"),
-                bundle2.getString("menu.animation.rewind"),
-                bundle2.getString("menu.control.edit"),
+                bundle2.getString("menu.animation.rewind"), bundle2.getString("menu.control.edit"),
                 bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
 
@@ -1478,8 +1469,7 @@ public class JeliotWindow {
         setEnabledMenuItems(false, s1);
         String[] s2 = { bundle2.getString("menu.animation.step"),
                 bundle2.getString("menu.animation.play"),
-                bundle2.getString("menu.animation.rewind"),
-                bundle2.getString("menu.control.edit"),
+                bundle2.getString("menu.animation.rewind"), bundle2.getString("menu.control.edit"),
                 bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(true, s2);
 
@@ -1501,8 +1491,7 @@ public class JeliotWindow {
         setEnabledMenuItems(true, s1);
         String[] s2 = { bundle2.getString("menu.animation.step"),
                 bundle2.getString("menu.animation.play"),
-                bundle2.getString("menu.animation.rewind"),
-                bundle2.getString("menu.control.edit"),
+                bundle2.getString("menu.animation.rewind"), bundle2.getString("menu.control.edit"),
                 bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
     }
@@ -1536,7 +1525,7 @@ public class JeliotWindow {
      * @see jeliot.theatre.Theatre#repaint()
      */
     void rewindAnimation() {
-        
+
         unhighlightTabTitles();
 
         errorOccured = false;
@@ -1547,12 +1536,12 @@ public class JeliotWindow {
          * try { Thread.sleep(25); } catch(InterruptedException e) { throw new
          * RuntimeException(e); }
          */
-        
+
         if (runningUntil) {
-        	//TODO: Here ask if the user wants to continue with run until.
-        	jeliot.runUntil(0);
-        	runUntilFinished();
-        }        
+            //TODO: Here ask if the user wants to continue with run until.
+            jeliot.runUntil(0);
+            runUntilFinished();
+        }
 
         stepButton.setEnabled(true);
         playButton.setEnabled(true);
@@ -1635,14 +1624,13 @@ public class JeliotWindow {
      * Method is used to implement the run until feature.
      */
     public void runUntil() {
-        String inputValue = JOptionPane.showInputDialog(bundle2
-                .getString("dialog.run_until"), new Integer(0));
+        String inputValue = JOptionPane.showInputDialog(bundle2.getString("dialog.run_until"),
+                new Integer(0));
         int lineNumber = 0;
 
         try {
             lineNumber = Integer.parseInt(inputValue);
-        } catch (Exception ex) {
-        }
+        } catch (Exception ex) {}
 
         if (lineNumber > 0) {
             jeliot.runUntil(lineNumber);
@@ -1651,18 +1639,19 @@ public class JeliotWindow {
             runningUntil = true;
             codePane.highlightLineNumber(lineNumber);
             SwingUtilities.invokeLater(new Runnable() {
+
                 public void run() {
                     playButton.doClick();
                 }
             });
         } else {
-        	if (runningUntil) {
-            	jeliot.runUntil(0);
-        		runUntilFinished();
-        	}
+            if (runningUntil) {
+                jeliot.runUntil(0);
+                runUntilFinished();
+            }
         }
     }
-    
+
     /**
      * 
      *
@@ -1677,8 +1666,9 @@ public class JeliotWindow {
      * Invoked when the runUntil is done.
      */
     public void runUntilDone() {
-    	runUntilFinished();
+        runUntilFinished();
         SwingUtilities.invokeLater(new Runnable() {
+
             public void run() {
                 pauseButton.doClick();
             }
@@ -1695,7 +1685,6 @@ public class JeliotWindow {
             editButton.doClick();
         }
         editor.setProgram(program);
-        codePane.installProgram(program);
     }
 
     /**
@@ -1706,7 +1695,7 @@ public class JeliotWindow {
     public void setProgram(File f) {
         editor.loadProgram(f);
     }
-    
+
     /**
      * Returns the code from the CodePane.
      * 
@@ -1732,8 +1721,7 @@ public class JeliotWindow {
             } else {
                 tabbedPane.setForegroundAt(tabNumber, normalTabColor);
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
     }
 
     /**
@@ -1744,7 +1732,7 @@ public class JeliotWindow {
     public int getTabNumber(String title) {
         return tabbedPane.indexOfTab(title);
     }
-    
+
     /**
      * 
      *
