@@ -1440,12 +1440,12 @@ public class Interpreter {
                             //Open the scope
                             if (scope == 1) {
 
-                                director.getCurrentMethodFrame().openScope();
+                                director.openScope();
 
                             //Close the scope
                             } else if (scope == 0) {
 
-                                director.getCurrentMethodFrame().closeScope();
+                                director.closeScope();
 
                             }
 

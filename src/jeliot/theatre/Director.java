@@ -430,6 +430,7 @@ public class Director {
                 varact[i] = factory.produceVariableActor(vars[i]);
                 vars[i].setActor(varact[i]);
                 stage.reserve(varact[i]);
+                stage.extend();
                 stage.bind();
             }
         }
@@ -498,7 +499,7 @@ public class Director {
                 expr.setId(expressionCounter);
             } else {
                 expr = currentScratch.getExpression(1, expressionCounter);
-        	}
+            }
         }
 
         // Get the old location of the scratch
@@ -679,6 +680,10 @@ public class Director {
         Stage stage = currentMethodFrame.getStage();
 
         Point loc = stage.reserve(actor);
+        Animation a = stage.extend();
+        if (a != null) {
+            engine.showAnimation(a);
+        }
         engine.showAnimation(actor.appear(loc));
         stage.bind();
 
@@ -1024,6 +1029,16 @@ public class Director {
         engine.showAnimation(message.appear(p));
         theatre.removeActor(message);
         theatre.release();
+    }
+
+    public void openScope() {
+        showMessage("Opening new scope for variables.");
+        getCurrentMethodFrame().openScope();
+    }
+
+    public void closeScope() {
+        showMessage("Closing a scope and erasing the scope variables.");
+        getCurrentMethodFrame().closeScope();
     }
 
     public void enterLoop(String statementName, Highlight h) {
