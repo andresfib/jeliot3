@@ -83,8 +83,9 @@ To display the available targets type:
 
   <!-- Compilation ==================================================== -->
   <target name="compile" depends="init">
-  <javac destdir="${dest}" deprecation="on">
-    <src path="${src}"/>
+  <javac sourcepath="" destdir="${dest}" deprecation="on" srcdir="${src}">
+  	<include name="**/*.java" />
+    <exclude name="**/examples/*.java" />
   </javac>
    <delete>
    <!-- Example classes are compiled too, delete them -->
