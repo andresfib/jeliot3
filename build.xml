@@ -64,10 +64,11 @@ To display the available targets type:
     <!-- dest : Compiled classes will be stored here, if no exists, create it -->
     <mkdir dir="${dest}"/>
     <mkdir dir="${release}"/>
-          <copy todir="${dest}">
+  	<copy todir="${dest}">
       <fileset dir="${resources}"/>
     </copy>
-
+  	<copy file="doc/quicktutorial/quicktutorial.pdf" todir="${dist}"/>
+  	<copy file="doc/userguide/userguide.pdf" todir="${dist}"/>
 
   </target>
 
@@ -111,6 +112,7 @@ To display the available targets type:
      <zipfileset dir="lib" prefix="lib"/>
      <zipfileset dir="resources" prefix="resources"/>
      <zipfileset dir="src/docs" prefix="docs/"/>
+     <zipfileset dir="doc" prefix="doc/" excludes="**/JavaDoc/*.*"/>
      <fileset dir="">
        <include name="**/build.*"/>
      </fileset>
@@ -193,4 +195,22 @@ To display the available targets type:
         -->
     </jar>	
   	</target>
+	
+	<!-- Debugging target ==========================================-->
+	<target name="debug" depends="prepare-dist">
+		<!-- Compile with debug flag -->
+		<javac sourcepath="" destdir="${dest}" deprecation="on" srcdir="${src}" debug="on">
+			<include name="**/*.java" />
+			<exclude name="**/examples/*.java" />
+		</javac>
+		<!-- We create the jar file in the distribution (Jeliot3) directory -->
+		<jar manifest="${src}/jeliot.mf" jarfile="${dist}/jeliot.jar" basedir="${dest}">
+		  <fileset dir="${dest}">
+		    <include name="${package-prefix}/**/*"/>
+		  </fileset>
+		  <fileset dir="${resources}">
+		    <include name="${package-prefix}/**/*"/>
+		  </fileset>
+		</jar>
+	</target>
 </project>
