@@ -14,8 +14,9 @@ is sent to the Java interpreter and the intermediate code is extracted
 (2 and 3). The intermediate code is interpreted and the directions are
 given to the visualization engine (4 and 5). A user can control the
 animation by playing, pausing, rewinding or playing step-by-step the
-animation (6). Furthermore, the user can input data, for example,
-an integer or a string, to the program executed by the interpreter (6, 7 and 8).
+animation through the user interface (6). Furthermore, the user can
+input data, for example, an integer or a string, to the program
+executed by the interpreter (6, 7 and 8).
 
 \begin{figure}[htbp]
 \begin{center}
@@ -75,30 +76,53 @@ an integer or a string, to the program executed by the interpreter (6, 7 and 8).
 \end{center}
 \end{figure}
 
+Different packages of \jel{}~3 are introduced in this section in
+the same order as in the functional structure. In this way we
+hope that all the components and their meaning becomes clearer.
 
-\subsection{Jeliot Class}
+\subsection{\jel{} Class}
 \label{sec:Jeliot_Class}
+
+Class \jel{} in the package \p{jeliot} is the main class of the program.
+It combines the different components of the program together a deals with
+some communicational issues. When the program is started the class creates
+all the needed components and passes them as parameters to the user interface
+classes. It mainly handles the communication between the user interface
+(\p{jeliot.gui}) and the theater/animation engine (\p{jeliot.theatre}) classes.
+In addition to that it also invokes the thread handling the interpretation
+of the user program.
 
 \subsection{User Interface}
 \label{sec:User_Interface}
 
-The user interface of Jeliot is located in the package \p{jeliot.gui}. The main
+The user interface of Jeliot is located in the package \p{jeliot.gui}.
+The structure of the user interface is shown in the
+Figure~\ref{fig:jeliot3_UI_structure}. The main
 class is \p{JeliotWindow} that extends \p{JFrame}. The frame is layed out
-by \p{BorderLayout}. A split pane is added in the center and a panel containing
-\p{Control panel} (created in \p{JeliotWindow}) and \p{Output console}
-(\p{OutputConsole}) is added in the south border. In the split pane the
-left side is used by \p{Code editor} (\p{CodeEditor}) or \p{Code viewer}
-(\p{CodeEditor}). \p{Code editor} is shown during editing of the program
-and \p{Code viewer} during animation of the program. On the right hand side
-of the split pane a \p{Theatre} is normally shown. If any errors are
-found durint the compilation or running of the program they are shown in
-the \p{Error viewer} (\p{ErrorViewer}). The structure of the user interface
-is shown in the Figure~\ref{fig:jeliot3_UI_structure}.
+by \p{BorderLayout}. A split pane (\p{JSplitPane}) is added in the center and
+a panel containing control panel (created in \p{JeliotWindow}) and output console
+(\p{OutputConsole}) is added in the south (bottom) border.
+
+In the split pane the left side is used by code editor (\p{CodeEditor}) or code viewer
+(\p{CodeViewer}). Code editor is shown during editing of the program
+and code viewer during the animation of the program. Both of the text components
+have a line numbering component (\p{LineNumbers} on their row header. Moreover,
+code editor consist of editing panel that has a few buttons to load, save and
+edit the source code. The frame has also a menu bar that is constructed
+partially in \p{CodeEditor} class and partilly in \p{JeliotWindow} class.
+
+On the right hand side of the split pane a animation engine called
+theater (\p{Theatre}) is normally shown. However, if any errors occur
+during the compilation or run-time of the program they are shown
+in the \p{Error viewer} (\p{ErrorViewer}) instead of theater.
 
 \p{JeliotWindow} combines all the components in \p{jeliot.gui} package and
 creates the user interface. It also deals with most of the events
 happening during the {run-time} and delegates the commands forward to
-the appropriate class (e.g. \p{Jeliot})
+the appropriate classes (e.g. \p{Jeliot} or \p{CodeEditor}). Other classes
+in the \p{gui} package are related to one of the components introduced in the
+previous paragraph. There are also three classes that are not currently in use
+in \jel{}~3, namely \p{LoadJeliot}, \p{DraggableComponent} and \p{TheatrePopup}.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -120,8 +144,6 @@ the appropriate class (e.g. \p{Jeliot})
 \label{fig:jeliot3_UI_structure}
 \end{center}
 \end{figure}
-
-Other classes in the \p{gui} package are related to one of these components.
 
 \subsection{DynamicJava}
 \label{sec:DynamicJava}
@@ -210,24 +232,25 @@ main relationships between the packages, the visitors and the main data flow.
 \end{figure}
 
 As we can see in the image DynamicJava carries the source code
-through three visitors: \p{NameVisitor}, \p{TypeChecker} and, finally, \p{EvaluationVisitor}.
-We also see how \p{EvaluationVisitor} will receive a class from \p{TypeChecker},
-the reason of this behaviour will be explained in the next paragraphs.
+through three visitors: \p{NameVisitor}, \p{TypeChecker} and, finally,
+\p{EvaluationVisitor}. We also see how \p{EvaluationVisitor} will receive
+a class from \p{TypeChecker}, the reason of this behaviour will be explained
+in the next paragraphs.
 
-The NameVisitor is a tree visitor that resolves the ambiguity in identifiers in a syntax tree.
-As declared, this visitor traverses the tree trying to find out syntactical ambiguities.
+The NameVisitor is a tree visitor that resolves the ambiguity in identifiers
+in a syntax tree. As declared, this visitor traverses the tree trying to find
+out syntactical ambiguities.
 
 The \p{TypeChecker} is a tree visitor that checks the typing rules and loads the
-classes, fields and methods.
-This \p{TypeChecker} class is not only worried about typing rules.
-When visiting a class declaration, it invokes \p{TreeCompiler}, which
-compile the class into Java bytecode. However, this compiling
-process \textit{alters the class} and the formed \textit{bytecode does
-not match the original source code} of the class.
+classes, fields and methods. This \p{TypeChecker} class is not only worried
+about typing rules. When visiting a class declaration, it invokes
+\p{TreeCompiler}, which compiles the class into Java bytecode. However, this
+compiling process \textit{alters the class} and the formed \textit{bytecode
+does not match the original source code} of the class.
 
-The \p{EvaluationVisitor} is a tree visitor that evaluates each node of a syntax tree.
-This visitor is the one that performs the evaluation and execution
-of the program. It usually starts by invoking the main method
+The \p{EvaluationVisitor} is a tree visitor that evaluates each node of
+a syntax tree. This visitor is the one that performs the evaluation and
+execution of the program. It usually starts by invoking the main method
 of the compiled class. We can easily observe how it traverses
 the syntax tree and modifies \djava{} structures to store information
 and thus we can interfere with its normal interpretation to extract
@@ -277,8 +300,35 @@ See the Figures~\ref{fig:several_tree_classes},
 
 The package \p{jeliot.ecode} includes the classes used by the intermediate
 code interpreter. The class \p{Interpreter} contains the intermediate code
-interpreter and the other classes  help the work with the intermediate
-code generation, interpretation and other aspects of the program execution.
+interpreter and the other classes  help the work with intermediate
+code generation, interpretation and on the other aspects of the program execution.
+
+The intermediate code is generated by the modified version of \djava{}. The code is
+then written into a pipe that can be read by the interpreter. As the code is completely
+machine written we know the form of the code and can interpret it easily. The intermediate
+code is introduced in the section~\ref{sec:Intermediate_Code}. The code is read
+line by line and it is tokenized with the agreed token in the class \p{Code} that contains
+all the necessary constants for intermediate code generation. Then the first token tells what kind of statement is coming and how it should be processed. Then the rest of the statement is processed accordingly and a part of the animation is shown if necessary.
+
+There are several data structures in the \p{Code} class.
+\begin{description}
+\item[\p{commands}] variable is a reference to a hash table that contains information about each given command. Command in this context tells, for instance, whether a operand of a binary operation is the left or right side of the operation.
+\item[\p{exprs}] variable is a reference to a hash table containing the information about each expression. The information consist of each expressions type (e.g. addition or subtraction operation), expression reference and the location in the code.
+\item[\p{values}]
+\item[\p{variables}]
+\item[\p{instances}]
+\item[\p{methodInvocation}]
+\item[\p{postIncsDecs}]
+\item[\p{currentClass}]
+\item[\p{classes}]
+\item[\p{currentMethodInvocation}] 
+\item[\p{objectCreation}]
+\item[\p{returned, returnValue, returnActor, returnExpressionCounter}] are variables for handling the return value of a method.
+\end{description}
+
+Class \p{ECodeUtilities} is used by the interpreter to help type identification and
+translating the intermediate code into the commands used in the visualization engine because they differ in some parts. It also handles some issues related to user input
+and communication between \djava{} and the intermediate code interpreter. 
 
 \subsection{Language Constructs}
 \label{sec:Language_package}
@@ -290,8 +340,7 @@ See Figure~\ref{fig:language_constructs_and_actors}.
 \begin{figure}[!htb]
 \begin{center}
 \includegraphics[width=\textwidth]{images/language_constructs_and_actors.eps}
-\caption{The hierarchy of the language constructs and their usage relations
-to each other and to the \p{Actor}s.}
+\caption{The class hierarchy of the language constructs (gray boxes and solid lines) and the \p{Actor}s (white boxes and solid lines) and their usage relations to each other (dashed lines). \p{Actor}s (white boxes) implementing actor container are written in bold and italics and the other \p{Actor}s on just italics.}
 \label{fig:language_constructs_and_actors}
 \end{center}
 \end{figure}
