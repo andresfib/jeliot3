@@ -21,6 +21,8 @@ public class InstanceActor extends Actor implements ActorContainer {
 	 */
 	private Vector references = new Vector();
 
+    private int position;
+	
     /**
      *
      */
@@ -66,4 +68,16 @@ public class InstanceActor extends Actor implements ActorContainer {
 	public void removeActor(Actor actor) { }
 
 
+    /**
+     * @return Returns the position.
+     */
+    public int getPosition() {
+        return position;
+    }
+    /**
+     * @param position The position to set.
+     */
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }

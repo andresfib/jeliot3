@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Stack;
 import java.util.Vector;
@@ -35,11 +34,12 @@ public class TheaterManager implements ComponentListener {
       * after the last value of the table the first value is used
       * again.
       */
-    private Point[] methodStagePoints = {new Point(10, 20),
-                                         new Point(20, 30),
-                                         new Point(30, 40),
-                                         new Point(15, 50),
-                                         new Point(25, 45)};
+    private static Point[] methodStagePoints = {new Point(10, 20),
+                                         		new Point(20, 30),
+                                         		new Point(30, 40),
+                                         		new Point(15, 50),
+                                         		new Point(25, 45)};
+    private static int maxMethodStageInsetX = 30;
 
 	/**
       * Reference to the current Theatre instance.
@@ -92,12 +92,12 @@ public class TheaterManager implements ComponentListener {
     /**
 	 *
 	 */
-	private int minInstanceY = Integer.MAX_VALUE;
+	//private int minInstanceY = Integer.MAX_VALUE;
     
     /**
 	 *
 	 */
-	private int minInstanceX = Integer.MAX_VALUE;
+	//private int minInstanceX = Integer.MAX_VALUE;
 
     /**
 	 * @param theatre
@@ -109,6 +109,10 @@ public class TheaterManager implements ComponentListener {
         lrCorner = new Point(d.width, d.height);
     }
 
+    public static int getMaxMethodInset() {
+        return maxMethodStageInsetX;
+    }
+    
     /**
 	 * 
 	 */
@@ -117,8 +121,8 @@ public class TheaterManager implements ComponentListener {
         objects.removeAllElements();
         scratches.removeAllElements();
         constantBox = null;
-        minInstanceY = Integer.MAX_VALUE;
-        minInstanceX = Integer.MAX_VALUE;
+        //minInstanceY = Integer.MAX_VALUE;
+        //minInstanceX = Integer.MAX_VALUE;
     }
 
 
@@ -129,7 +133,6 @@ public class TheaterManager implements ComponentListener {
     public Point reserve(MethodStage stage) {
         Point loc = methodStagePoints[methods.size() % methodStagePoints.length];
         reservations.put(stage, loc);
-
         return loc;
     }
 
@@ -150,6 +153,7 @@ public class TheaterManager implements ComponentListener {
             int wx = s.getX() + s.getWidth();
             if (wx > maxMethodStageX) {
                 maxMethodStageX = wx;
+                //System.out.println("Stage width: " + maxMethodStageX);
             }
         }
     }
@@ -164,12 +168,22 @@ public class TheaterManager implements ComponentListener {
         int h = actor.getHeight();
 
         int x = objects.isEmpty() ?
+                getMinInstanceX() + 20 :
+                    ((Actor)objects.lastElement()).getX() +((Actor)objects.lastElement()).getWidth() + 40;
+        int y = getMinInstanceY() + 30;
+        
+        /*
+        int x = objects.isEmpty() ?
                 theatre.getWidth() - w - 45 :
                 ((Actor)objects.lastElement()).getX() - w - 45;
         int y = theatre.getHeight() - h - 10;
+        */
+        
         Point loc = new Point(x, y);
         reservations.put(actor, loc);
-
+        
+        actor.setPosition(objects.size());
+        
         return loc;
     }
 
@@ -182,12 +196,25 @@ public class TheaterManager implements ComponentListener {
         objects.addElement(actor);
         theatre.passivate(actor);
         actor.setLocation(loc);
+        /*
         if (loc.y < minInstanceY) {
             minInstanceY = loc.y;
         }
         if (loc.x < minInstanceX) {
             minInstanceX = loc.x;
         }
+        */
+        
+        Dimension d = theatre.getSize();
+        
+        if (d.width < loc.x + actor.getWidth()) {
+            d.width = loc.x + actor.getWidth();
+        }
+        if (d.height < loc.y + actor.getHeight()) {
+            d.height = loc.y + actor.getHeight();
+        }
+        theatre.setPreferredSize(d);
+        theatre.revalidate();
     }
 
 
@@ -225,19 +252,22 @@ public class TheaterManager implements ComponentListener {
 	 */
     public void addScratch(Scratch scratch) {
         scratches.addElement(scratch);
-        scratch.setLocation(getScratchPositionX(), 10);
+        scratch.setLocation(getScratchPositionX(), 20);
         theatre.addPassive(scratch);
     }
 
     /**
 	 * @return
 	 */
-	public int getScratchPositionX() {
+	public static int getScratchPositionX() {
+	    return 250;
+	    /*
         if (!methods.empty()) {
-            return maxMethodStageX + 45;
+            return 235;
         } else {
             return (ActorFactory.getMaxMethodStageWidth()) + 45;
         }
+        */
     }
 
     /**
@@ -255,7 +285,7 @@ public class TheaterManager implements ComponentListener {
     private void positionConstantBox() {
         if (constantBox != null) {
             int x = 10; //theatre.getWidth() - 10 - cbox.getWidth();
-            int y = theatre.getHeight() - 10 - constantBox.getHeight();
+            int y = getConstantPositionY() + 10;
             constantBox.setLocation(x, y);
         }
     }
@@ -263,23 +293,25 @@ public class TheaterManager implements ComponentListener {
     /**
 	 * @return
 	 */
-	public int getConstantPositionY() {
+	public static int getConstantPositionY() {
         //Change this when static variables are visualized!
-        return theatre.getHeight() - 10 - constantBox.getHeight();
+        return 338;
     }
 
     /**
 	 * @return
 	 */
-	public int getMinInstanceY() {
-        return minInstanceY;
+	public static int getMinInstanceY() {
+	    return 258;
+        //return minInstanceY;
     }
 
     /**
 	 * @return
 	 */
-	public int getMinInstanceX() {
-        return minInstanceX;
+	public static int getMinInstanceX() {
+	    return 250;
+        //return minInstanceX;
     }
 
     /**
@@ -287,6 +319,7 @@ public class TheaterManager implements ComponentListener {
 	 * @param to
 	 */
     public void positionObjects(Point from, Point to) {
+        /*
         Enumeration enum = objects.elements();
         while (enum.hasMoreElements()) {
             Actor actor = (Actor)enum.nextElement();
@@ -295,6 +328,7 @@ public class TheaterManager implements ComponentListener {
                     loc.x + to.x - from.x,
                     loc.y + to.y - from.y);
         }
+        */
     }
 
 
@@ -313,7 +347,6 @@ public class TheaterManager implements ComponentListener {
      * @param lat
      */
     public void setLinesAndText(LinesAndText lat) {
-        lat.setManager(this);
         lat.setTheatre(theatre);
     }
 

@@ -58,6 +58,8 @@ import jeliot.theater.ImageLoader;
 import jeliot.theater.PanelController;
 import jeliot.theater.Theater;
 
+//import org.syntax.jedit.tokenmarker.JavaTokenMarker;
+
 /**
  * The main window of the Jeliot 3.
  * 
@@ -122,7 +124,6 @@ public class JeliotWindow {
 
             public void stateChanged(ChangeEvent e) {
                 highlightTabTitle(false, tabbedPane.getSelectedIndex());
-                System.out.println("HELLO!" + tabbedPane.getSelectedIndex());
             }
         });
     }
@@ -133,6 +134,8 @@ public class JeliotWindow {
     /** The theatre in which the programs are animated. */
     private Theater theatre;
 
+    private JScrollPane theaterScrollPane;
+    
     /** The animation engine that that will animate the code. */
     private AnimationEngine engine;
 
@@ -143,7 +146,8 @@ public class JeliotWindow {
     private CodePane codePane;
 
     /** The code editor in which the users can write their code. */
-    private CodeEditor editor;// = new CodeEditor();
+    //private NewCodeEditor editor;
+    private CodeEditor editor /*  = new CodeEditor() */ ;
 
     /** The pane that splits the window. */
     private JSplitPane codeNest;
@@ -202,8 +206,7 @@ public class JeliotWindow {
      */
     private JScrollPane errorPane = new JScrollPane(errorJEditorPane);
     {
-        errorPane
-                .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        errorPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //errorPane.setPreferredSize(new Dimension(250, 145));
     }
 
@@ -368,15 +371,12 @@ public class JeliotWindow {
         this.callTree = td;
 
         this.panelController = new PanelController(theatre, iLoad);
+        //this.editor = new CodeEditor(this.udir);
         this.editor = new CodeEditor(this.udir);
-
-        this.tabbedPane.addTab(bundle.getString("tab.title.theater"), theatre);
-        this.tabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
-
-        this.tabbedPane.addTab(bundle.getString("tab.title.call_tree"),
-                callTree.getComponent());
-        this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
-
+        
+        //Special for JEditTextArea for syntax highlighting
+        //editor.setTokenMarker(new JavaTokenMarker());
+        //editor.clearProgram();
     }
 
     /**
@@ -385,6 +385,17 @@ public class JeliotWindow {
      */
     public void setUp() {
 
+        theaterScrollPane = new JScrollPane(theatre);
+        //theaterScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        //theaterScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        
+        this.tabbedPane.addTab(bundle.getString("tab.title.theater"), theaterScrollPane);
+        this.tabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
+
+        this.tabbedPane.addTab(bundle.getString("tab.title.call_tree"),
+                callTree.getComponent());
+        this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
+        
         frame = new JFrame(jeliotVersion);
         frame.setIconImage(iLoad
                 .getImage(bundle.getString("image.jeliot_icon")));
@@ -392,7 +403,7 @@ public class JeliotWindow {
         frame.setJMenuBar(makeMenuBar());
         editor.setMasterFrame(frame);
 
-        JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, codePane,
+        JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editor,
                 tabbedPane);
         pane.setOneTouchExpandable(true);
         codeNest = pane;
@@ -470,6 +481,7 @@ public class JeliotWindow {
                 .getString("image.jeliot_icon")), udir);
 
         frame.show();
+        //System.out.println(theatre.getSize());
     }
 
     /**
@@ -952,6 +964,7 @@ public class JeliotWindow {
 
         tabbedPane.setSelectedIndex(0);
         changeTheatrePane(tabbedPane);
+        unhighlightTabTitles();
 
         panelController.slide(false, new Runnable() {
 
@@ -1001,11 +1014,8 @@ public class JeliotWindow {
 
         try {
             try {
-
+                
                 enableWidgets(editWidgets.elements(), false);
-                enableWidgets(animWidgets.elements(), true);
-                pauseButton.setEnabled(false);
-                rewindButton.setEnabled(false);
 
                 String programCode = editor.getProgram();
 
@@ -1032,6 +1042,10 @@ public class JeliotWindow {
 
                                 public void run() {
                                     enterAnimate();
+                                    //Buttons are enables just after the animation not before
+                                    enableWidgets(animWidgets.elements(), true);
+                                    pauseButton.setEnabled(false);
+                                    rewindButton.setEnabled(false);
                                 }
                             });
                         }
@@ -1438,6 +1452,8 @@ public class JeliotWindow {
      * @see jeliot.theatre.Theatre#repaint()
      */
     void rewindAnimation() {
+        
+        unhighlightTabTitles();
 
         errorOccured = false;
 
@@ -1604,5 +1620,12 @@ public class JeliotWindow {
 
     public int getTabNumber(String title) {
         return tabbedPane.indexOfTab(title);
+    }
+    
+    public void unhighlightTabTitles() {
+        int n = tabbedPane.getTabCount();
+        for (int i = 0; i < n; i++) {
+            tabbedPane.setForegroundAt(i, normalTabColor);
+        }
     }
 }

@@ -444,7 +444,7 @@ public class ActorFactory {
      * @return
      */
     public static int getMaxMethodStageWidth() {
-        if (typeValWidth != null) { return getMaxTypeWidth() + typeValWidth[8] + 20; }
+        if (typeValWidth != null) { return getMaxTypeWidth() + typeValWidth[8] + TheaterManager.getMaxMethodInset(); }
         return 0;
     }
 
