@@ -55,7 +55,7 @@ public class NameVisitor extends VisitorObject {
      * @param ctx the context
      */
     public NameVisitor(Context ctx) {
-	context = ctx;
+        context = ctx;
     }
 
     /**
@@ -91,22 +91,22 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(WhileStatement node) {
         // Visits the components of this node
-	Node   n = node.getCondition();
+        Node   n = node.getCondition();
         Object o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setCondition((Expression)o);
+            }
+            node.setCondition((Expression)o);
         }
-	
-	n = node.getBody();
+
+        n = node.getBody();
         o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setBody((Node)o);
+            }
+            node.setBody((Node)o);
         }
         return null;
     }
@@ -125,28 +125,28 @@ public class NameVisitor extends VisitorObject {
             visitList(l);
         }
 
-	Node n;
+        Node n;
         if ((n = node.getCondition()) != null) {
             Object o = n.acceptVisitor(this);
-	    if (o != null) {
-		if (o instanceof ReferenceType) {
-		    throw new ExecutionError("malformed.expression", n);
-		}
-		node.setCondition((Expression)o);
-	    }
+            if (o != null) {
+                if (o instanceof ReferenceType) {
+                    throw new ExecutionError("malformed.expression", n);
+                }
+                node.setCondition((Expression)o);
+            }
         }
 
         if ((l = node.getUpdate()) != null) {
             visitList(l);
         }
 
-	n = node.getBody();
+        n = node.getBody();
         Object o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setBody((Node)o);
+            }
+            node.setBody((Node)o);
         }
 
         // Leave the current scope
@@ -160,22 +160,22 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(DoStatement node) {
         // Visits the components of this node
-	Node   n = node.getCondition();
+        Node   n = node.getCondition();
         Object o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setCondition((Expression)o);
+            }
+            node.setCondition((Expression)o);
         }
-	
-	n = node.getBody();
+
+        n = node.getBody();
         o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setBody((Node)o);
+            }
+            node.setBody((Node)o);
         }
         return null;
     }
@@ -186,13 +186,13 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(SwitchStatement node) {
         // Visits the components of this node
-	Expression exp = node.getSelector();
+        Expression exp = node.getSelector();
         Object o = exp.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", exp);
-	    }
-	    node.setSelector((Expression)o);
+            }
+            node.setSelector((Expression)o);
         }
 
         Iterator it = node.getBindings().iterator();
@@ -207,15 +207,15 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(SwitchBlock node) {
-	Expression exp = node.getExpression();
-	if (exp != null) {
-	    visitExpressionContainer(node);
-	}
-	List l;
-	if ((l = node.getStatements()) != null) {
-	    visitList(l);
-	}
-	return null;
+        Expression exp = node.getExpression();
+        if (exp != null) {
+            visitExpressionContainer(node);
+        }
+        List l;
+        if ((l = node.getStatements()) != null) {
+            visitList(l);
+        }
+        return null;
     }
 
     /**
@@ -223,13 +223,13 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(LabeledStatement node) {
-	Node n = node.getStatement();
+        Node n = node.getStatement();
         Object o = n.acceptVisitor(this);
         if (o != null) {
-	    if (o instanceof ReferenceType) {
-		throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setStatement((Expression)o);
+            if (o instanceof ReferenceType) {
+                throw new ExecutionError("malformed.expression", n);
+            }
+            node.setStatement((Expression)o);
         }
         return null;
     }
@@ -239,7 +239,7 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ThrowStatement node) {
-	visitExpressionContainer(node);
+        visitExpressionContainer(node);
         return null;
     }
 
@@ -249,22 +249,22 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(SynchronizedStatement node) {
         // Visits the component of this node
-	Node n = node.getLock();
+        Node n = node.getLock();
         Object o = n.acceptVisitor(this);
         if (o != null) {
-	    if (o instanceof ReferenceType) {
-		throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setLock((Expression)o);
+            if (o instanceof ReferenceType) {
+                throw new ExecutionError("malformed.expression", n);
+            }
+            node.setLock((Expression)o);
         }
-	
-	n = node.getBody();
+
+        n = node.getBody();
         o = n.acceptVisitor(this);
         if (o != null) {
-	    if (o instanceof ReferenceType) {
-		throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setBody((Node)o);
+            if (o instanceof ReferenceType) {
+                throw new ExecutionError("malformed.expression", n);
+            }
+            node.setBody((Node)o);
         }
         return null;
     }
@@ -291,14 +291,14 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(CatchStatement node) {
-	// Enter a new scope
-	context.enterScope();
+        // Enter a new scope
+        context.enterScope();
 
-	node.getException().acceptVisitor(this);
-	node.getBlock().acceptVisitor(this);
-	// Leave the current scope
-	context.leaveScope();
-	return null;
+        node.getException().acceptVisitor(this);
+        node.getBlock().acceptVisitor(this);
+        // Leave the current scope
+        context.leaveScope();
+        return null;
     }
 
     /**
@@ -308,7 +308,7 @@ public class NameVisitor extends VisitorObject {
     public Object visit(ReturnStatement node) {
         Expression e = node.getExpression();
         if (e != null) {
-	    visitExpressionContainer(node);
+            visitExpressionContainer(node);
         }
         return null;
     }
@@ -319,22 +319,22 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(IfThenStatement node) {
         // Visits the components of this node
-	Node   n = node.getCondition();
+        Node   n = node.getCondition();
         Object o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setCondition((Expression)o);
+            }
+            node.setCondition((Expression)o);
         }
-	
-	n = node.getThenStatement();
+
+        n = node.getThenStatement();
         o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setThenStatement((Node)o);
+            }
+            node.setThenStatement((Node)o);
         }
         return null;
     }
@@ -345,31 +345,31 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(IfThenElseStatement node) {
         // Visits the components of this node
-	Node   n = node.getCondition();
+        Node   n = node.getCondition();
         Object o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setCondition((Expression)o);
+            }
+            node.setCondition((Expression)o);
         }
-	
-	n = node.getThenStatement();
+
+        n = node.getThenStatement();
         o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setThenStatement((Node)o);
+            }
+            node.setThenStatement((Node)o);
         }
-	
-	n = node.getElseStatement();
+
+        n = node.getElseStatement();
         o = n.acceptVisitor(this);
         if (o != null) {
             if (o instanceof ReferenceType) {
                 throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setElseStatement((Node)o);
+            }
+            node.setElseStatement((Node)o);
         }
         return null;
     }
@@ -379,11 +379,11 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(VariableDeclaration node) {
-	// Define the variable
-	String s = node.getName();
+        // Define the variable
+        String s = node.getName();
         if (context.isDefinedVariable(s)) {
-	    node.setProperty(NodeProperties.ERROR_STRINGS,
-			     new String[] { s });
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { s });
             throw new ExecutionError("variable.redefinition", node);
         }
 
@@ -393,18 +393,18 @@ public class NameVisitor extends VisitorObject {
             context.define(s, null);
         }
 
-	// Visit the initializer
-	Node n = node.getInitializer();
+        // Visit the initializer
+        Node n = node.getInitializer();
         if (n != null) {
             Object o = n.acceptVisitor(this);
             if (o != null) {
-		if (o instanceof ReferenceType) {
+                if (o instanceof ReferenceType) {
                     throw new ExecutionError("malformed.expression", n);
-		}
-		node.setInitializer((Expression)o);
+                }
+                node.setInitializer((Expression)o);
             }
-	}	
-	return null;
+        }
+        return null;
     }
 
     /**
@@ -416,10 +416,10 @@ public class NameVisitor extends VisitorObject {
         Expression right  = node.getRightExpression();
         Object o = right.acceptVisitor(this);
         if (o != null) {
-	    if (o instanceof ReferenceType) {
+            if (o instanceof ReferenceType) {
                 throw new ExecutionError("right.expression", right);
-	    }
-	    node.setRightExpression((Expression)o);
+            }
+            node.setRightExpression((Expression)o);
         }
 
         // Perhaps is this assignment a variable declaration ?
@@ -428,19 +428,19 @@ public class NameVisitor extends VisitorObject {
             List   ids = ((QualifiedName)left).getIdentifiers();
             String var = ((IdentifierToken)ids.get(0)).image();
             if (ids.size() == 1 && !context.exists(var)) {
-		context.define(var, null);
-	    }
-	}	
+                context.define(var, null);
+            }
+        }
 
         // Visit the left expression
-	o = left.acceptVisitor(this);
-	if (o != null) {
-	    if (o instanceof ReferenceType) {
+        o = left.acceptVisitor(this);
+        if (o != null) {
+            if (o instanceof ReferenceType) {
                 throw new ExecutionError("left.expression", node);
-	    }
-	    node.setLeftExpression((Expression)o);
-	}
-	return null;
+            }
+            node.setLeftExpression((Expression)o);
+        }
+        return null;
     }
 
     /**
@@ -456,7 +456,7 @@ public class NameVisitor extends VisitorObject {
 
         // Leave the current scope
         context.leaveScope();
-        
+
         return null;
     }
 
@@ -470,17 +470,17 @@ public class NameVisitor extends VisitorObject {
         if (o != null) {
             if (o instanceof ReferenceType) {
                 return new StaticFieldAccess((ReferenceType)o,
-					     node.getFieldName(),
-					     node.getFilename(),
-					     node.getBeginLine(),
-					     node.getBeginColumn(),
-					     node.getEndLine(),
-					     node.getEndColumn());
+                                             node.getFieldName(),
+                                             node.getFilename(),
+                                             node.getBeginLine(),
+                                             node.getBeginColumn(),
+                                             node.getEndLine(),
+                                             node.getEndColumn());
             } else {
                 node.setExpression((Expression)o);
             }
         }
-	return null;
+        return null;
     }
 
     /**
@@ -488,45 +488,45 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ObjectMethodCall node) {
-	// Check the arguments
-	List args = node.getArguments();
-	if (args != null) {
-	    visitList(args);
-	}
+        // Check the arguments
+        List args = node.getArguments();
+        if (args != null) {
+            visitList(args);
+        }
 
-	// Check the expression
-	Expression exp = node.getExpression();
-	Object o;
-	if (exp == null) {
-	    o = context.getDefaultQualifier(node);
-	} else {
-	    o = exp.acceptVisitor(this);
-	    if (o == null) {
-		return null;
-	    }
-	}
+        // Check the expression
+        Expression exp = node.getExpression();
+        Object o;
+        if (exp == null) {
+            o = context.getDefaultQualifier(node);
+        } else {
+            o = exp.acceptVisitor(this);
+            if (o == null) {
+                return null;
+            }
+        }
 
-	if (o == null) {
-	    return new FunctionCall(node.getMethodName(),
-				    node.getArguments(),
-				    node.getFilename(),
-				    node.getBeginLine(),
-				    node.getBeginColumn(),
-				    node.getEndLine(),
-				    node.getEndColumn());
+        if (o == null) {
+            return new FunctionCall(node.getMethodName(),
+                                    node.getArguments(),
+                                    node.getFilename(),
+                                    node.getBeginLine(),
+                                    node.getBeginColumn(),
+                                    node.getEndLine(),
+                                    node.getEndColumn());
         } else if (o instanceof ReferenceType) {
-	    return new StaticMethodCall((ReferenceType)o,
-					node.getMethodName(),
-					node.getArguments(),
-					node.getFilename(),
-					node.getBeginLine(),
-					node.getBeginColumn(),
-					node.getEndLine(),
-					node.getEndColumn());
-	} else {
-	    node.setExpression((Expression)o);
-	}
-	return null;
+            return new StaticMethodCall((ReferenceType)o,
+                                        node.getMethodName(),
+                                        node.getArguments(),
+                                        node.getFilename(),
+                                        node.getBeginLine(),
+                                        node.getBeginColumn(),
+                                        node.getEndLine(),
+                                        node.getEndColumn());
+        } else {
+            node.setExpression((Expression)o);
+        }
+        return null;
     }
 
     /**
@@ -534,12 +534,12 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(SuperMethodCall node) {
-	// Check the arguments
-	List args = node.getArguments();
-	if (args != null) {
-	    visitList(args);
-	}
-	return null;
+        // Check the arguments
+        List args = node.getArguments();
+        if (args != null) {
+            visitList(args);
+        }
+        return null;
     }
 
     /**
@@ -548,7 +548,7 @@ public class NameVisitor extends VisitorObject {
      * @return a qualified name or a field access
      */
     public Object visit(ThisExpression node) {
-	return context.getDefaultQualifier(node, node.getClassName());
+        return context.getDefaultQualifier(node, node.getClassName());
     }
 
     /**
@@ -564,7 +564,7 @@ public class NameVisitor extends VisitorObject {
         if (context.isDefined(t.image())) {
             // The name starts with a reference to a local variable,
             // end of the name is a sequence of field access
-	    Expression result = context.createName(node, t);
+            Expression result = context.createName(node, t);
             Iterator it = ids.iterator();
             it.next();
 
@@ -577,42 +577,42 @@ public class NameVisitor extends VisitorObject {
                                                t2.endLine(),  t2.endColumn());
             }
             return result;
-        } 
-	    
+        }
+
         // The name must be, or starts with, a class name
         List      l = (List)((LinkedList)ids).clone();
-	boolean   b = false;
+        boolean   b = false;
 
-	while (l.size() > 0) {
-	    String s = TreeUtilities.listToName(l);
-	    if (b = context.classExists(s)) {
-		break;
-	    }
-	    l.remove(l.size()-1);
-	}
+        while (l.size() > 0) {
+            String s = TreeUtilities.listToName(l);
+            if (b = context.classExists(s)) {
+                break;
+            }
+            l.remove(l.size()-1);
+        }
 
         if (!b) {
             // It is an error if no matching class or field was found
-	    node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { t.image() });
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { t.image() });
            throw new ExecutionError("undefined.class", node);
         }
 
         // Creates a ReferenceType node
         IdentifierToken t2 = (IdentifierToken)l.get(l.size()-1);
         ReferenceType rt = new ReferenceType(l,
-					     node.getFilename(),
-					     t.beginLine(), t.beginColumn(),
-					     t2.endLine(),  t2.endColumn());
-	
+                                             node.getFilename(),
+                                             t.beginLine(), t.beginColumn(),
+                                             t2.endLine(),  t2.endColumn());
+
         if (l.size() != ids.size()) {
             // The end of the name is a sequence of field access
             ListIterator it = ids.listIterator(l.size());
             Expression result =
-		new StaticFieldAccess(rt,
-				      (t2 = (IdentifierToken)it.next()).image(),
-				      node.getFilename(),
-				      t.beginLine(), t.beginColumn(),
-				      t2.endLine(),  t2.endColumn());
+                new StaticFieldAccess(rt,
+                                      (t2 = (IdentifierToken)it.next()).image(),
+                                      node.getFilename(),
+                                      t.beginLine(), t.beginColumn(),
+                                      t2.endLine(),  t2.endColumn());
             while (it.hasNext()) {
                 result = new ObjectFieldAccess(result,
                                                (t2 = (IdentifierToken)it.next()).image(),
@@ -621,7 +621,7 @@ public class NameVisitor extends VisitorObject {
                                                t2.endLine(),  t2.endColumn());
             }
             return result;
-        } else { 
+        } else {
             return rt;
         }
     }
@@ -636,7 +636,7 @@ public class NameVisitor extends VisitorObject {
 
         if (args != null) {
             visitList(args);
-	}
+        }
         return null;
     }
 
@@ -652,7 +652,7 @@ public class NameVisitor extends VisitorObject {
         if (node.getInitialization() != null) {
             node.getInitialization().acceptVisitor(this);
         }
-	return null;
+        return null;
     }
 
     /**
@@ -660,14 +660,14 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(InnerAllocation node) {
-	visitExpressionContainer(node);
+        visitExpressionContainer(node);
 
         // Do the type checking of the arguments
         List args = node.getArguments();
         if (args != null) {
             visitList(args);
         }
-	return null;
+        return null;
     }
 
     /**
@@ -684,18 +684,18 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ArrayAccess node) {
-	visitExpressionContainer(node);
+        visitExpressionContainer(node);
 
         // Visits the cell number expression
-	Node   n = node.getCellNumber();
+        Node   n = node.getCellNumber();
         Object o = n.acceptVisitor(this);
-	if (o != null) {
-	    if (o instanceof ReferenceType) {
-		throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setCellNumber((Expression)o);
-	}
-	return null;
+        if (o != null) {
+            if (o instanceof ReferenceType) {
+                throw new ExecutionError("malformed.expression", n);
+            }
+            node.setCellNumber((Expression)o);
+        }
+        return null;
     }
 
     /**
@@ -704,7 +704,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(NotExpression node) {
         visitExpressionContainer(node);
-	return null;
+        return null;
     }
 
     /**
@@ -713,7 +713,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(ComplementExpression node) {
         visitExpressionContainer(node);
-	return null;
+        return null;
     }
 
     /**
@@ -722,7 +722,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(PlusExpression node) {
         visitExpressionContainer(node);
-	return null;
+        return null;
     }
 
     /**
@@ -731,7 +731,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(MinusExpression node) {
         visitExpressionContainer(node);
-	return null;
+        return null;
     }
 
     /**
@@ -740,7 +740,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(AddExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -749,7 +749,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(AddAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -758,7 +758,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(SubtractExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -767,7 +767,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(SubtractAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -776,7 +776,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(MultiplyExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -785,7 +785,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(MultiplyAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -794,7 +794,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(DivideExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -803,7 +803,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(DivideAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -812,7 +812,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(RemainderExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -821,7 +821,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(RemainderAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -830,7 +830,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(EqualExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -839,7 +839,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(NotEqualExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -848,7 +848,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(LessExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -857,7 +857,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(LessOrEqualExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -866,7 +866,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(GreaterExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -875,7 +875,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(GreaterOrEqualExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -884,7 +884,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(BitAndExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -893,7 +893,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(BitAndAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -902,7 +902,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(ExclusiveOrExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -911,7 +911,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(ExclusiveOrAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -920,7 +920,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(BitOrExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -929,7 +929,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(BitOrAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -938,7 +938,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(ShiftLeftExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -947,7 +947,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(ShiftLeftAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -956,7 +956,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(ShiftRightExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -965,7 +965,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(ShiftRightAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -974,7 +974,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(UnsignedShiftRightExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -983,7 +983,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(UnsignedShiftRightAssignExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -992,7 +992,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(AndExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -1001,7 +1001,7 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(OrExpression node) {
         visitBinaryExpression(node);
-	return null;
+        return null;
     }
 
     /**
@@ -1009,8 +1009,8 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(InstanceOfExpression node) {
-	visitExpressionContainer(node);
-	return null;
+        visitExpressionContainer(node);
+        return null;
     }
 
     /**
@@ -1019,33 +1019,33 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(ConditionalExpression node) {
         // Check each subexpression
-	Node   n = node.getConditionExpression();
+        Node   n = node.getConditionExpression();
         Object o = n.acceptVisitor(this);
         if (o != null) {
-	    if (o instanceof ReferenceType) {
-		throw new ExecutionError("malformed.expression", n);
-	    }
-	    node.setConditionExpression((Expression)o);
+            if (o instanceof ReferenceType) {
+                throw new ExecutionError("malformed.expression", n);
+            }
+            node.setConditionExpression((Expression)o);
         }
 
-	n = node.getIfTrueExpression();
+        n = node.getIfTrueExpression();
         o = n.acceptVisitor(this);
         if (o != null) {
-	    if (o instanceof ReferenceType) {
-		throw new ExecutionError("malformed.second.operand", n);
-	    }
-	    node.setIfTrueExpression((Expression)o);
+            if (o instanceof ReferenceType) {
+                throw new ExecutionError("malformed.second.operand", n);
+            }
+            node.setIfTrueExpression((Expression)o);
         }
-	
-	n = node.getIfFalseExpression();
+
+        n = node.getIfFalseExpression();
         o = n.acceptVisitor(this);
         if (o != null) {
-	    if (o instanceof ReferenceType) {
-		throw new ExecutionError("malformed.third.operand", n);
-	    }
-	    node.setIfFalseExpression((Expression)o);
+            if (o instanceof ReferenceType) {
+                throw new ExecutionError("malformed.third.operand", n);
+            }
+            node.setIfFalseExpression((Expression)o);
         }
-	return null;
+        return null;
     }
 
     /**
@@ -1053,8 +1053,8 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(PostIncrement node) {
-	visitExpressionContainer(node);
-	return null;
+        visitExpressionContainer(node);
+        return null;
     }
 
     /**
@@ -1062,8 +1062,8 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(PreIncrement node) {
-	visitExpressionContainer(node);
-	return null;
+        visitExpressionContainer(node);
+        return null;
     }
 
     /**
@@ -1071,8 +1071,8 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(PostDecrement node) {
-	visitExpressionContainer(node);
-	return null;
+        visitExpressionContainer(node);
+        return null;
     }
 
     /**
@@ -1080,8 +1080,8 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(PreDecrement node) {
-	visitExpressionContainer(node);
-	return null;
+        visitExpressionContainer(node);
+        return null;
     }
 
     /**
@@ -1089,8 +1089,8 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(CastExpression node) {
-	visitExpressionContainer(node);
-	return null;
+        visitExpressionContainer(node);
+        return null;
     }
 
     /**
@@ -1098,11 +1098,11 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ClassAllocation node) {
-	List largs = node.getArguments();
-	if (largs != null) {
-	    visitList(largs);
-	}
-	return null;
+        List largs = node.getArguments();
+        if (largs != null) {
+            visitList(largs);
+        }
+        return null;
     }
 
     /**
@@ -1110,12 +1110,12 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(InnerClassAllocation node) {
-	visitExpressionContainer(node);
-	List largs = node.getArguments();
-	if (largs != null) {
-	    visitList(largs);
-	}
-	return null;
+        visitExpressionContainer(node);
+        List largs = node.getArguments();
+        if (largs != null) {
+            visitList(largs);
+        }
+        return null;
     }
 
     /**
@@ -1137,8 +1137,8 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ClassDeclaration node) {
-	context.defineClass(node);
-	return null;
+        context.defineClass(node);
+        return null;
     }
 
     /**
@@ -1146,22 +1146,22 @@ public class NameVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(InterfaceDeclaration node) {
-	context.defineClass(node);
-	return null;
+        context.defineClass(node);
+        return null;
     }
 
     /**
      * Visits an expression container
      */
     private void visitExpressionContainer(ExpressionContainer node) {
-	Expression exp = node.getExpression();
-	Object o = exp.acceptVisitor(this);
-	if (o != null) {
-	    if (o instanceof ReferenceType) {
-		throw new ExecutionError("malformed.expression", exp);
-	    }
-	    node.setExpression((Expression)o);
-	}
+        Expression exp = node.getExpression();
+        Object o = exp.acceptVisitor(this);
+        if (o != null) {
+            if (o instanceof ReferenceType) {
+                throw new ExecutionError("malformed.expression", exp);
+            }
+            node.setExpression((Expression)o);
+        }
     }
 
     /**
@@ -1193,7 +1193,7 @@ public class NameVisitor extends VisitorObject {
      * Visits a list of node
      */
     private void visitList(List l) {
-	Node n;
+        Node n;
         ListIterator it = l.listIterator();
         while (it.hasNext()) {
             Object o = (n = (Node)it.next()).acceptVisitor(this);
@@ -1201,7 +1201,7 @@ public class NameVisitor extends VisitorObject {
                 if (o instanceof ReferenceType) {
                     throw new ExecutionError("malformed.expression", n);
                 }
-		it.set(o);
+                it.set(o);
             }
         }
     }

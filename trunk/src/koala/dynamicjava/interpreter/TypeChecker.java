@@ -58,7 +58,7 @@ public class TypeChecker extends VisitorObject {
      * @param ctx the context
      */
     public TypeChecker(Context ctx) {
-	context = ctx;
+        context = ctx;
     }
 
     /**
@@ -117,7 +117,7 @@ public class TypeChecker extends VisitorObject {
             checkList(l);
         }
 
-	Node cond = node.getCondition();
+        Node cond = node.getCondition();
         if (cond != null) {
             // Check the condition
             if (cond.acceptVisitor(this) != boolean.class) {
@@ -159,23 +159,23 @@ public class TypeChecker extends VisitorObject {
         // Visits the components of this node
         Class c = (Class)node.getSelector().acceptVisitor(this);
         if (c != char.class && c != byte.class && c != short.class && c != int.class) {
-	    node.setProperty(NodeProperties.ERROR_STRINGS,
-			     new String[] { c.getName() });
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { c.getName() });
             throw new ExecutionError("selector.type", node);
         }
 
         // Check the type of the case labels
         Iterator it = node.getBindings().iterator();
         while (it.hasNext()) {
-	    SwitchBlock sb = (SwitchBlock)it.next();
-	    sb.acceptVisitor(this);
+            SwitchBlock sb = (SwitchBlock)it.next();
+            sb.acceptVisitor(this);
             Expression exp = sb.getExpression();
             if (exp != null) {
                 Class lc = NodeProperties.getType(exp);
                 if (lc != char.class &&  lc != byte.class &&
                     lc != short.class && lc != int.class) {
-		    node.setProperty(NodeProperties.ERROR_STRINGS,
-				     new String[] { lc.getName() });
+                    node.setProperty(NodeProperties.ERROR_STRINGS,
+                                     new String[] { lc.getName() });
                     throw new ExecutionError("switch.label.type", node);
                 }
                 if (c != lc) {
@@ -191,9 +191,9 @@ public class TypeChecker extends VisitorObject {
                     if (c == byte.class) {
                         if (exp.hasProperty(NodeProperties.VALUE)) {
                             if (n.byteValue() != n.intValue()) {
-				node.setProperty(NodeProperties.ERROR_STRINGS,
-						 new String[] { c.getName() });
-				throw new ExecutionError
+                                node.setProperty(NodeProperties.ERROR_STRINGS,
+                                                 new String[] { c.getName() });
+                                throw new ExecutionError
                                     ("switch.label.type", node);
                             }
                         } else {
@@ -202,14 +202,14 @@ public class TypeChecker extends VisitorObject {
                     } else if (c == short.class || c == char.class) {
                         if (exp.hasProperty(NodeProperties.VALUE)) {
                             if (n.shortValue() != n.intValue()) {
-				node.setProperty(NodeProperties.ERROR_STRINGS,
-						 new String[] { c.getName() });
+                                node.setProperty(NodeProperties.ERROR_STRINGS,
+                                                 new String[] { c.getName() });
                                 throw new ExecutionError
                                     ("switch.label.type", node);
                             }
                         } else if (lc == int.class) {
-			    node.setProperty(NodeProperties.ERROR_STRINGS,
-					     new String[] { c.getName() });
+                            node.setProperty(NodeProperties.ERROR_STRINGS,
+                                             new String[] { c.getName() });
                             throw new ExecutionError("switch.label.type", node);
                         }
                     }
@@ -224,15 +224,15 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(SwitchBlock node) {
-	Expression exp = node.getExpression();
-	if (exp != null) {
-	    exp.acceptVisitor(this);
-	}
-	List l;
-	if ((l = node.getStatements()) != null) {
-	    checkList(l);
-	}
-	return null;
+        Expression exp = node.getExpression();
+        if (exp != null) {
+            exp.acceptVisitor(this);
+        }
+        List l;
+        if ((l = node.getStatements()) != null) {
+            checkList(l);
+        }
+        return null;
     }
 
     /**
@@ -266,22 +266,22 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(CatchStatement node) {
-	// Enter a new scope
-	context.enterScope();
+        // Enter a new scope
+        context.enterScope();
 
-	Class c = (Class)node.getException().acceptVisitor(this);
-	if (!Throwable.class.isAssignableFrom(c)) {
-	    node.setProperty(NodeProperties.ERROR_STRINGS,
-			     new String[] { c.getName() });
-	    throw new ExecutionError("catch.type", node);
-	}
+        Class c = (Class)node.getException().acceptVisitor(this);
+        if (!Throwable.class.isAssignableFrom(c)) {
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { c.getName() });
+            throw new ExecutionError("catch.type", node);
+        }
 
-	node.getBlock().acceptVisitor(this);
+        node.getBlock().acceptVisitor(this);
 
-	// Leave the current scope
-	context.leaveScope();
-	node.setProperty(NodeProperties.TYPE, c);
-	return null;
+        // Leave the current scope
+        context.leaveScope();
+        node.setProperty(NodeProperties.TYPE, c);
+        return null;
     }
 
     /**
@@ -291,8 +291,8 @@ public class TypeChecker extends VisitorObject {
     public Object visit(ThrowStatement node) {
         Class c = (Class)node.getExpression().acceptVisitor(this);
         if (!Throwable.class.isAssignableFrom(c)) {
-	    node.setProperty(NodeProperties.ERROR_STRINGS,
-			     new String[] { c.getName() });
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { c.getName() });
             throw new ExecutionError("throw.type", node);
         }
         return null;
@@ -358,8 +358,8 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(Literal node) {
-        // Set the properties of the node 
-	Class c = node.getType();
+        // Set the properties of the node
+        Class c = node.getType();
         node.setProperty(NodeProperties.VALUE, node.getValue());
         node.setProperty(NodeProperties.TYPE, c);
         return c;
@@ -378,7 +378,7 @@ public class TypeChecker extends VisitorObject {
             context.define(node.getName(), lc);
         }
 
-	Node init = node.getInitializer();
+        Node init = node.getInitializer();
         if (init != null) {
             Class rc = (Class)init.acceptVisitor(this);
             checkAssignmentStaticRules(lc, rc, node, init);
@@ -400,7 +400,7 @@ public class TypeChecker extends VisitorObject {
         // Leave the current scope and store the defined variables
         // (a map of String-Class mappings) in the "variables" property
         node.setProperty(NodeProperties.VARIABLES, context.leaveScope());
-        
+
         return null;
     }
 
@@ -411,7 +411,7 @@ public class TypeChecker extends VisitorObject {
     public Object visit(ObjectFieldAccess node) {
         // Visit the expression
         Class c = (Class)node.getExpression().acceptVisitor(this);
-	
+
         // Load the field object
         if (!c.isArray()) {
             Field f = null;
@@ -421,23 +421,23 @@ public class TypeChecker extends VisitorObject {
                 throw new CatchedExceptionError(e, node);
             }
 
-	    // Set the node properties
-	    node.setProperty(NodeProperties.FIELD, f);
-	    node.setProperty(NodeProperties.TYPE,  c = f.getType());
+            // Set the node properties
+            node.setProperty(NodeProperties.FIELD, f);
+            node.setProperty(NodeProperties.TYPE,  c = f.getType());
 
-	    node.setProperty(NodeProperties.MODIFIER, context.getModifier(node));
-	    return c;
-	} else {
+            node.setProperty(NodeProperties.MODIFIER, context.getModifier(node));
+            return c;
+        } else {
             if (!node.getFieldName().equals("length")) {
-		String s0 = "length";
-		String s1 = c.getComponentType().getName() + " array";
-		node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0, s1 });
+                String s0 = "length";
+                String s1 = c.getComponentType().getName() + " array";
+                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0, s1 });
                 throw new ExecutionError("no.such.field", node);
             }
             node.setProperty(NodeProperties.TYPE,  int.class);
             node.setProperty(NodeProperties.MODIFIER, new InvalidModifier(node));
-	    return int.class;
-	}
+            return int.class;
+        }
     }
 
     /**
@@ -445,19 +445,19 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(SuperFieldAccess node) {
-	Field f = null;
-	try {
-	    f = context.getSuperField(node, node.getFieldName());
-	} catch (Exception e) {
-	    throw new CatchedExceptionError(e, node);
-	}
+        Field f = null;
+        try {
+            f = context.getSuperField(node, node.getFieldName());
+        } catch (Exception e) {
+            throw new CatchedExceptionError(e, node);
+        }
 
-	// Set the node properties
-	node.setProperty(NodeProperties.FIELD, f);
-	Class c;
-	node.setProperty(NodeProperties.TYPE,  c = f.getType());
-	node.setProperty(NodeProperties.MODIFIER, context.getModifier(node));
-	return c;
+        // Set the node properties
+        node.setProperty(NodeProperties.FIELD, f);
+        Class c;
+        node.setProperty(NodeProperties.TYPE,  c = f.getType());
+        node.setProperty(NodeProperties.MODIFIER, context.getModifier(node));
+        return c;
     }
 
     /**
@@ -480,8 +480,8 @@ public class TypeChecker extends VisitorObject {
         node.setProperty(NodeProperties.FIELD, f);
         node.setProperty(NodeProperties.TYPE,  c = f.getType());
 
-	node.setProperty(NodeProperties.MODIFIER, context.getModifier(node));
-	return c;
+        node.setProperty(NodeProperties.MODIFIER, context.getModifier(node));
+        return c;
     }
 
     /**
@@ -490,9 +490,9 @@ public class TypeChecker extends VisitorObject {
      */
     public Object visit(ObjectMethodCall node) {
         // Check the receiver
-	Expression exp = node.getExpression();
-	Class      c   = (Class)exp.acceptVisitor(this);
-	String     mn  = node.getMethodName();
+        Expression exp = node.getExpression();
+        Class      c   = (Class)exp.acceptVisitor(this);
+        String     mn  = node.getMethodName();
 
         if (!c.isArray() || (c.isArray() && !mn.equals("clone"))) {
             // Do the type checking of the arguments
@@ -510,30 +510,46 @@ public class TypeChecker extends VisitorObject {
             try {
                 m = context.lookupMethod(exp, mn, cargs);
             } catch (NoSuchMethodException e) {
-		String s = c.getName();
-		node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { mn, s });
+                String s = c.getName();
+
+                /* Jeliot 3 addition begins */
+                int n = cargs.length;
+                String params = "(";
+                for (int i = 0; i < n; i++) {
+                    params += cargs[i].getName();
+                    if (i == n-1) {
+                        break;
+                    }
+                    params += ",";
+                }
+                params += ")";
+
+                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { mn /*jeliot 3*/ + params /*jeliot 3*/, s });
+                /* Jeliot 3 addition ends */
+
+                //node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { mn, s });
                 throw new ExecutionError("no.such.method", node);
-	    } catch (MethodModificationError e) {
-		Expression expr = e.getExpression();
-		expr.acceptVisitor(this);
-		node.setExpression(expr);
-		m = e.getMethod();
-	    }
+            } catch (MethodModificationError e) {
+                Expression expr = e.getExpression();
+                expr.acceptVisitor(this);
+                node.setExpression(expr);
+                m = e.getMethod();
+            }
 
             // Set the node properties
             node.setProperty(NodeProperties.METHOD, m);
             node.setProperty(NodeProperties.TYPE,   c = m.getReturnType());
-	    return c;
-	} else {
+            return c;
+        } else {
             if (!mn.equals("clone") || node.getArguments() != null) {
-		String s0 = "clone";
-		String s1 = c.getComponentType().getName() + " array";
-		node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0, s1 });
+                String s0 = "clone";
+                String s1 = c.getComponentType().getName() + " array";
+                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0, s1 });
                 throw new ExecutionError("no.such.method", node);
             }
             node.setProperty(NodeProperties.TYPE, c = Object.class);
-	    return c;
-	}
+            return c;
+        }
     }
 
     /**
@@ -541,17 +557,17 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(MethodDeclaration node) {
-	context.defineFunction(node);
+        context.defineFunction(node);
 
-	node.setProperty(NodeProperties.TYPE, node.getReturnType().acceptVisitor(this));
-	node.setProperty(NodeProperties.FUNCTIONS, context.getFunctions());
-	node.setProperty(NodeProperties.IMPORTATION_MANAGER,
-			 context.getImportationManager().clone());
+        node.setProperty(NodeProperties.TYPE, node.getReturnType().acceptVisitor(this));
+        node.setProperty(NodeProperties.FUNCTIONS, context.getFunctions());
+        node.setProperty(NodeProperties.IMPORTATION_MANAGER,
+                         context.getImportationManager().clone());
 
-	context.enterScope();
-	checkList(node.getParameters());
-	context.leaveScope();
-	return null;
+        context.enterScope();
+        checkList(node.getParameters());
+        context.leaveScope();
+        return null;
     }
 
     /**
@@ -559,31 +575,31 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(FunctionCall node) {
-	// Do the type checking of the arguments
-	List args = node.getArguments();
-	Class[] cargs = Constants.EMPTY_CLASS_ARRAY;
-	if (args != null) {
-	    cargs = new Class[args.size()];
-	    Iterator it = args.iterator();
-	    int i  = 0;
-	    while (it.hasNext()) {
-		cargs[i++] = (Class)((Node)it.next()).acceptVisitor(this);
-	    }
-	}
-	MethodDeclaration f = null;
-	try {
-	    f = context.lookupFunction(node.getMethodName(), cargs);
-	} catch (NoSuchFunctionException e) {
-	    String s = node.getMethodName();
-	    node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s });
-	    throw new ExecutionError("no.such.function", node);
-	}
+        // Do the type checking of the arguments
+        List args = node.getArguments();
+        Class[] cargs = Constants.EMPTY_CLASS_ARRAY;
+        if (args != null) {
+            cargs = new Class[args.size()];
+            Iterator it = args.iterator();
+            int i  = 0;
+            while (it.hasNext()) {
+                cargs[i++] = (Class)((Node)it.next()).acceptVisitor(this);
+            }
+        }
+        MethodDeclaration f = null;
+        try {
+            f = context.lookupFunction(node.getMethodName(), cargs);
+        } catch (NoSuchFunctionException e) {
+            String s = node.getMethodName();
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s });
+            throw new ExecutionError("no.such.function", node);
+        }
 
-	// Set the node properties
-	Class c;
-	node.setProperty(NodeProperties.FUNCTION, f);
-	node.setProperty(NodeProperties.TYPE,  c = NodeProperties.getType(f));
-	return c;
+        // Set the node properties
+        Class c;
+        node.setProperty(NodeProperties.FUNCTION, f);
+        node.setProperty(NodeProperties.TYPE,  c = NodeProperties.getType(f));
+        return c;
     }
 
     /**
@@ -591,13 +607,13 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(SuperMethodCall node) {
-	// Do the type checking of the arguments
+        // Do the type checking of the arguments
         List args = node.getArguments();
         Class[] pt = Constants.EMPTY_CLASS_ARRAY;
         if (args != null) {
             pt = new Class[args.size()];
             Iterator it = args.iterator();
-	    int i = 0;
+            int i = 0;
             while (it.hasNext()) {
                 pt[i++] = (Class)((Node)it.next()).acceptVisitor(this);
             }
@@ -608,9 +624,9 @@ public class TypeChecker extends VisitorObject {
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }
-        
+
         // Set the node properties
-	Class c;
+        Class c;
         node.setProperty(NodeProperties.METHOD, m);
         node.setProperty(NodeProperties.TYPE,   c = m.getReturnType());
         return c;
@@ -634,20 +650,36 @@ public class TypeChecker extends VisitorObject {
         }
         Method m = null;
         Node   n = node.getMethodType();
-	Class  c = (Class)n.acceptVisitor(this);
+        Class  c = (Class)n.acceptVisitor(this);
 
         try {
             m = context.lookupMethod(n, node.getMethodName(), cargs);
         } catch (NoSuchMethodException e) {
-	    String s0 = node.getMethodName();
-	    String s1 = c.getName();
-	    node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0, s1 });
-	    throw new ExecutionError("no.such.method", node);
+            String s0 = node.getMethodName();
+            String s1 = c.getName();
+
+            /* Jeliot 3 addition begins */
+            int n1 = cargs.length;
+            String params = "(";
+            for (int i = 0; i < n1; i++) {
+                params += cargs[i].getName();
+                if (i == n1-1) {
+                    break;
+                }
+                params += ",";
+            }
+            params += ")";
+
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0 + params , s1 });
+            /* Jeliot 3 addition ends */
+
+            //node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0, s1 });
+            throw new ExecutionError("no.such.method", node);
         }
 
         // Set the node properties
         node.setProperty(NodeProperties.METHOD, m);
-        node.setProperty(NodeProperties.TYPE,   c = m.getReturnType());
+        node.setProperty(NodeProperties.TYPE, c = m.getReturnType());
         return c;
     }
 
@@ -664,22 +696,22 @@ public class TypeChecker extends VisitorObject {
         if (left instanceof QualifiedName) {
             String var = ((QualifiedName)left).getRepresentation();
             if (!context.exists(var)) {
-		context.define(var, (rc == null) ? Object.class : rc);
-	    }
-	}
+                context.define(var, (rc == null) ? Object.class : rc);
+            }
+        }
 
         Class lc = (Class)left.acceptVisitor(this);
 
-	// The left subexpression must be a variable
+        // The left subexpression must be a variable
         if (!left.hasProperty(NodeProperties.MODIFIER)) {
             throw new ExecutionError("left.expression", node);
         }
-	
+
         // Check the validity of the assignment
         checkAssignmentStaticRules(lc, rc, node, right);
 
         node.setProperty(NodeProperties.TYPE, lc);
-	return lc;
+        return lc;
     }
 
     /**
@@ -687,14 +719,14 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(QualifiedName node) {
-	String var = node.getRepresentation();
-	
-	// Set the modifier
-	Class c = (Class)context.get(var);
-	node.setProperty(NodeProperties.TYPE, c);
-	
-	node.setProperty(NodeProperties.MODIFIER, context.getModifier(node));
-	return c;
+        String var = node.getRepresentation();
+
+        // Set the modifier
+        Class c = (Class)context.get(var);
+        node.setProperty(NodeProperties.TYPE, c);
+
+        node.setProperty(NodeProperties.MODIFIER, context.getModifier(node));
+        return c;
     }
 
     /**
@@ -710,17 +742,17 @@ public class TypeChecker extends VisitorObject {
         List args = node.getArguments();
         Class[] cargs = Constants.EMPTY_CLASS_ARRAY;
 
-	if (args != null) {
-	    cargs = new Class[args.size()];
+        if (args != null) {
+            cargs = new Class[args.size()];
 
-	    ListIterator it = args.listIterator();
-	    int i  = 0;
-	    while (it.hasNext()) {
-		cargs[i++] = (Class)((Node)it.next()).acceptVisitor(this);
-	    }
-	}
+            ListIterator it = args.listIterator();
+            int i  = 0;
+            while (it.hasNext()) {
+                cargs[i++] = (Class)((Node)it.next()).acceptVisitor(this);
+            }
+        }
 
-	return context.setProperties(node, c, cargs);
+        return context.setProperties(node, c, cargs);
     }
 
     /**
@@ -740,7 +772,7 @@ public class TypeChecker extends VisitorObject {
             throw new ExecutionError("allocation.type", node);
         }
         Class c = (Class)type.acceptVisitor(this);
-	Class dc = InterpreterUtilities.getDeclaringClass(c);
+        Class dc = InterpreterUtilities.getDeclaringClass(c);
 
         // Do the type checking of the arguments
         List args = node.getArguments();
@@ -750,7 +782,7 @@ public class TypeChecker extends VisitorObject {
             // Adds an argument if the class to build is an innerclass
             if (args != null) {
                 cargs = new Class[args.size() + 1];
-                
+
                 cargs[0] = ec;
                 ListIterator it = args.listIterator();
                 int i  = 1;
@@ -769,7 +801,7 @@ public class TypeChecker extends VisitorObject {
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }
-        
+
         // Set the properties of this node
         node.setProperty(NodeProperties.TYPE,        c);
         node.setProperty(NodeProperties.CONSTRUCTOR, cons);
@@ -782,27 +814,27 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ClassAllocation node) {
-	// If the class allocation is the initializer of a field,
-	// it is possible that it has already been visited
-	if (node.hasProperty(NodeProperties.TYPE)) {
-	    return NodeProperties.getType(node);
-	} else {
-	    // Get the class to allocate
-	    Node   ctn   = node.getCreationType();
-	    Class   ct   = (Class)ctn.acceptVisitor(this);
-	    List   largs = node.getArguments();
-	    Class[] args = Constants.EMPTY_CLASS_ARRAY;
+        // If the class allocation is the initializer of a field,
+        // it is possible that it has already been visited
+        if (node.hasProperty(NodeProperties.TYPE)) {
+            return NodeProperties.getType(node);
+        } else {
+            // Get the class to allocate
+            Node   ctn   = node.getCreationType();
+            Class   ct   = (Class)ctn.acceptVisitor(this);
+            List   largs = node.getArguments();
+            Class[] args = Constants.EMPTY_CLASS_ARRAY;
 
-	    if (largs != null) {
-		args = new Class[largs.size()];
-		Iterator it = largs.iterator();
-		int i = 0;
-		while (it.hasNext()) {
-		    args[i++] = (Class)((Node)it.next()).acceptVisitor(this);
-		}
-	    }
-	    return context.setProperties(node, ct, args, node.getMembers());
-	}
+            if (largs != null) {
+                args = new Class[largs.size()];
+                Iterator it = largs.iterator();
+                int i = 0;
+                while (it.hasNext()) {
+                    args[i++] = (Class)((Node)it.next()).acceptVisitor(this);
+                }
+            }
+            return context.setProperties(node, ct, args, node.getMembers());
+        }
     }
 
     /**
@@ -819,7 +851,7 @@ public class TypeChecker extends VisitorObject {
                 throw new ExecutionError("array.dimension.type", node);
             }
         }
-        
+
         Class c = (Class)node.getCreationType().acceptVisitor(this);
 
         // Visits the initializer if one
@@ -855,13 +887,13 @@ public class TypeChecker extends VisitorObject {
         Class c = (Class)node.getExpression().acceptVisitor(this);
 
         if (!c.isArray()) {
-	    node.setProperty(NodeProperties.ERROR_STRINGS,
-			     new String[] { c.getName() });
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { c.getName() });
             throw new ExecutionError("array.required", node);
         }
-        
+
         // Sets the properties of this node
-	Class result;
+        Class result;
         node.setProperty(NodeProperties.TYPE, result = c.getComponentType());
         node.setProperty(NodeProperties.MODIFIER, new ArrayModifier(node));
 
@@ -880,7 +912,7 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(PrimitiveType node) {
-	Object o = node.getValue();
+        Object o = node.getValue();
         node.setProperty(NodeProperties.TYPE, o);
         return o;
     }
@@ -890,18 +922,18 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ReferenceType node) {
-	Class c = null;
-	try {
-	    c = context.lookupClass(node.getRepresentation());
-	} catch (ClassNotFoundException e) {
-	    node.setProperty(NodeProperties.ERROR_STRINGS,
-			     new String[] { node.getRepresentation() });
-	    throw new ExecutionError("undefined.class", node);
-	}
-	node.setProperty(NodeProperties.TYPE, c);
-	return c;
+        Class c = null;
+        try {
+            c = context.lookupClass(node.getRepresentation());
+        } catch (ClassNotFoundException e) {
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { node.getRepresentation() });
+            throw new ExecutionError("undefined.class", node);
+        }
+        node.setProperty(NodeProperties.TYPE, c);
+        return c;
     }
-	
+
     /**
      * Visits a ArrayType
      * @param node the node to visit
@@ -910,7 +942,7 @@ public class TypeChecker extends VisitorObject {
         Node eType = node.getElementType();
         Class c = (Class)eType.acceptVisitor(this);
         Class ac = Array.newInstance(c, 0).getClass();
-        
+
         // Set the type property of this node
         node.setProperty(NodeProperties.TYPE, ac);
         return ac;
@@ -921,10 +953,10 @@ public class TypeChecker extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(TypeExpression node) {
-	Class c = (Class)node.getType().acceptVisitor(this);
+        Class c = (Class)node.getType().acceptVisitor(this);
         node.setProperty(NodeProperties.TYPE, Class.class);
         node.setProperty(NodeProperties.VALUE, c);
-	return Class.class;
+        return Class.class;
     }
 
     /**
@@ -976,11 +1008,11 @@ public class TypeChecker extends VisitorObject {
                 o = new Integer(((Character)o).charValue());
             }
             if (c == int.class) {
-		o = new Integer(~((Number)o).intValue());
+                o = new Integer(~((Number)o).intValue());
             } else {
-		o = new Long(~((Number)o).longValue());
+                o = new Long(~((Number)o).longValue());
             }
-	    node.setProperty(NodeProperties.VALUE, o);
+            node.setProperty(NodeProperties.VALUE, o);
         }
         return c;
     }
@@ -1029,13 +1061,13 @@ public class TypeChecker extends VisitorObject {
         Node  rn = node.getRightExpression();
         Class lc = (Class)ln.acceptVisitor(this);
         Class rc = (Class)rn.acceptVisitor(this);
-	Class c  = String.class;
+        Class c  = String.class;
 
-	if (lc != String.class && rc != String.class) {
-	    c = visitNumericExpression(node, "addition.type");
-	} else {
-	    node.setProperty(NodeProperties.TYPE, c = String.class);
-	}
+        if (lc != String.class && rc != String.class) {
+            c = visitNumericExpression(node, "addition.type");
+        } else {
+            node.setProperty(NodeProperties.TYPE, c = String.class);
+        }
 
         // Compute the expression if it is constant
         if (ln.hasProperty(NodeProperties.VALUE) &&
@@ -1046,7 +1078,7 @@ public class TypeChecker extends VisitorObject {
                                           ln.getProperty(NodeProperties.VALUE),
                                           rn.getProperty(NodeProperties.VALUE)));
         }
-	return c;
+        return c;
     }
 
     /**
@@ -1055,7 +1087,7 @@ public class TypeChecker extends VisitorObject {
      */
     public Object visit(AddAssignExpression node) {
         // Check the types
-	Node  ln = node.getLeftExpression();
+        Node  ln = node.getLeftExpression();
         Class lc = (Class)ln.acceptVisitor(this);
         Class rc = (Class)node.getRightExpression().acceptVisitor(this);
 
@@ -1066,7 +1098,7 @@ public class TypeChecker extends VisitorObject {
                 throw new ExecutionError("addition.type", node);
             }
         }
-        
+
         // The left subexpression must be a variable
         if (!ln.hasProperty(NodeProperties.MODIFIER)) {
             throw new ExecutionError("left.expression", node);
@@ -1106,7 +1138,7 @@ public class TypeChecker extends VisitorObject {
      */
     public Object visit(SubtractAssignExpression node) {
         // Check the types
-	Node  ln = node.getLeftExpression();
+        Node  ln = node.getLeftExpression();
         Class lc = (Class)ln.acceptVisitor(this);
         Class rc = (Class)node.getRightExpression().acceptVisitor(this);
 
@@ -1116,7 +1148,7 @@ public class TypeChecker extends VisitorObject {
             !lc.isPrimitive()   || !rc.isPrimitive()) {
             throw new ExecutionError("subtraction.type", node);
         }
-        
+
         // The left subexpression must be a variable
         if (!ln.hasProperty(NodeProperties.MODIFIER)) {
             throw new ExecutionError("left.expression", node);
@@ -1156,7 +1188,7 @@ public class TypeChecker extends VisitorObject {
      */
     public Object visit(MultiplyAssignExpression node) {
         // Check the types
-	Node  ln = node.getLeftExpression();
+        Node  ln = node.getLeftExpression();
         Class lc = (Class)ln.acceptVisitor(this);
         Class rc = (Class)node.getRightExpression().acceptVisitor(this);
 
@@ -1166,7 +1198,7 @@ public class TypeChecker extends VisitorObject {
             !lc.isPrimitive()   || !rc.isPrimitive()) {
             throw new ExecutionError("multiplication.type", node);
         }
-        
+
         // The left subexpression must be a variable
         if (!ln.hasProperty(NodeProperties.MODIFIER)) {
             throw new ExecutionError("left.expression", node);
@@ -1206,7 +1238,7 @@ public class TypeChecker extends VisitorObject {
      */
     public Object visit(DivideAssignExpression node) {
         // Check the types
- 	Node  ln = node.getLeftExpression();
+        Node  ln = node.getLeftExpression();
         Class lc = (Class)ln.acceptVisitor(this);
         Class rc = (Class)node.getRightExpression().acceptVisitor(this);
 
@@ -1216,7 +1248,7 @@ public class TypeChecker extends VisitorObject {
             !lc.isPrimitive()   || !rc.isPrimitive()) {
             throw new ExecutionError("division.type", node);
         }
-        
+
         // The left subexpression must be a variable
         if (!ln.hasProperty(NodeProperties.MODIFIER)) {
             throw new ExecutionError("left.expression", node);
@@ -1244,8 +1276,8 @@ public class TypeChecker extends VisitorObject {
             node.setProperty
                 (NodeProperties.VALUE,
                  InterpreterUtilities.remainder(c,
-						ln.getProperty(NodeProperties.VALUE),
-						rn.getProperty(NodeProperties.VALUE)));
+                                                ln.getProperty(NodeProperties.VALUE),
+                                                rn.getProperty(NodeProperties.VALUE)));
         }
         return c;
     }
@@ -1256,7 +1288,7 @@ public class TypeChecker extends VisitorObject {
      */
     public Object visit(RemainderAssignExpression node) {
         // Check the types
- 	Node  ln = node.getLeftExpression();
+        Node  ln = node.getLeftExpression();
         Class lc = (Class)ln.acceptVisitor(this);
         Class rc = (Class)node.getRightExpression().acceptVisitor(this);
 
@@ -1266,7 +1298,7 @@ public class TypeChecker extends VisitorObject {
             !lc.isPrimitive()   || !rc.isPrimitive()) {
             throw new ExecutionError("remainder.type", node);
         }
-        
+
         // The left subexpression must be a variable
         if (!ln.hasProperty(NodeProperties.MODIFIER)) {
             throw new ExecutionError("left.expression", node);
@@ -1289,7 +1321,7 @@ public class TypeChecker extends VisitorObject {
         Class rc = (Class)rn.acceptVisitor(this);
 
         checkEqualityStaticRules(lc, rc, node);
-                                 
+
         // Compute the expression if it is constant
         if (ln.hasProperty(NodeProperties.VALUE) &&
             rn.hasProperty(NodeProperties.VALUE)) {
@@ -1317,15 +1349,15 @@ public class TypeChecker extends VisitorObject {
         Class rc = (Class)rn.acceptVisitor(this);
 
         checkEqualityStaticRules(lc, rc, node);
-                                 
+
         // Compute the expression if it is constant
         if (ln.hasProperty(NodeProperties.VALUE) &&
             rn.hasProperty(NodeProperties.VALUE)) {
             node.setProperty
                 (NodeProperties.VALUE,
                  InterpreterUtilities.notEqualTo(lc, rc,
-						 ln.getProperty(NodeProperties.VALUE),
-						 rn.getProperty(NodeProperties.VALUE)));
+                                                 ln.getProperty(NodeProperties.VALUE),
+                                                 rn.getProperty(NodeProperties.VALUE)));
         }
 
         // Set the type property
@@ -1370,7 +1402,7 @@ public class TypeChecker extends VisitorObject {
             node.setProperty
                 (NodeProperties.VALUE,
                  InterpreterUtilities.lessOrEqual(ln.getProperty(NodeProperties.VALUE),
-						  rn.getProperty(NodeProperties.VALUE)));
+                                                  rn.getProperty(NodeProperties.VALUE)));
         }
         return c;
     }
@@ -1412,7 +1444,7 @@ public class TypeChecker extends VisitorObject {
             node.setProperty
                 (NodeProperties.VALUE,
                  InterpreterUtilities.greaterOrEqual(ln.getProperty(NodeProperties.VALUE),
-						  rn.getProperty(NodeProperties.VALUE)));
+                                                  rn.getProperty(NodeProperties.VALUE)));
         }
         return c;
     }
@@ -1647,7 +1679,7 @@ public class TypeChecker extends VisitorObject {
                  (((Boolean)ln.getProperty(NodeProperties.VALUE)).booleanValue() &&
                   ((Boolean)rn.getProperty(NodeProperties.VALUE)).booleanValue())
                  ? Boolean.TRUE : Boolean.FALSE);
-	}
+        }
 
         // Set the type property
         node.setProperty(NodeProperties.TYPE, boolean.class);
@@ -1677,7 +1709,7 @@ public class TypeChecker extends VisitorObject {
                  (((Boolean)ln.getProperty(NodeProperties.VALUE)).booleanValue() ||
                   ((Boolean)rn.getProperty(NodeProperties.VALUE)).booleanValue())
                  ? Boolean.TRUE : Boolean.FALSE);
-	}
+        }
 
         // Set the type property
         node.setProperty(NodeProperties.TYPE, boolean.class);
@@ -1765,7 +1797,7 @@ public class TypeChecker extends VisitorObject {
                 ec = (c1 == char.class) ? char.class : short.class;
             } else {
                 ec = int.class;
-            }       
+            }
         } else if (c1 == double.class || c2 == double.class) {
             ec = double.class;
         } else if (c1 == float.class || c2 == float.class) {
@@ -1794,7 +1826,7 @@ public class TypeChecker extends VisitorObject {
             context.define(node.getName(), c);
         }
         node.setProperty(NodeProperties.TYPE, c);
-	
+
         return c;
     }
 
@@ -1919,7 +1951,7 @@ public class TypeChecker extends VisitorObject {
         } else {
             throw new ExecutionError(s, node);
         }
-	return c;
+        return c;
     }
 
     /**
@@ -1929,7 +1961,7 @@ public class TypeChecker extends VisitorObject {
         // Set the type property of the given node
         Class lc = NodeProperties.getType(node.getLeftExpression());
         Class rc = NodeProperties.getType(node.getRightExpression());
-	Class c  = null;
+        Class c  = null;
 
         if (lc == null           || rc == null          ||
             lc == boolean.class  || rc == boolean.class ||
@@ -1945,7 +1977,7 @@ public class TypeChecker extends VisitorObject {
         } else {
             node.setProperty(NodeProperties.TYPE, c = int.class);
         }
-	return c;
+        return c;
     }
 
     /**
@@ -1985,22 +2017,22 @@ public class TypeChecker extends VisitorObject {
                     throw new ExecutionError("assignment.types", node);
                 } else if (lc == long.class   &&
                            (rc == null          ||
-			    !rc.isPrimitive()   ||
+                            !rc.isPrimitive()   ||
                             rc == void.class    ||
                             rc == boolean.class ||
                             rc == float.class   ||
                             rc == double.class)) {
                     throw new ExecutionError("assignment.types", node);
-                } else if (lc == float.class  && 
+                } else if (lc == float.class  &&
                            (rc == null          ||
-			    !rc.isPrimitive()   ||
+                            !rc.isPrimitive()   ||
                             rc == void.class    ||
                             rc == boolean.class ||
                             rc == double.class)) {
                     throw new ExecutionError("assignment.types", node);
-                } else if (lc == double.class && 
+                } else if (lc == double.class &&
                            (rc == null        ||
-			    !rc.isPrimitive() ||
+                            !rc.isPrimitive() ||
                             rc == void.class  ||
                             rc == boolean.class)) {
                     throw new ExecutionError("assignment.types", node);
@@ -2054,10 +2086,10 @@ public class TypeChecker extends VisitorObject {
             !lc.isPrimitive()   || !rc.isPrimitive()) {
             throw new ExecutionError("relational.expression.type", node);
         }
-        
+
         // The type of the expression is always boolean
         node.setProperty(NodeProperties.TYPE, boolean.class);
-	return boolean.class;
+        return boolean.class;
     }
 
     /**
@@ -2067,7 +2099,7 @@ public class TypeChecker extends VisitorObject {
         // Check the types
         Class lc = (Class)node.getLeftExpression().acceptVisitor(this);
         Class rc = (Class)node.getRightExpression().acceptVisitor(this);
-	Class c = null;
+        Class c = null;
 
         if (lc == null           || rc == null           ||
             lc == void.class     || rc == void.class     ||
@@ -2083,7 +2115,7 @@ public class TypeChecker extends VisitorObject {
         } else {
             node.setProperty(NodeProperties.TYPE, c = int.class);
         }
-	return c;
+        return c;
     }
 
     /**
@@ -2091,7 +2123,7 @@ public class TypeChecker extends VisitorObject {
      */
     private Class visitBitwiseAssign(BinaryExpression node) {
         // Check the types
-	Node  ln = node.getLeftExpression();
+        Node  ln = node.getLeftExpression();
         Class lc = (Class)ln.acceptVisitor(this);
         Class rc = (Class)node.getRightExpression().acceptVisitor(this);
 
@@ -2108,10 +2140,10 @@ public class TypeChecker extends VisitorObject {
         if (!ln.hasProperty(NodeProperties.MODIFIER)) {
             throw new ExecutionError("left.expression", node);
         }
- 
+
        // Sets the type property of this node
         node.setProperty(NodeProperties.TYPE, lc);
-	return lc;
+        return lc;
      }
 
     /**
@@ -2121,7 +2153,7 @@ public class TypeChecker extends VisitorObject {
         // Check the types
         Class lc = (Class)node.getLeftExpression().acceptVisitor(this);
         Class rc = (Class)node.getRightExpression().acceptVisitor(this);
-	Class c  = null;
+        Class c  = null;
 
         if (lc == null          || rc == null          ||
             lc == boolean.class || rc == boolean.class ||
@@ -2135,7 +2167,7 @@ public class TypeChecker extends VisitorObject {
         } else {
             node.setProperty(NodeProperties.TYPE, c = int.class);
         }
-	return c;
+        return c;
     }
 
     /**

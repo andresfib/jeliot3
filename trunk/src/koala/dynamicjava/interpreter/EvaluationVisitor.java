@@ -1473,7 +1473,7 @@ public class EvaluationVisitor extends VisitorObject {
         ECodeUtilities.write(""+Code.CONSCN+Code.DELIM+EvaluationVisitor.getConstructorCallNumber());
 
         //}
-        try {
+        try { // Jeliot 3
             Object result = context.invokeConstructor(node, args);
             //System.out.println(consName+" wtf");
             ECodeUtilities.write("" + Code.SAC+Code.DELIM+
@@ -1483,7 +1483,24 @@ public class EvaluationVisitor extends VisitorObject {
 
             return result;
 
+        /* Jeliot 3 addition begins */
         } catch (NoSuchMethodError e) {
+            Class[] paramTypes = cons.getParameterTypes();
+            int n = paramTypes.length;
+            String params = "(";
+            for (int i = 0; i < n; i++) {
+                params += paramTypes[i].getName();
+                if (i == n-1) {
+                    break;
+                }
+                params += ",";
+            }
+            params += ")";
+
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { consName + params, declaringClass });
+            throw new ExecutionError("j3.no.such.constructor", node);
+        }/* catch (NoSuchMethodException e) {
             Class[] paramTypes = cons.getParameterTypes();
             int n = paramTypes.length;
             String params = "(";
@@ -1500,7 +1517,8 @@ public class EvaluationVisitor extends VisitorObject {
                              new String[] { consName + params, declaringClass });
             throw new ExecutionError("j3.no.such.constructor", node);
         }
-
+        */
+        /* Jeliot 3 addition ends */
     }
 
     /**
