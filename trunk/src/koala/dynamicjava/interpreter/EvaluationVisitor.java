@@ -233,6 +233,13 @@ public class EvaluationVisitor extends VisitorObject {
     public static boolean isSetPreparing() {
         return preparing;
     }
+    
+    /**
+     *  shortCircuit will indicate if we evaluate && and || in shor circuit
+     * TODO: place it somewhere more reasonable 
+     */
+    
+    public boolean shortCircuit=true;
 
     /**
      * Returns constructorCall value
@@ -1280,20 +1287,32 @@ public class EvaluationVisitor extends VisitorObject {
         // Check if the static method call is one of our Input methods
         // Hardcoded!!! TO BE CHANGED
         Object result = null;
+        
+        // If true Input Class, if false Lue class
+        boolean inputClass=false;
         if (m.getDeclaringClass().getName().equals("jeliot.io.Input")) {
-            if (m.getName().equals("readInt")) {
+        	inputClass = true;
+        }
+		 
+        if (inputClass  ||m.getDeclaringClass().getName().equals("jeliot.io.Lue") ) {
+        String methodName=m.getName();
+            if (inputClass && methodName.equals("readInt") || 
+            		(!inputClass && methodName.equals("kluku"))) {
                 MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter++) + Code.DELIM
                         + int.class.getName() + Code.DELIM + MCodeUtilities.locationToString(node));
                 result = MCodeUtilities.readInt();
-            } else if (m.getName().equals("readDouble")) {
+            } else if (inputClass && methodName.equals("readDouble") || 
+            		(!inputClass && methodName.equals("dluku"))) {
                 MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter++) + Code.DELIM
                         + double.class.getName() + Code.DELIM + MCodeUtilities.locationToString(node));
                 result = MCodeUtilities.readDouble();
-            } else if (m.getName().equals("readChar")) {
+            } else if (inputClass && methodName.equals("readChar") || 
+            		(!inputClass && methodName.equals("merkki"))) {
                 MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter++) + Code.DELIM
                         + char.class.getName() + Code.DELIM + MCodeUtilities.locationToString(node));
                 result = MCodeUtilities.readChar();
-            } else if (m.getName().equals("readString")) {
+            } else if (inputClass && methodName.equals("readString") || 
+            		(!inputClass && methodName.equals("rivi"))) {
                 MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter++) + Code.DELIM
                         + String.class.getName() + Code.DELIM + MCodeUtilities.locationToString(node));
                 result = MCodeUtilities.readString();
@@ -2743,10 +2762,21 @@ public class EvaluationVisitor extends VisitorObject {
             // The expression is constant
             return node.getProperty(NodeProperties.VALUE);
         } else {
+        	long condcounter = counter;
             Boolean b = (Boolean) node.getConditionExpression().acceptVisitor(this);
+            //TODO: There should be a better way to do this. But Assigment is waiting for the initial counter,
+            // that condition modifies here, and thus we need to reset it after evaluating the condition
+            counter=condcounter;
             if (b.booleanValue()) {
+            	MCodeUtilities.write("" + Code.IFTE + Code.DELIM + condcounter + Code.DELIM + Code.TRUE
+                        + Code.DELIM + MCodeUtilities.locationToString(node.getIfTrueExpression()));
+
                 return node.getIfTrueExpression().acceptVisitor(this);
             } else {
+            	MCodeUtilities.write("" + Code.IFTE + Code.DELIM + condcounter + Code.DELIM + Code.FALSE
+                        + Code.DELIM + MCodeUtilities.locationToString(node.getIfFalseExpression()));
+
+
                 return node.getIfFalseExpression().acceptVisitor(this);
             }
         }
@@ -3502,25 +3532,36 @@ public class EvaluationVisitor extends VisitorObject {
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         boolean left = ((Boolean) node.getLeftExpression().acceptVisitor(this)).booleanValue();
-        long auxcounter2 = counter;
-        MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
-        boolean right = ((Boolean) node.getRightExpression().acceptVisitor(this)).booleanValue();
-
-        if (left && right) {
-
-            MCodeUtilities.write("" + Code.AND + Code.DELIM + andcounter + Code.DELIM + auxcounter
-                    + Code.DELIM + auxcounter2 + Code.DELIM + Code.TRUE + Code.DELIM
-                    + NodeProperties.getType(node).getName() + Code.DELIM + MCodeUtilities.locationToString(node));
-
-            return Boolean.TRUE;
-
-        } else {
-
-            MCodeUtilities.write("" + Code.AND + Code.DELIM + andcounter + Code.DELIM + auxcounter
-                    + Code.DELIM + auxcounter2 + Code.DELIM + Code.FALSE + Code.DELIM
+        
+        if (!left && shortCircuit){
+        	MCodeUtilities.write("" + Code.AND + Code.DELIM + andcounter + Code.DELIM + auxcounter
+                    + Code.DELIM + Code.NO_REFERENCE + Code.DELIM + Code.FALSE + Code.DELIM
                     + NodeProperties.getType(node).getName() + Code.DELIM + MCodeUtilities.locationToString(node));
 
             return Boolean.FALSE;
+
+        }else{
+        	
+	        long auxcounter2 = counter;
+	        MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
+	        boolean right = ((Boolean) node.getRightExpression().acceptVisitor(this)).booleanValue();
+	
+	        if (left && right) {
+	
+	            MCodeUtilities.write("" + Code.AND + Code.DELIM + andcounter + Code.DELIM + auxcounter
+	                    + Code.DELIM + auxcounter2 + Code.DELIM + Code.TRUE + Code.DELIM
+	                    + NodeProperties.getType(node).getName() + Code.DELIM + MCodeUtilities.locationToString(node));
+	
+	            return Boolean.TRUE;
+	
+	        } else {
+	
+	            MCodeUtilities.write("" + Code.AND + Code.DELIM + andcounter + Code.DELIM + auxcounter
+	                    + Code.DELIM + auxcounter2 + Code.DELIM + Code.FALSE + Code.DELIM
+	                    + NodeProperties.getType(node).getName() + Code.DELIM + MCodeUtilities.locationToString(node));
+	
+	            return Boolean.FALSE;
+	        }
         }
     }
 
@@ -3536,25 +3577,35 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + MCodeUtilities.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
         boolean left = ((Boolean) node.getLeftExpression().acceptVisitor(this)).booleanValue();
-        long auxcounter2 = counter;
-        MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
-        boolean right = ((Boolean) node.getRightExpression().acceptVisitor(this)).booleanValue();
-
-        if (left || right) {
-
-            MCodeUtilities.write("" + Code.OR + Code.DELIM + orcounter + Code.DELIM + auxcounter
-                    + Code.DELIM + auxcounter2 + Code.DELIM + Code.TRUE + Code.DELIM
+        
+        if (left && shortCircuit){
+        	MCodeUtilities.write("" + Code.OR + Code.DELIM + orcounter + Code.DELIM + auxcounter
+                    + Code.DELIM + Code.NO_REFERENCE + Code.DELIM + Code.TRUE + Code.DELIM
                     + NodeProperties.getType(node).getName() + Code.DELIM + MCodeUtilities.locationToString(node));
 
             return Boolean.TRUE;
 
-        } else {
-
-            MCodeUtilities.write("" + Code.OR + Code.DELIM + orcounter + Code.DELIM + auxcounter
-                    + Code.DELIM + auxcounter2 + Code.DELIM + Code.FALSE + Code.DELIM
-                    + NodeProperties.getType(node).getName() + Code.DELIM + MCodeUtilities.locationToString(node));
-
-            return Boolean.FALSE;
+        }else{
+	        long auxcounter2 = counter;
+	        MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
+	        boolean right = ((Boolean) node.getRightExpression().acceptVisitor(this)).booleanValue();
+	
+	        if (left || right) {
+	
+	            MCodeUtilities.write("" + Code.OR + Code.DELIM + orcounter + Code.DELIM + auxcounter
+	                    + Code.DELIM + auxcounter2 + Code.DELIM + Code.TRUE + Code.DELIM
+	                    + NodeProperties.getType(node).getName() + Code.DELIM + MCodeUtilities.locationToString(node));
+	
+	            return Boolean.TRUE;
+	
+	        } else {
+	
+	            MCodeUtilities.write("" + Code.OR + Code.DELIM + orcounter + Code.DELIM + auxcounter
+	                    + Code.DELIM + auxcounter2 + Code.DELIM + Code.FALSE + Code.DELIM
+	                    + NodeProperties.getType(node).getName() + Code.DELIM + MCodeUtilities.locationToString(node));
+	
+	            return Boolean.FALSE;
+	        }
         }
     }
 
