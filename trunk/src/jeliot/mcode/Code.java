@@ -234,7 +234,11 @@ public class Code {
 	public static final int FIELD = 62;
 
 	public static final int CAST = 73;
-	//Last int used = 73
+
+	/** Static field access */
+	public static final int SFA = 74;
+	
+	//Last int used = 74
 }
 
 //package jeliot.ecode;
