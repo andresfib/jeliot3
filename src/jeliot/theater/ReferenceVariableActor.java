@@ -5,19 +5,33 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         8.8.1999
-  * revised         18.9.1999
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class ReferenceVariableActor extends VariableActor {
 
-    private int refWidth = 6;
-    private int refLen = 15;
-    private ReferenceActor refActor;
-    private ReferenceActor reservedRefActor;
+    /**
+	 *
+	 */
+	private int refWidth = 6;
+    /**
+	 *
+	 */
+	private int refLen = 15;
+    /**
+	 *
+	 */
+	private ReferenceActor refActor;
+    /**
+	 *
+	 */
+	private ReferenceActor reservedRefActor;
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         int w = width;
         int h = height;
         int bw = borderWidth;
@@ -94,7 +108,10 @@ public class ReferenceVariableActor extends VariableActor {
         }
     }
 
-    public void setBounds(int x, int y, int w, int h) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setBounds(int, int, int, int)
+	 */
+	public void setBounds(int x, int y, int w, int h) {
         int oldw = getWidth();
         int oldh = getHeight();
         super.setBounds(x, y, w, h);
@@ -104,7 +121,10 @@ public class ReferenceVariableActor extends VariableActor {
         }
     }
 
-    public void calculateSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#calculateSize()
+	 */
+	public void calculateSize() {
         FontMetrics fm = getFontMetrics();
         int sw = fm.stringWidth(name);
         int sh = fm.getHeight();
@@ -115,11 +135,17 @@ public class ReferenceVariableActor extends VariableActor {
                 Math.max(valueh, sh));
     }
 
-    public void setReference(ReferenceActor refActor) {
+    /**
+	 * @param refActor
+	 */
+	public void setReference(ReferenceActor refActor) {
         this.refActor = refActor;
     }
 
-    public Point reserve(ValueActor actor) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.VariableActor#reserve(jeliot.theater.ValueActor)
+	 */
+	public Point reserve(ValueActor actor) {
         if (actor instanceof ReferenceActor) {
                return reserve((ReferenceActor) actor);
         } else {
@@ -127,7 +153,11 @@ public class ReferenceVariableActor extends VariableActor {
         }
     }
 
-    public Point reserve(ReferenceActor actor) {
+    /**
+	 * @param actor
+	 * @return
+	 */
+	public Point reserve(ReferenceActor actor) {
         this.reservedRefActor = actor;
         Point rp = getRootLocation();
         int w = actor.width;
@@ -137,7 +167,10 @@ public class ReferenceVariableActor extends VariableActor {
         return rp;
     }
 
-    public void bind() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.VariableActor#bind()
+	 */
+	public void bind() {
         this.refActor = this.reservedRefActor;
         refActor.setParent(this);
 
@@ -145,17 +178,26 @@ public class ReferenceVariableActor extends VariableActor {
                             (height - refActor.height)/2 + borderWidth);
     }
 
-    public void setValue(ReferenceActor actor) {
+    /**
+	 * @param actor
+	 */
+	public void setValue(ReferenceActor actor) {
         this.reservedRefActor = actor;
         bind();
     }
 
-    public ValueActor getValue() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.VariableActor#getValue()
+	 */
+	public ValueActor getValue() {
         ValueActor act = (ReferenceActor) this.refActor.clone();
         return act;
     }
 
-    public void theatreResized() {
+    /**
+	 * 
+	 */
+	public void theatreResized() {
         if (refActor != null) {
             refActor.calculateBends();
         }

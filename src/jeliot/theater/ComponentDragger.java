@@ -9,24 +9,52 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 /**
-  * ComponentDragger is for Theatre's components to be dragged.
-  * NOT CURRENTLY USED IN JELIOT!
-  *
-  * @author Pekka Uronen
-  */
+ * This class is not currently used by Jeliot.
+ * ComponentDragger is helping the draggin of the Theater's components.
+ *
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class ComponentDragger implements MouseListener,
                                          MouseMotionListener {
-    final static int FREE   = 0;
-    final static int DRAG   = 1;
-    final static int RESIZE = 2;
-    final static int FIXED  = 3;
+    /**
+	 *
+	 */
+	final static int FREE   = 0;
+    /**
+	 *
+	 */
+	final static int DRAG   = 1;
+    /**
+	 *
+	 */
+	final static int RESIZE = 2;
+    /**
+	 *
+	 */
+	final static int FIXED  = 3;
 
-    int mode = FREE;
-    Point dragPoint;
-    Dimension origSize;
-    Component comp;
+    /**
+	 *
+	 */
+	int mode = FREE;
+    /**
+	 *
+	 */
+	Point dragPoint;
+    /**
+	 *
+	 */
+	Dimension origSize;
+    /**
+	 *
+	 */
+	Component comp;
 
-    public ComponentDragger(Component comp) {
+    /**
+	 * @param comp
+	 */
+	public ComponentDragger(Component comp) {
         this.comp = comp;
         comp.addMouseListener(this);
         comp.addMouseMotionListener(this);
@@ -34,19 +62,29 @@ public class ComponentDragger implements MouseListener,
     }
 
 
-    boolean inStretchArea(Point p) {
+    /**
+	 * @param p
+	 * @return
+	 */
+	boolean inStretchArea(Point p) {
         Dimension d = comp.getSize();
         return (p.x > d.width - 8) && (p.y > d.height-8);
     }
 
-    public void mousePressed(MouseEvent e) {
+    /* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
+	 */
+	public void mousePressed(MouseEvent e) {
         dragPoint = new Point(e.getX(), e.getY());
         origSize = comp.getSize();
         mode = inStretchArea(dragPoint) ? RESIZE : DRAG;
 
     }
 
-    public void mouseDragged(MouseEvent e) {
+    /* (non-Javadoc)
+	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 */
+	public void mouseDragged(MouseEvent e) {
         switch (mode) {
             case (DRAG):
                 Point loc = comp.getLocation();
@@ -64,18 +102,36 @@ public class ComponentDragger implements MouseListener,
 
     }
 
-    public void mouseReleased(MouseEvent e) {
+    /* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 */
+	public void mouseReleased(MouseEvent e) {
         mode = FREE;
         comp.invalidate();
         comp.validate();
     }
 
-    public boolean isFree() {
+    /**
+	 * @return
+	 */
+	public boolean isFree() {
         return mode == FREE;
     }
 
-    public void mouseClicked(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseMoved(MouseEvent e) {}
+    /* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+	 */
+	public void mouseClicked(MouseEvent e) {}
+    /* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
+	 */
+	public void mouseExited(MouseEvent e) {}
+    /* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
+	 */
+	public void mouseEntered(MouseEvent e) {}
+    /* (non-Javadoc)
+	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 */
+	public void mouseMoved(MouseEvent e) {}
 }

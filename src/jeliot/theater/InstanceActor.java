@@ -4,27 +4,42 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         10.10.1999
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller 
+ */
 public class InstanceActor extends Actor implements ActorContainer {
 
-    private Vector references = new Vector();
+    /**
+	 *
+	 */
+	private Vector references = new Vector();
 
-    public void addReference(ReferenceActor ref) {
+    /**
+	 * @param ref
+	 */
+	public void addReference(ReferenceActor ref) {
         references.addElement(ref);
     }
 
-    public void removeReference(ReferenceActor ref) {
+    /**
+	 * @param ref
+	 */
+	public void removeReference(ReferenceActor ref) {
         references.removeElement(ref);
     }
 
-    public int getNumberOfReferences() {
+    /**
+	 * @return
+	 */
+	public int getNumberOfReferences() {
         return references.size();
     }
 
-    public void setLocation(int x, int y) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setLocation(int, int)
+	 */
+	public void setLocation(int x, int y) {
         super.setLocation(x, y);
         Enumeration enum = references.elements();
         while (enum.hasMoreElements()) {
@@ -33,7 +48,10 @@ public class InstanceActor extends Actor implements ActorContainer {
         }
     }
 
-    public void removeActor(Actor actor) { }
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+	 */
+	public void removeActor(Actor actor) { }
 
 
 }

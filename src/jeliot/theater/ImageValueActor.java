@@ -10,19 +10,34 @@ import java.awt.Image;
   */
 public class ImageValueActor extends ValueActor {
 
-    private Image image;
+    /**
+	 *
+	 */
+	private Image image;
 
-    public ImageValueActor(Image image) {
+    /**
+	 * @param image
+	 */
+	public ImageValueActor(Image image) {
         this.image = image;
 	}
 
-    public void paintValue(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ValueActor#paintValue(java.awt.Graphics)
+	 */
+	public void paintValue(Graphics g) {
         g.drawImage(image, 0, 0, null);
     }
 
-    protected void calcLabelPosition() { }
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ValueActor#calcLabelPosition()
+	 */
+	protected void calcLabelPosition() { }
     
-    public void calculateSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#calculateSize()
+	 */
+	public void calculateSize() {
         setSize(image.getWidth(null), image.getHeight(null));
     }
 

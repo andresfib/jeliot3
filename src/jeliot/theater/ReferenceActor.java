@@ -8,14 +8,21 @@ import java.awt.Point;
 import java.awt.Polygon;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         10.10.1999
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class ReferenceActor extends ValueActor {
 
-    private InstanceActor instance = null;
-    private VariableActor variable = null;
+    /**
+	 *
+	 */
+	private InstanceActor instance = null;
+    
+    /**
+	 *
+	 */
+	private VariableActor variable = null;
 
     /**
      * Reference width is the width of the rectangle
@@ -42,47 +49,81 @@ public class ReferenceActor extends ValueActor {
     private Polygon arrowheadPolygon1;
     private Polygon arrowheadPolygon2;
 
-    public ReferenceActor() {
+    /**
+	 * 
+	 */
+	public ReferenceActor() {
         refWidthRandom += (int) (Math.random() * 15);
     }
 
-    public ReferenceActor(InstanceActor inst) {
+    /**
+	 * @param inst
+	 */
+	public ReferenceActor(InstanceActor inst) {
         this();
         this.instance = inst;
     }
 
-    public ReferenceActor(InstanceActor inst, boolean instVarConnect) {
+    /**
+	 * @param inst
+	 * @param instVarConnect
+	 */
+	public ReferenceActor(InstanceActor inst, boolean instVarConnect) {
         this(inst);
         this.instVarConnect = instVarConnect;
     }
 
-    public ReferenceActor(InstanceActor inst, VariableActor var) {
+    /**
+	 * @param inst
+	 * @param var
+	 */
+	public ReferenceActor(InstanceActor inst, VariableActor var) {
         this(inst);
         this.variable = var;
     }
 
-    public ReferenceActor(InstanceActor inst, VariableActor var, boolean instVarConnect) {
+    /**
+	 * @param inst
+	 * @param var
+	 * @param instVarConnect
+	 */
+	public ReferenceActor(InstanceActor inst, VariableActor var, boolean instVarConnect) {
         this(inst, var);
         this.instVarConnect = instVarConnect;
     }
 
-    public InstanceActor getInstanceActor() {
+    /**
+	 * @return
+	 */
+	public InstanceActor getInstanceActor() {
         return this.instance;
     }
 
-    public void setInstanceActor(InstanceActor inst) {
+    /**
+	 * @param inst
+	 */
+	public void setInstanceActor(InstanceActor inst) {
         this.instance = inst;
     }
 
-    public void setVariableActor(VariableActor var) {
+    /**
+	 * @param var
+	 */
+	public void setVariableActor(VariableActor var) {
         this.variable = var;
     }
 
-    public VariableActor getVariableActor() {
+    /**
+	 * @return
+	 */
+	public VariableActor getVariableActor() {
         return this.variable;
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
 
         Color bc = bgcolor;
         Color fc = fgcolor;
@@ -201,7 +242,10 @@ public class ReferenceActor extends ValueActor {
         }
     }
 
-    public void calculateBends() {
+    /**
+	 * 
+	 */
+	public void calculateBends() {
         Point ip = instance.getRootLocation();
         Point vp = this.getRootLocation();
 
@@ -249,7 +293,11 @@ public class ReferenceActor extends ValueActor {
         }
     }
 
-    /** dir is 1 up, 2 right, 3 down and 4 left */
+    /**
+     *  
+     * dir is 1 up, 2 right, 3 down and 4 left.
+	 * @param dir
+	 */
     public void calculateArrowhead(int dir) {
         int n = bend.length - 1;
 
@@ -367,11 +415,17 @@ public class ReferenceActor extends ValueActor {
         }
     }
 
-    public void calculateSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#calculateSize()
+	 */
+	public void calculateSize() {
         setSize(getPreferredSize());
     }
 
-    public int getReferenceWidth() {
+    /**
+	 * @return
+	 */
+	public int getReferenceWidth() {
         calculateBends();
         if (instance != null) {
             return bend[1].x - bend[0].x + 4;
@@ -380,7 +434,10 @@ public class ReferenceActor extends ValueActor {
         }
     }
 
-    public Dimension getPreferredSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ValueActor#getPreferredSize()
+	 */
+	public Dimension getPreferredSize() {
         FontMetrics fm = getFontMetrics();
         int h = fm.getHeight();
         int w = refWidth;

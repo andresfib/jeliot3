@@ -5,6 +5,12 @@ package jeliot.theater;
   * @author Niko Myller
   */
 public interface Controlled {
-    public abstract void suspend();
-    public abstract void resume();
+    /**
+	 * 
+	 */
+	public abstract void suspend();
+    /**
+	 * 
+	 */
+	public abstract void resume();
 }

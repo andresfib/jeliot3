@@ -12,24 +12,44 @@ import java.awt.Point;
   */
 public class IndexActor extends Actor {
 
-    private Actor source;
+    /**
+	 *
+	 */
+	private Actor source;
 
-    private Point startPoint;
-    private Point endPoint;
+    /**
+	 *
+	 */
+	private Point startPoint;
+    
+    /**
+	 *
+	 */
+	private Point endPoint;
 
-    public IndexActor(Actor source) {
+    /**
+	 * @param source
+	 */
+	public IndexActor(Actor source) {
         this.source = source;
         this.fgcolor = Color.white;
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         g.setColor(fgcolor);
         g.drawLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y);
         g.drawLine(startPoint.x, startPoint.y+1, endPoint.x, endPoint.y+1);
         g.drawLine(startPoint.x, startPoint.y-1, endPoint.x, endPoint.y-1);
     }
 
-    public Animation index(VariableInArrayActor varAct) {
+    /**
+	 * @param varAct
+	 * @return
+	 */
+	public Animation index(VariableInArrayActor varAct) {
 
         final Point finalPoint = varAct.getRootLocation();
         finalPoint.translate(0, varAct.getHeight()/2);
@@ -79,7 +99,5 @@ public class IndexActor extends Actor {
                 this.passivate((Actor)IndexActor.this);
             }
         };
-
     }
-
 }

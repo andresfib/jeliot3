@@ -73,17 +73,10 @@ Class \jel{} in the package \p{jeliot} is the main class of the program. It comb
 \subsection{User Interface}
 \label{sec:User_Interface}
 
-The user interface of Jeliot is located in the package \p{jeliot.gui}. The structure of the user interface is shown in the Figure~\ref{fig:jeliot3_UI_structure}. The main class is \p{JeliotWindow} that extends \p{JFrame}. The frame is layed out by \p{BorderLayout}. A split pane (\p{JSplitPane}) is added in the center and a panel containing the control panel (created in \p{JeliotWindow}) and the output console (\p{OutputConsole}) is added in the south (bottom) border.
+The user interface of Jeliot is located in the package \p{jeliot.gui}. The structure of the user interface and the actual user interface are shown in the Figures~\ref{fig:jeliot3_UI_structure} and \ref{fig:jeliot3_UI}. The main class is \p{JeliotWindow} that extends \p{JFrame}. The frame is layed out by \p{BorderLayout}. A split pane (\p{JSplitPane}) is added in the center and a panel containing the control panel (created in \p{JeliotWindow}) and the output console (\p{OutputConsole}) is added in the south (bottom) border.
 
-In the split pane the left side is used by the code editor (\p{CodeEditor}) or the code viewer (\p{CodeViewer}). The code editor is shown during editing of the program and the code viewer during the animation of the program. Both of the text components have a line numbering component (\p{LineNumbers} on their row header). The code editor consist of an editing panel that has buttons to load, save and edit the source code. The frame has also a menu bar that is constructed partially in the \p{CodeEditor} class and partially in the \p{JeliotWindow} class.
 
-On the right hand side of the split pane a animation engine called theater (\p{Theatre}) is normally shown. However, if any errors occur during the compilation or run-time of the program they are shown in the \p{Error viewer} (\p{ErrorViewer}) instead of theater.
-
-\p{JeliotWindow} combines all the components in the \p{jeliot.gui} package and creates the user interface. It also deals with most of the events happening during {run-time} and delegates the commands to the appropriate classes (e.g. \p{Jeliot} or \p{CodeEditor}). Other classes in the \p{gui} package are related to one of the components introduced in the previous paragraph.
-
-There are also three classes that are not currently in use in \jel{}~3, namely \p{LoadJeliot}, \p{DraggableComponent} and \p{TheatrePopup}. LoadJeliot class could be used to show a splash screen in the startup of the program. DraggableComponent is an class that a DraggableComponent could extend to be dragged during the visualization. TheatrePopup class could be used to have a popup menu on the visualization frame. This popup menu could show, for example, methods of the object.
-
-\begin{figure}[htbp]
+\begin{figure}[htb]
 \begin{center}
 \begin{picture}(300,200)
 %overall frame
@@ -103,6 +96,22 @@ There are also three classes that are not currently in use in \jel{}~3, namely \
 \label{fig:jeliot3_UI_structure}
 \end{center}
 \end{figure}
+
+In the split pane the left side is used by the code editor (\p{CodeEditor}) or the code viewer (\p{CodeViewer}). The code editor is shown during editing of the program and the code viewer during the animation of the program. Both of the text components have a line numbering component (\p{LineNumbers} on their row header). The code editor consist of an editing panel that has buttons to load, save and edit the source code. The frame has also a menu bar that is constructed partially in the \p{CodeEditor} class and partially in the \p{JeliotWindow} class.
+
+On the right hand side of the split pane a animation engine called theater (\p{Theatre}) is normally shown. However, if any errors occur during the compilation or run-time of the program they are shown in the \p{Error viewer} (\p{ErrorViewer}) instead of theater.
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=\textwidth]{images/jeliot3.eps}
+\caption{The user interface of Jeliot~3.}
+\label{fig:jeliot3_UI}
+\end{center}
+\end{figure}
+
+\p{JeliotWindow} combines all the components in the \p{jeliot.gui} package and creates the user interface. It also deals with most of the events happening during {run-time} and delegates the commands to the appropriate classes (e.g. \p{Jeliot} or \p{CodeEditor}). Other classes in the \p{gui} package are related to one of the components introduced in the previous paragraph.
+
+There are also three classes that are not currently in use in \jel{}~3, namely \p{LoadJeliot}, \p{DraggableComponent} and \p{TheatrePopup}. LoadJeliot class could be used to show a splash screen in the startup of the program. DraggableComponent is an class that a DraggableComponent could extend to be dragged during the visualization. TheatrePopup class could be used to have a popup menu on the visualization frame. This popup menu could show, for example, methods of the object.
 
 \subsection{DynamicJava}
 \label{sec:DynamicJava}

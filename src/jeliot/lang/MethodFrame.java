@@ -13,20 +13,39 @@ import jeliot.theater.*;
   */
 public class MethodFrame {
 
-    private MethodStage stage;
-    //private int depth;
+    /**
+	 *
+	 */
+	private MethodStage stage;
+    /**
+	 *
+	 */
+	//private int depth;
 
     private Stack vars;
-    private int vcount = 0;
+    /**
+	 *
+	 */
+	private int vcount = 0;
 
-    private String name;
+    /**
+	 *
+	 */
+	private String name;
 
-    public MethodFrame(String name) {
+    /**
+	 * @param name
+	 */
+	public MethodFrame(String name) {
         this.name = name;
         vars = new Stack();
     }
 
-    //public PMethod getMethod() {
+    /**
+	 * @param var
+	 * @return
+	 */
+	//public PMethod getMethod() {
         //return method;
     //}
 
@@ -36,7 +55,11 @@ public class MethodFrame {
         return var;
     }
 
-    public Variable getVariable(String name) {
+    /**
+	 * @param name
+	 * @return
+	 */
+	public Variable getVariable(String name) {
         int size = vars.size();
         for (int i = 0; i < size; ++i) {
             if (vars.elementAt(i) != null) {
@@ -49,30 +72,48 @@ public class MethodFrame {
         return null;
     }
 
-    public void openScope() {
+    /**
+	 * 
+	 */
+	public void openScope() {
         vars.push(null);
         stage.openScope();
     }
 
-    public void closeScope() {
+    /**
+	 * 
+	 */
+	public void closeScope() {
 
         while (vars.pop() != null);
         stage.closeScope();
     }
 
-    public String getMethodName() {
+    /**
+	 * @return
+	 */
+	public String getMethodName() {
         return name;
     }
 
-    public int getVarCount() {
+    /**
+	 * @return
+	 */
+	public int getVarCount() {
         return vcount;
     }
 
-    public MethodStage getMethodStage() {
+    /**
+	 * @return
+	 */
+	public MethodStage getMethodStage() {
         return stage;
     }
 
-    public void setMethodStage(MethodStage stage) {
+    /**
+	 * @param stage
+	 */
+	public void setMethodStage(MethodStage stage) {
         this.stage = stage;
     }
 }

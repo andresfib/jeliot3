@@ -5,22 +5,35 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         13.10.1999
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class VariableInArrayActor extends VariableActor {
 
-    private int indexw;
+    /**
+	 *
+	 */
+	private int indexw;
 
-    public VariableInArrayActor() { }
+    /**
+	 * 
+	 */
+	public VariableInArrayActor() { }
 
-    public VariableInArrayActor(ArrayActor arrayActor, String name) {
+    /**
+	 * @param arrayActor
+	 * @param name
+	 */
+	public VariableInArrayActor(ArrayActor arrayActor, String name) {
         setParent(arrayActor);
         this.name = name;
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         ArrayActor array = (ArrayActor)getParent();
 
         // fill background
@@ -47,9 +60,17 @@ public class VariableInArrayActor extends VariableActor {
 
     }
 
-    protected void calcLabelPosition() { }
+    /* (non-Javadoc)
+	 * @see jeliot.theater.VariableActor#calcLabelPosition()
+	 */
+	protected void calcLabelPosition() { }
 
-    public void calculateSize(int indexw, int valuew, int h) {
+    /**
+	 * @param indexw
+	 * @param valuew
+	 * @param h
+	 */
+	public void calculateSize(int indexw, int valuew, int h) {
         setSize(indexw + 2 + valuew, valueh);
 
         FontMetrics fm = ((ArrayActor)getParent()).getFontMetrics();

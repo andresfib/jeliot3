@@ -10,14 +10,31 @@ import jeliot.theater.*;
   */
 public class ObjectFrame extends Instance {
 
-    private ObjectStage stage;
+    /**
+	 *
+	 */
+	private ObjectStage stage;
 
-    private Hashtable vars;
-    private int vcount = 0;
+    /**
+	 *
+	 */
+	private Hashtable vars;
+    /**
+	 *
+	 */
+	private int vcount = 0;
 
-    private String name;
+    /**
+	 *
+	 */
+	private String name;
 
-    public ObjectFrame(String hashCode, String type, int vcount) {
+    /**
+	 * @param hashCode
+	 * @param type
+	 * @param vcount
+	 */
+	public ObjectFrame(String hashCode, String type, int vcount) {
         super(hashCode, type);
 
         //Name can be changed to something else.
@@ -26,12 +43,20 @@ public class ObjectFrame extends Instance {
         vars = new Hashtable();
     }
 
-    public Variable declareVariable(Variable var) {
+    /**
+	 * @param var
+	 * @return
+	 */
+	public Variable declareVariable(Variable var) {
         vars.put(var.getName(), var);
         return var;
     }
 
-    public Variable getVariable(String name) {
+    /**
+	 * @param name
+	 * @return
+	 */
+	public Variable getVariable(String name) {
         Variable var = (Variable) vars.get(name);
         if (var != null) {
             return var;
@@ -41,19 +66,31 @@ public class ObjectFrame extends Instance {
         }
     }
 
-    public String getObjectName() {
+    /**
+	 * @return
+	 */
+	public String getObjectName() {
         return name;
     }
 
-    public int getVarCount() {
+    /**
+	 * @return
+	 */
+	public int getVarCount() {
         return vcount;
     }
 
-    public ObjectStage getObjectStage() {
+    /**
+	 * @return
+	 */
+	public ObjectStage getObjectStage() {
         return stage;
     }
 
-    public void setObjectStage(ObjectStage stage) {
+    /**
+	 * @param stage
+	 */
+	public void setObjectStage(ObjectStage stage) {
         this.stage = stage;
         setActor(stage);
     }

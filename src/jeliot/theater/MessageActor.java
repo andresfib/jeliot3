@@ -5,29 +5,55 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         17.8.1999
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class MessageActor extends Actor {
 
-    private int borderw = 2;
-    private int padding = 5;
-    private int fheight;
+    /**
+	 *
+	 */
+	private int borderw = 2;
+    
+    /**
+	 *
+	 */
+	private int padding = 5;
+    
+    /**
+	 *
+	 */
+	private int fheight;
 
-    private String[] text;
+    /**
+	 *
+	 */
+	private String[] text;
 
-    private Image backImage;
+    /**
+	 *
+	 */
+	private Image backImage;
 
-    public void setText(String[] text) {
+    /**
+	 * @param text
+	 */
+	public void setText(String[] text) {
         this.text = text;
     }
 
-    public void setBackground(Image backImage) {
+    /**
+	 * @param backImage
+	 */
+	public void setBackground(Image backImage) {
         this.backImage = backImage;
     }
 
-    public void calculateSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#calculateSize()
+	 */
+	public void calculateSize() {
         FontMetrics fm = getFontMetrics();
         int w = 0;
         int n = text.length;
@@ -41,7 +67,10 @@ public class MessageActor extends Actor {
         setSize(w, h);
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
 
         int w = getWidth();
         int h = getHeight();

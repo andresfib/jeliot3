@@ -22,22 +22,40 @@ package jeliot.theater;
   */
 public class AnimationEngine implements Controlled {
 
-    /** Amount of action for one second period */
+    /**
+     * Amount of action for one second period
+     */
     private double volume = 500.0;
+    
+    /**
+     * Default amount of action for one second period
+     */
     private double defaultVolume = 500.0;
 
-    /** Number of times to act per second */
+    /**
+     * Number of times to act per second
+     */
     private double fps = 20.0;
+    
+    /**
+     * Default number of times to act per second
+     */
     private double defaultFPS = 20.0;
 
-    /** True if the animation engine is running */
+    /**
+     * True if the animation engine is running.
+     */
     private boolean running;
 
-    /** The theatre in which the animation takes place. */
+    /**
+     * The theatre in which the animation takes place.
+     */
     private Theater theatre;
 
-    /** The thread controller of this animation engine. If controller
-      * null, it will be called afrter each step of animation. */
+    /**
+     * The thread controller of this animation engine. If controller
+     * null, it will be called after each step of animation.
+     */
     private ThreadController controller;
 
     /** Constructs a new animation engine that will show its animations
@@ -47,38 +65,46 @@ public class AnimationEngine implements Controlled {
         this.theatre = theatre;
     }
 
-    /** Sets the thread controller of this animation engine.
-      */
+    /**
+     * Sets the thread controller of this animation engine.
+     */
     public void setController(ThreadController controller) {
         this.controller = controller;
     }
 
-    /** Sets the number of frames that should be shown in one second.
-      */
+    /**
+     * Sets the number of frames that should be shown in one second.
+     */
     public void setFPS(double fps) {
         this.fps = fps;
     }
 
-    /** Sets the amount of action that is given to each animation at
-      * each step.
-      */
+    /**
+     * Sets the amount of action that is given to each animation at
+     * each step.
+     */
     public void setVolume(double volume) {
         this.volume = volume;
     }
 
-    public void setDefaultValues() {
+    /**
+	 * 
+	 */
+	public void setDefaultValues() {
         this.fps = this.defaultFPS;
         this.volume = this.defaultVolume;
     }
 
-    /** Performs the given animation.
-      */
+    /**
+     * Performs the given animation.
+     */
     public void showAnimation(Animation animation) {
         showAnimation(new Animation [] {animation});
     }
 
-    /** Performs the animations in given array.
-      */
+    /**
+     * Performs the animations in given array.
+     */
     public void showAnimation(Animation[] animations) {
         int n = animations.length;
         int duration = 0;
@@ -150,14 +176,16 @@ public class AnimationEngine implements Controlled {
 
     }
 
-    /** Called by the thread controller when the animation is paused.
-      */
+    /**
+     * Called by the thread controller when the animation is paused.
+     */
     public void suspend() {
         theatre.release();
     }
 
-    /** Called by the thread controller when the animation is resumed.
-      */
+    /**
+     * Called by the thread controller when the animation is resumed.
+     */
     public void resume() {
         theatre.capture();
     }

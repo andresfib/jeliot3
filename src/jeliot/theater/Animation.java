@@ -30,32 +30,40 @@ import java.awt.Point;
   */
 public abstract class Animation {
 
-    /** This flag is set by the finish() method when the animation is
-      * at end. */
+	/**
+     * This flag is set by the finish() method when the animation
+     * is at end.
+     */
     private boolean finished;
 
-    /** The theatre in which the animation takes place. */
+	/**
+     * The theatre in which the animation takes place.
+     */
     private Theater theatre;
 
-    /** The starting time for the animation, in milliseconds. */
+	/**
+     * The starting time for the animation, in milliseconds.
+     */
     private int startTime = 0;
 
-    /** Desired duration of the animation, in milliseconds. */
+	/**
+     * Desired duration of the animation, in milliseconds.
+     */
     private int duration = 1000;
 
-    /** An actor associated with this animation -- the actor that gets
+	/** An actor associated with this animation -- the actor that gets
       * animated.
       */
     private Actor actor;
 
-    /** Initializes the animation. This method is called by the
+	/** Initializes the animation. This method is called by the
       * animation engine before starting the animation, after duration
       * and theatre have been set. To be overriden by subclasses;
       * default implementation does nothing.
       */
     public void init() { }
 
-    /** This method performs the animation. It is abstract, so it must
+	/** This method performs the animation. It is abstract, so it must
       * be implemented by the subclasses.
       *
       * @param p Amount of work to do in this animation step. P of 1000
@@ -65,19 +73,19 @@ public abstract class Animation {
       */
     public abstract void animate(double p);
 
-    /** Finishes the animation. This method may be overriden by
+	/** Finishes the animation. This method may be overriden by
       * subclasses to do something after the animation has finished.
       */
     protected void finish() { }
 
-    /** Finishes the animation.
+	/** Finishes the animation.
       */
     public void doFinish() {
         finish();
         finished = true;
     }
 
-    /** Sets the starting time for this animation.
+	/** Sets the starting time for this animation.
       *
       *@param startTime The desired starting time in milliseconds.
       */
@@ -85,7 +93,7 @@ public abstract class Animation {
          this.startTime = startTime;
     }
 
-    /** Returns the starting time of this animation in milliseconds.
+	/** Returns the starting time of this animation in milliseconds.
       *
       * @return the starting time of this animation in milliseconds.
       */
@@ -93,7 +101,7 @@ public abstract class Animation {
         return startTime;
     }
 
-    /** Sets the desired duration for this animation. The actual
+	/** Sets the desired duration for this animation. The actual
       * duration depends on the speed of the animation engine playing
       * the animation.
       *
@@ -103,7 +111,7 @@ public abstract class Animation {
          this.duration = duration;
     }
 
-    /** Returns the desired duration of this animation in milliseconds.
+	/** Returns the desired duration of this animation in milliseconds.
       *
       * @return the desired duration of this animation in milliseconds.
       */
@@ -111,7 +119,7 @@ public abstract class Animation {
         return duration;
     }
 
-    /** Returns true if the animation has already finished. That is, it
+	/** Returns true if the animation has already finished. That is, it
       * has set its finished-flag.
       *
       * @return true if the animation has already finished. That is, it
@@ -121,17 +129,21 @@ public abstract class Animation {
         return finished;
     }
 
-    /** Sets the theatre in which this animation is played. This method
-      * is called by the animation engine before performing the
-      * animation.
-      */
+    /**
+     * Sets the theatre in which this animation is played. This method
+     * is called by the animation engine before performing the
+     * animation.
+	 * @param theatre
+	 */
     public void setTheatre(Theater theatre) {
         this.theatre = theatre;
     }
 
-    /** Adds an actor to the theatre in which the animation is
-      * performed. Called by subclasses.
-      */
+    /**
+     * Adds an actor to the theatre in which the animation is
+     * performed. Called by subclasses.
+	 * @param actor
+	 */
     protected void addActor(Actor actor) {
         if (actor.getParent() != theatre) {
             Point p = actor.getRootLocation();
@@ -143,21 +155,31 @@ public abstract class Animation {
         }
     }
 
-    protected void passivate(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	protected void passivate(Actor actor) {
         theatre.passivate(actor);
     }
 
-    protected void removeActor(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	protected void removeActor(Actor actor) {
         theatre.removeActor(actor);
     }
 
-    /** Repaints the theatre. This method is called by subclasses
-      * between animation steps.
-      */
+	/**
+     * Repaints the theatre. This method is called by subclasses
+     * between animation steps.
+     */
     protected void repaint() {
         theatre.repaint();
     }
 
-    public void finalFinish() { }
+    /**
+	 * 
+	 */
+	public void finalFinish() { }
 
 }

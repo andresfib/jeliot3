@@ -3,16 +3,23 @@ package jeliot.theater;
 import java.awt.Graphics;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         12.8.1999
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class Trace {
 
-    public void paint(Graphics g) {
+    /**
+	 * @param g
+	 */
+	public void paint(Graphics g) {
     }
 
-    public void putTrace(int x, int y) {
+    /**
+	 * @param x
+	 * @param y
+	 */
+	public void putTrace(int x, int y) {
 
     }
 }

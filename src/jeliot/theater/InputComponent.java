@@ -12,20 +12,35 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         25.8.1999
-  * revised         4.10.1999
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class InputComponent extends JPanel implements ActionListener {
 
-    private InputValidator validator;
-    private JTextField field;
-    private JLabel label;
+    /**
+	 *
+	 */
+	private InputValidator validator;
+    /**
+	 *
+	 */
+	private JTextField field;
+    /**
+	 *
+	 */
+	private JLabel label;
     
-    private Actor bgactor;
+    /**
+	 *
+	 */
+	private Actor bgactor;
     
-    public InputComponent(String prompt, InputValidator validator) {
+    /**
+	 * @param prompt
+	 * @param validator
+	 */
+	public InputComponent(String prompt, InputValidator validator) {
         this.validator = validator;
         
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -40,7 +55,10 @@ public class InputComponent extends JPanel implements ActionListener {
         field.addActionListener(this);
 	}
 	
-    public void paintComponent(Graphics g) {
+    /* (non-Javadoc)
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
+	public void paintComponent(Graphics g) {
         if (bgactor == null) {
             super.paintComponent(g);
         }
@@ -50,19 +68,28 @@ public class InputComponent extends JPanel implements ActionListener {
         }
     }
     
-    public void setBgactor(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void setBgactor(Actor actor) {
         this.bgactor = actor;
         Font font = actor.getFont();
         label.setFont(font);
         field.setFont(font);
     }
 
-    public void popup() {
+    /**
+	 * 
+	 */
+	public void popup() {
        field.requestFocus();
        bgactor.setSize(getSize());
     }
 
-    public void actionPerformed(ActionEvent evt) {
+    /* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	public void actionPerformed(ActionEvent evt) {
         String text = field.getText();
         validator.validate(text);
     }

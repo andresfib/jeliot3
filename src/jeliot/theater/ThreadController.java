@@ -22,86 +22,109 @@ package jeliot.theater;
   */
 public class ThreadController {
 
-    /** Possible states of the controller. */
-    private static final int RUNNING    = 1;
-    private static final int PAUSEREQ   = 2;
-    private static final int PAUSED     = 0;
+	/**
+	 * Possible states of the controller.
+	 */
+	private static final int RUNNING = 1;
 
-    /** Current state of the controller. */
-    private int status;
+	/**
+	 * Possible states of the controller.
+	 */
+	private static final int PAUSEREQ = 2;
 
-    /** The Runnable object controled by this controller. */
-    private Runnable runner;
+	/**
+	 * Possible states of the controller.
+	 */
+	private static final int PAUSED = 0;
 
-    /** A thread in which the Runnable is executed. */
-    private Thread thread;
+	/**
+	 * Current state of the controller.
+	 */
+	private int status;
 
-    /** Constructs a new controller for given Runnable. */
-    public ThreadController(Runnable runner) {
-        this.runner = runner;
-    }
+	/**
+	 * The Runnable object controled by this controller.
+	 */
+	private Runnable runner;
 
-    /** Starts or resumes the Runnable immediately in its own thread.
-      */
-    public synchronized void start() {
-        switch (status) {
-            case (PAUSED):
-                if (thread == null) {
-                    thread = new Thread(runner);
-                    thread.start();
-                }
-                else {
-                    notify();
-                }
-                status = RUNNING;
-                break;
-            default:
-                throw new RuntimeException();
-        }
-    }
+	/**
+	 * A thread in which the Runnable is executed.
+	 */
+	private Thread thread;
 
+	/**
+	 * Constructs a new controller for given Runnable.
+	 * @param runner
+	 */
+	public ThreadController(Runnable runner) {
+		this.runner = runner;
+	}
 
-    /** Instructs the controller to pause execution in next check
-      * point.
-      */
-    public synchronized void pause() {
-        switch (status) {
-            case (RUNNING):
-                status = PAUSEREQ;
-                break;
-            default:
-                throw new RuntimeException();
-        }
-    }
+	/** 
+	 * Starts or resumes the Runnable immediately in its own thread.
+	 */
+	public synchronized void start() {
+		switch (status) {
+			case (PAUSED) :
+				if (thread == null) {
+					thread = new Thread(runner);
+					thread.start();
+				} else {
+					notify();
+				}
+				status = RUNNING;
+				break;
+			default :
+				throw new RuntimeException();
+		}
+	}
 
-    /** Pauses the execution, if pause() method has been called since
-      * previous checkpoint.
-      */
-    public synchronized void checkPoint(Controlled cont) {
-        switch (status) {
-            case (RUNNING):
-                break;
-            case (PAUSEREQ):
-                status = PAUSED;
-                if (cont != null) {
-                    cont.suspend();
-                }
-                try {
-                    wait();
-                }
-                catch (InterruptedException e) { }
-                if (cont != null) {
-                    cont.resume();
-                }
-                status = RUNNING;
-                break;
-            default:
-                throw new RuntimeException();
-        }
-    }
+	/**
+	 * Instructs the controller to pause execution in next check
+	 * point.
+	 */
+	public synchronized void pause() {
+		switch (status) {
+			case (RUNNING) :
+				status = PAUSEREQ;
+				break;
+			default :
+				throw new RuntimeException();
+		}
+	}
 
-    public synchronized void checkPoint() {
-        checkPoint(null);
-    }
+	/**
+	 * Pauses the execution, if pause() method has been called since
+	 * previous checkpoint.
+	 * @param cont
+	 */
+	public synchronized void checkPoint(Controlled cont) {
+		switch (status) {
+			case (RUNNING) :
+				break;
+			case (PAUSEREQ) :
+				status = PAUSED;
+				if (cont != null) {
+					cont.suspend();
+				}
+				try {
+					wait();
+				} catch (InterruptedException e) {}
+				if (cont != null) {
+					cont.resume();
+				}
+				status = RUNNING;
+				break;
+			default :
+				throw new RuntimeException();
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public synchronized void checkPoint() {
+		checkPoint(null);
+	}
 
 }

@@ -65,9 +65,13 @@ For an extensive discussion of the history of \jel{}, see Ben-Ari et al. (2002).
 
 \mysubsection{Release notes}
 
-\begin{description}
-\item[3.2] Initial public release of Java 3.
-\end{description}
+\paragraph{Version 3.2} contains documentation and supports inheritance, supports: inheritance of classes and \p{super()} method calls at the beginning of a constructor.
+
+\paragraph{Version 3.1} supports objects creation and object method calls. Line numbering was added for source code editor and viewer. Supports: User made classes (inheritance is not yet supported), constructor calls, object method calls, object field accesses.
+
+\paragraph{Version 3.01} is a maintenance release. Bugs of the initial release were fixed. Support for \p{switch} statement was added.
+
+\paragraph{Version 3.0} is the initial public release. Supports: Values of type \p{String} and all primitive types, one-dimensional arrays with primitive types or strings as their component type, expressions including all unary and binary operations except \p{instanceof}, all the control statements (\p{if}, \p{while}, etc.) except \p{switch} statement and conditional expression (\p{exp?exp1:exp2}), method invocations, including recursive invocations.
 
 \mysubsection{Installation and execution}
 
@@ -80,11 +84,12 @@ You must have Java (SDK or JRE) Version 1.4 installed in order to run \jel{}. Op
 \mysubsection{The User Interface}
 
 \ifthenelse{\boolean{htmlversion}}{}{The \jel{} user interface and display is shown in Figure~\ref{fig.1}.
-\begin{figure}
+\begin{figure}[htb]
 \begin{center}
-\vspace*{-2cm}
-\includegraphics[width=15cm,keepaspectratio=true]{jeliot1.jpg}
-\vspace*{-3cm}
+\includegraphics[width=\textwidth]{images/jeliot3.eps}
+%\vspace*{-2cm}
+%\includegraphics[width=15cm,keepaspectratio=true]{jeliot1.jpg}
+%\vspace*{-3cm}
 \caption{The \jel{} user interface and display}\label{fig.1}
 \end{center}
 \end{figure}
@@ -108,13 +113,13 @@ The animation is performed in the animation frame. In addition, there is an outp
 
 \begin{itemize}
 
-\item Activation frames for each method are cascaded in the upper left hand corner. These will include the name and value of each variable.
+	\item Activation frames for each method are cascaded in the upper left hand corner. These will include the name and value of each variable.
 
-\item For variables of primitive or \p{String} type, the value is displayed adjacent to the name. For variables of other types, the value of the variable is a reference to an object which will be displayed at the lower right hand corner of the animation frame. A \p{null} value is displayed with an electrical ground symbol.
+	\item For variables of primitive or \p{String} type, the value is displayed adjacent to the name. For variables of other types, the value of the variable is a reference to an object which will be displayed at the lower right hand corner of the animation frame. A \p{null} value is displayed with an electrical ground symbol.
 
-\item A \emph{constant store} appears at the lower left hand corner; when an expression needs a literal, it is animated from the constant store.
+	\item A \emph{constant store} appears at the lower left hand corner; when an expression needs a literal, it is animated from the constant store.
 
-\item The upper right hand corner of the display is where expression evaluation (include method invocation) are animated. Values will be animated from the other areas and the evaluation of the expression will be carried out step-by-step. If a control statement is animated, messages will describe the outcome of the control action.
+	\item The upper right hand corner of the display is where expression evaluation (include method invocation) are animated. Values will be animated from the other areas and the evaluation of the expression will be carried out step-by-step. If a control statement is animated, messages will describe the outcome of the control action.
 
 \end{itemize}
 
@@ -126,12 +131,11 @@ There are two incompatibilities between \jel{} and standard Java.
 
 \begin{itemize}
 
-\item All classes must be in a single source \hfi{}le.
+	\item All classes must be in a single source \hfi{}le.
 
-\item For I/O, import the package \p{jeliot.io.*;} which provides the methods\\
-\p{void Output.println()}, \p{int Input.readInt()},
-\p{double Input.readDouble()},\\
-\p{char Input.readChar()}, \p{String Input.readString()}.
+	\item For I/O, import the package \p{jeliot.io.*;} which provides the methods\\
+	\p{void Output.println()}, \p{int Input.readInt()}, \p{double Input.readDouble()},\\
+	\p{char Input.readChar()}, \p{String Input.readString()}.
 
 \end{itemize}
 
@@ -139,25 +143,38 @@ There are two incompatibilities between \jel{} and standard Java.
 
 \begin{itemize}
 
-\item Values of type \p{String}, all primitive types and one-dimensional arrays.
+	\item Values of type \p{String}, all primitive types and one-dimensional arrays.
 
-\item Expressions including all unary and binary operations except \p{instanceof}.
+	\item Expressions including all unary and binary operations except \p{instanceof}.
 
-\item All the control statements (\p{if}, \p{while}, etc.).
+	\item All the control statements (\p{if}, \p{while}, etc.).
 
-\item Method invocation, including recursive invocation.
+	\item Method invocation, including recursive invocation.
 
-\item Allocation of objects, constructors, invocation of methods on objects.
+	\item Allocation of objects, constructors, invocation of methods on objects.
 
 \end{itemize}
 
-Not implemented are:
-
+\paragraph{Not implemented:}
 \begin{itemize}
 
-\item Static variables.
+	\item Static variables.
 
-\item Calls to \p{super(\ldots)}, except for \p{super()} at the beginning of a constructor.
+	\item Calls to \p{super(...)} method with parameters.
+
+	\item Super field accesses.
+
+	\item Arrays with components of reference type (except \p{String})
+
+	\item Two or more dimensional arrays.
+
+	\item Conditional expressions (\p{exp?exp1:exp2}).
+
+	\item Array initializers.
+
+	\item Java 2 SDK API classes' methods cannot return object (except \p{String} type) or array types (e.g. \p{object.getClass()} that returns a \p{Class} instance).
+
+	\item The used classes hashCode() -method has to return always a unique value.
 
 \end{itemize}
 
@@ -171,6 +188,5 @@ in Computer Science 2269, 31-45, Dagstuhl Castle, Germany, 2002.
 Ronit {Ben-Bassat Levy}, Mordechai Ben-Ari, and Pekka~A. Uronen.
 The {Jeliot} 2000 program animation system.
 {\em Computers \& Education}, 40(1), 1-15, 2003.
-
 
 \end{document}

@@ -6,33 +6,63 @@ import java.awt.Polygon;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         5.10.1999
+  * @author Niko Myller
   */
 public class BubbleActor extends Actor implements ActorContainer{
 
-    String name;
+    /**
+	 *
+	 */
+	String name;
 
-    Actor speaker;
-    Actor actor;
-    Polygon tip;
-    boolean bound;
-    Point loc;
+    /**
+	 *
+	 */
+	Actor speaker;
+    /**
+	 *
+	 */
+	Actor actor;
+    /**
+	 *
+	 */
+	Polygon tip;
+    /**
+	 *
+	 */
+	boolean bound;
+    /**
+	 *
+	 */
+	Point loc;
 
-    public BubbleActor(Actor speaker) {
+    /**
+	 * @param speaker
+	 */
+	public BubbleActor(Actor speaker) {
         this.speaker = speaker;
     }
 
-    public void setActor(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void setActor(Actor actor) {
         reserve(actor);
         bind();
     }
 
-    public Actor getActor() {
+    /**
+	 * @return
+	 */
+	public Actor getActor() {
         return (Actor) this.actor.clone();
     }
 
-    public Point reserve(Actor actor) {
+    /**
+	 * @param actor
+	 * @return
+	 */
+	public Point reserve(Actor actor) {
         this.actor = actor;
         loc = new Point(insets.left, insets.top);
         calculateSize();
@@ -41,13 +71,19 @@ public class BubbleActor extends Actor implements ActorContainer{
         return rp;
     }
 
-    public void bind() {
+    /**
+	 * 
+	 */
+	public void bind() {
         bound = true;
         actor.setParent(this);
         actor.setLocation(loc);
     }
 
-    public void paintActors(Graphics g) {
+    /**
+	 * @param g
+	 */
+	public void paintActors(Graphics g) {
         if (actor != null && bound) {
             g.translate(actor.getX(), actor.getY());
             actor.paintActor(g);
@@ -55,7 +91,10 @@ public class BubbleActor extends Actor implements ActorContainer{
         }
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         int w = getWidth();
         int h = getHeight();
 
@@ -79,11 +118,17 @@ public class BubbleActor extends Actor implements ActorContainer{
         paintActors(g);
     }
 
-    public void removeTip() {
+    /**
+	 * 
+	 */
+	public void removeTip() {
         tip = null;
     }
 
-    public void calculateSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#calculateSize()
+	 */
+	public void calculateSize() {
         setSize(actor.getWidth() + insets.right + insets.left,
                 actor.getHeight()+ insets.bottom + insets.top);
 
@@ -115,7 +160,10 @@ public class BubbleActor extends Actor implements ActorContainer{
 
     }
 
-    public void removeActor(Actor actor) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+	 */
+	public void removeActor(Actor actor) {
         if (actor == this.actor) {
             this.actor = null;
         }

@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 public class ImageLoader {
 
     /**
-     * The resource bundle
+     * The resource bundle for theater package.
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.theater.resources.properties",
@@ -34,7 +34,7 @@ public class ImageLoader {
     /** Maps images to their dark counterpants. */
     private Hashtable darks = new Hashtable();
 
-    /* SHOULD BE REPLACED WITH RESOURCE BUNDLE! */
+	/* SHOULD BE REPLACED WITH RESOURCE BUNDLE! */
     // Maps logical image names to their real names.
     /*
     private Hashtable mapping = new Hashtable(); {
@@ -50,11 +50,25 @@ public class ImageLoader {
     }
     */
 
+    /**
+     *
+     */
     private Component comp = new Panel();
-    private Toolkit toolkit = Toolkit.getDefaultToolkit();
-    private MediaTracker tracker = new MediaTracker(comp);
+    
+    /**
+	 *
+	 */
+	private Toolkit toolkit = Toolkit.getDefaultToolkit();
+    
+    /**
+	 *
+	 */
+	private MediaTracker tracker = new MediaTracker(comp);
 
-    ImageFilter darkFilter = new RGBImageFilter() {
+    /**
+	 *
+	 */
+	ImageFilter darkFilter = new RGBImageFilter() {
         {
             canFilterIndexColorModel = true;
         }
@@ -69,14 +83,22 @@ public class ImageLoader {
     };
 
 
-    public Image getLogicalImage(String name) {
+    /**
+	 * @param name
+	 * @return
+	 */
+	public Image getLogicalImage(String name) {
         //String realName = (String)mapping.get(name);
         //return getImage(realName);
         return getImage(bundle.getString(name));
     }
 
 
-    public Image getImage(String name) {
+    /**
+	 * @param name
+	 * @return
+	 */
+	public Image getImage(String name) {
         Image image = (Image)images.get(name);
         if (image == null) {
             image = toolkit.getImage(bundle.getString("directory.images")+name);
@@ -90,7 +112,11 @@ public class ImageLoader {
         return image;
     }
 
-    public Image darken(Image image) {
+    /**
+	 * @param image
+	 * @return
+	 */
+	public Image darken(Image image) {
         Image dark = (Image)darks.get(image);
         if (dark == null) {
             ImageProducer producer = new FilteredImageSource(

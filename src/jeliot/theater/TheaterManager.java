@@ -10,13 +10,13 @@ import java.util.Stack;
 import java.util.Vector;
 
 /**
-  *
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ *
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class TheaterManager implements ComponentListener {
 
-    /**
+	/**
       * Contains Points that are set as the rootlocations of the
       * new MethodStage instances. They are circulated so that
       * after the last value of the table the first value is used
@@ -28,7 +28,7 @@ public class TheaterManager implements ComponentListener {
                                          new Point(15, 50),
                                          new Point(25, 45)};
 
-    /**
+	/**
       * Reference to the current Theatre instance.
       * Reference is need for two reasons:
       * Firstly, to set this TheatreManager instance as the
@@ -39,31 +39,54 @@ public class TheaterManager implements ComponentListener {
       */
     private Theater theatre;
 
-    /** */
+    /**
+	 *
+	 */
     private Stack methods = new Stack();
 
-    /** */
+    /**
+	 *
+	 */
     private Vector objects = new Vector();
 
-    /** */
+    /**
+	 *
+	 */
     private Vector scratches = new Vector();
 
-    /** */
+    /**
+	 *
+	 */
     private ConstantBox constantBox;
 
-    /** */
+    /**
+	 *
+	 */
     private int maxMethodStageX;
 
-    /** */
+    /**
+	 *
+	 */
     private Hashtable reservations = new Hashtable();
 
-    /** */
+    /**
+	 *
+	 */
     private Point lrCorner;
 
-    private int minInstanceY = Integer.MAX_VALUE;
-    private int minInstanceX = Integer.MAX_VALUE;
+    /**
+	 *
+	 */
+	private int minInstanceY = Integer.MAX_VALUE;
+    
+    /**
+	 *
+	 */
+	private int minInstanceX = Integer.MAX_VALUE;
 
-    /** */
+    /**
+	 * @param theatre
+	 */
     public TheaterManager(Theater theatre) {
         this.theatre = theatre;
         theatre.addComponentListener(this);
@@ -71,7 +94,9 @@ public class TheaterManager implements ComponentListener {
         lrCorner = new Point(d.width, d.height);
     }
 
-    /** */
+    /**
+	 * 
+	 */
     public void cleanUp() {
         methods.removeAllElements();
         objects.removeAllElements();
@@ -82,7 +107,10 @@ public class TheaterManager implements ComponentListener {
     }
 
 
-    /** */
+    /**
+	 * @param stage
+	 * @return
+	 */
     public Point reserve(MethodStage stage) {
         Point loc = methodStagePoints[methods.size() % methodStagePoints.length];
         reservations.put(stage, loc);
@@ -91,7 +119,9 @@ public class TheaterManager implements ComponentListener {
     }
 
 
-    /** */
+    /**
+	 * @param stage
+	 */
     public void bind(MethodStage stage) {
         Point loc = (Point)reservations.remove(stage);
         methods.push(stage);
@@ -110,7 +140,10 @@ public class TheaterManager implements ComponentListener {
     }
 
 
-    /** */
+    /**
+	 * @param actor
+	 * @return
+	 */
     public Point reserve(InstanceActor actor) {
         int w = actor.getWidth();
         int h = actor.getHeight();
@@ -126,7 +159,9 @@ public class TheaterManager implements ComponentListener {
     }
 
 
-    /** */
+    /**
+	 * @param actor
+	 */
     public void bind(InstanceActor actor) {
         Point loc = (Point)reservations.remove(actor);
         objects.addElement(actor);
@@ -141,7 +176,9 @@ public class TheaterManager implements ComponentListener {
     }
 
 
-    /** */
+    /**
+	 * @param actor
+	 */
     public void removeInstance(InstanceActor actor) {
         //move also minInstanceX and -Y
         objects.removeElement(actor);
@@ -150,28 +187,37 @@ public class TheaterManager implements ComponentListener {
     }
 
 
-    /** */
+    /**
+	 * @param stage
+	 */
     public void removeMethodStage(MethodStage stage) {
         methods.removeElement(stage);
         theatre.removePassive(stage);
     }
 
 
-    /** */
+    /**
+	 * @param cbox
+	 */
     public void setConstantBox(ConstantBox cbox) {
         this.constantBox = cbox;
         positionConstantBox();
     }
 
 
-    /** */
+    /**
+	 * @param scratch
+	 */
     public void addScratch(Scratch scratch) {
         scratches.addElement(scratch);
         scratch.setLocation(getScratchPositionX(), 10);
         theatre.addPassive(scratch);
     }
 
-    public int getScratchPositionX() {
+    /**
+	 * @return
+	 */
+	public int getScratchPositionX() {
         if (!methods.empty()) {
             return maxMethodStageX + 45;
         } else {
@@ -179,14 +225,18 @@ public class TheaterManager implements ComponentListener {
         }
     }
 
-    /** */
+    /**
+	 * @param scratch
+	 */
     public void removeScratch(Scratch scratch) {
         scratches.removeElement(scratch);
         theatre.removePassive(scratch);
     }
 
 
-    /** */
+    /**
+	 * 
+	 */
     private void positionConstantBox() {
         if (constantBox != null) {
             int x = 10; //theatre.getWidth() - 10 - cbox.getWidth();
@@ -195,20 +245,32 @@ public class TheaterManager implements ComponentListener {
         }
     }
 
-    public int getConstantPositionY() {
+    /**
+	 * @return
+	 */
+	public int getConstantPositionY() {
         //Change this when static variables are visualized!
         return theatre.getHeight() - 10 - constantBox.getHeight();
     }
 
-    public int getMinInstanceY() {
+    /**
+	 * @return
+	 */
+	public int getMinInstanceY() {
         return minInstanceY;
     }
 
-    public int getMinInstanceX() {
+    /**
+	 * @return
+	 */
+	public int getMinInstanceX() {
         return minInstanceX;
     }
 
-    /** */
+    /**
+	 * @param from
+	 * @param to
+	 */
     public void positionObjects(Point from, Point to) {
         Enumeration enum = objects.elements();
         while (enum.hasMoreElements()) {
@@ -221,24 +283,29 @@ public class TheaterManager implements ComponentListener {
     }
 
 
-    /** */
+    /**
+	 * @return
+	 */
     public Point getOutputPoint() {
         Dimension d = theatre.getSize();
         return new Point(d.width/2, d.height);
     }
 
 
-    /** Draws the lines separating different areas
-     *  and writes texts on them.
+	/**
+     * Draws the lines separating different areas
+     * and writes texts on them.
+     * @param lat
      */
     public void setLinesAndText(LinesAndText lat) {
         lat.setManager(this);
         lat.setTheatre(theatre);
     }
 
-    /** Called, when the theatre object is resized. Rearranges the
-      * theatre after resizing.
-      */
+	/** Called, when the theatre object is resized. Rearranges the
+     * theatre after resizing.
+     * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
+     */
     public void componentResized(ComponentEvent e) {
         positionConstantBox();
         Dimension d = theatre.getSize();
@@ -248,11 +315,17 @@ public class TheaterManager implements ComponentListener {
         theatre.repaint();
     }
 
-    /** These methods are needed to conform to the ComponentListener
-      * interface.
-      */
+    /* (non-Javadoc)
+	 * @see java.awt.event.ComponentListener#componentMoved(java.awt.event.ComponentEvent)
+	 */
     public void componentMoved(ComponentEvent e) { }
-    public void componentShown(ComponentEvent e) { }
-    public void componentHidden(ComponentEvent e) { }
+    /* (non-Javadoc)
+	 * @see java.awt.event.ComponentListener#componentShown(java.awt.event.ComponentEvent)
+	 */
+	public void componentShown(ComponentEvent e) { }
+    /* (non-Javadoc)
+	 * @see java.awt.event.ComponentListener#componentHidden(java.awt.event.ComponentEvent)
+	 */
+	public void componentHidden(ComponentEvent e) { }
 
 }

@@ -5,18 +5,39 @@ import java.awt.Shape;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         18.9.1999
+  * @author Niko Myller
   */
 public class CastActor extends Actor {
 
-    ValueActor fromActor;
-    ValueActor toActor;
+    /**
+	 *
+	 */
+	ValueActor fromActor;
+    /**
+	 *
+	 */
+	ValueActor toActor;
     
-    int line;
-    int linex, linew;
+    /**
+	 *
+	 */
+	int line;
+
+	/**
+	 *
+	 */
+	int linex;
     
-    public CastActor(ValueActor fromActor, ValueActor toActor) {
+    /**
+     *
+     */    
+    int linew;
+    
+    /**
+	 * @param fromActor
+	 * @param toActor
+	 */
+	public CastActor(ValueActor fromActor, ValueActor toActor) {
         this.fromActor = fromActor;
         this.toActor = toActor;
         
@@ -27,7 +48,10 @@ public class CastActor extends Actor {
             linew);
     }
     
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         if (line <= 0) {
             fromActor.paintActor(g);
         }
@@ -52,7 +76,10 @@ public class CastActor extends Actor {
         }
     }
     
-    public Animation cast() {
+    /**
+	 * @return
+	 */
+	public Animation cast() {
         return new Animation() {
             double plus;
             double h;

@@ -4,21 +4,68 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class PanelActor extends Actor {
 
-    private Image panelImage;
-    private Image leftImage;
-    private Image rightImage;
+    /**
+	 *
+	 */
+	private Image panelImage;
+    
+    /**
+	 *
+	 */
+	private Image leftImage;
+    
+    /**
+	 *
+	 */
+	private Image rightImage;
 
-    private int displace;
-    private int lgap, rgap;
-    private int gapplace;
-    private int biw, lbiw, rbiw;
+    /**
+	 *
+	 */
+	private int displace;
+    
+	/**
+	 *
+	 */
+	private int lgap;
+    
+    /**
+     *
+    */
+    private int rgap;
+    
+    /**
+	 *
+	 */
+	private int gapplace;
 
-    public PanelActor(
+	/**
+	 *
+	 */
+	private int biw;
+    
+    /**
+     *
+     */
+    private int lbiw;
+    
+    /**
+     *
+     */
+    private int rbiw;
+
+    /**
+	 * @param panelImage
+	 * @param leftImage
+	 * @param rightImage
+	 * @param gapplace
+	 */
+	public PanelActor(
             Image panelImage,
             Image leftImage,
             Image rightImage,
@@ -33,17 +80,27 @@ public class PanelActor extends Actor {
         this.rbiw = rightImage.getWidth(dummy);
     }
 
-    public void setSize(int w, int h) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setSize(int, int)
+	 */
+	public void setSize(int w, int h) {
         super.setSize(w, h);
     //    displace = (w/2)%biw - gapplace;
     }
 
-    public void setGap(int lgap, int rgap) {
+    /**
+	 * @param lgap
+	 * @param rgap
+	 */
+	public void setGap(int lgap, int rgap) {
         this.lgap = lgap;
         this.rgap = rgap;
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         if (lgap == 0 && rgap == 0) {
             paintBackground(g, panelImage, 0, 0, width, height);
         }
@@ -69,7 +126,11 @@ public class PanelActor extends Actor {
         }
     }
 
-     public Animation slide(final boolean open) {
+     /**
+	 * @param open
+	 * @return
+	 */
+	public Animation slide(final boolean open) {
 
         int leftn = 2;
         final int left = Math.max(0, leftn*biw + lbiw);
