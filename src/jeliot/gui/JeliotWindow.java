@@ -1062,7 +1062,7 @@ public class JeliotWindow {
 
                 String programCode = editor.getProgram();
 
-                if (methodCall != null) {
+                if (methodCall == null) {
                     methodCall = findMainMethodCall(programCode);
                     if (askForMethod) {
                         methodCall = ((methodCall != null) ? methodCall : null);
