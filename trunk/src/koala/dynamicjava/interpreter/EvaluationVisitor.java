@@ -1618,7 +1618,7 @@ public class EvaluationVisitor extends VisitorObject {
 
 			MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
 					+ Code.DELIM + node.getRepresentation() + Code.DELIM
-					+ result + Code.DELIM + c.getName() + Code.DELIM
+					+ MCodeUtilities.getValue(result) + Code.DELIM + c.getName() + Code.DELIM
 					+ MCodeUtilities.locationToString(node));
 
 			return result;
