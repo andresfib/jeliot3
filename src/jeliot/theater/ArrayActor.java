@@ -77,18 +77,31 @@ public class ArrayActor extends InstanceActor {
 	 *
 	 */
 	private int[] dimensions;
+	
+	/**
+	 * 
+	 */
+	private boolean primitive;
 
 	/**
 	 * @param valueActors
 	 * @param dimensions
 	 */
-	public ArrayActor(Object valueActors, int[] dimensions) {
+	public ArrayActor(Object valueActors, int[] dimensions, boolean primitive) {
 
 		this.dimensions = dimensions;
-		this.variableActors =
-			Array.newInstance(
-				(new VariableInArrayActor()).getClass(),
-				dimensions);
+		this.primitive = primitive;
+		if (primitive) {
+			this.variableActors =
+				Array.newInstance(
+						(new VariableInArrayActor()).getClass(),
+						dimensions);
+		} else {
+			this.variableActors =
+				Array.newInstance(
+						(new ReferenceVariableInArrayActor()).getClass(),
+						dimensions);			
+		}
 
 		int n = dimensions.length;
 
@@ -110,15 +123,30 @@ public class ArrayActor extends InstanceActor {
 			}
 
 			for (int i = 0; i < dimensions[n - 1]; i++) {
-				VariableInArrayActor viaa =
-					new VariableInArrayActor(
-						this,
-						indexString + "[" + Integer.toString(i) + "]");
-
-				ValueActor va = (ValueActor) Array.get(tempArray, i);
-				viaa.setValue(va);
-				viaa.setParent(this);
-				Array.set(tempArray2, i, viaa);
+				if (primitive) {
+					VariableInArrayActor viaa =
+						new VariableInArrayActor(
+								this,
+								indexString + "[" + Integer.toString(i) + "]");
+						ValueActor va = (ValueActor) Array.get(tempArray, i);
+						viaa.setValue(va);
+						viaa.setParent(this);
+						Array.set(tempArray2, i, viaa);
+				} else {
+					ReferenceVariableInArrayActor viaa =
+						new ReferenceVariableInArrayActor(
+								this,
+								indexString + "[" + Integer.toString(i) + "]");
+						ValueActor va = (ValueActor) Array.get(tempArray, i);
+						if (va instanceof ReferenceActor) {
+							viaa.setValue((ReferenceActor) va);							
+						} else {
+							throw new RuntimeException("Reference Variable in array needs to be initialized with reference.");
+						}
+						viaa.setParent(this);
+						Array.set(tempArray2, i, viaa);
+					
+				}				
 			}
 
 		} while (ArrayUtilities.nextIndex(index, dimensions));
@@ -143,9 +171,8 @@ public class ArrayActor extends InstanceActor {
 				index[n - 1] = i;
 				VariableInArrayActor viaa =
 					(VariableInArrayActor) ArrayUtilities.getObjectAt(
-						variableActors,
-						index);
-
+							variableActors,
+							index);
 				viaa.setValueColor(valueColor);
 			}
 		} while (ArrayUtilities.nextIndex(index, dimensions));
@@ -249,19 +276,6 @@ public class ArrayActor extends InstanceActor {
 
 			} else {
 
-				// draw cells
-				for (int i = 0; i < n; ++i) {
-
-					VariableInArrayActor a =
-						(VariableInArrayActor) Array.get(variableActors, i);
-
-					int x = a.getX();
-					int y = a.getY();
-					g.translate(x, y);
-					a.paintActor(g);
-					g.translate(-x, -y);
-				}
-
 				// draw border
 				g.setColor(borderColor);
 				g.drawRect(0, 0, w - 1, h - 1);
@@ -279,6 +293,19 @@ public class ArrayActor extends InstanceActor {
 				for (int i = 1; i < n; ++i) {
 					yc += 1 + valueh;
 					g.drawLine(x1, yc, x2, yc);
+				}
+				
+				// draw cells
+				for (int i = 0; i < n; ++i) {
+
+					VariableInArrayActor a =
+						(VariableInArrayActor) Array.get(variableActors, i);
+
+					int x = a.getX();
+					int y = a.getY();
+					g.translate(x, y);
+					a.paintActor(g);
+					g.translate(-x, -y);
 				}
 			}
 

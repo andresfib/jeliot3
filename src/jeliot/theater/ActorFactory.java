@@ -355,7 +355,7 @@ public class ActorFactory {
     /**
      *  
      */
-    private static int[] typeValWidth;
+    public static int[] typeValWidth;
 
     /**
      *  
@@ -389,7 +389,7 @@ public class ActorFactory {
                 m + fm.stringWidth("888"), m + fm.stringWidth("88888"),
                 m + fm.stringWidth("8888888"), m + fm.stringWidth("888888888"),
                 m + fm.stringWidth("xm"), m + fm.stringWidth("0.00E10"),
-                m + fm.stringWidth("0.0000E10"), m + fm.stringWidth("Normal string")};
+                m + fm.stringWidth("0.0000E10"), m + fm.stringWidth("Normal string"), 6};
     }
 
     /**
@@ -964,19 +964,19 @@ public class ActorFactory {
                 //k++;
             }
         } while (ArrayUtilities.nextIndex(index, dims));
-        ArrayActor aactor = new ArrayActor(valueActors, dims);
         String ctype = array.getComponentType();
         int typeInfo = MCodeUtilities.resolveType(ctype);
+        ArrayActor aactor = new ArrayActor(valueActors, dims, MCodeUtilities.isPrimitive(ctype));
         if (MCodeUtilities.isPrimitive(ctype)) {
             aactor.setFont(indexFont);
             aactor.setBackground(varColor[typeInfo]);
             aactor.setValueColor(valColor[typeInfo]);
             aactor.calculateSize(typeValWidth[typeInfo], valueHeight);
         } else {
-            //TODO: handle the reference type as a component type.
-            //If array's component type is reference type
-            //is not implemented.
-            return null;
+        	aactor.setFont(indexFont);
+            aactor.setBackground(varColor[typeInfo]);
+            aactor.setValueColor(valColor[typeInfo]);
+            aactor.calculateSize(typeValWidth[typeInfo], valueHeight);
         }
         for (int i = 0; i < n; i++) {
             index[i] = 0;

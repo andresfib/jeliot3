@@ -106,10 +106,12 @@ public class ArrayInstance extends Instance {
                 cloneValue = new Value("", double.class.getName());
                 break;
             }
+            
+            case MCodeUtilities.REFERENCE: {
+            	cloneValue = new Reference(componentType);
+                break;
+            }
         }
-            //case ECodeUtilities.REFERENCE: {
-                //break;
-            //}
 
         int n = dimensions.length;
 

@@ -58,7 +58,7 @@ public class TextAreaDefaults
 
 			DEFAULTS.inputHandler = new DefaultInputHandler();
 			DEFAULTS.inputHandler.addDefaultKeyBindings();
-			DEFAULTS.document = new SyntaxDocument();
+			//DEFAULTS.document = new SyntaxDocument();
 			DEFAULTS.editable = true;
 
 			DEFAULTS.blockCaret = false;
@@ -79,6 +79,8 @@ public class TextAreaDefaults
 			DEFAULTS.eolMarkers = false; //true; 
 			DEFAULTS.paintInvalid = false; //true; 
 		}
+		DEFAULTS.document = new SyntaxDocument();
+
 		return DEFAULTS;
 	}
 }

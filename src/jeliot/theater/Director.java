@@ -1307,22 +1307,38 @@ public class Director {
             // Get/create actors.
             ReferenceActor refAct = (ReferenceActor) value.getActor();
             //refAct.calculateBends();
-            ReferenceVariableActor rva = (ReferenceVariableActor) variableAct;
+        	ReferenceActor ra = factory.produceReferenceActor(refAct);
+        	casted.setActor(ra);
+            
+            if (variableAct instanceof ReferenceVariableActor) {
+            	ReferenceVariableActor rva = (ReferenceVariableActor) variableAct;
 
-            //refAct.setBackground(rva.getBackground());
+            	//refAct.setBackground(rva.getBackground());
 
-            ReferenceActor ra = factory.produceReferenceActor(refAct);
-            casted.setActor(ra);
-            //rva.setReference(refAct);
-            //instAct.addReference(refAct);
-            Point valueLoc = rva.reserve(ra);
+            	//rva.setReference(refAct);
+            	//instAct.addReference(refAct);
+            	Point valueLoc = rva.reserve(ra);
 
-            theatre.capture();
-            engine.showAnimation(refAct.fly(valueLoc));
-            rva.bind();
-            theatre.removePassive(refAct);
-            theatre.release();
+            	theatre.capture();
+            	engine.showAnimation(refAct.fly(valueLoc));
+            	rva.bind();
+            	theatre.removePassive(refAct);
+            	theatre.release();
+            } else if (variableAct instanceof ReferenceVariableInArrayActor) {
+            	ReferenceVariableInArrayActor rva = (ReferenceVariableInArrayActor) variableAct;
 
+            	//refAct.setBackground(rva.getBackground());
+
+            	//rva.setReference(refAct);
+            	//instAct.addReference(refAct);
+            	Point valueLoc = rva.reserve(ra);
+
+            	theatre.capture();
+            	engine.showAnimation(refAct.fly(valueLoc));
+            	rva.bind();
+            	theatre.removePassive(refAct);
+            	theatre.release();            	
+            }
             if (returnValue != null) {
                 ValueActor returnAct =
                     factory.produceReferenceActor((Reference) returnValue);

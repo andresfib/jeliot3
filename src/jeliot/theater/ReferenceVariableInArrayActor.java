@@ -1,25 +1,17 @@
+/*
+ * Created on Jun 26, 2004
+ */
 package jeliot.theater;
 
-import java.awt.FontMetrics;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
 /**
- * ReferenceVariableActor represents graphically the
- * variables of the reference type. It can bind
- * ReferenceActor instances and render them.  
- * 
- * @author Pekka Uronen
- * @author Niko Myller
- * 
- * @see jeliot.lang.Variable
- * @see jeliot.theater.VariableActor
- * @see jeliot.theater.VariableInArrayActor
- * @see jeliot.theater.MethodStage
- * @see jeliot.theater.ObjectStage
+ * @author nmyller
  */
-public class ReferenceVariableActor extends VariableActor {
-
+public class ReferenceVariableInArrayActor extends VariableInArrayActor {
+	
 //  DOC: Document!
 
     /**
@@ -42,6 +34,13 @@ public class ReferenceVariableActor extends VariableActor {
 	 */
 	private ReferenceActor reservedRefActor;
 
+	public ReferenceVariableInArrayActor() { }
+	
+	public ReferenceVariableInArrayActor(ArrayActor arrayActor, String name) {
+        setParent(arrayActor);
+        this.name = name;
+	}
+	
     /* (non-Javadoc)
 	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
 	 */
@@ -50,40 +49,29 @@ public class ReferenceVariableActor extends VariableActor {
         int h = height;
         int bw = borderWidth;
 
+        ArrayActor array = (ArrayActor)getParent();
+
         // fill background
         g.setColor( (light == HIGHLIGHT) ?
-                darkColor :
-                bgcolor );
-        g.fillRect(bw, bw, w - 2 * bw, h - 2 * bw);
+                array.darkColor :
+                array.bgcolor);
+        g.fillRect(0, 0, getIndexWidth(), height);
+        g.setColor(valueColor);
+        g.fillRect(getIndexWidth() + 2, 0, width - 2 - getIndexWidth(), height);
 
-        // draw the name
-        g.setFont(font);
-        g.setColor((light == HIGHLIGHT) ?
-                lightColor :
-                fgcolor);
+        // draw indices
+        g.setFont(array.getFont());
+        g.setColor( (light == HIGHLIGHT) ?
+                Color.white :
+                array.darkColor);
         g.drawString(name, namex, namey);
 
-        // draw border
-        ActorContainer parent = getParent();
-        g.setColor( (parent instanceof Actor)   ?
-                ( (Actor)parent ).darkColor     :
-                fgcolor );
-        g.drawLine(0, 0, w-1, 0);
-        g.drawLine(0, 0, 0, h-1);
-        g.setColor( (parent instanceof Actor)   ?
-                ( (Actor)parent ).lightColor     :
-                fgcolor );
-        g.drawLine(1, h-1, w-1, h-1);
-        g.drawLine(w-1, 1, w-1, h-1);
-
-        g.setColor(fgcolor);
-        g.drawRect(1, 1, w-3, h-3);
-        g.setColor(darkColor);
-        g.drawLine(2, h-3, w-3, h-3);
-        g.drawLine(w-3, 2, w-3, h-3);
-        g.setColor(lightColor);
-        g.drawLine(2, 2, w-3, 2);
-        g.drawLine(2, 2, 2, h-3);
+        // draw value
+        //int x = value.getX();
+        //int y = value.getY();
+        //g.translate(x, y);
+        //value.paintValue(g);
+        //g.translate(-x, -y);
 
         // draw link
         if (refActor == null) {
@@ -106,6 +94,7 @@ public class ReferenceVariableActor extends VariableActor {
             g.drawLine(a+1, valueh/2 - 6, a+1, valueh/2 + 6);
 
         } else {
+        	
             int actx = refActor.getX();
             int acty = refActor.getY();
             g.translate(actx, acty);
@@ -133,20 +122,6 @@ public class ReferenceVariableActor extends VariableActor {
         if (w != oldw || h != oldh) {
             calcLabelPosition();
         }
-    }
-
-    /* (non-Javadoc)
-	 * @see jeliot.theater.Actor#calculateSize()
-	 */
-	public void calculateSize() {
-        FontMetrics fm = getFontMetrics();
-        int sw = fm.stringWidth(name);
-        int sh = fm.getHeight();
-
-        setSize(2 * borderWidth + insets.right + insets.left +
-                refWidth + sw,
-                insets.top + insets.bottom + 4 * borderWidth +
-                Math.max(valueh, sh));
     }
 
     /**
@@ -178,6 +153,7 @@ public class ReferenceVariableActor extends VariableActor {
         int h = actor.height;
         rp.translate(width - borderWidth - refWidth - 3,
                     (height - actor.height)/2 + borderWidth);
+        rp.translate(valuex + (valuew-w)/2, valuey + (valueh-h)/2);
         return rp;
     }
 
@@ -188,10 +164,13 @@ public class ReferenceVariableActor extends VariableActor {
         this.refActor = this.reservedRefActor;
         refActor.setParent(this);
 
-        refActor.setLocation(width - borderWidth - refWidth - 3,
-                            (height - refActor.height)/2 + borderWidth);
+//        refActor.setLocation(width - borderWidth - refWidth - 3,
+//                            (height - refActor.height)/2 + borderWidth);
+        refActor.setLocation(valuex + (valuew - refActor.width)/ 2,
+                			 valuey + (valueh - refActor.height)/ 2);
     }
-
+	
+	
     /**
 	 * @param actor
 	 */
@@ -217,6 +196,9 @@ public class ReferenceVariableActor extends VariableActor {
         }
     }
 
-
+    /* (non-Javadoc)
+	 * @see jeliot.theater.VariableActor#calcLabelPosition()
+	 */
+	protected void calcLabelPosition() { }
 
 }

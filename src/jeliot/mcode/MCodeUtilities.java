@@ -442,12 +442,12 @@ public class MCodeUtilities {
             return float.class.getName();
         } else if (type.equals(double.class.getName()) || type.equals("D")) {
             return double.class.getName();
-        } else if (type.equals("".getClass().getName()) || type.equals("L".getClass().getName())) {
+        } else if (type.equals("".getClass().getName()) || type.equals("L" + "".getClass().getName())) {
             return "".getClass().getName();
         } else if (type.equals(Void.TYPE.getName()) || type.equals("V")) {
             return Void.TYPE.getName();
         } else {
-            return type.substring(1);
+            return type; //type.substring(1);
         }
     }
 
