@@ -11,12 +11,27 @@
 
 package org.syntax.jedit;
 
-import org.syntax.jedit.tokenmarker.*;
-import javax.swing.ToolTipManager;
-import javax.swing.text.*;
-import javax.swing.JComponent;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
-import java.awt.*;
+
+import javax.swing.JComponent;
+import javax.swing.ToolTipManager;
+import javax.swing.text.PlainDocument;
+import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
+import javax.swing.text.Utilities;
+
+import jeliot.tracker.Tracker;
+
+import org.syntax.jedit.tokenmarker.Token;
+import org.syntax.jedit.tokenmarker.TokenMarker;
 
 /**
  * The text area repaint manager. It performs double buffering and paints
@@ -598,6 +613,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				gfx.setColor(lineHighlightColor);
 				gfx.fillRect(0,y,getWidth(),height);
+				Tracker.writeToFileFromCodeView("CodeHighlight", 0, y, getWidth(), height, System.currentTimeMillis());
 			}
 		}
 		else
@@ -649,6 +665,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			// "inlined" min/max()
 			gfx.fillRect(x1 > x2 ? x2 : x1,y,x1 > x2 ?
 				(x1 - x2) : (x2 - x1),height);
+			Tracker.writeToFileFromCodeView("CodeHighlight", x1 > x2 ? x2 : x1, y, x1 > x2 ?
+					(x1 - x2) : (x2 - x1), height, System.currentTimeMillis());
 		}
 
 	}
