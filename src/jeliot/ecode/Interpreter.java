@@ -72,6 +72,12 @@ public class Interpreter {
     private Vector superMethodsReading = null;
     private long superMethodCallNumber = 0;
 
+   /**
+     * The resource bundle
+     */
+    private ResourceBundle bundle;
+
+    
     protected Interpreter() { }
 
     public Interpreter(BufferedReader r,
@@ -82,8 +88,8 @@ public class Interpreter {
         this.director = d;
         this.programCode = programCode;
         this.input = pr;
+	this.bundle = ResourceBundle.getBundle("jeliot.ecode.resources.messages", Locale.getDefault());
     }
-
     public void initialize() {
         running = true;
         start = true;
@@ -114,8 +120,7 @@ public class Interpreter {
 
         //Change this to be something more meaningful!
         if (line == null) {
-            line = "" + Code.ERROR + Code.DELIM +
-                   "<H1>Runtime Exception</H1><P>The reason for runtime exception is not known.</P>" +
+            line = "" + Code.ERROR + Code.DELIM +bundle.getString("unknown.exception")+
                    Code.DELIM + "0"+Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0";
         }
 
@@ -164,9 +169,9 @@ public class Interpreter {
         }
         //Change this to be something more meaningful!
         if (readLine == null) {
-            readLine = "" + Code.ERROR + Code.DELIM +
-                   "<H1>Runtime Exception</H1>"+
-                   "<P>The reason for runtime exception is unknown.</P>" +
+            readLine = "" + Code.ERROR + Code.DELIM +bundle.getString("unknown.exception")+
+		/*                   "<H1>Runtime Exception</H1>"+
+                   "<P>The reason for runtime exception is unknown.</P>" +*/
                    Code.DELIM + "0"+Code.LOC_DELIM+"0"+
                    Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0";
         }
@@ -199,10 +204,10 @@ public class Interpreter {
                             new StringTokenizer(storedLine, Code.DELIM);
                 int token = Integer.parseInt(tokenizer.nextToken());
                 if (token == Code.INPUT) {
-                   interpret("" + Code.ERROR + Code.DELIM +
-                             "<H1>Feature not implemented</H1>" +
+                    interpret("" + Code.ERROR + Code.DELIM +bundle.getString("inputInConstructor.exception")+
+                              /*"<H1>Feature not implemented</H1>" +
                              "<P>Super classes' constructors cannot " +
-                             "contain input requests.</P>" +
+                             "contain input requests.</P>" +*/
                              Code.DELIM + "0" + Code.LOC_DELIM + "0" +
                              Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0");
                 }
@@ -1182,8 +1187,8 @@ public class Interpreter {
                                 try {
                                     declaredClass = Class.forName(declaringClass);
                                 } catch (Exception e) {
-                                    String message = "<H1>Runtime Error</H1> <P>The class that was supposed to be initiated could not be found.</P>";
-                                    director.showErrorMessage(new InterpreterError(message, null));
+                                    //String message = "<H1>Runtime Error</H1> <P>The class that was supposed to be initiated could not be found.</P>";
+                                    director.showErrorMessage(new InterpreterError(bundle.getString("notfoundclass.exception")));
                                 }
                                 ci = new ClassInfo(declaredClass);
                                 classes.put(ci.getName(), ci);
@@ -2793,8 +2798,9 @@ public class Interpreter {
 
                         //There is an error if the execution comes here.
                         default: {
-                            director.showErrorMessage(new InterpreterError("<H1>Runtime Error</H1> <P>The feature is not yet implemented or " +
-                                                                           "there is an error on the other side of the ecode interface.</P>", null));
+                            director.showErrorMessage(new InterpreterError(bundle.getString("notImplemented.exception"), null));
+                            /*"<H1>Runtime Error</H1> <P>The feature is not yet implemented or " +
+                              "there is an error on the other side of the ecode interface.</P>"*/
                             break;
                         }
                     }
