@@ -622,8 +622,8 @@ public class TreeInterpreter implements Interpreter {
         String            name    = meth.getName();
         Context           context = null;
 
-        System.out.println(c.getName());
-        System.out.println(name);
+        //System.out.println(c.getName());
+        //System.out.println(name);
         if (EvaluationVisitor.isSetConstructorCall() &&
             c.getName().equals(EvaluationVisitor.getConstructorCallName()) &&
             name.equals("<init>")) {

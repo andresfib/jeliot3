@@ -2,6 +2,7 @@ package jeliot.ecode;
 
 import java.util.*;
 import java.io.*;
+import java.lang.reflect.*;
 import jeliot.lang.*;
 import jeliot.theatre.*;
 
@@ -77,7 +78,7 @@ public class Interpreter {
      */
     private ResourceBundle bundle;
 
-    
+
     protected Interpreter() { }
 
     public Interpreter(BufferedReader r,
@@ -88,7 +89,7 @@ public class Interpreter {
         this.director = d;
         this.programCode = programCode;
         this.input = pr;
-	this.bundle = ResourceBundle.getBundle("jeliot.ecode.resources.messages", Locale.getDefault());
+        this.bundle = ResourceBundle.getBundle("jeliot.ecode.resources.messages", Locale.getDefault());
     }
     public void initialize() {
         running = true;
@@ -116,7 +117,7 @@ public class Interpreter {
         try {
             line = ecode.readLine();
             System.out.println(line);
-        } catch (Exception e) {}
+        } catch (Exception e) {e.printStackTrace();}
 
         //Change this to be something more meaningful!
         if (line == null) {
@@ -170,7 +171,7 @@ public class Interpreter {
         //Change this to be something more meaningful!
         if (readLine == null) {
             readLine = "" + Code.ERROR + Code.DELIM +bundle.getString("unknown.exception")+
-		/*                   "<H1>Runtime Exception</H1>"+
+        /*                   "<H1>Runtime Exception</H1>"+
                    "<P>The reason for runtime exception is unknown.</P>" +*/
                    Code.DELIM + "0"+Code.LOC_DELIM+"0"+
                    Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0";
@@ -1663,6 +1664,7 @@ public class Interpreter {
                                 Value[] args = null;
 
                                 if (((String) currentMethodInvocation[1]).equals("")) {
+                                    //System.out.println("CI: " + "new " + ((String) currentMethodInvocation[0]));
                                     args = director.animateOMInvocation(
                                             "new " + ((String) currentMethodInvocation[0]),
                                             (Value[]) currentMethodInvocation[2],
@@ -1678,6 +1680,7 @@ public class Interpreter {
                                     objectCreation.push(new Reference(of));
 
                                 } else {
+                                    //System.out.println("OMI: " + "." + ((String) currentMethodInvocation[0]));
                                     args = director.animateOMInvocation(
                                             "." + ((String) currentMethodInvocation[0]),
                                             (Value[]) currentMethodInvocation[2],
@@ -1689,11 +1692,14 @@ public class Interpreter {
 
                                 if (((String) currentMethodInvocation[1]).equals("")) {
                                     call = ((String) currentMethodInvocation[0]);
+                                } else if (((String) currentMethodInvocation[0]).equals("this.super")) {
+                                    call = (String) currentMethodInvocation[0];
                                 } else {
                                     call = ((String) currentMethodInvocation[1]) +
                                            "." +((String) currentMethodInvocation[0]);
                                 }
 
+                                //System.out.println("METHOD: " + call);
                                 director.setUpMethod(
                                  call,
                                  args,
@@ -2834,7 +2840,11 @@ public class Interpreter {
                 value = st.nextToken();
             }
 
-            Variable var = director.declareObjectVariable(of, name, type, null);
+            if (!Modifier.isStatic(Integer.parseInt(mods)) && name.indexOf("$") < 0) {
+
+                Variable var = director.declareObjectVariable(of, name, type, null);
+
+            }
 /*
             if (!value.equals(Code.UNKNOWN)) {
 

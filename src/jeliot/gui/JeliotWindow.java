@@ -139,7 +139,7 @@ public class JeliotWindow {
             new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     changeTheatrePane(theatre);
-                    //editButton.setEnabled(true);
+                    //editButton.doClick();
                 }
            }
         );
@@ -300,6 +300,17 @@ public class JeliotWindow {
         frame.addWindowListener(
             new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
+                    if (editor.isChanged()) {
+                        int n = JOptionPane.showConfirmDialog(frame,
+                                "You are quiting the program\n" +
+                                "without saving the edited file.\n" +
+                                "Do you want to save your file?",
+                                "Quiting without saving",
+                                JOptionPane.YES_NO_OPTION);
+                        if (n == JOptionPane.YES_OPTION) {
+                            editor.saveProgram();
+                        }
+                    }
                     System.exit(0);
                 }
             }
@@ -851,7 +862,6 @@ public class JeliotWindow {
             } else {
                 editor.saveProgram();
             }
-            editor.setChanged(false);
         }
 
         try {
@@ -868,8 +878,7 @@ public class JeliotWindow {
                     //jeliot.createLauncher(r);
                     //Reader s = new BufferedReader(new StringReader(methodCall));
 
-                    jeliot.compile(programCode, methodCall);
-
+                    jeliot.setSourceCode(programCode, methodCall);
                     changeTheatrePane(theatre);
 
                     panelController.slide(true,
@@ -1255,7 +1264,7 @@ public class JeliotWindow {
 
         errorOccured = false;
 
-        jeliot.recompile();
+        jeliot.compile();
 
 /*
         try {

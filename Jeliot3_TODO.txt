@@ -16,7 +16,7 @@ Bugs regarding inheritance:
   exceptions randomly (Due to some bug in ThreadController??) (Should be 
 fixed, problem was in Launcher class)
 * SuperClass variables with some kind of temp name(this$0) produced by
-  DJava
+  DJava (Should be fixed)
 * ERROR Rectangle: method <init>()V not found
 * Fix the problem with RuntimeException: 'No Variable bigSquare' when
   bigSquare does not exist in the classes MethodStage and ObjectStage. 
@@ -35,14 +35,16 @@ Technical:
 
 Bugs:
 
-* Bad user code crashes Jeliot "}", error not being read by Interpreter
+* Bad user code crashes Jeliot "}", error not being read by Interpreter 
+(Done)
 
 Graphical:
 
 * Reference actors visualization needs to be fixed in instances and in short distances
 * Arrow heads or something to indicate that the reference ends to that 
-  specific object.
-* Some randomness to the placement of references to prevent overlapping
+  specific object. (done)
+* Some randomness to the placement of references to prevent overlapping 
+(done
 * Explicit mentioning of different areas in the theater (e.g. constant area, expression evaluation area, instance and array area and method frame area).
 
 -------These can be done later: ------------------------------------

@@ -1,4 +1,4 @@
-/* Jeliot 3.02 */
+/* Jeliot 3.2 */
 
 /*
  * This program is free software; you can redistribute it and/or modify
@@ -104,7 +104,7 @@ public class Jeliot {
     * @param    reader  Gives the program to be compiled.
     * @throws   Exception   If the lexer throws an error the this Exception is throwed.
       */
-    public void compile(String sourceCode, String methodCall) throws Exception {
+    public void setSourceCode(String sourceCode, String methodCall) throws Exception {
         // create the lexer and the parser
         //Lex.Lexer l = new Lex.Lexer(r, false);
         //Java11Parser g = new Java11Parser(l);
@@ -133,7 +133,7 @@ public class Jeliot {
 
         compiled = false;
 
-        recompile();
+        //recompile();
 
 /*
         this.ecode = null;
@@ -171,7 +171,7 @@ public class Jeliot {
 */
     }
 
-    public void recompile() {
+    public void compile() {
 
         if (!compiled) {
 
@@ -179,7 +179,7 @@ public class Jeliot {
 
             if (launcher != null) {
                 launcher.stopThread();
-                synchronized(launcher){
+                synchronized(launcher) {
                     launcher.notify();
                 }
                 launcher = null;
@@ -187,23 +187,16 @@ public class Jeliot {
 
             launcher = new Launcher(new BufferedReader(
                                    new StringReader(this.sourceCode)));
+            launcher.setMethodCall(this.methodCall);
 
             launcher.setCompiling(true);
+//            launcher.setExecuting(true);
 
             launcher.start();
 
-            launcher.setMethodCall(this.methodCall);
-
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            launcher.setCompiling(false);
-            synchronized(launcher){
-                launcher.notify();
-            }
+//             synchronized(launcher){
+//                 launcher.notify();
+//             }
 
             ecode = launcher.getReader();
             pr = launcher.getInputWriter();
@@ -220,10 +213,6 @@ public class Jeliot {
     public void rewind() {
 
         compiled = false;
-
-        synchronized(launcher){
-            launcher.notify();
-        }
 
         //clear the remnants of previous animation
         theatre.cleanUp();
