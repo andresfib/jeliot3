@@ -13,7 +13,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Toolkit;
+
+import javax.swing.JPanel;
 
 /**
  * A simple text style class. It can specify the color, italic flag,
@@ -102,8 +103,8 @@ public class SyntaxStyle
 			(bold ? Font.BOLD : 0)
 			| (italic ? Font.ITALIC : 0),
 			font.getSize());
-		fontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(
-			lastStyledFont);
+        fontMetrics = dummy.getFontMetrics(lastStyledFont);
+		//fontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(lastStyledFont);
 		return fontMetrics;
 	}
 
@@ -137,4 +138,5 @@ public class SyntaxStyle
 	private Font lastFont;
 	private Font lastStyledFont;
 	private FontMetrics fontMetrics;
+    private JPanel dummy = new JPanel();
 }

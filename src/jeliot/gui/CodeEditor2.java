@@ -499,11 +499,13 @@ public class CodeEditor2 extends JComponent {
      *            code.
      */
     public void setProgram(String program) {
+        program = replaceTabs(program);
         area.setText(program);
         setChanged(false); //Jeliot 3
         //area.recalculateVisibleLines();
         area.setFirstLine(0);
         area.setCaretPosition(0);
+        //area.requestFocus();
     }
 
     /**
@@ -515,10 +517,24 @@ public class CodeEditor2 extends JComponent {
      */
     public String getProgram() {
         String programCode = area.getText() + "\n";
-        programCode = MCodeUtilities.replace(programCode, "\t", "    ");
+        programCode = replaceTabs(programCode);
         return programCode;
     }
 
+    /**
+     * 
+     * @param code
+     * @return
+     */
+    public String replaceTabs(String code) {
+        int n = Integer.parseInt(propertiesBundle.getString("editor.tab_size"));
+        String spaces = "";
+        for (int i = 0; i < n; i++) {
+            spaces += " ";
+        }
+        return MCodeUtilities.replace(code, "\t", spaces);
+    }
+    
     /**
      * Method highlights the specified code area by selecting it.
      * 
@@ -568,6 +584,7 @@ public class CodeEditor2 extends JComponent {
             File file = fileChooser.getSelectedFile();
             loadProgram(file);
         }
+        area.requestFocus();
     }
 
     /**
@@ -584,7 +601,6 @@ public class CodeEditor2 extends JComponent {
     void loadProgram(File file) {
         String program = readProgram(file);
         setProgram(program);
-
         currentFile = file; // Jeliot 3
         setChanged(false); //Jeliot 3
         setTitle(file.getName());
@@ -595,11 +611,40 @@ public class CodeEditor2 extends JComponent {
      *
      */
     void saveProgram() {
+        //This is to keep the caret position after the saving of the file.
+        String code = area.getText();
+        int tabSize = Integer.parseInt(propertiesBundle.getString("editor.tab_size"));
+        int caretPosition = area.getCaretPosition();
+        int selectionStart = area.getSelectionStart();
+        int selectionEnd = area.getSelectionEnd();
+
+        boolean saved = false;
         if (currentFile != null) {
-            writeProgram(currentFile);
+            saved = writeProgram(currentFile);
         } else {
-            saveAsProgram();
+            saved = saveAsProgram();
+        } 
+        
+        //If program was saved then the tabs are changed to spaces
+        if (saved) {
+            if (selectionStart != selectionEnd) {
+                selectionStart = getCorrectTextPosition(code, selectionStart, tabSize);
+                selectionEnd = getCorrectTextPosition(code, selectionEnd, tabSize);
+            }
+            caretPosition = getCorrectTextPosition(code, caretPosition, tabSize);
         }
+        
+        if (selectionStart != selectionEnd) {
+            if (caretPosition == selectionStart) {
+                area.select(selectionEnd, selectionStart);
+            } else {
+                area.select(selectionStart, selectionEnd);
+            }
+        } else {
+            area.setCaretPosition(caretPosition);
+        }
+        area.requestFocus();
+
     }
     
     /**
@@ -608,13 +653,14 @@ public class CodeEditor2 extends JComponent {
      * 
      * @see #writeProgram(File)
      */
-    void saveAsProgram() {
+    private boolean saveAsProgram() {
         fileChooser.rescanCurrentDirectory();
         int returnVal = fileChooser.showSaveDialog(masterFrame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            writeProgram(file);
+            return writeProgram(file);
         }
+        return false;
     }
 
     /**
@@ -625,23 +671,21 @@ public class CodeEditor2 extends JComponent {
      * 
      * @see JeliotWindow#tryToEnterAnimate()
      */
-    public void writeProgram(File file) {
+    private boolean writeProgram(File file) {
         try {
             FileWriter w = new FileWriter(file);
-            String spaces = "";
-            int n = Integer.parseInt(propertiesBundle.getString("editor.tab_size"));
-            for (int i = 0; i < n; i++) {
-                spaces += " ";
-            }
-            String code = MCodeUtilities.replace(area.getText(), "\t", spaces);
+                        
+            //Taking out \t characters
+            String code = replaceTabs(area.getText());
             w.write(code);
             w.close();
             
+            area.setText(code);
             currentFile = file; // Jeliot 3
             setChanged(false); //Jeliot 3
             setTitle(file.getName()); // Jeliot 3
-            area.setText(code);
             
+            return true; 
         } catch (IOException e) {
             //e.printStackTrace();
             JOptionPane
@@ -649,8 +693,19 @@ public class CodeEditor2 extends JComponent {
                             masterFrame,
 							messageBundle.getString("code_editor.save_failed"));
         }
+        return false;
     }
 
+    /**
+     * 
+     * @param position
+     * @return
+     */
+    public int getCorrectTextPosition(String code, int position, int tabSize) {
+        int tabs = code.substring(0, position).split("\t",-1).length - 1;
+        return position + (tabs * tabSize) - tabs;
+    }
+    
     /**
      * Reads the content of the given file and returns the content of the file
      * as String.

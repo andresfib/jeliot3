@@ -66,7 +66,7 @@ public class LoadJeliot {
 
 		window.setBounds((screen.width - iw) / 2, (screen.height - ih) / 2, iw, ih);
 		window.setVisible(true);
-		window.show();
+		//window.show();
 
 		final Jeliot jeliot = new Jeliot(udir, experiment);
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
