@@ -4,7 +4,8 @@ JELIOT 3 TODO-LIST
 
 Urgent:
 
-* Initialization of object when it inherits user made class (super() call)
+* Initialization of object when it inherits user made class (super() call) 
+(should be done)
 * Array initializers (but only for on3 dimensional arrays)
 * Static field access (into the constant area)
 * Documentation
@@ -12,18 +13,18 @@ Urgent:
 Bugs regarding inheritance:
 
 * Instability in the animation engine, reporting unknown runtime
-  exceptions randomly (Due to some bug in ThreadController??)
+  exceptions randomly (Due to some bug in ThreadController??) (Should be 
+fixed, problem was in Launcher class)
 * SuperClass variables with some kind of temp name(this$0) produced by
   DJava
-* ERROR
- Rectangle: method <init>()V not found
+* ERROR Rectangle: method <init>()V not found
 * Fix the problem with RuntimeException: 'No Variable bigSquare' when
   bigSquare does not exist in the classes MethodStage and ObjectStage. 
 
 Technical:
 
 * Use invokeLater method to build up the gui in the beginning of the 
-  program.
+  program. (Should be done)
 * Default error message needs to be changed
 * getValue -method for EvaluationVisitor. It returns string 
   representation of the value. If value is primitive type then the values 
