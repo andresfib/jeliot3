@@ -35,8 +35,9 @@ Language support:
 
 Graphical:
 * Returned value should not stay in the return "bubble" after it has been used or should it? 
-* Zoomable canvas for Theater (see Piccolo project, requires quite a lot of work to transform all the drawing in piccolo)
+* Zoomable canvas for Theater (see Piccolo project -> requires quite a lot of work to transform all the drawing in piccolo)
 * Customize the visualization (change visual attributes or change the granularity of visualization)
+	* Adaptable Jeliot
 
 Web:
 * Applet Jeliot (with predefined m-code or program).
