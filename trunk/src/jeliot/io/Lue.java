@@ -77,4 +77,25 @@ Operaatiot ovat sitkeitä, ne VAATIVAT kelvollisen syötteen!
       return ' ';
     }
   }
+/*  
+  public static char merkki(String prompt) {
+      System.out.println(prompt);
+      return merkki();
+  }
+  
+  public static double dluku(String prompt) {
+      System.out.println(prompt);
+      return dluku();      
+  }
+  
+  public static int kluku(String prompt) {
+      System.out.println(prompt);
+      return kluku();      
+  }
+  
+  public static String rivi(String prompt) {
+      System.out.println(prompt);
+      return rivi();      
+  }
+*/
 }
