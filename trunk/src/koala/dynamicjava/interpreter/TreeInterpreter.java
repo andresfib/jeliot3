@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import jeliot.mcode.*;
 import koala.dynamicjava.interpreter.context.Context;
@@ -671,6 +672,8 @@ public class TreeInterpreter implements Interpreter {
         String            name    = meth.getName();
         Context           context = null;
 
+        // Jeliot 3
+        
         //System.out.println(c.getName());
         //System.out.println(name);
         if (EvaluationVisitor.isSetConstructorCall() &&
@@ -682,29 +685,63 @@ public class TreeInterpreter implements Interpreter {
             EvaluationVisitor.constructorCallFinished();
 
         } else if (EvaluationVisitor.isSetConstructorCall() &&
+        
                    !c.getName().equals(EvaluationVisitor.getConstructorCallName()) &&
                    name.equals("<init>") &&
                    EvaluationVisitor.getSuperClasses().contains(c.getName())) {
 
-            // Fake OMC with super() when
-            // !c.getName().equals(EvaluationVisitor.getConstructorCallName())
-            // so to describe a super call,
-            long counter = EvaluationVisitor.getCounter();
-            EvaluationVisitor.incrementCounter();
+                   int numParameters =((Integer) MCodeUtilities.numParametersStack.pop()).intValue();
 
-            MCodeUtilities.write("" + Code.QN+Code.DELIM+
-                    counter+Code.DELIM+"this"+
-                    Code.DELIM+obj.toString()+
-                    Code.DELIM+obj.getClass().getName());
+                   long counter = EvaluationVisitor.getCounter();
+                   EvaluationVisitor.incrementCounter();
+                   
+                   if (numParameters == 0){
+            
+                        // Fake OMC with super() when
+                        // !c.getName().equals(EvaluationVisitor.getConstructorCallName())
+                        // so to describe a super call,
+            
+                        
+                        MCodeUtilities.write("" + Code.QN+Code.DELIM+
+                            counter+Code.DELIM+"this"+
+                            Code.DELIM+obj.toString()+
+                            Code.DELIM+obj.getClass().getName());
+                
+                        MCodeUtilities.write("" + Code.OMC+Code.DELIM+
+                             //m.getName()+Code.DELIM+
+                             "super"+Code.DELIM+
+                             "0"+Code.DELIM+
+                             counter+Code.DELIM+
+                             "0,0,0,0");
+                      
+                   }else{
+                       
+                       MCodeUtilities.write("" + Code.QN+Code.DELIM+
+                                                   counter+Code.DELIM+"this"+
+                                                   Code.DELIM+obj.toString()+
+                                                   Code.DELIM+obj.getClass().getName());
+                
+                       MCodeUtilities.write("" + Code.OMC+Code.DELIM+
+                                                    //m.getName()+Code.DELIM+
+                                                    "super"+Code.DELIM+
+                                                    numParameters+Code.DELIM+
+                                                    counter+Code.DELIM+
+                                                    "0,0,0,0");
+                       //TODO: Print out the parameters info 
+                       Vector redirectBuffer = (Vector) MCodeUtilities.redirectBufferStack.pop(); 
+                       //MCodeUtilities.numParametersStack.pop();
+                       MCodeUtilities.writeRedirectBuffer(redirectBuffer);
+                       //MCodeUtilities.clearRedirectBuffer(); 
+                       //TODO: Set to 0 parameter count
+                       //MCodeUtilities.clearNumParameters();
+                       }
+                       
 
-            MCodeUtilities.write("" + Code.OMC+Code.DELIM+
-                                 //m.getName()+Code.DELIM+
-                                 "super"+Code.DELIM+
-                                 "0"+Code.DELIM+
-                                 counter+Code.DELIM+
-                                 "0,0,0,0");
+            
+        
         }
-
+            
+        
         if (Modifier.isStatic(md.method.getAccessFlags())) {
             if (md.variables == null) {
                 md.importationManager.setClassLoader(classLoader);
@@ -974,6 +1011,9 @@ public class TreeInterpreter implements Interpreter {
     protected Object[] interpretArguments(Class c,
                     ConstructorParametersDescriptor cpd,
                     Object[] args) {
+        //Jeliot3
+        String[] types = new String[cpd.parameters.size()];
+
         if (cpd.variables == null) {
             cpd.importationManager.setClassLoader(classLoader);
 
@@ -981,12 +1021,17 @@ public class TreeInterpreter implements Interpreter {
             ctx.setAdditionalClassLoaderContainer(classLoader);
             Visitor nv = new NameVisitor(ctx);
             Visitor tc = new TypeChecker(ctx);
-
+            
             // Check the parameters
             if (cpd.parameters != null) {
                 ListIterator it = cpd.parameters.listIterator();
+                int i=0;             
+                Node aux;   
                 while (it.hasNext()) {
-                    ((Node)it.next()).acceptVisitor(tc);
+                    //We get the parameters type from here
+                    aux = (Node) it.next();
+                    aux.acceptVisitor(tc);
+                    types[i++]= ((Class) aux.getProperty(NodeProperties.TYPE)).getName();
                 }
             }
 
@@ -1027,11 +1072,27 @@ public class TreeInterpreter implements Interpreter {
             ListIterator it = cpd.arguments.listIterator();
             result = new Object[cpd.arguments.size()];
             int i = 0;
+            //TODO: Get data from node to be outputted later on
+            //TODO: Modify flag to get output to data strucuture
+            MCodeUtilities.setRedirectOutput(true);
+            int j=0;
             while (it.hasNext()) {
+                long auxCounter= EvaluationVisitor.getCounter();  
+                //TODO: increase parameter count (DONE)  
+                MCodeUtilities.incNumParameters();
+                MCodeUtilities.addToRedirectBuffer(""+Code.BEGIN+Code.DELIM+Code.P+Code.DELIM+auxCounter+Code.DELIM+"0,0,0,0");
                 result[i++] = ((Node)it.next()).acceptVisitor(v);
+                MCodeUtilities.addToRedirectBuffer(""+ Code.P+ Code.DELIM + auxCounter + Code.DELIM+ result[i-1].getClass().getName());               
             }
+            MCodeUtilities.setRedirectOutput(false);
+            MCodeUtilities.redirectBufferStack.push(new Vector(MCodeUtilities.getRedirectBuffer()));
+            MCodeUtilities.clearRedirectBuffer();
+            MCodeUtilities.numParametersStack.push(new Integer(MCodeUtilities.getNumParameters()));
+            MCodeUtilities.clearNumParameters();
+                        
+        }else if (!c.getSuperclass().getName().equals("java.lang.Object")){
+            MCodeUtilities.numParametersStack.push(new Integer(0));
         }
-
         return result;
     }
 
