@@ -1,3 +1,12 @@
+----- JELIOT 3.5.X bugs and features: ------
+* Printing
+* Fixed bugs related to constructors, super and this method calls
+* Fixed bugs related to fonts and changing the fonts
+* Fixed bugs related to toString method
+* Fixed bugs related to method's return values shown incorrectly and persistently
+* Fixed bugs related to wrong casting of parameters
+* Fixed bugs related to reference visualization
+
 ----- JELIOT 3.4.X bugs and features: ------
 * null values caused crashing in constructors and methods (done)
 * maximize window when starting (done)
