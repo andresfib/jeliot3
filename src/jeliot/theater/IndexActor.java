@@ -86,7 +86,7 @@ public class IndexActor extends Actor {
             }
 
             public void animate(double pulse) {
-                Tracker.writeToFile("Indexing", IndexActor.this.startPoint.x, IndexActor.this.startPoint.y, IndexActor.this.endPoint.x, IndexActor.this.endPoint.y, System.currentTimeMillis());
+                Tracker.writeIndexToFile("Indexing", IndexActor.this.startPoint.x, IndexActor.this.startPoint.y, IndexActor.this.endPoint.x, IndexActor.this.endPoint.y, System.currentTimeMillis());
                 xp += pulse * step * cos;
                 yp += pulse * step * sin;
                 l += pulse * step;

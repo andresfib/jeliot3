@@ -418,6 +418,7 @@ public class Jeliot {
      * @param str String that is outputted.
      */
     public void output(String str) {
+        Tracker.writeToFile("Output", str, System.currentTimeMillis());
         gui.output(str);
     }
 
@@ -616,7 +617,6 @@ public class Jeliot {
                 });
             }
         }
-        System.out.println("hello");
         return jeliot;
     }
 
