@@ -239,8 +239,8 @@ public class Actor implements Cloneable {
         return fgcolor;
     }
 
-    public void setShadowImage(Image si) {
-        this.shadowImage = si;
+    public static void setShadowImage(Image si) {
+        shadowImage = si;
     }
 
     public void setBackground(Color bgcolor) {
