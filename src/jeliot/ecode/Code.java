@@ -3,8 +3,6 @@ import java.io.*;
 import jeliot.launcher.*;
 import java.util.*;
 
-
-
 public class Code {
 
     //Auxiliary statements
@@ -105,7 +103,7 @@ public class Code {
 
     public static final int SA=63;          // Simplea class allocation
     public static final int OFA=64;         // Object field access
-    //Last int used -> 63
+    //Last int used -> 64
 }
 
 //package jeliot.ecode;
