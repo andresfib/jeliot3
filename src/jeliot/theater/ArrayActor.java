@@ -10,24 +10,28 @@ import java.util.ResourceBundle;
 import jeliot.lang.ArrayUtilities;
 
 /**
-  * @author Pekka Uronen
-  * created         10.10.1999
-  * @modified Niko Myller
-  * modified        10.5.2003
-  */
+ * Array Actor represents the array instance.
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ * 
+ * @see jeliot.lang.ArrayInstance
+ */
 public class ArrayActor extends InstanceActor {
 
     /**
-     * The resource bundle
+     * The resource bundle for theater package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
+//DOC: Document!
 
     /**
 	 *
 	 */
 	private String emptyArray1 = bundle.getString("string.empty_array1");
+    
     /**
 	 *
 	 */
@@ -43,17 +47,25 @@ public class ArrayActor extends InstanceActor {
 	 */
 	private Color valueColor;
 
-    /** The x-coordinate of the vertical line separating indices from
-      * values. */
+    /**
+     * The x-coordinate of the vertical line separating indices from
+     * values.
+     */
     private int vlinex;
 
-    /** The width of a cell reserved for a single value actor. */
+    /**
+     * The width of a cell reserved for a single value actor.
+     */
     private int valuew;
 
-    /** The height of a single value actor. */
+    /**
+     * The height of a single value actor.
+     */
     private int valueh;
 
-    /** The width of an index label. */
+    /**
+     * The width of an index label.
+     */
     private int indexw;
 
     /**

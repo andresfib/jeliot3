@@ -2,24 +2,27 @@ package jeliot.theater;
 
 
 /**
-  * <p>
-  * <code>AnimationEngine</code> schedules the animations represented
-  * by instances of <code>Animation</code> class. The engine is given
-  * an animation or an array of animations, and it plays those
-  * animations. The speed and quality of the animation can be
-  * controlled by setting its volume (speed) and FPS (Frames Per Second)
-  * values. An engine's volume is the amount of action it gives to the
-  * animation objects each second. The higher the volume, the faster
-  * the animations will play.
-  * </p><p>
-  * An animation engine may be assigned a <code>ThreadController</code>
-  * instance. In this case, the engine checks with the controller after
-  * every step of animation calling its <code>checkPoint</code> method.
-  * </p>
-  *
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * 
+ * <p>
+ * <code>AnimationEngine</code> schedules the animations represented
+ * by instances of <code>Animation</code> class. The engine is given
+ * an animation or an array of animations, and it plays those
+ * animations. The speed and quality of the animation can be
+ * controlled by setting its volume (speed) and FPS (Frames Per Second)
+ * values. An engine's volume is the amount of action it gives to the
+ * animation objects each second. The higher the volume, the faster
+ * the animations will play.
+ * </p>
+ * 
+ * <p>
+ * An animation engine may be assigned a <code>ThreadController</code>
+ * instance. In this case, the engine checks with the controller after
+ * every step of animation calling its <code>checkPoint</code> method.
+ * </p>
+ *
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class AnimationEngine implements Controlled {
 
     /**

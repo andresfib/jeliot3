@@ -3,19 +3,33 @@ package jeliot.theater;
 import jeliot.lang.Value;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * An abstract class that handles the animation. Currectly, it is
+ * only used in the input handling in Theater class. 
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ * 
+ * @see jeliot.theater.Director.InputAnimator
+ * @see jeliot.theater.Director#readChar()
+ * @see jeliot.theater.Director#readDouble()
+ * @see jeliot.theater.Director#readInt()
+ * @see jeliot.theater.Director#readString()
+ * @see jeliot.theater.Director#animateInputHandling(String,Highlight)
+ */
 public abstract class Animator {
+
+//DOC: Document!
 
     /**
 	 *
 	 */
 	private Value[] args;
+    
     /**
 	 *
 	 */
 	private ValueActor[] argact;
+    
     /**
 	 *
 	 */
@@ -69,5 +83,4 @@ public abstract class Animator {
 	 * @param director
 	 */
 	public abstract void animate(Director director);
-
 }
