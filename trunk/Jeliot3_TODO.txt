@@ -1,35 +1,60 @@
 JELIOT 3 TODO-LIST
 
-* Use invokeLater method to build up the gui in the beginning of the 
-  program.
+-------These should be done before freezing the "final" version:-----
+
+Urgent:
+
 * Initialization of object when it inherits user made class (super() call)
 * Super method call with parameters in object creation with inheritance
-* Bad user code crashes Jeliot "}", error not being read by Interpreter
 * Documentation
-* Reference actors needs to be fixed in instances and in short distances
-* Arrow heads or something to indicate that the reference ends to that 
-  specific object.
-* Execute until feature
-* Instance garbage collection
-* Array initializers
-* Array variables could be references
-* Command line parameters
-* 2 -dimensional arrays
+* Array initializers (but only for on3 dimensional arrays)
+* Static field access (into the constant area)
+* Explicit mentioning of different areas in the theater area.
+
+Technical:
+
+* Use invokeLater method to build up the gui in the beginning of the 
+  program.
 * Default error message needs to be changed
-* Static field access
-* Super field access
-* Super method calls when constructor is called.
 * getValue -method for EvaluationVisitor. It returns string 
   representation of the value. If value is primitive type then the values 
   String presentation otherwise the hashcode.
+* Not implemented feature -message (Done, but needs to be added from comments to releases)
+
+Bugs:
+
+* Bad user code crashes Jeliot "}", error not being read by Interpreter
+
+Graphical:
+
+* Reference actors visualization needs to be fixed in instances and in short distances
+* Arrow heads or something to indicate that the reference ends to that 
+  specific object.
+* Some randomness to the placement of references to prevent overlapping
+
+-------These can be done later: ------------------------------------
+
+Otherwise low priority:
+* Array variables could be references
+
+Speculative or not needed at all:
+* Command line parameters
+
+Conceptually/Technically challenging:
+* Execute until feature
+* Going backwards
+* New editor (e.g. from BlueJ or JEdit)
+* Instance garbage collection
+
+Ideas for next versions:
+* 2 -dimensional arrays
+* Super field access
 * Connection wizard for different kind of connections (e.g. DJava, Woven 
   Stories etc.) also for different visualizers like Call Tree.
 * Call Tree
-* (Scratch visualization)?
 * Using Vivaldi-kernel as a tool to visualize object oriented programming 
   on more abstract level.
-* Not implemented feature -message (Done, but needs to be added from comments to releases)
-* Error message when super class, does not include constructor without 
-  parameters or default constructor (Done)
-* Object's fields initial values (Partially done, but should be changed)
-* Simple enough build (DONE)
+* Combining Jeliot and Woven Stories supporting collaborative working
+* Combining Jeliot and JHave supporting self-assesment and explanations
+* Generating explanations from the intermediate code
+* Integrating Jeliot into BlueJ
