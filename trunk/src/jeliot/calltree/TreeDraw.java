@@ -8,14 +8,14 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * @author Niko Myller
  */
 public class TreeDraw extends JComponent {
 
-	protected static final UserPropertyResourceBundle propertiesBundle = ResourceBundles.getCallTreeUserPropertyResourceBundle();
+	protected static final UserProperties propertiesBundle = ResourceBundles.getCallTreeUserProperties();
 
     /**
      * 
@@ -35,7 +35,7 @@ public class TreeDraw extends JComponent {
     /**
      * Font to be used in the call tree
      */
-    private static final Font FONT = new Font(propertiesBundle.getString("font.calltree"), Font.BOLD, Integer.parseInt(propertiesBundle.getString("font.calltree.size")));
+    private static final Font FONT = new Font(propertiesBundle.getStringProperty("font.calltree"), Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.calltree.size")));
     
     /**
      * 

@@ -16,7 +16,7 @@ import java.util.Vector;
 import jeliot.tracker.Tracker;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * The base class for all the actors. The Actor class should not be
@@ -31,8 +31,8 @@ public abstract class Actor implements Cloneable {
     /**
      * The resource bundle for theater package.
      */
-    private static UserPropertyResourceBundle propertiesBundle = ResourceBundles
-            .getTheaterUserPropertyResourceBundle();
+    private static UserProperties propertiesBundle = ResourceBundles
+            .getTheaterUserProperties();
 
     /**
      *
@@ -47,8 +47,8 @@ public abstract class Actor implements Cloneable {
     /**
      *
      */
-    private static Font defaultFont = new Font(propertiesBundle.getString("font.actor.default.family"),
-            Font.PLAIN, Integer.parseInt(propertiesBundle.getString("font.actor.default.size")));
+    private static Font defaultFont = new Font(propertiesBundle.getStringProperty("font.actor.default.family"),
+            Font.PLAIN, Integer.parseInt(propertiesBundle.getStringProperty("font.actor.default.size")));
 
     /**
      *
@@ -88,7 +88,7 @@ public abstract class Actor implements Cloneable {
     /**
      * Width of actor's border.
      */
-    protected int borderWidth = Integer.parseInt(propertiesBundle.getString("actor.border_width"));
+    protected int borderWidth = Integer.parseInt(propertiesBundle.getStringProperty("actor.border_width"));
 
     /**
      *
@@ -124,7 +124,7 @@ public abstract class Actor implements Cloneable {
      * Actor's foreground color. Used to draw text, for example.
      */
     protected Color fgcolor = new Color(Integer.decode(
-            propertiesBundle.getString("color.actor.default.foreground")).intValue());
+            propertiesBundle.getStringProperty("color.actor.default.foreground")).intValue());
 
     /**
      * Darker shade of background color.
@@ -140,13 +140,13 @@ public abstract class Actor implements Cloneable {
      * Color used for highlighting.
      */
     protected Color highColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.actor.default.highlight")).intValue());
+            propertiesBundle.getStringProperty("color.actor.default.highlight")).intValue());
 
     /**
      * Color used for painting borders.
      */
     protected Color borderColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.actor.default.border")).intValue());
+            propertiesBundle.getStringProperty("color.actor.default.border")).intValue());
 
     /**
      * Parent actor.

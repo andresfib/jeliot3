@@ -25,6 +25,7 @@ import javax.swing.event.ChangeListener;
 
 import jeliot.mcode.Highlight;
 import jeliot.util.DebugUtil;
+import jeliot.util.Util;
 
 /**
  * @author nmyller
@@ -129,14 +130,8 @@ public class HistoryView extends JComponent implements ActionListener {
     public HistoryView(final CodePane2 c, String udir) {
         //TODO: add some of the literals below to a resourceBundle.
         this.codePane = c;
-        //We take the first user home path as the one to be used.
-        String userPath = System.getProperty("user.home").split(
-                System.getProperty("path.separator"))[0];
-        imageTemp = new File(userPath, ".jeliot");
-        if (!imageTemp.exists()) {
-            imageTemp.mkdir();
-        }
-        imageTemp = new File(imageTemp, "images");
+        File userPath = Util.createUserPath();
+        imageTemp = new File(userPath, "images");
         if (!imageTemp.exists()) {
             imageTemp.mkdir();
         }

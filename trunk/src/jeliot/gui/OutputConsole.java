@@ -18,7 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * OutputConsole is a text area on which the output of a user's
@@ -32,7 +32,7 @@ public class OutputConsole extends JTextArea {
     /**
      * The resource bundle for gui package
      */
-    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getGuiUserPropertyResourceBundle();
+    static private UserProperties propertiesBundle = ResourceBundles.getGuiUserProperties();
     
     /**
      * The resource bundle for gui package
@@ -95,9 +95,9 @@ public class OutputConsole extends JTextArea {
 
         this.model = model;
 
-        setFont(new Font(propertiesBundle.getString("font.output.family"),
+        setFont(new Font(propertiesBundle.getStringProperty("font.output.family"),
                 Font.BOLD,
-                Integer.parseInt(propertiesBundle.getString("font.output.size"))));
+                Integer.parseInt(propertiesBundle.getStringProperty("font.output.size"))));
         setEditable(false);
 
         // create titled border

@@ -7,7 +7,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * <code>ValueActor</code> is an actor that represents graphically
@@ -27,7 +27,7 @@ public class ValueActor extends Actor {
    /**
      * The resource bundle for theater package
      */
-    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getTheaterUserPropertyResourceBundle();
+    static private UserProperties propertiesBundle = ResourceBundles.getTheaterUserProperties();
 
 //  DOC: Document!
     /**
@@ -54,9 +54,9 @@ public class ValueActor extends Actor {
 	 * 
 	 */
 	public ValueActor() {
-        setFont(new Font(propertiesBundle.getString("font.value_actor.family"),
+        setFont(new Font(propertiesBundle.getStringProperty("font.value_actor.family"),
         Font.BOLD,
-        Integer.parseInt(propertiesBundle.getString("font.value_actor.size"))));
+        Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size"))));
     }
 
     /**

@@ -5,19 +5,19 @@ import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * @author Niko Myller
  */
 public class BoundingBoxCalculator extends EulerTour {
 
-	protected static final UserPropertyResourceBundle propertiesBundle = ResourceBundles.getCallTreeUserPropertyResourceBundle();
+	protected static final UserProperties propertiesBundle = ResourceBundles.getCallTreeUserProperties();
 	
     /**
      * size of the grid squares (default 50)
      */
-    protected int offset = Integer.parseInt(propertiesBundle.getString("offset")); 
+    protected int offset = Integer.parseInt(propertiesBundle.getStringProperty("offset")); 
 
     /**
      * a running total width of the explored tree drawing
@@ -42,7 +42,7 @@ public class BoundingBoxCalculator extends EulerTour {
     /**
      * the distance to separate bounding boxes (default 15)
      */
-    protected int pad = Integer.parseInt(propertiesBundle.getString("pad"));
+    protected int pad = Integer.parseInt(propertiesBundle.getStringProperty("pad"));
 
     /**
      * Comment for <code>maxWidth</code>

@@ -11,7 +11,7 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * The LineNumbers component is used to show the line numbers in the scroll
@@ -26,7 +26,7 @@ public class LineNumbers extends JComponent {
     /**
      * The resource bundle for gui package
      */
-    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getGuiUserPropertyResourceBundle();
+    static private UserProperties propertiesBundle = ResourceBundles.getGuiUserProperties();
     
     /**
      * The width of the component.
@@ -63,7 +63,7 @@ public class LineNumbers extends JComponent {
      */
     private Color normalColor = new Color(
 			Integer
-			.decode(propertiesBundle.getString("color.line_numbers.normal"))
+			.decode(propertiesBundle.getStringProperty("color.line_numbers.normal"))
 			.intValue());
     
     /**
@@ -71,7 +71,7 @@ public class LineNumbers extends JComponent {
      */
     private Color highlightColor = new Color(
 			Integer
-			.decode(propertiesBundle.getString("color.line_numbers.highlight"))
+			.decode(propertiesBundle.getStringProperty("color.line_numbers.highlight"))
 			.intValue());
     
     /**
@@ -79,7 +79,7 @@ public class LineNumbers extends JComponent {
      */
     private Color backGroundColor = new Color(
 			Integer
-			.decode(propertiesBundle.getString("color.line_numbers.background"))
+			.decode(propertiesBundle.getStringProperty("color.line_numbers.background"))
 			.intValue());
 			
     /**

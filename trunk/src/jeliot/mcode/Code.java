@@ -1,7 +1,7 @@
 package jeliot.mcode;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * This class contains the MCode language constructs as a 
@@ -28,27 +28,27 @@ public class Code {
     /**
      * The resource bundle used in this package
      */
-    static private UserPropertyResourceBundle bundle = ResourceBundles
-            .getMCodeUserPropertyResourceBundle();
+    static private UserProperties bundle = ResourceBundles
+            .getMCodeUserProperties();
 
     //Useful constants
     /** Delimiter of the mcode expressions */
-    public static final String DELIM = bundle.getString("delim");
+    public static final String DELIM = bundle.getStringProperty("delim");
 
     /** Delimiter of the mcode location expressions */
-    public static final String LOC_DELIM = bundle.getString("delim.location");
+    public static final String LOC_DELIM = bundle.getStringProperty("delim.location");
 
     /** Symbol for an unknown value */
-    public static final String UNKNOWN = bundle.getString("unknown_value");
+    public static final String UNKNOWN = bundle.getStringProperty("unknown_value");
 
     /** Symbol for no reference */
-    public static final int NO_REFERENCE = Integer.parseInt(bundle.getString("no_reference"));
+    public static final int NO_REFERENCE = Integer.parseInt(bundle.getStringProperty("no_reference"));
 
     /** Symbol for a non-final variable */
-    public static final int NOT_FINAL = Integer.parseInt(bundle.getString("not_final"));
+    public static final int NOT_FINAL = Integer.parseInt(bundle.getStringProperty("not_final"));
 
     /** Symbol for a final variable */
-    public static final int FINAL = Integer.parseInt(bundle.getString("final"));
+    public static final int FINAL = Integer.parseInt(bundle.getStringProperty("final"));
 
     /** Symbolic presentation for true value */
     public static final String TRUE = Boolean.TRUE.toString();
