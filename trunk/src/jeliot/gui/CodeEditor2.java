@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -304,10 +305,13 @@ public class CodeEditor2 extends JComponent {
      * @return The constructed button from the given parameters.
      */
     private JButton makeToolButton(String label, String iconName,
-            ActionListener listener) {    	
-        ImageIcon icon = new ImageIcon(this.getClass().getClassLoader().getResource("directory.images") + iconName);
-        //Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+iconName));
-        //iLoad.getIconImage(iconName);
+            ActionListener listener) {
+        
+        URL imageURL = this.getClass().getClassLoader().getResource(bundle.getString("directory.images") + iconName);
+        if (imageURL == null) {
+            imageURL = Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+iconName);
+        }
+        ImageIcon icon = new ImageIcon(imageURL);
         
         JButton b = new JButton(label, icon);
         b.setVerticalTextPosition(AbstractButton.BOTTOM);
