@@ -503,6 +503,7 @@ public class JeliotWindow {
 
 				if (aw != null) {
 					//aw.pack();
+                    aw.reload();
 					aw.show();
 				}
 			}
