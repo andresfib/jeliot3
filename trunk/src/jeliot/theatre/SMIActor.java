@@ -1,0 +1,124 @@
+package jeliot.theatre;
+
+import java.awt.*;
+
+/**
+  * @author Pekka Uronen
+  *
+  * created         4.10.1999
+  */
+public class SMIActor extends Actor implements ActorContainer{
+
+    String name;
+
+    Actor[] actors;
+    Point[] locs;
+    boolean[] bound;
+    int next;
+
+    int margin = 2;
+    int titlemargin = 4;
+    int namey;
+    int namex;
+
+    public SMIActor(String name, int n) {
+        this.name = name;
+        actors = new Actor[n];
+        locs = new Point[n];
+        bound = new boolean[n];
+    }
+
+    public Point reserve(Actor actor) {
+        actors[next] = actor;
+        int y = insets.top + namey + titlemargin;
+        int x = (next == 0) ?
+                insets.left :
+                locs[next -1].x + margin + actors[next -1].getWidth();
+        locs[next++] = new Point(x, y);
+        Point rp = getRootLocation();
+        rp.translate(x, y);
+        return rp;
+    }
+
+
+    public void bind(Actor actor) {
+        for (int i = 0; i < next; ++i) {
+            if (actors[i] == actor) {
+                bound[i] = true;
+                actor.setParent(this);
+                actor.setLocation(locs[i]);
+                return;
+            }
+        }
+        throw new RuntimeException();
+    }
+
+    public void paintActors(Graphics g) {
+        int n = next;
+        for (int i = 0; i < n; ++i) {
+            if (bound[i]) {
+                g.translate(locs[i].x, locs[i].y);
+                actors[i].paintActor(g);
+                g.translate(-locs[i].x, -locs[i].y);
+            }
+        }
+    }
+
+    public void paintActor(Graphics g) {
+        int w = getWidth();
+        int h = getHeight();
+
+        // draw background
+        g.setColor(bgcolor);
+        g.fillRect(2, 2, w-4, h-4);
+
+        // draw border
+        g.setColor(darkColor);
+        g.drawRect(1, 1, w-3, h-3);
+        g.setColor(fgcolor);
+        g.drawRect(0, 0, w-1, h-1);
+
+        // draw text
+        g.setFont(getFont());
+        g.drawString(name, namex, namey);
+
+        paintActors(g);
+    }
+
+    public void calculateSize() {
+        // Get the size of the name.
+        FontMetrics fm = getFontMetrics();
+        int nameh = fm.getHeight();
+        int namew = fm.stringWidth(this.name);
+
+        int n = next;
+        int maxh = insets.top + titlemargin + nameh;
+        int maxw = insets.left + namew;
+        for (int i = 0; i < n; ++i) {
+            int h = locs[i].y + actors[i].getHeight();
+            maxh = h > maxh ? h : maxh;
+            int w = locs[i].x + actors[i].getWidth();
+            maxw = w > maxw ? w : maxw;
+        }
+        namex = insets.left;
+        namey = insets.top + nameh;
+        setSize(maxw + insets.right, maxh + insets.bottom);
+    }
+
+    public void removeActor(Actor actor) {
+        int n = next;
+        for (int i = 0; i < n; ++i) {
+            if (actors[i] == actor) {
+                bound[i] = false;
+            }
+        }
+    }
+
+    public void setLight(int light) {
+        super.setLight(light);
+        int n = next;
+        for (int i = 0; i < n; ++i) {
+            actors[i].setLight(light);
+        }
+    }
+}
