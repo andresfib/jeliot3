@@ -112,11 +112,17 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     /**
      * currentMethodInvocation keeps track of all the information that is
-     * collected during the method invocation. Cells: 0: Method name 1:
-     * Class/Object expression 2: Parameter values 3: Parameter types 4:
-     * Parameter names 5: Highlight info for invocation 6: Highlight info for
-     * declaration 7: Parameter expression references 8: Object reference if
-     * method is constructor or object method
+     * collected during the method invocation.
+     * Cells:
+     * 0: Method name
+     * 1: Class/Object expression
+     * 2: Parameter values
+     * 3: Parameter types
+     * 4: Parameter names
+     * 5: Highlight info for invocation
+     * 6: Highlight info for declaration
+     * 7: Parameter expression references
+     * 8: Object reference if method is constructor or object method
      */
     protected Object[] currentMethodInvocation = null;
 
@@ -242,7 +248,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     + Code.LOC_DELIM + "0";
         }
         //TODO: comment the next line in the released versions
-        //System.out.println(readLine);
+        System.out.println(readLine);
         return readLine;
     }
 
@@ -2361,8 +2367,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodePRDE(long expressionCounter,
             long expressionReference, String value, String type, Highlight h) {
-        handlePostIncDec(expressionCounter, expressionReference, value, type,
-                h, MCodeUtilities.resolveUnOperator(Code.PRDE));
+        handlePreIncDec(expressionCounter, expressionReference, value, type, h,
+                MCodeUtilities.resolveUnOperator(Code.PRDE));
     }
 
     /**
@@ -2374,8 +2380,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodePRIE(long expressionCounter,
             long expressionReference, String value, String type, Highlight h) {
-        handlePostIncDec(expressionCounter, expressionReference, value, type,
-                h, MCodeUtilities.resolveUnOperator(Code.PRIE));
+        handlePreIncDec(expressionCounter, expressionReference, value, type, h,
+                MCodeUtilities.resolveUnOperator(Code.PRIE));
     }
 
     /**
@@ -2387,8 +2393,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodePDE(long expressionCounter,
             long expressionReference, String value, String type, Highlight h) {
-        handlePreIncDec(expressionCounter, expressionReference, value, type, h,
-                MCodeUtilities.resolveUnOperator(Code.PDE));
+        handlePostIncDec(expressionCounter, expressionReference, value, type,
+                h, MCodeUtilities.resolveUnOperator(Code.PDE));
     }
 
     /**
@@ -2400,8 +2406,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodePIE(long expressionCounter,
             long expressionReference, String value, String type, Highlight h) {
-        handlePreIncDec(expressionCounter, expressionReference, value, type, h,
-                MCodeUtilities.resolveUnOperator(Code.PIE));
+        handlePostIncDec(expressionCounter, expressionReference, value, type,
+                h, MCodeUtilities.resolveUnOperator(Code.PIE));
     }
 
     /**
