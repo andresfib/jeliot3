@@ -168,33 +168,57 @@ public class ECodeUtilities {
             }
 
             // Or Expression (|| sign)
-            case Code.OR:     {
+            case Code.OR: {
                 return OROR;
             }
 
             // Equal Expression (== sign)
-            case Code.EE:     {
+            case Code.EE: {
                 return EQEQ;
             }
 
             // Not Equal Expression (!= sign)
-            case Code.NE:     {
+            case Code.NE: {
                 return NOTEQ;
             }
 
             // Less Expression (< sign)
-            case Code.LE:     {
+            case Code.LE: {
                 return LT;
             }
 
             // Less or Equal Expression (<= sign)
-            case Code.LQE:    {
+            case Code.LQE: {
                 return LTEQ;
             }
 
             // Greater or Equal Expression (>= sign)
-            case Code.GQT:    {
+            case Code.GQT: {
                 return GTEQ;
+            }
+
+            case Code.BITOR: {
+                return OR;
+            }
+
+            case Code.BITXOR: {
+                return XOR;
+            }
+
+            case Code.BITAND: {
+                return AND;
+            }
+
+            case Code.LSHIFT: {
+                return LSHIFT;
+            }
+
+            case Code.RSHIFT: {
+                return RSHIFT;
+            }
+
+            case Code.URSHIFT: {
+                return URSHIFT;
             }
 
             //This is an error.
@@ -242,6 +266,10 @@ public class ECodeUtilities {
                 return MINUSMINUS;
             }
 
+            case Code.COMP: {
+                return COMP;
+            }
+
             //This is an error.
             default: {
                 return -1;
@@ -251,6 +279,7 @@ public class ECodeUtilities {
 
     public static boolean isUnary(int operator) {
         switch (operator) {
+            case Code.COMP:
             case Code.MINUS:    //Unary minus expression
             case Code.PLUS:     //Unary plus expression
             case Code.NO:       //Unary not expression
@@ -269,6 +298,12 @@ public class ECodeUtilities {
 
     public static boolean isBinary(int operator) {
         switch (operator) {
+            case Code.BITOR:
+            case Code.BITXOR:
+            case Code.BITAND:
+            case Code.LSHIFT:
+            case Code.RSHIFT:
+            case Code.URSHIFT:
             case Code.OR:       // Or Expression
             case Code.EE:       // Equal Expression
             case Code.NE:       // Not Equal Expression
