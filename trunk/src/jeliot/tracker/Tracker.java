@@ -66,8 +66,11 @@ public class Tracker {
 	public static void openFile(File f) {
 		if (out == null && track) {
 			try {
-				File file = new File(f, "JeliotTracker"
+                File file = null;
+                do {
+				file = new File(f, "JeliotTracker"
 						+ System.currentTimeMillis() + ".txt");
+                } while (file.exists());
 				file.createNewFile();
 				out = new BufferedWriter(new FileWriter(file));
 			} catch (Exception e) {
@@ -117,6 +120,33 @@ public class Tracker {
 		}
 	}
 
+    /**
+     * @param name
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param millis
+     */
+    public static void writeIndexToFile(String name, int x, int y, int x2, int y2,
+            long millis) {
+        if (out != null && track && theater != null) {
+            try {
+                Point p = theater.getLocationOnScreen();
+                Rectangle r = theater.getClipRect();
+                if (r != null) {
+                    out.write(name + ":" + (p.x + x - r.x) + ":"
+                            + (p.y + y - r.y) + ":" + (p.x + x2 - r.x) + ":" + (p.y + y2 - r.y) + ":"
+                            + millis);
+                    out.newLine();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    
 	/**
 	 * @param name
 	 * @param x
@@ -153,6 +183,31 @@ public class Tracker {
 		}
 	}
 
+    /**
+     * @param name
+     * @param l
+     * @param r
+     * @param millis
+     */
+    public static void writeToFileFromCodeView(String name, int l, int r,
+            long millis) {
+        if (out != null && track && codePane != null
+                && codePane.getTextArea().isShowing()) {
+            try {
+                    out.write(name
+                            + ":"
+                            + l
+                            + ":"
+                            + r
+                            + ":"
+                            + millis);
+                    out.newLine();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
 	/**
 	 * @param name
 	 * @param millis

@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -890,6 +891,7 @@ public class JeliotWindow {
             public void stateChanged(ChangeEvent e) {
                 int volume = speedSlider.getValue();
                 engine.setVolume((double) (volume * 50.0));
+                Tracker.writeToFile("Slider", "" + volume, System.currentTimeMillis());
             }
         });
 
@@ -1153,6 +1155,11 @@ public class JeliotWindow {
      * index = from.indexOf(c); } return from; }
      */
 
+    Pattern method1 = Pattern.compile("\\s+static\\s+void\\s+main\\s*\\(\\s*String[^,]*\\[\\s*\\][^,]*\\)");
+    Pattern method2 = Pattern.compile("\\s+static\\s+void\\s+main\\s*\\(\\s*\\)");
+    Pattern class1 = Pattern.compile("\\s+class\\s+");
+    Pattern class2 = Pattern.compile("\\s");
+    
     /**
      * Tries to find the main method declaration
      * from one of the classes.
@@ -1166,12 +1173,16 @@ public class JeliotWindow {
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\n", " ");
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\r", " ");
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\t", " ");
-
-        String[] method = programCode.split(
-                "\\s+?static\\s+?void\\s+?main\\s*?\\(\\s*?String.*?\\[\\]??\\s[^,]*?\\)", 2);
+        commentsRemoved = " " + commentsRemoved;
+        
+        //System.out.println(p.pattern());
+        String[] method = method1.split(commentsRemoved, 2);
+        //String[] method = programCode.split("\\s+static\\s+void\\s+main\\s*\\(\\s*String[^,]*\\[\\s*\\]\\s[^,]*\\)", 2);
         if (method.length > 1 && method[1].length() > 0) {
-            String[] classes = method[0].split("\\s*?class\\s+?");
-            String[] classNames = classes[classes.length - 1].split("\\s");
+            //System.out.println(method[0]);
+            //System.out.println(method[1]);
+            String[] classes = class1.split(method[0]);
+            String[] classNames = class2.split(classes[classes.length - 1]);
             String className = classNames[0].replace('{', ' ');
             className = className.trim();
             if (className.length() > 0) {
@@ -1180,10 +1191,13 @@ public class JeliotWindow {
             }
         }
 
-        method = programCode.split("\\s+?static\\s+?void\\s+?main\\s*?\\(\\s*?\\)", 2);
+        method = method2.split(commentsRemoved, 2);
+        
         if (method.length > 1 && method[1].length() > 0) {
-            String[] classes = method[0].split("\\s*?class\\s+?");
-            String[] classNames = classes[classes.length - 1].split("\\s");
+            //System.out.println(method[0]);
+            //System.out.println(method[1]);
+            String[] classes = class1.split(method[0]);
+            String[] classNames = class2.split(classes[classes.length - 1]);
             String className = classNames[0].replace('{', ' ');
             className = className.trim();
             if (className.length() > 0) {

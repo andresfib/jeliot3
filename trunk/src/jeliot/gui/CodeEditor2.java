@@ -51,6 +51,8 @@ import org.syntax.jedit.tokenmarker.JavaTokenMarker;
  */
 public class CodeEditor2 extends JComponent {
 
+    //TODO: Add Tracker commands for Editor buttons!
+    
     /**
      * The resource bundle for gui package
      */

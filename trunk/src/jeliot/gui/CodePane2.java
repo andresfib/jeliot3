@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.PlainDocument;
 
 import jeliot.mcode.Highlight;
+import jeliot.tracker.Tracker;
 
 import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.tokenmarker.JavaTokenMarker;
@@ -158,6 +159,8 @@ public class CodePane2 extends JComponent {
 		final int left = l - 1;
 		final int right = r;
 
+        Tracker.writeToFileFromCodeView("Highlight", left, right, System.currentTimeMillis());
+        
  		Runnable updateAComponent = new Runnable() {
 			public void run() {
 				//area.requestFocus();
