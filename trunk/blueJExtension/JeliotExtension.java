@@ -114,7 +114,7 @@ class MenuBuilder extends MenuGenerator {
      */
     MenuBuilder(BlueJ bluej) {
     	this.bluej = bluej;
-        aToolsAction = new ToolsAction("Use Jeliot", bluej);
+        aToolsAction = new ToolsAction("Run Jeliot", bluej);
     }
 
     public JMenuItem getToolsMenuItem(BPackage aPackage) {
@@ -358,8 +358,10 @@ class MenuBuilder extends MenuGenerator {
     		
     	}
     	
-    	public void compileSucceeded(CompileEvent event){
-    		//System.out.println("files compiled, jeliot extension ok\n");
+    	public void compileSucceeded(CompileEvent event){	
+    		//we change the source code inside jeliot
+    		jeliot.setProgram(generateJeliotString());
+    		System.out.println("files compiled, jeliot extension ok\n");
     	}
     	
     	public void compileWarning(CompileEvent event){}
@@ -390,8 +392,15 @@ class MenuBuilder extends MenuGenerator {
     			
     		}
     		
+    		if (event.getMethodName()=="main") {
+    			System.out.println("main method called\n");
+    			//jeliot.compile();
+    			jeliot.recompile(generateJeliotString(), null);
+    			System.out.println("main compiled\n");
+    		}
+    		
     		//it´s a method called on an object
-    		if (event.getMethodName()!=null){//we call a method of an existing object
+    		if (event.getMethodName()!=null && event.getMethodName()!="main"){//we call a method of an existing object
     			String paramMethod = new String("");//string of the parameters
     			
     			//we get the object from the hashtable
