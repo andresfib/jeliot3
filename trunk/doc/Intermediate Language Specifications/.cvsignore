@@ -5,3 +5,5 @@ intermediate.aux
 intermediate.log
 intermediate.toc
 intermediate.dvi
+intermediate.bbl
+intermediate.blg

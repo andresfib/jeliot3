@@ -10,22 +10,32 @@
 
 \section{User Characteristics}
 \label{sec:users}
+
 This document is addressed to the following people:
+
 \begin{description}
-\item[Developers of Visualization Systems] This document may provide ideas and solutions to developers of new visualization systems, as well as provides of an existing solution that can be merged into their ongoing projects.
-\item[Maintainers of \jel{}] Future developers and maintainers of \jel{} should refer to this document when modifying its source code, specially those files referring to \djava{} and \jel{}'s interpreter. They should incorporate here all changes done to \mcode{} to provide a state of the art document as well. 
+	\item[Developers of Visualization Systems] This document may provide ideas and solutions to developers of new visualization systems, as well as provides of an existing solution that can be merged into their ongoing projects.
+	
+	\item[Maintainers of \jel{}] Future developers and maintainers of \jel{} should refer to this document when modifying its source code, specially those files referring to \djava{} and \jel{}'s interpreter. They should incorporate here all changes done to \mcode{} to provide a state of the art document as well. 
+	
 \end{description}
 
 \section{Features and Constraints}
 \label{sec:features}
+
 While trying to produce the more generic intermediate code some features and constraints where placed due to several reasons. The most important ones are the following ones:
+
 \begin{description}
-\item[Java] Being Java the language of choice, \mcode{} supports most of its characteristics and abilities. It is object oriented, so things as method calls, objects and, to some extend, inheritance are supported.
-\item[\djava{}]Because of using \djava{} as an interpreter from which to extract the execution information, some of the specified ordered sequences of instructions may be too constrained to the particularity of \djava{}. However that is not the case for the most of instructions explained here.
-\item[Targeted audience] \mcode{} was designed to support the development of \mcode{}, thus it was important to address their specific problems: \mcode{} has a great detail in the evaluation of expressions and the normal flow of program, so novices will grasp the programming fundamental issues. Meanwhile, more advanced features are not within the scope of the \mcode{} and have not been implemented. Those features include threads, reflection utilities and exception handling. 
+	\item[Java] Being Java the language of choice, \mcode{} supports most of its characteristics and abilities. It is object oriented, so things as method calls, objects and, to some extend, inheritance are supported.
+	
+	\item[\djava{}]Because of using \djava{} as an interpreter from which to extract the execution information, some of the specified ordered sequences of instructions may be too constrained to the particularity of \djava{}. However that is not the case for the most of instructions explained here.
+	
+	\item[Targeted audience] \mcode{} was designed to support the development of \mcode{}, thus it was important to address their specific problems: \mcode{} has a great detail in the evaluation of expressions and the normal flow of program, so novices will grasp the programming fundamental issues. Meanwhile, more advanced features are not within the scope of the \mcode{} and have not been implemented. Those features include threads, reflection utilities and exception handling. 
+	
 \end{description}
 
 \section{Dependencies}
 \label{sec:dependencies}
-Right now \mcode{} is only produced through the modified version of \djava{} included in the distribution of \jel{}. However it is up to anyone to create a new high\-{}level interpreter to produce its own \mcode{} to be run by \jel{}'s \mcode{} interpreter or by one they develope. 
+
+Right now \mcode{} is only produced through the modified version of \djava{} included in the distribution of \jel{}. However it is up to anyone to create a new high\-{}level interpreter to produce its own \mcode{} to be run by \jel{}'s \mcode{} interpreter or by one they develop. 
 There is also the possibility to store the \mcode{} a single text file and be retrieved later by a \mcode{} interpreter to produce visualization orders. However, this configuration would not allow INPUT/OUTPUT operations as they provide information to the evaluation needed to carry on with following instructions. 
