@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 /**
  *
@@ -19,7 +21,7 @@ import javax.swing.JScrollPane;
  * @author Andrés Moreno
  *
  */
-public class AboutWindow extends JFrame {
+public class AboutWindow extends JFrame implements HyperlinkListener {
 
 	/**
 	 * The resource bundle for gui package
@@ -39,6 +41,8 @@ public class AboutWindow extends JFrame {
 	 */
 	private JScrollPane jsp;
 
+    private String udir;
+
 	/**
 	 * constructs the AboutWindow by creating a JFrame.
 	 * Sets inside the JFrame JScrollPane with JEditorPane editorPane.
@@ -52,19 +56,26 @@ public class AboutWindow extends JFrame {
 		setIconImage(icon);
 
 		aboutPane.setEditable(false);
+		aboutPane.addHyperlinkListener(this);
 
 		jsp = new JScrollPane(aboutPane);
 		jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
+        this.udir = udir;
+
+        reload();
+
+		getContentPane().add(jsp);
+		setSize(600, 600);
+	}
+
+	public void reload() {
 		try {
 			File f = new File(udir, bundle.getString("window.about.content"));
 			showURL(f.toURI().toURL());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		getContentPane().add(jsp);
-		setSize(600, 600);
 	}
 
 	/**
@@ -79,5 +90,11 @@ public class AboutWindow extends JFrame {
 		} catch (IOException e) {
 			System.err.println(bundle.getString("bad.URL") + " " + url);
 		}
+	}
+
+	public void hyperlinkUpdate(HyperlinkEvent e) {
+        /*if (e.getEventType().toString().equals(HyperlinkEvent.EventType.ACTIVATED.toString())) {
+            showURL(e.getURL());
+        }*/
 	}
 }
