@@ -108,17 +108,17 @@ public class Interpreter {
                     int token = Integer.parseInt(tokenizer.nextToken());
 
 
-                    if (exprs.empty() &&
-                        !invokingMethod &&
-                        token != Code.WHI &&
-                        token != Code.FOR &&
-                        token != Code.DO &&
-                        token != Code.IFT &&
-                        token != Code.IFTE &&
-                        token != Code.VD &&
+                    if (exprs.empty()        &&
+                        !invokingMethod      &&
+                        token != Code.WHI    &&
+                        token != Code.FOR    &&
+                        token != Code.DO     &&
+                        token != Code.IFT    &&
+                        token != Code.IFTE   &&
+                        token != Code.VD     &&
                         token != Code.OUTPUT &&
-                        token != Code.INPUT) {
-                        //&& token != Code.INPUTTED) {
+                        token != Code.INPUT  &&
+                        token != Code.INPUTTED) {
                             director.closeScratch();
                             director.openScratch();
                     }
@@ -345,11 +345,14 @@ public class Interpreter {
                             } else if (ECodeUtilities.isUnary(oper)) {
 
                                 values.put(new Integer(expressionCounter), expressionValue);
-                                //int operator = ECodeUtilities.resolveUnaryOperator(oper);
-                                //if (command == Code.RIGHT) {
-                                //  director.beginUnaryExpression(operator, val,
-                                //                      expressionReference, highlight);
-                                //}
+
+                                int operator = ECodeUtilities.resolveUnOperator(oper);
+
+                                if (command == Code.RIGHT) {
+                                  director.beginUnaryExpression(operator, expressionValue,
+                                                      expressionReference, highlight);
+                                }
+
                             //If it is something else we will store it for later use.
                             } else {
 
@@ -634,11 +637,13 @@ public class Interpreter {
 
                                 values.put(new Integer(expressionCounter), expressionValue);
 
-                                //int operator = ECodeUtilities.resolveUnaryOperator(oper);
-                                //if (command == Code.RIGHT) {
-                                //  director.beginUnaryExpression(operator, val,
-                                //                      expressionReference, highlight);
-                                //}
+                                int operator = ECodeUtilities.resolveUnOperator(oper);
+
+                                if (command == Code.RIGHT) {
+                                    director.beginUnaryExpression(operator, expressionValue,
+                                                                  expressionReference, highlight);
+                                }
+
                             //If it is something else we will store it for later use.
                             } else {
 
@@ -693,7 +698,7 @@ public class Interpreter {
                             int expressionCounter = Integer.parseInt(tokenizer.nextToken());
                             String variableName = tokenizer.nextToken();
                             String value = null;
-                            if (tokenizer.countTokens() >= 4) {
+                            if (tokenizer.countTokens() >= 2) {
                                 value = tokenizer.nextToken();
                             } else {
                                 value = "";
@@ -714,6 +719,7 @@ public class Interpreter {
                                                 Code.DELIM);
                                 int comm = Integer.parseInt(commandTokenizer.nextToken());
                                 int cid = Integer.parseInt(commandTokenizer.nextToken());
+
                                 if (expressionCounter == cid) {
                                     command = comm;
                                     commands.removeElementAt(i);
@@ -808,11 +814,12 @@ public class Interpreter {
 
                                 } else {
 
+                                    values.put(new Integer(expressionCounter), val);
                                     int operator = ECodeUtilities.resolveUnOperator(oper);
-                                    //if (command == Code.RIGHT) {
+                                    if (command == Code.RIGHT) {
                                         director.beginUnaryExpression(operator, val,
                                                         expressionReference, highlight);
-                                    //}
+                                    }
                                 }
 
                             //If it is something else we will store it for later use.
@@ -934,10 +941,11 @@ public class Interpreter {
                             } else if (ECodeUtilities.isUnary(oper)) {
 
                                 int operator = ECodeUtilities.resolveUnOperator(oper);
-                                //if (command == Code.RIGHT) {
+                                values.put(new Integer(expressionCounter), lit);
+                                if (command == Code.RIGHT) {
                                     director.beginUnaryExpression(operator, lit,
                                                         expressionReference, highlight);
-                                //}
+                                }
 
                             //If it is something else we will store it for later use.
                             } else {
@@ -1089,7 +1097,7 @@ public class Interpreter {
                             int expressionCounter = Integer.parseInt(tokenizer.nextToken());
                             int expressionReference = Integer.parseInt(tokenizer.nextToken());
                             String value = null;
-                            if (tokenizer.countTokens() >= 4) {
+                            if (tokenizer.countTokens() >= 3) {
                                 value = tokenizer.nextToken();
                             } else {
                                 value = "";
@@ -1200,6 +1208,8 @@ public class Interpreter {
                                         director.getCurrentScratch().findActor(expressionReference);
                                         director.rightBinaryExpression(rv, ea, highlight);
 
+                                    } else {
+                                        values.put(new Integer(returnExpressionCounter), rv);
                                     }
 
                                 //If oper is a unary operator we will show it
@@ -1207,8 +1217,13 @@ public class Interpreter {
                                 } else if (ECodeUtilities.isUnary(oper)) {
 
                                     int operator = ECodeUtilities.resolveUnOperator(oper);
-                                    director.beginUnaryExpression(operator, rv,
-                                                expressionReference, highlight);
+
+                                    values.put(new Integer(returnExpressionCounter), rv);
+
+                                    if (command == Code.RIGHT) {
+                                        director.beginUnaryExpression(operator, rv,
+                                                        expressionReference, highlight);
+                                    }
 
                                 //If it is something else we will store it for later use.
                                 } else {
@@ -1456,6 +1471,29 @@ public class Interpreter {
 
                             input.println(in.getValue());
 
+                            values.put(new Integer(expressionCounter), in);
+
+                            break;
+                        }
+
+                        case Code.INPUTTED: {
+
+                            int expressionCounter = Integer.parseInt(
+                                                         tokenizer.nextToken());
+
+                            String value = tokenizer.nextToken();
+
+                            String type = tokenizer.nextToken();
+
+                            Highlight h = ECodeUtilities.makeHighlight(
+                                                tokenizer.nextToken());
+
+                            Value in = (Value) values.remove(
+                                              new Integer(expressionCounter));
+                            if (in == null) {
+                                in = new Value(value, type);
+                            }
+
                             //command that wait for this expression (left, right)
                             int command = -1;
                             int oper = -1;
@@ -1536,10 +1574,13 @@ public class Interpreter {
                             } else if (ECodeUtilities.isUnary(oper)) {
 
                                 int operator = ECodeUtilities.resolveUnOperator(oper);
-                                //if (command == Code.RIGHT) {
+
+                                values.put(new Integer(expressionCounter), in);
+
+                                if (command == Code.RIGHT) {
                                     director.beginUnaryExpression(operator, in,
                                                         expressionReference, highlight);
-                                //}
+                                }
 
                             //If it is something else we will store it for later use.
                             } else {
@@ -1558,16 +1599,16 @@ public class Interpreter {
                             if (scope == 1) {
 
                                 director.openScope();
+                                director.closeScratch();
+                                director.openScratch();
 
                             //Close the scope
                             } else if (scope == 0) {
 
                                 director.closeScope();
-
+                                director.closeScratch();
+                                director.openScratch();
                             }
-
-                            director.closeScratch();
-                            director.openScratch();
 
                             break;
                         }
