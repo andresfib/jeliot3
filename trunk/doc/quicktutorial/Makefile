@@ -1,8 +1,8 @@
 CC = latex
 PDFCC = dvipdf
 
-DEP = quicktutorial.tex
-DEPDVI = quicktutorial.dvi
+DEP = tutorial.tex
+DEPDVI = tutorial.dvi
 
 all: dvi pdf 
 
