@@ -1142,30 +1142,31 @@ public class TreeInterpreter implements Interpreter {
         Class[] previousParameters = (Class[]) MCodeUtilities.previousClassParametersStack.peek();
         
         // With previous values 
-        boolean signatureTest = ParamTypes.compareSignatures( previousParameters, 
-        			MCodeUtilities.getConstructorParamTypes());
-        boolean nameTest = previousClass.equals(c.getName());
-        
-        //With current values
-        boolean currentNameTest = c.getName().equals(MCodeUtilities.getConstructorName());
-
-        boolean inConstructorCall = signatureTest && currentNameTest; 
-        boolean inThisCall = (!signatureTest && currentNameTest) || (!signatureTest && nameTest);
-        boolean inSuperCall = !inThisCall && !inConstructorCall;
-
-        
-//        // With previous values 
-//        boolean signatureTest = ParamTypes.compareSignatures( previousParameters,types); 
+//        boolean signatureTest = ParamTypes.compareSignatures( previousParameters, 
+//        			MCodeUtilities.getConstructorParamTypes());
 //        boolean nameTest = previousClass.equals(c.getName());
 //        
-//        // With original constructor
-//        boolean consNameTest = c.getName().equals(MCodeUtilities.getConstructorName());
-//        boolean consSignatureTest = ParamTypes.compareSignatures( types,
-//        							MCodeUtilities.getConstructorParamTypes());
-//        
-//        boolean inConstructorCall = consSignatureTest && consNameTest;
-//        boolean inThisCall = (!consSignatureTest && consNameTest) || (!signatureTest && nameTest);
-//        boolean inSuperCall = !inThisCall && !inConstructorCall;      
+//        //With current values
+//        boolean currentNameTest = c.getName().equals(MCodeUtilities.getConstructorName());
+//
+//        boolean inConstructorCall = signatureTest && currentNameTest; 
+//        boolean inThisCall = (!signatureTest && currentNameTest) || (!signatureTest && nameTest);
+//        boolean inSuperCall = !inThisCall && !inConstructorCall;
+
+        
+        // With previous values 
+        boolean signatureTest = ParamTypes.compareSignatures( previousParameters,types); 
+        boolean nameTest = previousClass.equals(c.getName());
+        
+        // With original constructor
+        boolean consNameTest = c.getName().equals(MCodeUtilities.getConstructorName());
+        boolean consSignatureTest = ParamTypes.compareSignatures( previousParameters,
+        							MCodeUtilities.getConstructorParamTypes());
+        
+        boolean inConstructorCall = consSignatureTest && consNameTest;
+        boolean inThisCall = !inConstructorCall && (!signatureTest && nameTest);
+        boolean inSuperCall = !inThisCall && !inConstructorCall;      
+        
         
         
         MCodeUtilities.previousClassStack.push(c.getName());
