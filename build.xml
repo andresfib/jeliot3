@@ -88,10 +88,19 @@ To display the available targets type:
   <!-- Distribution ================================================= -->
   <target name="dist" depends="prepare-dist, jars">
     <zip zipfile="${dist}.zip" basedir="${dist}" includes="**/*"/>
+    <zip zipfile="${dist}-src.zip">
+     <zipfileset dir="src" prefix="src"/>
+     <zipfileset dir="lib" prefix="lib"/>
+     <zipfileset dir="resources" prefix="resources"/>
+     <zipfileset dir="docs" prefix="docs/"/>
+     <fileset dir="">
+       <include name="**/build.*"/>
+       <include name="**/jeliot.mf"/>
+     </fileset>
+    </zip>
   </target>
-
   <target name="jars" depends="compile, prepare-dist">
-    <jar jarfile="${dist}/lib/dynamicjava.jar">
+    <jar manifest="${src}/jeliot.mf" jarfile="${dist}/jeliot.jar" basedir="${dest}">
       <fileset dir="${dest}">
         <include name="${package-prefix}/**/*"/>
       </fileset>
@@ -99,19 +108,25 @@ To display the available targets type:
         <include name="${package-prefix}/**/*"/>
       </fileset>
     </jar>
-    <jar manifest="${src}/jeliot.mf"
-         jarfile="${dist}/jeliot.jar"/>
+<!--    <jar manifest="${src}/jeliot3.mf"
+         jarfile="${dist}/jeliot3.jar"/>-->
   </target>
 
   <target name="prepare-dist" depends="init">
     <mkdir dir="${dist}"/>
-    <mkdir dir="${dist}/lib"/>
    <!-- <mkdir dir="${dist}/docs"/>
     <mkdir dir="${dist}/docs/javadoc"/> -->
     <copy todir="${dist}/docs">
-      <fileset dir="docs"/>
+      <fileset dir="${dest}/docs"/>
     </copy>
-    <copy file="README" todir="${dist}"/>
+    <copy todir="${dist}/images">
+      <fileset dir="${dest}/images"/>
+    </copy>
+    <copy todir="${dist}/examples">
+      <fileset dir="${dest}/examples"/>
+    </copy>
+
+<!--    <copy file="README" todir="${dist}"/>-->
   </target>
 
   <target name="javadoc" depends="init">
