@@ -805,8 +805,9 @@ public class Interpreter {
                                     if (postIncDec != null) {
                                         doPostIncDec(postIncDec);
                                     }
+                                    i++;
                                 }
-        					}
+                            }
 
                             if (!methodInvocation.empty()) {
                                 currentMethodInvocation = (Object[]) methodInvocation.pop();
