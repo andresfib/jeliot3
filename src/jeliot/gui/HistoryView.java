@@ -97,6 +97,11 @@ public class HistoryView extends JComponent implements ActionListener {
      */
     private BufferedImage current;
 
+    /**
+     * Comment for <code>newImageAdded</code>
+     */
+    private boolean newImageAdded = false;
+
     //TODO: Buffering of next and previous image could improve performance
     /**
      * Comment for <code>previousImageNumber</code>
@@ -118,7 +123,8 @@ public class HistoryView extends JComponent implements ActionListener {
     public HistoryView(final CodePane2 c, String udir) {
         this.codePane = c;
         //We take the first user home path as the one to be used.
-        String userPath = System.getProperty("user.home").split(System.getProperty("path.separator"))[0];
+        String userPath = System.getProperty("user.home").split(
+                System.getProperty("path.separator"))[0];
         imageTemp = new File(userPath, ".jeliot");
         if (!imageTemp.exists()) {
             imageTemp.mkdir();
@@ -196,38 +202,39 @@ public class HistoryView extends JComponent implements ActionListener {
                  } else
                  */
                 if (imageNumber < imageFiles.size() && imageNumber >= 0) {
-                    try {
-                        current = ImageIO.read((File) imageFiles
-                                .get(imageNumber));
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
+                    if (!(imageNumber == imageFiles.size() - 1 && newImageAdded)) {
+                        try {
+                            current = ImageIO.read((File) imageFiles.get(imageNumber));
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        /*
+                         if (imageNumber - 1 >= 0) {
+                         try {
+                         previous = ImageIO.read((File) imageFiles
+                         .get(imageNumber - 1));
+                         } catch (IOException e1) {
+                         e1.printStackTrace();
+                         }
+                         }
+                         if (imageNumber + 1 < imageFiles.size()) {
+                         try {
+                         next = ImageIO.read((File) imageFiles
+                         .get(imageNumber + 1));
+                         } catch (IOException e1) {
+                         e1.printStackTrace();
+                         }
+                         }
+                         */
                     }
-                    /*
-                     if (imageNumber - 1 >= 0) {
-                     try {
-                     previous = ImageIO.read((File) imageFiles
-                     .get(imageNumber - 1));
-                     } catch (IOException e1) {
-                     e1.printStackTrace();
-                     }
-                     }
-                     if (imageNumber + 1 < imageFiles.size()) {
-                     try {
-                     next = ImageIO.read((File) imageFiles
-                     .get(imageNumber + 1));
-                     } catch (IOException e1) {
-                     e1.printStackTrace();
-                     }
-                     }
-                     */
+                    ic.setImage(current);
                 }
-                ic.setImage(current);
                 if (highlights.get(imageNumber) != null) {
                     if (HistoryView.this.isVisible()) {
-                        c.highlightStatement((Highlight) highlights
-                                .get(imageNumber));
+                        c.highlightStatement((Highlight) highlights.get(imageNumber));
                     }
                 }
+                newImageAdded = false;
                 ic.repaint();
                 validate();
             }
@@ -256,7 +263,7 @@ public class HistoryView extends JComponent implements ActionListener {
      * @param i
      * @param h
      */
-    public void addImage(Image i, Highlight h) {
+    public void addImage(final Image i, final Highlight h) {
         if (!slider.isEnabled()) {
             slider.setEnabled(true);
         }
@@ -271,6 +278,8 @@ public class HistoryView extends JComponent implements ActionListener {
         imageFiles.add(imageFile);
         highlights.add(h);
 
+        current = newImage;
+        newImageAdded = true;
         size = imageFiles.size() - 1;
         slider.setMaximum(size);
         slider.setValue(size);
@@ -294,9 +303,7 @@ public class HistoryView extends JComponent implements ActionListener {
      */
     public static BufferedImage getBufferedImage(Image img) {
         // if the image is already a BufferedImage, cast and return it
-        if ((img instanceof BufferedImage)) {
-            return (BufferedImage) img;
-        }
+        if ((img instanceof BufferedImage)) { return (BufferedImage) img; }
         // otherwise, create a new BufferedImage and draw the original 
         // image on it
         int w = img.getWidth(null);

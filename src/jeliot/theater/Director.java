@@ -1248,18 +1248,21 @@ public class Director {
         String type = variable.getType();
         VariableActor variableAct = variable.getActor();
         ValueActor valueAct = value.getActor();
-
+        
         if (MCodeUtilities.isPrimitive(type)) {
 
             // Get/create actors.
             ValueActor castAct = factory.produceValueActor(casted);
             casted.setActor(castAct);
 
+            ValueActor copiedValueAct = factory.produceValueActor(valueAct);
+            copiedValueAct.setLocation(valueAct.getRootLocation());
+            
             Point valueLoc = variableAct.reserve(castAct);
 
-            theatre.addActor(valueAct);
+            theatre.addActor(copiedValueAct);
             capture();
-            theatre.removeActor(valueAct);
+            theatre.removeActor(copiedValueAct);
             engine.showAnimation(valueAct.fly(valueLoc));
             variableAct.bind();
             theatre.removePassive(valueAct);
