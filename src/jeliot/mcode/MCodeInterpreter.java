@@ -9,7 +9,7 @@ import java.util.Vector;
 
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * The MCode interpreter that interprets the MCode received
@@ -80,8 +80,8 @@ public abstract class MCodeInterpreter {
     /**
      * The resource bundle for mcode properties
      */
-    static protected UserPropertyResourceBundle propertiesBundle = ResourceBundles
-            .getMCodeUserPropertyResourceBundle();
+    static protected UserProperties propertiesBundle = ResourceBundles
+            .getMCodeUserProperties();
 
     /**
      * Related to Super method calls in constructor's first line in

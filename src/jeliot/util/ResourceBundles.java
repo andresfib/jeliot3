@@ -6,110 +6,204 @@
  */
 package jeliot.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Locale;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 /**
+ * 
  * @author Niko Myller
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class ResourceBundles {
 
-    private static UserPropertyResourceBundle callTreeProperties;
+    /**
+     * Comment for <code>callTreeProperties</code>
+     */
+    private static UserProperties callTreeProperties;
 
-    private static UserPropertyResourceBundle guiProperties;
+    /**
+     * Comment for <code>guiProperties</code>
+     */
+    private static UserProperties guiProperties;
 
-    private static UserPropertyResourceBundle mCodeProperties;
+    /**
+     * Comment for <code>mCodeProperties</code>
+     */
+    private static UserProperties mCodeProperties;
 
-    private static UserPropertyResourceBundle theaterProperties;
+    /**
+     * Comment for <code>theaterProperties</code>
+     */
+    private static UserProperties theaterProperties;
 
+    /**
+     * Comment for <code>jeliotUserProperties</code>
+     */
+    private static UserProperties jeliotUserProperties;
+    
+    /**
+     * Comment for <code>guiMessages</code>
+     */
     private static ResourceBundle guiMessages;
 
+    /**
+     * Comment for <code>mCodeMessages</code>
+     */
     private static ResourceBundle mCodeMessages;
 
+    /**
+     * Comment for <code>theaterMessages</code>
+     */
     private static ResourceBundle theaterMessages;
 
-    private static PropertyResourceBundle userProperties;
-    
-    public static PropertyResourceBundle getUserProperties() {
-        if (userProperties == null) {
-            FileInputStream fis = null;
-            try {
-                fis = new FileInputStream(new File("properties.properties"));
-                userProperties = new PropertyResourceBundle(fis);
-            } catch (FileNotFoundException e) {
-            } catch (IOException e) {
-            }
+    /**
+     * @return
+     */
+    public static UserProperties getJeliotUserProperties() {
+        if (jeliotUserProperties == null) {
+            jeliotUserProperties = new UserProperties("jeliot",
+                    null);
         }
-        return userProperties;
+
+        return jeliotUserProperties;
     }
     
-    
-    public static UserPropertyResourceBundle getCallTreeUserPropertyResourceBundle() {
+    /**
+     * @return
+     */
+    public static UserProperties getCallTreeUserProperties() {
         if (callTreeProperties == null) {
-                callTreeProperties = new UserPropertyResourceBundle(getUserProperties(), ResourceBundle.getBundle(
-                        "jeliot.calltree.resources.properties", Locale.getDefault()));
+            callTreeProperties = new UserProperties("calltree",
+                    "jeliot.calltree.resources.properties");
         }
-        
+
         return callTreeProperties;
     }
 
-    public static UserPropertyResourceBundle getGuiUserPropertyResourceBundle() {
+    /**
+     * @return
+     */
+    public static UserProperties getGuiUserProperties() {
         if (guiProperties == null) {
-            guiProperties = new UserPropertyResourceBundle(getUserProperties(), ResourceBundle.getBundle(
-                    "jeliot.gui.resources.properties", Locale.getDefault()));
+            guiProperties = new UserProperties("gui",
+                    "jeliot.gui.resources.properties");
         }
-        
+
         return guiProperties;
     }
 
-    public static UserPropertyResourceBundle getMCodeUserPropertyResourceBundle() {
+    /**
+     * @return
+     */
+    public static UserProperties getMCodeUserProperties() {
         if (mCodeProperties == null) {
-            mCodeProperties = new UserPropertyResourceBundle(getUserProperties(), ResourceBundle.getBundle(
-                    "jeliot.mcode.resources.properties", Locale.getDefault()));
+            mCodeProperties = new UserProperties("mcode",
+                    "jeliot.mcode.resources.properties");
         }
-        
+
         return mCodeProperties;
     }
 
-    public static UserPropertyResourceBundle getTheaterUserPropertyResourceBundle() {
+    /**
+     * @return
+     */
+    public static UserProperties getTheaterUserProperties() {
         if (theaterProperties == null) {
-            theaterProperties = new UserPropertyResourceBundle(getUserProperties(), ResourceBundle.getBundle(
-                    "jeliot.theater.resources.properties", Locale.getDefault()));
+            theaterProperties = new UserProperties("theater",
+                    "jeliot.theater.resources.properties");
         }
-        
+
         return theaterProperties;
     }
-    
+
+    /**
+     * @return
+     */
     public static ResourceBundle getGuiMessageResourceBundle() {
         if (guiMessages == null) {
-            guiMessages = ResourceBundle.getBundle("jeliot.gui.resources.messages", Locale.getDefault());
+            guiMessages = ResourceBundle.getBundle(
+                    "jeliot.gui.resources.messages", Locale.getDefault());
         }
-        
+
         return guiMessages;
     }
 
+    /**
+     * @return
+     */
     public static ResourceBundle getMCodeMessageResourceBundle() {
         if (mCodeMessages == null) {
-            mCodeMessages = ResourceBundle.getBundle("jeliot.mcode.resources.messages", Locale.getDefault());
+            mCodeMessages = ResourceBundle.getBundle(
+                    "jeliot.mcode.resources.messages", Locale.getDefault());
         }
-        
+
         return mCodeMessages;
     }
-    
+
+    /**
+     * @return
+     */
     public static ResourceBundle getTheaterMessageResourceBundle() {
         if (theaterMessages == null) {
-            theaterMessages = ResourceBundle.getBundle("jeliot.theater.resources.messages", Locale.getDefault());
+            theaterMessages = ResourceBundle.getBundle(
+                    "jeliot.theater.resources.messages", Locale.getDefault());
         }
-        
+
         return theaterMessages;
     }
+
+    /**
+     * 
+     */
+    public static void saveCallTreeUserProperties() {
+        if (callTreeProperties != null) {
+            callTreeProperties.save();
+        }
+    }
     
+    /**
+     * 
+     */
+    public static void saveJeliotUserProperties() {
+        if (jeliotUserProperties != null) {
+            jeliotUserProperties.save();
+        }
+    }
+
+    /**
+     * 
+     */
+    public static void saveGuiUserProperties() {
+        if (guiProperties != null) {
+            guiProperties.save();
+        }
+    }
+
+    /**
+     * 
+     */
+    public static void saveMCodeUserProperties() {
+        if (mCodeProperties != null) {
+            mCodeProperties.save();
+        }
+    }
+
+    /**
+     * 
+     */
+    public static void saveTheaterUserProperties() {
+        if (theaterProperties != null) {
+            theaterProperties.save();
+        }
+    }
+
+    /**
+     * 
+     */
+    public static void saveAllUserProperties() {
+        saveCallTreeUserProperties();
+        saveGuiUserProperties();
+        saveMCodeUserProperties();
+        saveTheaterUserProperties();
+        saveJeliotUserProperties();
+    }
 }

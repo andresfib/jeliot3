@@ -25,7 +25,7 @@ import jeliot.theater.ExpressionActor;
 import jeliot.theater.ValueActor;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * NOT IN USE IN THE CURRENT RELEASE, REPLACED BY MCodeInterpreter!
@@ -206,7 +206,7 @@ public class Interpreter {
     /**
      * The resource bundle for mcode properties
      */
-    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getMCodeUserPropertyResourceBundle();
+    static private UserProperties propertiesBundle = ResourceBundles.getMCodeUserProperties();
 
     /**
      *  
@@ -2322,11 +2322,11 @@ public class Interpreter {
 
                             if (value.equals(Boolean.TRUE.toString())) {
                                 director.enterLoop(propertiesBundle
-                                        .getString("statement_name.while"),
+                                        .getStringProperty("statement_name.while"),
                                         result, h);
                             } else {
                                 director.skipLoop(propertiesBundle
-                                        .getString("statement_name.while"),
+                                        .getStringProperty("statement_name.while"),
                                         result);
                             }
 
@@ -2334,11 +2334,11 @@ public class Interpreter {
 
                             if (value.equals(Boolean.TRUE.toString())) {
                                 director.continueLoop(propertiesBundle
-                                        .getString("statement_name.while"),
+                                        .getStringProperty("statement_name.while"),
                                         result, h);
                             } else {
                                 director.exitLoop(propertiesBundle
-                                        .getString("statement_name.while"),
+                                        .getStringProperty("statement_name.while"),
                                         result);
                             }
 
@@ -2366,21 +2366,21 @@ public class Interpreter {
                         if (round == 0) {
                             if (value.equals(Boolean.TRUE.toString())) {
                                 director.enterLoop(propertiesBundle
-                                        .getString("statement_name.for"),
+                                        .getStringProperty("statement_name.for"),
                                         result, h);
                             } else {
                                 director.skipLoop(propertiesBundle
-                                        .getString("statement_name.for"),
+                                        .getStringProperty("statement_name.for"),
                                         result);
                             }
                         } else {
                             if (value.equals(Boolean.TRUE.toString())) {
                                 director.continueLoop(propertiesBundle
-                                        .getString("statement_name.for"),
+                                        .getStringProperty("statement_name.for"),
                                         result, h);
                             } else {
                                 director.exitLoop(propertiesBundle
-                                        .getString("statement_name.for"),
+                                        .getStringProperty("statement_name.for"),
                                         result);
                             }
                         }
@@ -2404,15 +2404,15 @@ public class Interpreter {
 
                         if (round == 0) {
                             director.enterLoop(propertiesBundle
-                                    .getString("statement_name.do_while"), h);
+                                    .getStringProperty("statement_name.do_while"), h);
                         } else {
                             if (value.equals(Boolean.TRUE.toString())) {
                                 director.continueLoop(propertiesBundle
-                                        .getString("statement_name.do_while"),
+                                        .getStringProperty("statement_name.do_while"),
                                         result, h);
                             } else {
                                 director.exitLoop(propertiesBundle
-                                        .getString("statement_name.do_while"),
+                                        .getStringProperty("statement_name.do_while"),
                                         result);
                             }
                         }
@@ -2485,15 +2485,15 @@ public class Interpreter {
 
                         if (statementName == Code.WHI) {
                             stmt = propertiesBundle
-                                    .getString("statement_name.while");
+                                    .getStringProperty("statement_name.while");
                             director.breakLoop(stmt, h);
                         } else if (statementName == Code.FOR) {
                             stmt = propertiesBundle
-                                    .getString("statement_name.for");
+                                    .getStringProperty("statement_name.for");
                             director.breakLoop(stmt, h);
                         } else if (statementName == Code.DO) {
                             stmt = propertiesBundle
-                                    .getString("statement_name.do_while");
+                                    .getStringProperty("statement_name.do_while");
                             director.breakLoop(stmt, h);
                         } else if (statementName == Code.SWITCH) {
                             director.breakSwitch(h);
@@ -2516,13 +2516,13 @@ public class Interpreter {
 
                         if (statementName == Code.WHI) {
                             stmt = propertiesBundle
-                                    .getString("statement_name.while");
+                                    .getStringProperty("statement_name.while");
                         } else if (statementName == Code.FOR) {
                             stmt = propertiesBundle
-                                    .getString("statement_name.for");
+                                    .getStringProperty("statement_name.for");
                         } else if (statementName == Code.DO) {
                             stmt = propertiesBundle
-                                    .getString("statement_name.do_while");
+                                    .getStringProperty("statement_name.do_while");
                         }
 
                         director.continueLoop(stmt, h);

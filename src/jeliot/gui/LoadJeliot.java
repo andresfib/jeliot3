@@ -15,7 +15,7 @@ import javax.swing.JWindow;
 
 import jeliot.Jeliot;
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * LoadJeliot displays a splash screen and
@@ -34,7 +34,7 @@ public class LoadJeliot {
 	/**
 	 * The resource bundle for gui package
 	 */
-	static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getGuiUserPropertyResourceBundle();
+	static private UserProperties propertiesBundle = ResourceBundles.getGuiUserProperties();
 
 	/**
 	 * Initializes the Jeliot's splash screen window. Initializes the
@@ -42,7 +42,7 @@ public class LoadJeliot {
 	 */
 	public static void start(final Jeliot jeliot) {
 		// Get the splash screen image
-		final Image image = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(propertiesBundle.getString("directory.images") + messageBundle.getString("image.splash_screen"))).getImage();
+		final Image image = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(propertiesBundle.getStringProperty("directory.images") + messageBundle.getString("image.splash_screen"))).getImage();
 
 		// create the splash screen window
 		Component splash = new Component() {

@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * This class handles the image loading and caching for the animation.
@@ -27,8 +27,8 @@ public class ImageLoader {
     /**
      * The resource bundle for theater package.
      */
-    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles
-            .getTheaterUserPropertyResourceBundle();
+    static private UserProperties propertiesBundle = ResourceBundles
+            .getTheaterUserProperties();
 
     /** Maps image names to loaded images. */
     private Hashtable images = new Hashtable();
@@ -77,7 +77,7 @@ public class ImageLoader {
      * @return
      */
     public Image getLogicalImage(String name) {
-        return getImage(propertiesBundle.getString(name));
+        return getImage(propertiesBundle.getStringProperty(name));
     }
 
     /**
@@ -88,10 +88,10 @@ public class ImageLoader {
         if (images.containsKey(filename)) { return (Image) images.get(filename); }
 
         URL imageURL = Thread.currentThread().getContextClassLoader().getResource(
-                propertiesBundle.getString("directory.images") + filename);
+                propertiesBundle.getStringProperty("directory.images") + filename);
         if (imageURL == null) {
             imageURL = (this.getClass().getClassLoader().getResource(propertiesBundle
-                    .getString("directory.images")
+                    .getStringProperty("directory.images")
                     + filename));
         }
         Image image = getImage(imageURL);

@@ -3,7 +3,7 @@ package jeliot.theater;
 import java.awt.Image;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * PanelController handles the curtains of the theater (PanelActor) by
@@ -20,8 +20,8 @@ public class PanelController {
     /**
      * The resource bundle for theater package
      */
-    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles
-            .getTheaterUserPropertyResourceBundle();
+    static private UserProperties propertiesBundle = ResourceBundles
+            .getTheaterUserProperties();
 
     //  DOC: Document!
 
@@ -53,12 +53,12 @@ public class PanelController {
     /**
      *
      */
-    private int openDur = Integer.parseInt(propertiesBundle.getString("curtain.open_duration"));
+    private int openDur = Integer.parseInt(propertiesBundle.getStringProperty("curtain.open_duration"));
 
     /**
      *
      */
-    private int closeDur = Integer.parseInt(propertiesBundle.getString("curtain.close_duration"));
+    private int closeDur = Integer.parseInt(propertiesBundle.getStringProperty("curtain.close_duration"));
 
     /**
      * @param theatre
@@ -67,11 +67,11 @@ public class PanelController {
     public PanelController(Theater theatre, ImageLoader iLoad) {
         this.theatre = theatre;
         this.engine = new AnimationEngine(theatre);
-        this.bgImage = iLoad.getImage(propertiesBundle.getString("image.background"));
-        this.panelImage = iLoad.getImage(propertiesBundle.getString("image.panel"));
+        this.bgImage = iLoad.getImage(propertiesBundle.getStringProperty("image.background"));
+        this.panelImage = iLoad.getImage(propertiesBundle.getStringProperty("image.panel"));
         this.panel = new PanelActor(panelImage, iLoad
-                .getImage(propertiesBundle.getString("image.panel.left")), iLoad.getImage(propertiesBundle
-                .getString("image.panel.right")), 62);
+                .getImage(propertiesBundle.getStringProperty("image.panel.left")), iLoad.getImage(propertiesBundle
+                .getStringProperty("image.panel.right")), 62);
     }
 
     /**

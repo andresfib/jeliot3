@@ -21,7 +21,7 @@ import jeliot.lang.Value;
 import jeliot.lang.Variable;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * This class handles the centralized creation of the actors. This enables the centralized
@@ -35,7 +35,7 @@ public class ActorFactory {
     /**
      * The resource bundle for theater package
      */
-    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getTheaterUserPropertyResourceBundle();
+    static private UserProperties propertiesBundle = ResourceBundles.getTheaterUserProperties();
 
     /**
      * The resource bundle for theater package
@@ -81,38 +81,38 @@ public class ActorFactory {
     /**
      *  
      */
-    private Font messageFont = new Font(propertiesBundle.getString("font.message.family"), Font.BOLD, Integer
-            .parseInt(propertiesBundle.getString("font.message.size")));
+    private Font messageFont = new Font(propertiesBundle.getStringProperty("font.message.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.message.size")));
 
     /**
      *  
      */
-    private Font indexFont = new Font(propertiesBundle.getString("font.index.family"), Font.BOLD, Integer
-            .parseInt(propertiesBundle.getString("font.index.size")));
+    private Font indexFont = new Font(propertiesBundle.getStringProperty("font.index.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.index.size")));
 
     /**
      *  
      */
-    private Font SMIFont = new Font(propertiesBundle.getString("font.SMI.family"), Font.BOLD, Integer
-            .parseInt(propertiesBundle.getString("font.SMI.size")));
+    private Font SMIFont = new Font(propertiesBundle.getStringProperty("font.SMI.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.SMI.size")));
 
     /**
      *  
      */
-    private Font OMIFont = new Font(propertiesBundle.getString("font.OMI.family"), Font.BOLD, Integer
-            .parseInt(propertiesBundle.getString("font.OMI.size")));
+    private Font OMIFont = new Font(propertiesBundle.getStringProperty("font.OMI.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.OMI.size")));
 
     /**
      *  
      */
-    private Font ACFont = new Font(propertiesBundle.getString("font.AC.family"), Font.BOLD, Integer
-            .parseInt(propertiesBundle.getString("font.AC.size")));
+    private Font ACFont = new Font(propertiesBundle.getStringProperty("font.AC.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.AC.size")));
 
     /**
      *  
      */
-    private Font LATFont = new Font(propertiesBundle.getString("font.LAT.family"), Font.BOLD, Integer
-            .parseInt(propertiesBundle.getString("font.LAT.size")));
+    private Font LATFont = new Font(propertiesBundle.getStringProperty("font.LAT.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.LAT.size")));
 
     /**
      *  
@@ -127,204 +127,204 @@ public class ActorFactory {
     /**
      *  
      */
-    private int margin = Integer.parseInt(propertiesBundle.getString("actor_factory.margin"));
+    private int margin = Integer.parseInt(propertiesBundle.getStringProperty("actor_factory.margin"));
 
     /**
      *  
      */
     private Color messagebc = new Color(Integer
-            .decode(propertiesBundle.getString("color.message.background")).intValue());
+            .decode(propertiesBundle.getStringProperty("color.message.background")).intValue());
 
     /**
      *  
      */
     private Color messagefc = new Color(Integer
-            .decode(propertiesBundle.getString("color.message.foreground")).intValue());
+            .decode(propertiesBundle.getStringProperty("color.message.foreground")).intValue());
 
     /**
      *  
      */
-    private Color trueColor = new Color(Integer.decode(propertiesBundle.getString("color.true")).intValue());
+    private Color trueColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.true")).intValue());
 
     /**
      *  
      */
-    private Color falseColor = new Color(Integer.decode(propertiesBundle.getString("color.false")).intValue());
+    private Color falseColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.false")).intValue());
 
     /**
      *  
      */
-    private Color opColor = new Color(Integer.decode(propertiesBundle.getString("color.operator")).intValue());
+    private Color opColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.operator")).intValue());
 
     /**
      *  
      */
     private Color methodStageColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.method_stage.background")).intValue());
+            propertiesBundle.getStringProperty("color.method_stage.background")).intValue());
 
     /**
      *  
      */
     private Color objectStageColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.object_stage.background")).intValue());
+            propertiesBundle.getStringProperty("color.object_stage.background")).intValue());
     
     /**
      *  
      */
     private Color classColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.class.background")).intValue());
+            propertiesBundle.getStringProperty("color.class.background")).intValue());
     
     /**
      *  
      */
-    private Color SMIColor = new Color(Integer.decode(propertiesBundle.getString("color.SMI.background"))
+    private Color SMIColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.SMI.background"))
             .intValue());
 
     /**
      *  
      */
     private Color variableForegroundColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.variable.foreground")).intValue());
+            propertiesBundle.getStringProperty("color.variable.foreground")).intValue());
 
     /**
      *  
      */
     private Color valueForegroundColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.value.foreground")).intValue());
+            propertiesBundle.getStringProperty("color.value.foreground")).intValue());
 
     /**
      *  
      */
-    private Color OMIColor = new Color(Integer.decode(propertiesBundle.getString("color.OMI.background"))
+    private Color OMIColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.OMI.background"))
             .intValue());
 
     /**
      *  
      */
-    private Color ACColor = new Color(Integer.decode(propertiesBundle.getString("color.AC.background"))
+    private Color ACColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.AC.background"))
             .intValue());
 
     /**
      *  
      */
     private Color bubbleColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.bubble.background")).intValue());
+            propertiesBundle.getStringProperty("color.bubble.background")).intValue());
 
     /**
      *  
      */
     private Color LATForegroundColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.LAT.foreground")).intValue());
+            propertiesBundle.getStringProperty("color.LAT.foreground")).intValue());
 
     /**
      *  
      */
     private Color LATBackgroundColor = new Color(Integer.decode(
-            propertiesBundle.getString("color.LAT.background")).intValue());
+            propertiesBundle.getStringProperty("color.LAT.background")).intValue());
 
     /**
      *  
      */
     private Color[] valColor = {
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.boolean")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.byte")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.short")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.int")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.long")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.char")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.float")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.double")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.string")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.value.background.reference"))
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.boolean")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.byte")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.short")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.int")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.long")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.char")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.float")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.double")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.string")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.value.background.reference"))
                     .intValue())};
 
     /**
      *  
      */
     private Color[] varColor = {
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.boolean"))
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.boolean"))
                     .intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.byte")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.short"))
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.byte")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.short"))
                     .intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.int")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.long")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.char")).intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.float"))
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.int")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.long")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.char")).intValue()),
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.float"))
                     .intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.double"))
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.double"))
                     .intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.string"))
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.string"))
                     .intValue()),
-            new Color(Integer.decode(propertiesBundle.getString("color.variable.background.reference"))
+            new Color(Integer.decode(propertiesBundle.getStringProperty("color.variable.background.reference"))
                     .intValue())};
 
     /**
      *  
      */
     private String[][] binOpImageName = {
-            { propertiesBundle.getString("image.binary_operator.multiplication"),
-                    propertiesBundle.getString("image.binary_operator.result.multiplication")},
+            { propertiesBundle.getStringProperty("image.binary_operator.multiplication"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.multiplication")},
             //multiplication
-            { propertiesBundle.getString("image.binary_operator.division"),
-                    propertiesBundle.getString("image.binary_operator.result.division")},
+            { propertiesBundle.getStringProperty("image.binary_operator.division"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.division")},
             //division
-            { propertiesBundle.getString("image.binary_operator.remaider"),
-                    propertiesBundle.getString("image.binary_operator.result.remaider")},
+            { propertiesBundle.getStringProperty("image.binary_operator.remaider"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.remaider")},
             //remaider
-            { propertiesBundle.getString("image.binary_operator.addition"),
-                    propertiesBundle.getString("image.binary_operator.result.addition")},
+            { propertiesBundle.getStringProperty("image.binary_operator.addition"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.addition")},
             //addition
-            { propertiesBundle.getString("image.binary_operator.subtraction"),
-                    propertiesBundle.getString("image.binary_operator.result.subtraction")},
+            { propertiesBundle.getStringProperty("image.binary_operator.subtraction"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.subtraction")},
             //subtraction
-            { propertiesBundle.getString("image.binary_operator.left_shift"),
-                    propertiesBundle.getString("image.binary_operator.result.left_shift")},
+            { propertiesBundle.getStringProperty("image.binary_operator.left_shift"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.left_shift")},
             //left shift
-            { propertiesBundle.getString("image.binary_operator.right_shift"),
-                    propertiesBundle.getString("image.binary_operator.result.right_shift")},
+            { propertiesBundle.getStringProperty("image.binary_operator.right_shift"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.right_shift")},
             //right shift
-            { propertiesBundle.getString("image.binary_operator.unsigned_right_shift"),
-                    propertiesBundle.getString("image.binary_operator.result.unsigned_right_shift")},
+            { propertiesBundle.getStringProperty("image.binary_operator.unsigned_right_shift"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.unsigned_right_shift")},
             //unsigned right shift
-            { propertiesBundle.getString("image.binary_operator.lesser_than"),
-                    propertiesBundle.getString("image.binary_operator.result.lesser_than")},
+            { propertiesBundle.getStringProperty("image.binary_operator.lesser_than"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.lesser_than")},
             //lesser than
-            { propertiesBundle.getString("image.binary_operator.greater_than"),
-                    propertiesBundle.getString("image.binary_operator.result.greater_than")},
+            { propertiesBundle.getStringProperty("image.binary_operator.greater_than"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.greater_than")},
             //greater than
-            { propertiesBundle.getString("image.binary_operator.lesser_than_or_equals"),
-                    propertiesBundle.getString("image.binary_operator.result.lesser_than_or_equals")},
+            { propertiesBundle.getStringProperty("image.binary_operator.lesser_than_or_equals"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.lesser_than_or_equals")},
             //lesser than or equals
-            { propertiesBundle.getString("image.binary_operator.greater_than_or_equals"),
-                    propertiesBundle.getString("image.binary_operator.result.greater_than_or_equals")},
+            { propertiesBundle.getStringProperty("image.binary_operator.greater_than_or_equals"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.greater_than_or_equals")},
             //greater than or equals
-            { propertiesBundle.getString("image.binary_operator.instanceof"),
-                    propertiesBundle.getString("image.binary_operator.result.instanceof")},
+            { propertiesBundle.getStringProperty("image.binary_operator.instanceof"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.instanceof")},
             //instanceof not yet implemented
-            { propertiesBundle.getString("image.binary_operator.equals"),
-                    propertiesBundle.getString("image.binary_operator.result.equals")},
+            { propertiesBundle.getStringProperty("image.binary_operator.equals"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.equals")},
             //equals
-            { propertiesBundle.getString("image.binary_operator.not_equals"),
-                    propertiesBundle.getString("image.binary_operator.result.not_equals")},
+            { propertiesBundle.getStringProperty("image.binary_operator.not_equals"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.not_equals")},
             //not equals
-            { propertiesBundle.getString("image.binary_operator.bitwise_and"),
-                    propertiesBundle.getString("image.binary_operator.result.bitwise_and")},
+            { propertiesBundle.getStringProperty("image.binary_operator.bitwise_and"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.bitwise_and")},
             //bitwise and
-            { propertiesBundle.getString("image.binary_operator.bitwise_xor"),
-                    propertiesBundle.getString("image.binary_operator.result.bitwise_xor")},
+            { propertiesBundle.getStringProperty("image.binary_operator.bitwise_xor"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.bitwise_xor")},
             //bitwise xor
-            { propertiesBundle.getString("image.binary_operator.bitwise_or"),
-                    propertiesBundle.getString("image.binary_operator.result.bitwise_or")},
+            { propertiesBundle.getStringProperty("image.binary_operator.bitwise_or"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.bitwise_or")},
             //bitwise or
-            { propertiesBundle.getString("image.binary_operator.logical_and"),
-                    propertiesBundle.getString("image.binary_operator.result.logical_and")},
+            { propertiesBundle.getStringProperty("image.binary_operator.logical_and"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.logical_and")},
             //logical and
-            { propertiesBundle.getString("image.binary_operator.logical_or"),
-                    propertiesBundle.getString("image.binary_operator.result.logical_or")},
+            { propertiesBundle.getStringProperty("image.binary_operator.logical_or"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.logical_or")},
             //logical or
-            { propertiesBundle.getString("image.binary_operator.logical_xor"),
-                    propertiesBundle.getString("image.binary_operator.result.logical_xor")} //logical
+            { propertiesBundle.getStringProperty("image.binary_operator.logical_xor"),
+                    propertiesBundle.getStringProperty("image.binary_operator.result.logical_xor")} //logical
             // xor
     };
 
@@ -332,29 +332,29 @@ public class ActorFactory {
      *  
      */
     private String[][] unaOpImageName = {
-            { propertiesBundle.getString("image.unary_operator.plus"),
-                    propertiesBundle.getString("image.unary_operator.result.plus")},
+            { propertiesBundle.getStringProperty("image.unary_operator.plus"),
+                    propertiesBundle.getStringProperty("image.unary_operator.result.plus")},
             //plus
-            { propertiesBundle.getString("image.unary_operator.minus"),
-                    propertiesBundle.getString("image.unary_operator.result.minus")},
+            { propertiesBundle.getStringProperty("image.unary_operator.minus"),
+                    propertiesBundle.getStringProperty("image.unary_operator.result.minus")},
             //minus
-            { propertiesBundle.getString("image.unary_operator.preinc"),
-                    propertiesBundle.getString("image.unary_operator.result.preinc")},
+            { propertiesBundle.getStringProperty("image.unary_operator.preinc"),
+                    propertiesBundle.getStringProperty("image.unary_operator.result.preinc")},
             //preinc
-            { propertiesBundle.getString("image.unary_operator.predec"),
-                    propertiesBundle.getString("image.unary_operator.result.predec")},
+            { propertiesBundle.getStringProperty("image.unary_operator.predec"),
+                    propertiesBundle.getStringProperty("image.unary_operator.result.predec")},
             //predec
-            { propertiesBundle.getString("image.unary_operator.complement"),
-                    propertiesBundle.getString("image.unary_operator.result.complement")},
+            { propertiesBundle.getStringProperty("image.unary_operator.complement"),
+                    propertiesBundle.getStringProperty("image.unary_operator.result.complement")},
             //complement
-            { propertiesBundle.getString("image.unary_operator.not"),
-                    propertiesBundle.getString("image.unary_operator.result.not")},
+            { propertiesBundle.getStringProperty("image.unary_operator.not"),
+                    propertiesBundle.getStringProperty("image.unary_operator.result.not")},
             //not
-            { propertiesBundle.getString("image.unary_operator.postinc"),
-                    propertiesBundle.getString("image.unary_operator.result.postinc")},
+            { propertiesBundle.getStringProperty("image.unary_operator.postinc"),
+                    propertiesBundle.getStringProperty("image.unary_operator.result.postinc")},
             //postinc
-            { propertiesBundle.getString("image.unary_operator.postdec"),
-                    propertiesBundle.getString("image.unary_operator.result.postdec")}
+            { propertiesBundle.getStringProperty("image.unary_operator.postdec"),
+                    propertiesBundle.getStringProperty("image.unary_operator.result.postdec")}
             //postdec
     };
 
@@ -373,15 +373,15 @@ public class ActorFactory {
      */
     public ActorFactory(ImageLoader iLoad) {
         this.iLoad = iLoad;
-        this.shadowImage = iLoad.getImage(propertiesBundle.getString("image.shadow"));
+        this.shadowImage = iLoad.getImage(propertiesBundle.getStringProperty("image.shadow"));
         Actor.setShadowImage(this.shadowImage);
-        this.messageImage = iLoad.getImage(propertiesBundle.getString("image.message.background"));
-        setValueFont(new Font(propertiesBundle.getString("font.value.family"), Font.BOLD, Integer
-                .parseInt(propertiesBundle.getString("font.value.size"))));
-        setVariableFont(new Font(propertiesBundle.getString("font.variable.family"), Font.BOLD, Integer
-                .parseInt(propertiesBundle.getString("font.variable.size"))));
-        setStageFont(new Font(propertiesBundle.getString("font.stage.family"), Font.PLAIN, Integer
-                .parseInt(propertiesBundle.getString("font.stage.size"))));
+        this.messageImage = iLoad.getImage(propertiesBundle.getStringProperty("image.message.background"));
+        setValueFont(new Font(propertiesBundle.getStringProperty("font.value.family"), Font.BOLD, Integer
+                .parseInt(propertiesBundle.getStringProperty("font.value.size"))));
+        setVariableFont(new Font(propertiesBundle.getStringProperty("font.variable.family"), Font.BOLD, Integer
+                .parseInt(propertiesBundle.getStringProperty("font.variable.size"))));
+        setStageFont(new Font(propertiesBundle.getStringProperty("font.stage.family"), Font.PLAIN, Integer
+                .parseInt(propertiesBundle.getStringProperty("font.stage.size"))));
     }
 
     /**
@@ -494,7 +494,7 @@ public class ActorFactory {
             actor = new VariableActor();
             ValueActor vact = null;
             ImageValueActor valueActor = new ImageValueActor(iLoad.getImage(propertiesBundle
-                    .getString("image.mystery")));
+                    .getStringProperty("image.mystery")));
             valueActor.calculateSize();
             vact = valueActor;
             int dotIndex = type.lastIndexOf(".");
@@ -785,7 +785,7 @@ public class ActorFactory {
      * @return
      */
     public OperatorActor produceEllipsis() {
-        Image image = iLoad.getImage(propertiesBundle.getString("image.dots"));
+        Image image = iLoad.getImage(propertiesBundle.getStringProperty("image.dots"));
         OperatorActor actor = produceOperatorActor(image);
         return actor;
     }
@@ -924,7 +924,7 @@ public class ActorFactory {
      * @return
      */
     public ConstantBox produceConstantBox() {
-        ConstantBox cbox = new ConstantBox(iLoad.getImage(propertiesBundle.getString("image.constant_box")));
+        ConstantBox cbox = new ConstantBox(iLoad.getImage(propertiesBundle.getStringProperty("image.constant_box")));
         cbox.calculateSize();
         return cbox;
     }
@@ -943,7 +943,7 @@ public class ActorFactory {
      * @return
      */
     public Image produceImage(String iname) {
-        return iLoad.getImage(propertiesBundle.getString(iname));
+        return iLoad.getImage(propertiesBundle.getStringProperty(iname));
     }
 
     /**

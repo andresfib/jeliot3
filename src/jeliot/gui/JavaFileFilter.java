@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import javax.swing.filechooser.FileFilter;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * Filter for the file chooser to only show the java source code files. Modified
@@ -19,7 +19,7 @@ public class JavaFileFilter extends FileFilter {
 	/**
 	 * The resource bundle for gui package
 	 */
-	static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getGuiUserPropertyResourceBundle();
+	static private UserProperties propertiesBundle = ResourceBundles.getGuiUserProperties();
 
 	static private ResourceBundle messageBbundle = ResourceBundles.getGuiMessageResourceBundle();
 
@@ -37,7 +37,7 @@ public class JavaFileFilter extends FileFilter {
 			String extension = getExtension(f);
 			if (extension != null) {
 				if (extension.toLowerCase().equals(
-						propertiesBundle.getString("extension.java"))) {
+						propertiesBundle.getStringProperty("extension.java"))) {
 					return true;
 				}
 			}

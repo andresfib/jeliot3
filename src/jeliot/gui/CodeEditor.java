@@ -38,12 +38,13 @@ import jeliot.mcode.Highlight;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * NOT CURRENTLY USED IN JELIOT 3! CAN CONTAIN OLD AND NOT WORKING CODE!
  * The simple code editor for the users to code their algorithm.
  *
+ * @deprecated
  * @author Pekka Uronen
  * @author Niko Myller
  */
@@ -52,7 +53,7 @@ public class CodeEditor extends JComponent {
     /**
      * The resource bundle for gui package
      */
-    static private UserPropertyResourceBundle propertiesbundle = ResourceBundles.getGuiUserPropertyResourceBundle();
+    static private UserProperties propertiesbundle = ResourceBundles.getGuiUserProperties();
     static private ResourceBundle messagesBundle = ResourceBundles.getGuiMessageResourceBundle();
 
     /**
@@ -60,14 +61,14 @@ public class CodeEditor extends JComponent {
      */
     private String template = messagesBundle.getString("code_editor.template");
 
-    private String title = propertiesbundle.getString("name") + propertiesbundle.getString("version");
+    private String title = propertiesbundle.getStringProperty("name") + propertiesbundle.getStringProperty("version");
     
     /**
 	 * Font for the editor area.
 	 */
-	private Font areaFont = new Font(propertiesbundle.getString("font.code_editor.family"),
+	private Font areaFont = new Font(propertiesbundle.getStringProperty("font.code_editor.family"),
                                      Font.PLAIN,
-                                     Integer.parseInt(propertiesbundle.getString("font.code_editor.size")));
+                                     Integer.parseInt(propertiesbundle.getStringProperty("font.code_editor.size")));
     /**
 	 * Insets for the text. Used for the layout.
 	 */
@@ -308,7 +309,7 @@ public class CodeEditor extends JComponent {
     private JButton makeToolButton(String label, String iconName,
             ActionListener listener) {
 
-        ImageIcon icon = new ImageIcon(propertiesbundle.getString("directory.images")+iconName);
+        ImageIcon icon = new ImageIcon(propertiesbundle.getStringProperty("directory.images")+iconName);
         JButton b = new JButton(label, icon);
         b.setVerticalTextPosition(AbstractButton.BOTTOM);
         b.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -327,18 +328,18 @@ public class CodeEditor extends JComponent {
      * @see #makeToolButton(String, String, ActionListener)
      */
     private JToolBar makeToolBar() {
-        JButton loadButton = makeToolButton(messagesBundle.getString("button.open"), propertiesbundle.getString("image.open_icon"), loader);
+        JButton loadButton = makeToolButton(messagesBundle.getString("button.open"), propertiesbundle.getStringProperty("image.open_icon"), loader);
         loadButton.setMnemonic(KeyEvent.VK_O);
-        JButton saveButton = makeToolButton(messagesBundle.getString("button.save"), propertiesbundle.getString("image.save_icon"), saver);
+        JButton saveButton = makeToolButton(messagesBundle.getString("button.save"), propertiesbundle.getStringProperty("image.save_icon"), saver);
         saveButton.setMnemonic(KeyEvent.VK_S);
-        JButton clearButton = makeToolButton(messagesBundle.getString("button.new"), propertiesbundle.getString("image.new_icon"), clearer);
+        JButton clearButton = makeToolButton(messagesBundle.getString("button.new"), propertiesbundle.getStringProperty("image.new_icon"), clearer);
         clearButton.setMnemonic(KeyEvent.VK_N);
 
-        JButton cutButton = makeToolButton(messagesBundle.getString("button.cut"), propertiesbundle.getString("image.cut_icon"), cutter);
+        JButton cutButton = makeToolButton(messagesBundle.getString("button.cut"), propertiesbundle.getStringProperty("image.cut_icon"), cutter);
         cutButton.setMnemonic(KeyEvent.VK_U);
-        JButton copyButton = makeToolButton(messagesBundle.getString("button.copy"), propertiesbundle.getString("image.copy_icon"), copyist);
+        JButton copyButton = makeToolButton(messagesBundle.getString("button.copy"), propertiesbundle.getStringProperty("image.copy_icon"), copyist);
         copyButton.setMnemonic(KeyEvent.VK_Y);
-        JButton pasteButton = makeToolButton(messagesBundle.getString("button.paste"), propertiesbundle.getString("image.paste_icon"), pasteur);
+        JButton pasteButton = makeToolButton(messagesBundle.getString("button.paste"), propertiesbundle.getStringProperty("image.paste_icon"), pasteur);
         pasteButton.setMnemonic(KeyEvent.VK_T);
 
         JToolBar p = new JToolBar();

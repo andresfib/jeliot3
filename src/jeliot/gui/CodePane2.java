@@ -12,7 +12,7 @@ import javax.swing.text.PlainDocument;
 import jeliot.mcode.Highlight;
 import jeliot.tracker.Tracker;
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.tokenmarker.JavaTokenMarker;
@@ -29,8 +29,8 @@ public class CodePane2 extends JComponent {
     /**
      * The resource bundle for gui package.
      */
-    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles
-            .getGuiUserPropertyResourceBundle();
+    static private UserProperties propertiesBundle = ResourceBundles
+            .getGuiUserProperties();
 
     /**
      * Text area that is used from the JEdit project.
@@ -46,8 +46,8 @@ public class CodePane2 extends JComponent {
     /**
      * Font for the code view area.
      */
-    private Font font = new Font(propertiesBundle.getString("font.code_pane.family"), Font.PLAIN, Integer
-            .parseInt(propertiesBundle.getString("font.code_pane.size")));
+    private Font font = new Font(propertiesBundle.getStringProperty("font.code_pane.family"), Font.PLAIN, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.code_pane.size")));
 
     /**
      * Constructs the CodePane -object, sets the layout and
@@ -69,7 +69,7 @@ public class CodePane2 extends JComponent {
         add("Center", area);
         area.getPainter()
                 .setBackground(
-                        new Color(Integer.decode(propertiesBundle.getString("color.code_pane.background"))
+                        new Color(Integer.decode(propertiesBundle.getStringProperty("color.code_pane.background"))
                                 .intValue()));
         area.getPainter().setLineHighlightEnabled(false);
         /*

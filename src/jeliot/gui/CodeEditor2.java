@@ -39,7 +39,7 @@ import jeliot.mcode.MCodeUtilities;
 import jeliot.tracker.Tracker;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.tokenmarker.JavaTokenMarker;
@@ -57,8 +57,8 @@ public class CodeEditor2 extends JComponent {
     /**
      * The resource bundle for gui package
      */
-    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles
-            .getGuiUserPropertyResourceBundle();
+    static private UserProperties propertiesBundle = ResourceBundles
+            .getGuiUserProperties();
 
     /**
      * The resource bundle for gui package
@@ -74,8 +74,8 @@ public class CodeEditor2 extends JComponent {
     /**
      * Comment for <code>title</code>
      */
-    private String title = propertiesBundle.getString("name") + " "
-            + propertiesBundle.getString("version");
+    private String title = messageBundle.getString("name") + " "
+            + messageBundle.getString("version");
 
     /**
      * Tells whether or not the current file is changed since last loading or
@@ -273,14 +273,14 @@ public class CodeEditor2 extends JComponent {
         area = new JEditTextArea();
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(
-                new Font(propertiesBundle.getString("font.code_editor.family"), Font.PLAIN, Integer
-                        .parseInt(propertiesBundle.getString("font.code_editor.size"))));
+                new Font(propertiesBundle.getStringProperty("font.code_editor.family"), Font.PLAIN, Integer
+                        .parseInt(propertiesBundle.getStringProperty("font.code_editor.size"))));
         area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute,
-                Integer.valueOf(propertiesBundle.getString("editor.tab_size")));
+                Integer.valueOf(propertiesBundle.getStringProperty("editor.tab_size")));
         area.getDocument().addDocumentListener(dcl);
         area.setHorizontalOffset(5);
-        ln = new LineNumbers(new Font(propertiesBundle.getString("font.code_editor.family"),
-                Font.PLAIN, Integer.parseInt(propertiesBundle.getString("font.code_editor.size"))),
+        ln = new LineNumbers(new Font(propertiesBundle.getStringProperty("font.code_editor.family"),
+                Font.PLAIN, Integer.parseInt(propertiesBundle.getStringProperty("font.code_editor.size"))),
                 new Insets(1, 0, 0, 0));
         area.addToLeft(ln);
         LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(area, ln);
@@ -305,7 +305,7 @@ public class CodeEditor2 extends JComponent {
         //String wdname = prop.getProperty("user.dir");
         //File wd = new File(wdname);
         File wd = new File(udir);
-        wd = new File(wd, propertiesBundle.getString("directory.examples"));
+        wd = new File(wd, propertiesBundle.getStringProperty("directory.examples"));
         fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(wd);
         fileChooser.setFileFilter(new JavaFileFilter());
@@ -325,10 +325,10 @@ public class CodeEditor2 extends JComponent {
     private JButton makeToolButton(String label, String iconName, ActionListener listener) {
 
         URL imageURL = this.getClass().getClassLoader().getResource(
-                propertiesBundle.getString("directory.images") + iconName);
+                propertiesBundle.getStringProperty("directory.images") + iconName);
         if (imageURL == null) {
             imageURL = Thread.currentThread().getContextClassLoader().getResource(
-                    propertiesBundle.getString("directory.images") + iconName);
+                    propertiesBundle.getStringProperty("directory.images") + iconName);
         }
         ImageIcon icon = new ImageIcon(imageURL);
 
@@ -350,23 +350,23 @@ public class CodeEditor2 extends JComponent {
      */
     private JToolBar makeToolBar() {
         JButton loadButton = makeToolButton(messageBundle.getString("button.open"),
-                propertiesBundle.getString("image.open_icon"), loader);
+                propertiesBundle.getStringProperty("image.open_icon"), loader);
         loadButton.setMnemonic(KeyEvent.VK_O);
         JButton saveButton = makeToolButton(messageBundle.getString("button.save"),
-                propertiesBundle.getString("image.save_icon"), saver);
+                propertiesBundle.getStringProperty("image.save_icon"), saver);
         saveButton.setMnemonic(KeyEvent.VK_S);
         JButton clearButton = makeToolButton(messageBundle.getString("button.new"),
-                propertiesBundle.getString("image.new_icon"), clearer);
+                propertiesBundle.getStringProperty("image.new_icon"), clearer);
         clearButton.setMnemonic(KeyEvent.VK_N);
 
         JButton cutButton = makeToolButton(messageBundle.getString("button.cut"), propertiesBundle
-                .getString("image.cut_icon"), cutter);
+                .getStringProperty("image.cut_icon"), cutter);
         cutButton.setMnemonic(KeyEvent.VK_U);
         JButton copyButton = makeToolButton(messageBundle.getString("button.copy"),
-                propertiesBundle.getString("image.copy_icon"), copyist);
+                propertiesBundle.getStringProperty("image.copy_icon"), copyist);
         copyButton.setMnemonic(KeyEvent.VK_Y);
         JButton pasteButton = makeToolButton(messageBundle.getString("button.paste"),
-                propertiesBundle.getString("image.paste_icon"), pasteur);
+                propertiesBundle.getStringProperty("image.paste_icon"), pasteur);
         pasteButton.setMnemonic(KeyEvent.VK_T);
 
         JToolBar p = new JToolBar();
@@ -509,7 +509,7 @@ public class CodeEditor2 extends JComponent {
      * @return
      */
     public String replaceTabs(String code) {
-        int n = Integer.parseInt(propertiesBundle.getString("editor.tab_size"));
+        int n = Integer.parseInt(propertiesBundle.getStringProperty("editor.tab_size"));
         String spaces = "";
         for (int i = 0; i < n; i++) {
             spaces += " ";
@@ -608,7 +608,7 @@ public class CodeEditor2 extends JComponent {
     void saveProgram() {
         //This is to keep the caret position after the saving of the file.
         String code = area.getText();
-        int tabSize = Integer.parseInt(propertiesBundle.getString("editor.tab_size"));
+        int tabSize = Integer.parseInt(propertiesBundle.getStringProperty("editor.tab_size"));
         int caretPosition = area.getCaretPosition();
         int selectionStart = area.getSelectionStart();
         int selectionEnd = area.getSelectionEnd();

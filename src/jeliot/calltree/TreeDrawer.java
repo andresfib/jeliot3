@@ -5,24 +5,24 @@ import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * @author Niko Myller
  */
 public class TreeDrawer extends EulerTour {
 
-	protected static final UserPropertyResourceBundle propertiesBundle = ResourceBundles.getCallTreeUserPropertyResourceBundle();
+	protected static final UserProperties propertiesBundle = ResourceBundles.getCallTreeUserProperties();
 	
     /**
      * Y offset from (0,0) (default 40)
      */
-    protected int Yoffset = Integer.parseInt(propertiesBundle.getString("y_offset"));
+    protected int Yoffset = Integer.parseInt(propertiesBundle.getStringProperty("y_offset"));
 
     /**
      * X offset from (0,0) (default 20)
      */
-    protected int Xoffset = Integer.parseInt(propertiesBundle.getString("x_offset"));
+    protected int Xoffset = Integer.parseInt(propertiesBundle.getStringProperty("x_offset"));
 
     /**
      * where to draw the tree
@@ -32,27 +32,27 @@ public class TreeDrawer extends EulerTour {
     /**
      * fill color
      */
-    private static final Color background = new Color(Integer.decode(propertiesBundle.getString("color.calltree.node.background")).intValue());
+    private static final Color background = new Color(Integer.decode(propertiesBundle.getStringProperty("color.calltree.node.background")).intValue());
 
     /**
      * Edge color
      */
-    private static final Color edgeColor = new Color(Integer.decode(propertiesBundle.getString("color.calltree.edge")).intValue());
+    private static final Color edgeColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.calltree.edge")).intValue());
 
     /**
      * Returned node's color
      */
-	private static final Color returnedNodeColor = new Color(Integer.decode(propertiesBundle.getString("color.calltree.node_returned")).intValue());
+	private static final Color returnedNodeColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.calltree.node_returned")).intValue());
 
 	/**
 	 * Current node's color
 	 */
-	private static final Color currentNodeColor = new Color(Integer.decode(propertiesBundle.getString("color.calltree.node_current")).intValue());
+	private static final Color currentNodeColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.calltree.node_current")).intValue());
 	
 	/**
 	 * Active node's color if not current
 	 */
-	private static final Color activeNodeColor = new Color(Integer.decode(propertiesBundle.getString("color.calltree.node_active")).intValue());
+	private static final Color activeNodeColor = new Color(Integer.decode(propertiesBundle.getStringProperty("color.calltree.node_active")).intValue());
     
     /**
      * a running total to shift bounding boxes.  The shift

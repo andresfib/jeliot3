@@ -852,11 +852,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         String stmt = "";
 
         if (statementName == Code.WHI) {
-            stmt = propertiesBundle.getString("statement_name.while");
+            stmt = propertiesBundle.getStringProperty("statement_name.while");
         } else if (statementName == Code.FOR) {
-            stmt = propertiesBundle.getString("statement_name.for");
+            stmt = propertiesBundle.getStringProperty("statement_name.for");
         } else if (statementName == Code.DO) {
-            stmt = propertiesBundle.getString("statement_name.do_while");
+            stmt = propertiesBundle.getStringProperty("statement_name.do_while");
         }
 
         director.continueLoop(stmt, h);
@@ -873,13 +873,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         String stmt = "";
 
         if (statementName == Code.WHI) {
-            stmt = propertiesBundle.getString("statement_name.while");
+            stmt = propertiesBundle.getStringProperty("statement_name.while");
             director.breakLoop(stmt, h);
         } else if (statementName == Code.FOR) {
-            stmt = propertiesBundle.getString("statement_name.for");
+            stmt = propertiesBundle.getStringProperty("statement_name.for");
             director.breakLoop(stmt, h);
         } else if (statementName == Code.DO) {
-            stmt = propertiesBundle.getString("statement_name.do_while");
+            stmt = propertiesBundle.getStringProperty("statement_name.do_while");
             director.breakLoop(stmt, h);
         } else if (statementName == Code.SWITCH) {
             director.breakSwitch(h);
@@ -941,14 +941,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         if (round == 0) {
             director.enterLoop(propertiesBundle
-                    .getString("statement_name.do_while"), h);
+                    .getStringProperty("statement_name.do_while"), h);
         } else {
             if (value.equals(Boolean.TRUE.toString())) {
                 director.continueLoop(propertiesBundle
-                        .getString("statement_name.do_while"), result, h);
+                        .getStringProperty("statement_name.do_while"), result, h);
             } else {
                 director.exitLoop(propertiesBundle
-                        .getString("statement_name.do_while"), result);
+                        .getStringProperty("statement_name.do_while"), result);
             }
         }
         director.closeScratch();
@@ -968,18 +968,18 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (round == 0) {
             if (value.equals(Boolean.TRUE.toString())) {
                 director.enterLoop(propertiesBundle
-                        .getString("statement_name.for"), result, h);
+                        .getStringProperty("statement_name.for"), result, h);
             } else {
                 director.skipLoop(propertiesBundle
-                        .getString("statement_name.for"), result);
+                        .getStringProperty("statement_name.for"), result);
             }
         } else {
             if (value.equals(Boolean.TRUE.toString())) {
                 director.continueLoop(propertiesBundle
-                        .getString("statement_name.for"), result, h);
+                        .getStringProperty("statement_name.for"), result, h);
             } else {
                 director.exitLoop(propertiesBundle
-                        .getString("statement_name.for"), result);
+                        .getStringProperty("statement_name.for"), result);
             }
         }
         director.closeScratch();
@@ -1001,20 +1001,20 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             if (value.equals(Boolean.TRUE.toString())) {
                 director.enterLoop(propertiesBundle
-                        .getString("statement_name.while"), result, h);
+                        .getStringProperty("statement_name.while"), result, h);
             } else {
                 director.skipLoop(propertiesBundle
-                        .getString("statement_name.while"), result);
+                        .getStringProperty("statement_name.while"), result);
             }
 
         } else {
 
             if (value.equals(Boolean.TRUE.toString())) {
                 director.continueLoop(propertiesBundle
-                        .getString("statement_name.while"), result, h);
+                        .getStringProperty("statement_name.while"), result, h);
             } else {
                 director.exitLoop(propertiesBundle
-                        .getString("statement_name.while"), result);
+                        .getStringProperty("statement_name.while"), result);
             }
 
         }

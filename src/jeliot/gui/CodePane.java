@@ -12,13 +12,14 @@ import javax.swing.SwingUtilities;
 
 import jeliot.mcode.Highlight;
 import jeliot.util.ResourceBundles;
-import jeliot.util.UserPropertyResourceBundle;
+import jeliot.util.UserProperties;
 
 /**
  * NOT CURRENTLY USED IN JELIOT 3! CAN CONTAIN OLD AND NOT WORKING CODE!
  * This is the component that shows and highlights the program while
  * Jeliot is animating, called also code view.
  *
+ * @deprecated
  * @author Pekka Uronen
  * @author Niko Myller
  */
@@ -27,8 +28,8 @@ public class CodePane extends JComponent {
 	/**
 	 * The resource bundle for gui package.
 	 */
-	static private UserPropertyResourceBundle propertiesBundle =
-		ResourceBundles.getGuiUserPropertyResourceBundle();
+	static private UserProperties propertiesBundle =
+		ResourceBundles.getGuiUserProperties();
 
 	/**
 	 * Line numbering component that handles the correct
@@ -41,9 +42,9 @@ public class CodePane extends JComponent {
 	 */
 	private Font font =
 		new Font(
-			propertiesBundle.getString("font.code_pane.family"),
+			propertiesBundle.getStringProperty("font.code_pane.family"),
 			Font.PLAIN,
-			Integer.parseInt(propertiesBundle.getString("font.code_pane.size")));
+			Integer.parseInt(propertiesBundle.getStringProperty("font.code_pane.size")));
 	/**
 	 * Insets for the text. Used for the layout.
 	 */
@@ -67,17 +68,17 @@ public class CodePane extends JComponent {
 		area.setBackground(
 			new Color(
 				Integer
-					.decode(propertiesBundle.getString("color.code_pane.background"))
+					.decode(propertiesBundle.getStringProperty("color.code_pane.background"))
 					.intValue()));
 		area.setSelectionColor(
 			new Color(
 				Integer
-					.decode(propertiesBundle.getString("color.code_pane.selection"))
+					.decode(propertiesBundle.getStringProperty("color.code_pane.selection"))
 					.intValue()));
 		area.setSelectedTextColor(
 			new Color(
 				Integer
-					.decode(propertiesBundle.getString("color.code_pane.selection.text"))
+					.decode(propertiesBundle.getStringProperty("color.code_pane.selection.text"))
 					.intValue()));
 		area.setEditable(false);
 	}
