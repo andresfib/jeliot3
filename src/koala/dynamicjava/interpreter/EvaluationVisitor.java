@@ -1049,10 +1049,16 @@ public class EvaluationVisitor extends VisitorObject {
 								+ Code.OUTPUT + Code.DELIM + outputCounter
 								+ Code.DELIM
 								+ MCodeUtilities.locationToString(node));
-							args[i] = ((Expression) it.next()).acceptVisitor(this);
+							Expression exp =(Expression) it.next();
+							
+							args[i] = MCodeUtilities.stringConversion(exp, this);
+
+							
+							//args[i] = ((Expression) it.next()).acceptVisitor(this);
 							MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
 								+ outputCounter + Code.DELIM + "System.out"
 								+ Code.DELIM + m.getName() + Code.DELIM
+								//+ args[i].toString() + Code.DELIM
 								+ MCodeUtilities.getValue(args[i]) + Code.DELIM
 								+ typs[i].getName() + Code.DELIM
 								//To indicate newline or not
@@ -2276,33 +2282,71 @@ public class EvaluationVisitor extends VisitorObject {
 	 *            the node to visit
 	 */
 	public Object visit(AddExpression node) {
+		
+		Class c = NodeProperties.getType(node);
+		if (c == String.class){
+			return concatenate (node);
+		} else {
+			long addcounter = counter++;
+			long auxcounter = counter;			
+			
+			MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AE
+					+ Code.DELIM + addcounter + Code.DELIM
+					+ MCodeUtilities.locationToString(node));
+			MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
+			
+			Object lobj = node.getLeftExpression().acceptVisitor(this);
+			
+			long auxcounter2 = counter;
+			
+			MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
+			
+			Object robj = node.getRightExpression().acceptVisitor(this);
+			
+			Object o = InterpreterUtilities.add(c, lobj, robj);
+			
+			MCodeUtilities.write("" + Code.AE + Code.DELIM + addcounter
+					+ Code.DELIM + auxcounter + Code.DELIM + auxcounter2
+					+ Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
+					+ NodeProperties.getType(node).getName() + Code.DELIM
+					+ MCodeUtilities.locationToString(node));
+			return o;	
+		}
+	}
+	public Object concatenate(AddExpression node) {
 
 		Class c = NodeProperties.getType(node);
 		long addcounter = counter++;
-		long auxcounter = counter;
+		Object lobj,robj;
 
 		MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AE
 				+ Code.DELIM + addcounter + Code.DELIM
 				+ MCodeUtilities.locationToString(node));
-		MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
-		Object lobj = node.getLeftExpression().acceptVisitor(this);
+		String str1="";
+		Node exp = node.getLeftExpression();
+		long auxcounter = counter;
+		MCodeUtilities.write("" + Code.LEFT + Code.DELIM + auxcounter);		
+		
+		str1 = MCodeUtilities.stringConversion(exp, this);
+
+		String str2="";
+		exp = node.getRightExpression();
 		long auxcounter2 = counter;
-
-		MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
-
-		Object robj = node.getRightExpression().acceptVisitor(this);
-		Object o = InterpreterUtilities.add(c, lobj, robj);
-
+		
+		MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + auxcounter2);
+		
+		str2 = MCodeUtilities.stringConversion(node.getRightExpression(), this);
+				
+		Object o = InterpreterUtilities.add(c, str1, str2);
 		MCodeUtilities.write("" + Code.AE + Code.DELIM + addcounter
 				+ Code.DELIM + auxcounter + Code.DELIM + auxcounter2
-				+ Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
+				+ Code.DELIM + o.toString() + Code.DELIM
 				+ NodeProperties.getType(node).getName() + Code.DELIM
 				+ MCodeUtilities.locationToString(node));
-		return o;
+		return o;	
 
 	}
-
 	/**
 	 * Visits an AddAssignExpression
 	 * 
