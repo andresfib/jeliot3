@@ -1,4 +1,4 @@
-package jeliot.gui;
+package jeliot.historyview;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
