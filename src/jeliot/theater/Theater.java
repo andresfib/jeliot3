@@ -8,7 +8,7 @@ import java.awt.Point;
 import java.util.Vector;
 
 /**
- * This is the theatre component that is added in the left pane of the
+ * This is the <code>Theatre</code> component that is added in the left pane of the
  * user interface and on which the program animation produced in the theater
  * package is currently drawn.
  *

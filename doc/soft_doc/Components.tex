@@ -68,7 +68,7 @@ Different packages of \jel{}~3 are introduced in this section in the same order 
 \subsection{Class \jel{} }
 \label{sec:Jeliot_Class}
 
-Class \jel{} in the package \p{jeliot} is the main class of the program. It combines the different components of the program together and handles the communication between different components. When the program is started the class creates all the needed components and passes them as parameters to the user interface classes. It mainly handles the communication between the user interface (\p{jeliot.gui}) and the theater/animation engine (\p{jeliot.theatre}) classes. In addition to that it invokes the thread handling the interpretation of the user programs with the \p{jeliot.launcher.Launcher} class.
+Class \jel{} in the package \p{jeliot} is the main class of the program. It combines the different components of the program together and handles the communication between different components. When the program is started the class creates all the needed components and passes them as parameters to the user interface classes. It mainly handles the communication between the user interface (\p{jeliot.gui}) and the theater/animation engine (\p{jeliot.theater}) classes. In addition to that it invokes the thread handling the interpretation of the user programs with the \p{jeliot.launcher.Launcher} class.
 
 \subsection{User Interface}
 \label{sec:User_Interface}
@@ -86,7 +86,7 @@ The user interface of Jeliot is located in the package \p{jeliot.gui}. The struc
 %Code editor
 \put(0,40){\framebox(100,130){\shortstack{\f{Code editor}\\\f{or}\\\f{Code viewer}}}}
 %Theatre
-\put(100,40){\framebox(200,160){\shortstack{\f{Animation frame (Theatre)}\\\f{or}\\\f{Error viewer}}}}
+\put(100,40){\framebox(200,160){\shortstack{\f{Animation frame (Theater)}\\\f{or}\\\f{Error viewer}}}}
 %Control panel
 \put(0,0){\framebox(120,40){\f{Control panel}}}
 %Output Console
@@ -99,7 +99,7 @@ The user interface of Jeliot is located in the package \p{jeliot.gui}. The struc
 
 In the split pane the left side is used by the code editor (\p{CodeEditor}) or the code viewer (\p{CodeViewer}). The code editor is shown during editing of the program and the code viewer during the animation of the program. Both of the text components have a line numbering component (\p{LineNumbers} on their row header). The code editor consist of an editing panel that has buttons to load, save and edit the source code. The frame has also a menu bar that is constructed partially in the \p{CodeEditor} class and partially in the \p{JeliotWindow} class.
 
-On the right hand side of the split pane a animation engine called theater (\p{Theatre}) is normally shown. However, if any errors occur during the compilation or run-time of the program they are shown in the \p{Error viewer} (\p{ErrorViewer}) instead of theater.
+On the right hand side of the split pane a animation engine called the\-a\-ter (\p{The\-a\-ter}) is normally shown. However, if any errors occur during the compilation or run-time of the program they are shown in the \p{Error viewer} (\p{ErrorViewer}) instead of theater.
 
 \begin{figure}[htb]
 \begin{center}
@@ -111,7 +111,7 @@ On the right hand side of the split pane a animation engine called theater (\p{T
 
 \p{JeliotWindow} combines all the components in the \p{jeliot.gui} package and creates the user interface. It also deals with most of the events happening during {run-time} and delegates the commands to the appropriate classes (e.g. \p{Jeliot} or \p{CodeEditor}). Other classes in the \p{gui} package are related to one of the components introduced in the previous paragraph.
 
-There are also three classes that are not currently in use in \jel{}~3, namely \p{LoadJeliot}, \p{DraggableComponent} and \p{TheatrePopup}. LoadJeliot class could be used to show a splash screen in the startup of the program. DraggableComponent is an class that a DraggableComponent could extend to be dragged during the visualization. TheatrePopup class could be used to have a popup menu on the visualization frame. This popup menu could show, for example, methods of the object.
+There are also three classes that are not currently in use in \jel{}~3, namely \p{LoadJeliot}, \p{DraggableComponent} and \p{TheaterPopup}. LoadJeliot class could be used to show a splash screen in the startup of the program. DraggableComponent is an class that a DraggableComponent could extend to be dragged during the visualization. TheaterPopup class could be used to have a popup menu on the visualization frame. This popup menu could show, for example, methods of the object.
 
 \subsection{DynamicJava}
 \label{sec:DynamicJava}
@@ -206,7 +206,7 @@ Figure~\ref{fig:several_tree_classes} shows the different nodes for declarations
 
 Figure~\ref{fig:primary_expression_classes} shows the primary expressions classes. Its super class, \p{Expression}, is also super class for binary and unary expressions. All properties are defined by \p{PrimaryExpression} subclasses. Some of those also implement interfaces, even more than one. Interfaces are used by \djava{} to know when certain conditions hold. Nodes that implement \p{LeftHandSide} interface (\p{ArrayAccess}, \p{QualifiedName}, \p{FieldAccess}) are available to be the left hand side of an assignment. Those that implement \p{ExpressionContainer}
 (\p{ObjectMethodCall}, \p{ReturnStatement}, \p{Constructor\-Invocation}, \p{ObjectFieldAccess},
-\p{ArrayAccess}, \p{UnaryExpression}) are those that need another expression to be complete and meaningful. For example, an array access ({\tt buffer[3]} needs a qualified name ({\tt buffer}) where to look for the data, that qualified name is the expression contained in \p{ArrayAccess}. The interface \p{ExpressionStatement} is used only when \djava{} parses the source code to build the \p{ForStatement} node.
+\p{Array\-Ac\-cess}, \p{UnaryExpression}) are those that need another expression to be complete and meaningful. For example, an array access ({\tt buffer[3]} needs a qualified name ({\tt buffer}) where to look for the data, that qualified name is the expression contained in \p{ArrayAccess}. The interface \p{ExpressionStatement} is used only when \djava{} parses the source code to build the \p{ForStatement} node.
 
 \begin{figure}[!htb]
 \begin{center}
@@ -262,11 +262,11 @@ There are several important data structures in the \p{Interpreter} class:
 
 \item[\p{postIncsDecs}] variable is a reference to a hash table (\p{Hashtable}) that keeps the information about all the post increments or decrements that should be performed. This information is collected when a intermediate code command for post increment or decrement is read. The expression reference is used as the key in the hash table. During every expression involving variables, it is tested if the post increment or decrement should be animated after the variable value is used in the visualization.
 
-\item[\p{currentClass}] variable is a reference to an instance of \p{Classinfo} class that contains the information about the constructors, methods and fields that each class has. 
+\item[\p{currentClass}] variable is a reference to an instance of \p{ClassInfo} class that contains the information about the constructors, methods and fields that each class has. 
 
-\item[\p{classes}] variable is a reference to an instance of 
+\item[\p{classes}] variable is a reference to an instance of \p{Hashtable} that contains the \p{ClassInfo} instances of all the classes that are created.
 
-\item[\p{objectCreation}]
+\item[\p{objectCreation}] variable is a reference to an instance of \p{Stack} that contains the hash code of the current object allocation during the constructor call.
 
 \item[\p{returned, returnValue, returnActor, returnExpressionCounter}] are variables for handling the return value of a method.
 
@@ -287,48 +287,33 @@ The classes of \p{jeliot.lang} package represent Java language constructs. They 
 \end{center}
 \end{figure}
 
-{\bf Information about language constructs in the picture and outside it.}
+\p{Instance} class is the base class for all the instances (e.g. \p{ArrayInstance} and \p{ObjectFrame}).
+The instance of the \p{ArrayInstance} class represents an array of n-dimensions. 
+The instance of the \p{ObjectFrame} represents an object of a class that is created at runtime. 
+
+The instance of the \p{ClassInfo} class contains the information about a single Java class. It contains all the fields, methods and constructors of the class. 
+
+The instance of the \p{MethodFrame} class represents a method under execution. A method frame is created runtime each time a method is called.
+
+The instance of the \p{Variable} class is an instance of a variable --- a field or a local variable. A new variable is created runtime every time a local variable is declared. The instance of the \p{VariableInArray} is an instance of an array variable. A new array variables are created at runtime every time a new array is created.
+
+The instance of the \p{Value} class represents any primitive type of value and values of String type and is the base class for reference values. The instance of the \p{Reference} is a value of a reference type meaning that all the references to the instances are objects of this class. 
 
 \subsection{Visualization Engine}
 \label{sec:Visualization_Engine}
 
-The package \p{jeliot.theatre} contains classes that are used to form the animation of the program. We will here introduce the most important classes in the package and explain the meaning of these classes. For rest of the classes see their source codes.
-
-\subsubsection{Theatre}
-
-The \p{jeliot.theatre} package contains a class \p{Theatre} that extends \p{JComponent} class so that it can be entered inside the split pane in the user interface. It is the canvas for the animation and all the actors are drawn on it.
-
-See Figure~\ref{fig:jeliot3_theatre_structure}.
-
-\begin{figure}[htbp]
-\begin{center}
-\begin{picture}(250,200)
-%Overall frame
-\put(0,0){\framebox(250,200){{\f{\bf{Theatre}}}}}
-%Method frame area
-\put(10,100){\dashbox{5}(80,90){\shortstack{\f{Method}\\\f{Stage}\\\f{Area}}}}
-%Constant box
-\put(10,10){\dashbox{5}(60,30){\shortstack{\f{Constant}\\\f{Box}}}}
-%Instance Area
-\put(80,10){\dashbox{5}(160,80){\shortstack{\f{Instance}\\\f{Area}}}}
-%Expression Evaluation Area
-\put(100,110){\dashbox{5}(140,80){\shortstack{\f{Expression}\\\f{Evaluation}\\\f{Area}\\\f{(Scratch)}}}}
-\end{picture}
-\caption{The structure of the animation frame (theatre) in Jeliot~3.}
-\label{fig:jeliot3_theatre_structure}
-\end{center}
-\end{figure}
+The package \p{jeliot.theater} contains classes that are used to form the animation of the program. We will here introduce the most important classes in the package and explain the meaning of these classes. For rest of the classes see their source codes.
 
 \subsubsection{Director class}
 
 \p{Director} has methods for different kinds of operations during the animation of the program (e.g. binary expression, unary expression, object creation and method call). These methods are called by the intermediate code interpreter (\p{MCodeInterpreter}). In each of the methods are given parameters that the method needs for the operation.
 
-Normally, the method first creates actors through \p{ActorFactory} or uses existing actors. \p{Animation}s are created through \p{Actor}s' methods (e.g. \p{appear} or \p{fly}). Created animations are given to the \p{AnimationEngine} to be run. Actors can be also added to other \p{ActorContainer}s (e.g. \p{Theatre}, \p{VariableActor} or \p{MethodStage}).
+Normally, the method first creates actors through \p{ActorFactory} or uses existing actors. \p{Animation}s are created through \p{Actor}s' methods (e.g. \p{appear} or \p{fly}). Created animations are given to the \p{AnimationEngine} to be run. Actors can be also added to other \p{ActorContainer}s (e.g. \p{Theater}, \p{VariableActor} or \p{MethodStage}).
 
 \subsubsection{Actor classes}
 \label{sec:Actors}
 
-See Figure~\ref{fig:class_hierarchy_of_Actor_class_small}.
+There is a large number of different \p{Actor} classes as can be seen from Figure~\ref{fig:class_hierarchy_of_Actor_class_small}. 
 
 \begin{figure}[!htb]
 \begin{center}
@@ -338,9 +323,39 @@ See Figure~\ref{fig:class_hierarchy_of_Actor_class_small}.
 \end{center}
 \end{figure}
 
+\p{Actor} class is the base class for all the actors. The \p{Actor} class should not be used directly but indirectly with it's subclasses. 
+
+\p{ValueActor} is an actor that represents graphically the language construct \p{Value}. The \p{Value}'s type is represented by the colors of the \p{ValueActor} and the \p{Value}'s value is printed out as the String representation of the value. \p{ImageValueActor} is an actor that is used when a value actor should be an image. At the moment this only happens when the value of a variable is unknown visualized as ``???''. \p{ReferenceActor} shows the reference to some \p{InstanceActor} (e.g. \p{ArrayActor} or \p{ObjectStage}). They can be assigned to the \p{ReferenceVariableActor} instances or any other instance that is derived from the \p{ReferenceVariableActor}.
+
+An instance of the \p{OperatorActor} class represents a operator in  the expressions. It can be a binary or unary operator and it is shown in the \p{ExpressionActor} with the operands. 
+
+\p{Scratch} controls the expression evaluation area. It allocates the space for each \p{ExpressionEvaluationActor} and possibly for other \p{Actor}s that are there temporarily. \p{ExpressionActor} represents a single line of a scratch the evaluation area. It can contain any number of different \p{Actor}s (e.g. \p{ValueActor}, \p{ReferenceActor}, \p{OperatorActor}, \p{SMIActor}, \p{OMIActor} or \p{BubbleActor}) inside that it renders.
+
+\p{VariableActor} represent graphically the language construct \p{Variable} for primitive data types and Strings. \p{ReferenceVariableActor} represents graphically the variables of the reference type. It can bind \p{ReferenceActor} instances and render them. \p{VariableInArrayActor} represent graphically the language construct \p{VariableInArray} for primitive data types and Strings. 
+
+\p{SMIActor} represents graphically the static method invocation. The actor shows the  method name and the parameters in a similar way as Java syntax just replaces the variable references with their actual values. \p{OMIActor} represents graphically the object method invocation. The actor shows the object reference, the method name and the parameters in a similar way as Java syntax just replaces the variable references with their actual values.
+
+\p{MethodStage} is the graphical representation of the \p{MethodFrame}. It contains the local \p{VariableActor}s and handles the scope changes.
+
+\p{InstanceActor} is a base class for all the instances: \p{ArrayActors} and \p{Object\-Stage}. An instance of this class should not be instantiated. \p{Object\-Stage} is the graphical representation of the \p{ObjectFrame}. It contains the field of the object as \p{VariableActor}s. \p{ArrayActor} represents the array instance and contains \p{Var\-i\-a\-ble\-In\-Array\-Actor}s for every index of the array. \p{IndexActor} shows the line between the array access' indexing expression result value and the array's actual index. 
+
+\p{BubbleActor} is used to move the return value from the \p{MethodStage} to the \p{ExpressionActor} on the \p{Scratch} (evaluation area).
+
+\p{CastActor} handles the animation of the casting of the primitive values.
+
+\p{ConstantBox} instance represents a place where all the literal constants appear during the animation.
+
+\p{AnimatingActor} is a actor that may be used to show frame based animation. The output animation is currently uses this actor.
+
+The \p{LinesAndText} actor draws the dashed lines and titles to separate explicitly the theater (animation frame) into four areas: constant area, method area, object and array area and expression evaluation area.
+
+\p{MessageActor} shows all the textual messages to the user. 
+
+\p{PanelActor} represents the curtains of the theater and produces the opening and closing animations of the curtains.
+
 \subsubsection{ActorContainer interface}
 
-See the Figure~\ref{fig:actors_and_actorcontainers}.
+\p{ActoContainer} interface is implemented by classes that are going to contain \p{Actor}s as their fields and take care of their painting. This means that those classes having actors as their fields but not taking care of the painting of the actors are not implementing this class. The implementing classes are shown in Figure~\ref{fig:class_hierarchy_of_Actor_class_small}. The different containing relationships are illustrated in Figure~\ref{fig:actors_and_actorcontainers}.
 
 \begin{figure}[!htb]
 \begin{center}
@@ -350,25 +365,25 @@ See the Figure~\ref{fig:actors_and_actorcontainers}.
 \end{center}
 \end{figure}
 
+\subsubsection{ActorFactory class}
+
+This class handles the centralized creation of all the \p{Actor}s. This enables the centralized appearance handling for fonts, color and other appearance parameters. If the appearance parameters of the actors are going to be changed this class should be consulted first before any modifications to the actual \p{Actor} classes are made.
+
 \subsubsection{Animation class}
 
-See the Figure~\ref{fig:jeliot3_animation_engine}.
+\p{Animation} class represents one atomic animation in \p{Jeliot}. Animation means here any event that includes movement of actors or that is otherwise dependent of time. Examples of animation include moving an actor from one place to another or flashing the colors of an actor as it is introduced to the theatre.
+
+The animation is played by an instance of \p{AnimationEngine} class. The animation engine takes care of scheduling the animation. Animation class is the abstract superclass of various specialized animation classes. These subclasses must implement the \p{animate} method in which they make their changes to actors. The animation engine calls this method at even time intervals. If the animation has to do something in prior to starting the animation, especially if it has to set any parameters that depend on the duration of the animation or it has to add any actors to the theater, it may do this in its \p{init()} method. When the animation finishes, the engine calls its \p{finish} method.
+
+See from Figure~\ref{fig:jeliot3_animation_engine} how the \p{Animation} class relates to the animation formation.
 
 \subsubsection{AnimationEngine class}
 
-See the Figure~\ref{fig:jeliot3_animation_engine}.
+\p{AnimationEngine} schedules the animations represented by instances of \p{An\-i\-ma\-tion} class. The engine is given an animation or an array of animations, and it plays those animations. The speed and quality of the animation can be controlled by setting its volume (speed) and FPS (Frames Per Second) values. An engine's volume is the amount of action it gives to the animation objects each second. The higher the volume, the faster the animations will play.
 
-\subsubsection{Theatre class}
+An animation engine may be assigned a \p{ThreadController} instance. In this case, the engine checks with the controller after every step of animation calling its \p{checkPoint} method.
 
-See the Figure~\ref{fig:theatre_and_actorcontainers}.
-
-\begin{figure}[!htb]
-\begin{center}
-\includegraphics[width=10cm]{images/theatre_and_actors.eps}
-\caption{The \p{Actor}s that are commonly included in the passive (\p{pasAct}) and active (\p{actAct}) \p{Actor}s.}
-\label{fig:theatre_and_actorcontainers}
-\end{center}
-\end{figure}
+See from Figure~\ref{fig:jeliot3_animation_engine} how the \p{AnimationEngine} relates to the animation formation.
 
 \begin{figure}[!htb]
 \begin{center}
@@ -378,7 +393,42 @@ See the Figure~\ref{fig:theatre_and_actorcontainers}.
 \end{center}
 \end{figure}
 
-\subsubsection{TheatreManager class}
+\subsubsection{Theater class}
 
+The \p{jeliot.theater} package contains a class \p{Theater} that extends \p{JComponent} class so that it can be entered inside the split pane in the user interface. It is the canvas for the animation and all the actors are drawn on it. The different actors of the theater are shown on the theater in different areas that are shown in  Figure~\ref{fig:jeliot3_theatre_structure}. Furthermore, the \p{TheaterManager} allocates the places for the
+different actors on these areas.
 
-\subsubsection{ActorFactory class}
+\begin{figure}[htbp]
+\begin{center}
+\begin{picture}(250,200)
+%Overall frame
+\put(0,0){\framebox(250,200){{\f{\bf{Theater}}}}}
+%Method frame area
+\put(10,100){\dashbox{5}(80,90){\shortstack{\f{Method}\\\f{Stage}\\\f{Area}}}}
+%Constant box
+\put(10,10){\dashbox{5}(60,30){\shortstack{\f{Constant}\\\f{Box}}}}
+%Instance Area
+\put(80,10){\dashbox{5}(160,80){\shortstack{\f{Instance}\\\f{Area}}}}
+%Expression Evaluation Area
+\put(100,110){\dashbox{5}(140,80){\shortstack{\f{Expression}\\\f{Evaluation}\\\f{Area}\\\f{(Scratch)}}}}
+\end{picture}
+\caption{The structure of the animation frame (theater) in Jeliot~3.}
+\label{fig:jeliot3_theatre_structure}
+\end{center}
+\end{figure}
+
+\p{Theater} instance is a special case of an \p{ActorContainer} because actually \p{The\-a\-ter} is not a subclass of the \p{Actor} class but still is implements \p{ActorContainer} interface. The \p{Theater} contains two different kinds of \p{Actor}s. The other actors are active (stored into \p{Vector} \p{actAct}) and the other actors are passive (stored into \p{Vector} \p{pasAct}). The active actors are the one that are drawn every time again when the new round of the animation is run. The passive actors are only stored in the background image in the beginning of the animation to optimize the drawing during the animation. See Figure~\ref{fig:theatre_and_actorcontainers} for those actors that are inserted as active actors during the animations.
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=10cm]{images/theatre_and_actors.eps}
+\caption{The \p{Actor}s that are commonly included in the passive (\p{pasAct}) and active (\p{actAct}) \p{Actor}s.}
+\label{fig:theatre_and_actorcontainers}
+\end{center}
+\end{figure}
+
+See from Figure~\ref{fig:jeliot3_animation_engine} how the \p{Theater} relates to the animation formation.
+
+\subsubsection{TheaterManager class}
+
+\p{TheaterManager} allocates the space for all \p{InstanceActor}s, \p{MethodStage}s, \p{Scratch}\-es and constants (\p{ConstantBox}), and also listens the \p{Theater} component for resizes so the the allocation of the space is valid after resizing of the \p{Theater} component.

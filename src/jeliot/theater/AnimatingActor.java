@@ -4,12 +4,13 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 /**
-  * Animating actor is a actor that may be used to show frame based
-  * animation.
-  *
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * 
+ * Animating actor is a actor that may be used to show frame based
+ * animation.
+ *
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class AnimatingActor extends Actor {
 
 //  DOC: document!

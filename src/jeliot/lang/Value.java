@@ -3,7 +3,7 @@ package jeliot.lang;
 import jeliot.theater.*;
 
 /**
- * Value represents any primitive type of value plus String type and
+ * Value represents any primitive type of value and a String type and
  * is the base class for reference values.
  *
  * @author Pekka Uronen
