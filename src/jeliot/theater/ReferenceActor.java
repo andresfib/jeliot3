@@ -274,6 +274,8 @@ public class ReferenceActor extends ValueActor {
         Point ip = instance.getRootLocation();
         Point vp = this.getRootLocation();
 
+        int position = instance.getPosition();
+        
         int iy1 = ip.y;
         int iy2 = iy1 + instance.getHeight();
         int vy1 = vp.y;
@@ -283,39 +285,73 @@ public class ReferenceActor extends ValueActor {
         int ix2 = ix + instance.getWidth();
         int vx  = vp.x + refWidth;
 
+        int xp2 = vx + refLen + refWidthRandom;
+
         if (!instVarConnect) {
-            int xp2 = vx + refLen + refWidthRandom;
             if (xp2 < ix) {
-                bend = new Point[4];
+                bend = new Point[5];
                 bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
-                bend[1] = new Point(xp2 /*- (vy1/6)*/, bend[0].y);
-                bend[2] = new Point(bend[1].x, iy1 + 12);
-                bend[3] = new Point(ix - 3, bend[2].y);
-                calculateArrowhead(2);
-            } else if (xp2 > ix2) {
-                bend = new Point[4];
-                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
-                bend[1] = new Point(xp2 /*- (vy1/6)*/, bend[0].y);
-                bend[2] = new Point(bend[1].x, iy1 + 12);
-                bend[3] = new Point(ix2 - 3, bend[2].y);
-                calculateArrowhead(4);
-            } else {
-                bend = new Point[3];
-                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
-                bend[1] = new Point(xp2 /*- (vy1/6)*/, bend[0].y);
-                bend[2] = new Point(bend[1].x, iy1);
+                bend[1] = new Point(xp2, bend[0].y);
+                bend[2] = new Point(bend[1].x, iy1 - 20 - position * 10);
+                bend[3] = new Point((ix+ix2)/2, bend[2].y);
+                bend[4] = new Point(bend[3].x, iy1);
+                
                 calculateArrowhead(3);
+//                bend = new Point[4];
+//                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+//                bend[1] = new Point(xp2 /*- (vy1/6)*/, bend[0].y);
+//                bend[2] = new Point(bend[1].x, iy1 + 12);
+//                bend[3] = new Point(ix - 3, bend[2].y);
+//                calculateArrowhead(2);
+            } else if (xp2 > ix2) {
+                bend = new Point[5];
+                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+                bend[1] = new Point(xp2, bend[0].y);
+                bend[2] = new Point(bend[1].x, iy1 - 20 - position * 10);
+                bend[3] = new Point((ix+ix2)/2, bend[2].y);
+                bend[4] = new Point(bend[3].x, iy1);
+
+                
+                calculateArrowhead(3);
+//                bend = new Point[4];
+//                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+//                bend[1] = new Point(xp2 /*- (vy1/6)*/, bend[0].y);
+//                bend[2] = new Point(bend[1].x, iy1 + 12);
+//                bend[3] = new Point(ix2 - 3, bend[2].y);
+//                calculateArrowhead(4);
+            } else {
+                bend = new Point[5];
+                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+                bend[1] = new Point(xp2, bend[0].y);
+                bend[2] = new Point(bend[1].x, iy1 - 20 - position * 10);
+                bend[3] = new Point((ix+ix2)/2, bend[2].y);
+                bend[4] = new Point(bend[3].x, iy1);
+                
+                calculateArrowhead(3);
+//                bend = new Point[3];
+//                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+//                bend[1] = new Point(xp2 /*- (vy1/6)*/, bend[0].y);
+//                bend[2] = new Point(bend[1].x, iy1);
+//                calculateArrowhead(3);
             }
         } else {
-            //Change this!
-            //It should contain 7 points with 5 bends
-            bend = new Point[4];
+            bend = new Point[5];
             bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
-            bend[1] = new Point(vx + refLen + refWidthRandom /*- (vy1/6)*/, bend[0].y);
-            bend[2] = new Point(bend[1].x, iy1 + 12);
-            bend[3] = new Point(ix + 3, bend[2].y);
-            calculateArrowhead(2);
+            bend[1] = new Point(xp2, bend[0].y);
+            bend[2] = new Point(bend[1].x, iy1 - 20 - position * 10);
+            bend[3] = new Point((ix+ix2)/2, bend[2].y);
+            bend[4] = new Point(bend[3].x, iy1);
+            
+            calculateArrowhead(3);
+            
+            //bend = new Point[4];
+            //bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+            //bend[1] = new Point(vx + refLen + refWidthRandom /*- (vy1/6)*/, bend[0].y);
+            //bend[2] = new Point(bend[1].x, iy1 + 12);
+            //bend[3] = new Point(ix + 3, bend[2].y);
+            //calculateArrowhead(2);
         }
+        
     }
 
     /**

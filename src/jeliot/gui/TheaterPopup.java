@@ -43,6 +43,15 @@ public class TheaterPopup extends MouseAdapter implements MouseMotionListener {
         menu.add(menuItem);
     }
 
+    JPopupMenu zoomingMenu = new JPopupMenu(); {
+        JPopupMenu menu = methodMenu;
+        JMenuItem menuItem;
+        menuItem = new JMenuItem("Zoom in");
+        menu.add(menuItem);
+        menuItem = new JMenuItem("Zoom out");
+        menu.add(menuItem);        
+    }
+    
     /**
      * Method to handle the mouse events when the actors should be
      * highlighted.
@@ -50,7 +59,7 @@ public class TheaterPopup extends MouseAdapter implements MouseMotionListener {
      * @param   evt The mouse event when mouse entered the area.
      */
     public void mouseEntered(MouseEvent evt) {
-        handleMouseEvent(evt);
+        //handleMouseEvent(evt);
     }
 
     /**
@@ -60,7 +69,7 @@ public class TheaterPopup extends MouseAdapter implements MouseMotionListener {
      * @param   evt The mouse event when mouse exited the area.
      */
     public void mouseExited(MouseEvent evt) {
-        handleMouseEvent(evt);
+        //handleMouseEvent(evt);
     }
 
     /**
@@ -70,7 +79,7 @@ public class TheaterPopup extends MouseAdapter implements MouseMotionListener {
      * @param   evt The mouse event when mouse is moved.
      */
     public void mouseMoved(MouseEvent evt) {
-        handleMouseEvent(evt);
+        //handleMouseEvent(evt);
     }
 
     /**
@@ -80,9 +89,9 @@ public class TheaterPopup extends MouseAdapter implements MouseMotionListener {
      */
     public void mousePressed(MouseEvent evt) {
        // System.err.println("mousePressed");
-       // if (evt.isPopupTrigger()) {
+       if (evt.isPopupTrigger()) {
             showPopup(evt);
-       // }
+       }
     }
 
     /** Implemented to conform to MouseMotionListener interface. */
@@ -110,6 +119,10 @@ public class TheaterPopup extends MouseAdapter implements MouseMotionListener {
      * @param   evt The mouse event when mouse button is pressed.
      */
     private void showPopup(MouseEvent evt) {
+        
+        zoomingMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+        
+        /*
         int x = evt.getX();
         int y = evt.getY();
         Theater theatre = (Theater)evt.getComponent();
@@ -131,6 +144,7 @@ public class TheaterPopup extends MouseAdapter implements MouseMotionListener {
                 menu.show(evt.getComponent(), evt.getX(), evt.getY());
             }
         }
+        */
     }
 
 }

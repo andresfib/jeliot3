@@ -32,11 +32,6 @@ public class LinesAndText extends Actor {
     /**
 	 *
 	 */
-	private TheaterManager manager;
-
-    /**
-	 *
-	 */
 	private String constantArea = bundle.getString("string.constant_area");
     
     /**
@@ -89,10 +84,9 @@ public class LinesAndText extends Actor {
 	 * @param t
 	 * @param tm
 	 */
-	public LinesAndText(Theater t, TheaterManager tm) {
+	public LinesAndText(Theater t) {
         super();
         this.theatre = t;
-        this.manager = tm;
     }
 
     /**
@@ -100,13 +94,6 @@ public class LinesAndText extends Actor {
 	 */
 	public void setTheatre(Theater t) {
         this.theatre = t;
-    }
-
-    /**
-	 * @param tm
-	 */
-	public void setManager(TheaterManager tm) {
-        this.manager = tm;
     }
 
 	/**
@@ -118,14 +105,16 @@ public class LinesAndText extends Actor {
         Dimension d = theatre.getSize();
         int w = d.width;
         int h = d.height;
-        int methodX = manager.getScratchPositionX();
-        int constantY = manager.getConstantPositionY();
-        int instanceY = manager.getMinInstanceY();
-        int instanceX = manager.getMinInstanceX();
+        int methodX = TheaterManager.getScratchPositionX();
+        int constantY = TheaterManager.getConstantPositionY();
+        int instanceY = TheaterManager.getMinInstanceY();
+        int instanceX = TheaterManager.getMinInstanceX();
 
+        /*
         if (constantY < instanceY) {
             instanceY = constantY;
         }
+        */
 
         if (methodX < instanceX) {
             instanceX = methodX;
