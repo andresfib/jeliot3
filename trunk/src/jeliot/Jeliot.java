@@ -16,6 +16,7 @@
 
 package jeliot;
 
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PipedReader;
@@ -29,9 +30,11 @@ import java.util.regex.Pattern;
 
 import jeliot.calltree.TreeDraw;
 import jeliot.gui.CodePane2;
+import jeliot.gui.HistoryView;
 import jeliot.gui.JeliotWindow;
 import jeliot.launcher.Launcher;
 import jeliot.mcode.CallTreeMCodeInterpreter;
+import jeliot.mcode.Highlight;
 import jeliot.mcode.InterpreterError;
 import jeliot.mcode.MCodeInterpreter;
 import jeliot.mcode.MCodeUtilities;
@@ -135,6 +138,8 @@ public class Jeliot {
      */
     private CodePane2 codePane = new CodePane2();
 
+    private HistoryView hv = new HistoryView(codePane);
+    
     /**
      * A director for animating the program.
      */
@@ -157,7 +162,7 @@ public class Jeliot {
      */
     public Jeliot(String udir) {
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
-        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir, callTree);
+        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir, callTree, hv);
     }
 
     /**
@@ -281,6 +286,7 @@ public class Jeliot {
         //clear the remnants of previous animation
         theatre.cleanUp();
         callTree.initialize();
+        hv.initialize();
 
         //create director and the other equipment
         ActorFactory af = new ActorFactory(iLoad);
@@ -434,6 +440,10 @@ public class Jeliot {
      */
     public void highlightTabTitle(boolean highlight, int tabNumber) {
         gui.highlightTabTitle(highlight, tabNumber);
+    }
+    
+    public void addImageToHistory(Image i, Highlight h) {
+    	hv.addImage(i, h);
     }
     
     /**

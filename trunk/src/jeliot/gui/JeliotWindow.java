@@ -186,6 +186,8 @@ public class JeliotWindow {
     /** This variable will control the panels. */
     private PanelController panelController;
 
+    private HistoryView hv;
+    
     /**
      * This JEditorPane errorJEditorPane will show the error messages for the
      * users.
@@ -355,7 +357,7 @@ public class JeliotWindow {
      *            The user directory
      */
     public JeliotWindow(Jeliot jeliot, CodePane2 codePane, Theater theatre,
-            AnimationEngine engine, ImageLoader iLoad, String udir, TreeDraw td) {
+            AnimationEngine engine, ImageLoader iLoad, String udir, TreeDraw td, HistoryView hv) {
 
         this.jeliot = jeliot;
         this.codePane = codePane;
@@ -364,6 +366,7 @@ public class JeliotWindow {
         this.iLoad = iLoad;
         this.udir = udir;
         this.callTree = td;
+        this.hv = hv;
 
         this.panelController = new PanelController(theatre, iLoad);
         //this.editor = new CodeEditor(this.udir);
@@ -387,6 +390,10 @@ public class JeliotWindow {
         this.tabbedPane.addTab(bundle.getString("tab.title.call_tree"),
                 callTree.getComponent());
         this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
+        
+        this.tabbedPane.addTab("History",
+                hv);
+        this.tabbedPane.setMnemonicAt(2, KeyEvent.VK_Y);        
         
         frame = new JFrame(jeliotVersion);
         frame.setIconImage(iLoad
