@@ -487,8 +487,8 @@ public class ReferenceActor extends ValueActor {
 	 * @return
 	 */
 	public int getReferenceWidth() {
-        calculateBends();
         if (instance != null) {
+            calculateBends();
             return bend[1].x - bend[0].x + 4;
         } else {
             return refLen + 15;

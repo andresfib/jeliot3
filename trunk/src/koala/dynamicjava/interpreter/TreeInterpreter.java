@@ -281,6 +281,10 @@ public class TreeInterpreter implements Interpreter {
 			code = MCodeUtilities.replace(code, "\n", "<BR>");
 			code = MCodeUtilities.replace(code, "\r", "");
 
+            if (code.equals("" + Code.ERROR + Code.DELIM + "<H1>Error</H1><BR>")) {
+                code += internalError(e);
+            }
+            
 			code += "" + Code.DELIM;
 			code += ""
 				+ 0
@@ -296,7 +300,7 @@ public class TreeInterpreter implements Interpreter {
 
 		} catch (Exception e) {
             e.printStackTrace();
-		    
+		    e.toString();
 			String code =
 				"" + Code.ERROR + Code.DELIM + "<H1>Exception</H1><BR>";
 
@@ -322,7 +326,11 @@ public class TreeInterpreter implements Interpreter {
 			}
 			code = MCodeUtilities.replace(code, "\n", "<BR>");
 			code = MCodeUtilities.replace(code, "\r", "");
-
+            
+            if (code.equals("" + Code.ERROR + Code.DELIM + "<H1>Exception</H1><BR>")) {
+                code += internalError(e);
+            }
+            
 			code += "" + Code.DELIM;
 			code += ""
 				+ 0
@@ -339,6 +347,19 @@ public class TreeInterpreter implements Interpreter {
     	return null;
 	}
 
+    public String internalError(Throwable e) {
+        String code = "";
+        code += "<P>" + bundle.getString("j3.internal_error")+ "</P>";
+        code += "<P>";
+        StackTraceElement[] st = e.getStackTrace();
+        int n = st.length;
+        for (int i = 0; i < n; i++) {
+            code += st[i].toString() + "<BR>";
+        }
+        code += "</P>";
+        return code;
+    }
+    
 	/**
 	 * Runs the interpreter
 	 * @param is    the input stream from which the statements are read

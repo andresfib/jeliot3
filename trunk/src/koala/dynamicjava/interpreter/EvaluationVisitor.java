@@ -1381,7 +1381,7 @@ public class EvaluationVisitor extends VisitorObject {
 					MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
 							+ outputCounter + Code.DELIM
 							+ m.getDeclaringClass().getName() + Code.DELIM
-							+ m.getName() + Code.DELIM + args[i].toString()
+							+ m.getName() + Code.DELIM + MCodeUtilities.getValue(args[i])
 							+ Code.DELIM + typs[i].getName() + Code.DELIM + "1" //BREAKLINE
 							+ Code.DELIM
 							+ MCodeUtilities.locationToString(node));
@@ -1443,7 +1443,7 @@ public class EvaluationVisitor extends VisitorObject {
 				args[i] = ((Expression) it.next()).acceptVisitor(this);
 
 				MCodeUtilities.write("" + Code.P + Code.DELIM + auxcounter
-						+ Code.DELIM + args[i].toString() + Code.DELIM
+						+ Code.DELIM + MCodeUtilities.getValue(args[i]) + Code.DELIM
 						+ argType);
 				i++;
 			}
@@ -1471,6 +1471,7 @@ public class EvaluationVisitor extends VisitorObject {
 							+ MCodeUtilities.locationToString(node));
 					// Don't try this with objects, foreign method calls don't
 					// provide enough info to handle them
+                    //TODO: How to handle objects from foreign method calls.
 					String value = MCodeUtilities.getValue(o);
 					String className = (o == null) ? Code.REFERENCE : o
 							.getClass().getName();
@@ -1648,6 +1649,7 @@ public class EvaluationVisitor extends VisitorObject {
 		long simpleAllocationCounter = counter++;
 		Constructor cons = (Constructor) node
 				.getProperty(NodeProperties.CONSTRUCTOR);
+        Class[] paramTypes = cons.getParameterTypes();
 		String consName = cons.getName();
 		String declaringClass = cons.getDeclaringClass().getName();
 		// Fill the arguments
@@ -1685,11 +1687,20 @@ public class EvaluationVisitor extends VisitorObject {
 				auxcounter = counter;
 				args[i] = ((Expression) it.next()).acceptVisitor(this);
 
+				// HACK: If we can assure that the type of the argument is a
+                // String then specify it. Useful for external method call.
+                // Not working completely, or none at all, arg retrieved as null
+                String argType;
+                if (args[i] instanceof String) {
+                    argType = String.class.getName();
+                } else {
+                    argType = paramTypes[i].getName();
+                }
+                
 				MCodeUtilities.write("" + Code.P + Code.DELIM + auxcounter
-						+ Code.DELIM + args[i].toString() + Code.DELIM
-						+ args[i].getClass().getName());
+						+ Code.DELIM + MCodeUtilities.getValue(args[i]) + Code.DELIM
+						+ argType/*args[i].getClass().getName()*/);
 				i++;
-
 			}
 		}
 
@@ -1711,7 +1722,6 @@ public class EvaluationVisitor extends VisitorObject {
 
 			/* Jeliot 3 addition begins */
 		} catch (NoSuchMethodError e) {
-			Class[] paramTypes = cons.getParameterTypes();
 			int n = paramTypes.length;
 			String params = "(";
 			for (int i = 0; i < n; i++) {

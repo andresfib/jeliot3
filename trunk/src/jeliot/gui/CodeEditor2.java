@@ -388,7 +388,7 @@ public class CodeEditor2 extends JComponent {
      */
     JMenu makeProgramMenu() {
         JMenu menu = new JMenu(bundle2.getString("menu.program"));
-        menu.setMnemonic(KeyEvent.VK_P);
+        menu.setMnemonic(KeyEvent.VK_F);
         JMenuItem menuItem;
 
         menuItem = new JMenuItem(bundle2.getString("menu.program.new"));
