@@ -10,10 +10,9 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
-
 /**
- * The LineNumbers component is used to show the line numbers in the
- * scroll panes left side in the code view and code editor.
+ * The LineNumbers component is used to show the line numbers in the scroll
+ * panes left side in the code view and code editor.
  * 
  * @author Niko Myller
  * @see jeliot.gui.CodePane
@@ -22,60 +21,67 @@ import javax.swing.JComponent;
 public class LineNumbers extends JComponent {
 
     /**
-	 * The width of the component.
-	 */
-	private int size = 35;
-    
-    /**
-	 * The font for this component.
-	 */
-	private Font font;
-    
-    /**
-	 * The ascent of the font.
-	 */
-	private int ascent;
-    
-    /**
-	 * The increment between two lines.
-	 */
-	private int increment;
-    
-    /**
-	 * insets in the component.
-	 */
-	private Insets insets;
+     * The width of the component.
+     */
+    private int size = 35;
 
     /**
-     * Sets the font and the insets and the determines the size
-     * increment and ascent from the font's font metrics.
-	 * @param font the font to be used in the component
-	 * @param insets the insets for the layout.
-	 */
-	public LineNumbers(Font font, Insets insets) {
+     * The font for this component.
+     */
+    private Font font;
+
+    /**
+     * The ascent of the font.
+     */
+    private int ascent;
+
+    /**
+     * The increment between two lines.
+     */
+    private int increment;
+
+    /**
+     * insets in the component.
+     */
+    private Insets insets;
+
+    private int startLine = 0;
+
+    /**
+     * Sets the font and the insets and the determines the size increment and
+     * ascent from the font's font metrics.
+     * 
+     * @param font
+     *            the font to be used in the component
+     * @param insets
+     *            the insets for the layout.
+     */
+    public LineNumbers(Font font, Insets insets) {
         this.font = font;
         this.insets = insets;
         FontMetrics fm = getFontMetrics(font);
         size = fm.stringWidth("000") + 6;
         increment = fm.getHeight();
         ascent = fm.getAscent();
+        setPreferredHeight(400);
     }
 
     /**
      * Sets the preferred height of the component.
-	 * @param ph
-	 */
-	public void setPreferredHeight(int ph) {
+     * 
+     * @param ph
+     */
+    public void setPreferredHeight(int ph) {
         setPreferredSize(new Dimension(size, ph));
         revalidate();
     }
 
-
     /**
      * sets the height by the given number of lines that should be shown.
-	 * @param lines
-	 */
-	public void setHeightByLines(int lines) {
+     * 
+     * @param lines
+     */
+    public void setHeightByLines(int lines) {
         int height = insets.top + ascent + (lines * increment) + insets.bottom;
         //System.out.println("CodePane: " + height);
         setPreferredSize(new Dimension(size, height));
@@ -83,11 +89,18 @@ public class LineNumbers extends JComponent {
     }
 
     /*
-     * 
-	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
-	 */
-	public void paintComponent(Graphics g) {
+     * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+     */
+    public void paintComponent(Graphics g) {
+        
         Rectangle drawHere = g.getClipBounds();
+        int lineNumber = 1;
+        
+        if (startLine != 0) {
+            lineNumber = startLine;
+        } else {
+            lineNumber = (int) Math.floor(drawHere.y / increment) + 1;
+        }
 
         g.setColor(new Color(204, 204, 204));
         g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
@@ -102,10 +115,7 @@ public class LineNumbers extends JComponent {
 
         start = (drawHere.y / increment) * increment;
 
-        end = (((drawHere.y + drawHere.height) / increment) + 1)
-              * increment;
-
-        int lineNumber = (int) Math.floor(drawHere.y / increment) + 1;
+        end = (((drawHere.y + drawHere.height) / increment) + 1) * increment;
 
         start += insets.top + ascent;
         end += insets.top + ascent;
@@ -115,5 +125,12 @@ public class LineNumbers extends JComponent {
             g.drawString(Integer.toString(lineNumber), 3, i);
             lineNumber++;
         }
+    }
+
+    public void setLineNumbersByFirstLine(int firstLine, int height) {
+        startLine = firstLine;
+        //System.out.println("CodePane: " + height);
+        setPreferredSize(new Dimension(size, height));
+        revalidate();
     }
 }

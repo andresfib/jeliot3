@@ -149,13 +149,15 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeMD(jeliot.mcode.Highlight)
      */
     protected void handleCodeMD(Highlight h) {
-        if (currentMethodCall.endsWith(", ")) {
-            callTree.insertMethodCall(currentMethodCall.substring(0, currentMethodCall.length() - 2) + ")");
-        } else {
-            callTree.insertMethodCall(currentMethodCall + ")");
+        if (currentMethodCall != null) {
+            if (currentMethodCall.endsWith(", ")) {
+                callTree.insertMethodCall(currentMethodCall.substring(0, currentMethodCall.length() - 2) + ")");
+            } else {
+                callTree.insertMethodCall(currentMethodCall + ")");
+            }
+            currentMethodCall = null;
+            jeliot.highlightTabTitle(true, tabNumber);
         }
-        currentMethodCall = null;
-        jeliot.highlightTabTitle(true, tabNumber);
     }
 
     /* (non-Javadoc)
@@ -590,16 +592,31 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#beforeInterpretation(java.lang.String)
      */
-    public void beforeInterpretation(String line) {
+    protected void beforeInterpretation(String line) {
     }
 
 
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeCAST(long, long, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
-    public void handleCodeCAST(long expressionCounter, long expressionReference, String value, String type, Highlight h) {
+    protected void handleCodeCAST(long expressionCounter, long expressionReference, String value, String type, Highlight h) {
+    }
+
+
+    /* (non-Javadoc)
+     * @see jeliot.mcode.MCodeInterpreter#handleCodeSFA(long, java.lang.String, java.lang.String, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
+     */
+    protected void handleCodeSFA(long expressionCounter, String declaringClass, String variableName, String value, String type, Highlight highlight) {
+    }
+
+
+    /* (non-Javadoc)
+     * @see jeliot.mcode.MCodeInterpreter#beforeExecution()
+     */
+    public void beforeExecution() {
         // TODO Auto-generated method stub
         
     }
+
     
 }

@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import jeliot.calltree.TreeDraw;
-import jeliot.gui.CodePane;
+import jeliot.gui.CodePane2;
 import jeliot.gui.JeliotWindow;
 import jeliot.launcher.Launcher;
 import jeliot.mcode.CallTreeMCodeInterpreter;
@@ -133,7 +133,7 @@ public class Jeliot {
      * A code pane for showing and highlighting the program source
      * while the program is being animated.
      */
-    private CodePane codePane = new CodePane();
+    private CodePane2 codePane = new CodePane2();
 
     /**
      * A director for animating the program.

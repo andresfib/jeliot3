@@ -70,6 +70,11 @@ public class TheaterManager implements ComponentListener {
     private Vector scratches = new Vector();
 
     /**
+     * 
+     */
+    private Vector classes = new Vector();
+    
+    /**
 	 *
 	 */
     private ConstantBox constantBox;
@@ -120,6 +125,7 @@ public class TheaterManager implements ComponentListener {
         methods.removeAllElements();
         objects.removeAllElements();
         scratches.removeAllElements();
+        classes.removeAllElements();
         constantBox = null;
         //minInstanceY = Integer.MAX_VALUE;
         //minInstanceX = Integer.MAX_VALUE;
@@ -216,8 +222,7 @@ public class TheaterManager implements ComponentListener {
         theatre.setPreferredSize(d);
         theatre.revalidate();
     }
-
-
+    
     /**
 	 * @param actor
 	 */
@@ -238,6 +243,59 @@ public class TheaterManager implements ComponentListener {
     }
 
 
+    /**
+	 * @param actor
+	 * @return
+	 */
+    public Point reserve(ClassActor actor) {
+        int w = actor.getWidth();
+        int h = actor.getHeight();
+
+        int x = constantBox.getX();
+        int y = classes.isEmpty() ? 
+                constantBox.getY() + constantBox.getHeight() + 20:
+                ((Actor) classes.lastElement()).getY() + ((Actor) classes.lastElement()).getHeight() + 20;
+                
+        Point loc = new Point(x, y);
+        reservations.put(actor, loc);
+                
+        return loc;
+    }
+
+
+    /**
+	 * @param actor
+	 */
+    public void bind(ClassActor actor) {
+        Point loc = (Point) reservations.remove(actor);
+        classes.addElement(actor);
+        theatre.passivate(actor);
+        actor.setLocation(loc);
+        
+        Dimension d = theatre.getSize();
+        
+        if (d.width < loc.x + actor.getWidth() + 35) {
+            d.width = loc.x + actor.getWidth() + 35;
+        }
+        
+        if (d.height < loc.y + actor.getHeight() + 35) {
+            d.height = loc.y + actor.getHeight() + 35;
+        }
+        
+        theatre.setPreferredSize(d);
+        theatre.revalidate();
+    }
+    
+    /**
+	 * @param actor
+	 */
+    public void removeClass(ClassActor actor) {
+        //move also minInstanceX and -Y
+        classes.removeElement(actor);
+        theatre.removePassive(actor);
+        theatre.flush();
+    }
+    
     /**
 	 * @param cbox
 	 */

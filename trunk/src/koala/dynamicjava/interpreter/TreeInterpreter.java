@@ -44,11 +44,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
 
-import jeliot.mcode.*;
+import jeliot.mcode.Code;
+import jeliot.mcode.MCodeUtilities;
 import koala.dynamicjava.interpreter.context.Context;
 import koala.dynamicjava.interpreter.context.GlobalContext;
 import koala.dynamicjava.interpreter.context.MethodContext;
@@ -76,6 +79,9 @@ import koala.dynamicjava.util.LibraryFinder;
 
 public class TreeInterpreter implements Interpreter {
 
+    private ResourceBundle bundle = ResourceBundle.getBundle(
+            "koala.dynamicjava.interpreter.resources.messages", Locale.getDefault());
+    
 	private String locationToString(Node node) {
 		return node.getBeginLine()
 			+ Code.LOC_DELIM
@@ -258,7 +264,11 @@ public class TreeInterpreter implements Interpreter {
 		} catch (Error e) {
 			String code = "" + Code.ERROR + Code.DELIM + "<H1>Error</H1><BR>";
 
-			if (e.getCause() != null) {
+			if (e instanceof NoClassDefFoundError) {
+			    code += bundle.getString("j3.no.class.def.found");
+			}
+			
+			if (e.getCause() != null && !e.getCause().equals("")) {
 				String cause =
 					MCodeUtilities.replace(
 						e.getCause().toString(),
@@ -288,13 +298,16 @@ public class TreeInterpreter implements Interpreter {
 				+ 0;
 			MCodeUtilities.write(code);
 
-			e.printStackTrace();
+			//e.printStackTrace();
 
-		} catch (Exception e) {
-            e.printStackTrace();
+		} catch (Exception e) {		    
 			String code =
 				"" + Code.ERROR + Code.DELIM + "<H1>Exception</H1><BR>";
 
+			if (e instanceof ClassNotFoundException) {
+			    code += "Class is not found: ";
+			}
+			
 			if (e.getCause() != null) {
 				String cause =
 					MCodeUtilities.replace(
@@ -326,7 +339,7 @@ public class TreeInterpreter implements Interpreter {
 			MCodeUtilities.write(code);
 
 			//throw new InterpreterException(e);
-
+            //e.printStackTrace();
 		}
     	return null;
 	}

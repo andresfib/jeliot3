@@ -1,5 +1,6 @@
 package jeliot.lang;
 
+import java.lang.Class;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

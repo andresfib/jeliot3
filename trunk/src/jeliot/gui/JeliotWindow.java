@@ -58,8 +58,6 @@ import jeliot.theater.ImageLoader;
 import jeliot.theater.PanelController;
 import jeliot.theater.Theater;
 
-//import org.syntax.jedit.tokenmarker.JavaTokenMarker;
-
 /**
  * The main window of the Jeliot 3.
  * 
@@ -143,11 +141,11 @@ public class JeliotWindow {
     private Jeliot jeliot;
 
     /** The code pane where the code is shown during the animation. */
-    private CodePane codePane;
+    private CodePane2 codePane;
 
     /** The code editor in which the users can write their code. */
     //private NewCodeEditor editor;
-    private CodeEditor editor /*  = new CodeEditor() */ ;
+    private CodeEditor2 editor /*  = new CodeEditor() */ ;
 
     /** The pane that splits the window. */
     private JSplitPane codeNest;
@@ -359,7 +357,7 @@ public class JeliotWindow {
      * @param udir
      *            The user directory
      */
-    public JeliotWindow(Jeliot jeliot, CodePane codePane, Theater theatre,
+    public JeliotWindow(Jeliot jeliot, CodePane2 codePane, Theater theatre,
             AnimationEngine engine, ImageLoader iLoad, String udir, TreeDraw td) {
 
         this.jeliot = jeliot;
@@ -372,11 +370,8 @@ public class JeliotWindow {
 
         this.panelController = new PanelController(theatre, iLoad);
         //this.editor = new CodeEditor(this.udir);
-        this.editor = new CodeEditor(this.udir);
+        this.editor = new CodeEditor2(this.udir);
         
-        //Special for JEditTextArea for syntax highlighting
-        //editor.setTokenMarker(new JavaTokenMarker());
-        //editor.clearProgram();
     }
 
     /**
@@ -385,7 +380,7 @@ public class JeliotWindow {
      */
     public void setUp() {
 
-        theaterScrollPane = new JScrollPane(theatre);
+        this.theaterScrollPane = new JScrollPane(this.theatre);
         //theaterScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //theaterScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         
@@ -480,7 +475,9 @@ public class JeliotWindow {
         aw = new AboutWindow(iLoad.getImage(bundle
                 .getString("image.jeliot_icon")), udir);
 
+        frame.pack();
         frame.show();
+        editor.requestFocus();
         //System.out.println(theatre.getSize());
     }
 
@@ -965,6 +962,7 @@ public class JeliotWindow {
         tabbedPane.setSelectedIndex(0);
         changeTheatrePane(tabbedPane);
         unhighlightTabTitles();
+        callTree.initialize();
 
         panelController.slide(false, new Runnable() {
 
@@ -1282,8 +1280,8 @@ public class JeliotWindow {
                 ((CodeEditor) c).highlight(e.getHighlight());
             }
 
-            if (c instanceof CodePane) {
-                ((CodePane) c).highlightStatement(e.getHighlight());
+            if (c instanceof CodePane2) {
+                ((CodePane2) c).highlightStatement(e.getHighlight());
             }
         }
     }
@@ -1594,7 +1592,7 @@ public class JeliotWindow {
      * 
      * @return
      */
-    public CodePane getCodePane() {
+    public CodePane2 getCodePane() {
         return codePane;
     }
 
