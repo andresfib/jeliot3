@@ -1,0 +1,18 @@
+What's new in Jeliot 3.4.0
+
++ Improved editor with Syntax Highlighting (thanks to JEdit)
++ Array Initializers, speed up 
++ Start Jeliot animation from any method in your class, useful if you don't have a main method
++ History view, want to repeat the last part of the animation, use the History view
++ Call Tree view, interested in how recursion works, have a look at the call tree view
++ Logical operators && || now work in shortcircuit
++ Improved object-oriented suppor, like Static Field Access
++ Start Jeliot with a filename as a parameter like "jeliot If.java", it will look first in Examples
+
+
+Other new features
+
++ Support for CASE statements
++ Run until, just indicate a line and the animation will fast-forward to it
++ System.out.println and System.out.print support, for the shake of being "standard"
+
