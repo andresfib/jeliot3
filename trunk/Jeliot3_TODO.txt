@@ -58,10 +58,10 @@ Ideas for next versions:
 * Super field access
 * Connection wizard for different kind of connections (e.g. DJava, Woven 
   Stories etc.) also for different visualizers like Call Tree.
-* Call Tree
+* Call Tree (done)
 * Using Vivaldi-kernel as a tool to visualize object oriented programming 
   on more abstract level.
-* Combining Jeliot and Woven Stories supporting collaborative working
+* Combining Jeliot and Woven Stories supporting collaborative working (done)
 * Combining Jeliot and JHave supporting self-assesment and explanations
 * Generating explanations from the intermediate code
 * Integrating Jeliot into BlueJ
