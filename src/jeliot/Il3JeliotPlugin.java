@@ -19,7 +19,6 @@ import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 
-import jeliot.gui.LoadJeliot;
 import jeliot.tracker.Tracker;
 
 /**
@@ -94,14 +93,11 @@ public class Il3JeliotPlugin extends Jeliot {
 
         final Il3JeliotPlugin jeliot = new Il3JeliotPlugin(udir, experiment);
 
-        (new LoadJeliot()).start(jeliot);
-        /*
-        		 new Runnable() {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 jeliot.run();
             }
         });
-        */
 
         if (args.length >= 1) {
             File file = new File(udir);
