@@ -212,6 +212,7 @@ public class JeliotWindow {
      * Things for debugging.
      */
     public void setUp() {
+
         frame = new JFrame("Jeliot 3 - Beta Version");
         frame.setIconImage(iLoad.getLogicalImage("Jeliot-icon"));
 
@@ -268,6 +269,7 @@ public class JeliotWindow {
      * @return  The menubar for the main frame.
      */
     private JMenuBar makeMenuBar() {
+
         JMenuBar menuBar = new JMenuBar();
 
         JMenu menu, submenu;
@@ -325,6 +327,7 @@ public class JeliotWindow {
      * @return  The control button for control panel.
      */
     private JButton makeControlButton(String label, String iconName) {
+
         ImageIcon icon = new ImageIcon("images/"+iconName);
         JButton b = new JButton(label, icon);
         b.setVerticalTextPosition(AbstractButton.BOTTOM);
@@ -342,6 +345,7 @@ public class JeliotWindow {
      * @see #makeControlButton(String, String)
      */
     private JPanel makeControlPanel() {
+
         editButton = makeControlButton("Edit", "editicon.gif");
         compileButton = makeControlButton("Compile", "compileicon.gif");
 
@@ -477,6 +481,7 @@ public class JeliotWindow {
      * @param   enable  Sets wheter the components are enabled or disabled.
      */
     private void enableWidgets(Enumeration enum, boolean enable) {
+
         while (enum.hasMoreElements()) {
             Component comp = (Component)enum.nextElement();
             comp.setEnabled(enable);
@@ -490,6 +495,7 @@ public class JeliotWindow {
      * @param   comp    The component that is changes in the code pane.
      */
     private void changeCodePane(JComponent comp) {
+
         int loc = codeNest.getDividerLocation();
         codeNest.setLeftComponent(comp);
         codeNest.setDividerLocation(loc);
@@ -503,6 +509,7 @@ public class JeliotWindow {
      * @param   comp    The component that is changes in the theatre pane.
      */
     private void changeTheatrePane(JComponent comp) {
+
         int loc = codeNest.getDividerLocation();
         codeNest.setRightComponent(comp);
         codeNest.setDividerLocation(loc);
@@ -512,6 +519,7 @@ public class JeliotWindow {
      * This method is called when user clicks the "Edit" button.
      */
     void enterEdit() {
+
         panelController.slide(false,
             new Runnable() {
                 public void run() {
@@ -564,14 +572,15 @@ public class JeliotWindow {
         try {
             try {
                 String programCode = editor.getProgram();
-                Reader r = new BufferedReader(new StringReader(programCode));
-                //jeliot.createLauncher(r);
 
                 //Change this!!!
                 String methodCall = "Testing.main();";
+
+                //Reader r = new BufferedReader(new StringReader(programCode));
+                //jeliot.createLauncher(r);
                 //Reader s = new BufferedReader(new StringReader(methodCall));
 
-                jeliot.compile(r, methodCall);
+                jeliot.compile(programCode, methodCall);
                 changeTheatrePane(theatre);
 
                 panelController.slide(true,
@@ -724,6 +733,15 @@ public class JeliotWindow {
      * @see jeliot.theatre.Theatre#repaint()
      */
     void rewindAnimation() {
+
+        jeliot.recompile();
+
+        try {
+            Thread.sleep(50);
+        } catch(InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         stepButton.setEnabled(true);
         playButton.setEnabled(true);
         pauseButton.setEnabled(false);

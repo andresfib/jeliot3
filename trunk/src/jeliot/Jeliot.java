@@ -24,8 +24,12 @@ import jeliot.launcher.*;
 */
 public class Jeliot implements Runnable {
 
-    Launcher launcher;
-    BufferedReader ecode;
+    Launcher launcher = null;
+    BufferedReader ecode = null;
+
+    String sourceCode = "";
+    String methodCall = "";
+    boolean compiled = false;
 
     /** The program that was last compiled. */
     //private PCompilationUnit program;
@@ -82,7 +86,7 @@ public class Jeliot implements Runnable {
     * @param    reader  Gives the program to be compiled.
     * @throws   Exception   If the lexer throws an error the this Exception is throwed.
       */
-    public void compile(Reader r, String methodCall) throws Exception {
+    public void compile(String sourceCode, String methodCall) throws Exception {
         // create the lexer and the parser
         //Lex.Lexer l = new Lex.Lexer(r, false);
         //Java11Parser g = new Java11Parser(l);
@@ -106,20 +110,65 @@ public class Jeliot implements Runnable {
         //TypeChecker check = new TypeChecker(space);
         //program.acceptVisitor(check);
 
-        ecode = null;
+        this.ecode = null;
+        this.sourceCode = sourceCode;
+        this.methodCall = methodCall;
 
-        launcher= new Launcher(r);
+        if (launcher != null) {
+            launcher.stopThread();
+            synchronized(launcher){
+                launcher.notify();
+            }
+            launcher = null;
+        }
+
+        launcher= new Launcher(new BufferedReader(
+                               new StringReader(sourceCode)));
+
         launcher.setMethodCall(methodCall);
         launcher.start();
 
         ecode = launcher.getReader();
 
-        codePane.installProgram(gui.getProgram());
+        codePane.installProgram(sourceCode);
+
+        compiled = true;
+    }
+
+    public void recompile() {
+
+        if (!compiled) {
+
+            this.ecode = null;
+
+            if (launcher != null) {
+                launcher.stopThread();
+                synchronized(launcher){
+                    launcher.notify();
+                }
+                launcher = null;
+            }
+
+            launcher= new Launcher(new BufferedReader(
+                               new StringReader(this.sourceCode)));
+
+            launcher.setMethodCall(this.methodCall);
+            launcher.start();
+
+            ecode = launcher.getReader();
+        }
+
     }
 
     /** Initializes the compiled program to be animated.
       */
     public void rewind() {
+
+        compiled = false;
+
+        synchronized(launcher){
+            launcher.notify();
+        }
 
         //clear the remnants of previous animation
         theatre.cleanUp();
@@ -132,17 +181,13 @@ public class Jeliot implements Runnable {
         director = new Director(theatre, codePane, this, engine);
         director.setActorFactory(af);
 
+        director.initializeInterpreter(ecode, gui.getProgram());
+
         //find the main method
         //Enumeration enum = program.getClasses();
         //PClass c = (PClass)enum.nextElement();
         //PMethod m = c.getMainMethod();
         //director.setMainMethod(m);
-
-        synchronized(launcher){
-            launcher.notify();
-        }
-
-        director.setInterpreterSource(ecode, gui.getProgram());
 
         // create the main loop for visualization
         controller = new ThreadController(
