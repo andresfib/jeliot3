@@ -8,7 +8,6 @@ public class LineNumbers extends JComponent {
     private int size = 35;
     private Font font;
     private int ascent;
-    private int descent;
     private int increment;
     private Insets insets;
 
@@ -18,6 +17,7 @@ public class LineNumbers extends JComponent {
         FontMetrics fm = getFontMetrics(font);
         size = fm.stringWidth("000") + 6;
         increment = fm.getHeight();
+        ascent = fm.getAscent();
     }
 
     public void setPreferredHeight(int ph) {
@@ -35,8 +35,6 @@ public class LineNumbers extends JComponent {
 
     public void paintComponent(Graphics g) {
         Rectangle drawHere = g.getClipBounds();
-
-        //drawHere.height += 50;
 
         g.setColor(new Color(204, 204, 204));
         g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);

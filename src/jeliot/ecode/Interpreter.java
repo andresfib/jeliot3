@@ -27,7 +27,7 @@ public class Interpreter {
     private boolean returned = false;
     private Value returnValue = null;
     private Actor returnActor = null;
-    private int returnExpressionCounter = 0;
+    private long returnExpressionCounter = 0;
 
     private Stack commands = new Stack();
     private Stack exprs = new Stack();
@@ -62,6 +62,16 @@ public class Interpreter {
 
     private Stack objectCreation = new Stack();
 
+    private boolean readNew = true;
+
+    //Related to Super method calls in constructor's first line
+    //in classes with inheritance.
+    private boolean constructorCall = false;
+    private Stack constructorCalls = new Stack();
+    private Vector superMethods = null;
+    private Vector superMethodsReading = null;
+    private long superMethodCallNumber = 0;
+
     protected Interpreter() { }
 
     public Interpreter(BufferedReader r,
@@ -92,7 +102,11 @@ public class Interpreter {
         instances = new Hashtable();
         classes = new Hashtable();
         objectCreation = new Stack();
-
+        constructorCall = false;
+        constructorCalls = new Stack();
+        superMethods = null;
+        superMethodsReading = null;
+        superMethodCallNumber = 0;
         try {
             line = ecode.readLine();
             System.out.println(line);
@@ -107,7 +121,7 @@ public class Interpreter {
 
         StringTokenizer tokenizer = new StringTokenizer(line, Code.DELIM);
 
-        if (Integer.parseInt(tokenizer.nextToken()) == Code.ERROR) {
+        if (Long.parseLong(tokenizer.nextToken()) == Code.ERROR) {
             String message = tokenizer.nextToken();
             Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
@@ -127,31 +141,103 @@ public class Interpreter {
         return exprs.empty();
     }
 
+    public boolean readNew() {
+        return constructorCalls.empty();
+    }
+
+    public String readLine() {
+        String readLine = null;
+        if (readNew()) {
+            try {
+                readLine = ecode.readLine();
+            } catch (Exception e) {}
+        } else {
+            if (!superMethods.isEmpty()) {
+                readLine = (String) superMethods.remove(0);
+            } else {
+                constructorCalls.pop();
+                if (!constructorCalls.empty()) {
+                    superMethods = (Vector) constructorCalls.peek();
+                }
+                return readLine();
+            }
+        }
+        //Change this to be something more meaningful!
+        if (readLine == null) {
+            readLine = "" + Code.ERROR + Code.DELIM +
+                   "<H1>Runtime Exception</H1>"+
+                   "<P>The reason for runtime exception is unknown.</P>" +
+                   Code.DELIM + "0"+Code.LOC_DELIM+"0"+
+                   Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0";
+        }
+        System.out.println(readLine);
+        return readLine;
+    }
+
     public void execute() {
 
-        //try { //This is for realease versions
+        //This is for realease versions
+        //try {
 
         director.openScratch();
 
         while (running) {
 
-            if (!firstLineRead) {
-                try {
-
-                    line = ecode.readLine();
-                    System.out.println(line);
-
-                } catch (Exception e) {}
-
-                //Change this to be something more meaningful!
-                if (line == null) {
-                    line = "" + Code.ERROR + Code.DELIM +
-                           "<H1>Runtime Exception</H1><P>The reason for runtime exception is not known.</P>" +
-                           Code.DELIM + "0"+Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0";
+            if (!constructorCall) {
+                if (!firstLineRead) {
+                    line = readLine();
+                    interpret(line);
+                } else {
+                    firstLineRead = false;
+                    interpret(line);
                 }
+            //Constructor call is going in super method calls.
             } else {
-                firstLineRead = false;
+                String storedLine = readLine();
+
+                StringTokenizer tokenizer =
+                            new StringTokenizer(storedLine, Code.DELIM);
+                int token = Integer.parseInt(tokenizer.nextToken());
+                if (token == Code.INPUT) {
+                   interpret("" + Code.ERROR + Code.DELIM +
+                             "<H1>Feature not implemented</H1>" +
+                             "<P>Super classes' constructors cannot " +
+                             "contain input requests.</P>" +
+                             Code.DELIM + "0" + Code.LOC_DELIM + "0" +
+                             Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0");
+                }
+                if (token == Code.ERROR) {
+                    interpret(storedLine);
+                }
+                if (token == Code.CONSCN) {
+                    long number = Long.parseLong(tokenizer.nextToken());
+                    if (number == superMethodCallNumber) {
+                        //Interpret the rest of the constructor call
+                        interpret(readLine());
+                        interpret(readLine());
+
+                        //Then start using the collected statements
+                        constructorCalls.push(superMethodsReading);
+                        superMethods = superMethodsReading;
+                        superMethodsReading = null;
+                        constructorCall=false;
+                        continue;
+                    }
+                }
+                superMethodsReading.add(storedLine);
             }
+
+        }
+        director.closeScratch();
+
+        //This is for realease versions
+        //} catch (Exception e) {
+        //    director.showErrorMessage(new InterpreterError("<H1>Runtime Error</H1>"+
+        //                         "<P>The feature is not yet implemented.</P>", null));
+        //}
+    }
+
+    public void interpret(String line) {
 
             if (!line.equals("" + Code.END)) {
 
@@ -160,7 +246,6 @@ public class Interpreter {
                 if (tokenizer.hasMoreTokens()) {
 
                     int token = Integer.parseInt(tokenizer.nextToken());
-
 
                     if (exprs.empty()         &&
                         !invokingMethod       &&
@@ -187,7 +272,7 @@ public class Interpreter {
                         //Gives a reference to the left hand side of the expression
                         case Code.LEFT: {
 
-                            int token1 = Integer.parseInt(tokenizer.nextToken());
+                            long token1 = Long.parseLong(tokenizer.nextToken());
                             commands.push("" + Code.LEFT + Code.DELIM + token1);
                             break;
                         }
@@ -195,7 +280,7 @@ public class Interpreter {
                         //Gives a reference to the right hand side of the expression
                         case Code.RIGHT: {
 
-                            int token1 = Integer.parseInt(tokenizer.nextToken());
+                            long token1 = Long.parseLong(tokenizer.nextToken());
                             commands.push("" + Code.RIGHT + Code.DELIM + token1);
                             break;
                         }
@@ -204,8 +289,8 @@ public class Interpreter {
                         case Code.BEGIN: {
 
                             //first token
-                            int expressionType = Integer.parseInt(tokenizer.nextToken());
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionType = Long.parseLong(tokenizer.nextToken());
+                            long expressionReference = Long.parseLong(tokenizer.nextToken());
                             String location = tokenizer.nextToken();
                             exprs.push(expressionType + Code.DELIM + expressionReference + Code.DELIM + location);
                             break;
@@ -214,7 +299,7 @@ public class Interpreter {
                         //Indicates where the value is assigned
                         case Code.TO: {
 
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionReference = Long.parseLong(tokenizer.nextToken());
                             commands.push("" + Code.TO + Code.DELIM + expressionReference);
                             break;
                         }
@@ -222,9 +307,9 @@ public class Interpreter {
                         //Assignment
                         case Code.A: {
 
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
-                            int fromExpression = Integer.parseInt(tokenizer.nextToken());
-                            int toExpression =  Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                            long fromExpression = Long.parseLong(tokenizer.nextToken());
+                            long toExpression =  Long.parseLong(tokenizer.nextToken());
                             String value = "";
                             if (tokenizer.countTokens() > 2) {
                                 value = tokenizer.nextToken();
@@ -233,12 +318,12 @@ public class Interpreter {
                             Highlight h = ECodeUtilities.makeHighlight(
                                                          tokenizer.nextToken());
 
-                            Variable toVariable = (Variable) variables.remove(new Integer(toExpression));
+                            Variable toVariable = (Variable) variables.remove(new Long(toExpression));
 
                             //just to get rid of extra references
-                            variables.remove(new Integer(fromExpression));
+                            variables.remove(new Long(fromExpression));
 
-                            Value fromValue = (Value) values.remove(new Integer(fromExpression));
+                            Value fromValue = (Value) values.remove(new Long(fromExpression));
                             Value casted = null;
                             Value expressionValue = null;
                             if (ECodeUtilities.isPrimitive(type) || type.equals("null")) {
@@ -270,15 +355,15 @@ public class Interpreter {
                             director.animateAssignment(toVariable, fromValue, casted, expressionValue, h);
                             toVariable.assign(casted);
 
-                            values.put(new Integer(expressionCounter), expressionValue);
+                            values.put(new Long(expressionCounter), expressionValue);
 
-                            Object[] postIncDec = (Object[]) postIncsDecs.remove(new Integer(fromExpression));
+                            Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(fromExpression));
 
                             if (postIncDec != null) {
                                 doPostIncDec(postIncDec);
                             }
 
-                            postIncDec = (Object[]) postIncsDecs.remove(new Integer(toExpression));
+                            postIncDec = (Object[]) postIncsDecs.remove(new Long(toExpression));
 
                             if (postIncDec != null) {
                                 doPostIncDec(postIncDec);
@@ -299,15 +384,15 @@ public class Interpreter {
                         case Code.MINUS:    // Minus operator
                         case Code.NO: {     // Boolean Not
 
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
-                            int unaryExpressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                            long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
                             String type = tokenizer.nextToken();
 
                             Highlight h = ECodeUtilities.makeHighlight(
                                                          tokenizer.nextToken());
                             Value result = new Value(value, type);
-                            Value val = (Value) values.remove(new Integer(unaryExpressionReference));
+                            Value val = (Value) values.remove(new Long(unaryExpressionReference));
 
                             int unaryOperator = ECodeUtilities.resolveUnOperator(token);
 
@@ -320,7 +405,7 @@ public class Interpreter {
                                                                      h);
                             }
 
-                            Object[] postIncDec = (Object[]) postIncsDecs.remove(new Integer(unaryExpressionReference));
+                            Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(unaryExpressionReference));
 
                             if (postIncDec != null) {
                                 doPostIncDec(postIncDec);
@@ -342,7 +427,7 @@ public class Interpreter {
                             //                                        expressionCounter,
                             //                                        h);
 
-//                          values.put(new Integer(expressionCounter), expressionValue);
+//                          values.put(new Long(expressionCounter), expressionValue);
 
                             exprs.pop();
 
@@ -360,7 +445,7 @@ public class Interpreter {
                                                 (String) commands.elementAt(i),
                                                 Code.DELIM);
                                 int comm = Integer.parseInt(commandTokenizer.nextToken());
-                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+                                long cid = Long.parseLong(commandTokenizer.nextToken());
                                 if (expressionCounter == cid) {
                                     command = comm;
                                     commands.removeElementAt(i);
@@ -373,7 +458,7 @@ public class Interpreter {
                             * what expression should be shown next
                             */
 /*
-                            int expressionReference = 0;
+                            long expressionReference = 0;
                             Highlight highlight = null;
 
                             if (!exprs.empty()) {
@@ -384,12 +469,12 @@ public class Interpreter {
 
                                 oper = Integer.parseInt(expressionTokenizer.nextToken());
 
-                                expressionReference = Integer.parseInt(
+                                expressionReference = Long.parseLong(
                                                               expressionTokenizer.nextToken());
 
                                 //Make the location information for the location token
                                 highlight = ECodeUtilities.makeHighlight(
-                                expressionTokenizer.nextToken());
+                                            expressionTokenizer.nextToken());
                             }
 
                             //Do different things depending on in what expression
@@ -398,7 +483,7 @@ public class Interpreter {
                             //If operator is assignment we just store the value
                             if (oper == Code.A) {
 
-                                values.put(new Integer(expressionCounter), expressionValue);
+                                values.put(new Long(expressionCounter), expressionValue);
 
                             //If oper is other binary operator we will show it
                             //on the screen with operator
@@ -418,18 +503,18 @@ public class Interpreter {
                                     if (ea != null) {
                                         director.rightBinaryExpression(expressionValue, ea, highlight);
                                     } else {
-                                        values.put(new Integer(expressionCounter), expressionValue);
+                                        values.put(new Long(expressionCounter), expressionValue);
                                     }
 
                                 } else {
-                                        values.put(new Integer(expressionCounter), expressionValue);
+                                        values.put(new Long(expressionCounter), expressionValue);
                                 }
 
                             //If oper is a unary operator we will show it
                             //on the screen with operator
                             } else if (ECodeUtilities.isUnary(oper)) {
 
-                                values.put(new Integer(expressionCounter), expressionValue);
+                                values.put(new Long(expressionCounter), expressionValue);
 
                                 int operator = ECodeUtilities.resolveUnOperator(oper);
 
@@ -441,7 +526,7 @@ public class Interpreter {
                             //If it is something else we will store it for later use.
                             } else {
 
-                                values.put(new Integer(expressionCounter), expressionValue);
+                                values.put(new Long(expressionCounter), expressionValue);
 
                             }
 */
@@ -454,8 +539,8 @@ public class Interpreter {
                         case Code.PIE:      // PostIncrement
                         case Code.PDE: {    // PostDecrement
 
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                            long expressionReference = Long.parseLong(tokenizer.nextToken());
 
                             String value = tokenizer.nextToken();
                             String type = tokenizer.nextToken();
@@ -468,18 +553,18 @@ public class Interpreter {
 
                             if (exprs.empty()) {
 
-                                Variable var = (Variable) variables.remove(new Integer(expressionReference));
+                                Variable var = (Variable) variables.remove(new Long(expressionReference));
 
                                 int operator = ECodeUtilities.resolveUnOperator(token);
                                 director.animatePreIncDec(operator, var, result, h);
 
                             } else {
 
-                                Object[] postIncDec = { new Integer(ECodeUtilities.resolveUnOperator(token)),
-                                                        new Integer(expressionReference),
+                                Object[] postIncDec = { new Long(ECodeUtilities.resolveUnOperator(token)),
+                                                        new Long(expressionReference),
                                                         result,
                                                         h };
-                                postIncsDecs.put(new Integer(expressionCounter), postIncDec);
+                                postIncsDecs.put(new Long(expressionCounter), postIncDec);
 
                             }
 
@@ -492,8 +577,8 @@ public class Interpreter {
                         case Code.PRIE:      // PreIncrement
                         case Code.PRDE: {    // PreDecrement
 
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                            long expressionReference = Long.parseLong(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
                             String type = tokenizer.nextToken();
 
@@ -501,15 +586,15 @@ public class Interpreter {
                                                          tokenizer.nextToken());
 
                             Value result = new Value(value, type);
-                            Variable var = (Variable) variables.remove(new Integer(expressionReference));
+                            Variable var = (Variable) variables.remove(new Long(expressionReference));
 
                             int operator = ECodeUtilities.resolveUnOperator(token);
                             director.animatePreIncDec(operator, var, result, h);
-                            values.put(new Integer(expressionCounter), result);
+                            values.put(new Long(expressionCounter), result);
 
                             exprs.pop();
 
-                            Object[] postIncDec = (Object[]) postIncsDecs.remove(new Integer(expressionReference));
+                            Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(expressionReference));
 
                             if (postIncDec != null) {
                                 doPostIncDec(postIncDec);
@@ -545,9 +630,9 @@ public class Interpreter {
                         case Code.SE:       // Substract Expression
                         case Code.AE: {     // Add Expression
 
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
-                            int leftExpressionReference = Integer.parseInt(tokenizer.nextToken());
-                            int rightExpressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                            long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                            long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                             String value = null;
                             if (tokenizer.countTokens() >= 3) {
                                 value = tokenizer.nextToken();
@@ -575,7 +660,7 @@ public class Interpreter {
                                 * yet set thus we need to check that to be sure.
                                 */
 
-                                Value right = (Value) values.remove(new Integer(rightExpressionReference));
+                                Value right = (Value) values.remove(new Long(rightExpressionReference));
 
                                 if (right != null) {
                                     director.rightBinaryExpression(right, expr, h);
@@ -588,9 +673,9 @@ public class Interpreter {
 
                                 exprs.pop();
 
-//                              values.put(new Integer(expressionCounter), expressionValue);
+//                              values.put(new Long(expressionCounter), expressionValue);
 
-                                Object[] postIncDec = (Object[]) postIncsDecs.remove(new Integer(rightExpressionReference));
+                                Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(rightExpressionReference));
 
                                 if (postIncDec != null) {
                                     doPostIncDec(postIncDec);
@@ -602,15 +687,15 @@ public class Interpreter {
                             */
                             } else {
 
-                                Value left = (Value) values.remove(new Integer(leftExpressionReference));
-                                Value right = (Value) values.remove(new Integer(rightExpressionReference));
+                                Value left = (Value) values.remove(new Long(leftExpressionReference));
+                                Value right = (Value) values.remove(new Long(rightExpressionReference));
 
                                 expr = director.beginBinaryExpression(left,
                                                 ECodeUtilities.resolveBinOperator(token),
                                                 expressionCounter,
                                                 h);
 
-                                Object[] postIncDec = (Object[]) postIncsDecs.remove(new Integer(leftExpressionReference));
+                                Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(leftExpressionReference));
 
                                 if (postIncDec != null) {
                                     doPostIncDec(postIncDec);
@@ -618,7 +703,7 @@ public class Interpreter {
 
                                 director.rightBinaryExpression(right, expr, h);
 
-                                postIncDec = (Object[]) postIncsDecs.remove(new Integer(rightExpressionReference));
+                                postIncDec = (Object[]) postIncsDecs.remove(new Long(rightExpressionReference));
 
                                 if (postIncDec != null) {
                                     doPostIncDec(postIncDec);
@@ -639,7 +724,7 @@ public class Interpreter {
 */
                                 exprs.pop();
 
-//                              values.put(new Integer(expressionCounter), expressionValue);
+//                              values.put(new Long(expressionCounter), expressionValue);
 
                             }
 
@@ -655,8 +740,8 @@ public class Interpreter {
                                 StringTokenizer commandTokenizer = new StringTokenizer(
                                                 (String) commands.elementAt(i),
                                                 Code.DELIM);
-                                int comm = Integer.parseInt(commandTokenizer.nextToken());
-                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+                                int comm = Long.parseLong(commandTokenizer.nextToken());
+                                int cid = Long.parseLong(commandTokenizer.nextToken());
                                 if (expressionCounter == cid) {
                                     command = comm;
                                     commands.removeElementAt(i);
@@ -678,9 +763,9 @@ public class Interpreter {
                                                                      (String) exprs.peek(),
                                                                       Code.DELIM);
 
-                                oper = Integer.parseInt(expressionTokenizer.nextToken());
+                                oper = Long.parseLong(expressionTokenizer.nextToken());
 
-                                expressionReference = Integer.parseInt(
+                                expressionReference = Long.parseLong(
                                                         expressionTokenizer.nextToken());
 
                                 //Make the location information for the location token
@@ -693,7 +778,7 @@ public class Interpreter {
 
                             //If operator is assignment we just store the value
                             if (oper == Code.A){
-                                values.put(new Integer(expressionCounter), expressionValue);
+                                values.put(new Long(expressionCounter), expressionValue);
 
                             //If oper is other binary operator we will show it
                             //on the screen with operator
@@ -713,18 +798,18 @@ public class Interpreter {
                                     if (ea != null) {
                                         director.rightBinaryExpression(expressionValue, ea, highlight);
                                     } else {
-                                        values.put(new Integer(expressionCounter), expressionValue);
+                                        values.put(new Long(expressionCounter), expressionValue);
                                     }
 
                                 } else {
-                                    values.put(new Integer(expressionCounter), expressionValue);
+                                    values.put(new Long(expressionCounter), expressionValue);
                                 }
 
                             //If oper is a unary operator we will show it
                             //on the screen with operator
                             } else if (ECodeUtilities.isUnary(oper)) {
 
-                                values.put(new Integer(expressionCounter), expressionValue);
+                                values.put(new Long(expressionCounter), expressionValue);
 
                                 int operator = ECodeUtilities.resolveUnOperator(oper);
 
@@ -736,7 +821,7 @@ public class Interpreter {
                             //If it is something else we will store it for later use.
                             } else {
 
-                                values.put(new Integer(expressionCounter), expressionValue);
+                                values.put(new Long(expressionCounter), expressionValue);
 
                             }
 */
@@ -747,7 +832,7 @@ public class Interpreter {
                         case Code.VD: {
 
                             String variableName = tokenizer.nextToken();
-                            int initializerExpression = Integer.parseInt(tokenizer.nextToken());
+                            long initializerExpression = Long.parseLong(tokenizer.nextToken());
                             String value = null;
                             if (tokenizer.countTokens() >= 4) {
                                 value = tokenizer.nextToken();
@@ -785,11 +870,11 @@ public class Interpreter {
 
                             if (initializerExpression > 0) {
 
-                                Value val = (Value) values.remove(new Integer(initializerExpression));
+                                Value val = (Value) values.remove(new Long(initializerExpression));
                                 director.animateAssignment(var, val, casted, null, highlight);
 
                                 Object[] postIncDec =
-                                    (Object[]) postIncsDecs.remove(new Integer(initializerExpression));
+                                    (Object[]) postIncsDecs.remove(new Long(initializerExpression));
 
                                 if (postIncDec != null) {
                                     doPostIncDec(postIncDec);
@@ -805,7 +890,7 @@ public class Interpreter {
                         //Qualified Name (variable)
                         case Code.QN: {
 
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
                             String variableName = tokenizer.nextToken();
                             String value = null;
                             if (tokenizer.countTokens() >= 2) {
@@ -828,7 +913,7 @@ public class Interpreter {
                                                 (String) commands.elementAt(i),
                                                 Code.DELIM);
                                 int comm = Integer.parseInt(commandTokenizer.nextToken());
-                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+                                long cid = Long.parseLong(commandTokenizer.nextToken());
 
                                 if (expressionCounter == cid) {
                                     command = comm;
@@ -842,7 +927,7 @@ public class Interpreter {
                             * what expression should be shown next
                             */
 
-                            int expressionReference = 0;
+                            long expressionReference = 0;
                             Highlight highlight = null;
                             if (!exprs.empty()) {
                                 StringTokenizer expressionTokenizer = new StringTokenizer(
@@ -851,7 +936,7 @@ public class Interpreter {
 
                                 oper = Integer.parseInt(expressionTokenizer.nextToken());
 
-                                expressionReference = Integer.parseInt(
+                                expressionReference = Long.parseLong(
                                                         expressionTokenizer.nextToken());
 
                                 //Make the location information for the location token
@@ -886,75 +971,54 @@ public class Interpreter {
 
                             //If operator is assignment we just store the value
                             if (oper == Code.A) {
-
                                 if (command == Code.TO) {
-
-                                    variables.put(new Integer(expressionCounter), var);
-
+                                    variables.put(new Long(expressionCounter), var);
                                 } else {
-
-                                    values.put(new Integer(expressionCounter), val);
+                                    values.put(new Long(expressionCounter), val);
                                 }
-
                             //If oper is other binary operator we will show it
                             //on the screen with operator
                             } else if (ECodeUtilities.isBinary(oper)) {
-
                                 int operator = ECodeUtilities.resolveBinOperator(oper);
-
                                 if (command == Code.LEFT) {
-
                                     director.beginBinaryExpression(val, operator,
-                                                expressionReference, highlight);
-
+                                                 expressionReference, highlight);
                                 } else if (command == Code.RIGHT) {
-
                                     ExpressionActor ea = (ExpressionActor)
                                         director.getCurrentScratch().findActor(expressionReference);
                                     if (ea != null) {
-
                                         director.rightBinaryExpression(val, ea, highlight);
-
                                     } else {
-                                        values.put(new Integer(expressionCounter), val);
+                                        values.put(new Long(expressionCounter), val);
                                     }
                                 } else {
-                                    values.put(new Integer(expressionCounter), val);
+                                    values.put(new Long(expressionCounter), val);
                                 }
 
                             //If oper is a unary operator we will show it
                             //on the screen with operator
                             } else if (ECodeUtilities.isUnary(oper)) {
-
                                 if (oper == Code.PRIE ||
                                     oper == Code.PRDE) {
-
-                                        variables.put(new Integer(expressionCounter), var);
-                                        values.put(new Integer(expressionCounter), val);
-
+                                        variables.put(new Long(expressionCounter), var);
+                                        values.put(new Long(expressionCounter), val);
                                 } else if (oper == Code.PIE  ||
                                            oper == Code.PDE) {
-
-                                        variables.put(new Integer(expressionCounter), var);
-                                        values.put(new Integer(expressionReference), val);
-                                        values.put(new Integer(expressionCounter), val);
-
+                                        variables.put(new Long(expressionCounter), var);
+                                        values.put(new Long(expressionReference), val);
+                                        values.put(new Long(expressionCounter), val);
                                 } else {
-
-                                    values.put(new Integer(expressionCounter), val);
+                                    values.put(new Long(expressionCounter), val);
                                     int operator = ECodeUtilities.resolveUnOperator(oper);
                                     if (command == Code.RIGHT) {
                                         director.beginUnaryExpression(operator, val,
                                                         expressionReference, highlight);
                                     }
                                 }
-
                             //If it is something else we will store it for later use.
                             } else {
-
-                                values.put(new Integer(expressionCounter), val);
-                                variables.put(new Integer(expressionCounter), var);
-
+                                values.put(new Long(expressionCounter), val);
+                                variables.put(new Long(expressionCounter), var);
                             }
 
                             break;
@@ -964,7 +1028,7 @@ public class Interpreter {
                         case Code.L: {
 
                             //Second token is the expression counter
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
 
                             String value = null;
                             if (tokenizer.countTokens() >= 3) {
@@ -1002,8 +1066,8 @@ public class Interpreter {
                                 StringTokenizer commandTokenizer = new StringTokenizer(
                                                 (String) commands.elementAt(i),
                                                 Code.DELIM);
-                                int comm = Integer.parseInt(commandTokenizer.nextToken());
-                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+                                int comm = Long.parseLong(commandTokenizer.nextToken());
+                                int cid = Long.parseLong(commandTokenizer.nextToken());
                                 if (expressionCounter == cid) {
                                     command = comm;
                                     commands.removeElementAt(i);
@@ -1024,9 +1088,9 @@ public class Interpreter {
                                                                      (String) exprs.peek(),
                                                                       Code.DELIM);
 
-                                oper = Integer.parseInt(expressionTokenizer.nextToken());
+                                oper = Long.parseLong(expressionTokenizer.nextToken());
 
-                                expressionReference = Integer.parseInt(
+                                expressionReference = Long.parseLong(
                                                         expressionTokenizer.nextToken());
 
                                 //Make the location information for the location token
@@ -1043,7 +1107,7 @@ public class Interpreter {
 
                             //If operator is assignment we just store the value
                             if (oper == Code.A){
-                                values.put(new Integer(expressionCounter), lit);
+                                values.put(new Long(expressionCounter), lit);
 
                             //If oper is other binary operator we will show it
                             //on the screen with operator
@@ -1063,11 +1127,11 @@ public class Interpreter {
                                     if (ea != null) {
                                         director.rightBinaryExpression(lit, ea, highlight);
                                     } else {
-                                        values.put(new Integer(expressionCounter), lit);
+                                        values.put(new Long(expressionCounter), lit);
                                     }
 
                                 } else {
-                                    values.put(new Integer(expressionCounter), lit);
+                                    values.put(new Long(expressionCounter), lit);
                                 }
 
                             //If oper is a unary operator we will show it
@@ -1075,7 +1139,7 @@ public class Interpreter {
                             } else if (ECodeUtilities.isUnary(oper)) {
 
                                 int operator = ECodeUtilities.resolveUnOperator(oper);
-                                values.put(new Integer(expressionCounter), lit);
+                                values.put(new Long(expressionCounter), lit);
                                 if (command == Code.RIGHT) {
                                     director.beginUnaryExpression(operator, lit,
                                                         expressionReference, highlight);
@@ -1083,7 +1147,7 @@ public class Interpreter {
 
                             //If it is something else we will store it for later use.
                             } else {
-                                values.put(new Integer(expressionCounter), lit);
+                                values.put(new Long(expressionCounter), lit);
                             }
 */
                             break;
@@ -1094,8 +1158,8 @@ public class Interpreter {
                         case Code.SA: {
 
                             //simpleAllocationCounter
-                            int expressionCounter =
-                                Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter =
+                                Long.parseLong(tokenizer.nextToken());
 
                             String declaringClass = tokenizer.nextToken();
                             String constructorName = tokenizer.nextToken();
@@ -1149,7 +1213,7 @@ public class Interpreter {
                             Value[] parameterValues = new Value[parameterCount];
                             String[] parameterTypes = new String[parameterCount];
                             String[] parameterNames = new String[parameterCount];
-                            Integer[] parameterExpressionReferences = new Integer[parameterCount];
+                            Long[] parameterExpressionReferences = new Long[parameterCount];
 
                             for (int i = 0; i < parameterCount; i++) {
                                 parameterValues[i] = null;
@@ -1164,7 +1228,7 @@ public class Interpreter {
                             currentMethodInvocation[5] = highlight;
                             currentMethodInvocation[7] = parameterExpressionReferences;
                             //Here we put the ClassInfo of the class in the array
-                            //just to wait for the Method Declaration is read and the
+                            //just to wait for the Method Declaration to be read and the
                             //object can be created from this method info.
                             currentMethodInvocation[8] = ci/*ref*/;
 
@@ -1173,12 +1237,22 @@ public class Interpreter {
                             break;
                         }
 
+                        case Code.CONSCN: {
+
+                            constructorCall = true;
+                            superMethodsReading = new Vector();
+                            superMethodCallNumber =
+                                  Long.parseLong(tokenizer.nextToken());
+
+                            break;
+                        }
+
                         // Simple class allocation close
                         case Code.SAC: {
 
                             //simpleAllocationCounter
-                            int expressionCounter =
-                                Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter =
+                                Long.parseLong(tokenizer.nextToken());
 
                             String hashCode = tokenizer.nextToken();
 
@@ -1231,8 +1305,8 @@ public class Interpreter {
                         // Object field access
                         case Code.OFA: {
 
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
-                            int objectCounter = Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                            long objectCounter = Long.parseLong(tokenizer.nextToken());
                             String variableName = tokenizer.nextToken();
                             String value = "";
                             if (tokenizer.countTokens() >= 3) {
@@ -1241,7 +1315,7 @@ public class Interpreter {
 
                             String type = tokenizer.nextToken();
 
-                            Reference objVal = (Reference) values.remove(new Integer(objectCounter));
+                            Reference objVal = (Reference) values.remove(new Long(objectCounter));
                             if (objVal == null && !objectCreation.empty()) {
                                 objVal = (Reference) objectCreation.peek();
                             }
@@ -1266,7 +1340,7 @@ public class Interpreter {
                                                 (String) commands.elementAt(i),
                                                 Code.DELIM);
                                 int comm = Integer.parseInt(commandTokenizer.nextToken());
-                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+                                long cid = Long.parseLong(commandTokenizer.nextToken());
 
                                 if (expressionCounter == cid) {
                                     command = comm;
@@ -1279,7 +1353,7 @@ public class Interpreter {
                             * Look from the expression stack
                             * what expression should be shown next
                             */
-                            int expressionReference = 0;
+                            long expressionReference = 0;
                             Highlight highlight = null;
                             if (!exprs.empty()) {
                                 StringTokenizer expressionTokenizer = new StringTokenizer(
@@ -1288,7 +1362,7 @@ public class Interpreter {
 
                                 oper = Integer.parseInt(expressionTokenizer.nextToken());
 
-                                expressionReference = Integer.parseInt(
+                                expressionReference = Long.parseLong(
                                                         expressionTokenizer.nextToken());
 
                                 //Make the location information for the location token
@@ -1326,11 +1400,11 @@ public class Interpreter {
 
                                 if (command == Code.TO) {
 
-                                    variables.put(new Integer(expressionCounter), var);
+                                    variables.put(new Long(expressionCounter), var);
 
                                 } else {
 
-                                    values.put(new Integer(expressionCounter), val);
+                                    values.put(new Long(expressionCounter), val);
                                 }
 
                             //If oper is other binary operator we will show it
@@ -1353,10 +1427,10 @@ public class Interpreter {
                                         director.rightBinaryExpression(val, ea, highlight);
 
                                     } else {
-                                        values.put(new Integer(expressionCounter), val);
+                                        values.put(new Long(expressionCounter), val);
                                     }
                                 } else {
-                                    values.put(new Integer(expressionCounter), val);
+                                    values.put(new Long(expressionCounter), val);
                                 }
 
                             //If oper is a unary operator we will show it
@@ -1366,20 +1440,20 @@ public class Interpreter {
                                 if (oper == Code.PRIE ||
                                     oper == Code.PRDE) {
 
-                                        variables.put(new Integer(expressionCounter), var);
-                                        values.put(new Integer(expressionCounter), val);
+                                        variables.put(new Long(expressionCounter), var);
+                                        values.put(new Long(expressionCounter), val);
 
                                 } else if (oper == Code.PIE  ||
                                            oper == Code.PDE) {
 
-                                        variables.put(new Integer(expressionCounter), var);
-                                        values.put(new Integer(expressionReference), val);
-                                        values.put(new Integer(expressionCounter), val);
+                                        variables.put(new Long(expressionCounter), var);
+                                        values.put(new Long(expressionReference), val);
+                                        values.put(new Long(expressionCounter), val);
 
 
                                 } else {
 
-                                    values.put(new Integer(expressionCounter), val);
+                                    values.put(new Long(expressionCounter), val);
                                     int operator = ECodeUtilities.resolveUnOperator(oper);
                                     if (command == Code.RIGHT) {
                                         director.beginUnaryExpression(operator, val,
@@ -1390,8 +1464,8 @@ public class Interpreter {
                             //If it is something else we will store it for later use.
                             } else {
 
-                                values.put(new Integer(expressionCounter), val);
-                                variables.put(new Integer(expressionCounter), var);
+                                values.put(new Long(expressionCounter), val);
+                                variables.put(new Long(expressionCounter), var);
 
                             }
 
@@ -1403,13 +1477,15 @@ public class Interpreter {
 
                             String methodName = tokenizer.nextToken();
                             int parameterCount = Integer.parseInt(tokenizer.nextToken());
-                            int objectCounter =  Integer.parseInt(tokenizer.nextToken());
+                            long objectCounter =  Long.parseLong(tokenizer.nextToken());
                             Highlight highlight = ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                            Value val = (Value) values.remove(new Integer(objectCounter));
-                            Variable var = (Variable) variables.remove(new Integer(objectCounter));
+                            Value val = (Value) values.remove(new Long(objectCounter));
+                            Variable var = (Variable) variables.remove(new Long(objectCounter));
 
                             if (val == null && !objectCreation.empty()) {
+                                val = (Reference) objectCreation.peek();
+                            } else if (val.getValue().equals("null") && !objectCreation.empty()) {
                                 val = (Reference) objectCreation.peek();
                             }
 
@@ -1450,7 +1526,7 @@ public class Interpreter {
                             Value[] parameterValues = new Value[parameterCount];
                             String[] parameterTypes = new String[parameterCount];
                             String[] parameterNames = new String[parameterCount];
-                            Integer[] parameterExpressionReferences = new Integer[parameterCount];
+                            Long[] parameterExpressionReferences = new Long[parameterCount];
 
                             for (int i = 0; i < parameterCount; i++) {
                                 parameterValues[i] = null;
@@ -1521,7 +1597,7 @@ public class Interpreter {
                             Value[] parameterValues = new Value[parameterCount];
                             String[] parameterTypes = new String[parameterCount];
                             String[] parameterNames = new String[parameterCount];
-                            Integer[] parameterExpressionReferences = new Integer[parameterCount];
+                            Long[] parameterExpressionReferences = new Long[parameterCount];
 
                             for (int i = 0; i < parameterCount; i++) {
                                 parameterValues[i] = null;
@@ -1544,13 +1620,13 @@ public class Interpreter {
                         //Parameter
                         case Code.P: {
 
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionReference = Long.parseLong(tokenizer.nextToken());
 
                             Value[] parameterValues = (Value[]) currentMethodInvocation[2];
                             String[] parameterTypes = (String[]) currentMethodInvocation[3];
-                            Integer[] parameterExpressionReferences = (Integer[]) currentMethodInvocation[7];
+                            Long[] parameterExpressionReferences = (Long[]) currentMethodInvocation[7];
 
-                            Value parameterValue = (Value) values.remove(new Integer(expressionReference));
+                            Value parameterValue = (Value) values.remove(new Long(expressionReference));
 
                             //if (parameterValue == null) {
                             //  System.out.println("Mistake");
@@ -1562,7 +1638,7 @@ public class Interpreter {
                             }
                             parameterValues[i] = parameterValue;
                             parameterTypes[i] = tokenizer.nextToken();
-                            parameterExpressionReferences[i] = new Integer(expressionReference);
+                            parameterExpressionReferences[i] = new Long(expressionReference);
 
                             exprs.pop();
 
@@ -1648,12 +1724,12 @@ public class Interpreter {
                                         (Highlight) currentMethodInvocation[6]);
                             }
 
-                            Integer[] parameterExpressionReferences = (Integer[]) currentMethodInvocation[7];
+                            Long[] parameterExpressionReferences = (Long[]) currentMethodInvocation[7];
 
                             if (parameterExpressionReferences != null) {
                                 int i = 0;
                                 while (i < parameterExpressionReferences.length) {
-                                    Object[] postIncDec = (Object[]) postIncsDecs.remove(((Integer) parameterExpressionReferences[i]));
+                                    Object[] postIncDec = (Object[]) postIncsDecs.remove(((Long) parameterExpressionReferences[i]));
                                     if (postIncDec != null) {
                                         doPostIncDec(postIncDec);
                                     }
@@ -1689,8 +1765,8 @@ public class Interpreter {
                         // Return Statement
                         case Code.R: {
 
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                            long expressionReference = Long.parseLong(tokenizer.nextToken());
                             String value = null;
                             if (tokenizer.countTokens() >= 3) {
                                 value = tokenizer.nextToken();
@@ -1708,7 +1784,7 @@ public class Interpreter {
 
                             } else {
 
-                                Value ret = (Value) values.remove(new Integer(expressionReference));
+                                Value ret = (Value) values.remove(new Long(expressionReference));
 
                                 Value casted = null;
 
@@ -1773,8 +1849,8 @@ public class Interpreter {
                                     StringTokenizer commandTokenizer = new StringTokenizer(
                                                     (String) commands.elementAt(i),
                                                     Code.DELIM);
-                                    command = Integer.parseInt(commandTokenizer.nextToken());
-                                    int cid = Integer.parseInt(commandTokenizer.nextToken());
+                                    command = Long.parseLong(commandTokenizer.nextToken());
+                                    int cid = Long.parseLong(commandTokenizer.nextToken());
                                     if (returnExpressionCounter == cid) {
                                         commands.removeElementAt(i);
                                         break;
@@ -1796,9 +1872,9 @@ public class Interpreter {
                                                                          (String) exprs.peek(),
                                                                          Code.DELIM);
 
-                                    oper = Integer.parseInt(expressionTokenizer.nextToken());
+                                    oper = Long.parseLong(expressionTokenizer.nextToken());
 
-                                    expressionReference = Integer.parseInt(
+                                    expressionReference = Long.parseLong(
                                                             expressionTokenizer.nextToken());
 
                                     //Make the location information for the location token
@@ -1812,7 +1888,7 @@ public class Interpreter {
                                 //If operator is assignment we just store the value
                                 if (oper == Code.A){
 
-                                    values.put(new Integer(returnExpressionCounter), rv);
+                                    values.put(new Long(returnExpressionCounter), rv);
 
                                 //If oper is other binary operator we will show it
                                 //on the screen with operator
@@ -1832,7 +1908,7 @@ public class Interpreter {
                                         director.rightBinaryExpression(rv, ea, highlight);
 
                                     } else {
-                                        values.put(new Integer(returnExpressionCounter), rv);
+                                        values.put(new Long(returnExpressionCounter), rv);
                                     }
 
                                 //If oper is a unary operator we will show it
@@ -1841,7 +1917,7 @@ public class Interpreter {
 
                                     int operator = ECodeUtilities.resolveUnOperator(oper);
 
-                                    values.put(new Integer(returnExpressionCounter), rv);
+                                    values.put(new Long(returnExpressionCounter), rv);
 
                                     if (command == Code.RIGHT) {
                                         director.beginUnaryExpression(operator, rv,
@@ -1851,7 +1927,7 @@ public class Interpreter {
                                 //If it is something else we will store it for later use.
                                 } else {
 
-                                    values.put(new Integer(returnExpressionCounter), rv);
+                                    values.put(new Long(returnExpressionCounter), rv);
 
                                 }
 
@@ -1864,8 +1940,8 @@ public class Interpreter {
                         //If Then Statement
                         case Code.IFT: {
 
-                            int expressionReference =
-                                Integer.parseInt(tokenizer.nextToken());
+                            long expressionReference =
+                                Long.parseLong(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
 
                             Highlight h = null;
@@ -1873,7 +1949,7 @@ public class Interpreter {
                                 h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
                             }
 
-                            Value result = (Value) values.remove(new Integer(expressionReference));
+                            Value result = (Value) values.remove(new Long(expressionReference));
 
                             if (value.equals(Boolean.TRUE.toString())) {
                                 director.branchThen(result, h);
@@ -1890,12 +1966,12 @@ public class Interpreter {
                         //IF Then Else Statement
                         case Code.IFTE: {
 
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionReference = Long.parseLong(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
 
                             Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                            Value result = (Value) values.remove(new Integer(expressionReference));
+                            Value result = (Value) values.remove(new Long(expressionReference));
 
                             if (value.equals(Boolean.TRUE.toString())) {
                                 director.branchThen(result, h);
@@ -1912,14 +1988,14 @@ public class Interpreter {
                         //While Statement
                         case Code.WHI: {
 
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionReference = Long.parseLong(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
 
                             int round = Integer.parseInt(tokenizer.nextToken());
 
                             Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                            Value result = (Value) values.remove(new Integer(expressionReference));
+                            Value result = (Value) values.remove(new Long(expressionReference));
 
                             if (round == 0) {
 
@@ -1948,65 +2024,53 @@ public class Interpreter {
                         //For Statement
                         case Code.FOR: {
 
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            long expressionReference = Long.parseLong(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
-                            int round = Integer.parseInt(tokenizer.nextToken());
+                            long round = Long.parseLong(tokenizer.nextToken());
                             Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                            Value result = (Value) values.remove(new Integer(expressionReference));
+                            Value result = (Value) values.remove(new Long(expressionReference));
 
                             if (round == 0) {
-
                                 if (value.equals(Boolean.TRUE.toString())) {
                                     director.enterLoop("for", result, h);
                                 } else {
                                     director.skipLoop("for", result);
                                 }
-
                             } else {
-
                                 if (value.equals(Boolean.TRUE.toString())) {
                                     director.continueLoop("for", result, h);
                                 } else {
                                     director.exitLoop("for", result);
                                 }
-
                             }
-
                             director.closeScratch();
                             director.openScratch();
-
                             break;
                         }
 
                         //Do-While Statement
                         case Code.DO: {
 
-                            int expressionReference = Integer.parseInt(
+                            long expressionReference = Long.parseLong(
                                                  tokenizer.nextToken());
                             String value = tokenizer.nextToken();
-                            int round = Integer.parseInt(
-                                                 tokenizer.nextToken());
+                            long round = Long.parseLong(tokenizer.nextToken());
                             Highlight h = ECodeUtilities.makeHighlight(
                                                  tokenizer.nextToken());
 
                             Value result = (Value) values.remove(
-                                      new Integer(expressionReference));
+                                      new Long(expressionReference));
 
                             if (round == 0) {
-
                                 director.enterLoop("do - while", h);
-
                             } else {
-
                                 if (value.equals(Boolean.TRUE.toString())) {
                                     director.continueLoop("do - while", result, h);
                                 } else {
                                     director.exitLoop("do - while", result);
                                 }
-
                             }
-
                             director.closeScratch();
                             director.openScratch();
 
@@ -2019,7 +2083,6 @@ public class Interpreter {
                                                  tokenizer.nextToken());
 
                             director.openSwitch(h);
-
                             director.closeScratch();
                             director.openScratch();
 
@@ -2028,17 +2091,16 @@ public class Interpreter {
 
                         case Code.SWIBF: {
 
-                            int selectorReference = Integer.parseInt(
+                            long selectorReference = Long.parseLong(
                                                  tokenizer.nextToken());
-                            int switchBlockReference = Integer.parseInt(
+                            long switchBlockReference = Long.parseLong(
                                                  tokenizer.nextToken());
                             Highlight h = ECodeUtilities.makeHighlight(
                                                  tokenizer.nextToken());
 
                             if (switchBlockReference != -1) {
-
-                                Value selector = (Value) values.remove(new Integer(selectorReference));
-                                Value switchBlock = (Value) values.remove(new Integer(switchBlockReference));
+                                Value selector = (Value) values.remove(new Long(selectorReference));
+                                Value switchBlock = (Value) values.remove(new Long(switchBlockReference));
                                 Value result = new Value("true", "boolean");
 
                                 director.animateBinaryExpression(
@@ -2122,7 +2184,7 @@ public class Interpreter {
                         //Opening and closing scopes
                         case Code.OUTPUT: {
 
-                            int expressionReference = Integer.parseInt(
+                            long expressionReference = Long.parseLong(
                                                          tokenizer.nextToken());
 
                             String value = tokenizer.nextToken();
@@ -2132,7 +2194,7 @@ public class Interpreter {
                                                 tokenizer.nextToken());
 
                             Value output = (Value) values.remove(
-                                              new Integer(expressionReference));
+                                              new Long(expressionReference));
 
                             if (output == null) {
                                 output = new Value(value, type);
@@ -2146,7 +2208,7 @@ public class Interpreter {
                         //Input needs to be read
                         case Code.INPUT: {
 
-                            int expressionCounter = Integer.parseInt(
+                            long expressionCounter = Long.parseLong(
                                                          tokenizer.nextToken());
 
                             String type = tokenizer.nextToken();
@@ -2158,7 +2220,7 @@ public class Interpreter {
 
                             input.println(in.getValue());
 
-                            values.put(new Integer(expressionCounter), in);
+                            values.put(new Long(expressionCounter), in);
 
                             break;
                         }
@@ -2166,18 +2228,16 @@ public class Interpreter {
                         //Inputted value is returned
                         case Code.INPUTTED: {
 
-                            int expressionCounter = Integer.parseInt(
+                            long expressionCounter = Long.parseLong(
                                                          tokenizer.nextToken());
 
                             String value = tokenizer.nextToken();
-
                             String type = tokenizer.nextToken();
-
                             Highlight h = ECodeUtilities.makeHighlight(
                                                 tokenizer.nextToken());
 
                             Value in = (Value) values.remove(
-                                              new Integer(expressionCounter));
+                                              new Long(expressionCounter));
                             if (in == null) {
                                 in = new Value(value, type);
                             }
@@ -2196,7 +2256,7 @@ public class Interpreter {
                                                 (String) commands.elementAt(i),
                                                 Code.DELIM);
                                 int comm = Integer.parseInt(commandTokenizer.nextToken());
-                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+                                long cid = Long.parseLong(commandTokenizer.nextToken());
                                 if (expressionCounter == cid) {
                                     command = comm;
                                     commands.removeElementAt(i);
@@ -2209,7 +2269,7 @@ public class Interpreter {
                             * what expression should be shown next
                             */
 /*
-                            int expressionReference = 0;
+                            long expressionReference = 0;
                             Highlight highlight = null;
 
                             if (!exprs.empty()) {
@@ -2218,10 +2278,10 @@ public class Interpreter {
                                                           (String) exprs.peek(),
                                                           Code.DELIM);
 
-                                oper = Integer.parseInt(
+                                oper = Long.parseLong(
                                                expressionTokenizer.nextToken());
 
-                                expressionReference = Integer.parseInt(
+                                expressionReference = Long.parseLong(
                                                expressionTokenizer.nextToken());
 
                                 //Make the location information for the location token
@@ -2234,7 +2294,7 @@ public class Interpreter {
 
                             //If operator is assignment we just store the value
                             if (oper == Code.A){
-                                values.put(new Integer(expressionCounter), in);
+                                values.put(new Long(expressionCounter), in);
 
                             //If oper is other binary operator we will show it
                             //on the screen with operator
@@ -2254,11 +2314,11 @@ public class Interpreter {
                                     if (ea != null) {
                                         director.rightBinaryExpression(in, ea, highlight);
                                     } else {
-                                        values.put(new Integer(expressionCounter), in);
+                                        values.put(new Long(expressionCounter), in);
                                     }
 
                                 } else {
-                                    values.put(new Integer(expressionCounter), in);
+                                    values.put(new Long(expressionCounter), in);
                                 }
 
                             //If oper is a unary operator we will show it
@@ -2267,7 +2327,7 @@ public class Interpreter {
 
                                 int operator = ECodeUtilities.resolveUnOperator(oper);
 
-                                values.put(new Integer(expressionCounter), in);
+                                values.put(new Long(expressionCounter), in);
 
                                 if (command == Code.RIGHT) {
                                     director.beginUnaryExpression(operator, in,
@@ -2276,7 +2336,7 @@ public class Interpreter {
 
                             //If it is something else we will store it for later use.
                             } else {
-                                values.put(new Integer(expressionCounter), in);
+                                values.put(new Long(expressionCounter), in);
                             }
 */
                             break;
@@ -2307,8 +2367,8 @@ public class Interpreter {
 
                         //Array Allocation
                         case Code.AA: {
-                            int expressionReference =
-                                        Integer.parseInt(tokenizer.nextToken());
+                            long expressionReference =
+                                        Long.parseLong(tokenizer.nextToken());
 
                             String hashCode = tokenizer.nextToken();
                             String compType = tokenizer.nextToken();
@@ -2319,11 +2379,11 @@ public class Interpreter {
                             StringTokenizer st =
                                   new StringTokenizer(dimensionReferences, ",");
 
-                            int [] dimensionReference = new int[dims];
+                            long [] dimensionReference = new long[dims];
 
                             for (int i = 0; st.hasMoreTokens(); i++) {
                                 dimensionReference[i] =
-                                    Integer.parseInt(st.nextToken());
+                                    Long.parseLong(st.nextToken());
                             }
 
                             //int values of the dimension sizes
@@ -2345,7 +2405,7 @@ public class Interpreter {
 
                             for (int i = 0; i < dims; i++) {
                                 dimensionValues[i] = (Value) values.remove(
-                                            new Integer(dimensionReference[i]));
+                                            new Long(dimensionReference[i]));
 
                             }
 
@@ -2364,12 +2424,12 @@ public class Interpreter {
 
                             ref.makeReference();
 
-                            values.put(new Integer(expressionReference), ref);
+                            values.put(new Long(expressionReference), ref);
 
 
                             for (int i = 0; i < dims; i++) {
                                 Object[] postIncDec = (Object[])
-                                    postIncsDecs.remove(new Integer(dimensionReference[i]));
+                                    postIncsDecs.remove(new Long(dimensionReference[i]));
 
                                 if (postIncDec != null) {
                                     doPostIncDec(postIncDec);
@@ -2382,11 +2442,11 @@ public class Interpreter {
                         //Array Access
                         case Code.AAC: {
 
-                            int expressionCounter =
-                                Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter =
+                                Long.parseLong(tokenizer.nextToken());
 
-                            int expressionReference =
-                                Integer.parseInt(tokenizer.nextToken());
+                            long expressionReference =
+                                Long.parseLong(tokenizer.nextToken());
 
                             int dims =
                                 Integer.parseInt(tokenizer.nextToken());
@@ -2395,17 +2455,17 @@ public class Interpreter {
                             StringTokenizer st =
                                   new StringTokenizer(cellNumberReferences, ",");
 
-                            int [] cellNumberReference = new int[dims];
+                            long [] cellNumberReference = new long[dims];
 
                             for (int i = 0; st.hasMoreTokens(); i++) {
                                 cellNumberReference[i] =
-                                    Integer.parseInt(st.nextToken());
+                                    Long.parseLong(st.nextToken());
                             }
 
                             //int values of the dimension sizes
                             String cellNumbers = tokenizer.nextToken();
                             st = new StringTokenizer(cellNumbers, ",");
-                            int [] cellNumber = new int[dims];
+                            int[] cellNumber = new int[dims];
 
                             for (int i = 0; st.hasMoreTokens(); i++) {
                                 cellNumber[i] =
@@ -2428,8 +2488,8 @@ public class Interpreter {
                             }
 
                             //Finding the VariableInArray
-                            values.remove(new Integer(expressionReference));
-                            Variable variable = (Variable) variables.remove(new Integer(expressionReference));
+                            values.remove(new Long(expressionReference));
+                            Variable variable = (Variable) variables.remove(new Long(expressionReference));
                             Reference varRef = (Reference) variable.getValue();
                             ArrayInstance ainst = (ArrayInstance) varRef.getInstance();
                             VariableInArray var = ainst.getVariableAt(cellNumber);
@@ -2438,7 +2498,7 @@ public class Interpreter {
                             Value[] cellNumberValues = new Value[dims];
                             for (int i = 0; i < dims; i++) {
                                 cellNumberValues[i] = (Value) values.remove(
-                                            new Integer(cellNumberReference[i]));
+                                            new Long(cellNumberReference[i]));
 
                             }
 
@@ -2477,7 +2537,7 @@ public class Interpreter {
                                                 (String) commands.elementAt(i),
                                                 Code.DELIM);
                                 int comm = Integer.parseInt(commandTokenizer.nextToken());
-                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+                                long cid = Long.parseLong(commandTokenizer.nextToken());
 
                                 if (expressionCounter == cid) {
                                     command = comm;
@@ -2499,7 +2559,7 @@ public class Interpreter {
 
                                 oper = Integer.parseInt(expressionTokenizer.nextToken());
 
-                                expressionReference = Integer.parseInt(
+                                expressionReference = Long.parseLong(
                                                         expressionTokenizer.nextToken());
 
                                 //Make the location information for the location token
@@ -2518,11 +2578,11 @@ public class Interpreter {
 
                                 if (command == Code.TO) {
 
-                                    variables.put(new Integer(expressionCounter), var);
+                                    variables.put(new Long(expressionCounter), var);
 
                                 } else {
 
-                                    values.put(new Integer(expressionCounter), val);
+                                    values.put(new Long(expressionCounter), val);
                                 }
 
                             //If oper is other binary operator we will show it
@@ -2545,10 +2605,10 @@ public class Interpreter {
                                         director.rightBinaryExpression(val, ea, highlight);
 
                                     } else {
-                                        values.put(new Integer(expressionCounter), val);
+                                        values.put(new Long(expressionCounter), val);
                                     }
                                 } else {
-                                    values.put(new Integer(expressionCounter), val);
+                                    values.put(new Long(expressionCounter), val);
                                 }
 
                             //If oper is a unary operator we will show it
@@ -2558,19 +2618,19 @@ public class Interpreter {
                                 if (oper == Code.PRIE ||
                                     oper == Code.PRDE) {
 
-                                        variables.put(new Integer(expressionCounter), var);
-                                        values.put(new Integer(expressionCounter), val);
+                                        variables.put(new Long(expressionCounter), var);
+                                        values.put(new Long(expressionCounter), val);
 
                                 } else if (oper == Code.PIE  ||
                                            oper == Code.PDE) {
 
-                                        variables.put(new Integer(expressionCounter), var);
-                                        values.put(new Integer(expressionReference), val);
-                                        values.put(new Integer(expressionCounter), val);
+                                        variables.put(new Long(expressionCounter), var);
+                                        values.put(new Long(expressionReference), val);
+                                        values.put(new Long(expressionCounter), val);
 
                                 } else {
 
-                                    values.put(new Integer(expressionCounter), val);
+                                    values.put(new Long(expressionCounter), val);
                                     int operator = ECodeUtilities.resolveUnOperator(oper);
                                     if (command == Code.RIGHT) {
                                         director.beginUnaryExpression(operator, val,
@@ -2581,14 +2641,14 @@ public class Interpreter {
                             //If it is something else we will store it for later use.
                             } else {
 
-                                values.put(new Integer(expressionCounter), val);
-                                variables.put(new Integer(expressionCounter), var);
+                                values.put(new Long(expressionCounter), val);
+                                variables.put(new Long(expressionCounter), var);
 
                             }
 
                             for (int i = 0; i < dims; i++) {
                                 Object[] postIncDec = (Object[])
-                                    postIncsDecs.remove(new Integer(cellNumberReference[i]));
+                                    postIncsDecs.remove(new Long(cellNumberReference[i]));
 
                                 if (postIncDec != null) {
                                     doPostIncDec(postIncDec);
@@ -2602,8 +2662,8 @@ public class Interpreter {
                         case Code.AL: {
 
                             //Second token is the expression counter
-                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
-                            int arrayCounter = Integer.parseInt(tokenizer.nextToken());
+                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                            long arrayCounter = Long.parseLong(tokenizer.nextToken());
 
                             String name = tokenizer.nextToken();
                             String value = "";
@@ -2619,7 +2679,7 @@ public class Interpreter {
                             //Not used because the whole expression is highlighted.
                             Highlight highlight = ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                            Reference ref = (Reference) values.remove(new Integer(arrayCounter));
+                            Reference ref = (Reference) values.remove(new Long(arrayCounter));
                             ArrayInstance array = (ArrayInstance) ref.getInstance();
 
                             Value length = new Value(value, type);
@@ -2744,19 +2804,7 @@ public class Interpreter {
                 running = false;
                 removeInstances();
             }
-
-        }
-        director.closeScratch();
-
-        //This is for realease versions
-        /*
-        } catch (Exception e) {
-            director.showErrorMessage(new InterpreterError("<H1>Runtime Error</H1>"+
-                                 "<P>The feature is not yet implemented.</P>", null));
-        }
-        */
-
-    }
+     }
 
 
     public ObjectFrame createNewInstance(ClassInfo ci, Highlight h) {
@@ -2861,7 +2909,7 @@ public class Interpreter {
         }
     }
 
-    private void handleExpression(Value val, int expressionCounter) {
+    private void handleExpression(Value val, long expressionCounter) {
 
         //command that wait for this expression (left, right)
         int command = -1;
@@ -2875,7 +2923,7 @@ public class Interpreter {
                                                         Code.DELIM);
 
             int comm = Integer.parseInt(commandTokenizer.nextToken());
-            int cid = Integer.parseInt(commandTokenizer.nextToken());
+            long cid = Long.parseLong(commandTokenizer.nextToken());
             if (expressionCounter == cid) {
                 command = comm;
                 commands.removeElementAt(i);
@@ -2887,7 +2935,7 @@ public class Interpreter {
          * Look from the expression stack
          * what expression should be shown next
          */
-        int expressionReference = 0;
+        long expressionReference = 0;
         Highlight highlight = null;
 
         if (!exprs.empty()) {
@@ -2897,7 +2945,7 @@ public class Interpreter {
                                             Code.DELIM);
 
             oper = Integer.parseInt(expressionTokenizer.nextToken());
-            expressionReference = Integer.parseInt(expressionTokenizer.nextToken());
+            expressionReference = Long.parseLong(expressionTokenizer.nextToken());
 
             //Make the location information for the location token
             highlight = ECodeUtilities.makeHighlight(expressionTokenizer.nextToken());
@@ -2908,7 +2956,7 @@ public class Interpreter {
 
         //If operator is assignment we just store the value
         if (oper == Code.A) {
-            values.put(new Integer(expressionCounter), val);
+            values.put(new Long(expressionCounter), val);
 
             //If oper is other binary operator we will show it
             //on the screen with operator
@@ -2929,11 +2977,11 @@ public class Interpreter {
                 if (ea != null) {
                     director.rightBinaryExpression(val, ea, highlight);
                 } else {
-                    values.put(new Integer(expressionCounter), val);
+                    values.put(new Long(expressionCounter), val);
                 }
 
             } else {
-                values.put(new Integer(expressionCounter), val);
+                values.put(new Long(expressionCounter), val);
             }
 
         /* If oper is a unary operator we will show it
@@ -2943,7 +2991,7 @@ public class Interpreter {
 
             int operator = ECodeUtilities.resolveUnOperator(oper);
 
-            values.put(new Integer(expressionCounter), val);
+            values.put(new Long(expressionCounter), val);
 
             if (command == Code.RIGHT) {
                 director.beginUnaryExpression(operator, val,
@@ -2952,16 +3000,16 @@ public class Interpreter {
 
         //If it is something else we will store it for later use.
         } else {
-            values.put(new Integer(expressionCounter), val);
+            values.put(new Long(expressionCounter), val);
         }
     }
 
 
     public void doPostIncDec(Object[] postIncDecInfo) {
 
-        Variable var = (Variable) variables.remove(((Integer) postIncDecInfo[1]));
+        Variable var = (Variable) variables.remove(((Long) postIncDecInfo[1]));
 
-        director.animatePreIncDec(((Integer) postIncDecInfo[0]).intValue(),
+        director.animatePreIncDec(((Long) postIncDecInfo[0]).intValue(),
                                   var,
                                   ((Value) postIncDecInfo[2]),
                                   ((Highlight) postIncDecInfo[3]));

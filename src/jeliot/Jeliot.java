@@ -39,7 +39,7 @@ import jeliot.ecode.*;
 * @author Pekka Uronen
 * @modified Niko Myller
 */
-public class Jeliot implements Runnable {
+public class Jeliot {
 
     Launcher launcher = null;
     BufferedReader ecode = null;
@@ -128,9 +128,15 @@ public class Jeliot implements Runnable {
         //TypeChecker check = new TypeChecker(space);
         //program.acceptVisitor(check);
 
-        this.ecode = null;
         this.sourceCode = sourceCode;
         this.methodCall = methodCall;
+
+        compiled = false;
+
+        recompile();
+
+/*
+        this.ecode = null;
 
         if (launcher != null) {
             launcher.stopThread();
@@ -143,17 +149,26 @@ public class Jeliot implements Runnable {
         launcher = new Launcher(new BufferedReader(
                                 new StringReader(this.sourceCode)));
 
-        launcher.compile();
-
-        launcher.setMethodCall(methodCall);
+        launcher.setCompiling(true);
         launcher.start();
+        launcher.setMethodCall(this.methodCall);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        launcher.setCompiling(false);
+        synchronized(launcher){
+            launcher.notify();
+        }
 
         ecode = launcher.getReader();
         pr = launcher.getInputWriter();
 
-        codePane.installProgram(this.sourceCode);
 
         compiled = true;
+*/
     }
 
     public void recompile() {
@@ -170,16 +185,32 @@ public class Jeliot implements Runnable {
                 launcher = null;
             }
 
-            launcher= new Launcher(new BufferedReader(
+            launcher = new Launcher(new BufferedReader(
                                    new StringReader(this.sourceCode)));
 
-            launcher.compile();
+            launcher.setCompiling(true);
+
+            launcher.start();
 
             launcher.setMethodCall(this.methodCall);
-            launcher.start();
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            launcher.setCompiling(false);
+            synchronized(launcher){
+                launcher.notify();
+            }
 
             ecode = launcher.getReader();
             pr = launcher.getInputWriter();
+
+            codePane.installProgram(this.sourceCode);
+
+            compiled = true;
         }
 
     }
@@ -286,6 +317,15 @@ public class Jeliot implements Runnable {
         return gui.showMessagesInDialogs();
     }
 
+    public void runUntil(int line) {
+        director.runUntil(line);
+    }
+
+    public void runUntilDone() {
+        gui.runUntilDone();
+    }
+
+
     /** Called by gui to get a tree view of the program.
     *
     * @return   The treeview of the program. Used for the debugging.
@@ -303,8 +343,13 @@ public class Jeliot implements Runnable {
         f = new File(f, "examples");
         prop.put("user.dir", f.toString());
 
-        Jeliot jeliot = new Jeliot(udir);
-        jeliot.run();
+        final Jeliot jeliot = new Jeliot(udir);
+
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+               jeliot.run();
+            }
+        });
     }
 
 }

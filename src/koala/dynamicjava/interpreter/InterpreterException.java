@@ -81,9 +81,10 @@ public class InterpreterException extends ThrownException {
 
             message = "<H2>Syntax Error</H2><P><B>Line " + e.getLine() +
                       ", Column " + e.getColumn() + ":</P><P>" + m + "</B></P>";
-            //System.out.println(message);
 
         } else {
+
+            //System.out.println(m);
 
             message = "<H2>Syntax Error</H2><P>" + m + "</P>";
 
@@ -96,15 +97,13 @@ public class InterpreterException extends ThrownException {
                 String message = m.substring(index + "line".length()).trim();
                 int i = 1;
                 while (true) {
-                    try {
-                        Integer.parseInt(message.substring(i-1,i));
-                        i++;
-                    } catch (NumberFormatException ex) {
+                    if (!Character.isDigit(message.substring(i-1,i).charAt(0))) {
                         break;
                     }
+                    i++;
                 }
                 if (i > 1) {
-                    line = Integer.parseInt(message.substring(0,i-1));
+                    line = Integer.parseInt(message.substring(0, i-1));
                 }
             }
 
@@ -115,15 +114,13 @@ public class InterpreterException extends ThrownException {
                 int numberEndIndex = message.indexOf(" ");
                 int i = 1;
                 while (true) {
-                    try {
-                        Integer.parseInt(message.substring(i-1,i));
-                        i++;
-                    } catch (NumberFormatException ex) {
+                    if (!Character.isDigit(message.substring(i-1,i).charAt(0))) {
                         break;
                     }
+                    i++;
                 }
                 if (i > 1) {
-                    column = Integer.parseInt(message.substring(0,i-1));
+                    column = Integer.parseInt(message.substring(0, i-1));
                 }
             }
 

@@ -11,29 +11,51 @@ import java.awt.event.*;
   */
 public class TheatreManager implements ComponentListener {
 
-    private Point[] methodStagePoints = {
-        new Point(10, 10),
-        new Point(20, 20),
-        new Point(30, 30),
-        new Point(15, 40),
-        new Point(25, 35)};
+    /**
+      * Contains Points that are set as the rootlocations of the
+      * new MethodStage instances. They are circulated so that
+      * after the last value of the table the first value is used
+      * again.
+      */
+    private Point[] methodStagePoints = {new Point(10, 10),
+                                         new Point(20, 20),
+                                         new Point(30, 30),
+                                         new Point(15, 40),
+                                         new Point(25, 35)};
 
+    /**
+      * Reference to the current Theatre instance.
+      * Reference is need for two reasons:
+      * Firstly, to set this TheatreManager instance as the
+      * ComponentListener of the Theatre and then assign the actors in
+      * correct places when the Theatre (<code>JComponent</code>)
+      * resized. Secondly, for inserting new actors to the passive
+      * (<code>pasAct</code>) and active (<code>actAct</code>) actors.
+      */
     private Theatre theatre;
 
+    /** */
     private Stack methods = new Stack();
+
+    /** */
     private Vector objects = new Vector();
+
+    /** */
     private Vector scratches = new Vector();
 
+    /** */
     private ConstantBox constantBox;
 
-    //private ConstantBox input;
-
+    /** */
     private int maxMethodStageX;
 
+    /** */
     private Hashtable reservations = new Hashtable();
 
+    /** */
     private Point lrCorner;
 
+    /** */
     public TheatreManager(Theatre theatre) {
         this.theatre = theatre;
         theatre.addComponentListener(this);
@@ -41,6 +63,7 @@ public class TheatreManager implements ComponentListener {
         lrCorner = new Point(d.width, d.height);
     }
 
+    /** */
     public void cleanUp() {
         methods.removeAllElements();
         objects.removeAllElements();
@@ -48,6 +71,8 @@ public class TheatreManager implements ComponentListener {
         constantBox = null;
     }
 
+
+    /** */
     public Point reserve(MethodStage stage) {
         Point loc = methodStagePoints[methods.size() % methodStagePoints.length];
         reservations.put(stage, loc);
@@ -55,6 +80,8 @@ public class TheatreManager implements ComponentListener {
         return loc;
     }
 
+
+    /** */
     public void bind(MethodStage stage) {
         Point loc = (Point)reservations.remove(stage);
         methods.push(stage);
@@ -72,6 +99,8 @@ public class TheatreManager implements ComponentListener {
         }
     }
 
+
+    /** */
     public Point reserve(InstanceActor actor) {
         int w = actor.getWidth();
         int h = actor.getHeight();
@@ -86,6 +115,8 @@ public class TheatreManager implements ComponentListener {
         return loc;
     }
 
+
+    /** */
     public void bind(InstanceActor actor) {
         Point loc = (Point)reservations.remove(actor);
         objects.addElement(actor);
@@ -93,29 +124,30 @@ public class TheatreManager implements ComponentListener {
         actor.setLocation(loc);
     }
 
+
+    /** */
     public void removeInstance(InstanceActor actor) {
         objects.removeElement(actor);
         theatre.removePassive(actor);
         theatre.flush();
     }
 
+
+    /** */
     public void removeMethodStage(MethodStage stage) {
         methods.removeElement(stage);
         theatre.removePassive(stage);
     }
 
+
+    /** */
     public void setConstantBox(ConstantBox cbox) {
         this.constantBox = cbox;
         positionConstantBox();
     }
 
-/*
-    public void setInputBox(ConstantBox input) {
-        this.input = input;
-        positionInputBox();
-    }
-*/
 
+    /** */
     public void addScratch(Scratch scratch) {
         scratches.addElement(scratch);
         if (!methods.empty()) {
@@ -126,11 +158,15 @@ public class TheatreManager implements ComponentListener {
         theatre.addPassive(scratch);
     }
 
+
+    /** */
     public void removeScratch(Scratch scratch) {
         scratches.removeElement(scratch);
         theatre.removePassive(scratch);
     }
 
+
+    /** */
     private void positionConstantBox() {
         if (constantBox != null) {
             int x = 10; //theatre.getWidth() - 10 - cbox.getWidth();
@@ -139,16 +175,8 @@ public class TheatreManager implements ComponentListener {
         }
     }
 
-/*
-    private void positionInputBox() {
-        if (input != null) {
-            //There is now 50 pixels between constant box and input box
-            int x = 60 + cbox.getWidth();
-            int y = theatre.getHeight() - 10 - input.getHeight();
-            input.setLocation(x, y);
-        }
-    }
-*/
+
+    /** */
     public void positionObjects(Point from, Point to) {
         Enumeration enum = objects.elements();
         while (enum.hasMoreElements()) {
@@ -161,6 +189,7 @@ public class TheatreManager implements ComponentListener {
     }
 
 
+    /** */
     public Point getOutputPoint() {
         Dimension d = theatre.getSize();
         return new Point(d.width/2, d.height);

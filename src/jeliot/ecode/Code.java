@@ -106,13 +106,14 @@ public class Code {
     public static final int OFA=65;         // Object field access
     public static final int OMC=66;         // Object method call
     public static final int OMCC=67;        // Object method call close
+    public static final int CONSCN=72;      // Constructor call number (special) used for a hack
 
     public static final int SWIBF=68;       // Switch block found
     public static final int SWITCHB=69;     // Switch block begins
     public static final int SWITCH=70;      // Switch
 
     public static final int AL=71;          // Array length
-    //Last int used -> 71
+    //Last int used = 72
 }
 
 //package jeliot.ecode;

@@ -539,7 +539,7 @@ public class ECodeUtilities {
         writer=w;
     }
 
-    //For output handling!!!!
+    //For input handling!!!!
     public static void setReader(BufferedReader r){
         reader=r;
     }
@@ -549,7 +549,9 @@ public class ECodeUtilities {
 
             str = ECodeUtilities.replace(str, "\n", "\\n");
             str = ECodeUtilities.replace(str, "\r", "");
+            //System.out.println("Hello");
             writer.println(str); // connected to jeliot
+            //System.out.println("Hello2");
 
             //System.out.println(str);// Output to stdout ; debugging only
         }

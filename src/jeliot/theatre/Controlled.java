@@ -2,8 +2,7 @@ package jeliot.theatre;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         22.9.1999
+  * @author Niko Myller
   */
 public interface Controlled {
     public abstract void suspend();

@@ -7,8 +7,6 @@ import jeliot.FeatureNotImplementedException;
 /**
   *
   * @author Niko Myller
-  *
-  * created 26.6.2003
   */
 public class ObjectFrame extends Instance {
 
@@ -21,7 +19,8 @@ public class ObjectFrame extends Instance {
 
     public ObjectFrame(String hashCode, String type, int vcount) {
         super(hashCode, type);
-        //Possible to change it to be something else
+
+        //Name can be changed to something else.
         this.name = type;
         this.vcount = vcount;
         vars = new Hashtable();
@@ -37,8 +36,8 @@ public class ObjectFrame extends Instance {
         if (var != null) {
             return var;
         } else {
-            //throw new RuntimeException("No Variable " + name);
-            return null;
+            throw new RuntimeException("No Variable " + name);
+            //return null;
         }
     }
 

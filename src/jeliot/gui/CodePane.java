@@ -41,7 +41,6 @@ public class CodePane extends JComponent {
         area.setSelectionColor(new Color(0x990000));
         area.setSelectedTextColor(Color.white);
         area.setEditable(false);
-
     }
 
 

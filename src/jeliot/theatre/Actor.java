@@ -5,9 +5,7 @@ import java.util.*;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         8.8.1999
-  * revised         18.9.1999
+  * @author Niko Myller
   */
 public class Actor implements Cloneable {
 

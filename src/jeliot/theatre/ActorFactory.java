@@ -6,13 +6,10 @@ import jeliot.lang.*;
 
 import jeliot.ecode.*;
 
-//import jeliot.parser.*;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         9.8.1999
-  * modified        12.12.2002 by Niko Myller
+  * @author Niko Myller
   */
 public class ActorFactory {
 

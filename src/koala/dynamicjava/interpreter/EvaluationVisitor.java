@@ -60,6 +60,16 @@ public class EvaluationVisitor extends VisitorObject {
             Code.LOC_DELIM+node.getEndLine()+Code.LOC_DELIM+ node.getEndColumn();
     }
 
+    public void initialize() {
+        counter = 1;
+        evaluating = true;
+        preparing = false;
+        inside = false;
+        constructorCallNames = new Stack();
+        superClasses = new Stack();
+        constructorCallNumbers = new Stack();
+    }
+
     /**
      * Identifies each expression
      */
@@ -72,6 +82,24 @@ public class EvaluationVisitor extends VisitorObject {
                                            // TreeInterpreter.interpretMethod
                                            // to decide wheter to print MD and
                                            // PARAMETER
+
+    private static Stack constructorCallNames = new Stack(); // Used in Simple Allocation and
+                                              // TreeInterpreter.interpretMethod
+                                              //Used to identify the name of the constructor
+                                             //and distinguish it from its super constructors
+    private static Stack superClasses = new Stack();
+    private static Stack constructorCallNumbers = new Stack();
+
+
+    public static long getCounter() {
+        return counter;
+    }
+
+    public static void incrementCounter() {
+        counter++;
+    }
+
+
     /**
      * Set preparing value to true. So ArrayModifier is preparing the array
      * to visit
@@ -97,11 +125,55 @@ public class EvaluationVisitor extends VisitorObject {
     }
 
     /**
+     * Returns constructorCall value
+     *
+     */
+    public static boolean isSetConstructorCall() {
+        return !constructorCallNames.empty();
+    }
+
+    public static String getConstructorCallName() {
+        return (String) constructorCallNames.peek();
+    }
+
+    public static void newConstructorCall(String name,
+                                          Vector superClassesNames,
+                                          long consCallNumber) {
+        Long ccn = new Long(consCallNumber);
+        constructorCallNumbers.push(ccn);
+        constructorCallNames.push(name);
+        superClasses.push(superClassesNames);
+    }
+
+    public static void constructorCallFinished() {
+        constructorCallNumbers.pop();
+        constructorCallNames.pop();
+        superClasses.pop();
+    }
+
+    public static Vector getSuperClasses() {
+        return (Vector) superClasses.peek();
+    }
+
+    public static long getConstructorCallNumber() {
+        return ((Long) constructorCallNumbers.peek()).longValue();
+    }
+
+    public Vector extractSuperClasses(Class c) {
+        Vector v = new Vector();
+        do {
+            v.add(c.getName());
+            c = c.getSuperclass();
+        } while (c != null);
+        return v;
+    }
+
+    /**
      * Set inside value to true. So we have the information required (MD and PARAMETER)
      * in a static method call
      */
     public static void setInside() {
-        //        inside = true;
+        //inside = true;
         domesticStack.push(returnExpressionCounterStack.peek());
     }
 
@@ -886,62 +958,62 @@ public class EvaluationVisitor extends VisitorObject {
             // Invoke the method
             try {Object o = m.invoke(obj, args);
 
-            if (! isSetInside()){
-                //visit(o)
+                if (! isSetInside()){
+                    //visit(o)
 
-                ECodeUtilities.write(Code.PARAMETERS+Code.DELIM+ECodeUtilities.arrayToString(m.getParameterTypes()));
-                ECodeUtilities.write(Code.MD+Code.DELIM+locationToString(node));
+                    ECodeUtilities.write(Code.PARAMETERS+Code.DELIM+ECodeUtilities.arrayToString(m.getParameterTypes()));
+                    ECodeUtilities.write(Code.MD+Code.DELIM+locationToString(node));
 
-                if (! m.getReturnType().getName().equals(Void.TYPE.getName())) {
+                    if (! m.getReturnType().getName().equals(Void.TYPE.getName())) {
 
-                    long auxcounter = counter;
-                    ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.R+Code.DELIM+l.toString()+
-                                         Code.DELIM+locationToString(node));
-
-                    // Don't try this with objects, foreign method calls don't provide enough info to handle them
-                    if (o != null) {
-
-                        ECodeUtilities.write(Code.L+Code.DELIM+(counter++)+Code.DELIM+o.toString()+
-                                             Code.DELIM+o.getClass().getName()+Code.DELIM+locationToString(node));
-
-                        ECodeUtilities.write("" + Code.R+Code.DELIM+
-                                             l.toString()+
-                                             Code.DELIM+auxcounter+
-                                             Code.DELIM+o.toString()+Code.DELIM+
-                                             o.getClass().getName()+
+                        long auxcounter = counter;
+                        ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.R+Code.DELIM+l.toString()+
                                              Code.DELIM+locationToString(node));
 
-                    } else {
+                        // Don't try this with objects, foreign method calls don't provide enough info to handle them
+                        if (o != null) {
 
-                        ECodeUtilities.write("" + Code.L+Code.DELIM+
-                                             (counter++)+Code.DELIM+
-                                             "null"+Code.DELIM+
-                                             Code.REFERENCE+Code.DELIM+
-                                             locationToString(node));
+                            ECodeUtilities.write(Code.L+Code.DELIM+(counter++)+Code.DELIM+o.toString()+
+                                                 Code.DELIM+o.getClass().getName()+Code.DELIM+locationToString(node));
 
-                        ECodeUtilities.write("" + Code.R+Code.DELIM+
-                                             l.toString()+
-                                             Code.DELIM+auxcounter+
-                                             Code.DELIM+"null"+
-                                             Code.DELIM+Code.REFERENCE+
-                                             Code.DELIM+
-                                             locationToString(node));
+                            ECodeUtilities.write("" + Code.R+Code.DELIM+
+                                                 l.toString()+
+                                                 Code.DELIM+auxcounter+
+                                                 Code.DELIM+o.toString()+Code.DELIM+
+                                                 o.getClass().getName()+
+                                                 Code.DELIM+locationToString(node));
+
+                        } else {
+
+                            ECodeUtilities.write("" + Code.L+Code.DELIM+
+                                                 (counter++)+Code.DELIM+
+                                                 "null"+Code.DELIM+
+                                                 Code.REFERENCE+Code.DELIM+
+                                                 locationToString(node));
+
+                            ECodeUtilities.write("" + Code.R+Code.DELIM+
+                                                 l.toString()+
+                                                 Code.DELIM+auxcounter+
+                                                 Code.DELIM+"null"+
+                                                 Code.DELIM+Code.REFERENCE+
+                                                 Code.DELIM+
+                                                 locationToString(node));
+
+                        }
 
                     }
 
+                } else {
+                    unsetInside();
                 }
 
-            } else {
-                unsetInside();
-            }
+                ECodeUtilities.write("" + Code.OMCC); //the method call is closed
 
-            ECodeUtilities.write("" + Code.OMCC); //the method call is closed
+                if (((Long) returnExpressionCounterStack.peek()).equals(l)) {
 
-            if (((Long) returnExpressionCounterStack.peek()).equals(l)) {
-
-                returnExpressionCounterStack.pop();
-            }
-            return o;
+                    returnExpressionCounterStack.pop();
+                }
+                return o;
 
             } catch (InvocationTargetException e) {
                 if (e.getTargetException() instanceof Error) {
@@ -1003,21 +1075,44 @@ public class EvaluationVisitor extends VisitorObject {
         Method   m     = (Method)node.getProperty(NodeProperties.METHOD);
         List     larg  = node.getArguments();
         Object[] args  = Constants.EMPTY_OBJECT_ARRAY;
+        Class[]  typs = m.getParameterTypes();
 
+        //System.out.println("Are u visiting me?");
+       if (larg != null) {
+
+            ECodeUtilities.write("" + Code.OMC+Code.DELIM+m.getName()+
+                           Code.DELIM+m.getDeclaringClass().getName()+
+                           Code.DELIM+larg.size()+Code.DELIM+locationToString(node));
+
+        } else {
+
+            ECodeUtilities.write("" + Code.OMC+Code.DELIM+m.getName()+
+                           Code.DELIM+m.getDeclaringClass().getName()+
+                           Code.DELIM+"0"+Code.DELIM+locationToString(node));//0 arguments
+        }
         // Fill the arguments
         if (larg != null) {
             Iterator it = larg.iterator();
             int      i  = 0;
             args        = new Object[larg.size()];
+            long     auxcounter; //Records the previous counter value
+
             while (it.hasNext()) {
+                ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.P+Code.DELIM+counter+
+                                    Code.DELIM+locationToString(node));//arguments construction
+                auxcounter=counter;
                 args[i] = ((Expression)it.next()).acceptVisitor(this);
+
+                ECodeUtilities.write("" + Code.P+Code.DELIM+auxcounter+Code.DELIM+typs[i].getName());
                 i++;
             }
         }
 
         // Invoke the method
         try {
-            return m.invoke(context.getHiddenArgument(), args);
+            Object o = m.invoke(context.getHiddenArgument(), args);
+            ECodeUtilities.write("" + Code.OMCC); //the method call is closed
+            return o;
         } catch (InvocationTargetException e) {
             if (e.getTargetException() instanceof Error) {
                 throw (Error)e.getTargetException();
@@ -1344,12 +1439,19 @@ public class EvaluationVisitor extends VisitorObject {
                 //args[i++] = ((Expression)it.next()).acceptVisitor(this);
             }
         }
+        //if(!isSetConstructorCall()){
+        //    System.out.println(consName);
+        //    setConstructorCall(true);
+        newConstructorCall(consName, extractSuperClasses(cons.getDeclaringClass()), simpleAllocationCounter);
+        ECodeUtilities.write(""+Code.CONSCN+Code.DELIM+EvaluationVisitor.getConstructorCallNumber());
 
+        //}
         Object result = context.invokeConstructor(node, args);
+        //System.out.println(consName+" wtf");
         ECodeUtilities.write("" + Code.SAC+Code.DELIM+
-                                     simpleAllocationCounter+Code.DELIM+
-                                     Integer.toHexString(result.hashCode())+Code.DELIM+
-                                     locationToString(node));//0 arguments
+                             simpleAllocationCounter+Code.DELIM+
+                             Integer.toHexString(result.hashCode())+Code.DELIM+
+                             locationToString(node));//0 arguments
         return result;
     }
 

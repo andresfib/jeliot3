@@ -29,6 +29,8 @@ public class JeliotWindow {
     private AboutWindow aw = null;
     private HelpWindow hw = null;
 
+    private int previousSpeed;
+
     /** The frame in which all the action goes on. */
     private JFrame frame;
 
@@ -525,6 +527,19 @@ public class JeliotWindow {
         );
         menu.add(menuItem);
 
+        menuItem = new JMenuItem("Run until...");
+        menuItem.setMnemonic(KeyEvent.VK_L);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    runUntil();
+                }
+            }
+        );
+        menu.add(menuItem);
+
         return menu;
     }
 
@@ -659,8 +674,8 @@ public class JeliotWindow {
         animWidgets.addElement(rewindButton);
 
         // create animation speed control slider
-        speedSlider = new JSlider(JSlider.HORIZONTAL, 1, 60, 15);
-        speedSlider.setMajorTickSpacing(15);
+        speedSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 10);
+        speedSlider.setMajorTickSpacing(10);
         speedSlider.setMinorTickSpacing(5);
         speedSlider.setPaintTicks(true);
         speedSlider.setPaintLabels(false);
@@ -1142,7 +1157,7 @@ public class JeliotWindow {
 
         String[] s1 = {"Pause"};
         setEnabledMenuItems(true, s1);
-        String[] s2 = { "Step","Play","Rewind","Edit" };
+        String[] s2 = { "Step","Play","Rewind","Edit","Run until..."};
         setEnabledMenuItems(false, s2);
 
         jeliot.step();
@@ -1164,7 +1179,7 @@ public class JeliotWindow {
 
         String[] s1 = {"Pause"};
         setEnabledMenuItems(true, s1);
-        String[] s2 = { "Step","Play","Rewind","Edit"};
+        String[] s2 = { "Step","Play","Rewind","Edit","Run until..."};
         setEnabledMenuItems(false, s2);
 
         jeliot.play();
@@ -1187,7 +1202,7 @@ public class JeliotWindow {
 
         String[] s1 = {"Pause"};
         setEnabledMenuItems(false, s1);
-        String[] s2 = { "Step","Play","Rewind","Edit" };
+        String[] s2 = { "Step","Play","Rewind","Edit","Run until..."};
         setEnabledMenuItems(true, s2);
 
         jeliot.pause();
@@ -1207,7 +1222,7 @@ public class JeliotWindow {
 
         String[] s1 = { "Pause" };
         setEnabledMenuItems(true, s1);
-        String[] s2 = { "Step","Play","Rewind","Edit" };
+        String[] s2 = { "Step","Play","Rewind","Edit","Run until..."};
         setEnabledMenuItems(false, s2);
     }
 
@@ -1224,7 +1239,7 @@ public class JeliotWindow {
 
         String[] s1 = { "Edit" };
         setEnabledMenuItems(true, s1);
-        String[] s2 = { "Step","Play","Rewind","Pause" };
+        String[] s2 = { "Step","Play","Rewind","Pause", "Run until..."};
         setEnabledMenuItems(false, s2);
     }
 
@@ -1255,9 +1270,9 @@ public class JeliotWindow {
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(false);
 
-        String[] s1 = { "Step","Play" };
+        String[] s1 = { "Step","Play", "Run until..." };
         setEnabledMenuItems(true, s1);
-        String[] s2 = { "Rewind","Pause" };
+        String[] s2 = { "Rewind","Pause"};
         setEnabledMenuItems(false, s2);
 
         jeliot.rewind();
@@ -1278,7 +1293,7 @@ public class JeliotWindow {
 
             String[] s1 = { "Edit","Rewind" };
             setEnabledMenuItems(true, s1);
-            String[] s2 = { "Step","Play","Pause" };
+            String[] s2 = { "Step","Play","Pause","Run until..."};
             setEnabledMenuItems(false, s2);
 
         } else {
@@ -1291,7 +1306,7 @@ public class JeliotWindow {
 
             String[] s1 = {"Edit","Rewind"};
             setEnabledMenuItems(true, s1);
-            String[] s2 = { "Step","Play","Pause" };
+            String[] s2 = { "Step","Play","Pause","Run until..."};
             setEnabledMenuItems(false, s2);
         }
     }
@@ -1308,6 +1323,36 @@ public class JeliotWindow {
     public void output(String str) {
         //System.out.println("This is output: " + str);
         outputConsole.append(str);
+    }
+
+    public void runUntil() {
+        String inputValue = JOptionPane.showInputDialog("Run until the line", new Integer(0));
+        int lineNumber = 0;
+
+        try {
+            lineNumber = Integer.parseInt(inputValue);
+        } catch (Exception ex) {}
+
+        if (lineNumber > 0) {
+            jeliot.runUntil(lineNumber);
+            previousSpeed = speedSlider.getValue();
+            speedSlider.setValue(speedSlider.getMaximum());
+            SwingUtilities.invokeLater(new Runnable() {
+                                           public void run() {
+                                               playButton.doClick();
+                                           }
+                                       });
+
+        }
+    }
+
+    public void runUntilDone() {
+        speedSlider.setValue(previousSpeed);
+        SwingUtilities.invokeLater(new Runnable() {
+                                       public void run() {
+                                           pauseButton.doClick();
+                                       }
+                                   });
     }
 
 }

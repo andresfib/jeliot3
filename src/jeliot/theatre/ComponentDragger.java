@@ -4,32 +4,31 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
-  * @author Pekka Uronen
+  * ComponentDragger is for Theatre's components to be dragged.
+  * NOT CURRENTLY USED IN JELIOT!
   *
-  * created         17.8.1999
-  * last modified   17.8.1999
+  * @author Pekka Uronen
   */
 public class ComponentDragger implements MouseListener,
-        MouseMotionListener {
-
+                                         MouseMotionListener {
     final static int FREE   = 0;
     final static int DRAG   = 1;
     final static int RESIZE = 2;
     final static int FIXED  = 3;
-    
+
     int mode = FREE;
     Point dragPoint;
     Dimension origSize;
     Component comp;
 
     public ComponentDragger(Component comp) {
-        this.comp = comp;    
+        this.comp = comp;
         comp.addMouseListener(this);
         comp.addMouseMotionListener(this);
         comp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
-    
+
     boolean inStretchArea(Point p) {
         Dimension d = comp.getSize();
         return (p.x > d.width - 8) && (p.y > d.height-8);
@@ -39,7 +38,7 @@ public class ComponentDragger implements MouseListener,
         dragPoint = new Point(e.getX(), e.getY());
         origSize = comp.getSize();
         mode = inStretchArea(dragPoint) ? RESIZE : DRAG;
-       
+
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -57,7 +56,7 @@ public class ComponentDragger implements MouseListener,
                 break;
         }
         comp.getParent().repaint();
-                
+
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -65,7 +64,7 @@ public class ComponentDragger implements MouseListener,
         comp.invalidate();
         comp.validate();
     }
-    
+
     public boolean isFree() {
         return mode == FREE;
     }
