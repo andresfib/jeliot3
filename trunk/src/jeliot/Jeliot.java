@@ -545,7 +545,7 @@ public class Jeliot {
             file = new File(file, "examples");
             final File file1 = new File(file, args[0]);
             if (file.exists()) {
-                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         jeliot.setProgram(file1);
                     }
@@ -601,7 +601,7 @@ public class Jeliot {
             file = new File(file, bundle.getString("directory.examples"));
             final File file1 = new File(file, args[2]);
             if (file.exists()) {
-                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         jeliot.setProgram(file1);
                     }
@@ -610,7 +610,7 @@ public class Jeliot {
         } else if (args.length >= 1) {
             if (!args[0].equals("")) {
                 final String program = args[0];
-                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         jeliot.setProgram(program);
                     }
