@@ -119,9 +119,10 @@ public class TheatreManager implements ComponentListener {
     public void addScratch(Scratch scratch) {
         scratches.addElement(scratch);
         if (!stages.empty()) {
-            scratch.setLocation(maxStagex + 20, 10);
+            scratch.setLocation(maxStagex + 45, 10);
         } else {
-            scratch.setLocation(ActorFactory.getTypeValueWidth(8) + 100, 10);
+            scratch.setLocation((ActorFactory.getTypeValueWidth(8) +
+            ActorFactory.getMaxTypeWidth() + 50) + 45, 10);
         }
         theatre.addPassive(scratch);
     }

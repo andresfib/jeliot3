@@ -16,6 +16,8 @@ public class ReferenceActor extends ValueActor {
 
     private static int refLen = 18;
 
+    private boolean instVarConnect = false;
+
     private Point[] bend;
 
     public ReferenceActor() { }
@@ -24,10 +26,22 @@ public class ReferenceActor extends ValueActor {
         this.instance = inst;
     }
 
+    public ReferenceActor(InstanceActor inst, boolean instVarConnect) {
+        this.instance = inst;
+        this.instVarConnect = instVarConnect;
+    }
+
     public ReferenceActor(InstanceActor inst, VariableActor var) {
         this.instance = inst;
         this.variable = var;
     }
+
+    public ReferenceActor(InstanceActor inst, VariableActor var, boolean instVarConnect) {
+        this.instance = inst;
+        this.variable = var;
+        this.instVarConnect = instVarConnect;
+    }
+
 
     public InstanceActor getInstanceActor() {
         return this.instance;
@@ -88,6 +102,8 @@ public class ReferenceActor extends ValueActor {
                     g.drawLine(p1.x-1, p1.y+1, p2.x-1, p2.y);
                     g.drawLine(p1.x+1, p1.y, p2.x+1, p2.y);
                 }
+                //Here should be drawn something that shows that
+                //the reference is pointing to this exact instance.
             }
 
             g.translate(vp.x, vp.y);
@@ -164,11 +180,21 @@ public class ReferenceActor extends ValueActor {
         int ix = ip.x;
         int vx = vp.x + refWidth;
 
-        bend = new Point[4];
-        bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
-        bend[1] = new Point(vx + 45 /*- (vy1/6)*/, bend[0].y);
-        bend[2] = new Point(bend[1].x, iy1 + 12);
-        bend[3] = new Point(ix, bend[2].y);
+        if (!instVarConnect) {
+            bend = new Point[4];
+            bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+            bend[1] = new Point(vx + 45 /*- (vy1/6)*/, bend[0].y);
+            bend[2] = new Point(bend[1].x, iy1 + 12);
+            bend[3] = new Point(ix, bend[2].y);
+        } else {
+            //Change this!
+            //It should contain 7 points with 5 bends
+            bend = new Point[4];
+            bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+            bend[1] = new Point(vx + 45 /*- (vy1/6)*/, bend[0].y);
+            bend[2] = new Point(bend[1].x, iy1 + 12);
+            bend[3] = new Point(ix, bend[2].y);
+        }
     }
 
     public void calculateSize() {

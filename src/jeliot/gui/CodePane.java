@@ -24,13 +24,18 @@ import jeliot.gui.*;
 public class CodePane extends JComponent {
 
 
+    private LineNumbers nb;
+    private Font font = new Font("Courier", Font.PLAIN, 12);
+    private Insets insets = new Insets(5, 5, 5, 5);
+    private JScrollPane jsp;
+
     /**
      * The text area where the program code is shown and highlighted.
      */
     JTextArea area = new JTextArea();
     {
-        area.setMargin(new Insets(10, 10, 10, 10));
-        area.setFont(new Font("Courier", Font.PLAIN, 12));
+        area.setMargin(insets);
+        area.setFont(font);
         area.setTabSize(4);
         area.setBackground(new Color(0xFFF8F0));
         area.setSelectionColor(new Color(0x990000));
@@ -47,7 +52,16 @@ public class CodePane extends JComponent {
      */
     public CodePane() {
         setLayout(new BorderLayout());
-        add("Center", new JScrollPane(area));
+        add("Center", makeScrollPane());
+        validateScrollPane();
+    }
+
+    public JComponent makeScrollPane() {
+        jsp = new JScrollPane(area);
+        nb = new LineNumbers(font, insets);
+        jsp.setRowHeaderView(nb);
+        nb.setPreferredHeight(area.getSize().height);
+        return jsp;
     }
 
     /**
@@ -57,6 +71,22 @@ public class CodePane extends JComponent {
      */
     public void installProgram(String text) {
         area.setText(text);
+        validateScrollPane();
+    }
+
+    //here is a problem!!!
+    public void validateScrollPane() {
+        if (nb != null) {
+            Runnable updateAComponent = new Runnable() {
+                public void run() {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ie) { }
+                    nb.setPreferredHeight(area.getSize().height);
+                }
+            };
+            SwingUtilities.invokeLater(updateAComponent);
+        }
     }
 
     /**

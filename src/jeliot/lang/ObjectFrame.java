@@ -56,5 +56,6 @@ public class ObjectFrame extends Instance {
 
     public void setObjectStage(ObjectStage stage) {
         this.stage = stage;
+        setActor(stage);
     }
 }

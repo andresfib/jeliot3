@@ -132,7 +132,7 @@ public class TreeInterpreter implements Interpreter {
      * @param fname the name of the parsed stream
      * @return the result of the evaluation of the last statement
      */
-    public Object interpret(Reader r, String fname) throws InterpreterException {
+    public Object interpret(Reader r, String fname) /* throws InterpreterException */ {
         try {
             SourceCodeParser p = parserFactory.createParser(r, fname);
             List    statements = p.parseStream();
@@ -765,7 +765,7 @@ public class TreeInterpreter implements Interpreter {
         context.set(current.getName(), params[i++]);
         argnames.add(current.getName());
     }
-    
+
     ECodeUtilities.write(Code.PARAMETERS+Code.DELIM+ECodeUtilities.argToString(argnames));
     ECodeUtilities.write(Code.MD+Code.DELIM+locationToString(meth));
     // Hack for providing e-code for "outside" classes

@@ -49,8 +49,8 @@ public class ActorFactory {
             new Color(0x99CC99),    // char
             new Color(0xFFCCFF),    // float
             new Color(0xFFCCCC),    // double
-            new Color(0xFFCC99),    // String needed
-            new Color(0xFFCC99)     // Reference needed?
+            new Color(0xFFCC99),    // String
+            new Color(0xFFCC99)     // Reference
         };
 
     private Color[] varColor = {
@@ -62,7 +62,7 @@ public class ActorFactory {
             new Color(0x66CC66),    // char
             new Color(0xFF99CC),    // float
             new Color(0xFF9999),    // double
-            new Color(0xFF6666),    // String needed
+            new Color(0xFF6666),    // String
             new Color(0xFFFFAA)     // Reference
         };
 
@@ -103,6 +103,8 @@ public class ActorFactory {
 
     private static int[] typeValWidth;
 
+    private static int[] typeWidth;
+
     private Color opColor = new Color(0xE0E0E0);
 
     public ActorFactory(ImageLoader iLoad) {
@@ -116,7 +118,7 @@ public class ActorFactory {
     }
 
     public void setValueFont(Font font) {
-        FontMetrics fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
+        FontMetrics fm = dummy.getFontMetrics(font);
 
         valueHeight = fm.getHeight() + margin;
         int m = 4;
@@ -135,6 +137,20 @@ public class ActorFactory {
 
     public void setVariableFont(Font font) {
         this.variableFont = font;
+
+        FontMetrics fm = dummy.getFontMetrics(font);
+
+        typeWidth = new int[] {
+            fm.stringWidth("boolean"),
+            fm.stringWidth("byte"),
+            fm.stringWidth("short"),
+            fm.stringWidth("int"),
+            fm.stringWidth("long"),
+            fm.stringWidth("char"),
+            fm.stringWidth("float"),
+            fm.stringWidth("double"),
+            fm.stringWidth("String")
+        };
     }
 
     public void setStageFont(Font font) {
@@ -148,14 +164,29 @@ public class ActorFactory {
         return 0;
     }
 
+    public static int getTypeWidth(int n) {
+        if (n >= 0 && n < typeWidth.length) {
+            return typeWidth[n];
+        }
+        return 0;
+    }
+
+    public static int getMaxTypeWidth() {
+        int max = 0;
+        int n = typeWidth.length;
+        for (int i = 0; i < n; i++) {
+            if (typeWidth[i] > max) {
+                max = typeWidth[i];
+            }
+        }
+        return max;
+    }
+
+
     Stage produceStage(MethodFrame m) {
-        //the getVarCount method is changed to a constant for a while
-        //because it is not set properly in our situation.
-        //Actually it is not easy to know how many variables there are.
-        //This is handled in the Stage class.
         Stage stage = new Stage(m.getMethodName());
         stage.setFont(stageFont);
-        stage.calculateSize(typeValWidth[8] + 60,
+        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] + 30,
                             valueHeight + 8 +
                             variableInsets.top +
                             variableInsets.bottom);
@@ -420,6 +451,16 @@ public class ActorFactory {
         return actor;
     }
 
+    public OMIActor produceOMIActor(String name, int paramCount) {
+        OMIActor actor = new OMIActor(name, paramCount);
+        actor.setFont(messageFont);
+        actor.setBackground(new Color(0xFFEAEA));
+        actor.setInsets(new Insets(6, 6, 6, 6));
+        actor.calculateSize();
+        actor.setShadowImage(shadowImage);
+        return actor;
+    }
+
     //Added for Jeliot 3
     public ACActor produceACActor(String name, int paramCount) {
         ACActor actor = new ACActor(name, paramCount);
@@ -563,5 +604,17 @@ public class ActorFactory {
         aactor.setShadow(6);
         return aactor;
     }
-}
 
+    ObjectStage produceObjectStage(ObjectFrame m) {
+        ObjectStage stage = new ObjectStage("Object of the class" + m.getObjectName(), m.getVarCount());
+        stage.setFont(stageFont);
+        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] + 30,
+                            valueHeight + 8 +
+                            variableInsets.top +
+                            variableInsets.bottom);
+        stage.setBackground(new Color(0xFFFFAA));
+        stage.setShadow(6);
+        stage.setShadowImage(shadowImage);
+        return stage;
+    }
+}

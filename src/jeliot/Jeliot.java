@@ -1,13 +1,17 @@
-/* 
+/* Jeliot 3.02 */
+
+/*
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your option)
- * any later version. This program is distributed in the hope that it will be
- * useful but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details. You should have received a copy of the GNU General Public License 
- * along with this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. 
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version. This program is distributed in
+ * the hope that it will be useful but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston,
+ * MA 02111-1307, USA.
  */
 
 /**
@@ -74,7 +78,7 @@ public class Jeliot implements Runnable {
 
 
     /**
-    * The only constructor of the Jeliot 2000.
+    * The only constructor of the Jeliot 3.
     * Loads Theatre theatre -object's background.
     * Initializes JeliotWindow gui -object with parameters this, CodePane codepane, Theatre theatre,
     * AnimationEngine engine, ImageLoader iLoad */
@@ -294,7 +298,7 @@ public class Jeliot implements Runnable {
 
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
-        
+
         File f = new File(udir);
         f = new File(f, "examples");
         prop.put("user.dir", f.toString());

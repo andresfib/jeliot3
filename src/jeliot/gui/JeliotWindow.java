@@ -8,14 +8,14 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import jeliot.theatre.*;
-import jeliot.parser.*;
+//import jeliot.parser.*;
 import jeliot.*;
 import jeliot.ecode.*;
 
 import koala.dynamicjava.interpreter.*;
 
 /**
- * This is the main window of the Jeliot 2000.
+ * This is the main window of the Jeliot 3.
  *
  * @author Pekka Uronen
  */
@@ -249,7 +249,7 @@ public class JeliotWindow {
      */
     public void setUp() {
 
-        frame = new JFrame("Jeliot 3.01");
+        frame = new JFrame("Jeliot 3.02");
         frame.setIconImage(iLoad.getLogicalImage("Jeliot-icon"));
 
         frame.setJMenuBar(makeMenuBar());

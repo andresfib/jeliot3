@@ -9,7 +9,7 @@ import java.util.*;
   * created         26.6.2003
   *
   */
-public class ObjectStage extends Actor implements ActorContainer {
+public class ObjectStage extends InstanceActor {
 
 
     /** Variable actors in this stage. */

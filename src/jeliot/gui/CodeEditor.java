@@ -13,7 +13,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
 
-import jeliot.parser.*;
+//import jeliot.parser.*;
 import jeliot.theatre.*;
 import jeliot.gui.*;
 
@@ -38,6 +38,10 @@ public class CodeEditor extends JComponent {
         "    }\n" +
         "}";
 
+    private Font areaFont = new Font("Courier", Font.PLAIN, 12);
+    private Insets insets = new Insets(5, 5, 5, 5);
+    private LineNumbers nb;
+
     private boolean changed = false; //Jeliot 3
 
     private File currentFile = null; //Jeliot 3
@@ -58,14 +62,17 @@ public class CodeEditor extends JComponent {
 
         public void changedUpdate(DocumentEvent e) {
             changed = true;
+            validateScrollPane();
         }
 
         public void insertUpdate(DocumentEvent e) {
             changed = true;
+            validateScrollPane();
         }
 
         public void removeUpdate(DocumentEvent e) {
             changed = true;
+            validateScrollPane();
         }
 
     };
@@ -75,8 +82,8 @@ public class CodeEditor extends JComponent {
      */
     JTextArea area = new JTextArea();
     {
-        area.setMargin(new Insets(10, 10, 10, 10));
-        area.setFont(new Font("Courier", Font.PLAIN, 12));
+        area.setMargin(insets);
+        area.setFont(areaFont);
         area.setTabSize(4);
         area.getDocument().addDocumentListener(dcl);  //Jeliot 3
         clearProgram();
@@ -178,8 +185,18 @@ public class CodeEditor extends JComponent {
     public CodeEditor() {
         initFileChooser();
         setLayout(new BorderLayout());
-        add("Center", new JScrollPane(area));
+        add("Center", makeScrollPane());
         add("North", makeToolBar());
+        validateScrollPane();
+    }
+
+
+    public JComponent makeScrollPane() {
+        JScrollPane jsp = new JScrollPane(area);
+        nb = new LineNumbers(areaFont, insets);
+        nb.setPreferredHeight(area.getSize().height);
+        jsp.setRowHeaderView(nb);
+        return jsp;
     }
 
     /**
@@ -416,10 +433,9 @@ public class CodeEditor extends JComponent {
      * Sets in JTextAre area the default text as given in template.
      */
     void clearProgram() {
-        area.setText(template);
+        setProgram(template);
 
         currentFile = null; //Jeliot 3
-        changed = false; //Jeliot 3
     }
 
 
@@ -430,8 +446,26 @@ public class CodeEditor extends JComponent {
      */
     void setProgram(String program) {
         area.setText(program);
+        changed = false; //Jeliot 3
+        validateScrollPane();
     }
 
+
+    public void validateScrollPane() {
+        if (nb != null) {
+            Runnable updateAComponent = new Runnable() {
+                public void run() {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ie) { }
+                    nb.setPreferredHeight(area.getSize().height);
+                    revalidate();
+                    repaint();
+                }
+            };
+            SwingUtilities.invokeLater(updateAComponent);
+        }
+    }
 
     /**
      * Method returns the program code inside the JTextArea as String -object

@@ -41,28 +41,40 @@ import koala.dynamicjava.tree.*;
 public class CatchedExceptionError extends ExecutionError {
 
     /**
-     * Constructs an <code>CatchedExceptionError</code> with no detail message. 
+     * Constructs an <code>CatchedExceptionError</code> with no detail message.
      */
     public CatchedExceptionError(Exception e) {
         super("catched.exception");
-	thrown = e;
+        thrown = e;
     }
 
     /**
-     * Constructs an <code>CatchedExceptionError</code> with the specified 
+     * Constructs an <code>CatchedExceptionError</code> with the specified
      * detail message, filename, line, column and exception.
      * @param e  the catched exception
      * @param n  the node in the syntax tree where the error occurs
      */
     public CatchedExceptionError(Exception e, Node n) {
         super("catched.exception", n);
-	thrown = e;
+        thrown = e;
     }
-    
+
+    /**
+     * Constructs an <code>CatchedExceptionError</code> with the specified
+     * detail message, filename, line, column and exception.
+     * @param messageString the message string that describes the exception
+     * @param e  the catched exception
+     * @param n  the node in the syntax tree where the error occurs
+     */
+    public CatchedExceptionError(String messageString, Exception e, Node n) {
+        super(messageString, n);
+        thrown = e;
+    }
+
     /**
      * Returns the exception that causes this error throwing
      */
     public Throwable getException() {
-	return thrown;
+    return thrown;
     }
 }
