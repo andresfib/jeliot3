@@ -105,7 +105,7 @@ public class LinesAndText extends Actor {
         int w = d.width;
         int h = d.height;
         int methodX = TheaterManager.getScratchPositionX();
-        int constantY = TheaterManager.getConstantPositionY();
+        int constantY = TheaterManager.getConstantBoxPositionY();
         int instanceY = TheaterManager.getMinInstanceY();
         int instanceX = TheaterManager.getMinInstanceX();
 

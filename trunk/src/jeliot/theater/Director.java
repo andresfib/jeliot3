@@ -1029,7 +1029,15 @@ public class Director {
         CastActor castActor = new CastActor(fromActor, toActor);
         toValue.setActor(toActor);
 
+        // If the casted variable is constant then the value actor has not
+        // appeared yet and this needs to be done before casting.
+        Animation a = null;
         Point loc = fromActor.getRootLocation();
+        if (loc.y == TheaterManager.getConstantBoxPositionY() &&
+            loc.x == TheaterManager.constantBoxPositionX) {
+            
+            a = fromActor.appear(loc);
+        }
         toActor.setLocation(loc);
         castActor.setLocation(loc);
 
@@ -1038,7 +1046,16 @@ public class Director {
             parent.removeActor(fromActor);
         }
         theatre.addActor(castActor);
-        engine.showAnimation(castActor.cast());
+        if (a != null) {
+            capture();
+            engine.showAnimation(a);
+            updateCapture();
+            engine.showAnimation(castActor.cast());
+            release();
+            theatre.removeActor(fromActor);
+        } else {
+            engine.showAnimation(castActor.cast());            
+        }
         theatre.removeActor(castActor);
         theatre.addPassive(toActor);
         currentScratch.registerCrap(toActor);

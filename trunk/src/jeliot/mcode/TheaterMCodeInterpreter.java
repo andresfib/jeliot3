@@ -1385,7 +1385,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         Value parameterValue = (Value) values.remove(new Long(
                 expressionReference));
-
+        Value castedParameterValue = null;
+        if (MCodeUtilities.isPrimitive(parameterValue.getType())) {
+            if (!parameterValue.getType().equals(argType)) {
+                castedParameterValue = new Value(value, argType);
+                director.animateCastExpression(parameterValue, castedParameterValue);
+            }
+        }
+        
         //if (parameterValue == null) {
         //  System.out.println("Mistake");
         //}
@@ -1394,7 +1401,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         while (parameterValues[i] != null) {
             i++;
         }
-        parameterValues[i] = parameterValue;
+        if (castedParameterValue != null) {
+            parameterValues[i] = castedParameterValue; 
+        } else {
+            parameterValues[i] = parameterValue;
+        }
         parameterTypes[i] = argType;
         parameterExpressionReferences[i] = new Long(expressionReference);
 
