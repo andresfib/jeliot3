@@ -1245,6 +1245,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             //Object method call or constructor
             if (currentMethodInvocation.length == 9) {
 
+                if (start) {
+                    start = false;
+                    currentMethodInvocation[5] = null;
+                }
+                
                 Value[] args = null;
 
                 if (currentMethodInvocation[1] != null

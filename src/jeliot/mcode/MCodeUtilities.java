@@ -270,39 +270,42 @@ public class MCodeUtilities {
      * Stack with the Class of previous calls (constructors, this' and supers)
      */
     public static Stack previousClassStack = new Stack();
-    
+
     /**
      * Stack with the parameters of previous calls (constructors, this' and supers)
      */
     public static Stack previousParametersStack = new Stack();
+
     /**
      * Stack to keep the name of the original constructor calls
      * Pushed and popped at SimpleAllocation in EvaluationVisitor
      */
     public static Stack constructorNameStack = new Stack();
-    
+
     /**
      * Stack to keep the parameters of the original constructor calls
      * Pushed and popped at SimpleAllocation in EvaluationVisitor
      */
     public static Stack constructorParametersStack = new Stack();
-    
-    public static String getConstructorName() {
-		return (String) constructorNameStack.peek();
-	}
 
-	public static Class[] getConstructorParamTypes() {
-		return (Class[]) constructorParametersStack.peek();
-	}
-	/**
-	 * Pops the info of the constructor. Called when they are not needed
-	 * anymore
-	 *
-	 */
-	public static void popConstructorInfo() {
-		constructorParametersStack.pop();
-		constructorNameStack.pop();		
-	}
+    public static String getConstructorName() {
+        return (String) constructorNameStack.peek();
+    }
+
+    public static Class[] getConstructorParamTypes() {
+        return (Class[]) constructorParametersStack.peek();
+    }
+
+    /**
+     * Pops the info of the constructor. Called when they are not needed
+     * anymore
+     *
+     */
+    public static void popConstructorInfo() {
+        constructorParametersStack.pop();
+        constructorNameStack.pop();
+    }
+
     /**
      * 
      */
@@ -414,7 +417,9 @@ public class MCodeUtilities {
      * @return
      */
     public static boolean isArray(String type) {
-        if (type.indexOf("[") == -1) { return false; }
+        if (type.indexOf("[") == -1) {
+            return false;
+        }
         return true;
     }
 
@@ -471,7 +476,8 @@ public class MCodeUtilities {
             return float.class.getName();
         } else if (type.equals(double.class.getName()) || type.equals("D")) {
             return double.class.getName();
-        } else if (type.equals("".getClass().getName()) || type.equals("L" + "".getClass().getName())) {
+        } else if (type.equals("".getClass().getName())
+                || type.equals("L" + "".getClass().getName())) {
             return "".getClass().getName();
         } else if (type.equals(Void.TYPE.getName()) || type.equals("V")) {
             return Void.TYPE.getName();
@@ -527,130 +533,109 @@ public class MCodeUtilities {
     public static int resolveBinOperator(int operator) {
         switch (operator) {
             //Add expression (+ sign)
-            case Code.AE:
-                {
-                    return ADD;
-                }
+            case Code.AE: {
+                return ADD;
+            }
 
             //Substract expression (- sign)
-            case Code.SE:
-                {
-                    return SUBSTRACT;
-                }
+            case Code.SE: {
+                return SUBSTRACT;
+            }
 
             //Greater than expression (> sign)
-            case Code.GT:
-                {
-                    return GT;
-                }
+            case Code.GT: {
+                return GT;
+            }
 
             //Logical AND expression (&& sign)
-            case Code.AND:
-                {
-                    return ANDAND;
-                }
+            case Code.AND: {
+                return ANDAND;
+            }
 
             // Logical Xor Expression (^ sign)
-            case Code.XOR:
-                {
-                    return LXOR;
-                }
+            case Code.XOR: {
+                return LXOR;
+            }
 
             //Arithmetic multiplication (* sign)
-            case Code.ME:
-                {
-                    return MULT;
-                }
+            case Code.ME: {
+                return MULT;
+            }
 
             //Arithmetic division (/ sign)
-            case Code.DE:
-                {
-                    return DIV;
-                }
+            case Code.DE: {
+                return DIV;
+            }
 
             //Arithmetic remainder (% sign)
-            case Code.RE:
-                {
-                    return MOD;
-                }
+            case Code.RE: {
+                return MOD;
+            }
 
             // Or Expression (|| sign)
-            case Code.OR:
-                {
-                    return OROR;
-                }
+            case Code.OR: {
+                return OROR;
+            }
 
             // Equal Expression (== sign)
-            case Code.EE:
-                {
-                    return EQEQ;
-                }
+            case Code.EE: {
+                return EQEQ;
+            }
 
             // Not Equal Expression (!= sign)
-            case Code.NE:
-                {
-                    return NOTEQ;
-                }
+            case Code.NE: {
+                return NOTEQ;
+            }
 
             // Less Expression (< sign)
-            case Code.LE:
-                {
-                    return LT;
-                }
+            case Code.LE: {
+                return LT;
+            }
 
             // Less or Equal Expression (<= sign)
-            case Code.LQE:
-                {
-                    return LTEQ;
-                }
+            case Code.LQE: {
+                return LTEQ;
+            }
 
             // Greater or Equal Expression (>= sign)
-            case Code.GQT:
-                {
-                    return GTEQ;
-                }
+            case Code.GQT: {
+                return GTEQ;
+            }
 
             // Bitwise Or Expression (| sign)
-            case Code.BITOR:
-                {
-                    return OR;
-                }
+            case Code.BITOR: {
+                return OR;
+            }
 
             // Bitwise Xor Expression (^ sign)
-            case Code.BITXOR:
-                {
-                    return XOR;
-                }
+            case Code.BITXOR: {
+                return XOR;
+            }
 
             // Bitwise And Expression (& sign)
-            case Code.BITAND:
-                {
-                    return AND;
-                }
+            case Code.BITAND: {
+                return AND;
+            }
 
             // Bitwise Left Shift Expression (<< sign)
-            case Code.LSHIFT:
-                {
-                    return LSHIFT;
-                }
+            case Code.LSHIFT: {
+                return LSHIFT;
+            }
 
             // Bitwise Right Shift Expression (>> sign)
-            case Code.RSHIFT:
-                {
-                    return RSHIFT;
-                }
+            case Code.RSHIFT: {
+                return RSHIFT;
+            }
 
             // Bitwise Unsigned Right Shift Expression (>>> sign)
-            case Code.URSHIFT:
-                {
-                    return URSHIFT;
-                }
+            case Code.URSHIFT: {
+                return URSHIFT;
+            }
 
             //This is an error.
-            default:
-                {
-                    return -1;
-                }
+            default: {
+                return -1;
+            }
         }
     }
 
@@ -662,58 +647,49 @@ public class MCodeUtilities {
         switch (operator) {
 
             //Logical NOT expression (! sign)
-            case Code.NO:
-                {
-                    return NOT;
-                }
+            case Code.NO: {
+                return NOT;
+            }
 
             //Aritmetic minus expression (- sign)
-            case Code.MINUS:
-                {
-                    return MINUS;
-                }
+            case Code.MINUS: {
+                return MINUS;
+            }
 
             //Aritmetic plus expression (+ sign)
-            case Code.PLUS:
-                {
-                    return PLUS;
-                }
+            case Code.PLUS: {
+                return PLUS;
+            }
 
             //PostIncrement expression (++ sign)
-            case Code.PIE:
-                {
-                    return POSTPLUSPLUS;
-                }
+            case Code.PIE: {
+                return POSTPLUSPLUS;
+            }
 
             //PreIncrement expression (sign ++)
-            case Code.PRIE:
-                {
-                    return PLUSPLUS;
-                }
+            case Code.PRIE: {
+                return PLUSPLUS;
+            }
 
             //PostDecrement expression (-- sign)
-            case Code.PDE:
-                {
-                    return POSTMINUSMINUS;
-                }
+            case Code.PDE: {
+                return POSTMINUSMINUS;
+            }
 
             //PreDecrement expression (sign --)
-            case Code.PRDE:
-                {
-                    return MINUSMINUS;
-                }
+            case Code.PRDE: {
+                return MINUSMINUS;
+            }
 
             //Complement expression (~ sign)
-            case Code.COMP:
-                {
-                    return COMP;
-                }
+            case Code.COMP: {
+                return COMP;
+            }
 
             //This is an error.
-            default:
-                {
-                    return -1;
-                }
+            default: {
+                return -1;
+            }
         }
     }
 
@@ -737,15 +713,13 @@ public class MCodeUtilities {
             //PreIncrement expression (sign ++)
             case Code.PDE:
             //PostDecrement expression (-- sign)
-            case Code.PRDE:
-                { //PreDecrement expression (sign --)
-                    return true;
-                }
+            case Code.PRDE: { //PreDecrement expression (sign --)
+                return true;
+            }
 
-            default:
-                {
-                    return false;
-                }
+            default: {
+                return false;
+            }
         }
     }
 
@@ -800,15 +774,13 @@ public class MCodeUtilities {
             // Division Expression
             case Code.SE:
             // Substract Expression
-            case Code.AE:
-                { // Add Expression
-                    return true;
-                }
+            case Code.AE: { // Add Expression
+                return true;
+            }
 
-            default:
-                {
-                    return false;
-                }
+            default: {
+                return false;
+            }
         }
     }
 
@@ -913,11 +885,11 @@ public class MCodeUtilities {
     }
 
     private static Thread accessingThread = null;
-    
+
     public static void setAccessingThread(Thread thread) {
         accessingThread = thread;
     }
-    
+
     /**
      * @param str
      */
@@ -926,7 +898,7 @@ public class MCodeUtilities {
             throw new StoppingRequestedError();
         }
         StringTokenizer tokenizer = new StringTokenizer(str, Code.DELIM);
-              
+
         int token = Integer.parseInt(tokenizer.nextToken());
         if (!EvaluationVisitor.isSetPreparing() || token == Code.ERROR) {
             str = MCodeUtilities.replace(str, "\n", "\\n");
@@ -937,36 +909,36 @@ public class MCodeUtilities {
                 }
                 writer.println(str);
                 System.out.println("      " + str);
-                
+
             } else {
                 addToRedirectBuffer(str);
                 System.out.println("Redirected" + str);
             }
-            
+
             //This prints all the commands that were generated to a file
-            
+
             /*
-            str += "\n";
-            
-            //we get the user directory path
-            Properties prop = System.getProperties();
-            String udir = prop.getProperty("user.dir");
-            
-            String filePath = udir + "\\" + getFilename() + ".txt";
-            
-            //we write the string into the file
-            try {
-            	
-            	File outputFile = new File(filePath);
-            	//we delete the file if it already exists
-    			if (outputFile.exists()) outputFile.delete();        	
-            	FileOutputStream out = new FileOutputStream(new File(filePath), true);       
-            	out.write(str.getBytes());
-            }
-            catch(Exception e){
-            	e.printStackTrace(System.out);    
-            }
-            */
+             str += "\n";
+             
+             //we get the user directory path
+             Properties prop = System.getProperties();
+             String udir = prop.getProperty("user.dir");
+             
+             String filePath = udir + "\\" + getFilename() + ".txt";
+             
+             //we write the string into the file
+             try {
+             
+             File outputFile = new File(filePath);
+             //we delete the file if it already exists
+             if (outputFile.exists()) outputFile.delete();        	
+             FileOutputStream out = new FileOutputStream(new File(filePath), true);       
+             out.write(str.getBytes());
+             }
+             catch(Exception e){
+             e.printStackTrace(System.out);    
+             }
+             */
         }
     }
 
@@ -1145,13 +1117,13 @@ public class MCodeUtilities {
             ((PrintWriter) i.next()).println(str);
         }
     }
-    
+
     public static void addRegisteredSecondaryMCodeConnections(PrintWriter pw) {
         if (!registeredSecondaryMCodeConnections.contains(pw)) {
             registeredSecondaryMCodeConnections.add(pw);
         }
     }
-    
+
     public static void clearRegisteredSecondaryMCodeConnections() {
         Iterator i = registeredSecondaryMCodeConnections.iterator();
         while (i.hasNext()) {
@@ -1159,46 +1131,37 @@ public class MCodeUtilities {
         }
         registeredSecondaryMCodeConnections.clear();
     }
-    
+
     /**
      * 
      * @param o
      * @return
      */
-    public static String getValue(Object o){   
-        if (o == null) { 
-            return "null"; 
-        } 
-        if (o.getClass().isPrimitive()
-            || String.class.isInstance ( o )
-            || Integer.class.isInstance( o )
-        	|| Double.class.isInstance( o )
-			|| Byte.class.isInstance( o )
-			|| Long.class.isInstance( o )
-			|| Short.class.isInstance ( o )
-			|| Boolean.class.isInstance(o)
-            || Float.class.isInstance(o) 
-            || Character.class.isInstance(o)) {
-                
-            return o.toString();   
+    public static String getValue(Object o) {
+        if (o == null) {
+            return "null";
         }
-        
-        return Integer.toHexString(o.hashCode());            
+        if (o.getClass().isPrimitive() || String.class.isInstance(o) || Integer.class.isInstance(o)
+                || Double.class.isInstance(o) || Byte.class.isInstance(o)
+                || Long.class.isInstance(o) || Short.class.isInstance(o)
+                || Boolean.class.isInstance(o) || Float.class.isInstance(o)
+                || Character.class.isInstance(o)) {
+
+            return o.toString();
+        }
+
+        return Integer.toHexString(o.hashCode());
     }
+
     /**
      * Converts the node location into a string list. Each element is delimited
      * by Code.LOC_DELIM
      * @param node the node to visit
      */
-	public static String locationToString(Node node) {
-		return node.getBeginLine()
-			+ Code.LOC_DELIM
-			+ node.getBeginColumn()
-			+ Code.LOC_DELIM
-			+ node.getEndLine()
-			+ Code.LOC_DELIM
-			+ node.getEndColumn();
-	}
+    public static String locationToString(Node node) {
+        return node.getBeginLine() + Code.LOC_DELIM + node.getBeginColumn() + Code.LOC_DELIM
+                + node.getEndLine() + Code.LOC_DELIM + node.getEndColumn();
+    }
 
     public static Object readLong() {
         long result;
@@ -1245,10 +1208,10 @@ public class MCodeUtilities {
         }
     }
 
-    public static BufferedReader getReader () {
+    public static BufferedReader getReader() {
         return reader;
     }
-    
+
     public static PrintWriter getWriter() {
         return writer;
     }
@@ -1262,19 +1225,19 @@ public class MCodeUtilities {
             return null;
         }
     }
-    
+
     static String filename = "untitled";
 
     //Initialized in evalution visitor
-	public static Stack superClassesStack;
+    public static Stack superClassesStack;
 
-	public static Stack previousClassParametersStack = new Stack();
-    
+    public static Stack previousClassParametersStack = new Stack();
+
     public static void setFilename(String name) {
-    	filename = name;
+        filename = name;
     }
-    
+
     public static String getFilename() {
-    	return filename;
+        return filename;
     }
 }

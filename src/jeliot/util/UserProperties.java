@@ -73,10 +73,12 @@ public class UserProperties {
                     //found in command prompt for some mysterious reason.
                     ResourceBundle rb = null;
                     try {
-                        rb = ResourceBundle.getBundle(temp, Locale.getDefault(), this.getClass().getClassLoader());
+                        rb = ResourceBundle.getBundle(temp, Locale.getDefault(), this.getClass()
+                                .getClassLoader());
                     } catch (Exception e) {
                         try {
-                            rb = ResourceBundle.getBundle(temp, Locale.getDefault(), Thread.currentThread().getContextClassLoader());
+                            rb = ResourceBundle.getBundle(temp, Locale.getDefault(), Thread
+                                    .currentThread().getContextClassLoader());
                         } catch (Exception e1) {
                             DebugUtil.handleThrowable(e1);
                         }

@@ -415,10 +415,11 @@ public class JeliotWindow implements PauseListener {
         this.callTree = td;
         this.hv = hv;
 
+        this.frame = new JFrame(jeliotVersion);
         this.panelController = new PanelController(theatre, iLoad);
         //this.editor = new CodeEditor(this.udir);
         this.editor = new CodeEditor2(this.udir, jeliot.getImportIOStatement());
-        this.frame = new JFrame(jeliotVersion);
+        editor.setMasterFrame(frame);
     }
 
     /**
@@ -457,7 +458,6 @@ public class JeliotWindow implements PauseListener {
                     .getStringProperty("image.jeliot_icon")));
 
             frame.setJMenuBar(makeMenuBar());
-            editor.setMasterFrame(frame);
 
             JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                     editor, tabbedPane);
@@ -1312,11 +1312,9 @@ public class JeliotWindow implements PauseListener {
                     //Reader s = new BufferedReader(new
                     // StringReader(methodCall));
 
-                    jeliot.setSourceCode(programCode, methodCall);
-
                     changeTheatrePane(tabbedPane);
                     tabbedPane.setSelectedIndex(0);
-
+                    jeliot.setSourceCode(programCode, methodCall);
                     panelController.slide(true, new Runnable() {
 
                         public void run() {
