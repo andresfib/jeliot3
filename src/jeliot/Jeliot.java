@@ -68,6 +68,9 @@ public class Jeliot {
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
             "jeliot.gui.resources.properties", Locale.getDefault());
+    static private ResourceBundle bundle2 = ResourceBundle.getBundle(
+            "jeliot.gui.resources.messages", Locale.getDefault());
+    
     /**
      * 
      */
@@ -326,7 +329,7 @@ public class Jeliot {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);
             MCodeUtilities.addRegisteredSecondaryMCodeConnections(new PrintWriter(pw));
-            mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(new BufferedReader(pr), callTree, gui.getProgram(), this, gui.getTabNumber(bundle.getString("tab.title.call_tree")));
+            mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(new BufferedReader(pr), callTree, gui.getProgram(), this, gui.getTabNumber(bundle2.getString("tab.title.call_tree")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -522,12 +525,15 @@ public class Jeliot {
 
         final Jeliot jeliot = new Jeliot(udir, experiment);
 
-        (new LoadJeliot()).start(new Runnable() {
+        (new LoadJeliot()).start(jeliot);
+        /*
+        new Runnable() {
             public void run() {
                 jeliot.run();
             }
         });
-        
+        */
+        		
         if (args.length >=1) {
             File file = new File(udir);
             file = new File(file, "examples");
@@ -579,7 +585,7 @@ public class Jeliot {
         });
         if (args.length >= 3) {
             File file = new File(udir);
-            file = new File(file, "examples");
+            file = new File(file, bundle.getString("directory.examples"));
             final File file1 = new File(file, args[2]);
             if (file.exists()) {
                 javax.swing.SwingUtilities.invokeLater(new Runnable() {

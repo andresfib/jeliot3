@@ -34,6 +34,9 @@ public class OutputConsole extends JTextArea {
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.gui.resources.properties",
                                       Locale.getDefault());
+    static private ResourceBundle bundle2 = ResourceBundle.getBundle(
+            "jeliot.gui.resources.messages",
+            Locale.getDefault());
 
 
     /** A scroll pane that contains the output console. */
@@ -70,7 +73,7 @@ public class OutputConsole extends JTextArea {
     /** The console's popup menu has one choice for emptying the console. */
     private JPopupMenu menu = new JPopupMenu(); {
         JMenuItem menuItem;
-        menuItem = new JMenuItem(bundle.getString("popup_menu.clear"));
+        menuItem = new JMenuItem(bundle2.getString("popup_menu.clear"));
         menu.add(menuItem);
         menuItem.addActionListener(
             new ActionListener() {
@@ -98,7 +101,7 @@ public class OutputConsole extends JTextArea {
 
         // create titled border
         TitledBorder title = BorderFactory.createTitledBorder(
-                BorderFactory.createLoweredBevelBorder(), bundle.getString("title.output"));
+                BorderFactory.createLoweredBevelBorder(), bundle2.getString("title.output"));
         title.setTitlePosition(TitledBorder.ABOVE_TOP);
         container.setBorder(title);
 

@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 import jeliot.mcode.Highlight;
 
 /**
+ * NOT CURRENTLY USED IN JELIOT 3! CAN CONTAIN OLD AND NOT WORKING CODE!
  * This is the component that shows and highlights the program while
  * Jeliot is animating, called also code view.
  *

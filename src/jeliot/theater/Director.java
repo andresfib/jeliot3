@@ -39,7 +39,7 @@ public class Director {
      * The resource bundle for theater package.
      */
     static private ResourceBundle bundle =
-            ResourceBundle.getBundle("jeliot.theater.resources.properties",
+            ResourceBundle.getBundle("jeliot.theater.resources.messages",
                     Locale.getDefault());
 
     //DOC: Document!
@@ -2691,8 +2691,8 @@ public class Director {
         ca.bind();
 
         release();
-        /*
-        if (val != null) {
+
+        if (val != null && var.isFinal()) {
             introduceLiteral(val);
             
             Value casted = (Value) val.clone();
@@ -2708,7 +2708,6 @@ public class Director {
                     var.getLocationInCode());
             var.assign(casted);
         } 
-        */
     }
     
     //Jeliot 3

@@ -33,7 +33,6 @@ public class CodePane2 extends JComponent {
 			"jeliot.gui.resources.properties",
 			Locale.getDefault());
 
-
 	/**
      * Text area that is used from the JEdit project.
      */

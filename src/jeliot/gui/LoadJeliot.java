@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JWindow;
 
+import jeliot.Jeliot;
 import jeliot.theater.ImageLoader;
 
 
@@ -26,7 +27,7 @@ public class LoadJeliot {
     * The resource bundle for gui package
     */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
-                                      "jeliot.gui.resources.properties",
+                                      "jeliot.gui.resources.messages",
                                       Locale.getDefault());
 
     /**
@@ -35,15 +36,10 @@ public class LoadJeliot {
     ImageLoader iLoad = new ImageLoader();
 
     /**
-     * Jeliot window.
-     */
-    JWindow window;
-
-    /**
      * Initializes the Jeliot's splash screen window.
      * Initializes the jeliot.Jeliot object.
      */
-    public void start(Runnable jeliot) {
+    public void start(/*Runnable*/final Jeliot jeliot) {
         // Get the splash screen image
         final Image image = iLoad.getImage(bundle.getString("image.splash_screen"));
 
@@ -53,7 +49,7 @@ public class LoadJeliot {
                g.drawImage(image, 0, 0, this);
             }
         };
-        window = new JWindow();
+        final JWindow window = new JWindow();
         window.getContentPane().add(splash);
 
         // Set the window size to conform to the image and put the
@@ -70,14 +66,15 @@ public class LoadJeliot {
         
         try {
             Thread.sleep(1000);
-            javax.swing.SwingUtilities.invokeLater(jeliot);
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    jeliot.run();
+                    window.dispose();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        
-        window.dispose();
-
+        }   
     }
-
 }
 
