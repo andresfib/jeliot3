@@ -1094,17 +1094,22 @@ public class EvaluationVisitor extends VisitorObject {
             if (o instanceof Character) {
                 o = new Integer(((Character)o).charValue());
             }
-            Code.write(""+Code.NO+Code.DELIM+compcounter+
-		       Code.DELIM+auxcounter+
-		       Code.DELIM+o.toString()+
-		       Code.DELIM+NodeProperties.getType(node).getName()+
-		       Code.DELIM+locationToString(node));
-	    
-            if (c == int.class) {
+	    if (c == int.class) {
+		Code.write(""+Code.COMP+Code.DELIM+compcounter+
+			   Code.DELIM+auxcounter+
+			   Code.DELIM+(~((Number)o).intValue())+
+			   Code.DELIM+NodeProperties.getType(node).getName()+
+			   Code.DELIM+locationToString(node));
                 return new Integer(~((Number)o).intValue());
             } else {
-                return new Long(~((Number)o).longValue());
+		Code.write(""+Code.COMP+Code.DELIM+compcounter+
+			   Code.DELIM+auxcounter+
+			   Code.DELIM+(~((Number)o).longValue())+
+			   Code.DELIM+NodeProperties.getType(node).getName()+
+			   Code.DELIM+locationToString(node));
+		return new Long(~((Number)o).longValue());
             }
+
         }
     }
 
