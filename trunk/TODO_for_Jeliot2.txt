@@ -14,11 +14,11 @@ Things to do for Jeliot:
 
 - The array variable names are incorrect in method frame names (e.g. array[0].method() -> 34j3jd<hashcode>.method and not array[0].method() or something like that.
 
-- The user shouldn't be able to highlight to code while the animation is playing
+- The user shouldn't be able to highlight the code while the animation is playing
 
 - The previous output should be removed when rewind button is pressed.
 
-- Change the size of the theater to the original size when rewinded.
+- Change the size of the theater to the original size when rewinded. When the animation is finished the space for a theater is not contracted to the original size so the scrollbars are all the time active and that can cause misconceptions or just be annoying.
 
 - Maybe new objects should always appear as the leftmost object and the other objects should be moved one step further.
                                                                                              _______
@@ -32,11 +32,11 @@ Things to do for Jeliot:
 
 - Separate different files in the intermediate code to avoid wrong code highlights when calling other than main methods.
 
-- Extend the method area if the method over runs the space where it should fit. For example more than 7 variables will
+- Extend the method area if the method over runs the space where it should fit. For example more than 7 variables will be too much.
 
-- When the animation is finished the space for a theater is not contracted to the original size so the scrollbars are all the time active and that can cause misconceptions are just be annoying.
+"Difficult" or laborous:
 
-"Difficult":
+- All the static accesses should be changed to use a singleton pattern for each instance of Jeliot even inside one VM. This would permit several instances of Jeliot to be run in BlueJ and EJE. This will require at least changes in Classes: MCodeUtilities, EvaluationVisitor, Jeliot, Tracker, TrackerClock etc.
 
 - Zooming
 
