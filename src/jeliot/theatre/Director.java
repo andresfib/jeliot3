@@ -487,7 +487,14 @@ public class Director {
         // Get the stage and remove it.
         Stage stage = ((MethodFrame)frameStack.pop()).getStage();
         manager.removeStage(stage);
-        engine.showAnimation(stage.disappear());
+        Animation stageDisappear = stage.disappear();
+        if (returnAct != null) {
+            engine.showAnimation(new Animation[] {stageDisappear,
+                        returnAct.fly(returnAct.getRootLocation())});
+        } else {
+            engine.showAnimation(stageDisappear);
+        }
+
         if (!frameStack.empty()) {
             currentMethodFrame = (MethodFrame)frameStack.peek();
         }
@@ -517,7 +524,7 @@ public class Director {
         Animation[] anim;
         if (returnAct == null) {
 
-            anim = new Animation[] { flyScratch };
+            anim = new Animation[] {flyScratch};
             engine.showAnimation(anim);
 
         } else {
