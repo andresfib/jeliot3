@@ -15,15 +15,36 @@ package jeliot.util;
  */
 public class DebugUtil {
 
+   /**
+    * 
+    */
    //TODO: Change this to false for released versions.
-   public static boolean DEBUGGING = false; 
-    
+   public static boolean DEBUGGING = true; 
+   
+   /**
+    * 
+    *
+    */
    private DebugUtil() {
    }
 
+   /**
+    * 
+    * @param str
+    */
    public static void printDebugInfo(String str) {
        if (DEBUGGING) {
            System.out.println(str);
+       }
+   }
+   
+   /**
+    * 
+    * @param e
+    */
+   public static void handleThrowable(Throwable e) {
+       if (DEBUGGING) {
+           e.printStackTrace();
        }
    }
    
