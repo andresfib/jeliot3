@@ -1,0 +1,26 @@
+JELIOT 3 TODO-LIST
+
+* Initialization of object when it inherits user made class
+* Simple build
+* Documentation
+* Reference actors needs to be fixed in instances and in short distances
+* Execute until feature
+* Instance garbage collection
+* Command line parameters
+* Array initializers
+* 2+ -dimensional arrays
+* Default error message needs to be changed
+* Static field access
+* Super field access
+* Super method calls when constructor is called.
+* getValue -method for EvaluationVisitor. It returns string 
+  representation of the value. If value is primitive type then the values 
+  String presentation otherwise the hashcode.
+* Connection wizard for different kind of connections (e.g. DJava, Woven 
+  Stories etc.) also for different visualizers like Call Tree.
+* Call Tree
+* (Scratch visualization)?
+* Not implemented feature -message (Done, but needs to be added from comments to releases)
+* Error message when super class, does not include constructor without 
+  parameters or default constructor (Done)
+* Object's fields initial values (Partially done, but should be changed)
