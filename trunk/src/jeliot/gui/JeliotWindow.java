@@ -212,7 +212,7 @@ public class JeliotWindow {
      * Things for debugging.
      */
     public void setUp() {
-        frame = new JFrame("Jeliot");
+        frame = new JFrame("Jeliot 3 - Beta Version");
         frame.setIconImage(iLoad.getLogicalImage("Jeliot-icon"));
 
         frame.setJMenuBar(makeMenuBar());
@@ -561,47 +561,45 @@ public class JeliotWindow {
      * Sends it to "compilation".
      */
     void tryToEnterAnimate() {
-        try{
         try {
-			String programCode = editor.getProgram();
-            Reader r = new BufferedReader(
-                    new StringReader(programCode));
-			jeliot.createLauncher(r);
-			//Change this!!!
-			String methodCall = "Testing.main();";
-            //Reader s = new BufferedReader(
-             //       new StringReader(methodCall));
-			
-            changeTheatrePane(theatre);
+            try {
+                String programCode = editor.getProgram();
+                Reader r = new BufferedReader(new StringReader(programCode));
+                //jeliot.createLauncher(r);
 
-            jeliot.compile(r, methodCall);
+                //Change this!!!
+                String methodCall = "Testing.main();";
+                //Reader s = new BufferedReader(new StringReader(methodCall));
 
-            panelController.slide(true,
-                new Runnable() {
-                    public void run() {
-                        SwingUtilities.invokeLater(
-                            new Runnable() {
-                                public void run() {
-                                    enterAnimate();
+                jeliot.compile(r, methodCall);
+                changeTheatrePane(theatre);
+
+                panelController.slide(true,
+                    new Runnable() {
+                        public void run() {
+                            SwingUtilities.invokeLater(
+                                new Runnable() {
+                                    public void run() {
+                                        enterAnimate();
+                                    }
                                 }
-                            }
-                        );
+                            );
+                        }
                     }
-                }
-            ).start();
-        }
-        catch (SemanticException e) {
-            showErrorMessage(e);
-            return;
-        }
-        catch (FeatureNotImplementedException e) {
-            showErrorMessage(e);
-            return;
-        }
-        catch (SyntaxErrorException e) {
-            showErrorMessage(e);
-            return;
-        }
+                ).start();
+            }
+            catch (SemanticException e) {
+                showErrorMessage(e);
+                return;
+            }
+            catch (FeatureNotImplementedException e) {
+                showErrorMessage(e);
+                return;
+            }
+            catch (SyntaxErrorException e) {
+                showErrorMessage(e);
+                return;
+            }
         }
         catch (Exception e) {
             editButton.doClick();
@@ -714,7 +712,7 @@ public class JeliotWindow {
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(false);
         editButton.setEnabled(true);
-		
+
     }
 
     /**

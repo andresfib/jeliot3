@@ -53,10 +53,9 @@ public class CodePane extends JComponent {
     /**
      * Sets the given program code String text into the JTextArea area.
      *
-     * @param program unused!?!
      * @param text The program code to be set in the JTextArea area.
      */
-    public void installProgram(Object formerCompilationUnit, String text) {
+    public void installProgram(String text) {
         area.setText(text);
     }
 
@@ -67,7 +66,9 @@ public class CodePane extends JComponent {
      * @param right The end of the selection.
      */
     public void highlightStatement(Highlight h) {
+
         int l = 0, r = 0;
+
         try {
             if (h.getBeginLine() > 0) {
                 l = area.getLineStartOffset(h.getBeginLine() - 1);
@@ -85,7 +86,7 @@ public class CodePane extends JComponent {
 
         Runnable updateAComponent = new Runnable() {
             public void run() {
-				area.requestFocus();
+                area.requestFocus();
                 // +1 is a kludge! Should be fixed in the P-classes.
                 area.select(left, right);
             }
