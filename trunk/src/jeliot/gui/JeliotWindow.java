@@ -1691,7 +1691,11 @@ public class JeliotWindow {
      * @param program The program in String
      */
     public void setProgram(String program) {
+        if (editButton.isEnabled()) {
+            editButton.doClick();
+        }
         editor.setProgram(program);
+        codePane.installProgram(program);
     }
 
     /**
