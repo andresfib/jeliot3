@@ -102,6 +102,18 @@ public class Interpreter {
 
                     int token = Integer.parseInt(tokenizer.nextToken());
 
+
+		    if (exprs.empty() &&
+			!invokingMethod &&
+			token != Code.WHI &&
+			token != Code.FOR &&
+			token != Code.DO &&
+			token != Code.IFT &&
+			token != Code.IFTE) {
+			director.closeScratch();
+			director.openScratch();
+		    }
+
                     switch (token) {
 
                         //Gives a reference to the left hand side of the expression
@@ -1239,11 +1251,6 @@ public class Interpreter {
 
             } else {
                 running = false;
-            }
-
-            if (exprs.empty() && !invokingMethod) {
-                director.closeScratch();
-                director.openScratch();
             }
 
         }

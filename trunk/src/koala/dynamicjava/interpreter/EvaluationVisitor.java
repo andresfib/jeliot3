@@ -1235,7 +1235,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.add(
             NodeProperties.getType(node),
             lhs,
-            node.getRightExpression().acceptVisitor(this));
+	    val);
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -1328,7 +1328,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.subtract(
             NodeProperties.getType(node),
             lhs,
-            node.getRightExpression().acceptVisitor(this));
+	    val);
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -1451,7 +1451,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.multiply(
             NodeProperties.getType(node),
             lhs,
-            node.getRightExpression().acceptVisitor(this));
+	    val);
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -1563,7 +1563,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object lhs = mod.prepare(this, context);
         long auxcounter2=counter;
 
-        // Get right hand side for the add expression
+        // Get right hand side for the divide expression
         Code.write(""+Code.RIGHT+Code.DELIM+counter);
         Object val  = node.getRightExpression().acceptVisitor(this);
 
@@ -1572,7 +1572,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.divide(
             NodeProperties.getType(node),
             lhs,
-            node.getRightExpression().acceptVisitor(this));
+	    val);
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -2098,7 +2098,8 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.bitAnd(
             NodeProperties.getType(node),
             lhs,
-            node.getRightExpression().acceptVisitor(this));
+	    val);
+
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -2203,7 +2204,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.xOr(
             NodeProperties.getType(node),
             lhs,
-            node.getRightExpression().acceptVisitor(this));
+	    val);
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -2314,7 +2315,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.bitOr(
             NodeProperties.getType(node),
             lhs,
-            node.getRightExpression().acceptVisitor(this));
+	    val);
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -2419,7 +2420,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.shiftLeft(
                                                  NodeProperties.getType(node),
                                                  lhs,
-                                                 node.getRightExpression().acceptVisitor(this));
+						 val);
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -2523,7 +2524,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.shiftRight(
                                                  NodeProperties.getType(node),
                                                  lhs,
-                                                 node.getRightExpression().acceptVisitor(this));
+						 val);                                                
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -2628,7 +2629,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.unsignedShiftRight(
                                                  NodeProperties.getType(node),
                                                  lhs,
-                                                 node.getRightExpression().acceptVisitor(this));
+						 val);
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -2672,8 +2673,9 @@ public class EvaluationVisitor extends VisitorObject {
         if (left &&  right) {
 
             Code.write(""+Code.AND+Code.DELIM+andcounter+Code.DELIM+auxcounter+
-                          Code.DELIM+auxcounter2+Code.DELIM+Code.TRUE+
-                          Code.DELIM+locationToString(node));
+		       Code.DELIM+auxcounter2+Code.DELIM+Code.TRUE+
+                       Code.DELIM+NodeProperties.getType(node).getName()+
+		       Code.DELIM+locationToString(node));
 
             return Boolean.TRUE;
 
@@ -2707,8 +2709,9 @@ public class EvaluationVisitor extends VisitorObject {
         if (left || right) {
 
             Code.write(""+Code.OR+Code.DELIM+orcounter+Code.DELIM+auxcounter+
-                          Code.DELIM+auxcounter2+Code.DELIM+Code.TRUE+
-                          Code.DELIM+locationToString(node));
+		       Code.DELIM+auxcounter2+Code.DELIM+Code.TRUE+
+		       Code.DELIM+NodeProperties.getType(node).getName()+
+		       Code.DELIM+locationToString(node));
 
             return Boolean.TRUE;
 
