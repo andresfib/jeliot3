@@ -506,10 +506,6 @@ public class CodeEditor extends JComponent {
         }
     }
 
-
-    /**
-	 * 
-	 */
 	/**
      * Sets in JTextAre area the default text as given in template.
      */
@@ -518,7 +514,6 @@ public class CodeEditor extends JComponent {
 
         currentFile = null; //Jeliot 3
     }
-
 
 	/**
      * The given String program object will be set as the text inside the JTextArea area.
@@ -532,8 +527,9 @@ public class CodeEditor extends JComponent {
 
 
     /**
-	 * @param text
-	 * @return
+     * Calculates the number of lines in the program source code.
+	 * @param text the program source code.
+	 * @return the number of lines in the given program source code
 	 */
 	public int calculateLines(String text) {
         int lines = 1;
@@ -547,7 +543,7 @@ public class CodeEditor extends JComponent {
     }
 
     /**
-	 * 
+	 * Validates the scroll pane's line numbering.
 	 */
 	public void validateScrollPane() {
         final int lines = calculateLines(area.getText());
@@ -578,7 +574,7 @@ public class CodeEditor extends JComponent {
 
 	/**
      * Method highlights the specified Statement area by selecting it.
-     * @param h
+     * @param h contains the area that should be highlighted.
      */
     public void highlightStatement(Highlight h) {
         int l = 0, r = 0;
@@ -613,7 +609,7 @@ public class CodeEditor extends JComponent {
 
 	/**
      * Method highlights the specified code area by selecting it.
-     * @param h
+     * @param h contains the area that should be highlighted.
      */
     public void highlight(Highlight h) {
         int l = 0, r = 0;

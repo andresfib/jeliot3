@@ -10,7 +10,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 
 /**
-  * NOT CURRENTLY USED IN JELIOT!
+  * Not currently used in Jeliot 3.
   * The design of the draggable component that perhaps will be added inside Jeliot's
   * next version.
   *

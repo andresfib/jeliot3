@@ -70,7 +70,7 @@ public class AboutWindow extends JFrame {
 	/**
 	 * Shows the given url in the editor pane.
 	 *
-	 * @param   url The document in the url will be showed in JEditorPane editorPane.
+	 * @param url The document in the url will be showed in JEditorPane editorPane.
 	 */
 	public void showURL(URL url) {
 		try {

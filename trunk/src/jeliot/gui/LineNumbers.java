@@ -10,15 +10,49 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
+
+/**
+ * The LineNumbers component is used to show the line numbers in the
+ * scroll panes left side in the code view and code editor.
+ * 
+ * @author Niko Myller
+ * @see jeliot.gui.CodePane
+ * @see jelio.gui.CodeEditor
+ */
 public class LineNumbers extends JComponent {
 
-    private int size = 35;
-    private Font font;
-    private int ascent;
-    private int increment;
-    private Insets insets;
+    /**
+	 * The width of the component.
+	 */
+	private int size = 35;
+    
+    /**
+	 * The font for this component.
+	 */
+	private Font font;
+    
+    /**
+	 * The ascent of the font.
+	 */
+	private int ascent;
+    
+    /**
+	 * The increment between two lines.
+	 */
+	private int increment;
+    
+    /**
+	 * insets in the component.
+	 */
+	private Insets insets;
 
-    public LineNumbers(Font font, Insets insets) {
+    /**
+     * Sets the font and the insets and the determines the size
+     * increment and ascent from the font's font metrics.
+	 * @param font the font to be used in the component
+	 * @param insets the insets for the layout.
+	 */
+	public LineNumbers(Font font, Insets insets) {
         this.font = font;
         this.insets = insets;
         FontMetrics fm = getFontMetrics(font);
@@ -27,20 +61,32 @@ public class LineNumbers extends JComponent {
         ascent = fm.getAscent();
     }
 
-    public void setPreferredHeight(int ph) {
+    /**
+     * Sets the preferred height of the component.
+	 * @param ph
+	 */
+	public void setPreferredHeight(int ph) {
         setPreferredSize(new Dimension(size, ph));
         revalidate();
     }
 
 
-    public void setHeightByLines(int lines) {
+    /**
+     * sets the height by the given number of lines that should be shown.
+	 * @param lines
+	 */
+	public void setHeightByLines(int lines) {
         int height = insets.top + ascent + (lines * increment) + insets.bottom;
         //System.out.println("CodePane: " + height);
         setPreferredSize(new Dimension(size, height));
         revalidate();
     }
 
-    public void paintComponent(Graphics g) {
+    /*
+     * 
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
+	public void paintComponent(Graphics g) {
         Rectangle drawHere = g.getClipBounds();
 
         g.setColor(new Color(204, 204, 204));

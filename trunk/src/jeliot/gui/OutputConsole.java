@@ -29,7 +29,7 @@ import javax.swing.border.TitledBorder;
 public class OutputConsole extends JTextArea {
 
    /**
-     * The resource bundle
+     * The resource bundle for gui package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.gui.resources.properties",

@@ -10,9 +10,9 @@ import javax.swing.JPopupMenu;
 import jeliot.theater.*;
 
 /**
+ * Currently this class is not used in the Jeliot.
  * <code>Theatre</code>'s popup menu class that gives information
  * about the actors fo the theatre.
- * NOT CURRENLY USED IN JELIOT!
  *
  * @author Pekka Uronen
  * @author Niko Myller
