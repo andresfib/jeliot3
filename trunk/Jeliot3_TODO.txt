@@ -4,7 +4,7 @@ JELIOT 3 TODO-LIST
 
 Urgent:
 
-* Problem with main method finding in the JeliotWindow class.
+* Problem with main method finding in the JeliotWindow class. (done)
 * Array initializers (but only for one dimensional arrays)
 * Static field access (into the constant area)
 * super(...) method should be made working in the beginning of the classes.
@@ -25,6 +25,7 @@ Technical:
 * Not implemented feature -message (Done, but needs to be added from comments to releases)
 * Use invokeLater method to build up the gui in the beginning of the program. (Should be done)
 * Default error message needs to be changed (Should be done)
+* Use resource bundles to help adaptation of the user interface and visualization. (done)
 
 Bugs:
 
@@ -32,9 +33,9 @@ Bugs:
 
 Graphical:
 
-* Arrow heads or something to indicate that the reference ends to that specific object. (done partially should be still tested and fixed)
+* Arrow heads or something to indicate that the reference ends to that specific object. (done)
 * Reference actors visualization needs to be fixed in instances and in short distances
-* Explicit mentioning of different areas in the theater (e.g. constant area, expression evaluation area, instance and array area and method frame area).
+* Explicit mentioning of different areas in the theater (e.g. constant area, expression evaluation area, instance and array area and method frame area). (done)
 * Some randomness to the placement of references to prevent overlapping (done)
 
 -------These can be done later: ------------------------------------
