@@ -39,6 +39,7 @@ import koala.dynamicjava.tree.*;
 import koala.dynamicjava.tree.visitor.*;
 import koala.dynamicjava.util.*;
 
+import jeliot.ecode.*;
 /**
  * This class translates a class info into a Class object
  *
@@ -179,6 +180,15 @@ public class ClassInfoCompiler {
 	if (!isInterface) {
 	    ConstructorInfo[] cons = classInfo.getConstructors();
 	    for (int i = 0; i < cons.length; i++) {
+                ClassInfo[] cia = cons[i].getParameterTypes();
+                String[] params = new String[cia.length];
+            
+                for (int j = 0; j < cia.length; j++) {
+                    params[j] = cia[j].getName();
+                }
+
+                ECodeUtilities.write(""+Code.CONSTRUCTOR+Code.DELIM+
+                                     ECodeUtilities.arrayToString(params));
 		addConstructor((TreeConstructorInfo)cons[i]);
 	    }
 	}
@@ -1712,8 +1722,9 @@ public class ClassInfoCompiler {
 		}
 		af |= Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL;
 	    }
-
+	     
 	    Expression init = node.getInitializer();
+
 	    if (init != null) {
 		if ((init instanceof Literal) &&
 		    Modifier.isFinal(af) &&
@@ -1815,8 +1826,18 @@ public class ClassInfoCompiler {
 			addToInstanceInitializer(exp);
 		    }
 		}
+	    ECodeUtilities.write(""+Code.FIELD+Code.DELIM
+                                 +node.getName()+Code.DELIM
+                                 +fi.getType().getName()+Code.DELIM
+                                 +af+Code.DELIM
+                                 +((Literal)init).getValue());
 	    } else {
 		classFactory.addField(af, rt, fn);
+	    ECodeUtilities.write(""+Code.FIELD+Code.DELIM+
+                                 node.getName()+Code.DELIM
+                                 +fi.getType().getName()+Code.DELIM
+                                 +af+Code.DELIM
+                                 +Code.UNKNOWN);
 	    }
 	    return null;
 	}
@@ -1855,6 +1876,11 @@ public class ClassInfoCompiler {
 	    for (int i = 0; i < cia.length; i++) {
 		params[i] = cia[i].getName();
 	    }
+            ECodeUtilities.write(""+Code.METHOD+Code.DELIM+
+                                 node.getName()+Code.DELIM
+                                 +rt+Code.DELIM
+                                 +af+Code.DELIM
+                                 +ECodeUtilities.arrayToString(params));
 
 	    // Create the exception array
 	    cia = mi.getExceptionTypes();

@@ -39,6 +39,7 @@ import koala.dynamicjava.tree.*;
 import koala.dynamicjava.tree.visitor.*;
 import koala.dynamicjava.util.*;
 
+import jeliot.ecode.*;
 /**
  * This class contains methods to manage the creation of classes.
  *
@@ -159,7 +160,10 @@ public class TreeCompiler {
 	}
 
 	// Then compile the class
+        ECodeUtilities.write(""+Code.CLASS+Code.DELIM+name);
 	Class c = new ClassInfoCompiler(ci).compile();
+
+        ECodeUtilities.write(""+Code.END_CLASS+Code.DELIM+name);
 	ci.setCompilable(false);
 	if (name.equals(c.getName())) {
 	    result = c;
