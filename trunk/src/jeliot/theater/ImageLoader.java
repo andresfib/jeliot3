@@ -82,7 +82,7 @@ public class ImageLoader {
 		//return getImage(bundle.getString(name));
         URL imageURL = Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+bundle.getString(name));
         if (imageURL == null) {
-            imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+name));
+            imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+bundle.getString(name)));
         }
         return getImage(imageURL); 
     }
