@@ -82,6 +82,14 @@ public class JeliotWindow {
                 ));
     }
 
+/*
+    JScrollPane editorScrollPane = new JScrollPane(editorPane);
+    editorScrollPane.setVerticalScrollBarPolicy(
+        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    editorScrollPane.setPreferredSize(new Dimension(250, 145));
+*/
+
+
     /** This JPanel errorViewer will help the showing of the error messages for the users. */
     private JPanel errorViewer = new JPanel() {
         private Image backImage;
@@ -579,30 +587,37 @@ public class JeliotWindow {
             try {
                 String programCode = editor.getProgram();
 
-                //Change this!!!
-                String methodCall = "Testing.main();";
+                String methodCall = null;
+                methodCall = findMainMethodCall(programCode);
 
-                //Reader r = new BufferedReader(new StringReader(programCode));
-                //jeliot.createLauncher(r);
-                //Reader s = new BufferedReader(new StringReader(methodCall));
+                if (methodCall != null) {
 
-                jeliot.compile(programCode, methodCall);
+                    //Reader r = new BufferedReader(new StringReader(programCode));
+                    //jeliot.createLauncher(r);
+                    //Reader s = new BufferedReader(new StringReader(methodCall));
 
-                changeTheatrePane(theatre);
+                    jeliot.compile(programCode, methodCall);
 
-                panelController.slide(true,
-                    new Runnable() {
-                        public void run() {
-                            SwingUtilities.invokeLater(
-                                new Runnable() {
-                                    public void run() {
-                                        enterAnimate();
+                    changeTheatrePane(theatre);
+
+                    panelController.slide(true,
+                        new Runnable() {
+                            public void run() {
+                                SwingUtilities.invokeLater(
+                                    new Runnable() {
+                                        public void run() {
+                                            enterAnimate();
+                                        }
                                     }
-                                }
-                            );
+                                );
+                            }
                         }
-                    }
-                ).start();
+                    ).start();
+                } else {
+                    showErrorMessage("<H2>No main method call found</H2>"+
+                    "<P>No main method call was found from any class"+
+                    "and thus the program cannot be started. Add a main method.</P>");
+                }
             }
 
             catch (FeatureNotImplementedException e) {
@@ -630,14 +645,90 @@ public class JeliotWindow {
         }
     }
 
+    public String replaceChar(String from, char c, String with) {
+        int index = from.indexOf(c);
+        while(index != -1) {
+            from = from.substring(0,index) +
+            with +
+            from.substring(index+1,from.length());
+            index = from.indexOf(c);
+        }
+        return from;
+    }
+
+
+    /**
+     * Tries to find the main method call from one of the classes.
+     */
+    public String findMainMethodCall(String programCode) {
+        String commentsRemoved = removeComments(programCode);
+        replaceChar(commentsRemoved, '\n', " ");
+        replaceChar(commentsRemoved, '\t', " ");
+
+        String mainMethod="static void main()";
+        String classString = " class ";
+
+        int methodIndex = commentsRemoved.indexOf(mainMethod);
+        System.out.println(methodIndex);
+        if (methodIndex > -1) {
+            String partProgramCode = commentsRemoved.substring(0,methodIndex);
+            int classIndex = partProgramCode.lastIndexOf(classString);
+            System.out.println(classIndex);
+            if (classIndex > -1) {
+                partProgramCode = partProgramCode.substring(classIndex + classString.length()).trim();
+                int classNameIndex = partProgramCode.indexOf(" ");
+                System.out.println(classNameIndex);
+                if (classNameIndex > -1) {
+                    String mainMethodCall = partProgramCode.substring(0, classNameIndex) + ".main();";
+                    System.out.println(mainMethodCall);
+                    return mainMethodCall;
+                }
+            }
+        }
+        return null;
+    }
+
+    public String removeComments(String programCode) {
+
+        String lineComment = "//";
+        String beginningComment = "/*";
+        String endingComment = "*/";
+
+        int index = programCode.indexOf(lineComment);
+
+        while (index > -1) {
+            int endIndex = programCode.indexOf('\n', index);
+            programCode = programCode.substring(0, index) +
+            programCode.substring(endIndex, programCode.length());
+            index = programCode.indexOf(lineComment);
+        }
+
+        index = programCode.indexOf(beginningComment);
+
+        while (index > -1) {
+            int endIndex = programCode.indexOf(endingComment, index);
+            programCode = programCode.substring(0, index) +
+            programCode.substring(endIndex, programCode.length());
+            index = programCode.indexOf(beginningComment);
+        }
+
+        return programCode;
+
+    }
+
+    public void showErrorMessage(String e) {
+        errorPane.setText(e);
+        changeTheatrePane(errorViewer);
+    }
+
+
     /**
      * Show the error message of the exception in the theatre pane.
      *
      * @param   e   The exception that is wanted to show.
      */
     public void showErrorMessage(Exception e) {
-        errorPane.setText(e.toString());
-        changeTheatrePane(errorViewer);
+        showErrorMessage(e.toString());
     }
 
 
@@ -654,10 +745,12 @@ public class JeliotWindow {
 */
 
     public void showErrorMessage(InterpreterError e) {
+
         pauseButton.setEnabled(false);
         errorOccured = true;
-        errorPane.setText(e.getMessage());
-        changeTheatrePane(errorViewer);
+
+        showErrorMessage(e.getMessage());
+
         Component c = codeNest.getLeftComponent();
 
         if (e.getHighlight() != null) {

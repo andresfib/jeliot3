@@ -14,7 +14,7 @@ public class Code {
     public static final int TO=4;
 
     //Useful constants
-    public static final String DELIM="|";
+    public static final String DELIM="§";
     public static final String LOC_DELIM=",";
     public static final String UNKNOWN="?";
     public static final int NO_REFERENCE=0;

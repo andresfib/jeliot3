@@ -394,13 +394,20 @@ public class CodeEditor extends JComponent {
      * @return  The program code inside the JTextArea area.
      */
     public String getProgram() {
-		String programCode = area.getText() + "\n";
-		int index = programCode.indexOf('\t');
-		while(index != -1) {
-			programCode = programCode.substring(0,index) + "    " + programCode.substring(index+1,programCode.length());
-			index = programCode.indexOf('\t');
-		}
+        String programCode = area.getText() + "\n";
+        replaceChar(programCode, '\t', "    ");
         return programCode;
+    }
+
+    public String replaceChar(String from, char c, String to) {
+        int index = from.indexOf(c);
+        while(index != -1) {
+            from = from.substring(0,index) +
+            to +
+            from.substring(index+1,from.length());
+            index = from.indexOf(c);
+        }
+        return from;
     }
 
 

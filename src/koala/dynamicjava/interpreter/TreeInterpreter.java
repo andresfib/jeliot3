@@ -145,7 +145,7 @@ public class TreeInterpreter implements Interpreter {
                 Object o = n.acceptVisitor(v);
                 if (o != null) {
                     n = (Node)o;
-            	}
+                }
 
                 v = new TypeChecker(checkVisitorContext);
                 n.acceptVisitor(v);
@@ -158,38 +158,48 @@ public class TreeInterpreter implements Interpreter {
             }
 
             return result;
+
         } catch (ExecutionError e) {
+
             InterpreterException ie = new InterpreterException(e);
 
             String code = ""+Code.ERROR+Code.DELIM+ie.getMessage()+Code.DELIM;
+
             if (ie.getSourceInformation() != null) {
                 code += ""+ie.getSourceInformation().getLine()+Code.LOC_DELIM+
                 ie.getSourceInformation().getColumn()+Code.LOC_DELIM+
                 ie.getSourceInformation().getLine()+Code.LOC_DELIM+
                 ie.getSourceInformation().getColumn();
             } else {
+
                 code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+
                         0+Code.LOC_DELIM+0;
             }
             Code.write(code);
             return null;
-        //throw new InterpreterException(e);
+            //throw new InterpreterException(e);
+
         } catch (ParseError e) {
+
             InterpreterException ie = new InterpreterException(e);
 
             String code = ""+Code.ERROR+Code.DELIM+ie.getMessage()+Code.DELIM;
+
             if (ie.getSourceInformation() != null) {
+
                 code += ""+ie.getSourceInformation().getLine()+Code.LOC_DELIM+
                 ie.getSourceInformation().getColumn()+Code.LOC_DELIM+
                 ie.getSourceInformation().getLine()+Code.LOC_DELIM+
                 ie.getSourceInformation().getColumn();
+
             } else {
+
                 code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+
                         0+Code.LOC_DELIM+0;
             }
             Code.write(code);
             return null;
-        //throw new InterpreterException(e);
+            //throw new InterpreterException(e);
         }
     }
 
@@ -200,7 +210,7 @@ public class TreeInterpreter implements Interpreter {
      * @return the result of the evaluation of the last statement
      */
     public Object interpret(InputStream is, String fname) throws InterpreterException {
-    return interpret(new InputStreamReader(is), fname);
+        return interpret(new InputStreamReader(is), fname);
     }
 
     /**
@@ -209,7 +219,7 @@ public class TreeInterpreter implements Interpreter {
      * @return the result of the evaluation of the last statement
      */
     public Object interpret(String fname) throws InterpreterException, IOException {
-    return interpret(new FileReader(fname), fname);
+        return interpret(new FileReader(fname), fname);
     }
 
     /**
@@ -219,32 +229,32 @@ public class TreeInterpreter implements Interpreter {
      * @return list of statements
      */
     public List buildStatementList (Reader r, String fname) throws InterpreterException {
-    List resultingList;
-    try {
-        SourceCodeParser p = parserFactory.createParser(r, fname);
-        List    statements = p.parseStream();
-        ListIterator    it = statements.listIterator();
+        List resultingList;
+        try {
+            SourceCodeParser p = parserFactory.createParser(r, fname);
+            List    statements = p.parseStream();
+            ListIterator    it = statements.listIterator();
 
             resultingList = new ArrayList();
-        while (it.hasNext()) {
-        Node n = (Node)it.next();
-        Visitor v = new NameVisitor(nameVisitorContext);
-        Object o = n.acceptVisitor(v);
-        if (o != null) {
-            n = (Node)o;
-        }
-        resultingList.add(n);
-        v = new TypeChecker(checkVisitorContext);
-        n.acceptVisitor(v);
+            while (it.hasNext()) {
+                Node n = (Node)it.next();
+                Visitor v = new NameVisitor(nameVisitorContext);
+                Object o = n.acceptVisitor(v);
+                if (o != null) {
+                    n = (Node)o;
+                }
+                resultingList.add(n);
+                v = new TypeChecker(checkVisitorContext);
+                n.acceptVisitor(v);
 
-        evalVisitorContext.defineVariables
-            (checkVisitorContext.getCurrentScopeVariables());
-        }
+                evalVisitorContext.defineVariables
+                    (checkVisitorContext.getCurrentScopeVariables());
+            }
 
-        return resultingList;
-    } catch (ParseError e) {
-        throw new InterpreterException(e);
-    }
+            return resultingList;
+        } catch (ParseError e) {
+            throw new InterpreterException(e);
+        }
     }
 
     /**
