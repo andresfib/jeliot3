@@ -505,7 +505,7 @@ public class CodeEditor2 extends JComponent {
         //area.recalculateVisibleLines();
         area.setFirstLine(0);
         area.setCaretPosition(0);
-        //area.requestFocus();
+        area.requestFocus();
     }
 
     /**
@@ -578,11 +578,25 @@ public class CodeEditor2 extends JComponent {
      * @see #setProgram(String)
      */
     void loadProgram() {
+        int caretPosition = area.getCaretPosition();
+        int selectionStart = area.getSelectionStart();
+        int selectionEnd = area.getSelectionEnd();
+        
         fileChooser.rescanCurrentDirectory();
         int returnVal = fileChooser.showOpenDialog(masterFrame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             loadProgram(file);
+        } else {
+            if (selectionStart != selectionEnd) {
+                if (caretPosition == selectionStart) {
+                    area.select(selectionEnd, selectionStart);
+                } else {
+                    area.select(selectionStart, selectionEnd);
+                }
+            } else {
+                area.setCaretPosition(caretPosition);
+            }
         }
         area.requestFocus();
     }
