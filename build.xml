@@ -49,26 +49,26 @@ To display the available targets type:
 
   <target name="init" depends="init-args">
     <tstamp/>
-    <!-- This properties modify the output of the 
-    	build process-->
+  	
+    <!-- This properties modify the output of the build process-->
     <property name="version"         value="3"/>
     <property name="minor"         value=".4.3"/>
+  	
+  	<!-- dist: Used to create the folder where to place the binary distribuition, jar files and images-->
     <property name="dist"            value="Jeliot${version}"/>
-    <!-- dist: Used to create the folder where to place the binary distribuition, jar files and images-->
+  	
     <property name="package-prefix"  value=""/>
 
+  	<!-- directory names -->
     <property name="src"             value="src"/>
     <property name="resources"       value="resources"/>
     <property name="dest"            value="classes"/>
     <property name="release"         value="Release"/>
+  	
     <!-- dest : Compiled classes will be stored here, if no exists, create it -->
     <mkdir dir="${dest}"/>
+  	
     <mkdir dir="${release}"/>
-  	<copy todir="${dest}">
-      <fileset dir="${resources}"/>
-    </copy>
-  	<copy file="doc/quicktutorial/quicktutorial.pdf" todir="${dist}"/>
-  	<copy file="doc/userguide/userguide.pdf" todir="${dist}"/>
 
   </target>
 
@@ -105,8 +105,7 @@ To display the available targets type:
 
   <!-- Distribution ================================================= -->
 
-  <target name="dist" depends="clean, prepare-dist,  jars, blueJExt, createInstallers">
-
+  <target name="dist" depends="clean, prepare-dist, jars, blueJExt">
   <!-- After targets prepare-dist and jars we create the 2 diferent zip files
     that will contain the 2 distribuition files (source and binary)-->
     <zip zipfile="${release}/${dist}${minor}.zip" basedir="${dist}" includes="**/*"/>
@@ -125,6 +124,7 @@ To display the available targets type:
      <zipfileset dir="jre" prefix="jre"/>
     </zip>
   </target>
+	
   <!-- Installers for Windows ===================================-->
   <!-- Time consuming, moved out of dist -->
   <target name="createInstallers" depends="clean, prepare-dist, jars"> 	
@@ -136,9 +136,8 @@ To display the available targets type:
   		<arg line="jeliotJRE-Bundled.iss"/>
 	</exec>
     <move file="${release}/setup.exe" tofile="${release}/${dist}${minor}-JRE.exe"/>
-  	
-  	
   </target>
+	
   <target name="jars" depends="compile, prepare-dist">
   <!-- We create the jar file in the distribution (Jeliot3) directory -->
     <jar manifest="${src}/jeliot.mf" jarfile="${dist}/jeliot.jar" basedir="${dest}">
@@ -175,6 +174,13 @@ To display the available targets type:
       <fileset dir="${src}/examples"/>
     </copy>
 
+  	<copy todir="${dest}">
+      <fileset dir="${resources}"/>
+    </copy>
+ 	
+  	<copy file="doc/quicktutorial/quicktutorial.pdf" todir="${dist}"/>
+  	<copy file="doc/userguide/userguide.pdf" todir="${dist}"/>
+  	
     <copy file="${src}/docs/Jeliot_license.txt" todir="${dist}/docs"/>
     <copy file="${src}/docs/DJava_license.txt" todir="${dist}/docs"/>
     <copy file="${src}/docs/JEdit_license.txt" todir="${dist}/docs"/>
@@ -204,10 +210,10 @@ To display the available targets type:
   </target>
   <!-- Global clean ================================================= -->
   <target name="clean" depends="clean-compile">
-    <delete dir="${build}"/>
+    <delete dir="${dest}"/>
     <delete dir="${dist}"/>
-    <delete file="${dist}${minor}.zip"/>
-    <delete file="${dist}${minor}-src.zip"/>
+    <delete file="${dist}/${dist}${minor}.zip"/>
+    <delete file="${dist}/${dist}${minor}-src.zip"/>
   </target>
 	
 	
