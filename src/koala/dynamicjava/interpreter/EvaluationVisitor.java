@@ -1184,7 +1184,7 @@ public class EvaluationVisitor extends VisitorObject {
             }
             throw new ThrownException(e.getTargetException());
         } catch (NullPointerException e) {
-            throw new CatchedExceptionError("not.static.method", e, node);
+            throw new CatchedExceptionError("j3.not.static.method", e, node);
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }
@@ -1335,20 +1335,21 @@ public class EvaluationVisitor extends VisitorObject {
 
                 ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.P+Code.DELIM+counter+
                            Code.DELIM+locationToString(node));//arguments construction
-                auxcounter=counter;
+                auxcounter = counter;
                 args[i] = ((Expression)it.next()).acceptVisitor(this);
 
                 ECodeUtilities.write("" + Code.P+Code.DELIM+auxcounter+Code.DELIM+args[i].getClass().getName());
                 i++;
 
-                //                args[i++] = ((Expression)it.next()).acceptVisitor(this);
+                //args[i++] = ((Expression)it.next()).acceptVisitor(this);
             }
         }
-        Object result= context.invokeConstructor(node, args);
+
+        Object result = context.invokeConstructor(node, args);
         ECodeUtilities.write("" + Code.SAC+Code.DELIM+
-                             simpleAllocationCounter+Code.DELIM+
-                             Integer.toHexString(result.hashCode())+Code.DELIM+
-                             locationToString(node));//0 arguments
+                                     simpleAllocationCounter+Code.DELIM+
+                                     Integer.toHexString(result.hashCode())+Code.DELIM+
+                                     locationToString(node));//0 arguments
         return result;
     }
 
