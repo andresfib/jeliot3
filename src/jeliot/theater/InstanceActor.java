@@ -4,16 +4,26 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 /**
+ * InstanceActor is a base class for all the instances: ArrayActors and
+ * ObjectStage. An instance of this class should not be instantiated.
  * 
  * @author Pekka Uronen
  * @author Niko Myller 
  */
 public class InstanceActor extends Actor implements ActorContainer {
 
+//  DOC: Document!
+
     /**
 	 *
 	 */
 	private Vector references = new Vector();
+
+    /**
+     *
+     */
+    protected InstanceActor() {}
+    
 
     /**
 	 * @param ref

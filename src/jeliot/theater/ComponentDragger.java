@@ -17,6 +17,9 @@ import java.awt.event.MouseMotionListener;
  */
 public class ComponentDragger implements MouseListener,
                                          MouseMotionListener {
+                                             
+//DOC: Document!
+                                             
     /**
 	 *
 	 */

@@ -153,6 +153,14 @@ To display the available targets type:
   <target name="javadoc" depends="init">
   	<javadoc packagenames="*" sourcepath="${src}" destdir="${dist}/docs/javadoc" private="true" author="false" version="false" use="true" additionalparam="-breakiterator" windowtitle="Jeliot 3 Javadoc" doctitle="Jeliot 3 and DynamicJava API Specification" bottom="Copyright 2004 Stephane Hillion, Niko Myller, Andres Moreno, Erkki Sutinen, Mordechai Ben-Ari and Pekka Uronen. All Rights Reserved." /> 
   </target>
+  <target name="javadoc_tex" depends="init">
+  	<javadoc packagenames="*" sourcepath="${src}" private="true" author="false" version="false" additionalparam="-breakiterator" docletpath="doclet.jar"> 
+       <doclet name="com.c2_tech.doclets.TexDoclet">
+        	 <param name="-title" value="API Documentation for Jeliot 3 and DynamicJava Classes"/>
+             <!-- <param name="-output" value="doc\JavaDoc.tex"/> -->
+	     </doclet>
+  	</javadoc>
+  </target>
   <!-- Global clean ================================================= -->
   <target name="clean" depends="clean-compile">
     <delete dir="${build}"/>

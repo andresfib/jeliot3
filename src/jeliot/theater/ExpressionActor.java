@@ -4,43 +4,51 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
+ * ExpressionActor represents a single line of a scratch the evaluation
+ * area. It Can contain any number of different actors inside that it
+ * renders.
  * 
  * @author Pekka Uronen
  * @author Niko Myller
  */
 public class ExpressionActor extends Actor implements ActorContainer{
 
+//DOC: Document!
+
     /**
      * identifis the ExpressionActors
      */
-    long id;
+    private long id;
 
     /**
 	 *
 	 */
-	Actor[] actors;
+	private Actor[] actors;
+    
     /**
 	 *
 	 */
-	Point[] locs;
+	private Point[] locs;
+    
     /**
 	 *
 	 */
-	boolean[] bound;
+    private boolean[] bound;
+    
     /**
 	 *
 	 */
-	int next;
+    private int next;
 
     /**
 	 *
 	 */
-	int margin = 2;
+    private int margin = 2;
 
     /**
 	 * @param n
 	 */
-	ExpressionActor(int n) {
+	public ExpressionActor(int n) {
         actors = new Actor[n];
         locs = new Point[n];
         bound = new boolean[n];
@@ -50,7 +58,7 @@ public class ExpressionActor extends Actor implements ActorContainer{
 	 * @param n
 	 * @param i
 	 */
-	ExpressionActor(int n, long i) {
+	public ExpressionActor(int n, long i) {
         id = i;
         actors = new Actor[n];
         locs = new Point[n];

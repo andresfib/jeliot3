@@ -15,10 +15,11 @@ import java.util.ResourceBundle;
 
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
-
+ * This class handles the image loading and caching for the animation.
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class ImageLoader {
 
     /**
@@ -49,6 +50,8 @@ public class ImageLoader {
         mapping.put("Fist-2",   "hand3.gif");
     }
     */
+
+//DOC: Document!
 
     /**
      *

@@ -5,10 +5,15 @@ import java.awt.Point;
 import java.awt.Polygon;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * Bubble actor is used to move the return value from the method
+ * stage to the scratch (evaluation area).
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class BubbleActor extends Actor implements ActorContainer{
+
+//DOC: Document!
 
     /**
 	 *
@@ -19,18 +24,22 @@ public class BubbleActor extends Actor implements ActorContainer{
 	 *
 	 */
 	Actor speaker;
+    
     /**
 	 *
 	 */
 	Actor actor;
+    
     /**
 	 *
 	 */
 	Polygon tip;
+    
     /**
 	 *
 	 */
 	boolean bound;
+    
     /**
 	 *
 	 */

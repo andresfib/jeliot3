@@ -12,20 +12,29 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
+ * InputComponent is shown when ever the executed program
+ * requests input. The InputComponent is rendered as a message
+ * label and a text field that collects the input. 
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
+ * @see jeliot.theater.Director#animateInputHandling(String,Highlight)
  */
 public class InputComponent extends JPanel implements ActionListener {
+
+//  DOC: Document!
 
     /**
 	 *
 	 */
 	private InputValidator validator;
+    
     /**
 	 *
 	 */
 	private JTextField field;
+    
     /**
 	 *
 	 */

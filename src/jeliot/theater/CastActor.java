@@ -4,15 +4,19 @@ import java.awt.Graphics;
 import java.awt.Shape;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * CastActor handles the animation of the casting
+ * of the primitive values.
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class CastActor extends Actor {
 
     /**
 	 *
 	 */
 	ValueActor fromActor;
+    
     /**
 	 *
 	 */

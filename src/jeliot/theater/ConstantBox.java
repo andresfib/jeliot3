@@ -4,11 +4,15 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 /**
+ * Constant box instance represents a place where all the literal constants
+ * appear during the animation.
  * 
  * @author Pekka Uronen
  * @author Niko Myller
  */
 public class ConstantBox extends Actor {
+
+//  DOC: Document!
 
     /**
 	 *
@@ -27,14 +31,17 @@ public class ConstantBox extends Actor {
 	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
 	 */
 	public void paintActor(Graphics g) {
-        g.drawImage(image, 0, 0, null);
+        //g.drawImage(image, 0, 0, null);
+        //HACK: I do not know if this works properly if it does not use the previous line.
+        g.drawImage(image, 0, 0, dummy);
     }
     
     /* (non-Javadoc)
 	 * @see jeliot.theater.Actor#calculateSize()
 	 */
 	public void calculateSize() {
-        setSize(image.getWidth(null), image.getHeight(null));
+        //setSize(image.getWidth(null), image.getHeight(null));
+        //HACK: I do not know if this works properly if it does not use the previous line.
+        setSize(image.getWidth(dummy), image.getHeight(dummy));
     }
-    
 }
