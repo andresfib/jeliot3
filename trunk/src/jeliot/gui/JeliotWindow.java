@@ -508,7 +508,7 @@ public class JeliotWindow {
 
             frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.show();
+            frame.setVisible(true);
             //editor.requestFocus();
             //System.out.println(theatre.getSize());
         } catch (Exception e) {
@@ -600,7 +600,7 @@ public class JeliotWindow {
                 if (hw != null) {
                     //hw.pack();
                     hw.reload();
-                    hw.show();
+                    hw.setVisible(true);
                 }
             }
         });
@@ -617,7 +617,7 @@ public class JeliotWindow {
                 if (aw != null) {
                     //aw.pack();
                     aw.reload();
-                    aw.show();
+                    aw.setVisible(true);
                 }
             }
         });

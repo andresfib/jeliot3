@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -34,24 +35,27 @@ public class Il3JeliotPlugin extends Jeliot {
      * get Program from url
      */
     public void setProgram(final URL u) {
-        SwingUtilities.invokeLater(new Runnable(
-        ) {
-            public void run() {
-                try {
-                    System.out.println("Reading from u = " + u);
-                    BufferedReader bin = new BufferedReader(new InputStreamReader(u.openStream()));
-                    String line = null;
-                    StringBuffer content = new StringBuffer();
-                    while ((line = bin.readLine()) != null)
-                        content.append (line).append ("\n");
-                    bin.close();
-                    if (content.length() > 0)
-                        gui.setProgram(content.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        if (u != null) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                public void run() {
+                    try {
+                        System.out.println("Reading from u = " + u);
+                        BufferedReader bin = new BufferedReader(new InputStreamReader(u
+                                .openStream()));
+                        String line = null;
+                        StringBuffer content = new StringBuffer();
+                        while ((line = bin.readLine()) != null)
+                            content.append(line).append("\n");
+                        bin.close();
+                        if (content.length() > 0)
+                            gui.setProgram(content.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace(); //To change body of catch statement use File | Settings | File Templates.
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public static void main(String[] args) {
@@ -60,14 +64,14 @@ public class Il3JeliotPlugin extends Jeliot {
          */
 
         Policy.setPolicy(new Policy() {
+
             public PermissionCollection getPermissions(CodeSource codesource) {
                 Permissions perms = new Permissions();
                 perms.add(new AllPermission());
                 return (perms);
             }
 
-            public void refresh() {
-            }
+            public void refresh() {}
         });
 
         Properties prop = System.getProperties();
@@ -92,6 +96,7 @@ public class Il3JeliotPlugin extends Jeliot {
         final Il3JeliotPlugin jeliot = new Il3JeliotPlugin(udir, experiment);
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
             public void run() {
                 jeliot.run();
             }
@@ -103,16 +108,22 @@ public class Il3JeliotPlugin extends Jeliot {
             final File file1 = new File(file, args[0]);
             if (file.exists()) {
                 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
                     public void run() {
                         jeliot.setProgram(file1);
                     }
                 });
             } else {
                 try {
-                    URL u = new URL(URLDecoder.decode(args[0]));
+                    URL u = null;
+                    try {
+                        u = new URL(URLDecoder.decode(args[0], "UTF-8"));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     jeliot.setProgram(u);
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace(); //To change body of catch statement use File | Settings | File Templates.
                 }
             }
         }

@@ -18,7 +18,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
@@ -373,7 +372,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public void setFont(Font font)
 	{
 		super.setFont(font);
-		fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
+		fm = this.getFontMetrics(font);
 		textArea.recalculateVisibleLines();
 	}
 
