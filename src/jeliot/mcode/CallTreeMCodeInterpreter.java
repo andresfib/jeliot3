@@ -9,6 +9,7 @@ package jeliot.mcode;
 import java.io.BufferedReader;
 import java.util.Stack;
 
+import jeliot.Jeliot;
 import jeliot.calltree.TreeDraw;
 
 
@@ -39,18 +40,27 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * 
      */
     private Stack methodCalls;
-       
+    
+    /**
+     * 
+     */
+    private Jeliot jeliot;
+    
+    private int tabNumber;
+    
     /**
      * 
      * @param bf
      * @param callTree
      * @param programCode
      */
-    public CallTreeMCodeInterpreter(BufferedReader bf, TreeDraw callTree, String programCode) {
+    public CallTreeMCodeInterpreter(BufferedReader bf, TreeDraw callTree, String programCode, Jeliot jeliot, int tabNumber) {
         this.mcode = bf;
         this.programCode = programCode;
         this.callTree = callTree;
         this.methodCalls = new Stack();
+        this.jeliot = jeliot;
+        this.tabNumber = tabNumber;
         initialize();
     }
     
@@ -72,7 +82,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#showErrorMessage(jeliot.mcode.InterpreterError)
      */
     public void showErrorMessage(InterpreterError error) {
-        System.out.println(error.message);
+        //System.out.println(error.message);
     }
 
     
@@ -88,6 +98,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeINPUTTED(long expressionCounter, String value, String type, Highlight h) {
         callTree.returnMethodCall(value);
+        jeliot.highlightTabTitle(true, tabNumber);
     }
 
     /* (non-Javadoc)
@@ -99,6 +110,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
             type = type.substring(n, type.length());
         }
         callTree.insertMethodCall("Input.read" + type.substring(0,1).toUpperCase() + type.substring(1, type.length()).toLowerCase() + "()");
+        jeliot.highlightTabTitle(true, tabNumber);
     }
 
     /* (non-Javadoc)
@@ -107,6 +119,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeOUTPUT(long expressionReference, String value, String type, String breakLine, Highlight highlight) {
         callTree.insertMethodCall("Output.println(" + value + ")");
         callTree.returnMethodCall(null);
+        jeliot.highlightTabTitle(true, tabNumber);
     }
 
     /* (non-Javadoc)
@@ -115,6 +128,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeSMCC() {
         callTree.returnMethodCall(currentReturnValue);
         currentReturnValue = null;
+        jeliot.highlightTabTitle(true, tabNumber);
     }
 
     /* (non-Javadoc)
@@ -141,6 +155,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
             callTree.insertMethodCall(currentMethodCall + ")");
         }
         currentMethodCall = null;
+        jeliot.highlightTabTitle(true, tabNumber);
     }
 
     /* (non-Javadoc)
@@ -166,6 +181,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeOMCC() {
         callTree.returnMethodCall(currentReturnValue);
         currentReturnValue = null;
+        jeliot.highlightTabTitle(true, tabNumber);
     }
 
     /* (non-Javadoc)
@@ -184,6 +200,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeSAC(long expressionCounter, String hashCode, Highlight h) {
         callTree.returnMethodCall(hashCode);
         currentReturnValue = null;
+        jeliot.highlightTabTitle(true, tabNumber);
     }
 
     /* (non-Javadoc)
