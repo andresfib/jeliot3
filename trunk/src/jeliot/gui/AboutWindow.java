@@ -93,8 +93,8 @@ public class AboutWindow extends JFrame implements HyperlinkListener {
 	}
 
 	public void hyperlinkUpdate(HyperlinkEvent e) {
-        /*if (e.getEventType().toString().equals(HyperlinkEvent.EventType.ACTIVATED.toString())) {
+        if (e.getEventType().toString().equals(HyperlinkEvent.EventType.ACTIVATED.toString())) {
             showURL(e.getURL());
-        }*/
+        }
 	}
 }
