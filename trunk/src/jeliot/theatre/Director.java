@@ -1116,14 +1116,14 @@ public class Director {
         //int x = (tsize.width-msize.width)/2;
         //int y = (tsize.height-msize.height)/2;
         ExpressionActor ea = currentScratch.getExpression(1, -3);
-        Point loc = ea.reserve(message);
+        Point loc = ea.getRootLocation();
         showMessage(message, loc);
     }
 
     private void showMessage(MessageActor message, Point p) {
         theatre.capture();
         engine.showAnimation(message.appear(p));
- 		highlight(null);
+ 	highlight(null);
         messagePause = true;
         theatre.removeActor(message);
         theatre.release();
@@ -1148,17 +1148,17 @@ public class Director {
 
     public void enterLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage("Entering the " + statementName + " loop.", check);
+        showMessage("Entering the " + statementName + " loop.");//, check);
     }
 
     public void continueLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage("Continuing the " + statementName + " loop in the next round.", check);
+        showMessage("Continuing the " + statementName + " loop in the next round."); //, check);
     }
 
     public void exitLoop(String statementName, Value check) {
         highlight(null);
-        showMessage("Exiting the " + statementName + " loop.", check);
+        showMessage("Exiting the " + statementName + " loop.");//, check);
     }
 
     public void breakLoop(String statementName, Highlight h) {
@@ -1168,7 +1168,7 @@ public class Director {
 
     public void skipLoop(String statementName, Value check) {
         highlight(null);
-        showMessage("Not entering the " + statementName + " loop.", check);
+        showMessage("Not entering the " + statementName + " loop.");//, check);
     }
 
     public void continueLoop(String statementName, Highlight h) {
@@ -1178,17 +1178,17 @@ public class Director {
 
     public void branchThen(Value check, Highlight h) {
         highlight(h);
-        showMessage("Choosing then-branch.", check);
+        showMessage("Choosing then-branch.");//, check);
     }
 
     public void branchElse(Value check, Highlight h) {
         highlight(h);
-        showMessage("Choosing else-branch.", check);
+        showMessage("Choosing else-branch.");//, check);
     }
 
     public void skipIf(Value check, Highlight h) {
         highlight(h);
-        showMessage("Continuing without branching.", check);
+        showMessage("Continuing without branching.");//, check);
     }
 
     public void arrayCreation(int[] dims, Highlight h) {
