@@ -1386,11 +1386,11 @@ public class JeliotWindow {
      */
     void stepAnimation() {
 
-        stepButton.setEnabled(false);
-        playButton.setEnabled(false);
-        pauseButton.setEnabled(true);
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
+        playButton.setEnabled(false);
+        stepButton.setEnabled(false);
+        pauseButton.setEnabled(true);
 
         String[] s1 = { messageBundle.getString("menu.animation.pause")};
         setEnabledMenuItems(true, s1);

@@ -186,14 +186,20 @@ public class Director {
         manager.setLinesAndText(lat);
         theatre.addPassive(lat);
 
-        //Excecution of the program code takes place here.
-        boolean finished = mCodeInterpreter.execute();
+        /*
+         * Excecution of the program code takes place here.
+         * If animation is finished because of edit button or
+         * rewind button is pushed before the animation is finished
+         * interrupted flag is set true.
+         */
+        boolean interrupted = mCodeInterpreter.execute();
+        
         if (!errorOccured) {
-            highlight(new Highlight(0, 0, 0, 0));
+            codePane.highlightStatement(new Highlight(0, 0, 0, 0));
         }
         theatre.flush();
         Tracker.writeToFile("AnimationEnded", System.currentTimeMillis());
-        return finished;
+        return interrupted;
     }
 
     /**
