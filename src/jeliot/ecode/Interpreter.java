@@ -1789,7 +1789,7 @@ public class Interpreter {
                             director.showArrayCreation(ai, ref, dimensionValues,
                                               expressionReference, h);
 
-                            director.arrayCreation(dimensionSize, h);
+                            //director.arrayCreation(dimensionSize, h);
                                                                                             
                             instances.put(hashCode, ai);
 

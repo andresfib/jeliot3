@@ -1111,11 +1111,13 @@ public class Director {
     }
 
     private void showMessage(MessageActor message) {
-        Dimension msize = message.getSize();
-        Dimension tsize = theatre.getSize();
-        int x = (tsize.width-msize.width)/2;
-        int y = (tsize.height-msize.height)/2;
-        showMessage(message, new Point(x, y));
+        //Dimension msize = message.getSize();
+        //Dimension tsize = theatre.getSize();
+        //int x = (tsize.width-msize.width)/2;
+        //int y = (tsize.height-msize.height)/2;
+        ExpressionActor ea = currentScratch.getExpression(1, -3);
+        Point loc = ea.reserve(message);
+        showMessage(message, loc);
     }
 
     private void showMessage(MessageActor message, Point p) {
@@ -1460,7 +1462,50 @@ public class Director {
 
         //Array creation here
         //Use SMIActor as base.
+        int n = 0;
+        if (lenVal != null) {
+             n = lenVal.length;
+        }
+        
+        ACActor actor = factory.produceACActor("new " + array.getComponentType(), n);
+        ExpressionActor ea = currentScratch.getExpression(1, -1);
+        currentScratch.registerCrap(actor);
 
+//      Point invoLoc = ea.getRootLocation();
+        Point invoLoc = ea.reserve(actor);
+        actor.setLocation(invoLoc);
+
+        // Create actors and reserve places for all argument values,
+        // and create animations to bring them in their right places.
+        ValueActor[] argact = new ValueActor[n];
+        Animation[] fly = new Animation[n];
+        for (int i = 0; i < n; ++i) {
+            argact[i] = lenVal[i].getActor();
+            lenVal[i].setActor(argact[i]);
+            fly[i] = argact[i].fly(actor.reserve(argact[i]));
+        }
+
+        // Calculate the size of the invocation actor, taking into account
+        // the argument actors.
+        actor.calculateSize();
+
+        // Show the animation.
+        theatre.capture();
+
+        // Introduce the invocation.
+        engine.showAnimation(actor.appear(invoLoc));
+        theatre.passivate(actor);
+
+        // Bring in arguments.
+        engine.showAnimation(fly);
+
+        // Bind argument actors to the invocation actor.
+        for (int i = 0; i < n; ++i) {
+            actor.bind(argact[i]);
+        }
+        
+        highlight(h);
+        
         ArrayActor arrayAct = factory.produceArrayActor(array);
         array.setActor(arrayAct);
 
@@ -1482,6 +1527,10 @@ public class Director {
         expr.bind(refAct);
 
         theatre.release();
+        
+        //Make the array creation disappear.
+        ea.cut();
+        
 
     }
 

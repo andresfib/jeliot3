@@ -104,19 +104,40 @@ public class SMIActor extends Actor implements ActorContainer{
         	g.drawString(name + "(", namex, namey);
         	
         	for (int i = 0; i < next; i++) {
-	        	if (i != next - 1) {
-	   	     		g.drawString(",",
+	        	if (i != (next-1)) {
+		        	if (actors[i] instanceof ReferenceActor) {
+			        	g.drawString(",",
 	        					 locs[i].x +
-	        					 actors[i].getWidth() + margin,
+	        					 actors[i].getWidth() +
+	        					 ((ReferenceActor) actors[i]).getReferenceWidth() +
+	        					 margin,
 	        					 namey);
-        		}
+                    
+	            	} else {
+			        	g.drawString(",",
+	        					 locs[i].x +
+	        					 actors[i].getWidth() +
+	        					 margin,
+	        					 namey);
+    	        	}
+    			}
         	}
         	       
-       		g.drawString(")",
-        				 locs[next-1].x +
-        				 actors[next-1].getWidth() +
-        				 margin,
-        				 namey);
+        	if (actors[next-1] instanceof ReferenceActor) {
+	        	g.drawString(")",
+	     					 locs[next-1].x +
+	      					 actors[next-1].getWidth() +
+	       					 ((ReferenceActor) actors[next-1]).getReferenceWidth() +
+	       					 margin,
+	       					 namey);
+                    
+	       	} else {
+		       	g.drawString(")",
+	       					 locs[next-1].x +
+	       					 actors[next-1].getWidth() +
+	       					 margin,
+	       					 namey);
+    	        	}
 		} else {
         	g.drawString(name + "()", namex, namey);			
 		}
