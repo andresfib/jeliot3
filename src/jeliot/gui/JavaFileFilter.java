@@ -1,10 +1,12 @@
 package jeliot.gui;
 
 import java.io.File;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.filechooser.FileFilter;
+
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserPropertyResourceBundle;
 
 /**
  * Filter for the file chooser to only show the java source code files. Modified
@@ -17,11 +19,9 @@ public class JavaFileFilter extends FileFilter {
 	/**
 	 * The resource bundle for gui package
 	 */
-	static private ResourceBundle bundle = ResourceBundle.getBundle(
-			"jeliot.gui.resources.properties", Locale.getDefault());
+	static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getGuiUserPropertyResourceBundle();
 
-	static private ResourceBundle bundle2 = ResourceBundle.getBundle(
-			"jeliot.gui.resources.messages", Locale.getDefault());
+	static private ResourceBundle messageBbundle = ResourceBundles.getGuiMessageResourceBundle();
 
 	/**
 	 * Method accepts only the files whose extension which is defined in the
@@ -37,7 +37,7 @@ public class JavaFileFilter extends FileFilter {
 			String extension = getExtension(f);
 			if (extension != null) {
 				if (extension.toLowerCase().equals(
-						bundle.getString("extension.java"))) {
+						propertiesBundle.getString("extension.java"))) {
 					return true;
 				}
 			}
@@ -71,6 +71,6 @@ public class JavaFileFilter extends FileFilter {
 	 * @see javax.swing.filechooser.FileFilter#getDescription()
 	 */
 	public String getDescription() {
-		return bundle2.getString("extension.java.description");
+		return messageBbundle.getString("extension.java.description");
 	}
 }

@@ -3,19 +3,19 @@ package jeliot.calltree;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
+
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserPropertyResourceBundle;
 
 /**
  * @author Niko Myller
  */
 public class TreeDraw extends JComponent {
 
-	protected static final ResourceBundle bundle = ResourceBundle.getBundle(
-            "jeliot.calltree.resources.properties", Locale.getDefault());
+	protected static final UserPropertyResourceBundle propertiesBundle = ResourceBundles.getCallTreeUserPropertyResourceBundle();
 
     /**
      * 
@@ -35,7 +35,7 @@ public class TreeDraw extends JComponent {
     /**
      * Font to be used in the call tree
      */
-    private static final Font FONT = new Font(bundle.getString("font.calltree"), Font.BOLD, Integer.parseInt(bundle.getString("font.calltree.size")));
+    private static final Font FONT = new Font(propertiesBundle.getString("font.calltree"), Font.BOLD, Integer.parseInt(propertiesBundle.getString("font.calltree.size")));
     
     /**
      * 

@@ -66,7 +66,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
         try {
         return mcode.readLine();
         } catch (Exception e) {
-            return "" + Code.ERROR + Code.DELIM + bundle.getString("unknown.exception")
+            return "" + Code.ERROR + Code.DELIM + messageBundle.getString("unknown.exception")
             + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0";
         }
     }

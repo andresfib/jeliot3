@@ -1,12 +1,9 @@
 package jeliot.mcode;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -903,6 +900,9 @@ public class MCodeUtilities {
                 addToRedirectBuffer(str);
             }
             
+            //This prints all the commands that were generated to a file
+            
+            /*
             str += "\n";
             
             //we get the user directory path
@@ -923,6 +923,7 @@ public class MCodeUtilities {
             catch(Exception e){
             	e.printStackTrace(System.out);    
             }
+            */
         }
     }
 
