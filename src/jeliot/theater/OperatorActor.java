@@ -5,11 +5,18 @@ import java.awt.Image;
 import java.awt.Point;
 
 /**
+ * An instance of the OperatorActor class represents a operator in 
+ * the expressions. It can be a binary or unary operator and it is shown
+ * in the ExpressionActor with the operands. 
  * 
  * @author Pekka Uronen
  * @author Niko Myller 
+ * 
+ * @see jeliot.theater.ExpressionActor
  */
 public class OperatorActor extends Actor {
+
+//  DOC: Document!
 
     /**
 	 *

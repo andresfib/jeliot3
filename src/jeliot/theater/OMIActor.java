@@ -5,9 +5,15 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
-  * @author Niko Myller
-  */
+ * OMIActor represents graphically the object method invocation. The
+ * actor shows the object reference, the method name and the parameters
+ * in a similar way as Java syntax. 
+ * 
+ * @author Niko Myller
+ */
 public class OMIActor extends Actor implements ActorContainer{
+
+//DOC: Document!
 
     /**
 	 *
@@ -18,18 +24,22 @@ public class OMIActor extends Actor implements ActorContainer{
 	 *
 	 */
 	Actor thisActor;
+    
     /**
 	 *
 	 */
 	Point thisActorPoint;
+    
     /**
 	 *
 	 */
 	boolean thisActorBound = false;
+    
     /**
 	 *
 	 */
 	int thisActorw = 0;
+    
     /**
 	 *
 	 */
@@ -39,14 +49,17 @@ public class OMIActor extends Actor implements ActorContainer{
 	 *
 	 */
 	Actor[] actors;
+    
     /**
 	 *
 	 */
 	Point[] locs;
+    
     /**
 	 *
 	 */
 	boolean[] bound;
+    
     /**
 	 *
 	 */
@@ -56,26 +69,32 @@ public class OMIActor extends Actor implements ActorContainer{
 	 *
 	 */
 	int margin = 2;
+    
     /**
 	 *
 	 */
 	int titlemargin = 4;
+    
     /**
 	 *
 	 */
 	int namey;
+    
     /**
 	 *
 	 */
 	int namex;
+    
     /**
 	 *
 	 */
 	int namew;
+    
     /**
 	 *
 	 */
 	int nameh;
+    
     /**
 	 *
 	 */

@@ -9,9 +9,16 @@ import java.awt.Point;
 import java.util.Stack;
 
 /**
+ * MethodStage is the graphical representation of the MethodFrame.
+ * It contains the local <code>VariableActor</code>s and handles the 
+ * scope changes.
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ *
+ * @see jeliot.lang.MethodFrame 
+ * @see jeliot.theater.VariableActor
+ * @see jeliot.lang.Variable
  */
 public class MethodStage extends Actor implements ActorContainer {
 
