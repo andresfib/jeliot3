@@ -5,7 +5,7 @@ import java.util.*;
 //VERSION 0.0.6
 // Last MOdified : 10 Febraury
 
-public class Code{
+public class Code {
 
     //Auxiliary statements
     public static final int LEFT=1;
@@ -56,6 +56,7 @@ public class Code{
     public static final int COMP=45;        // Complement Expression
 
     // binary boolean  exps
+    public static final int XOR=52;         // Xor Expression
     public static final int AND=17;         // And Expression
     public static final int OR=18;          // Or Expression
     public static final int EE=19;          // Equal Expression
@@ -88,6 +89,8 @@ public class Code{
     public static final int CONT=42;        // Continue statement
     public static final int DO=43;          // DO-While statement
     public static final int OUTPUT=44;      // Output statement
+
+    //Highest code is now 52
 
     // private static PrintWriter writer=Launcher.getWriter();
     private static PrintWriter writer=null;

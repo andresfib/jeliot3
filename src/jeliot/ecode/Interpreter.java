@@ -274,20 +274,25 @@ public class Interpreter {
                         case Code.BITOR:    // Bitwise Or
                         case Code.BITXOR:   // Bitwise Xor
                         case Code.BITAND:   // Bitwise And
+
                         case Code.LSHIFT:   // Bitwise Left Shift
                         case Code.RSHIFT:   // Bitwise Right Shift
                         case Code.URSHIFT:  // Unsigned Right Shift
+
+                        case Code.XOR:      // Xor Expression
+                        case Code.AND:      // And Expression
                         case Code.OR:       // Or Expression
+
                         case Code.EE:       // Equal Expression
                         case Code.NE:       // Not Equal Expression
                         case Code.LE:       // Less Expression
                         case Code.LQE:      // Less or Equal Expression
+                        case Code.GT:       // Greater Than
                         case Code.GQT:      // Greater or Equal Expression
+
                         case Code.ME:       // Multiplication Expression
                         case Code.RE:       // Remainder (mod) Expression
                         case Code.DE:       // Division Expression
-                        case Code.AND:      // And Expression
-                        case Code.GT:       // Greater Than
                         case Code.SE:       // Substract Expression
                         case Code.AE: {     // Add Expression
 
