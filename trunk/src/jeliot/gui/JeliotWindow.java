@@ -46,8 +46,7 @@ import javax.swing.event.ChangeListener;
 
 import jeliot.FeatureNotImplementedException;
 import jeliot.Jeliot;
-import jeliot.ecode.ECodeUtilities;
-import jeliot.ecode.InterpreterError;
+import jeliot.mcode.*;
 import jeliot.theatre.AnimationEngine;
 import jeliot.theatre.ImageLoader;
 import jeliot.theatre.PanelController;
@@ -994,9 +993,9 @@ public class JeliotWindow {
     public String findMainMethodCall(String programCode) {
 
         String commentsRemoved = removeComments(programCode);
-        commentsRemoved = ECodeUtilities.replace(commentsRemoved, "\n", " ");
-        commentsRemoved = ECodeUtilities.replace(commentsRemoved, "\r", " ");
-        commentsRemoved = ECodeUtilities.replace(commentsRemoved, "\t", " ");
+        commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\n", " ");
+        commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\r", " ");
+        commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\t", " ");
 
         String [] method = programCode.split("\\s+?static\\s+?void\\s+?main\\s*?\\(\\s*?String.*?\\[\\]??\\s[^,]*?\\)",2);
         if (method.length > 1 && method[1].length() > 0) {

@@ -1,4 +1,4 @@
-package jeliot.ecode;
+package jeliot.mcode;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -278,7 +278,7 @@ public class Interpreter {
 
 		if (Long.parseLong(tokenizer.nextToken()) == Code.ERROR) {
 			String message = tokenizer.nextToken();
-			Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+			Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 			director.showErrorMessage(new InterpreterError(message, h));
 			running = false;
@@ -533,7 +533,7 @@ public class Interpreter {
 							}
 							String type = tokenizer.nextToken();
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Variable toVariable =
@@ -547,7 +547,7 @@ public class Interpreter {
 								(Value) values.remove(new Long(fromExpression));
 							Value casted = null;
 							Value expressionValue = null;
-							if (ECodeUtilities.isPrimitive(type)
+							if (MCodeUtilities.isPrimitive(type)
 								|| type.equals("null")) {
 								casted = new Value(value, type);
 								expressionValue = new Value(value, type);
@@ -555,9 +555,9 @@ public class Interpreter {
 								if (!casted
 									.getType()
 									.equals(fromValue.getType())
-									&& ECodeUtilities.resolveType(
+									&& MCodeUtilities.resolveType(
 										casted.getType())
-										!= ECodeUtilities.resolveType(
+										!= MCodeUtilities.resolveType(
 											fromValue.getType())) {
 									director.animateCastExpression(
 										fromValue,
@@ -568,7 +568,7 @@ public class Interpreter {
 							} else {
 								Instance inst =
 									(Instance) instances.get(
-										ECodeUtilities.getHashCode(value));
+										MCodeUtilities.getHashCode(value));
 								if (inst != null) {
 									casted = new Reference(inst);
 									((Reference) casted).makeReference();
@@ -630,7 +630,7 @@ public class Interpreter {
 							String type = tokenizer.nextToken();
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 							Value result = new Value(value, type);
 							Value val =
@@ -638,7 +638,7 @@ public class Interpreter {
 									new Long(unaryExpressionReference));
 
 							int unaryOperator =
-								ECodeUtilities.resolveUnOperator(token);
+								MCodeUtilities.resolveUnOperator(token);
 
 							ExpressionActor expr =
 								director.getCurrentScratch().findActor(
@@ -801,7 +801,7 @@ public class Interpreter {
 							String type = tokenizer.nextToken();
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value result = new Value(value, type);
@@ -815,7 +815,7 @@ public class Interpreter {
 										new Long(expressionReference));
 
 								int operator =
-									ECodeUtilities.resolveUnOperator(token);
+									MCodeUtilities.resolveUnOperator(token);
 								director.animatePreIncDec(
 									operator,
 									var,
@@ -827,7 +827,7 @@ public class Interpreter {
 								Object[] postIncDec =
 									{
 										new Long(
-											ECodeUtilities.resolveUnOperator(
+											MCodeUtilities.resolveUnOperator(
 												token)),
 										new Long(expressionReference),
 										result,
@@ -855,7 +855,7 @@ public class Interpreter {
 							String type = tokenizer.nextToken();
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value result = new Value(value, type);
@@ -864,7 +864,7 @@ public class Interpreter {
 									new Long(expressionReference));
 
 							int operator =
-								ECodeUtilities.resolveUnOperator(token);
+								MCodeUtilities.resolveUnOperator(token);
 							director.animatePreIncDec(operator, var, result, h);
 							values.put(new Long(expressionCounter), result);
 
@@ -923,7 +923,7 @@ public class Interpreter {
 							String type = tokenizer.nextToken();
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 							Value result = new Value(value, type);
 
@@ -958,7 +958,7 @@ public class Interpreter {
 								expressionValue =
 									director.finishBinaryExpression(result,
 									// token is declared and assigned in the line 91.
-	ECodeUtilities.resolveBinOperator(token), expr, h);
+	MCodeUtilities.resolveBinOperator(token), expr, h);
 
 								exprs.pop();
 
@@ -988,7 +988,7 @@ public class Interpreter {
 								expr =
 									director.beginBinaryExpression(
 										left,
-										ECodeUtilities.resolveBinOperator(
+										MCodeUtilities.resolveBinOperator(
 											token),
 										expressionCounter,
 										h);
@@ -1014,7 +1014,7 @@ public class Interpreter {
 								expressionValue =
 									director.finishBinaryExpression(result,
 									// token is declared and assigned in the line 91.
-	ECodeUtilities.resolveBinOperator(token), expr, h);
+	MCodeUtilities.resolveBinOperator(token), expr, h);
 
 								/*                              Value expressionValue = director.animateBinaryExpression(
 								                                                        ECodeUtilities.resolveBinOperator(token),
@@ -1150,7 +1150,7 @@ public class Interpreter {
 
 							//Make the location information for the location token
 							Highlight highlight =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Variable var =
@@ -1161,7 +1161,7 @@ public class Interpreter {
 
 							Value casted = null;
 
-							if (ECodeUtilities.isPrimitive(type)) {
+							if (MCodeUtilities.isPrimitive(type)) {
 								casted = new Value(value, type);
 							} else {
 								if (value.equals("null")) {
@@ -1169,7 +1169,7 @@ public class Interpreter {
 								} else {
 									Instance inst =
 										(Instance) instances.get(
-											ECodeUtilities.getHashCode(value));
+											MCodeUtilities.getHashCode(value));
 
 									if (inst != null) {
 										casted = new Reference(inst);
@@ -1274,12 +1274,12 @@ public class Interpreter {
 
 								//Make the location information for the location token
 								highlight =
-									ECodeUtilities.makeHighlight(
+									MCodeUtilities.makeHighlight(
 										expressionTokenizer.nextToken());
 							}
 
 							Value val = null;
-							if (ECodeUtilities.isPrimitive(type)) {
+							if (MCodeUtilities.isPrimitive(type)) {
 								val = new Value(value, type);
 								ValueActor va = var.getActor().getValue();
 								val.setActor(va);
@@ -1289,7 +1289,7 @@ public class Interpreter {
 								} else {
 									Instance inst =
 										(Instance) instances.get(
-											ECodeUtilities.getHashCode(value));
+											MCodeUtilities.getHashCode(value));
 									if (inst != null) {
 										val = new Reference(inst);
 									} else {
@@ -1317,9 +1317,9 @@ public class Interpreter {
 								}
 								//If oper is other binary operator we will show it
 								//on the screen with operator
-							} else if (ECodeUtilities.isBinary(oper)) {
+							} else if (MCodeUtilities.isBinary(oper)) {
 								int operator =
-									ECodeUtilities.resolveBinOperator(oper);
+									MCodeUtilities.resolveBinOperator(oper);
 								if (command == Code.LEFT) {
 									director.beginBinaryExpression(
 										val,
@@ -1350,7 +1350,7 @@ public class Interpreter {
 
 								//If oper is a unary operator we will show it
 								//on the screen with operator
-							} else if (ECodeUtilities.isUnary(oper)) {
+							} else if (MCodeUtilities.isUnary(oper)) {
 								if (oper == Code.PRIE || oper == Code.PRDE) {
 									variables.put(
 										new Long(expressionCounter),
@@ -1374,7 +1374,7 @@ public class Interpreter {
 										new Long(expressionCounter),
 										val);
 									int operator =
-										ECodeUtilities.resolveUnOperator(oper);
+										MCodeUtilities.resolveUnOperator(oper);
 									if (command == Code.RIGHT) {
 										director.beginUnaryExpression(
 											operator,
@@ -1537,7 +1537,7 @@ public class Interpreter {
 							int parameterCount =
 								Integer.parseInt(tokenizer.nextToken());
 							Highlight highlight =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							//Create here Object Stage with initial variables and values
@@ -1640,7 +1640,7 @@ public class Interpreter {
 							String hashCode = tokenizer.nextToken();
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							//This should handle the possible object
@@ -1773,12 +1773,12 @@ public class Interpreter {
 
 								//Make the location information for the location token
 								highlight =
-									ECodeUtilities.makeHighlight(
+									MCodeUtilities.makeHighlight(
 										expressionTokenizer.nextToken());
 							}
 
 							Value val = null;
-							if (ECodeUtilities.isPrimitive(type)) {
+							if (MCodeUtilities.isPrimitive(type)) {
 								val = new Value(value, type);
 								ValueActor va = var.getActor().getValue();
 								val.setActor(va);
@@ -1788,7 +1788,7 @@ public class Interpreter {
 								} else {
 									Instance inst =
 										(Instance) instances.get(
-											ECodeUtilities.getHashCode(value));
+											MCodeUtilities.getHashCode(value));
 									if (inst != null) {
 										val = new Reference(inst);
 									} else {
@@ -1821,10 +1821,10 @@ public class Interpreter {
 
 								//If oper is other binary operator we will show it
 								//on the screen with operator
-							} else if (ECodeUtilities.isBinary(oper)) {
+							} else if (MCodeUtilities.isBinary(oper)) {
 
 								int operator =
-									ECodeUtilities.resolveBinOperator(oper);
+									MCodeUtilities.resolveBinOperator(oper);
 
 								if (command == Code.LEFT) {
 
@@ -1861,7 +1861,7 @@ public class Interpreter {
 
 								//If oper is a unary operator we will show it
 								//on the screen with operator
-							} else if (ECodeUtilities.isUnary(oper)) {
+							} else if (MCodeUtilities.isUnary(oper)) {
 
 								if (oper == Code.PRIE || oper == Code.PRDE) {
 
@@ -1891,7 +1891,7 @@ public class Interpreter {
 										new Long(expressionCounter),
 										val);
 									int operator =
-										ECodeUtilities.resolveUnOperator(oper);
+										MCodeUtilities.resolveUnOperator(oper);
 									if (command == Code.RIGHT) {
 										director.beginUnaryExpression(
 											operator,
@@ -1922,7 +1922,7 @@ public class Interpreter {
 							long objectCounter =
 								Long.parseLong(tokenizer.nextToken());
 							Highlight highlight =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value val =
@@ -2082,7 +2082,7 @@ public class Interpreter {
 							currentMethodInvocation[3] = parameterTypes;
 							currentMethodInvocation[4] = parameterNames;
 							currentMethodInvocation[5] =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 							currentMethodInvocation[7] =
 								parameterExpressionReferences;
@@ -2132,7 +2132,7 @@ public class Interpreter {
 
 							//Make the location information for the location token
 							currentMethodInvocation[6] =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							//Object method call or constructor
@@ -2301,7 +2301,7 @@ public class Interpreter {
 							}
 							String type = tokenizer.nextToken();
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							if (type.equals(Void.TYPE.getName())) {
@@ -2317,12 +2317,12 @@ public class Interpreter {
 
 								Value casted = null;
 
-								if (ECodeUtilities.isPrimitive(type)) {
+								if (MCodeUtilities.isPrimitive(type)) {
 									casted = new Value(value, type);
 								} else {
 									Instance inst =
 										(Instance) instances.get(
-											ECodeUtilities.getHashCode(value));
+											MCodeUtilities.getHashCode(value));
 									if (inst != null) {
 										casted = new Reference(inst);
 									} else {
@@ -2483,7 +2483,7 @@ public class Interpreter {
 							Highlight h = null;
 							if (tokenizer.hasMoreElements()) {
 								h =
-									ECodeUtilities.makeHighlight(
+									MCodeUtilities.makeHighlight(
 										tokenizer.nextToken());
 							}
 
@@ -2512,7 +2512,7 @@ public class Interpreter {
 							String value = tokenizer.nextToken();
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value result =
@@ -2542,7 +2542,7 @@ public class Interpreter {
 							int round = Integer.parseInt(tokenizer.nextToken());
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value result =
@@ -2596,7 +2596,7 @@ public class Interpreter {
 							String value = tokenizer.nextToken();
 							long round = Long.parseLong(tokenizer.nextToken());
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value result =
@@ -2644,7 +2644,7 @@ public class Interpreter {
 							String value = tokenizer.nextToken();
 							long round = Long.parseLong(tokenizer.nextToken());
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value result =
@@ -2680,7 +2680,7 @@ public class Interpreter {
 						{
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							director.openSwitch(h);
@@ -2698,7 +2698,7 @@ public class Interpreter {
 							long switchBlockReference =
 								Long.parseLong(tokenizer.nextToken());
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							if (switchBlockReference != -1) {
@@ -2711,7 +2711,7 @@ public class Interpreter {
 								Value result = new Value("true", "boolean");
 
 								director.animateBinaryExpression(
-									ECodeUtilities.resolveBinOperator(Code.EE),
+									MCodeUtilities.resolveBinOperator(Code.EE),
 									selector,
 									switchBlock,
 									result,
@@ -2729,7 +2729,7 @@ public class Interpreter {
 						{
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							director.closeSwitch(h);
@@ -2747,7 +2747,7 @@ public class Interpreter {
 							int statementName =
 								Integer.parseInt(tokenizer.nextToken());
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 							String stmt = "";
 
@@ -2783,7 +2783,7 @@ public class Interpreter {
 							int statementName =
 								Integer.parseInt(tokenizer.nextToken());
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 							String stmt = "";
 
@@ -2820,7 +2820,7 @@ public class Interpreter {
 							String type = tokenizer.nextToken();
 
 							Highlight highlight =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value output =
@@ -2846,7 +2846,7 @@ public class Interpreter {
 							String type = tokenizer.nextToken();
 
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value in = director.animateInputHandling(type, h);
@@ -2868,7 +2868,7 @@ public class Interpreter {
 							String value = tokenizer.nextToken();
 							String type = tokenizer.nextToken();
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Value in =
@@ -3037,7 +3037,7 @@ public class Interpreter {
 							Highlight h = null;
 							if (tokenizer.hasMoreElements()) {
 								h =
-									ECodeUtilities.makeHighlight(
+									MCodeUtilities.makeHighlight(
 										tokenizer.nextToken());
 							}
 
@@ -3132,7 +3132,7 @@ public class Interpreter {
 							Highlight h = null;
 							if (tokenizer.hasMoreElements()) {
 								h =
-									ECodeUtilities.makeHighlight(
+									MCodeUtilities.makeHighlight(
 										tokenizer.nextToken());
 							}
 
@@ -3158,7 +3158,7 @@ public class Interpreter {
 
 							//Actual value in the array in pointed cell
 							Value val = null;
-							if (ECodeUtilities.isPrimitive(type)) {
+							if (MCodeUtilities.isPrimitive(type)) {
 								val = new Value(value, type);
 							} else {
 								if (value.equals("null")) {
@@ -3166,7 +3166,7 @@ public class Interpreter {
 								} else {
 									Instance inst =
 										(Instance) instances.get(
-											ECodeUtilities.getHashCode(value));
+											MCodeUtilities.getHashCode(value));
 									if (inst != null) {
 										val = new Reference(inst);
 									} else {
@@ -3230,7 +3230,7 @@ public class Interpreter {
 
 								//Make the location information for the location token
 								highlight =
-									ECodeUtilities.makeHighlight(
+									MCodeUtilities.makeHighlight(
 										expressionTokenizer.nextToken());
 							}
 
@@ -3257,10 +3257,10 @@ public class Interpreter {
 
 								//If oper is other binary operator we will show it
 								//on the screen with operator
-							} else if (ECodeUtilities.isBinary(oper)) {
+							} else if (MCodeUtilities.isBinary(oper)) {
 
 								int operator =
-									ECodeUtilities.resolveBinOperator(oper);
+									MCodeUtilities.resolveBinOperator(oper);
 
 								if (command == Code.LEFT) {
 
@@ -3297,7 +3297,7 @@ public class Interpreter {
 
 								//If oper is a unary operator we will show it
 								//on the screen with operator
-							} else if (ECodeUtilities.isUnary(oper)) {
+							} else if (MCodeUtilities.isUnary(oper)) {
 
 								if (oper == Code.PRIE || oper == Code.PRDE) {
 
@@ -3327,7 +3327,7 @@ public class Interpreter {
 										new Long(expressionCounter),
 										val);
 									int operator =
-										ECodeUtilities.resolveUnOperator(oper);
+										MCodeUtilities.resolveUnOperator(oper);
 									if (command == Code.RIGHT) {
 										director.beginUnaryExpression(
 											operator,
@@ -3381,7 +3381,7 @@ public class Interpreter {
 							//Fifth token is the highlight information.
 							//Not used because the whole expression is highlighted.
 							Highlight highlight =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							Reference ref =
@@ -3491,7 +3491,7 @@ public class Interpreter {
 							}
 
 							if (value.equals(Code.UNKNOWN)) {
-								value = ECodeUtilities.getDefaultValue(type);
+								value = MCodeUtilities.getDefaultValue(type);
 							}
 
 							currentClass.declareField(
@@ -3512,7 +3512,7 @@ public class Interpreter {
 
 							String message = tokenizer.nextToken();
 							Highlight h =
-								ECodeUtilities.makeHighlight(
+								MCodeUtilities.makeHighlight(
 									tokenizer.nextToken());
 
 							director.showErrorMessage(
@@ -3703,7 +3703,7 @@ public class Interpreter {
 
 			//Make the location information for the location token
 			highlight =
-				ECodeUtilities.makeHighlight(expressionTokenizer.nextToken());
+				MCodeUtilities.makeHighlight(expressionTokenizer.nextToken());
 		}
 
 		//Do different things depending on in what expression
@@ -3715,9 +3715,9 @@ public class Interpreter {
 
 			//If oper is other binary operator we will show it
 			//on the screen with operator
-		} else if (ECodeUtilities.isBinary(oper)) {
+		} else if (MCodeUtilities.isBinary(oper)) {
 
-			int operator = ECodeUtilities.resolveBinOperator(oper);
+			int operator = MCodeUtilities.resolveBinOperator(oper);
 
 			if (command == Code.LEFT) {
 
@@ -3746,9 +3746,9 @@ public class Interpreter {
 			/* If oper is a unary operator we will show it
 			 * on the screen with operator
 			 */
-		} else if (ECodeUtilities.isUnary(oper)) {
+		} else if (MCodeUtilities.isUnary(oper)) {
 
-			int operator = ECodeUtilities.resolveUnOperator(oper);
+			int operator = MCodeUtilities.resolveUnOperator(oper);
 
 			values.put(new Long(expressionCounter), val);
 

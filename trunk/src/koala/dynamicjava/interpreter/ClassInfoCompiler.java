@@ -34,8 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import jeliot.ecode.Code;
-import jeliot.ecode.ECodeUtilities;
+import jeliot.mcode.*;
 import koala.dynamicjava.classfile.InnerClassesEntry;
 import koala.dynamicjava.classinfo.ClassInfo;
 import koala.dynamicjava.classinfo.ClassInfoUtilities;
@@ -278,8 +277,8 @@ public class ClassInfoCompiler {
                     params[j] = cia[j].getName();
                 }
 
-                ECodeUtilities.write(""+Code.CONSTRUCTOR+Code.DELIM+
-                                     ECodeUtilities.arrayToString(params));
+                MCodeUtilities.write(""+Code.CONSTRUCTOR+Code.DELIM+
+                                     MCodeUtilities.arrayToString(params));
                 addConstructor((TreeConstructorInfo)cons[i]);
             }
         }
@@ -1937,14 +1936,14 @@ public class ClassInfoCompiler {
                         addToInstanceInitializer(exp);
                     }
                 }
-            ECodeUtilities.write(""+Code.FIELD+Code.DELIM
+            MCodeUtilities.write(""+Code.FIELD+Code.DELIM
                                  +node.getName()+Code.DELIM
                                  +fi.getType().getName()+Code.DELIM
                                  +af+Code.DELIM
                                  +((Literal)init).getValue());
             } else {
                 classFactory.addField(af, rt, fn);
-            ECodeUtilities.write(""+Code.FIELD+Code.DELIM+
+            MCodeUtilities.write(""+Code.FIELD+Code.DELIM+
                                  node.getName()+Code.DELIM
                                  +fi.getType().getName()+Code.DELIM
                                  +af+Code.DELIM
@@ -1987,11 +1986,11 @@ public class ClassInfoCompiler {
             for (int i = 0; i < cia.length; i++) {
                 params[i] = cia[i].getName();
             }
-            ECodeUtilities.write(""+Code.METHOD+Code.DELIM+
+            MCodeUtilities.write(""+Code.METHOD+Code.DELIM+
                                  node.getName()+Code.DELIM
                                  +rt+Code.DELIM
                                  +af+Code.DELIM
-                                 +ECodeUtilities.arrayToString(params));
+                                 +MCodeUtilities.arrayToString(params));
 
             // Create the exception array
             cia = mi.getExceptionTypes();

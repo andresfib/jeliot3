@@ -28,7 +28,7 @@
 
 package koala.dynamicjava.interpreter;
 
-import jeliot.ecode.ECodeUtilities;
+import jeliot.mcode.*;
 import koala.dynamicjava.interpreter.error.CatchedExceptionError;
 import koala.dynamicjava.interpreter.error.ExecutionError;
 import koala.dynamicjava.interpreter.throwable.ThrownException;
@@ -62,11 +62,11 @@ public class InterpreterException extends ThrownException {
 
         String m = e.getMessage();
 
-        m = ECodeUtilities.replace(m, "<", "&lt;");
-        m = ECodeUtilities.replace(m, ">", "&gt;");
+        m = MCodeUtilities.replace(m, "<", "&lt;");
+        m = MCodeUtilities.replace(m, ">", "&gt;");
 
-        m = ECodeUtilities.replace(m,"\n","<BR>");
-        m = ECodeUtilities.replace(m,"\r","");
+        m = MCodeUtilities.replace(m,"\n","<BR>");
+        m = MCodeUtilities.replace(m,"\r","");
 
         if (e.getLine() != -1) {
             sourceInformation = new SourceInformation(e.getFilename(),
@@ -84,8 +84,8 @@ public class InterpreterException extends ThrownException {
             int column = 0;
             String file = "buffer";
 
-            line = ECodeUtilities.findNumber(m, "line");
-            column = ECodeUtilities.findNumber(m, "column");
+            line = MCodeUtilities.findNumber(m, "line");
+            column = MCodeUtilities.findNumber(m, "column");
 
             //System.out.println(message);
             sourceInformation = new SourceInformation(file,
@@ -123,11 +123,11 @@ public class InterpreterException extends ThrownException {
 
             String m = ((CatchedExceptionError)e).getException().toString();
 
-            m = ECodeUtilities.replace(m, "<", "&lt;");
-            m = ECodeUtilities.replace(m, ">", "&gt;");
+            m = MCodeUtilities.replace(m, "<", "&lt;");
+            m = MCodeUtilities.replace(m, ">", "&gt;");
 
-            m = ECodeUtilities.replace(m,"\n","<BR>");
-            m = ECodeUtilities.replace(m,"\r","");
+            m = MCodeUtilities.replace(m,"\n","<BR>");
+            m = MCodeUtilities.replace(m,"\r","");
 
             message += "<P>" + m + "</P>";
 
@@ -137,8 +137,8 @@ public class InterpreterException extends ThrownException {
                 int column = 0;
                 String file = "buffer";
 
-                line = ECodeUtilities.findNumber(m, "line");
-                column = ECodeUtilities.findNumber(m, "column");
+                line = MCodeUtilities.findNumber(m, "line");
+                column = MCodeUtilities.findNumber(m, "column");
 
                 //System.out.println(message);
                 sourceInformation = new SourceInformation(file,
@@ -150,11 +150,11 @@ public class InterpreterException extends ThrownException {
 
             String m = ((ThrownException)e).getException().toString();
 
-            m = ECodeUtilities.replace(m, "<", "&lt;");
-            m = ECodeUtilities.replace(m, ">", "&gt;");
+            m = MCodeUtilities.replace(m, "<", "&lt;");
+            m = MCodeUtilities.replace(m, ">", "&gt;");
 
-            m = ECodeUtilities.replace(m,"\n","<BR>");
-            m = ECodeUtilities.replace(m,"\r","");
+            m = MCodeUtilities.replace(m,"\n","<BR>");
+            m = MCodeUtilities.replace(m,"\r","");
 
             message += "<P>" + m + "</P>";
 
@@ -164,8 +164,8 @@ public class InterpreterException extends ThrownException {
                 int column = 0;
                 String file = "buffer";
 
-                line = ECodeUtilities.findNumber(m, "line");
-                column = ECodeUtilities.findNumber(m, "column");
+                line = MCodeUtilities.findNumber(m, "line");
+                column = MCodeUtilities.findNumber(m, "column");
 
                 //System.out.println(message);
                 sourceInformation = new SourceInformation(file,
@@ -176,11 +176,11 @@ public class InterpreterException extends ThrownException {
 
             String m = e.getMessage();
 
-            m = ECodeUtilities.replace(m, "<", "&lt;");
-            m = ECodeUtilities.replace(m, ">", "&gt;");
+            m = MCodeUtilities.replace(m, "<", "&lt;");
+            m = MCodeUtilities.replace(m, ">", "&gt;");
 
-            m = ECodeUtilities.replace(m,"\n","<BR>");
-            m = ECodeUtilities.replace(m,"\r","");
+            m = MCodeUtilities.replace(m,"\n","<BR>");
+            m = MCodeUtilities.replace(m,"\r","");
 
             message += "<P>" + m + "</P>";
 
@@ -190,8 +190,8 @@ public class InterpreterException extends ThrownException {
                 int column = 0;
                 String file = "buffer";
 
-                line = ECodeUtilities.findNumber(m, "line");
-                column = ECodeUtilities.findNumber(m, "column");
+                line = MCodeUtilities.findNumber(m, "line");
+                column = MCodeUtilities.findNumber(m, "column");
 
                 //System.out.println(message);
                 sourceInformation = new SourceInformation(file,

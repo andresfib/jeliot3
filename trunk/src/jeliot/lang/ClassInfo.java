@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import jeliot.ecode.Code;
+import jeliot.mcode.*;
 
 public class ClassInfo {
 

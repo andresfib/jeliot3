@@ -34,8 +34,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import jeliot.ecode.Code;
-import jeliot.ecode.ECodeUtilities;
+import jeliot.mcode.*;
 import koala.dynamicjava.classinfo.ClassFinder;
 import koala.dynamicjava.classinfo.ClassInfo;
 import koala.dynamicjava.classinfo.TreeClassInfo;
@@ -178,10 +177,10 @@ public class TreeCompiler {
         }
 
         // Then compile the class
-        ECodeUtilities.write(""+Code.CLASS+Code.DELIM+name+Code.DELIM+superClass); //Jeliot 3
+        MCodeUtilities.write(""+Code.CLASS+Code.DELIM+name+Code.DELIM+superClass); //Jeliot 3
         Class c = new ClassInfoCompiler(ci).compile();
 
-        ECodeUtilities.write(""+Code.END_CLASS+Code.DELIM+name); //Jeliot 3
+        MCodeUtilities.write(""+Code.END_CLASS+Code.DELIM+name); //Jeliot 3
         ci.setCompilable(false);
         if (name.equals(c.getName())) {
             result = c;

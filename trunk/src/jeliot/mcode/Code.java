@@ -1,4 +1,5 @@
-package jeliot.ecode;
+package jeliot.mcode;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
 

@@ -1,4 +1,4 @@
-package jeliot.ecode;
+package jeliot.mcode;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -13,7 +13,7 @@ import koala.dynamicjava.interpreter.EvaluationVisitor;
  * 
  * @author Niko Myller
  */
-public class ECodeUtilities {
+public class MCodeUtilities {
 
 	//Unary expressions in Jeliot 3 visualization engine
     /**
@@ -201,63 +201,63 @@ public class ECodeUtilities {
             type.equals((new Boolean(true)).getClass().getName()) ||
             type.equals("Z")) {
 
-            return ECodeUtilities.BOOLEAN;
+            return MCodeUtilities.BOOLEAN;
 
         } else if (type.equals(byte.class.getName()) ||
                    type.equals((new Byte((byte)0)).getClass().getName()) ||
                    type.equals("B")) {
 
-            return ECodeUtilities.BYTE;
+            return MCodeUtilities.BYTE;
 
         } else if (type.equals(short.class.getName()) ||
                    type.equals((new Short((short)0)).getClass().getName()) ||
                    type.equals("S")) {
 
-            return ECodeUtilities.SHORT;
+            return MCodeUtilities.SHORT;
 
         } else if (type.equals(int.class.getName()) ||
                    type.equals((new Integer(0)).getClass().getName()) ||
                    type.equals("I")) {
 
-            return ECodeUtilities.INT;
+            return MCodeUtilities.INT;
 
         } else if (type.equals(long.class.getName()) ||
                    type.equals((new Long(0)).getClass().getName()) ||
                    type.equals("J")) {
 
-            return ECodeUtilities.LONG;
+            return MCodeUtilities.LONG;
 
         } else if (type.equals(char.class.getName()) ||
                    type.equals((new Character('\0')).getClass().getName()) ||
                    type.equals("C")) {
 
-            return ECodeUtilities.CHAR;
+            return MCodeUtilities.CHAR;
 
         } else if (type.equals(float.class.getName()) ||
                    type.equals((new Float(0.0f)).getClass().getName()) ||
                    type.equals("F")) {
 
-            return ECodeUtilities.FLOAT;
+            return MCodeUtilities.FLOAT;
 
         } else if (type.equals(double.class.getName()) ||
                    type.equals((new Double(0.0)).getClass().getName()) ||
                    type.equals("D")) {
 
-            return ECodeUtilities.DOUBLE;
+            return MCodeUtilities.DOUBLE;
 
         } else if (type.equals("".getClass().getName()) ||
                    type.equals("L".getClass().getName())) {
 
-            return ECodeUtilities.STRING;
+            return MCodeUtilities.STRING;
 
         } else if (type.equals(Void.TYPE.getName()) ||
                    type.equals("V")) {
 
-            return ECodeUtilities.VOID;
+            return MCodeUtilities.VOID;
 
         } else {
 
-            return ECodeUtilities.REFERENCE;
+            return MCodeUtilities.REFERENCE;
 
         }
     }
@@ -297,7 +297,7 @@ public class ECodeUtilities {
  	* @return
  	*/
     public static boolean isPrimitive(String type) {
-        if (resolveType(type) != ECodeUtilities.REFERENCE) {
+        if (resolveType(type) != MCodeUtilities.REFERENCE) {
             return true;
         } else {
             return false;
@@ -772,8 +772,8 @@ public class ECodeUtilities {
         int token = Integer.parseInt(tokenizer.nextToken());
         if (!EvaluationVisitor.isSetPreparing() || token == Code.ERROR) {
 
-            str = ECodeUtilities.replace(str, "\n", "\\n");
-            str = ECodeUtilities.replace(str, "\r", "");
+            str = MCodeUtilities.replace(str, "\n", "\\n");
+            str = MCodeUtilities.replace(str, "\r", "");
             //System.out.println("Hello");
             writer.println(str); // connected to jeliot
             //System.out.println("Hello2");

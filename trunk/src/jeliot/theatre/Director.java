@@ -12,9 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import jeliot.Jeliot;
-import jeliot.ecode.ECodeUtilities;
-import jeliot.ecode.Interpreter;
-import jeliot.ecode.InterpreterError;
+import jeliot.mcode.*;
 import jeliot.gui.CodePane;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.MethodFrame;
@@ -1218,7 +1216,7 @@ public class Director {
     public ValueActor initiateVariableAccess(Variable var) {
 
         //Problem with instances.
-        if (!ECodeUtilities.isPrimitive(var.getType())) {
+        if (!MCodeUtilities.isPrimitive(var.getType())) {
             return var.getValue().getActor();
         }
 
@@ -1261,7 +1259,7 @@ public class Director {
         VariableActor variableAct = variable.getActor();
         ValueActor valueAct = value.getActor();
 
-        if (ECodeUtilities.isPrimitive(type)) {
+        if (MCodeUtilities.isPrimitive(type)) {
 
             // Get/create actors.
             ValueActor castAct = factory.produceValueActor(casted);
@@ -1964,7 +1962,7 @@ public class Director {
      * @param str
      */
     public void output(String str) {
-        str = ECodeUtilities.replace(str, "\\n", "\n");
+        str = MCodeUtilities.replace(str, "\\n", "\n");
         jeliot.output(str);
     }
 
@@ -2092,13 +2090,13 @@ public class Director {
 
         Animator animator = null;
 
-        if (ECodeUtilities.resolveType(type) == ECodeUtilities.DOUBLE) {
+        if (MCodeUtilities.resolveType(type) == MCodeUtilities.DOUBLE) {
             animator = readDouble();
-        } else if (ECodeUtilities.resolveType(type) == ECodeUtilities.INT) {
+        } else if (MCodeUtilities.resolveType(type) == MCodeUtilities.INT) {
             animator = readInt();
-        } else if (ECodeUtilities.resolveType(type) == ECodeUtilities.STRING) {
+        } else if (MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
             animator = readString();
-        } else if (ECodeUtilities.resolveType(type) == ECodeUtilities.CHAR) {
+        } else if (MCodeUtilities.resolveType(type) == MCodeUtilities.CHAR) {
             animator = readChar();
         }
 

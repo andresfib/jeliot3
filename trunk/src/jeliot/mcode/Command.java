@@ -1,4 +1,4 @@
-package jeliot.ecode;
+package jeliot.mcode;
 
 //Not used in Jeliot 3 right now.
 
