@@ -1,6 +1,6 @@
 package jeliot.lang;
 
-import jeliot.theatre.InstanceActor;
+import jeliot.theater.*;
 
 /**
   * @author Pekka Uronen

@@ -30,12 +30,7 @@ import jeliot.mcode.*;
 import jeliot.gui.CodePane;
 import jeliot.gui.JeliotWindow;
 import jeliot.launcher.Launcher;
-import jeliot.theatre.ActorFactory;
-import jeliot.theatre.AnimationEngine;
-import jeliot.theatre.Director;
-import jeliot.theatre.ImageLoader;
-import jeliot.theatre.Theatre;
-import jeliot.theatre.ThreadController;
+import jeliot.theater.*;
 
 //import Lex.*;
 //import java_cup.runtime.*;
@@ -66,7 +61,7 @@ public class Jeliot {
     private JeliotWindow gui;
 
     /** Theatre object for showing the animation. */
-    private Theatre theatre = new Theatre();
+    private Theater theatre = new Theater();
 
     /** A thread controller object for handling concurrency and
       * starting and pausing the animation. */

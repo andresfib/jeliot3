@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JWindow;
 
-import jeliot.theatre.ImageLoader;
+import jeliot.theater.*;
 
 /**
  * LoadJeliot displays a splash screen and starts the Jeliot application.

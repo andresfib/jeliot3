@@ -1,7 +1,7 @@
 package jeliot.lang;
 
 //import jeliot.parser.*;
-import jeliot.theatre.ValueActor;
+import jeliot.theater.*;
 
 /**
   *

@@ -3,7 +3,7 @@ package jeliot.lang;
 import java.lang.reflect.Array;
 
 import jeliot.mcode.*;
-import jeliot.theatre.ArrayActor;
+import jeliot.theater.*;
 
 /**
   * @author         Pekka Uronen

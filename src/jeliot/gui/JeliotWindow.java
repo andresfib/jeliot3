@@ -47,10 +47,7 @@ import javax.swing.event.ChangeListener;
 import jeliot.FeatureNotImplementedException;
 import jeliot.Jeliot;
 import jeliot.mcode.*;
-import jeliot.theatre.AnimationEngine;
-import jeliot.theatre.ImageLoader;
-import jeliot.theatre.PanelController;
-import jeliot.theatre.Theatre;
+import jeliot.theater.*;
 
 /**
  * This is the main window of the Jeliot 3.
@@ -82,7 +79,7 @@ public class JeliotWindow {
     private JFrame frame;
 
     /** The theatre in which the programs are animated. */
-    private Theatre theatre;
+    private Theater theatre;
 
     /** The animation engine that that will animate the code. */
     private AnimationEngine engine;
@@ -278,7 +275,7 @@ public class JeliotWindow {
     public JeliotWindow(
             Jeliot jeliot,
             CodePane codePane,
-            Theatre theatre,
+            Theater theatre,
             AnimationEngine engine,
             ImageLoader iLoad ,
             String udir) {

@@ -36,7 +36,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import jeliot.mcode.*;
-import jeliot.theatre.Highlight;
+import jeliot.theater.*;
 
 /**
   * The simple code editor for the users to make the code for the animation theater.

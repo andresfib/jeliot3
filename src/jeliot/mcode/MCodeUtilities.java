@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import jeliot.theatre.Highlight;
+import jeliot.theater.*;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 
 /**
