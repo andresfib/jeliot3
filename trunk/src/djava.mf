@@ -1,3 +1,0 @@
-Manifest-Version: $Id$
-Main-Class: koala.dynamicjava.interpreter.Main
-Class-Path: lib/dynamicjava.jar
