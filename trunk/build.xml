@@ -4,37 +4,37 @@
 
 Build Tools
 ===========
- 
+
   The DynamicJava build system is based on Apache Ant, which is a Java building tool
   used in Apache projects.
   For more information refer to "http://jakarta.apache.org/ant/".
- 
+
   The distribution contains a precompiled version of Ant.
- 
+
   The only thing that you have to make sure, is the "JAVA_HOME" environment
   property should be set to match the JVM you want to use.
 
 Building Instructions
 =====================
- 
+
 First, make sure your current working directory is where this file is located.
 Then type:
- 
+
   [unix]  ./build.sh compile
   [win32] .\build.bat compile
- 
+
 This action will compile the sources to the 'classes' directory.
- 
+
 You can now launch the interpreter GUI by typing:
- 
+
   [unix]  ./build.sh gui
   [win32] .\build.bat gui
 
 Build Targets
 =============
- 
+
 To display the available targets type:
- 
+
   [unix]  ./build.sh  help
   [win32] .\build.bat help
 
@@ -51,7 +51,7 @@ To display the available targets type:
     <tstamp/>
 
     <property name="version"         value="3"/>
-    <property name="minor" 	       value="-0"/>
+    <property name="minor"         value="-01"/>
     <property name="dist"            value="Jeliot${version}"/>
     <property name="package-prefix"  value=""/>
 
@@ -93,7 +93,7 @@ To display the available targets type:
   <target name="clean-compile" depends="init">
     <delete dir="${dest}"/>
   </target>
- 
+
   <!-- Applications ================================================= -->
 
   <!-- Distribution ================================================= -->

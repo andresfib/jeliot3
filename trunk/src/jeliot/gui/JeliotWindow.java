@@ -249,7 +249,7 @@ public class JeliotWindow {
      */
     public void setUp() {
 
-        frame = new JFrame("Jeliot 3");
+        frame = new JFrame("Jeliot 3.01");
         frame.setIconImage(iLoad.getLogicalImage("Jeliot-icon"));
 
         frame.setJMenuBar(makeMenuBar());
@@ -1070,8 +1070,18 @@ public class JeliotWindow {
 
         pauseButton.setEnabled(false);
         errorOccured = true;
-
         showErrorMessage(e.getMessage());
+
+        editButton.setEnabled(true);
+        stepButton.setEnabled(false);
+        playButton.setEnabled(false);
+        pauseButton.setEnabled(false);
+        rewindButton.setEnabled(true);
+
+        String[] s1 = {"Edit","Rewind"};
+        setEnabledMenuItems(true, s1);
+        String[] s2 = { "Step","Play","Pause" };
+        setEnabledMenuItems(false, s2);
 
         Component c = codeNest.getLeftComponent();
 

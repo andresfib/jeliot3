@@ -166,7 +166,7 @@ public class ReferenceActor extends ValueActor {
 
         bend = new Point[4];
         bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
-        bend[1] = new Point(vx + 45 - (vy1/6), bend[0].y);
+        bend[1] = new Point(vx + 45 /*- (vy1/6)*/, bend[0].y);
         bend[2] = new Point(bend[1].x, iy1 + 12);
         bend[3] = new Point(ix, bend[2].y);
     }
@@ -177,7 +177,7 @@ public class ReferenceActor extends ValueActor {
 
     public int getReferenceWidth() {
         if (instance != null) {
-            return bend[1].x - bend[0].x + 7;
+            return bend[1].x - bend[0].x + 4;
         } else {
             return refLen + 15;
         }

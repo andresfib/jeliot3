@@ -93,7 +93,7 @@ public class Code {
 
     // Arrays and objects handling
     public static final int AA=56;          // Array allocation
-    public static final int AAC=57;          // Array access
+    public static final int AAC=57;         // Array access
 
     public static final int CLASS=58;
     public static final int END_CLASS=59;
@@ -105,8 +105,13 @@ public class Code {
     public static final int SAC=64;         // Simple class allocation close
     public static final int OFA=65;         // Object field access
     public static final int OMC=66;         // Object method call
-    public static final int OMCC=67;         // Object method call close
-    //Last int used -> 67
+    public static final int OMCC=67;        // Object method call close
+
+
+    public static final int SWIBF=68;       // Switch block found
+    public static final int SWITCHB=69;     // Switch block begins
+    public static final int SWITCH=70;      // Switch
+    //Last int used -> 70
 }
 
 //package jeliot.ecode;

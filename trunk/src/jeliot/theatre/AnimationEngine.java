@@ -84,16 +84,16 @@ public class AnimationEngine implements Controlled {
             duration = Math.max(duration,
                     anim.getStartTime() + anim.getDuration());
         }
-        
+
         // if the theatre is not captured, do capture it.
-        boolean capture = ! theatre.isCaptured();
+        boolean capture = !theatre.isCaptured();
         if (capture) {
             theatre.capture();
         }
         else {
             theatre.updateCapture();
         }
-        
+
         // The animation loop
         double amount = 0.0;
         long time = System.currentTimeMillis();
@@ -132,12 +132,12 @@ public class AnimationEngine implements Controlled {
             Animation anim = animations[i];
             anim.finalFinish();
         }
-        
-        // if theatre was not captured before animation, release it.
+
+        // if theatre was captured before animation, release it.
         if (capture) {
             theatre.release();
         }
-        
+
     }
 
     /** Called by the thread controller when the animation is paused.
