@@ -1134,6 +1134,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
 
         returned = false;
+        
+        if (currentMethodInvocation != null) {
+            invokingMethod = true;
+        }
+
     }
 
     /**
@@ -1249,7 +1254,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 if (currentMethodInvocation[1] != null
                         && ((String) currentMethodInvocation[1]).equals("")) {
                     call = (String) currentMethodInvocation[0];
-                } else if (((String) currentMethodInvocation[0]).startsWith("super") || ((String) currentMethodInvocation[0]).startsWith("this")) {
+                } else if (((String) currentMethodInvocation[0]).equals("super") || ((String) currentMethodInvocation[0]).equals("this")) {
                     call = /*"this." + */(String) currentMethodInvocation[9];
                 } else if (currentMethodInvocation[1] == null) {
                     call = ((Value) currentMethodInvocation[8]).getValue() + "."
@@ -1307,6 +1312,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             }
 
             invokingMethod = false;
+            
             openNewExpressionStack();
         }
     }
@@ -1404,7 +1410,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             rv.setActor(va);
             handleExpression(rv, returnExpressionCounter);
         }
-
+        if (currentMethodInvocation != null) {
+            invokingMethod = true;
+        }
+        
         returned = false;
     }
 
@@ -1415,7 +1424,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param highlight
      */
     protected void handleCodeOMC(String methodName, int parameterCount, long objectCounter,
-            String objectValue, Highlight highlight) {
+            String objectValueOrClassName, Highlight highlight) {
         Value val = (Value) values.remove(new Long(objectCounter));
         Variable var = (Variable) variables.remove(new Long(objectCounter));
 
@@ -1477,7 +1486,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         currentMethodInvocation[5] = highlight;
         currentMethodInvocation[7] = parameterExpressionReferences;
         currentMethodInvocation[8] = val;
-        currentMethodInvocation[9] = objectValue;
+        currentMethodInvocation[9] = objectValueOrClassName;
     }
 
     /**
@@ -1708,6 +1717,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         rv.setActor(va);
         handleExpression(rv, expressionCounter);
+        
+        if (currentMethodInvocation != null) {
+            invokingMethod = true;
+        }
+
     }
 
     /**
