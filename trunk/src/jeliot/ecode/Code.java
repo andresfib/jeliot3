@@ -97,7 +97,13 @@ public class Code {
     public static final int AA=56;          // Array allocation
     public static final int AAC=57;          // Array access
     
-    //Last int used -> 57
+    public static final int CLASS=58;
+    public static final int END_CLASS=59;
+    public static final int CONSTRUCTOR=60;
+    public static final int METHOD=61;
+    public static final int FIELD=62;
+
+    //Last int used -> 62
 }
 
 //package jeliot.ecode;

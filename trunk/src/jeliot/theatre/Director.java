@@ -1119,14 +1119,14 @@ public class Director {
     }
 
     public void openScope() {
-        highlight(null);
-        showMessage("Opening new scope for variables.");
+        //highlight(null);
+        //showMessage("Opening new scope for variables.");
         getCurrentMethodFrame().openScope();
     }
 
     public void closeScope() {
-        highlight(null);
-        showMessage("Closing a scope and erasing the scope variables.");
+        //highlight(null);
+        //showMessage("Closing a scope and erasing the scope variables.");
         getCurrentMethodFrame().closeScope();
     }
 
@@ -1146,7 +1146,7 @@ public class Director {
     }
 
     public void exitLoop(String statementName, Value check) {
-        highlight(null);
+        //highlight(null);
         showMessage("Exiting the " + statementName + " loop.", check);
     }
 
@@ -1156,7 +1156,7 @@ public class Director {
     }
 
     public void skipLoop(String statementName, Value check) {
-        highlight(null);
+        //highlight(null);
         showMessage("Not entering the " + statementName + " loop.", check);
     }
 
@@ -1180,7 +1180,9 @@ public class Director {
         showMessage("Continuing without branching.", check);
     }
 
-    public void arrayCreation(int[] dims) {
+    public void arrayCreation(int[] dims, Highlight h) {
+	    
+        highlight(h);	    
         String dimensions = "";
         int n = dims.length;
         for (int i = 0; i < n; i++) {
@@ -1335,7 +1337,7 @@ public class Director {
 
     /**
      * Shows an animation of the invocation of a static foreign
-     * method.
+     * method for handling input.
      */
     public Value animateInputHandling(String type, Highlight h) {
 
@@ -1432,11 +1434,15 @@ public class Director {
         act.setLocation(p);
         val.setActor(act);
         currentScratch.registerCrap(act);
-        theatre.addActor(act);
-
+        //theatre.addActor(act);
+        ea.cut();
+		ea.reserve(act);
+		ea.bind(act);
+        
         return val;
     }
 
+    
     public void showArrayCreation(ArrayInstance array, jeliot.lang.Reference ref,
                                   Value[] lenVal, int expressionCounter,
                                   Highlight h) {

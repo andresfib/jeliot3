@@ -1749,7 +1749,7 @@ public class Interpreter {
 
                             Reference ref = new Reference(ai);
 
-                            director.arrayCreation(dimensionSize);
+                            director.arrayCreation(dimensionSize, h);
 
                             director.showArrayCreation(ai, ref, dimensionValues,
                                               expressionReference, h);
