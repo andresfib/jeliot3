@@ -1,6 +1,5 @@
 package jeliot.lang;
 
-//import jeliot.parser.*;
 import jeliot.theater.*;
 
 /**
@@ -9,30 +8,32 @@ import jeliot.theater.*;
   * variable is declared.
   *
   * @author Pekka Uronen
-  *
-  * created         9.8.1999
-  * last modified   16.8.1999
-  * modified        12.12.2002 by Niko Myller
+  * @author Niko Myller
   */
 public class Variable {
 
-/**
- *
- */
-//    PVariableDeclarator declarator;
+//  TODO: documentation.
+
+    /**
+     *
+     */
     Value value;
+    
     /**
 	 *
 	 */
 	VariableActor actor;
+    
     /**
 	 *
 	 */
 	String type;
+    
     /**
 	 *
 	 */
 	String name;
+    
     /**
 	 *
 	 */

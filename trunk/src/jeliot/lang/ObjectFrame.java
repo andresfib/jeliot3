@@ -5,10 +5,14 @@ import java.util.Hashtable;
 import jeliot.theater.*;
 
 /**
-  *
-  * @author Niko Myller
-  */
+ * ObjectFrame represents an instance of a class that is created at
+ * run-time. 
+ *
+ * @author Niko Myller
+ */
 public class ObjectFrame extends Instance {
+
+//  TODO: documentation.
 
     /**
 	 *
@@ -19,6 +23,7 @@ public class ObjectFrame extends Instance {
 	 *
 	 */
 	private Hashtable vars;
+    
     /**
 	 *
 	 */

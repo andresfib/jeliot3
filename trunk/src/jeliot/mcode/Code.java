@@ -4,10 +4,24 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
+ * This class contains the MCode language constructs as a 
+ * final static variables that can be used in DynamicJava during
+ * extraction of information in MCode and interpretation of the
+ * MCode in MCode interpreter.
  * 
  * @author Niko Myller
+ * @author Andrés Moreno
+ * 
+ * @see koala.dynamicjava.interpreter.TreeInterpreter
+ * @see koala.dynamicjava.interpreter.EvaluationVisitor
+ * @see jeliot.mcode.Interpreter
  */
 public class Code {
+
+    /**
+     * This should be never used. 
+     */
+	private Code() {}
 
 	/**
 	 * The resource bundle used in this package
@@ -55,7 +69,6 @@ public class Code {
 	public static final int END = 36;
 	/**	Constructor call number to determine when the constructor call is finished. (SPECIAL) used for a hack */
 	public static final int CONSCN = 72;
-	
 
 	// statements and expressions
 	/** Assignment */
@@ -168,7 +181,7 @@ public class Code {
 	//Input and output
 	/**	Output statement */
 	public static final int OUTPUT = 44;
-	/** Input statement */ 
+	/** Input statement */
 	public static final int INPUT = 54;
 	/** Input statement */
 	public static final int INPUTTED = 55;
@@ -210,8 +223,8 @@ public class Code {
 
 	// Class information
 	/**	Starting the information for a class. */
-	public static final int CLASS = 58; 
-	/** Ends the information for a class. */	 
+	public static final int CLASS = 58;
+	/** Ends the information for a class. */
 	public static final int END_CLASS = 59;
 	/** Indicates a constructor in the class information */
 	public static final int CONSTRUCTOR = 60;

@@ -2,16 +2,18 @@ package jeliot.lang;
 
 
 /**
-  * Variable is an instance of a variable - a field or a local
-  * variable. A new variable is created runtime every time a local
-  * variable is declared.
+  * VariableInArray is an instance of an array variable.
+  * A new array variables are created at runtime every time
+  * a new array is created.
   *
   * @author Pekka Uronen
-  *
-  * created         11.10.1999
+  * @author Niko Myller
+  * 
+  * @see jeliot.lang.ArrayInstance
   */
 public class VariableInArray extends Variable {
 
+//  TODO: documentation.
     /**
 	 *
 	 */

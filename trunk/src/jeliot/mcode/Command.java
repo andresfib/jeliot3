@@ -9,10 +9,12 @@ package jeliot.mcode;
  */
 public class Command {
 
+//  TODO: documentation.
     /**
 	 *
 	 */
 	private int expressionReference = 0;
+    
     /**
 	 *
 	 */

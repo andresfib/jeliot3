@@ -2,12 +2,15 @@ package jeliot.lang;
 
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         2.10.1999
-  */
+ * Reference is a value of a reference type meaning that all the
+ * references to instances are objects of this class. 
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class Reference extends Value {
 
+//  TODO: documentation.
     /**
 	 *
 	 */

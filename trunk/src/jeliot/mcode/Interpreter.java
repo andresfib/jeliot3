@@ -22,12 +22,15 @@ import jeliot.lang.VariableInArray;
 import jeliot.theater.*;
 
 /**
- * 
+ * The MCode interpreter that interprets the MCode received during
+ * the intepretation in DynamicJava.
  * 
  * @author Niko Myller
+ * @author Andrés Moreno
  */
 public class Interpreter {
-
+    
+//  TODO: documentation.
 	/**
 	 *
 	 */

@@ -12,12 +12,24 @@ import jeliot.theater.*;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 
 /**
- * 
+ * This class contains helper methods for the MCode language
+ * extraction and interpretation. 
+ *  
  * @author Niko Myller
+ * @author Andrés Moreno
+ * 
+ * @see koala.dynamicjava.interpreter.TreeInterpreter
+ * @see koala.dynamicjava.interpreter.EvaluationVisitor
+ * @see jeliot.mcode.Interpreter
+ * 
  */
 public class MCodeUtilities {
 
-    
+    /**
+     * Should be never used. 
+     */
+    private MCodeUtilities() {}
+            
     //Unary expressions in Jeliot 3 visualization engine
     /**
 	 * Complement
@@ -184,6 +196,8 @@ public class MCodeUtilities {
 	 */
 	public static final int REFERENCE = 9;
 
+//  TODO: documentation.
+
 	/**
 	 *
 	 */
@@ -214,8 +228,13 @@ public class MCodeUtilities {
     /**
      * 
      */
-    public static Stack numParametersStack = new Stack();    
+    public static Stack numParametersStack = new Stack();
+        
+    /**
+     * 
+     */
     private static int numParameters = 0;
+    
     /**
 	 * @param type
 	 * @return
