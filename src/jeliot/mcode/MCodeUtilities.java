@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import jeliot.util.DebugUtil;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
+import koala.dynamicjava.interpreter.NodeProperties;
 import koala.dynamicjava.tree.Node;
 
 /**
@@ -314,24 +315,7 @@ public class MCodeUtilities {
         constructorParametersStack.pop();
         constructorNameStack.pop();
     }
-    /**
-     * Set to true when visiting overloaded toString method
-     */
-    public static boolean toStringOverloaded;
-    
-    /**
-     * 
-     */
-    public static boolean isToStringOverloaded(){
-    	return toStringOverloaded;
-    }
-    
-    /**
-     * 
-     */
-    public static void setToStringOverloaded(boolean value){
-    	toStringOverloaded = value;
-    }
+
     /**
      * 
      */
@@ -368,7 +352,7 @@ public class MCodeUtilities {
             return MCodeUtilities.LONG;
 
         } else if (type.equals(char.class.getName())
-                || type.equals(Character.class.getClass().getName()) || type.equals("C")) {
+                || type.equals(Character.class.getName()) || type.equals("C")) {
 
             return MCodeUtilities.CHAR;
 
@@ -1338,13 +1322,60 @@ public class MCodeUtilities {
 	 * 
 	 */
 	public static void initialize() {
-	
+	    toStringOverLoadedStack = new Stack();
 		previousClassStack = new Stack();
 		previousParametersStack = new Stack();
 		constructorNameStack = new Stack();
 		constructorParametersStack = new Stack();
 	}
 
+    /**
+     * Set to true when visiting overloaded toString method
+     */
+    private static Boolean toStringOverloaded;
+    
+
+    /**
+     * Comment for <code>toStringOverLoadedStack</code>
+     */
+    private static Stack toStringOverLoadedStack = new Stack(); 
+    
+   
+    /**
+     * @return
+     */
+    public static boolean isToStringOverloaded(){
+    	return !toStringOverLoadedStack.isEmpty() && ((Boolean) toStringOverLoadedStack.peek()).booleanValue();
+    }
+    
+    /**
+     * 
+     *
+     */
+    public static void startToString() {
+        toStringOverLoadedStack.push(new Boolean(false));
+    }
+    
+    /**
+     * 
+     *
+     */
+    public static void endToString() {
+        if (!toStringOverLoadedStack.isEmpty()) {
+            toStringOverLoadedStack.pop();
+        }
+    }
+    
+    /**
+     * @param value
+     */
+    public static void setToStringOverloaded(boolean value) {
+        if (!toStringOverLoadedStack.isEmpty()) {
+            toStringOverLoadedStack.pop();
+        }
+        toStringOverLoadedStack.push(new Boolean(value));
+    }
+	
 	/**
 	 * @param visitor
 	 * @param robj
@@ -1360,7 +1391,8 @@ public class MCodeUtilities {
 
 		Object obj = expression.acceptVisitor(visitor);
 
-		setToStringOverloaded(false);
+		MCodeUtilities.startToString();
+		
 		MCodeUtilities.write("" + Code.OMC + Code.DELIM
 				+ "toString" + Code.DELIM + "0"
 				+ Code.DELIM + counter + Code.DELIM
@@ -1368,6 +1400,7 @@ public class MCodeUtilities {
 				+ "0,0,0,0");
 		
 		String result = obj.toString();
+		
 		if (!isToStringOverloaded()){
 			//fake everything
 			MCodeUtilities.write(Code.PARAMETERS
@@ -1391,34 +1424,30 @@ public class MCodeUtilities {
 					+ EvaluationVisitor.returnExpressionCounterStack.pop() + Code.DELIM + auxCounter
 					+ Code.DELIM + result + Code.DELIM
 					+ String.class.getName() + Code.DELIM
-					+ "0,0,0,0");
-			
-		} else {
-			setToStringOverloaded(false);
+					+ "0,0,0,0");		
 		}
+		
+		MCodeUtilities.endToString();
 		MCodeUtilities.write("" + Code.OMCC);
 		
 		return result;
 	}
-	public static String stringConversion (Node exp, EvaluationVisitor visitor) {
-		if (MCodeUtilities.isString(exp)){ //ask for type implements tree.Literal
-			
-			return exp.acceptVisitor(visitor).toString();
-			
+	public static String stringConversion(Node exp, EvaluationVisitor visitor) {
+		if (MCodeUtilities.isString(exp)) { //ask for type implements tree.Literal
+			return exp.acceptVisitor(visitor).toString();			
 		} else {
-			
 			return MCodeUtilities.toStringCall(exp, visitor);
 		}
 	}
 	public static boolean isString( Node exp){
 		
-		Class c = (Class) exp.getProperty("type");
+		Class c = (Class) NodeProperties.getType(exp);
 		boolean automaticStringConversion = (c.isPrimitive() 
-				|| String.class.equals(c) || Integer.class.equals(c)
-                || Double.class.equals(c) || Byte.class.equals(c)
-                || Long.class.equals(c) || Short.class.equals(c)
-                || Boolean.class.equals(c) || Float.class.equals(c)
-                || Character.class.equals(c));
+				|| String.class.getName().equals(c.getName()) || Integer.class.getName().equals(c.getName())
+                || Double.class.getName().equals(c.getName()) || Byte.class.getName().equals(c.getName())
+                || Long.class.getName().equals(c.getName()) || Short.class.getName().equals(c.getName())
+                || Boolean.class.getName().equals(c.getName()) || Float.class.getName().equals(c.getName())
+                || Character.class.getName().equals(c.getName()));
 
 		return automaticStringConversion || (koala.dynamicjava.tree.Literal.class.isInstance(exp.getClass()));
 	}

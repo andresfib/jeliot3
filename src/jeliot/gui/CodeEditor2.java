@@ -134,7 +134,7 @@ public class CodeEditor2 extends JComponent {
      *            changed (means that it is just loaded or saved).
      */
     public void setChanged(boolean changed) {
-        if (changed && this.changed != changed && masterFrame != null) {
+        if (changed && this.changed != changed && masterFrame != null && !masterFrame.getTitle().endsWith("*")) {
             masterFrame.setTitle(masterFrame.getTitle() + " *");
         }
         this.changed = changed;
@@ -247,7 +247,7 @@ public class CodeEditor2 extends JComponent {
     private ActionListener allSelector = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            area.requestFocus();
+            area.requestFocusInWindow();
             area.selectAll();
         }
     };
@@ -501,7 +501,7 @@ public class CodeEditor2 extends JComponent {
         //area.recalculateVisibleLines();
         area.setFirstLine(0);
         area.setCaretPosition(0);
-        area.requestFocus();
+        area.requestFocusInWindow();
         //Clear undo/redo
         undoredo.undo.discardAllEdits();
         undoredo.undoAction.updateUndoState();
@@ -559,7 +559,7 @@ public class CodeEditor2 extends JComponent {
         final int left = l - 1;
         final int right = r;
 
-        //area.requestFocus();
+        area.requestFocusInWindow();
         if (left >= 0) {
             if (left != 0 && left == right) {
                 area.select(left, right + 1);
@@ -598,7 +598,7 @@ public class CodeEditor2 extends JComponent {
                 area.setCaretPosition(caretPosition);
             }
         }
-        area.requestFocus();
+        area.requestFocusInWindow();
     }
 
     /**
@@ -657,7 +657,7 @@ public class CodeEditor2 extends JComponent {
         } else {
             area.setCaretPosition(caretPosition);
         }
-        area.requestFocus();
+        area.requestFocusInWindow();
 
     }
 
@@ -672,6 +672,9 @@ public class CodeEditor2 extends JComponent {
         int returnVal = fileChooser.showSaveDialog(masterFrame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
+            if (file.getName().indexOf(".") < 0) {
+                file = new File(file.getPath() + ".java");
+            }
             return writeProgram(file);
         }
         return false;
@@ -756,7 +759,7 @@ public class CodeEditor2 extends JComponent {
     void clearProgram() {
         setProgram(template);
         area.setCaretPosition(0);
-        //area.requestFocus();
+        area.requestFocusInWindow();
 
         currentFile = null; //Jeliot 3
         setTitle("");
@@ -838,5 +841,15 @@ public class CodeEditor2 extends JComponent {
      */
     public void setSaveAutomatically(boolean saveAutomatically) {
         this.saveAutomatically = saveAutomatically;
+    }
+    
+    /**
+     * @param font Font to be set.
+     */
+    public void setFont(Font font) {
+        getTextArea().getPainter().setFont(font);
+        ln.setFont(font);
+        propertiesBundle.setFontProperty("font.code_editor", font);
+
     }
 }

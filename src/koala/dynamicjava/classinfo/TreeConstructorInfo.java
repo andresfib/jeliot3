@@ -79,18 +79,19 @@ public class TreeConstructorInfo implements ConstructorInfo {
      * @param cf the class finder
      * @param dc the declaring class
      */
-    public TreeConstructorInfo(ConstructorDeclaration f, ClassFinder cf, ClassInfo dc) {
+    public TreeConstructorInfo(ConstructorDeclaration f, ClassFinder cf,
+            ClassInfo dc) {
         constructorTree = f;
-        classFinder     = cf;
-	declaringClass  = dc;
-        typeVisitor     = new TypeVisitor(classFinder, declaringClass);
+        classFinder = cf;
+        declaringClass = dc;
+        typeVisitor = new TypeVisitor(classFinder, declaringClass);
     }
 
     /**
      * Returns the constructor declaration
      */
     public ConstructorDeclaration getConstructorDeclaration() {
-	return constructorTree;
+        return constructorTree;
     }
 
     /**
@@ -106,18 +107,19 @@ public class TreeConstructorInfo implements ConstructorInfo {
      * by this object
      */
     public ClassInfo[] getParameterTypes() {
-	if (parameters == null) {
-	    List        ls = constructorTree.getParameters();
-	    Iterator    it = ls.iterator();
-	    parameters     = new ClassInfo[ls.size()];
-	    int         i  = 0;
+        if (parameters == null) {
+            List ls = constructorTree.getParameters();
+            Iterator it = ls.iterator();
+            parameters = new ClassInfo[ls.size()];
+            int i = 0;
 
-	    while (it.hasNext()) {
-		FormalParameter fp = (FormalParameter)it.next();
-		parameters[i++] = (ClassInfo)fp.getType().acceptVisitor(typeVisitor);
-	    }
-	}
-	return (ClassInfo[])parameters.clone();
+            while (it.hasNext()) {
+                FormalParameter fp = (FormalParameter) it.next();
+                parameters[i++] = (ClassInfo) fp.getType().acceptVisitor(
+                        typeVisitor);
+            }
+        }
+        return (ClassInfo[]) parameters.clone();
     }
 
     /**
@@ -125,16 +127,17 @@ public class TreeConstructorInfo implements ConstructorInfo {
      * the exceptions declared to be thrown by the underlying constructor
      */
     public ClassInfo[] getExceptionTypes() {
-	if (exceptions == null) {
-            List        ls = constructorTree.getExceptions();
-            Iterator    it = ls.iterator();
-            exceptions     = new ClassInfo[ls.size()];
-            int         i  = 0;
+        if (exceptions == null) {
+            List ls = constructorTree.getExceptions();
+            Iterator it = ls.iterator();
+            exceptions = new ClassInfo[ls.size()];
+            int i = 0;
             while (it.hasNext()) {
-                exceptions[i++] = lookupClass((String)it.next(), declaringClass);
+                exceptions[i++] = lookupClass((String) it.next(),
+                        declaringClass);
             }
         }
-	return (ClassInfo[])exceptions.clone();
+        return (ClassInfo[]) exceptions.clone();
     }
 
     /**
@@ -144,7 +147,8 @@ public class TreeConstructorInfo implements ConstructorInfo {
         if (obj == null || !(obj instanceof TreeConstructorInfo)) {
             return false;
         }
-        return constructorTree.equals(((TreeConstructorInfo)obj).constructorTree);
+        return constructorTree
+                .equals(((TreeConstructorInfo) obj).constructorTree);
     }
 
     /**
@@ -154,15 +158,15 @@ public class TreeConstructorInfo implements ConstructorInfo {
      * @exception NoClassDefFoundError if the class cannot be loaded
      */
     private ClassInfo lookupClass(String s, ClassInfo c) {
-	try {
-	    if (c == null) {
-		return classFinder.lookupClass(s, c);
-	    } else {
-		return classFinder.lookupClass(s);
-	    }
-	} catch (ClassNotFoundException e) {
-	    throw new NoClassDefFoundError(e.getMessage());
-	}
+        try {
+            if (c == null) {
+                return classFinder.lookupClass(s, c);
+            } else {
+                return classFinder.lookupClass(s);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new NoClassDefFoundError(e.getMessage());
+        }
     }
 
 }

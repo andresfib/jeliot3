@@ -12,19 +12,22 @@ import java.util.Vector;
  * 
  * @see jeliot.lang.Instance
  */
-public class InstanceActor extends Actor implements ActorContainer {
+public abstract class InstanceActor extends Actor implements ActorContainer {
 
 //  DOC: Document!
 
-    /**
-	 *
+	/**
+	 * Comment for <code>references</code>
 	 */
 	private Vector references = new Vector();
 
+    /**
+     * Comment for <code>position</code>
+     */
     private int position;
 	
     /**
-     *
+     * 
      */
     protected InstanceActor() {}
     
@@ -55,9 +58,9 @@ public class InstanceActor extends Actor implements ActorContainer {
 	 */
 	public void setLocation(int x, int y) {
         super.setLocation(x, y);
-        Enumeration enum = references.elements();
-        while (enum.hasMoreElements()) {
-            ReferenceActor actor = (ReferenceActor)enum.nextElement();
+        Enumeration enumeration = references.elements();
+        while (enumeration.hasMoreElements()) {
+            ReferenceActor actor = (ReferenceActor) enumeration.nextElement();
             actor.calculateBends();
         }
     }
@@ -67,13 +70,13 @@ public class InstanceActor extends Actor implements ActorContainer {
 	 */
 	public void removeActor(Actor actor) { }
 
-
     /**
      * @return Returns the position.
      */
     public int getPosition() {
         return position;
     }
+    
     /**
      * @param position The position to set.
      */

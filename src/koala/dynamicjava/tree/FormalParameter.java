@@ -53,7 +53,7 @@ public class FormalParameter extends Node {
      */
     public final static String NAME = "name";
 
-   /**
+    /**
      * Is this parameter final?
      */
     private boolean finalParameter;
@@ -76,7 +76,7 @@ public class FormalParameter extends Node {
      * @exception IllegalArgumentException if t is null or n is null
      */
     public FormalParameter(boolean f, Type t, String n) {
-	this(f, t, n, null, 0, 0, 0, 0);
+        this(f, t, n, null, 0, 0, 0, 0);
     }
 
     /**
@@ -91,30 +91,32 @@ public class FormalParameter extends Node {
      * @param ec    the end column
      * @exception IllegalArgumentException if t is null or n is null
      */
-    public FormalParameter(boolean f, Type t, String n,
-			   String fn, int bl, int bc, int el, int ec) {
-	super(fn, bl, bc, el, ec);
+    public FormalParameter(boolean f, Type t, String n, String fn, int bl,
+            int bc, int el, int ec) {
+        super(fn, bl, bc, el, ec);
 
-	if (t == null) throw new IllegalArgumentException("t == null");
-	if (n == null) throw new IllegalArgumentException("n == null");
+        if (t == null)
+            throw new IllegalArgumentException("t == null");
+        if (n == null)
+            throw new IllegalArgumentException("n == null");
 
-	finalParameter = f;
-	type           = t;
-	name           = n;
+        finalParameter = f;
+        type = t;
+        name = n;
     }
 
     /**
      * Is this parameter final?
      */
     public boolean isFinal() {
-	return finalParameter;
+        return finalParameter;
     }
 
     /**
      * Returns the declaring type of this parameter
      */
     public Type getType() {
-	return type;
+        return type;
     }
 
     /**
@@ -122,16 +124,17 @@ public class FormalParameter extends Node {
      * @exception IllegalArgumentException if t is null
      */
     public void setType(Type t) {
-	if (t == null) throw new IllegalArgumentException("t == null");
+        if (t == null)
+            throw new IllegalArgumentException("t == null");
 
-	firePropertyChange(TYPE, type, type = t);
+        firePropertyChange(TYPE, type, type = t);
     }
 
     /**
      * The name of this parameter
      */
     public String getName() {
-	return name;
+        return name;
     }
 
     /**
@@ -139,9 +142,10 @@ public class FormalParameter extends Node {
      * @exception IllegalArgumentException if s is null
      */
     public void setName(String s) {
-	if (s == null) throw new IllegalArgumentException("s == null");
+        if (s == null)
+            throw new IllegalArgumentException("s == null");
 
-	firePropertyChange(NAME, name, name = s);
+        firePropertyChange(NAME, name, name = s);
     }
 
     /**
@@ -149,6 +153,6 @@ public class FormalParameter extends Node {
      * @param visitor the visitor to accept
      */
     public Object acceptVisitor(Visitor visitor) {
-	return visitor.visit(this);
+        return visitor.visit(this);
     }
 }

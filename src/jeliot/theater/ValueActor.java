@@ -122,6 +122,14 @@ public class ValueActor extends Actor {
         g.setFont(getFont());
         g.setColor(fgcolor);
         g.drawString(valstr, namex, namey-1);
+        /*
+         * This works if for some reason valstr would be null
+         * which never should be a case but if there is a bug that
+         * makes the situation so then this can help in the debugging.
+         */
+        //if (valstr != null) {
+        //    g.drawString(valstr, namex, namey-1);
+        //}
     }
 
     /* (non-Javadoc)

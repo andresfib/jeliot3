@@ -92,7 +92,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
     public final boolean isManagingFocus() {
         return false;
     }
-
+    
     /**
      * Returns the syntax styles used to paint colorized text. Entry <i>n</i>
      * will be used to paint tokens with id = <i>n</i>.

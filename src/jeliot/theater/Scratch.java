@@ -158,7 +158,7 @@ public class Scratch extends Actor implements ActorContainer {
             Actor a = (Actor)crap.elementAt(i);
             ActorContainer cont = a.getParent();
             if (cont instanceof Theater) {
-                cont.removeActor(a);
+                cont.removeActor(a); //Maybe this should be done even though the container is not a theater object.
                 ((Theater)cont).removePassive(a);
             }
         }

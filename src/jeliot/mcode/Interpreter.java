@@ -3266,9 +3266,9 @@ public class Interpreter {
      * Not in use at the moment.
      */
     public void checkInstancesForRemoval() {
-        Enumeration enum = instances.keys();
-        while (enum.hasMoreElements()) {
-            Object obj = enum.nextElement();
+        Enumeration enumeration = instances.keys();
+        while (enumeration.hasMoreElements()) {
+            Object obj = enumeration.nextElement();
             Instance inst = (Instance) instances.get(obj);
             if (inst != null) {
                 //For testing
@@ -3292,9 +3292,9 @@ public class Interpreter {
      * Not in use at the moment
      */
     public void removeInstances() {
-        Enumeration enum = instances.keys();
-        while (enum.hasMoreElements()) {
-            Object obj = enum.nextElement();
+        Enumeration enumeration = instances.keys();
+        while (enumeration.hasMoreElements()) {
+            Object obj = enumeration.nextElement();
             Instance inst = (Instance) instances.get(obj);
             if (inst != null) {
                 instances.remove(obj);

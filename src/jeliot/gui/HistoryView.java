@@ -109,19 +109,6 @@ public class HistoryView extends JComponent implements ActionListener {
      */
     private boolean enabled = true;
 
-    //TODO: Buffering of next and previous image could improve performance
-    /**
-     * Comment for <code>previousImageNumber</code>
-     */
-    //private int previousImageNumber;
-    /**
-     * Comment for <code>previous</code>
-     */
-    //private BufferedImage previous;
-    /**
-     * Comment for <code>next</code>
-     */
-    //private BufferedImage next;
     /**
      * 
      * @param c

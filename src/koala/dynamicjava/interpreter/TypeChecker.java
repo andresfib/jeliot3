@@ -2293,7 +2293,6 @@ public class TypeChecker extends VisitorObject {
                     }
                 } else if (ec.isInterface()) {
                     if (tc.isInterface()) {
-                        //TODO : tests the signatures ?
                     } else if (tc.isArray()) {
                         if (!Cloneable.class.isAssignableFrom(ec)) {
                             throw new ExecutionError("cast", n);

@@ -207,11 +207,12 @@ public class Jeliot {
      */
     public Jeliot(String defaultIO) {
         setIOPackageName(defaultIO);
-        
+
         //Set LookAndFeel
         try {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.MetalLookAndFeel");
+            UIManager
+                    .setLookAndFeel("com.sun.java.swing.plaf.windows.MetalLookAndFeel");
         } catch (InstantiationException e) { //
         } catch (ClassNotFoundException e) { //
         } catch (UnsupportedLookAndFeelException e) { //
@@ -220,12 +221,13 @@ public class Jeliot {
 
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
         hv = new HistoryView(codePane, udir);
-        
+
         //Just to track the animation happenings
         Tracker.setTheater(theatre);
         Tracker.setCodePane2(codePane);
 
-        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir, callTree, hv);
+        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir,
+                callTree, hv);
     }
 
     /**
@@ -279,7 +281,8 @@ public class Jeliot {
                 launcher = null;
             }
 
-            launcher = new Launcher(new BufferedReader(new StringReader(this.sourceCode)));
+            launcher = new Launcher(new BufferedReader(new StringReader(
+                    this.sourceCode)));
             launcher.setMethodCall(this.methodCall);
 
             launcher.setCompiling(true);
@@ -336,7 +339,7 @@ public class Jeliot {
         callTree.initialize();
         hv.initialize();
     }
-    
+
     /**
      * Initializes the compiled program to be animated.
      */
@@ -352,17 +355,18 @@ public class Jeliot {
         director = new Director(theatre, this, engine);
         director.setActorFactory(af);
 
-        mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader, director, gui
-                .getProgram(), inputWriter);
+        mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader,
+                director, gui.getProgram(), inputWriter);
         director.setInterpreter(mCodeInterpreterForTheater);
 
         try {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);
-            MCodeUtilities.addRegisteredSecondaryMCodeConnections(new PrintWriter(pw));
-            mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(new BufferedReader(pr),
-                    callTree, gui.getProgram(), this, gui.getTabNumber(bundle2
-                            .getString("tab.title.call_tree")));
+            MCodeUtilities
+                    .addRegisteredSecondaryMCodeConnections(new PrintWriter(pw));
+            mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(
+                    new BufferedReader(pr), callTree, gui.getProgram(), this,
+                    gui.getTabNumber(bundle2.getString("tab.title.call_tree")));
         } catch (Exception e) {
             if (DebugUtil.DEBUGGING) {
                 e.printStackTrace();
@@ -390,7 +394,7 @@ public class Jeliot {
         });
 
         controller.addPauseListener(gui);
-        
+
         callTreeThread = new Thread(new Runnable() {
 
             public void run() {
@@ -470,7 +474,9 @@ public class Jeliot {
      * @param e
      */
     public void showErrorMessage(InterpreterError e) {
-        Tracker.writeToFile("Error", e.getMessage(), System.currentTimeMillis());
+        Tracker
+                .writeToFile("Error", e.getMessage(), System
+                        .currentTimeMillis());
         gui.showErrorMessage(e);
     }
 
@@ -574,7 +580,8 @@ public class Jeliot {
             }
             try {
                 r.close();
-            } catch (IOException e1) {}
+            } catch (IOException e1) {
+            }
         }
         r = null;
         if (ecodeReader != null) {
@@ -649,16 +656,26 @@ public class Jeliot {
 
         if (args.length >= 1) {
             if (args[0] != null) {
-                File file = new File(udir);
-                file = new File(file, "examples");
-                final File file1 = new File(file, args[0]);
+                File userDir = new File(udir);
+                File file = new File(userDir, "examples");
                 if (file.exists()) {
-                    SwingUtilities.invokeLater(new Runnable() {
-
-                        public void run() {
-                            setProgram(file1);
-                        }
-                    });
+                    final File programFile = new File(file, args[0]);
+                    if (programFile.exists()) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                setProgram(programFile);
+                            }
+                        });
+                    }
+                } else {
+                    final File programFile = new File(userDir, args[0]);
+                    if (programFile.exists()) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                setProgram(programFile);
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -760,7 +777,8 @@ public class Jeliot {
      */
     public void setIOPackageName(String IOPackage) {
         this.IOPackage = IOPackage;
-        this.IOPackagePattern = Pattern.compile("import\\s+" + this.IOPackage + "\\s*;");
+        this.IOPackagePattern = Pattern.compile("import\\s+" + this.IOPackage
+                + "\\s*;");
     }
 
     /**
@@ -787,15 +805,15 @@ public class Jeliot {
     public boolean isHistoryViewVisible() {
         return hv.isVisible();
     }
-    
+
     public HistoryView getHistoryView() {
         return this.hv;
     }
-    
+
     public void highlightStatement(Highlight h) {
         codePane.highlightStatement(h);
     }
-    
+
     /**
      * Called when Jeliot is closed.
      * Clean up.

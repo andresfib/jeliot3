@@ -203,8 +203,9 @@ public class ClassInfoCompiler {
         classInfo = (TreeClassInfo) ci;
         typeDeclaration = classInfo.getTypeDeclaration();
         classFinder = (TreeClassFinder) classInfo.getClassFinder();
-        importationManager = (ci.getDeclaringClass() != null) ? classFinder.getImportationManager()
-                : (ImportationManager) classFinder.getImportationManager().clone();
+        importationManager = (ci.getDeclaringClass() != null) ? classFinder
+                .getImportationManager() : (ImportationManager) classFinder
+                .getImportationManager().clone();
         interpreter = (TreeInterpreter) classFinder.getInterpreter();
         isInterface = classInfo.isInterface();
     }
@@ -224,9 +225,9 @@ public class ClassInfoCompiler {
             af |= Modifier.INTERFACE;
         }
 
-        classFactory = new ClassFactory(af, name, classInfo.getSuperclass().getName(), interpreter
-                .getClass(), interpreter.getExceptionClass(), interpreter.getClassLoader()
-                .toString());
+        classFactory = new ClassFactory(af, name, classInfo.getSuperclass()
+                .getName(), interpreter.getClass(), interpreter
+                .getExceptionClass(), interpreter.getClassLoader().toString());
 
         // Add the innerclass attributes
         if (dc != null) {
@@ -240,7 +241,8 @@ public class ClassInfoCompiler {
             InnerClassesEntry ice = classFactory.addInnerClassesEntry();
             ice.setInnerClassInfo(ciname);
             ice.setOuterClassInfo(name);
-            ice.setInnerName(ciname.substring(name.length() + 1, ciname.length()));
+            ice.setInnerName(ciname.substring(name.length() + 1, ciname
+                    .length()));
             ice.setInnerClassAccessFlags((short) inners[i].getModifiers());
         }
 
@@ -257,7 +259,8 @@ public class ClassInfoCompiler {
         }
 
         if (!isInterface && hasAbstractMethod && !Modifier.isAbstract(af)) {
-            typeDeclaration.setProperty(NodeProperties.ERROR_STRINGS, new String[] { name});
+            typeDeclaration.setProperty(NodeProperties.ERROR_STRINGS,
+                    new String[] { name });
             throw new ExecutionError("misplaced.abstract", typeDeclaration);
         }
 
@@ -281,13 +284,15 @@ public class ClassInfoCompiler {
         // Create the class initializer
         if (classInitializer.size() > 0) {
             interpreter.registerMethod(classFactory.createClassInitializer(),
-                    new MethodDeclaration(Modifier.PUBLIC, new VoidType(), "<clinit>",
-                            new LinkedList(), new LinkedList(),
-                            new BlockStatement(classInitializer)), importationManager);
+                    new MethodDeclaration(Modifier.PUBLIC, new VoidType(),
+                            "<clinit>", new LinkedList(), new LinkedList(),
+                            new BlockStatement(classInitializer)),
+                    importationManager);
         }
 
         // Define the class
-        TreeClassLoader classLoader = (TreeClassLoader) interpreter.getClassLoader();
+        TreeClassLoader classLoader = (TreeClassLoader) interpreter
+                .getClassLoader();
         return classLoader.defineClass(name, classFactory.getByteCode());
     }
 
@@ -310,13 +315,14 @@ public class ClassInfoCompiler {
             ex[i] = cinf[i].getName();
         }
 
-        String sig = ClassFactory.getMethodIdentifier(classInfo.getName(), "<init>", params,
-                interpreter.getClassLoader().toString());
+        String sig = ClassFactory.getMethodIdentifier(classInfo.getName(),
+                "<init>", params, interpreter.getClassLoader().toString());
         ConstructorDeclaration cd = ci.getConstructorDeclaration();
 
         // Check the constructor's name
         if (!cd.getName().equals(typeDeclaration.getName())) {
-            cd.setProperty(NodeProperties.ERROR_STRINGS, new String[] { cd.getName()});
+            cd.setProperty(NodeProperties.ERROR_STRINGS, new String[] { cd
+                    .getName() });
             throw new ExecutionError("constructor.name", cd);
         }
 
@@ -331,15 +337,16 @@ public class ClassInfoCompiler {
             }
             civ.acceptVisitor(cv);
 
-            interpreter.registerConstructorArguments(sig, cd.getParameters(), civ.getArguments(),
-                    importationManager, cd); //jeliot 3
+            interpreter.registerConstructorArguments(sig, cd.getParameters(),
+                    civ.getArguments(), importationManager, cd); //jeliot 3
         } else {
-            interpreter.registerConstructorArguments(sig, new LinkedList(), new LinkedList(),
-                    importationManager, cd); //jeliot 3
+            interpreter.registerConstructorArguments(sig, new LinkedList(),
+                    new LinkedList(), importationManager, cd); //jeliot 3
         }
 
-        MethodDeclaration md = new MethodDeclaration(cd.getAccessFlags(), new VoidType(), "<init>",
-                cd.getParameters(), new LinkedList(), new BlockStatement(cd.getStatements()));
+        MethodDeclaration md = new MethodDeclaration(cd.getAccessFlags(),
+                new VoidType(), "<init>", cd.getParameters(), new LinkedList(),
+                new BlockStatement(cd.getStatements()));
         interpreter.registerMethod(sig, md, importationManager);
 
         // Add the instance initialization statement to the constructor statement
@@ -352,8 +359,8 @@ public class ClassInfoCompiler {
         }
 
         // Create the constructor
-        classFactory.addConstructor(cd.getAccessFlags(), params, ex, cv.superConstructor,
-                cv.constructorParameters);
+        classFactory.addConstructor(cd.getAccessFlags(), params, ex,
+                cv.superConstructor, cv.constructorParameters);
     }
 
     /**
@@ -369,7 +376,8 @@ public class ClassInfoCompiler {
             InnerClassesEntry ice = classFactory.addInnerClassesEntry();
             ice.setInnerClassInfo(ciname);
             ice.setOuterClassInfo(dcname);
-            ice.setInnerName(ciname.substring(dcname.length() + 1, ciname.length()));
+            ice.setInnerName(ciname.substring(dcname.length() + 1, ciname
+                    .length()));
             ice.setInnerClassAccessFlags((short) ci.getModifiers());
 
             ci = dc;
@@ -415,12 +423,14 @@ public class ClassInfoCompiler {
                 ClassInfo sdc = sc.getDeclaringClass();
                 ClassInfo dc = classInfo.getDeclaringClass();
 
-                if (dc != null && dc.equals(sdc) && !Modifier.isStatic(sc.getModifiers())) {
+                if (dc != null && dc.equals(sdc)
+                        && !Modifier.isStatic(sc.getModifiers())) {
                     List l = new LinkedList();
                     l.add(new Identifier("param$0"));
                     exp = new QualifiedName(l);
                     node.setExpression(exp);
-                } else if (sdc != null && sdc.equals(classInfo.getAnonymousDeclaringClass())
+                } else if (sdc != null
+                        && sdc.equals(classInfo.getAnonymousDeclaringClass())
                         && !Modifier.isStatic(sc.getModifiers())) {
                     List l = new LinkedList();
                     l.add(new Identifier("param$0"));
@@ -460,14 +470,16 @@ public class ClassInfoCompiler {
                     params = new ClassInfo[args.size()];
 
                     while (it.hasNext()) {
-                        params[i++] = NodeProperties.getClassInfo((Expression) it.next());
+                        params[i++] = NodeProperties
+                                .getClassInfo((Expression) it.next());
                     }
                     if (node.isSuper()) {
                         ClassInfo sc = classInfo.getSuperclass();
                         cons = ClassInfoUtilities.lookupConstructor(sc, params);
                         superConstructor = sc.getName();
                     } else {
-                        cons = ClassInfoUtilities.lookupConstructor(classInfo, params);
+                        cons = ClassInfoUtilities.lookupConstructor(classInfo,
+                                params);
                         superConstructor = classInfo.getName();
                     }
                 } catch (NoSuchMethodException e) {
@@ -482,8 +494,18 @@ public class ClassInfoCompiler {
             }
 
             if (superConstructor == null) {
-                ClassInfo sc = classInfo.getSuperclass();
-                superConstructor = sc.getName();
+                //Jeliot 3
+                //Changed to fix a bug in DJava
+                ConstructorInfo cons = null;
+                if (node.isSuper()) {
+                    ClassInfo sc = classInfo.getSuperclass();
+                    superConstructor = sc.getName();
+                } else {
+                    superConstructor = classInfo.getName();
+                }
+
+                //ClassInfo sc = classInfo.getSuperclass();
+                //superConstructor = sc.getName();
             }
             return null;
         }
@@ -562,7 +584,8 @@ public class ClassInfoCompiler {
         public Object visit(Literal node) {
             // Set the properties of the node
             Class c = node.getType();
-            node.setProperty(NodeProperties.TYPE, (c == null) ? null : new JavaClassInfo(c));
+            node.setProperty(NodeProperties.TYPE, (c == null) ? null
+                    : new JavaClassInfo(c));
             return null;
         }
 
@@ -586,7 +609,8 @@ public class ClassInfoCompiler {
             }
 
             // Sets the type property of this node
-            node.setProperty(NodeProperties.TYPE, NodeProperties.getClassInfo(left));
+            node.setProperty(NodeProperties.TYPE, NodeProperties
+                    .getClassInfo(left));
             return null;
         }
 
@@ -601,7 +625,8 @@ public class ClassInfoCompiler {
                 if (o instanceof Expression) {
                     node.setExpression((Expression) o);
                 } else {
-                    Node result = new StaticFieldAccess((ReferenceType) o, node.getFieldName());
+                    Node result = new StaticFieldAccess((ReferenceType) o, node
+                            .getFieldName());
                     result.acceptVisitor(this);
                     return result;
                 }
@@ -622,7 +647,8 @@ public class ClassInfoCompiler {
                 if (!node.getFieldName().equals("length")) {
                     String s0 = "length";
                     String s1 = c.getComponentType().getName() + " array";
-                    node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0, s1});
+                    node.setProperty(NodeProperties.ERROR_STRINGS,
+                            new String[] { s0, s1 });
                     throw new ExecutionError("no.such.field", node);
                 }
                 node.setProperty(NodeProperties.TYPE, JavaClassInfo.INT);
@@ -644,7 +670,8 @@ public class ClassInfoCompiler {
                 f = ClassInfoUtilities.getField(c, node.getFieldName());
             } catch (Exception e) {
                 try {
-                    f = ClassInfoUtilities.getOuterField(c, node.getFieldName());
+                    f = ClassInfoUtilities
+                            .getOuterField(c, node.getFieldName());
                 } catch (Exception ex) {
                     throw new CatchedExceptionError(e, node);
                 }
@@ -662,7 +689,8 @@ public class ClassInfoCompiler {
             ClassInfo c = classInfo;
             FieldInfo f = null;
             try {
-                f = ClassInfoUtilities.getField(c.getSuperclass(), node.getFieldName());
+                f = ClassInfoUtilities.getField(c.getSuperclass(), node
+                        .getFieldName());
             } catch (Exception e) {
                 throw new CatchedExceptionError(e, node);
             }
@@ -682,9 +710,11 @@ public class ClassInfoCompiler {
                     if (o instanceof Expression) {
                         node.setExpression((Expression) o);
                     } else {
-                        Node result = new StaticMethodCall((ReferenceType) o, node.getMethodName(),
-                                node.getArguments(), node.getFilename(), node.getBeginLine(), node
-                                        .getBeginColumn(), node.getEndLine(), node.getEndColumn());
+                        Node result = new StaticMethodCall((ReferenceType) o,
+                                node.getMethodName(), node.getArguments(), node
+                                        .getFilename(), node.getBeginLine(),
+                                node.getBeginColumn(), node.getEndLine(), node
+                                        .getEndColumn());
                         result.acceptVisitor(this);
                         return result;
                     }
@@ -695,8 +725,9 @@ public class ClassInfoCompiler {
                 l.add(t);
                 ReferenceType rt = new ReferenceType(l);
                 rt.acceptVisitor(this);
-                Node result = new StaticMethodCall(rt, node.getMethodName(), node.getArguments(),
-                        node.getFilename(), node.getBeginLine(), node.getBeginColumn(), node
+                Node result = new StaticMethodCall(rt, node.getMethodName(),
+                        node.getArguments(), node.getFilename(), node
+                                .getBeginLine(), node.getBeginColumn(), node
                                 .getEndLine(), node.getEndColumn());
                 result.acceptVisitor(this);
                 return result;
@@ -704,7 +735,8 @@ public class ClassInfoCompiler {
 
             ClassInfo c = NodeProperties.getClassInfo(node.getExpression());
 
-            if (!c.isArray() || (c.isArray() && !node.getMethodName().equals("clone"))) {
+            if (!c.isArray()
+                    || (c.isArray() && !node.getMethodName().equals("clone"))) {
                 // Do the type checking of the arguments
                 ClassInfo[] cargs = new ClassInfo[0];
                 List args = node.getArguments();
@@ -715,12 +747,14 @@ public class ClassInfoCompiler {
                     ListIterator it = args.listIterator();
                     int i = 0;
                     while (it.hasNext()) {
-                        cargs[i++] = NodeProperties.getClassInfo((Node) it.next());
+                        cargs[i++] = NodeProperties.getClassInfo((Node) it
+                                .next());
                     }
                 }
                 MethodInfo m = null;
                 try {
-                    m = ClassInfoUtilities.lookupMethod(c, node.getMethodName(), cargs);
+                    m = ClassInfoUtilities.lookupMethod(c,
+                            node.getMethodName(), cargs);
                 } catch (NoSuchMethodException e) {
                     /* Jeliot 3 addition begins */
                     String s0 = node.getMethodName();
@@ -736,7 +770,8 @@ public class ClassInfoCompiler {
                     }
                     params += ")";
 
-                    node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0 + params, s1});
+                    node.setProperty(NodeProperties.ERROR_STRINGS,
+                            new String[] { s0 + params, s1 });
 
                     //node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0, s1 });
                     throw new ExecutionError("no.such.method", node);
@@ -748,13 +783,16 @@ public class ClassInfoCompiler {
                 // Set the node properties
                 node.setProperty(NodeProperties.TYPE, m.getReturnType());
             } else {
-                if (!node.getMethodName().equals("clone") || node.getArguments() != null) {
+                if (!node.getMethodName().equals("clone")
+                        || node.getArguments() != null) {
                     String s0 = "clone";
                     String s1 = c.getComponentType().getName() + " array";
-                    node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { s0, s1});
+                    node.setProperty(NodeProperties.ERROR_STRINGS,
+                            new String[] { s0, s1 });
                     throw new ExecutionError("no.such.method", node);
                 }
-                node.setProperty(NodeProperties.TYPE, new JavaClassInfo(Object.class));
+                node.setProperty(NodeProperties.TYPE, new JavaClassInfo(
+                        Object.class));
             }
             return null;
         }
@@ -781,12 +819,15 @@ public class ClassInfoCompiler {
             Node n = node.getMethodType();
             ClassInfo c = NodeProperties.getClassInfo(n);
             try {
-                m = ClassInfoUtilities.lookupMethod(c, node.getMethodName(), cargs);
+                m = ClassInfoUtilities.lookupMethod(c, node.getMethodName(),
+                        cargs);
             } catch (NoSuchMethodException e) {
-                if (n.getBeginLine() == n.getEndLine() && n.getBeginColumn() == n.getEndLine()) {
+                if (n.getBeginLine() == n.getEndLine()
+                        && n.getBeginColumn() == n.getEndLine()) {
                     // Look for a method in the outerclasses
                     try {
-                        m = ClassInfoUtilities.lookupOuterMethod(c, node.getMethodName(), cargs);
+                        m = ClassInfoUtilities.lookupOuterMethod(c, node
+                                .getMethodName(), cargs);
                     } catch (NoSuchMethodException ex) {
                         throw new CatchedExceptionError(ex, node);
                     }
@@ -822,7 +863,8 @@ public class ClassInfoCompiler {
             }
             MethodInfo m = null;
             try {
-                m = ClassInfoUtilities.lookupMethod(c, node.getMethodName(), pt);
+                m = ClassInfoUtilities
+                        .lookupMethod(c, node.getMethodName(), pt);
             } catch (Exception e) {
                 throw new CatchedExceptionError(e, node);
             }
@@ -842,7 +884,8 @@ public class ClassInfoCompiler {
             List ids = node.getIdentifiers();
             IdentifierToken t = (IdentifierToken) ids.get(0);
 
-            if (context.isDefinedVariable(t.image()) || fieldExists(classInfo, t.image())) {
+            if (context.isDefinedVariable(t.image())
+                    || fieldExists(classInfo, t.image())) {
                 // The name starts with a reference to a local variable,
                 // the end of the name is a sequence of field access
                 Expression result = null;
@@ -856,8 +899,8 @@ public class ClassInfoCompiler {
                     l.add(t);
                     result = new QualifiedName(l);
                 } else {
-                    result = new StaticFieldAccess(new ReferenceType(classInfo.getName()), t
-                            .image());
+                    result = new StaticFieldAccess(new ReferenceType(classInfo
+                            .getName()), t.image());
                 }
 
                 Iterator it = ids.iterator();
@@ -865,9 +908,11 @@ public class ClassInfoCompiler {
 
                 IdentifierToken t2;
                 while (it.hasNext()) {
-                    result = new ObjectFieldAccess(result, (t2 = (IdentifierToken) it.next())
-                            .image(), node.getFilename(), t.beginLine(), t.beginColumn(), t2
-                            .endLine(), t2.endColumn());
+                    result = new ObjectFieldAccess(result,
+                            (t2 = (IdentifierToken) it.next()).image(), node
+                                    .getFilename(), t.beginLine(), t
+                                    .beginColumn(), t2.endLine(), t2
+                                    .endColumn());
                 }
                 result.acceptVisitor(this);
                 return result;
@@ -883,30 +928,35 @@ public class ClassInfoCompiler {
                     classFinder.lookupClass(s, classInfo);
                     b = true;
                     break;
-                } catch (ClassNotFoundException e) {}
+                } catch (ClassNotFoundException e) {
+                }
                 l.remove(l.size() - 1);
             }
             if (!b) {
                 // It is an error if no matching class or field was found
-                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { t.image()});
+                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { t
+                        .image() });
                 throw new ExecutionError("undefined.class", node);
             }
 
             // Creates a ReferenceType node
             IdentifierToken t2 = (IdentifierToken) l.get(l.size() - 1);
-            ReferenceType rt = new ReferenceType(l, node.getFilename(), t.beginLine(), t
-                    .beginColumn(), t2.endLine(), t2.endColumn());
+            ReferenceType rt = new ReferenceType(l, node.getFilename(), t
+                    .beginLine(), t.beginColumn(), t2.endLine(), t2.endColumn());
 
             if (l.size() != ids.size()) {
                 // The end of the name is a sequence of field access
                 ListIterator it = ids.listIterator(l.size());
-                Expression result = new StaticFieldAccess(rt, (t2 = (IdentifierToken) it.next())
-                        .image(), node.getFilename(), t.beginLine(), t.beginColumn(), t2.endLine(),
-                        t2.endColumn());
+                Expression result = new StaticFieldAccess(rt,
+                        (t2 = (IdentifierToken) it.next()).image(), node
+                                .getFilename(), t.beginLine(), t.beginColumn(),
+                        t2.endLine(), t2.endColumn());
                 while (it.hasNext()) {
-                    result = new ObjectFieldAccess(result, (t2 = (IdentifierToken) it.next())
-                            .image(), node.getFilename(), t.beginLine(), t.beginColumn(), t2
-                            .endLine(), t2.endColumn());
+                    result = new ObjectFieldAccess(result,
+                            (t2 = (IdentifierToken) it.next()).image(), node
+                                    .getFilename(), t.beginLine(), t
+                                    .beginColumn(), t2.endLine(), t2
+                                    .endColumn());
                 }
                 result.acceptVisitor(this);
                 return result;
@@ -971,7 +1021,8 @@ public class ClassInfoCompiler {
             }
             ClassInfo c = NodeProperties.getClassInfo(node.getExpression());
             if (!c.isArray()) {
-                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { c.getName()});
+                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { c
+                        .getName() });
                 throw new ExecutionError("array.required", node);
             }
 
@@ -1059,7 +1110,8 @@ public class ClassInfoCompiler {
             Class lc = null;
             Class rc = null;
 
-            if ((lci instanceof JavaClassInfo) && (rci instanceof JavaClassInfo)) {
+            if ((lci instanceof JavaClassInfo)
+                    && (rci instanceof JavaClassInfo)) {
                 lc = lci.getJavaClass();
                 rc = rci.getJavaClass();
             } else {
@@ -1264,8 +1316,8 @@ public class ClassInfoCompiler {
             visitBinaryExpression(node);
 
             // Sets the type property of this node
-            node.setProperty(NodeProperties.TYPE, NodeProperties.getClassInfo(node
-                    .getLeftExpression()));
+            node.setProperty(NodeProperties.TYPE, NodeProperties
+                    .getClassInfo(node.getLeftExpression()));
             return null;
         }
 
@@ -1287,8 +1339,8 @@ public class ClassInfoCompiler {
             visitBinaryExpression(node);
 
             // Sets the type property of this node
-            node.setProperty(NodeProperties.TYPE, NodeProperties.getClassInfo(node
-                    .getLeftExpression()));
+            node.setProperty(NodeProperties.TYPE, NodeProperties
+                    .getClassInfo(node.getLeftExpression()));
             return null;
         }
 
@@ -1310,8 +1362,8 @@ public class ClassInfoCompiler {
             visitBinaryExpression(node);
 
             // Sets the type property of this node
-            node.setProperty(NodeProperties.TYPE, NodeProperties.getClassInfo(node
-                    .getLeftExpression()));
+            node.setProperty(NodeProperties.TYPE, NodeProperties
+                    .getClassInfo(node.getLeftExpression()));
             return null;
         }
 
@@ -1409,14 +1461,16 @@ public class ClassInfoCompiler {
         public Object visit(ConditionalExpression node) {
             Object o = node.getIfTrueExpression().acceptVisitor(this);
             if (o != null) {
-                if (o instanceof ReferenceType) { throw new ExecutionError(
-                        "malformed.second.operand", node); }
+                if (o instanceof ReferenceType) {
+                    throw new ExecutionError("malformed.second.operand", node);
+                }
                 node.setIfTrueExpression((Expression) o);
             }
             o = node.getIfFalseExpression().acceptVisitor(this);
             if (o != null) {
-                if (o instanceof ReferenceType) { throw new ExecutionError(
-                        "malformed.third.operand", node); }
+                if (o instanceof ReferenceType) {
+                    throw new ExecutionError("malformed.third.operand", node);
+                }
                 node.setIfFalseExpression((Expression) o);
             }
 
@@ -1455,8 +1509,9 @@ public class ClassInfoCompiler {
             Node exp = node.getExpression();
             ClassInfo ci = NodeProperties.getClassInfo(exp);
 
-            if (!(ci instanceof JavaClassInfo)) { throw new ExecutionError("post.increment.type",
-                    node); }
+            if (!(ci instanceof JavaClassInfo)) {
+                throw new ExecutionError("post.increment.type", node);
+            }
             node.setProperty(NodeProperties.TYPE, ci);
             return null;
         }
@@ -1471,8 +1526,9 @@ public class ClassInfoCompiler {
             Node exp = node.getExpression();
             ClassInfo ci = NodeProperties.getClassInfo(exp);
 
-            if (!(ci instanceof JavaClassInfo)) { throw new ExecutionError("pre.increment.type",
-                    node); }
+            if (!(ci instanceof JavaClassInfo)) {
+                throw new ExecutionError("pre.increment.type", node);
+            }
             node.setProperty(NodeProperties.TYPE, ci);
             return null;
         }
@@ -1487,8 +1543,9 @@ public class ClassInfoCompiler {
             Node exp = node.getExpression();
             ClassInfo ci = NodeProperties.getClassInfo(exp);
 
-            if (!(ci instanceof JavaClassInfo)) { throw new ExecutionError("post.decrement.type",
-                    node); }
+            if (!(ci instanceof JavaClassInfo)) {
+                throw new ExecutionError("post.decrement.type", node);
+            }
             node.setProperty(NodeProperties.TYPE, ci);
             return null;
         }
@@ -1503,8 +1560,9 @@ public class ClassInfoCompiler {
             Node exp = node.getExpression();
             ClassInfo ci = NodeProperties.getClassInfo(exp);
 
-            if (!(ci instanceof JavaClassInfo)) { throw new ExecutionError("pre.decrement.type",
-                    node); }
+            if (!(ci instanceof JavaClassInfo)) {
+                throw new ExecutionError("pre.decrement.type", node);
+            }
             node.setProperty(NodeProperties.TYPE, ci);
             return null;
         }
@@ -1526,8 +1584,9 @@ public class ClassInfoCompiler {
             // Visit the subexpression
             Object o = node.getExpression().acceptVisitor(this);
             if (o != null) {
-                if (o instanceof ReferenceType) { throw new ExecutionError("malformed.expression",
-                        node); }
+                if (o instanceof ReferenceType) {
+                    throw new ExecutionError("malformed.expression", node);
+                }
                 node.setExpression((Expression) o);
             }
         }
@@ -1541,9 +1600,11 @@ public class ClassInfoCompiler {
 
             if (ci.isPrimitive()) {
                 Class c = ci.getJavaClass();
-                if (c == char.class || c == byte.class || c == short.class || c == int.class) {
+                if (c == char.class || c == byte.class || c == short.class
+                        || c == int.class) {
                     node.setProperty(NodeProperties.TYPE, JavaClassInfo.INT);
-                } else if (c == long.class || c == float.class || c == double.class) {
+                } else if (c == long.class || c == float.class
+                        || c == double.class) {
                     node.setProperty(NodeProperties.TYPE, new JavaClassInfo(c));
                 } else {
                     throw new ExecutionError(s, node);
@@ -1560,14 +1621,18 @@ public class ClassInfoCompiler {
             // Visit the left expression
             Object o = node.getLeftExpression().acceptVisitor(this);
             if (o != null) {
-                if (o instanceof ReferenceType) { throw new ExecutionError("left.operand", node); }
+                if (o instanceof ReferenceType) {
+                    throw new ExecutionError("left.operand", node);
+                }
                 node.setLeftExpression((Expression) o);
             }
 
             // Visit the right expression
             o = node.getRightExpression().acceptVisitor(this);
             if (o != null) {
-                if (o instanceof ReferenceType) { throw new ExecutionError("right.operand", node); }
+                if (o instanceof ReferenceType) {
+                    throw new ExecutionError("right.operand", node);
+                }
                 node.setRightExpression((Expression) o);
             }
         }
@@ -1577,13 +1642,16 @@ public class ClassInfoCompiler {
          */
         protected void visitNumericExpression(BinaryExpression node, String s) {
             // Set the type property of the given node
-            ClassInfo lci = NodeProperties.getClassInfo(node.getLeftExpression());
-            ClassInfo rci = NodeProperties.getClassInfo(node.getRightExpression());
+            ClassInfo lci = NodeProperties.getClassInfo(node
+                    .getLeftExpression());
+            ClassInfo rci = NodeProperties.getClassInfo(node
+                    .getRightExpression());
             Class lc = lci.getJavaClass();
             Class rc = rci.getJavaClass();
 
-            if (lc == null || rc == null || lc == boolean.class || rc == boolean.class
-                    || !lc.isPrimitive() || !rc.isPrimitive() || lc == void.class
+            if (lc == null || rc == null || lc == boolean.class
+                    || rc == boolean.class || !lc.isPrimitive()
+                    || !rc.isPrimitive() || lc == void.class
                     || rc == void.class) {
                 throw new ExecutionError(s, node);
             } else if (lc == double.class || rc == double.class) {
@@ -1609,16 +1677,19 @@ public class ClassInfoCompiler {
             Class lc = null;
             Class rc = null;
 
-            if ((lci instanceof JavaClassInfo) && (rci instanceof JavaClassInfo)) {
+            if ((lci instanceof JavaClassInfo)
+                    && (rci instanceof JavaClassInfo)) {
                 lc = lci.getJavaClass();
                 rc = rci.getJavaClass();
             } else {
                 throw new ExecutionError(s, node);
             }
 
-            if (lc == null || rc == null || lc == void.class || rc == void.class
-                    || lc == float.class || rc == float.class || lc == double.class
-                    || rc == double.class || (lc == boolean.class ^ rc == boolean.class)
+            if (lc == null || rc == null || lc == void.class
+                    || rc == void.class || lc == float.class
+                    || rc == float.class || lc == double.class
+                    || rc == double.class
+                    || (lc == boolean.class ^ rc == boolean.class)
                     || !lc.isPrimitive() || !rc.isPrimitive()) {
                 throw new ExecutionError(s, node);
             } else if (lc == long.class || rc == long.class) {
@@ -1642,17 +1713,20 @@ public class ClassInfoCompiler {
             Class lc = null;
             Class rc = null;
 
-            if ((lci instanceof JavaClassInfo) && (rci instanceof JavaClassInfo)) {
+            if ((lci instanceof JavaClassInfo)
+                    && (rci instanceof JavaClassInfo)) {
                 lc = lci.getJavaClass();
                 rc = rci.getJavaClass();
             } else {
                 throw new ExecutionError(s, node);
             }
 
-            if (lc == null || rc == null || lc == boolean.class || rc == boolean.class
-                    || lc == void.class || rc == void.class || lc == float.class
-                    || rc == float.class || lc == double.class || rc == double.class
-                    || !lc.isPrimitive() || !rc.isPrimitive()) {
+            if (lc == null || rc == null || lc == boolean.class
+                    || rc == boolean.class || lc == void.class
+                    || rc == void.class || lc == float.class
+                    || rc == float.class || lc == double.class
+                    || rc == double.class || !lc.isPrimitive()
+                    || !rc.isPrimitive()) {
                 throw new ExecutionError(s, node);
             } else if (lc == long.class) {
                 node.setProperty(NodeProperties.TYPE, JavaClassInfo.LONG);
@@ -1669,7 +1743,9 @@ public class ClassInfoCompiler {
             while (it.hasNext()) {
                 Object o = ((Node) it.next()).acceptVisitor(this);
                 if (o != null) {
-                    if (o instanceof ReferenceType) { throw new ExecutionError(s, n); }
+                    if (o instanceof ReferenceType) {
+                        throw new ExecutionError(s, n);
+                    }
                     it.set(o);
                 }
             }
@@ -1689,7 +1765,8 @@ public class ClassInfoCompiler {
                 try {
                     ClassInfoUtilities.getOuterField(dc, name);
                     result = true;
-                } catch (NoSuchFieldException ex) {} catch (AmbiguousFieldException ex) {
+                } catch (NoSuchFieldException ex) {
+                } catch (AmbiguousFieldException ex) {
                     result = true;
                 }
             } catch (AmbiguousFieldException e) {
@@ -1740,8 +1817,8 @@ public class ClassInfoCompiler {
 
             if (isInterface) {
                 if (Modifier.isPrivate(af) || Modifier.isProtected(af)) {
-                    node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { fn,
-                            classInfo.getName()});
+                    node.setProperty(NodeProperties.ERROR_STRINGS,
+                            new String[] { fn, classInfo.getName() });
                     throw new ExecutionError("interface.field.modifier", node);
                 }
                 af |= Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL;
@@ -1750,61 +1827,66 @@ public class ClassInfoCompiler {
             Expression init = node.getInitializer();
 
             if (init != null) {
-                if ((init instanceof Literal) && Modifier.isFinal(af) && Modifier.isStatic(af)) {
+                if ((init instanceof Literal) && Modifier.isFinal(af)
+                        && Modifier.isStatic(af)) {
                     if (init instanceof IntegerLiteral) {
                         Integer val = (Integer) ((Literal) init).getValue();
                         if (rt.equals("byte")) {
-                            if (val.intValue() != val.byteValue()) { throw new ExecutionError(
-                                    "invalid.constant", node); }
+                            if (val.intValue() != val.byteValue()) {
+                                throw new ExecutionError("invalid.constant",
+                                        node);
+                            }
                             classFactory.addConstantIntField(af, rt, fn, val);
                         } else if (rt.equals("short")) {
-                            if (val.intValue() != val.shortValue()) { throw new ExecutionError(
-                                    "invalid.constant", node); }
+                            if (val.intValue() != val.shortValue()) {
+                                throw new ExecutionError("invalid.constant",
+                                        node);
+                            }
                             classFactory.addConstantIntField(af, rt, fn, val);
                         } else if (rt.equals("int")) {
                             classFactory.addConstantIntField(af, rt, fn, val);
                         } else if (rt.equals("long")) {
-                            classFactory
-                                    .addConstantLongField(af, rt, fn, new Long(val.longValue()));
+                            classFactory.addConstantLongField(af, rt, fn,
+                                    new Long(val.longValue()));
                         } else if (rt.equals("float")) {
-                            classFactory.addConstantFloatField(af, rt, fn, new Float(val
-                                    .floatValue()));
+                            classFactory.addConstantFloatField(af, rt, fn,
+                                    new Float(val.floatValue()));
                         } else if (rt.equals("double")) {
-                            classFactory.addConstantDoubleField(af, rt, fn, new Double(val
-                                    .doubleValue()));
+                            classFactory.addConstantDoubleField(af, rt, fn,
+                                    new Double(val.doubleValue()));
                         } else {
                             throw new ExecutionError("invalid.constant", node);
                         }
                     } else if (init instanceof LongLiteral) {
                         Long val = (Long) ((Literal) init).getValue();
                         if (rt.equals("long")) {
-                            classFactory
-                                    .addConstantLongField(af, rt, fn, new Long(val.longValue()));
+                            classFactory.addConstantLongField(af, rt, fn,
+                                    new Long(val.longValue()));
                         } else if (rt.equals("float")) {
-                            classFactory.addConstantFloatField(af, rt, fn, new Float(val
-                                    .floatValue()));
+                            classFactory.addConstantFloatField(af, rt, fn,
+                                    new Float(val.floatValue()));
                         } else if (rt.equals("double")) {
-                            classFactory.addConstantDoubleField(af, rt, fn, new Double(val
-                                    .doubleValue()));
+                            classFactory.addConstantDoubleField(af, rt, fn,
+                                    new Double(val.doubleValue()));
                         } else {
                             throw new ExecutionError("invalid.constant", node);
                         }
                     } else if (init instanceof FloatLiteral) {
                         Float val = (Float) ((Literal) init).getValue();
                         if (rt.equals("float")) {
-                            classFactory.addConstantFloatField(af, rt, fn, new Float(val
-                                    .floatValue()));
+                            classFactory.addConstantFloatField(af, rt, fn,
+                                    new Float(val.floatValue()));
                         } else if (rt.equals("double")) {
-                            classFactory.addConstantDoubleField(af, rt, fn, new Double(val
-                                    .doubleValue()));
+                            classFactory.addConstantDoubleField(af, rt, fn,
+                                    new Double(val.doubleValue()));
                         } else {
                             throw new ExecutionError("invalid.constant", node);
                         }
                     } else if (init instanceof DoubleLiteral) {
                         Double val = (Double) ((Literal) init).getValue();
                         if (rt.equals("double")) {
-                            classFactory.addConstantDoubleField(af, rt, fn, new Double(val
-                                    .doubleValue()));
+                            classFactory.addConstantDoubleField(af, rt, fn,
+                                    new Double(val.doubleValue()));
                         } else {
                             throw new ExecutionError("invalid.constant", node);
                         }
@@ -1812,7 +1894,8 @@ public class ClassInfoCompiler {
                     } else if (init instanceof BooleanLiteral) {
                         Boolean val = (Boolean) ((Literal) init).getValue();
                         if (rt.equals("boolean")) {
-                            classFactory.addConstantBooleanField(af, rt, fn, val);
+                            classFactory.addConstantBooleanField(af, rt, fn,
+                                    val);
                         } else {
                             throw new ExecutionError("invalid.constant", node);
                         }
@@ -1825,7 +1908,8 @@ public class ClassInfoCompiler {
 
                     Expression var = null;
                     if (Modifier.isStatic(af)) {
-                        ReferenceType typ = new ReferenceType(classInfo.getName());
+                        ReferenceType typ = new ReferenceType(classInfo
+                                .getName());
                         var = new StaticFieldAccess(typ, fn);
                     } else {
                         Identifier t = new Identifier("this");
@@ -1838,25 +1922,31 @@ public class ClassInfoCompiler {
                     if (Modifier.isStatic(af)) {
                         addToClassInitializer(exp);
                     } else {
-                        exp.setProperty(NodeProperties.INSTANCE_INITIALIZER, null);
+                        exp.setProperty(NodeProperties.INSTANCE_INITIALIZER,
+                                null);
                         addToInstanceInitializer(exp);
                     }
                 }
                 if (init instanceof Literal) {
-                    MCodeUtilities.write("" + Code.FIELD + Code.DELIM + node.getName() + Code.DELIM
-                            + fi.getType().getName() + Code.DELIM + af + Code.DELIM
-                            + ((Literal) init).getValue() + Code.DELIM
+                    MCodeUtilities.write("" + Code.FIELD + Code.DELIM
+                            + node.getName() + Code.DELIM
+                            + fi.getType().getName() + Code.DELIM + af
+                            + Code.DELIM + ((Literal) init).getValue()
+                            + Code.DELIM
                             + MCodeUtilities.locationToString(node));
                 } else {
-                    MCodeUtilities.write("" + Code.FIELD + Code.DELIM + node.getName() + Code.DELIM
-                            + fi.getType().getName() + Code.DELIM + af + Code.DELIM + Code.UNKNOWN
-                            + Code.DELIM + MCodeUtilities.locationToString(node));
+                    MCodeUtilities.write("" + Code.FIELD + Code.DELIM
+                            + node.getName() + Code.DELIM
+                            + fi.getType().getName() + Code.DELIM + af
+                            + Code.DELIM + Code.UNKNOWN + Code.DELIM
+                            + MCodeUtilities.locationToString(node));
                 }
 
             } else {
                 classFactory.addField(af, rt, fn);
-                MCodeUtilities.write("" + Code.FIELD + Code.DELIM + node.getName() + Code.DELIM
-                        + fi.getType().getName() + Code.DELIM + af + Code.DELIM + Code.UNKNOWN
+                MCodeUtilities.write("" + Code.FIELD + Code.DELIM
+                        + node.getName() + Code.DELIM + fi.getType().getName()
+                        + Code.DELIM + af + Code.DELIM + Code.UNKNOWN
                         + Code.DELIM + MCodeUtilities.locationToString(node));
             }
             return null;
@@ -1875,10 +1965,12 @@ public class ClassInfoCompiler {
 
             // Check the modifiers
             if (isInterface) {
-                if (Modifier.isPrivate(af) || Modifier.isProtected(af) || Modifier.isFinal(af)
-                        || Modifier.isStatic(af)) {
-                    node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { node.getName(),
-                            classInfo.getName()});
+                if (Modifier.isPrivate(af) || Modifier.isProtected(af)
+                        || Modifier.isFinal(af) || Modifier.isStatic(af)) {
+                    node
+                            .setProperty(NodeProperties.ERROR_STRINGS,
+                                    new String[] { node.getName(),
+                                            classInfo.getName() });
                     throw new ExecutionError("interface.method.modifier", node);
                 }
                 af |= Modifier.PUBLIC | Modifier.ABSTRACT;
@@ -1894,8 +1986,9 @@ public class ClassInfoCompiler {
             for (int i = 0; i < cia.length; i++) {
                 params[i] = cia[i].getName();
             }
-            MCodeUtilities.write("" + Code.METHOD + Code.DELIM + node.getName() + Code.DELIM + rt
-                    + Code.DELIM + af + Code.DELIM + MCodeUtilities.arrayToString(params));
+            MCodeUtilities.write("" + Code.METHOD + Code.DELIM + node.getName()
+                    + Code.DELIM + rt + Code.DELIM + af + Code.DELIM
+                    + MCodeUtilities.arrayToString(params));
 
             // Create the exception array
             cia = mi.getExceptionTypes();
@@ -1915,20 +2008,23 @@ public class ClassInfoCompiler {
             // Check the method
             Node body = node.getBody();
             if ((isAbstract && body != null) || (isInterface && body != null)) {
-                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { node.getName()});
+                node.setProperty(NodeProperties.ERROR_STRINGS,
+                        new String[] { node.getName() });
                 throw new ExecutionError("abstract.method.body", node);
             }
 
             if (!isAbstract && body == null) {
-                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { node.getName()});
+                node.setProperty(NodeProperties.ERROR_STRINGS,
+                        new String[] { node.getName() });
                 throw new ExecutionError("missing.method.body", node);
             }
 
             // Register the body
             if (body != null) {
                 // Register the method
-                String sig = ClassFactory.getMethodIdentifier(classInfo.getName(), mn, params,
-                        interpreter.getClassLoader().toString());
+                String sig = ClassFactory.getMethodIdentifier(classInfo
+                        .getName(), mn, params, interpreter.getClassLoader()
+                        .toString());
                 interpreter.registerMethod(sig, node, importationManager);
             }
             return null;

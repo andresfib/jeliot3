@@ -100,13 +100,17 @@ public class LineNumbers extends JComponent {
     public LineNumbers(Font font, Insets insets) {
         this.font = font;
         this.insets = insets;
+        calculateFontMetrics();
+    }
+
+    public void calculateFontMetrics() {
         FontMetrics fm = getFontMetrics(font);
         size = fm.stringWidth("000") + 6;
         increment = fm.getHeight();
         ascent = fm.getAscent();
         setPreferredHeight(400);
     }
-
+    
     /**
      * Sets the preferred height of the component.
      * 
@@ -187,10 +191,19 @@ public class LineNumbers extends JComponent {
     
     /**
      * 
-     * @param line
+     * @param line the number of the line to be highlighted.
      */
     public void setHighlightedLine(int line) {
     	highlightedLine = line;
     	repaint();
+    }
+    
+    /**
+     * @param font the font to be set
+     */
+    public void setFont(Font font) {
+        super.setFont(font);
+        this.font = font;
+        calculateFontMetrics();        
     }
 }

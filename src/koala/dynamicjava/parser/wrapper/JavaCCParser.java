@@ -55,8 +55,8 @@ public class JavaCCParser implements SourceCodeParser {
      * @param fname the file name
      */
     public JavaCCParser(InputStream is, String fname) {
-	parser = new Parser(is);
-	parser.setFilename(fname);
+        parser = new Parser(is);
+        parser.setFilename(fname);
     }
 
     /**
@@ -65,8 +65,8 @@ public class JavaCCParser implements SourceCodeParser {
      * @param fname the file name
      */
     public JavaCCParser(Reader r, String fname) {
-	parser = new Parser(r);
-	parser.setFilename(fname);
+        parser = new Parser(r);
+        parser.setFilename(fname);
     }
 
     /**
@@ -75,7 +75,7 @@ public class JavaCCParser implements SourceCodeParser {
      * @param fname the file name
      */
     public SourceCodeParser createParser(InputStream is, String fname) {
-	return new JavaCCParser(is, fname);
+        return new JavaCCParser(is, fname);
     }
 
     /**
@@ -84,7 +84,7 @@ public class JavaCCParser implements SourceCodeParser {
      * @param fname the file name
      */
     public SourceCodeParser createParser(Reader r, String fname) {
-	return new JavaCCParser(r, fname);
+        return new JavaCCParser(r, fname);
     }
 
     /**
@@ -93,22 +93,22 @@ public class JavaCCParser implements SourceCodeParser {
      * @see koala.dynamicjava.tree.Node
      */
     public List parseStream() {
-	try {
-	    return parser.parseStream();
-	} catch (ParseException e) {
-	    throw new ParseError(e.getMessage());
-	}
+        try {
+            return parser.parseStream();
+        } catch (ParseException e) {
+            throw new ParseError(e.getMessage());
+        }
     }
-    
+
     /**
      * Parses a library file
      * @see koala.dynamicjava.tree.Node
      */
     public List parseCompilationUnit() {
-	try {
-	    return parser.parseCompilationUnit();
-	} catch (ParseException e) {
-	    throw new ParseError(e.getMessage());
-	}
+        try {
+            return parser.parseCompilationUnit();
+        } catch (ParseException e) {
+            throw new ParseError(e.getMessage());
+        }
     }
 }
