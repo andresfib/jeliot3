@@ -6,7 +6,8 @@ import javax.swing.*;
 import java.net.URL;
 import java.awt.event.*;
 import java.io.*;
-import java.lang.String;
+//import java.lang.String;
+import java.util.Hashtable;
 
 
 
@@ -20,15 +21,17 @@ import java.lang.String;
  * 
  * Main Class
  */
-public class JeliotExtension extends Extension implements PackageListener {
-    /**
+public class JeliotExtension extends Extension implements PackageListener{
+	
+	
+	/**
      * When this method is called, the extension may start its work.
      */
     public void startup (BlueJ bluej) {
         bluej.setMenuGenerator(new MenuBuilder(bluej));
         bluej.addPackageListener(this);
     }
-
+      
     /**
      * The package has been opened. Print the name of the project it is part of.
      */
@@ -58,7 +61,7 @@ public class JeliotExtension extends Extension implements PackageListener {
      * version number of the extension
      */
     public String  getVersion () { 
-        return ("version 1.0");  
+        	return ("1.0"); 
     }
 
     /**
@@ -141,12 +144,71 @@ class MenuBuilder extends MenuGenerator {
 			}
     }
 
+    
+    /**
+     * Value associated to a given key of the hashtable
+     * 
+     */
+    class Value {
+    	private String className;//name of the class object
+    	private String[] parameters;//parameters used by the construtor 
+    	
+    	/**
+    	 * 
+    	 * Constructor
+    	 * 
+    	 * @param className name of the class object
+    	 * @param parameters parameters of its constructor
+    	 */
+    	public Value(String className, String[] parameters){
+    		this.className = className;
+    		this.parameters = parameters;
+    	}
+    	
+    	public String[] getParameters(){
+    		return parameters;
+    	}
+    	
+    	
+    	public void setParameters(String[] newParameters){
+    		parameters = newParameters;
+    	}
+    	
+    	public String getClassName(){
+    		return className;
+    	}
+    	
+    	
+    	/**
+    	 * returns a string containing all parameters and puting a coma between each parameter
+    	 * 
+    	 * @return 
+    	 */
+    	public String printParameters(){
+    		String param = new String("");
+    		if (parameters == null) return param;
+    		if (parameters.length==1){ 
+    			return parameters[0];
+    		}
+    		else {  	
+    			for(int i=0; i<=parameters.length - 2; i++) {
+    				param += "," + parameters[i];
+    			}
+    			param += parameters[parameters.length - 1];
+    		}
+    		return param;
+    	}
+    }
+    
+    
     /**
      * The nested classe that instantiates the Jeliot window.
      */
-    class ToolsAction extends AbstractAction {
+    class ToolsAction extends AbstractAction implements CompileListener, bluej.extensions.event.InvocationListener{
     	private BlueJ bluej;//proxy object
-    	private String source;
+    	private Jeliot jeliot;//our jeliot application
+    	private boolean launched;//tells if jeliot has been launched or not
+    	private Hashtable hash;//hash table in which we put object instances created with BlueJ
     	
     	/**
     	 * Constructor, adds a "menuname" entry to the tool menu
@@ -154,6 +216,10 @@ class MenuBuilder extends MenuGenerator {
     	public ToolsAction(String menuName, BlueJ bluej) {
     		this.bluej = bluej;
     		putValue(AbstractAction.NAME, menuName);
+    		this.bluej.addCompileListener(this);
+    		this.bluej.addCompileListener(this);
+    		this.bluej.addInvocationListener(this);
+    		hash = new Hashtable();
     	}
     	
     	/**
@@ -162,19 +228,26 @@ class MenuBuilder extends MenuGenerator {
     	 */
     	public void actionPerformed(ActionEvent anEvent) {
     		try {
-    			Jeliot.start(new String[] {generateJeliotString(), "true"});//
+    			
+    			//we start jeliot
+    			jeliot = Jeliot.start(new String[] {generateJeliotString(), "true"});
+    			launched = true;
+    			while (jeliot == null) { try{ Thread.sleep(10); } catch (Exception e) { } }
+    			jeliot.getGUI().getFrame().addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) {launched = false;} });
+    			System.out.println("listener attached\n");
     			printCurrentStatus("Jeliot launched");//print in the debug file
     		} catch (Exception e) { 
     			printCurrentStatus("error while launching jeliot");
+    			e.printStackTrace(System.out);			
     		}
     	}
     	
     	/**
-    	 * get the name of the current project
+    	 * Create a string which contains the source code for jeliot
     	 */
     	public String generateJeliotString() {
     		//String projectName = new String();
-    		source = new String();
+    		String source = new String();//source code that will be used by jeliot
     		String path = new String();
     		BPackage currentPackage;
     		BClass currentClass;
@@ -220,14 +293,24 @@ class MenuBuilder extends MenuGenerator {
     							
     							//print the path in the debug file	
     							printCurrentStatus(classes[j].getJavaFile().getPath());
-    							  
+    							/*
+    							try {
+    								if (classes[j].getSuperclass()!= null)
+    									printCurrentStatus("class \n");
+    								else
+    									printCurrentStatus("abstract class or interface \n");
+    							}
+    			
+    							catch( ProjectNotOpenException p) {System.out.println("project error");}
+    							catch( ClassNotFoundException e) {System.out.println("class error");}
+    							*/
     							//create a bufferdReader 
     							BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(classes[j].getJavaFile().getPath())));
     							String line = new String();
     							
     							//we put each line in the source string
     							while  ((line = in.readLine()) != null) { 
-    								printCurrentStatus(line);
+    								//printCurrentStatus(line);
     								source += "\n" + line; 
     								}
     							// and we go to the next file
@@ -258,6 +341,98 @@ class MenuBuilder extends MenuGenerator {
     		curPackage = bp ; 
     		curClass = null ; 
     		curObject = null;
-    	}   
-    }
+    	}
+    	
+    	/**
+         * 
+         * Events that occured on compiling with BlueJ
+         */
+    	public void compileError(CompileEvent event){}
+    	
+    	public void compileFailed(CompileEvent event){}	
+    	
+    	//When a compilation starts, we empty the hashtable
+    	public void compileStarted(CompileEvent event){
+    		//System.out.println("Compilation starts and received by jeliot extension\n");
+    		hash.clear();
+    		
+    	}
+    	
+    	public void compileSucceeded(CompileEvent event){
+    		//System.out.println("files compiled, jeliot extension ok\n");
+    	}
+    	
+    	public void compileWarning(CompileEvent event){}
+    	
+    	
+    	/**
+    	 * 
+    	 * Invocation on a blueJ object
+    	 */	
+    	public void invocationFinished(bluej.extensions.event.InvocationEvent event){
+    		
+    		System.out.println("event: " + event.toString() + "\n");
+    		System.out.println("class name: " + event.getClassName() + "\n");
+    		System.out.println("object name: " + event.getObjectName() + "\n");
+    		System.out.println("method name: " + event.getMethodName() + "\n");
+    		
+    		//if it´s a constructor with parameters
+    		if (event.getClassName()!=null && event.getParameters() != null){
+    			for(int i=0; i<event.getParameters().length;i++) {
+    				System.out.println("constructor parameter[" + i + "]" + event.getParameters()[i] + "\n");
+    			}
+    		}
+    		
+    		//if it´s a constructor, we add it in the hashtable 
+    		if (event.getClassName()!=null){
+    			hash.put(event.getObjectName(), new Value(event.getClassName(), event.getParameters()));
+    			System.out.println("object" + event.getObjectName() + "inserted\n");
+    			
+    		}
+    		
+    		//it´s a method called on an object
+    		if (event.getMethodName()!=null){//we call a method of an existing object
+    			String paramMethod = new String("");//string of the parameters
+    			
+    			//we get the object from the hashtable
+    			Object obj = hash.get((Object)event.getObjectName());
+    			Value val = (Value)obj;
+    			System.out.println("call of method\n");
+    			//we add
+    			//val.setParameters(event.getParameters());
+   
+    			//we get the parameters of the method called
+    			//we check if there is at least one parameter, it returns null otherwise
+    			if (event.getParameters()!=null){
+    				
+    				
+    				//we write the parameters in a string, all parameters are separated by coma
+    				
+    				//1 parameter	
+    				if (event.getParameters().length==1){ 
+    					paramMethod = event.getParameters()[0];
+    				}
+    				//several parameters
+    				else {  	
+    					for(int i=0; i<=event.getParameters().length - 2; i++) {
+    						paramMethod += event.getParameters()[i] + ",";
+    					}
+    					paramMethod += event.getParameters()[event.getParameters().length - 1];
+    				}
+    			}  
+    			
+    			//trace in the debug file
+    			System.out.println("(new "+val.getClassName()+"(" +val.printParameters()+"))."+event.getMethodName()+"("+paramMethod+")");
+    			
+    			//we check if jeliot is already launched or not
+    			//if yes, we launch the animation, if not we do nothing
+    			if (launched) {
+    			jeliot.compile("(new "+val.getClassName()+"(" +val.printParameters()+"))."+event.getMethodName()+"("+paramMethod+");");
+    			System.out.println("jeliot opened\n");
+    			}
+    			else {System.out.println("jeliot closed\n");}
+    		}
+    	}
+    		
+    }	
 }
