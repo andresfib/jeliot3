@@ -1,27 +1,16 @@
-//Class:MeinProgramm
-//Call-Method:main(new String[0])
 
-class Ware {
-    int i = 0;
+import jeliot.io.*;
 
-    static int z = 0;
+public class If {
 
-    Ware(int i) {
-        this.i = i;
-        z++;
+    public static void main() {
+
+        // Your algorithm goes here.
+        int a = 2, b = 1;
+        if (a == b) {
+            Output.println('x');
+        } else {
+            Output.println('y');
+        }
     }
-}
-
-public class MeinProgramm {
-    public static void main(String[] args) {
-        int[] f = { 1, 2, 3 };
-        Ware[] waren = new Ware[3];
-        for (int j = 0; j < f.length; j++) {
-            waren[j] = new Ware(f[j]);
-        }
-        for (int j = 0; j < f.length; j++) {
-            System.out.println(waren[j].i);
-        }
-
-    } // Ende main
 }
