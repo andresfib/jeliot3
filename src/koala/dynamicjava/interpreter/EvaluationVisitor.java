@@ -1015,7 +1015,7 @@ public class EvaluationVisitor extends VisitorObject {
                                 + Code.DELIM + outputCounter + Code.DELIM + MCodeUtilities.locationToString(node));
                         args[i] = ((Expression) it.next()).acceptVisitor(this);
                         MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM + outputCounter
-                        		+ m.getDeclaringClass()	+ Code.DELIM + m.getName() + Code.DELIM
+                        		+ "System.out"	+ Code.DELIM + m.getName() + Code.DELIM
                                 + Code.DELIM + args[i].toString() + Code.DELIM + typs[i].getName()
                                 + Code.DELIM + (m.getName().equals("println") ? "1" : "0") //To indicate newline or not
                                 + Code.DELIM + MCodeUtilities.locationToString(node));
