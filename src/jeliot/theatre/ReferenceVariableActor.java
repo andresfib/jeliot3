@@ -16,7 +16,6 @@ public class ReferenceVariableActor extends VariableActor {
     private ReferenceActor refActor;
     private int refLen = 15;
 
-
     public void paintActor(Graphics g) {
         int w = width;
         int h = height;
@@ -30,9 +29,9 @@ public class ReferenceVariableActor extends VariableActor {
 
         // draw the name
         g.setFont(font);
-        g.setColor( (light == HIGHLIGHT) ?
+        g.setColor((light == HIGHLIGHT) ?
                 lightColor :
-                fgcolor );
+                fgcolor);
         g.drawString(name, namex, namey);
 
         // draw reference area

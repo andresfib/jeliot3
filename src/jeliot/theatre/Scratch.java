@@ -37,6 +37,10 @@ public class Scratch extends Actor implements ActorContainer {
         return ea;
     }
 
+    public Animation fly(Point p) {
+        return this.fly(p, 0);
+    }
+
     public Point accommodate(Actor actor) {
         actor.setParent(this);
         int size = exprs.size();

@@ -190,8 +190,6 @@ public class JeliotWindow {
     private Vector animWidgets = new Vector();
 
 
-
-
     /**
      * Assigns the values of the parameters in the object values.
      * Constructs the panelController with theatre and iload.
