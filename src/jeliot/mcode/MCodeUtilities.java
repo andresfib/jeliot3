@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import jeliot.theater.*;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
@@ -15,7 +17,8 @@ import koala.dynamicjava.interpreter.EvaluationVisitor;
  */
 public class MCodeUtilities {
 
-	//Unary expressions in Jeliot 3 visualization engine
+    
+    //Unary expressions in Jeliot 3 visualization engine
     /**
 	 * Complement
 	 */
@@ -192,6 +195,27 @@ public class MCodeUtilities {
 	 */
 	private static BufferedReader reader=null;
 
+    /**
+     * Hack flag to get the output into see below
+     */
+    private static boolean redirectOutput=false;
+    
+    /**
+     * Buffer to store the redirection orders
+     * from parameters collected in TreeInterpreter
+     */
+    private static Vector redirectBuffer = new Vector();
+    
+    /**
+     * Stack with the redirect buffers
+     */
+    public static Stack redirectBufferStack = new Stack();
+    
+    /**
+     * 
+     */
+    public static Stack numParametersStack = new Stack();    
+    private static int numParameters = 0;
     /**
 	 * @param type
 	 * @return
@@ -771,11 +795,16 @@ public class MCodeUtilities {
         StringTokenizer tokenizer = new StringTokenizer(str, Code.DELIM);
         int token = Integer.parseInt(tokenizer.nextToken());
         if (!EvaluationVisitor.isSetPreparing() || token == Code.ERROR) {
-
             str = MCodeUtilities.replace(str, "\n", "\\n");
             str = MCodeUtilities.replace(str, "\r", "");
             //System.out.println("Hello");
-            writer.println(str); // connected to jeliot
+            if (!redirectOutput){
+                writer.println(str);                
+            }
+            else {
+                addToRedirectBuffer(str);
+            }
+             // connected to jeliot
             //System.out.println("Hello2");
 
             //System.out.println(str);// Output to stdout ; debugging only
@@ -888,5 +917,66 @@ public class MCodeUtilities {
                 result+=Code.LOC_DELIM;
         }
         return result;
+    }
+    /**
+     * @return
+     */
+    public static boolean getRedirectOutput() {
+        return redirectOutput;
+    }
+
+    /**
+     * @param boolean1
+     */
+    public static void setRedirectOutput(boolean value) {
+        redirectOutput = value;
+    }
+
+    /**
+     * @return
+     */
+    public static void writeRedirectBuffer(Vector redirectBuffer) {
+         for(int i=0;i<redirectBuffer.size();i++){
+              write((String) redirectBuffer.get(i));
+        }
+    }
+
+    /**
+     * @param string
+     */
+    public static void clearRedirectBuffer() {
+        redirectBuffer.clear();
+    }
+    public static void addToRedirectBuffer(String string){
+        redirectBuffer.add(string);
+    }
+        
+
+    /**
+     * @return
+     */
+    public static int getNumParameters() {
+        return numParameters;
+    }
+
+    
+    /**
+     */
+    public static void incNumParameters() {
+        numParameters++;
+    }
+    /**
+     * 
+    */
+    public static void clearNumParameters() {
+        numParameters = 0;
+    }
+
+    /**
+     * 
+     */
+    public static Vector getRedirectBuffer() {
+        return redirectBuffer;
+        
     }
 }
