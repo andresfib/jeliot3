@@ -32,17 +32,17 @@ import jeliot.util.DebugUtil;
 public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     //  DOC: document!
-    
+
     /**
      * 
      */
     protected Stack stackOfExprsStacks = new Stack();
-    
+
     /**
      * 
      */
     protected Stack arrayInitialization = new Stack();
-    
+
     /**
      *  
      */
@@ -196,7 +196,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         superMethodCallNumber = 0;
         arrayInitialization = new Stack();
         //expressionStack = new Stack();
-        
+
         super.initialize();
 
         try {
@@ -212,8 +212,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         if (line == null) {
             line = "" + Code.ERROR + Code.DELIM
-                    + messageBundle.getString("unknown.exception") + Code.DELIM + "0"
-                    + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
+                    + messageBundle.getString("unknown.exception") + Code.DELIM
+                    + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
                     + Code.LOC_DELIM + "0";
         }
 
@@ -252,12 +252,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         if (readLine == null) {
             readLine = "" + Code.ERROR + Code.DELIM
-                    + messageBundle.getString("unknown.exception") + Code.DELIM + "0"
-                    + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
+                    + messageBundle.getString("unknown.exception") + Code.DELIM
+                    + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
                     + Code.LOC_DELIM + "0";
         }
         DebugUtil.printDebugInfo(readLine);
-        
+
         return readLine;
     }
 
@@ -303,14 +303,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#cleanEvaluationArea(int)
      */
     public void cleanEvaluationArea(int token) {
-        if (exprs.empty() && !invokingMethod
-                && arrayInitialization.empty() 
-                && token != Code.WHI && token != Code.FOR
-                && token != Code.DO && token != Code.IFT
-                && token != Code.IFTE && token != Code.SWIBF
-                && token != Code.SWITCHB && token != Code.SWITCH
-                && token != Code.VD && token != Code.OUTPUT
-                && token != Code.INPUT && token != Code.INPUTTED) {
+        if (exprs.empty() && !invokingMethod && arrayInitialization.empty()
+                && token != Code.WHI && token != Code.FOR && token != Code.DO
+                && token != Code.IFT && token != Code.IFTE
+                && token != Code.SWIBF && token != Code.SWITCHB
+                && token != Code.SWITCH && token != Code.VD
+                && token != Code.OUTPUT && token != Code.INPUT
+                && token != Code.INPUTTED) {
             closeScratch();
             openScratch();
         }
@@ -532,7 +531,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         for (int i = 0; i < n; i++) {
             vars[i] = ainst.getVariableAt(cellNumber[i]);
             if (i != n - 1) {
-                ainst = (ArrayInstance) ((Reference) vars[i].getValue()).getInstance();
+                ainst = (ArrayInstance) ((Reference) vars[i].getValue())
+                        .getInstance();
             }
         }
 
@@ -615,7 +615,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             if (command == Code.TO) {
 
-                variables.put(new Long(expressionCounter), vars[n-1]);
+                variables.put(new Long(expressionCounter), vars[n - 1]);
 
             } else {
 
@@ -635,8 +635,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             } else if (command == Code.RIGHT) {
 
-                ExpressionActor ea = director
-                        .getCurrentScratch().findActor(expressionReference);
+                ExpressionActor ea = director.getCurrentScratch().findActor(
+                        expressionReference);
                 if (ea != null) {
 
                     director.rightBinaryExpression(val, ea, highlight);
@@ -654,12 +654,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             if (oper == Code.PRIE || oper == Code.PRDE) {
 
-                variables.put(new Long(expressionCounter), vars[n-1]);
+                variables.put(new Long(expressionCounter), vars[n - 1]);
                 values.put(new Long(expressionCounter), val);
 
             } else if (oper == Code.PIE || oper == Code.PDE) {
 
-                variables.put(new Long(expressionCounter), vars[n-1]);
+                variables.put(new Long(expressionCounter), vars[n - 1]);
                 values.put(new Long(expressionReference), val);
                 values.put(new Long(expressionCounter), val);
 
@@ -678,7 +678,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         } else {
 
             values.put(new Long(expressionCounter), val);
-            variables.put(new Long(expressionCounter), vars[n-1]);
+            variables.put(new Long(expressionCounter), vars[n - 1]);
 
         }
 
@@ -705,82 +705,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeAA(long expressionReference, String hashCode,
             String compType, int dims, String dimensionReferences,
             String dimensionSizes, Highlight h) {
-        
 
-        StringTokenizer st = new StringTokenizer(
-                dimensionReferences, Code.LOC_DELIM);
-
-        long[] dimensionReference = new long[dims];
-
-        for (int i = 0; st.hasMoreTokens(); i++) {
-            dimensionReference[i] = Long.parseLong(st
-                    .nextToken());
-        }
-
-        st = new StringTokenizer(dimensionSizes, Code.LOC_DELIM);
-        int[] dimensionSize = new int[dims];
-
-        for (int i = 0; st.hasMoreTokens(); i++) {
-            dimensionSize[i] = Integer.parseInt(st.nextToken());
-        }
-
-        Value[] dimensionValues = new Value[dims];
-
-        for (int i = 0; i < dims; i++) {
-            dimensionValues[i] = (Value) values
-                    .remove(new Long(dimensionReference[i]));
-
-        }
-       
-        if (dimensionSize.length > 3) {
-            throw new FeatureNotImplementedException("More than 3-dimensional arrays are not supported.");
-        }
-        
-        ArrayInstance ai = new ArrayInstance(hashCode,
-                compType, dimensionSize.length, dimensionSize[0]);
-
-        Reference ref = new Reference(ai);
-
-        ArrayInstance[] level1 = null;
-        if (dimensionSize.length > 1) {
-            level1 = new ArrayInstance[dimensionSize[0]];
-            for (int i = 0; i < dimensionSize[0]; i++) {
-                level1[i] = new ArrayInstance("", compType, dimensionSize.length - 1, dimensionSize[1]);
-            }
-        }
-        
-        ArrayInstance[][] level2 = null;
-        if (dimensionSize.length > 2) {
-            level2 = new ArrayInstance[dimensionSize[0]][dimensionSize[1]];
-            for (int i = 0; i < dimensionSize[0]; i++) {
-                for (int j = 0; j < dimensionSize[1]; j++) {
-                    level2[i][j] = new ArrayInstance("", compType, dimensionSize.length - 2, dimensionSize[2]);
-                }
-            }
-        }
-
-        director.showArrayCreation(ai, ref, level1, level2, dimensionValues,
-                expressionReference, h);
-
-        //director.arrayCreation(dimensionSize, h);
-
-        instances.put(hashCode, ai);
-
-        ref.makeReference();
-
-        values.put(new Long(expressionReference), ref);
-
-        for (int i = 0; i < dims; i++) {
-            Object[] postIncDec = (Object[]) postIncsDecs
-                    .remove(new Long(dimensionReference[i]));
-
-            if (postIncDec != null) {
-                doPostIncDec(postIncDec);
-            }
-        }
-        
-        /*
-        StringTokenizer st = new StringTokenizer(dimensionReferences, ",");
+        StringTokenizer st = new StringTokenizer(dimensionReferences,
+                Code.LOC_DELIM);
 
         long[] dimensionReference = new long[dims];
 
@@ -788,8 +715,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             dimensionReference[i] = Long.parseLong(st.nextToken());
         }
 
-        //int values of the dimension sizes
-        st = new StringTokenizer(dimensionSizes, ",");
+        st = new StringTokenizer(dimensionSizes, Code.LOC_DELIM);
         int[] dimensionSize = new int[dims];
 
         for (int i = 0; st.hasMoreTokens(); i++) {
@@ -804,11 +730,37 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         }
 
-        ArrayInstance ai = new ArrayInstance(hashCode, compType, dimensionSize);
+        if (dimensionSize.length > 3) {
+            throw new FeatureNotImplementedException(
+                    "More than 3-dimensional arrays are not supported.");
+        }
+
+        ArrayInstance ai = new ArrayInstance(hashCode, compType,
+                dimensionSize.length, dimensionSize[0]);
 
         Reference ref = new Reference(ai);
 
-        director.showArrayCreation(ai, ref, dimensionValues,
+        ArrayInstance[] level1 = null;
+        if (dimensionSize.length > 1) {
+            level1 = new ArrayInstance[dimensionSize[0]];
+            for (int i = 0; i < dimensionSize[0]; i++) {
+                level1[i] = new ArrayInstance("", compType,
+                        dimensionSize.length - 1, dimensionSize[1]);
+            }
+        }
+
+        ArrayInstance[][] level2 = null;
+        if (dimensionSize.length > 2) {
+            level2 = new ArrayInstance[dimensionSize[0]][dimensionSize[1]];
+            for (int i = 0; i < dimensionSize[0]; i++) {
+                for (int j = 0; j < dimensionSize[1]; j++) {
+                    level2[i][j] = new ArrayInstance("", compType,
+                            dimensionSize.length - 2, dimensionSize[2]);
+                }
+            }
+        }
+
+        director.showArrayCreation(ai, ref, level1, level2, dimensionValues,
                 expressionReference, h);
 
         //director.arrayCreation(dimensionSize, h);
@@ -827,7 +779,56 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 doPostIncDec(postIncDec);
             }
         }
-        */
+
+        /*
+         StringTokenizer st = new StringTokenizer(dimensionReferences, ",");
+
+         long[] dimensionReference = new long[dims];
+
+         for (int i = 0; st.hasMoreTokens(); i++) {
+         dimensionReference[i] = Long.parseLong(st.nextToken());
+         }
+
+         //int values of the dimension sizes
+         st = new StringTokenizer(dimensionSizes, ",");
+         int[] dimensionSize = new int[dims];
+
+         for (int i = 0; st.hasMoreTokens(); i++) {
+         dimensionSize[i] = Integer.parseInt(st.nextToken());
+         }
+
+         Value[] dimensionValues = new Value[dims];
+
+         for (int i = 0; i < dims; i++) {
+         dimensionValues[i] = (Value) values.remove(new Long(
+         dimensionReference[i]));
+
+         }
+
+         ArrayInstance ai = new ArrayInstance(hashCode, compType, dimensionSize);
+
+         Reference ref = new Reference(ai);
+
+         director.showArrayCreation(ai, ref, dimensionValues,
+         expressionReference, h);
+
+         //director.arrayCreation(dimensionSize, h);
+
+         instances.put(hashCode, ai);
+
+         ref.makeReference();
+
+         values.put(new Long(expressionReference), ref);
+
+         for (int i = 0; i < dims; i++) {
+         Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(
+         dimensionReference[i]));
+
+         if (postIncDec != null) {
+         doPostIncDec(postIncDec);
+         }
+         }
+         */
     }
 
     /**
@@ -842,7 +843,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             director.closeScratch();
             director.openScratch();
             openNewExpressionStack();
-            
+
             //Close the scope
         } else if (scope == 0) {
 
@@ -853,8 +854,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
     }
 
-    
-    
     /**
      * @param expressionCounter
      * @param value
@@ -877,8 +876,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeINPUT(long expressionCounter, String className, String methodName, String type, String prompt,
-            Highlight h) {
+    protected void handleCodeINPUT(long expressionCounter, String className,
+            String methodName, String type, String prompt, Highlight h) {
         Value in = director.animateInputHandling(type, prompt, h);
 
         input.println(in.getValue());
@@ -892,15 +891,16 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param breakLine
      * @param highlight
      */
-    protected void handleCodeOUTPUT(long expressionReference, String className, String methodName, String value,
-            String type, boolean breakLine, Highlight highlight) {
+    protected void handleCodeOUTPUT(long expressionReference, String className,
+            String methodName, String value, String type, boolean breakLine,
+            Highlight highlight) {
         Value output = (Value) values.remove(new Long(expressionReference));
 
         if (output == null) {
             output = new Value(value, type);
             director.introduceLiteral(output);
         }
-        
+
         if (breakLine) {
             output.setValue(output.getValue() + "\\n");
         }
@@ -939,7 +939,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         } else if (statementName == Code.FOR) {
             stmt = propertiesBundle.getStringProperty("statement_name.for");
         } else if (statementName == Code.DO) {
-            stmt = propertiesBundle.getStringProperty("statement_name.do_while");
+            stmt = propertiesBundle
+                    .getStringProperty("statement_name.do_while");
         }
 
         director.continueLoop(stmt, h);
@@ -962,7 +963,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             stmt = propertiesBundle.getStringProperty("statement_name.for");
             director.breakLoop(stmt, h);
         } else if (statementName == Code.DO) {
-            stmt = propertiesBundle.getStringProperty("statement_name.do_while");
+            stmt = propertiesBundle
+                    .getStringProperty("statement_name.do_while");
             director.breakLoop(stmt, h);
         } else if (statementName == Code.SWITCH) {
             director.breakSwitch(h);
@@ -1028,7 +1030,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         } else {
             if (value.equals(Boolean.TRUE.toString())) {
                 director.continueLoop(propertiesBundle
-                        .getStringProperty("statement_name.do_while"), result, h);
+                        .getStringProperty("statement_name.do_while"), result,
+                        h);
             } else {
                 director.exitLoop(propertiesBundle
                         .getStringProperty("statement_name.do_while"), result);
@@ -1535,9 +1538,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeOFA(long expressionCounter, long objectCounter,
             String variableName, String value, String type, Highlight h) {
-        
+
         Reference objVal = (Reference) values.remove(new Long(objectCounter));
-        
+
         if (objVal == null && !objectCreation.empty()) {
             objVal = (Reference) objectCreation.peek();
         }
@@ -1550,14 +1553,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
          * there the reference in values don't have any instance as
          * it's reference point and then the ObjectFrame obj is null
          * after previous line.
-         */ 
+         */
         if (obj == null && !objectCreation.empty()) {
             objVal = (Reference) objectCreation.peek();
             obj = (ObjectFrame) objVal.getInstance();
         }
 
         Variable var = obj.getVariable(variableName);
-        
+
         /*
          * This is a static field access if there isn't such variable in the object.
          * If the code is like this:
@@ -1573,8 +1576,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
          * it is necessary to transfer those actions to static field accesses in
          * Jeliot side.    
          */
-        if (var == null)  {
-            handleCodeSFA(expressionCounter, obj.getType(), variableName, value, type, h);
+        if (var == null) {
+            handleCodeSFA(expressionCounter, obj.getType(), variableName,
+                    value, type, h);
             return;
         }
 
@@ -1667,8 +1671,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             } else if (command == Code.RIGHT) {
 
-                ExpressionActor ea = director
-                        .getCurrentScratch().findActor(expressionReference);
+                ExpressionActor ea = director.getCurrentScratch().findActor(
+                        expressionReference);
                 if (ea != null) {
 
                     director.rightBinaryExpression(val, ea, highlight);
@@ -1757,7 +1761,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         ValueActor va = director.finishMethod(returnActor, expressionCounter);
         closeExpressionStack();
-        
+
         rv.setActor(va);
         handleExpression(rv, expressionCounter);
     }
@@ -1977,8 +1981,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 director.beginBinaryExpression(val, operator,
                         expressionReference, highlight);
             } else if (command == Code.RIGHT) {
-                ExpressionActor ea = director
-                        .getCurrentScratch().findActor(expressionReference);
+                ExpressionActor ea = director.getCurrentScratch().findActor(
+                        expressionReference);
                 if (ea != null) {
                     director.rightBinaryExpression(val, ea, highlight);
                 } else {
@@ -2110,8 +2114,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 director.beginBinaryExpression(val, operator,
                         expressionReference, highlight);
             } else if (command == Code.RIGHT) {
-                ExpressionActor ea = director
-                        .getCurrentScratch().findActor(expressionReference);
+                ExpressionActor ea = director.getCurrentScratch().findActor(
+                        expressionReference);
                 if (ea != null) {
                     director.rightBinaryExpression(val, ea, highlight);
                 } else {
@@ -2129,6 +2133,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 values.put(new Long(expressionCounter), val);
             } else if (oper == Code.PIE || oper == Code.PDE) {
                 variables.put(new Long(expressionCounter), var);
+                variables.put(new Long(expressionReference), var);
                 values.put(new Long(expressionReference), val);
                 values.put(new Long(expressionCounter), val);
             } else {
@@ -2726,11 +2731,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     /**
      * 
      */
-    protected void handleCodeAIE(String arrayReference, long cellNumber, long expressionReference, String value, String type, long l, Highlight highlight) {
-        
+    protected void handleCodeAIE(String arrayReference, long cellNumber,
+            long expressionReference, String value, String type, long l,
+            Highlight highlight) {
+
         ArrayInstance ai = (ArrayInstance) instances.get(arrayReference);
         VariableInArray v = ai.getVariableAt((int) cellNumber);
-        
+
         boolean literal = ((l == 1) ? true : false);
         Value fromValue = (Value) values.remove(new Long(expressionReference));
 
@@ -2753,13 +2760,15 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             } else {
                 casted = new Reference();
             }
-            
-        }
-        
-        director.initializeArrayVariable(v, fromValue, casted, literal, highlight);
-        v.assign(casted); 
 
-        Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(expressionReference));
+        }
+
+        director.initializeArrayVariable(v, fromValue, casted, literal,
+                highlight);
+        v.assign(casted);
+
+        Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(
+                expressionReference));
 
         if (postIncDec != null) {
             doPostIncDec(postIncDec);
@@ -2773,7 +2782,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         arrayInitialization.pop();
         director.closeArrayInitializer(highlight);
     }
-    
+
     /**
      * @param ci
      * @param h
@@ -2947,8 +2956,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             } else if (command == Code.RIGHT) {
 
-                ExpressionActor ea = director
-                        .getCurrentScratch().findActor(expressionReference);
+                ExpressionActor ea = director.getCurrentScratch().findActor(
+                        expressionReference);
 
                 if (ea != null) {
                     director.rightBinaryExpression(val, ea, highlight);
@@ -2988,7 +2997,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         Variable var = (Variable) variables.remove(postIncDecInfo[1]);
 
-        director.animatePreIncDec(((Long) postIncDecInfo[0]).intValue(), var,
+        director.animateIncDec(((Long) postIncDecInfo[0]).intValue(), var,
                 ((Value) postIncDecInfo[2]), ((Highlight) postIncDecInfo[3]));
     }
 
@@ -3046,6 +3055,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             Value right = (Value) values.remove(new Long(
                     rightExpressionReference));
 
+            Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(
+                    rightExpressionReference));
+
             if (right != null) {
                 director.rightBinaryExpression(right, expr, h);
             }
@@ -3057,9 +3069,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             //values.put(new Long(expressionCounter),
             // expressionValue);
-
-            Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(
-                    rightExpressionReference));
 
             if (postIncDec != null) {
                 doPostIncDec(postIncDec);
@@ -3073,35 +3082,48 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             Value left = (Value) values
                     .remove(new Long(leftExpressionReference));
-            Value right = (Value) values.remove(new Long(
-                    rightExpressionReference));
 
+            //Do the left part of expression
             expr = director.beginBinaryExpression(left, operator,
                     expressionCounter, h);
 
             Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(
                     leftExpressionReference));
 
+            //Do post inc/dec for the left hand side if needed
             if (postIncDec != null) {
                 doPostIncDec(postIncDec);
             }
 
-            director.rightBinaryExpression(right, expr, h);
+            Value right = (Value) values.remove(new Long(
+                    rightExpressionReference));
 
             postIncDec = (Object[]) postIncsDecs.remove(new Long(
                     rightExpressionReference));
 
+            if (right != null) {
+
+                //Visualize the right hand side of the binary expression
+                director.rightBinaryExpression(right, expr, h);
+
+            }
+            
+            //Do post inc/dec for the right hand side of needed
             if (postIncDec != null) {
                 doPostIncDec(postIncDec);
             }
 
+            //Finish the expression evaluation.
             expressionValue = director.finishBinaryExpression(result, operator,
                     expr, h);
 
+            //Pop the shown expression from expression stack
             exprs.pop();
 
         }
 
+        //handle the expression where
+        //the value of just evaluated expression is used.
         handleExpression(expressionValue, expressionCounter);
     }
 
@@ -3112,7 +3134,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         Variable var = (Variable) variables
                 .remove(new Long(expressionReference));
 
-        director.animatePreIncDec(operator, var, result, h);
+        director.animateIncDec(operator, var, result, h);
         values.put(new Long(expressionCounter), result);
 
         exprs.pop();
@@ -3138,12 +3160,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             Variable var = (Variable) variables.remove(new Long(
                     expressionReference));
 
-            director.animatePreIncDec(operator, var, result, h);
+            director.animateIncDec(operator, var, result, h);
 
         } else {
 
             Object[] postIncDec = { new Long(operator),
-                    new Long(expressionReference), result, h};
+                    new Long(expressionReference), result, h };
             postIncsDecs.put(new Long(expressionCounter), postIncDec);
 
         }
@@ -3161,12 +3183,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     public void beforeExecution() {
     }
- 
+
     protected void openNewExpressionStack() {
         stackOfExprsStacks.push(exprs);
         exprs = new Stack();
     }
-    
+
     protected void closeExpressionStack() {
         exprs = (Stack) stackOfExprsStacks.pop();
     }
