@@ -46,7 +46,7 @@ public class LinesAndText extends Actor {
     /**
 	 *
 	 */
-	private String evaluationArea = bundle.getString("string.Evaluation_area");
+	private String evaluationArea = bundle.getString("string.evaluation_area");
     
     /**
 	 *

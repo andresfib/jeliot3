@@ -15,6 +15,9 @@ import jeliot.util.UserProperties;
  */
 public class TreeDraw extends JComponent {
 
+    /**
+     * 
+     */
 	protected static final UserProperties propertiesBundle = ResourceBundles.getCallTreeUserProperties();
 
     /**
