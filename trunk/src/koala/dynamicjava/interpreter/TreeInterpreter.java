@@ -754,9 +754,11 @@ public class TreeInterpreter implements Interpreter {
         if (EvaluationVisitor.isSetConstructorCall()
                 && c.getName().equals(EvaluationVisitor.getConstructorCallName())
                 && name.equals("<init>")) {
-
-            MCodeUtilities.write("" + Code.CONSCN + Code.DELIM
-                    + EvaluationVisitor.getConstructorCallNumber());
+        	
+            Long callNumber = new Long(EvaluationVisitor.getConstructorCallNumber());
+        	EvaluationVisitor.returnExpressionCounterStack.push(callNumber);
+            MCodeUtilities.write("" + Code.CONSCN + Code.DELIM + callNumber);
+            
             EvaluationVisitor.constructorCallFinished();
 
         } else if (EvaluationVisitor.isSetConstructorCall()
@@ -978,7 +980,7 @@ public class TreeInterpreter implements Interpreter {
         MCodeUtilities.write(Code.MD + Code.DELIM + MCodeUtilities.locationToString(meth));
         // Hack for providing e-code for "outside" classes
         // EvaluationVisitor will display PARAMETERS and MD just before SMCC
-        EvaluationVisitor.setInside();
+        EvaluationVisitor.setInside();        
 
         // Set the final local variables values
         if (md.contextField != null) {

@@ -201,9 +201,10 @@ public class EvaluationVisitor extends VisitorObject {
 
 	/**
 	 * Stack to keep track of the references of the return expression. Used to
-	 * allow method calls inside them.
+	 * allow method calls inside them. Public so TreeInterpreter can push a value when invoking a 
+	 * constructor.
 	 */
-	private static Stack returnExpressionCounterStack = new Stack();
+	public static Stack returnExpressionCounterStack = new Stack();
 
 	/**
 	 * Stack with the references of those methods where we can access to its
