@@ -110,7 +110,10 @@ public class Interpreter {
                         token != Code.DO &&
                         token != Code.IFT &&
                         token != Code.IFTE &&
-                        token != Code.VD) {
+                        token != Code.VD &&
+                        token != Code.OUTPUT &&
+                        token != Code.INPUT &&
+                        token != Code.INPUTTED) {
                             director.closeScratch();
                             director.openScratch();
                     }
@@ -158,7 +161,12 @@ public class Interpreter {
                             int expressionCounter = Integer.parseInt(tokenizer.nextToken());
                             int fromExpression = Integer.parseInt(tokenizer.nextToken());
                             int toExpression =  Integer.parseInt(tokenizer.nextToken());
-                            String value = tokenizer.nextToken();
+                            String value = null;
+                            if (tokenizer.countTokens() >= 4) {
+                                value = tokenizer.nextToken();
+                            } else {
+                                value = "";
+                            }
                             String type = tokenizer.nextToken();
                             Highlight h = ECodeUtilities.makeHighlight(
                                                          tokenizer.nextToken());
@@ -191,90 +199,6 @@ public class Interpreter {
                             }
 
                             exprs.pop();
-
-                            int command = -1;
-                            int oper = -1;
-                            int size = commands.size();
-
-                            //We find the command
-                            for (int i = size - 1; i >= 0; i--) {
-                                StringTokenizer commandTokenizer = new StringTokenizer(
-                                                (String) commands.elementAt(i),
-                                                Code.DELIM);
-                                int comm = Integer.parseInt(commandTokenizer.nextToken());
-                                int cid = Integer.parseInt(commandTokenizer.nextToken());
-                                if (expressionCounter == cid) {
-                                    command = comm;
-                                    commands.removeElementAt(i);
-                                    break;
-                                }
-                            }
-
-                            /**
-                            * Look from the expression stack
-                            * what expression should be shown next
-                            */
-                            int expressionReference = 0;
-                            Highlight highlight = null;
-
-                            if (!exprs.empty()) {
-
-                                StringTokenizer expressionTokenizer = new StringTokenizer(
-                                                                     (String) exprs.peek(),
-                                                                      Code.DELIM);
-
-                                oper = Integer.parseInt(expressionTokenizer.nextToken());
-
-                                expressionReference = Integer.parseInt(
-                                                        expressionTokenizer.nextToken());
-
-                                //Make the location information for the location token
-                                highlight = ECodeUtilities.makeHighlight(
-                                expressionTokenizer.nextToken());
-                            }
-
-                            //Do different things depending on in what expression
-                            //the literal is used.
-
-                            //If operator is assignment we just store the value
-                            if (oper == Code.A){
-                                values.put(new Integer(expressionCounter), expressionValue);
-
-                            //If oper is other binary operator we will show it
-                            //on the screen with operator
-                            } else if (ECodeUtilities.isBinary(oper)) {
-
-                                int operator = ECodeUtilities.resolveBinOperator(oper);
-
-                                if (command == Code.LEFT) {
-
-                                    director.beginBinaryExpression(expressionValue, operator,
-                                                expressionReference, highlight);
-
-                                } else if (command == Code.RIGHT) {
-
-                                    ExpressionActor ea = (ExpressionActor)
-                                        director.getCurrentScratch().findActor(expressionReference);
-                                    if (ea != null) {
-                                        director.rightBinaryExpression(expressionValue, ea, highlight);
-                                    } else {
-                                        values.put(new Integer(expressionCounter), expressionValue);
-                                    }
-
-                                }
-
-                            //If oper is a unary operator we will show it
-                            //on the screen with operator
-                            } else if (ECodeUtilities.isUnary(oper)) {
-
-                                values.put(new Integer(expressionCounter), expressionValue);
-
-                            //If it is something else we will store it for later use.
-                            } else {
-
-                                values.put(new Integer(expressionCounter), expressionValue);
-
-                            }
 
                             director.closeScratch();
                             director.openScratch();
@@ -416,7 +340,11 @@ public class Interpreter {
                             } else if (ECodeUtilities.isUnary(oper)) {
 
                                 values.put(new Integer(expressionCounter), expressionValue);
-
+                                //int operator = ECodeUtilities.resolveUnaryOperator(oper);
+                                //if (command == Code.RIGHT) {
+                                //  director.beginUnaryExpression(operator, val,
+                                //                      expressionReference, highlight);
+                                //}
                             //If it is something else we will store it for later use.
                             } else {
 
@@ -527,7 +455,12 @@ public class Interpreter {
                             int expressionCounter = Integer.parseInt(tokenizer.nextToken());
                             int leftExpressionReference = Integer.parseInt(tokenizer.nextToken());
                             int rightExpressionReference = Integer.parseInt(tokenizer.nextToken());
-                            String value = tokenizer.nextToken();
+                            String value = null;
+                            if (tokenizer.countTokens() >= 4) {
+                                value = tokenizer.nextToken();
+                            } else {
+                                value = "";
+                            }
                             String type = tokenizer.nextToken();
 
                             Highlight h = ECodeUtilities.makeHighlight(
@@ -688,7 +621,7 @@ public class Interpreter {
 
                                 } else {
                                     values.put(new Integer(expressionCounter), expressionValue);
-                        		}
+                                }
 
                             //If oper is a unary operator we will show it
                             //on the screen with operator
@@ -696,6 +629,11 @@ public class Interpreter {
 
                                 values.put(new Integer(expressionCounter), expressionValue);
 
+                                //int operator = ECodeUtilities.resolveUnaryOperator(oper);
+                                //if (command == Code.RIGHT) {
+                                //  director.beginUnaryExpression(operator, val,
+                                //                      expressionReference, highlight);
+                                //}
                             //If it is something else we will store it for later use.
                             } else {
 
@@ -711,7 +649,12 @@ public class Interpreter {
 
                             String variableName = tokenizer.nextToken();
                             int initializerExpression = Integer.parseInt(tokenizer.nextToken());
-                            String value = tokenizer.nextToken();
+                            String value = null;
+                            if (tokenizer.countTokens() >= 4) {
+                                value = tokenizer.nextToken();
+                            } else {
+                                value = "";
+                            }
                             String type = tokenizer.nextToken();
                             String modifier = tokenizer.nextToken();
 
@@ -744,7 +687,12 @@ public class Interpreter {
 
                             int expressionCounter = Integer.parseInt(tokenizer.nextToken());
                             String variableName = tokenizer.nextToken();
-                            String value = tokenizer.nextToken();
+                            String value = null;
+                            if (tokenizer.countTokens() >= 4) {
+                                value = tokenizer.nextToken();
+                            } else {
+                                value = "";
+                            }
                             String type = tokenizer.nextToken();
 
                             Variable var = director.getCurrentMethodFrame().getVariable(variableName);
@@ -835,7 +783,7 @@ public class Interpreter {
                                     }
                                 } else {
                                     values.put(new Integer(expressionCounter), val);
-                            	}
+                                }
 
                             //If oper is a unary operator we will show it
                             //on the screen with operator
@@ -847,7 +795,7 @@ public class Interpreter {
                                         variables.put(new Integer(expressionCounter), var);
 
                                 } else if (oper == Code.PIE  ||
-                                         oper == Code.PDE) {
+                                           oper == Code.PDE) {
 
                                         variables.put(new Integer(expressionCounter), var);
                                         values.put(new Integer(expressionReference), val);
@@ -856,8 +804,10 @@ public class Interpreter {
                                 } else {
 
                                     int operator = ECodeUtilities.resolveUnOperator(oper);
-                                    director.beginUnaryExpression(operator, val,
-                                                    expressionReference, highlight);
+                                    //if (command == Code.RIGHT) {
+                                        director.beginUnaryExpression(operator, val,
+                                                        expressionReference, highlight);
+                                    //}
                                 }
 
                             //If it is something else we will store it for later use.
@@ -877,8 +827,17 @@ public class Interpreter {
                             //Second token is the expression counter
                             int expressionCounter = Integer.parseInt(tokenizer.nextToken());
 
-                            //Third token is the value of the literal
-                            String value = tokenizer.nextToken();
+                            String value = null;
+                            if (tokenizer.countTokens() >= 3) {
+                                //Third token is the value of the literal
+                                value = tokenizer.nextToken();
+                            } else {
+                                /**
+                                 * There is no third token
+                                 * because the literal is an empty string
+                                 */
+                                value = "";
+                            }
 
                             //Fourth token is the type of the literal
                             String type = tokenizer.nextToken();
@@ -913,6 +872,7 @@ public class Interpreter {
                             */
                             int expressionReference = 0;
                             Highlight highlight = null;
+
                             if (!exprs.empty()) {
                                 StringTokenizer expressionTokenizer = new StringTokenizer(
                                                                      (String) exprs.peek(),
@@ -925,7 +885,7 @@ public class Interpreter {
 
                                 //Make the location information for the location token
                                 highlight = ECodeUtilities.makeHighlight(
-                                expressionTokenizer.nextToken());
+                                                           expressionTokenizer.nextToken());
                             }
 
                             //Value of the literal
@@ -962,15 +922,17 @@ public class Interpreter {
 
                                 } else {
                                     values.put(new Integer(expressionCounter), lit);
-                            	}
+                                }
 
                             //If oper is a unary operator we will show it
                             //on the screen with operator
                             } else if (ECodeUtilities.isUnary(oper)) {
 
                                 int operator = ECodeUtilities.resolveUnOperator(oper);
-                                director.beginUnaryExpression(operator, lit,
-                                                expressionReference, highlight);
+                                //if (command == Code.RIGHT) {
+                                    director.beginUnaryExpression(operator, lit,
+                                                        expressionReference, highlight);
+                                //}
 
                             //If it is something else we will store it for later use.
                             } else {
@@ -1121,7 +1083,12 @@ public class Interpreter {
 
                             int expressionCounter = Integer.parseInt(tokenizer.nextToken());
                             int expressionReference = Integer.parseInt(tokenizer.nextToken());
-                            String value = tokenizer.nextToken();
+                            String value = null;
+                            if (tokenizer.countTokens() >= 4) {
+                                value = tokenizer.nextToken();
+                            } else {
+                                value = "";
+                            }
                             String type = tokenizer.nextToken();
                             Highlight h = ECodeUtilities.makeHighlight(
                                                          tokenizer.nextToken());

@@ -31,6 +31,7 @@ public class CodeEditor extends JComponent {
      * The String for the basic code template that is shown to the user on the start of the Jeliot 2000.
      */
     private String template =
+        "import jeliot.io.*;\n" +
         "\n" +
         "public class MyClass {\n" +
         "    public static void main() {\n\n" +
