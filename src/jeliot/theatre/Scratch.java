@@ -87,6 +87,15 @@ public class Scratch extends Actor implements ActorContainer {
         crapRemovers.addElement(remover);
     }
 
+    public void removeCrap(Actor actor) {
+        crap.removeElement(actor);
+        ActorContainer cont = actor.getParent();
+        if (cont instanceof Theatre) {
+            cont.removeActor(actor);
+            ((Theatre)cont).removePassive(actor);
+        }
+    }
+
     public void removeCrap() {
         int n = crap.size();
         for (int i = 0; i < n; ++i) {
@@ -113,8 +122,7 @@ public class Scratch extends Actor implements ActorContainer {
 
     public void clean() {
         exprs.removeAllElements();
-        crap.removeAllElements();
-        crapRemovers.removeAllElements();
+        removeCrap();
     }
 
 }

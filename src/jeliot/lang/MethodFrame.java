@@ -16,7 +16,7 @@ import jeliot.FeatureNotImplementedException;
   */
 public class MethodFrame {
 
-    private Stage stage;
+    private MethodStage stage;
 //  private int depth;
 
     private Stack vars;
@@ -75,11 +75,11 @@ public class MethodFrame {
         return vcount;
     }
 
-    public Stage getStage() {
+    public MethodStage getMethodStage() {
         return stage;
     }
 
-    public void setStage(Stage stage) {
+    public void setMethodStage(MethodStage stage) {
         this.stage = stage;
     }
 

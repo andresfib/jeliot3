@@ -99,7 +99,7 @@ public class Director {
         eCodeInterpreter.execute();
 
         highlight(new Highlight(0,0,0,0));
-        theatre.repaint();
+        theatre.flush();
     }
 
     public void setStep(boolean step) {
@@ -137,7 +137,7 @@ public class Director {
         if (currentScratch != null) {
             currentScratch.removeCrap();
             manager.removeScratch(currentScratch);
-            theatre.repaint();
+            theatre.flush();
             if (!scratchStack.empty()) {
                 currentScratch = (Scratch) scratchStack.pop();
             }
@@ -309,10 +309,8 @@ public class Director {
     }
 */
 
-    public Value[] animateOMInvocation(String methodCall,
-                                      Value[] args,
-                                      Highlight h,
-                                      Value thisValue){
+    public Value[] animateOMInvocation(String methodCall, Value[] args,
+                                      Highlight h, Value thisValue) {
         highlight(h);
 
         // Remember the scratch of current expression.
@@ -325,6 +323,7 @@ public class Director {
         if (args != null) {
              n = args.length;
         }
+
         OMIActor actor = factory.produceOMIActor(methodCall, n);
         ExpressionActor expr = currentScratch.getExpression(1, -1);
         currentScratch.registerCrap(actor);
@@ -458,8 +457,8 @@ public class Director {
         MethodFrame frame = new MethodFrame(methodName);
 
         // create a stage for the method
-        Stage stage = factory.produceStage(frame);
-        frame.setStage(stage);
+        MethodStage stage = factory.produceMethodStage(frame);
+        frame.setMethodStage(stage);
         currentMethodFrame = frame;
         frameStack.push(frame);
 
@@ -590,8 +589,8 @@ public class Director {
         MethodFrame frame = new MethodFrame(methodName);
 
         // create a stage for the method
-        Stage stage = factory.produceStage(frame);
-        frame.setStage(stage);
+        MethodStage stage = factory.produceMethodStage(frame);
+        frame.setMethodStage(stage);
         currentMethodFrame = frame;
         frameStack.push(frame);
 
@@ -673,8 +672,8 @@ public class Director {
 
 
         // Get the stage and remove it.
-        Stage stage = ((MethodFrame)frameStack.pop()).getStage();
-        manager.removeStage(stage);
+        MethodStage stage = ((MethodFrame)frameStack.pop()).getMethodStage();
+        manager.removeMethodStage(stage);
         Animation stageDisappear = stage.disappear();
 
         if (returnAct != null) {
@@ -758,7 +757,7 @@ public class Director {
         casted.setActor(castAct);
         ValueActor valueAct = returnValue.getActor();
 
-        Stage stage = currentMethodFrame.getStage();
+        MethodStage stage = currentMethodFrame.getMethodStage();
         BubbleActor bubble = factory.produceBubble(stage);
 
         //The return value goes inside the Method stage in the last
@@ -814,11 +813,9 @@ public class Director {
         currentScratch.registerCrap(toActor);
     }
 
-    public Value animateBinaryExpression(
-            int operator,
-            Value first,
-            Value second,
-            Value result, int expressionCounter, Highlight h) {
+    public Value animateBinaryExpression(int operator, Value first,
+                                         Value second, Value result,
+                                         int expressionCounter, Highlight h) {
 
         highlight(h);
 
@@ -907,7 +904,7 @@ public class Director {
         VariableActor actor = factory.produceVariableActor(v);
         v.setActor(actor);
 
-        Stage stage = currentMethodFrame.getStage();
+        MethodStage stage = currentMethodFrame.getMethodStage();
 
 
         Point loc = stage.reserve(actor);
@@ -1195,7 +1192,6 @@ public class Director {
         ValueActor resAct = factory.produceValueActor(result);
         OperatorActor eqAct = factory.produceUnaOpResActor(operator);
 
-
         Point eLoc = exp.reserve(eqAct);
         Point rLoc = exp.reserve(resAct);
 
@@ -1280,7 +1276,8 @@ public class Director {
         return val;
     }
 
-
+    //TODO: Change showMessage so that the message is shown in the next
+    //empty expressionActor from Scratch and nothing else is possible.
     private void showMessage(String[] message) {
 
         if (jeliot.showMessagesInDialogs()) {
@@ -1291,9 +1288,7 @@ public class Director {
                 msg += message[i] + "\n";
             }
 
-            JOptionPane.showMessageDialog(null,
-                                          msg,
-                                          "Message",
+            JOptionPane.showMessageDialog(null, msg, "Message",
                                           JOptionPane.PLAIN_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
@@ -1302,25 +1297,15 @@ public class Director {
     }
 
     private void showMessage(String message) {
-
-        if (jeliot.showMessagesInDialogs()) {
-            JOptionPane.showMessageDialog(null,
-                                          message,
-                                          "Message",
-                                          JOptionPane.PLAIN_MESSAGE);
-        } else {
-            String[] ms = {message};
-            MessageActor actor = factory.produceMessageActor(ms);
-            showMessage(actor);
-        }
+        String[] ms = {message};
+        showMessage(ms);
     }
 
+/*  Not Valid Code Any More
     private void showMessage(String message, Value val) {
 
         if (jeliot.showMessagesInDialogs()) {
-            JOptionPane.showMessageDialog(null,
-                                          message,
-                                          "Message",
+            JOptionPane.showMessageDialog(null, message, "Message",
                                           JOptionPane.PLAIN_MESSAGE);
         } else {
             String[] ms = {message};
@@ -1350,6 +1335,7 @@ public class Director {
         showMessage(message, new Point(aloc.x, aloc.y));
         currentScratch.registerCrap(anchor);
     }
+*/
 
     private void showMessage(MessageActor message) {
         //Dimension msize = message.getSize();
@@ -1364,7 +1350,7 @@ public class Director {
     private void showMessage(MessageActor message, Point p) {
         theatre.capture();
         engine.showAnimation(message.appear(p));
-    highlight(null);
+        highlight(null);
         messagePause = true;
         theatre.removeActor(message);
         theatre.release();
@@ -1660,7 +1646,7 @@ public class Director {
                         theatre.showComponents(true);
                         theatre.release();
                         ic.popup();
-                        theatre.repaint();
+                        theatre.flush();
                     }
                 }
             );
@@ -1695,7 +1681,7 @@ public class Director {
                     public void run() {
                         theatre.remove(ic);
                         theatre.showComponents(false);
-                        theatre.repaint();
+                        theatre.flush();
                     }
                 }
             );
@@ -1790,6 +1776,11 @@ public class Director {
         ref.setActor(refAct);
         refAct.setLocation(arrayAct.getRootLocation());
 
+        //Remove passive Actor "actor" from Theatre.
+        currentScratch.removeCrap(actor);
+        //Remove ea from scratch!.
+        currentScratch.removeActor(ea);
+
         theatre.capture();
 
         ExpressionActor expr = currentScratch.getExpression(1, expressionCounter);
@@ -1798,16 +1789,10 @@ public class Director {
         expr.bind(refAct);
 
         theatre.release();
-
-        //Make the array creation disappear.
-        ea.cut();
-
     }
 
-    public void showArrayAccess(VariableInArray var,
-                                Value[] indexVal,
-                                Value returnVal,
-                                Highlight h) {
+    public void showArrayAccess(VariableInArray var, Value[] indexVal,
+                                Value returnVal, Highlight h) {
 
         highlight(h);
 

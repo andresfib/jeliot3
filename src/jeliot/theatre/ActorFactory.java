@@ -190,8 +190,8 @@ public class ActorFactory {
         return getMaxTypeWidth() + typeValWidth[8] + 20;
     }
 
-    Stage produceStage(MethodFrame m) {
-        Stage stage = new Stage(m.getMethodName());
+    public MethodStage produceMethodStage(MethodFrame m) {
+        MethodStage stage = new MethodStage(m.getMethodName());
         stage.setFont(stageFont);
         stage.calculateSize(getMaxMethodStageWidth(),
                             valueHeight + 8 +
@@ -203,7 +203,7 @@ public class ActorFactory {
         return stage;
     }
 
-    VariableActor produceVariableActor(Variable v) {
+    public VariableActor produceVariableActor(Variable v) {
 
         String type = v.getType();
         VariableActor actor = null;
@@ -299,7 +299,7 @@ public class ActorFactory {
     }
 
 
-    VariableActor produceObjectVariableActor(Variable v) {
+    public VariableActor produceObjectVariableActor(Variable v) {
 
         String type = v.getType();
         VariableActor actor = null;
