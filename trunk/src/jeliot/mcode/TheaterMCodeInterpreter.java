@@ -200,8 +200,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         try {
             line = readLine();
             MCodeUtilities.printToRegisteredSecondaryMCodeConnections(line);
-            //TODO: comment the next line in the released versions
-            //System.out.println(line);
+            //This is for debugging purposes.
+            Util.printDebugInfo(line);
         } catch (Exception e) {
             e.printStackTrace();
         }

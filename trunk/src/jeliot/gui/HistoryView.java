@@ -257,6 +257,9 @@ public class HistoryView extends JComponent implements ActionListener {
             files[i].delete();
         }
         slider.setEnabled(false);
+        buttonL.setEnabled(false);
+        buttonR.setEnabled(false);
+        ic.repaint();
     }
 
     /**
