@@ -203,15 +203,15 @@ public class Jeliot {
 
     /**
      *
-     * @param sourceCode The program source code as a String.
+     * @param srcCode The program source code as a String.
      * @param methodCall The main method call as a String.
      */
-    public void setSourceCode(String sourceCode, String methodCall) {
+    public void setSourceCode(String srcCode, String methodCall) {
 
-        if (p.matcher(sourceCode).find()) {
-            this.sourceCode = sourceCode;
+        if (p.matcher(srcCode).find()) {
+            this.sourceCode = srcCode;
         } else {
-            this.sourceCode = "import jeliot.io.*;\n\n" + sourceCode;
+            this.sourceCode = "import jeliot.io.*;\n\n" + srcCode;
             gui.getCodePane().getTextArea().setText(this.sourceCode);
         }                
                 
