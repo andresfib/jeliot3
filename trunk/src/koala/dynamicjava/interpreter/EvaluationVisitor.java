@@ -1102,7 +1102,11 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM
                     + node.getName()
             		//+ node.getRepresentation()
-            		+ Code.DELIM + value + Code.DELIM + c.getName());
+            		+ Code.DELIM
+                    + value
+                    + Code.DELIM
+                    + c.getName()
+                    + locationToString(node));
 
             if (o != null) {
                 value = o.toString();
@@ -2054,7 +2058,9 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM
                 + value
                 + Code.DELIM
-                + c.getName());
+                + c.getName()
+                + Code.DELIM
+                + locationToString(node));
 
         return result;
     }
@@ -2087,7 +2093,9 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM
                     + result
                     + Code.DELIM
-                    + c.getName());
+                    + c.getName()
+                    + Code.DELIM
+                    + locationToString(node));
 
             return result;
         } else {

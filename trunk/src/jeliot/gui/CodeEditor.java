@@ -35,7 +35,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import jeliot.mcode.MCodeUtilities;
-import jeliot.theater.Highlight;
+import jeliot.mcode.Highlight;
 
 /**
   * The simple code editor for the users to code their algorithm.

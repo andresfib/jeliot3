@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import jeliot.Jeliot;
-import jeliot.mcode.*;
 import jeliot.gui.CodePane;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.MethodFrame;
@@ -19,6 +18,10 @@ import jeliot.lang.Reference;
 import jeliot.lang.Value;
 import jeliot.lang.Variable;
 import jeliot.lang.VariableInArray;
+import jeliot.mcode.Highlight;
+import jeliot.mcode.InterpreterError;
+import jeliot.mcode.MCodeInterpreter;
+import jeliot.mcode.MCodeUtilities;
 
 /**
  * Directs the program animation. Contains the commands to handle
@@ -109,7 +112,7 @@ public class Director {
     /**
      *
      */
-    private Interpreter mCodeInterpreter;
+    private MCodeInterpreter mCodeInterpreter;
 
     /**
      *
@@ -2427,7 +2430,7 @@ public class Director {
  	/**
 	 * Used for setting the mcode interpreter
 	 */
-    public void setInterpreter(Interpreter mCodeInterpreter) {
+    public void setInterpreter(MCodeInterpreter mCodeInterpreter) {
         this.mCodeInterpreter = mCodeInterpreter;
     }
 }

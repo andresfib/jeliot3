@@ -23,7 +23,7 @@ import jeliot.lang.VariableInArray;
 import jeliot.theater.Actor;
 import jeliot.theater.Director;
 import jeliot.theater.ExpressionActor;
-import jeliot.theater.Highlight;
+import jeliot.mcode.Highlight;
 import jeliot.theater.ValueActor;
 
 /**
@@ -370,19 +370,7 @@ public class Interpreter {
                 int token = Integer.parseInt(tokenizer.nextToken());
                 if (token == Code.INPUT) {
                     interpret("" + Code.ERROR + Code.DELIM
-                            + bundle.getString("inputInConstructor.exception")/*
-                                                                               * + "
-                                                                               * <H1>
-                                                                               * Feature
-                                                                               * not
-                                                                               * implemented
-                                                                               * </H1> " + "
-                                                                               * <P>
-                                                                               * Super
-                                                                               * classes'
-                                                                               * constructors
-                                                                               * cannot "
-                                                                               */
+                            + bundle.getString("inputInConstructor.exception")
                             + Code.DELIM + "0" + Code.LOC_DELIM + "0"
                             + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0");
                 }
@@ -1171,7 +1159,7 @@ public class Interpreter {
                             }
                         }
 
-                        /**
+                        /*
                          * Look from the expression stack what expression
                          * should be shown next
                          */
@@ -1216,7 +1204,7 @@ public class Interpreter {
                             variables.put(new Long(expressionCounter), var);
                         }
 
-                        /**
+                        /*
                          * Do different kind of things depending on in what
                          * expression the variable is used.
                          */
@@ -1331,7 +1319,7 @@ public class Interpreter {
                          * if (expressionCounter == cid) { command = comm;
                          * commands.removeElementAt(i); break; } }
                          */
-                        /**
+                        /*
                          * Look from the expression stack what expression
                          * should be shown next
                          */

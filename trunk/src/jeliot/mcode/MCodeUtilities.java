@@ -8,7 +8,6 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import jeliot.theater.*;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 
 /**
