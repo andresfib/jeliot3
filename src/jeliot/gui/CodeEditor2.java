@@ -36,6 +36,7 @@ import javax.swing.text.PlainDocument;
 
 import jeliot.mcode.Highlight;
 import jeliot.mcode.MCodeUtilities;
+import jeliot.tracker.Tracker;
 
 import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.tokenmarker.JavaTokenMarker;
@@ -430,8 +431,12 @@ public class CodeEditor2 extends JComponent {
         if (masterFrame != null) {
             if (filename != null && filename.equals("")) {
                 masterFrame.setTitle(title);
+                
+                Tracker.writeToFile("File", "untitled", System.currentTimeMillis());
             } else {
                 masterFrame.setTitle(title + " - " + filename);
+                
+                Tracker.writeToFile("File", filename, System.currentTimeMillis());
             }
         }
     }

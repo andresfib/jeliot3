@@ -75,4 +75,15 @@ public class Tracker {
             }
         }
     }
+    
+    public static void writeToFile(String name, String fileName, long millis) {
+        if (out != null && track) {
+            try {
+                out.write(name + ":" + fileName + ":" + millis);
+                out.newLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }    
 }
