@@ -280,6 +280,7 @@ public class CodeEditor2 extends JComponent {
         area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute,
                 Integer.valueOf(propertiesBundle.getStringProperty("editor.tab_size")));
         area.getDocument().addDocumentListener(dcl);
+        area.setHorizontalOffsetForScrollBar(5);
         area.setHorizontalOffset(5);
         ln = new LineNumbers(new Font(propertiesBundle.getStringProperty("font.code_editor.family"),
                 Font.PLAIN, Integer.parseInt(propertiesBundle.getStringProperty("font.code_editor.size"))),

@@ -278,7 +278,7 @@ public class JEditTextArea extends JComponent
 		int width = painter.getWidth();
 		if(horizontal != null && width != 0)
 		{
-			horizontal.setValues(-horizontalOffset,width,0,width * 5);
+			horizontal.setValues(-horizontalOffset, width, -horizontalOffsetForScrollBar, width * 5);
 			horizontal.setUnitIncrement(painter.getFontMetrics()
 				.charWidth('w'));
 			horizontal.setBlockIncrement(width / 2);
@@ -2388,4 +2388,14 @@ public class JEditTextArea extends JComponent
 		this.caretReallyVisible = enabled;
 	}
 	
+    private int horizontalOffsetForScrollBar = 0;
+    
+    public int getHorizontalOffsetForScrollBar() {
+        return this.horizontalOffsetForScrollBar;
+    }
+    
+    public void setHorizontalOffsetForScrollBar(int offset) {
+        this.horizontalOffsetForScrollBar = offset;
+    }
+    
 }

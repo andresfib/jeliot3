@@ -61,6 +61,7 @@ public class CodePane2 extends JComponent {
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(font);
         area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute, new Integer(3));
+        area.setHorizontalOffsetForScrollBar(5);
         area.setHorizontalOffset(5);
         ln = new LineNumbers(font, new Insets(1, 0, 0, 0));
         area.addToLeft(ln);
