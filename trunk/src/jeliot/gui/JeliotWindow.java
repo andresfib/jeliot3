@@ -40,6 +40,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -48,6 +49,7 @@ import javax.swing.event.ChangeListener;
 
 import jeliot.FeatureNotImplementedException;
 import jeliot.Jeliot;
+import jeliot.calltree.TreeDraw;
 import jeliot.mcode.InterpreterError;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.theater.AnimationEngine;
@@ -108,6 +110,10 @@ public class JeliotWindow {
 	/** The frame in which all the action goes on. */
 	private JFrame frame;
 
+    private JTabbedPane tabbedPane = new JTabbedPane();
+    
+    private TreeDraw callTree;
+    
 	/** The theatre in which the programs are animated. */
 	private Theater theatre;
 
@@ -215,7 +221,7 @@ public class JeliotWindow {
 		JButton ok = new JButton(bundle.getString("button.ok"));
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeTheatrePane(theatre);
+				changeTheatrePane(tabbedPane);
 				rewindButton.setEnabled(true);
 				String[] s1 = { bundle.getString("menu.animation.rewind")};
 				setEnabledMenuItems(true, s1);
@@ -323,7 +329,8 @@ public class JeliotWindow {
 		Theater theatre,
 		AnimationEngine engine,
 		ImageLoader iLoad,
-		String udir) {
+		String udir,
+        TreeDraw td) {
 
 		this.jeliot = jeliot;
 		this.codePane = codePane;
@@ -331,9 +338,18 @@ public class JeliotWindow {
 		this.engine = engine;
 		this.iLoad = iLoad;
 		this.udir = udir;
+        this.callTree = td;
 
 		this.panelController = new PanelController(theatre, iLoad);
         this.editor = new CodeEditor(this.udir);
+        
+        this.tabbedPane.addTab("Theater", theatre);
+        this.tabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
+        
+        this.tabbedPane.addTab("Call Tree", callTree.getComponent());
+        this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
+        
+
 	}
 
 	/**
@@ -351,7 +367,7 @@ public class JeliotWindow {
 		editor.setMasterFrame(frame);
 
 		JSplitPane pane =
-			new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, codePane, theatre);
+			new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, codePane, tabbedPane);
 		pane.setOneTouchExpandable(true);
 		codeNest = pane;
 
@@ -904,7 +920,8 @@ public class JeliotWindow {
 	 */
 	void enterEdit() {
 
-		changeTheatrePane(theatre);
+        tabbedPane.setSelectedIndex(0);
+		changeTheatrePane(tabbedPane);
 
 		panelController.slide(false, new Runnable() {
 			public void run() {
@@ -966,7 +983,9 @@ public class JeliotWindow {
 					//Reader s = new BufferedReader(new StringReader(methodCall));
 
 					jeliot.setSourceCode(programCode, methodCall);
-					changeTheatrePane(theatre);
+                    
+					changeTheatrePane(tabbedPane);
+                    tabbedPane.setSelectedIndex(0);
 
 					panelController.slide(true, new Runnable() {
 						public void run() {

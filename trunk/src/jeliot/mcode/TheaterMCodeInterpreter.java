@@ -1,9 +1,3 @@
-/*
- * Created on 29.4.2004
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package jeliot.mcode;
 
 import java.io.BufferedReader;
@@ -14,6 +8,7 @@ import java.util.Hashtable;
 import java.util.ListIterator;
 import java.util.Stack;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.ClassInfo;
@@ -30,9 +25,6 @@ import jeliot.theater.ValueActor;
 
 /**
  * @author Niko Myller
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
@@ -114,11 +106,17 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     /**
      * currentMethodInvocation keeps track of all the information that is
-     * collected during the method invocation. Cells: 0: Method name 1:
-     * Class/Object expression 2: Parameter values 3: Parameter types 4:
-     * Parameter names 5: Highlight info for invocation 6: Highlight info for
-     * declaration 7: Parameter expression references 8: Object reference if
-     * method is constructor or object method
+     * collected during the method invocation.
+     * Cells:
+     * 0: Method name
+     * 1: Class/Object expression
+     * 2: Parameter values
+     * 3: Parameter types
+     * 4: Parameter names
+     * 5: Highlight info for invocation
+     * 6: Highlight info for declaration
+     * 7: Parameter expression references 
+     * 8: Object reference if method is constructor or object method
      */
     protected Object[] currentMethodInvocation = null;
 
@@ -174,8 +172,72 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         superMethodsReading = null;
         superMethodCallNumber = 0;
         super.initialize();
+        try {
+            line = readLine();
+            MCodeUtilities.printToRegisteredSecondaryMCodeConnections(line);
+            //TODO: comment the next line in the released versions
+            System.out.println(line);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //TODO: Change this to be something more meaningful!
+        if (line == null) {
+            line = "" + Code.ERROR + Code.DELIM + bundle.getString("unknown.exception")
+                    + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
+                    + Code.LOC_DELIM + "0";
+        }
+
+        StringTokenizer tokenizer = new StringTokenizer(line, Code.DELIM);
+
+        if (Long.parseLong(tokenizer.nextToken()) == Code.ERROR) {
+            String message = tokenizer.nextToken();
+            Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+
+            showErrorMessage(new InterpreterError(message, h));
+            running = false;
+        } else {
+            firstLineRead = true;
+        }
+
     }
 
+    public String readLine()  {
+        String readLine = null;
+        if (readNew()) {
+            try {
+                readLine = mcode.readLine();
+            } catch (Exception e) {}
+        } else {
+            if (!superMethods.isEmpty()) {
+                readLine = (String) superMethods.remove(0);
+            } else {
+                constructorCalls.pop();
+                if (!constructorCalls.empty()) {
+                    superMethods = (Vector) constructorCalls.peek();
+                }
+                return readLine();
+            }
+        }
+        
+        if (readLine == null) {
+            readLine = "" + Code.ERROR + Code.DELIM + bundle.getString("unknown.exception")
+            + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0";
+        }
+        //TODO: comment the next line in the released versions
+        System.out.println(readLine);
+        return readLine;
+    }
+
+    
+    /* (non-Javadoc)
+     * @see jeliot.mcode.MCodeInterpreter#beforeInterpretation(java.lang.String)
+     */
+    public void beforeInterpretation(String line) {
+        MCodeUtilities.printToRegisteredSecondaryMCodeConnections(line);
+    }
+
+    
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#showErrorMessage(jeliot.mcode.InterpreterError)
      */
@@ -1074,7 +1136,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param expressionReference
      * @param argType
      */
-    protected void handleCodeP(long expressionReference, String argType) {
+    protected void handleCodeP(long expressionReference, String value, String argType) {
 
         Value[] parameterValues = (Value[]) currentMethodInvocation[2];
         String[] parameterTypes = (String[]) currentMethodInvocation[3];
@@ -1173,7 +1235,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param objectCounter
      * @param highlight
      */
-    protected void handleCodeOMC(String methodName, int parameterCount, long objectCounter,
+    protected void handleCodeOMC(String methodName, int parameterCount, long objectCounter, String objectValue,
             Highlight highlight) {
         Value val = (Value) values.remove(new Long(objectCounter));
         Variable var = (Variable) variables.remove(new Long(objectCounter));
@@ -2540,6 +2602,15 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     
     public boolean emptyScratch() {
         return exprs.empty();
+    }
+
+    /* (non-Javadoc)
+     * @see jeliot.mcode.MCodeInterpreter#handleCodeCONSCN(long)
+     */
+    protected void handleCodeCONSCN(long superMethodCallNumber) {
+        constructorCall = true;
+        superMethodsReading = new Vector();
+        this.superMethodCallNumber = superMethodCallNumber;
     }
 
 }
