@@ -253,7 +253,7 @@ public class Interpreter {
 			e.printStackTrace();
 		}
 
-		//Change this to be something more meaningful!
+		//TODO: Change this to be something more meaningful!
 		if (line == null) {
 			line =
 				""
@@ -330,13 +330,14 @@ public class Interpreter {
 		if (readLine == null) {
 			readLine =
 				""
-					+ Code.ERROR
-					+ Code.DELIM
-					+ bundle.getString("unknown.exception")
-					+ 
-			/*                   "<H1>Runtime Exception</H1>"+
-			           "<P>The reason for runtime exception is unknown.</P>" +*/
-			Code.DELIM
+				+ Code.ERROR
+				+ Code.DELIM
+				+ bundle.getString("unknown.exception")
+			    /*
+			    + "<H1>Runtime Exception</H1>" 
+			    + "<P>The reason for runtime exception is unknown.</P>"
+			    */
+				+ Code.DELIM
 				+ "0"
 				+ Code.LOC_DELIM
 				+ "0"
@@ -354,9 +355,10 @@ public class Interpreter {
 	 */
 	public void execute() {
 
-		//This is for realease versions
-		//try {
-
+		/*
+		* TODO: Take this out of the comments for the versions to be realeased
+		try {
+		*/
 		director.openScratch();
 
 		while (running) {
@@ -382,11 +384,10 @@ public class Interpreter {
 						+ Code.ERROR
 						+ Code.DELIM
 						+ bundle.getString("inputInConstructor.exception")
-						+ 
-					/*"<H1>Feature not implemented</H1>" +
-					"<P>Super classes' constructors cannot " +
-					"contain input requests.</P>" +*/
-					Code.DELIM
+					 /* + "<H1>Feature not implemented</H1>"
+					    + "<P>Super classes' constructors cannot "
+					    + "contain input requests.</P>" */
+						+ Code.DELIM
 						+ "0"
 						+ Code.LOC_DELIM
 						+ "0"
@@ -419,12 +420,14 @@ public class Interpreter {
 		}
 		director.closeScratch();
 
-		//This is for realease versions
-		//} catch (Exception e) {
-		//    director.showErrorMessage(new InterpreterError("<H1>Runtime Error</H1>"+
-		//                         "<P>The feature is not yet implemented.</P>", null));
-		//}
-	}
+		/*
+		 * TODO: Take this out of the comments for the versions to be realeased
+		} catch (Exception e) {
+		    director.showErrorMessage(new InterpreterError("<H1>Runtime Error</H1>"+
+		                         "<P>The feature is not yet implemented.</P>", null));
+		}
+		*/
+	}	
 
 	/**
 	 * @param line
