@@ -5,10 +5,10 @@ package jeliot.theatre;
   * controlled by it to be paused and resumed in a safe way. The
   * controller gets a Runnable object in its constructor. After it has
   * been constructed, the controller can be called to start or pause
-  * the execution of its runnable. 
+  * the execution of its runnable.
   *     <P>
   * Calling the pause() method does not pause the execution
-  * immediately, butonly when the checkPoint() method is next called
+  * immediately, but only when the checkPoint() method is next called
   * in the controlled thread.
   *     <P>
   * Warning! ThreadController does not check that the checkPoint()
@@ -98,9 +98,9 @@ public class ThreadController {
                 throw new RuntimeException();
         }
     }
-    
+
     public synchronized void checkPoint() {
         checkPoint(null);
     }
-    
+
 }

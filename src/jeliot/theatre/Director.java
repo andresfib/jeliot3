@@ -127,15 +127,15 @@ public class Director {
         if (currentScratch != null) {
             scratchStack.push(currentScratch);
         }
-        currentScratch = new Scratch();
-        theatre.getManager().addScratch(currentScratch);
+        currentScratch = theatre.requestScratch();
+        //theatre.getManager().addScratch(currentScratch);
         //return currentScratch;
     }
 
     public void closeScratch() {
         if (currentScratch != null) {
             currentScratch.removeCrap();
-            theatre.getManager().removeScratch(currentScratch);
+            theatre.removeScratch(currentScratch);
             theatre.repaint();
             if (!scratchStack.empty()) {
                 currentScratch = (Scratch) scratchStack.pop();
