@@ -51,6 +51,7 @@ public class LoadJeliot {
 			}
 		};
 		JLabel label = new JLabel(messageBundle.getString("label.splash_screen"));
+		label.setHorizontalAlignment(JLabel.CENTER);
 		final JWindow window = new JWindow();
 		Container c = window.getContentPane();
 		c.setLayout(new BorderLayout());

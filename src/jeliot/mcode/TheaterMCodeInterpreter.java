@@ -1387,7 +1387,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 expressionReference));
         Value castedParameterValue = null;
         if (MCodeUtilities.isPrimitive(parameterValue.getType())) {
-            if (!parameterValue.getType().equals(argType)) {
+            if (MCodeUtilities.resolveType(parameterValue.getType()) != MCodeUtilities.resolveType(argType)) {
                 castedParameterValue = new Value(value, argType);
                 director.animateCastExpression(parameterValue, castedParameterValue);
             }
