@@ -918,9 +918,9 @@ public class JeliotWindow {
         pl.setConstraints(statePane, c);
         p.add(statePane);
 
-        JLabel jicon = new JLabel(new ImageIcon(bundle
+        JLabel jicon = new JLabel(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(bundle
                 .getString("directory.images")
-                + bundle.getString("image.jeliot")));
+                + bundle.getString("image.jeliot"))));
         c.gridx = 0;
         c.gridy = 1;
         c.gridheight = 2;
