@@ -87,13 +87,6 @@ public class CodeEditor extends JComponent {
 	 */
 	private File currentFile = null;
 
-	/**
-	 * Image loader
-	 * 
-	 */
-	
-	private ImageLoader iLoad;
-    
     /**
      * returns true if the document is changed and false
      * if it is not changed. This is the value of the changed
@@ -313,7 +306,7 @@ public class CodeEditor extends JComponent {
     private JButton makeToolButton(String label, String iconName,
             ActionListener listener) {
 
-        ImageIcon icon = iLoad.getIconImage(iconName);
+        ImageIcon icon = new ImageIcon(bundle.getString("directory.images")+iconName);
         JButton b = new JButton(label, icon);
         b.setVerticalTextPosition(AbstractButton.BOTTOM);
         b.setHorizontalTextPosition(AbstractButton.CENTER);
