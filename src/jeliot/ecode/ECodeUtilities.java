@@ -583,6 +583,33 @@ public class ECodeUtilities {
 
     }
 
+    public static Object readChar(){
+	char result;
+	try {
+	    //Get the first character of the readed string
+	    result=(reader.readLine()).charAt(0);
+	    return new Character (result);
+	} catch (Exception e) {
+	    return null;
+	    //ThrowException!!!!!!!!!!!!!!!
+	}
+
+    }
+
+    public static Object readString(){
+	String result;
+	try {
+	    
+        result=(reader.readLine());
+        return new String(result);
+	} catch (Exception e) {
+	
+    return null;
+	    //ThrowException!!!!!!!!!!!!!!!
+	}
+	
+    }
+
     public static String argToString(List argnames){
     //Change to extract elements from list and add delims
 

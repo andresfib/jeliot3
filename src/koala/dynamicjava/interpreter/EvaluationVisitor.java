@@ -1152,7 +1152,19 @@ public class EvaluationVisitor extends VisitorObject {
                                      +Code.DELIM+double.class.getName()
                                      +Code.DELIM+locationToString(node));
                 result = ECodeUtilities.readDouble();
+            } 
+	    else if (m.getName().equals("readChar")){
+                ECodeUtilities.write(""+Code.INPUT+Code.DELIM+(counter++)
+                                     +Code.DELIM+char.class.getName()
+                                     +Code.DELIM+locationToString(node));
+                result = ECodeUtilities.readChar();
             }
+            else if( m.getName().equals("readString")){
+                ECodeUtilities.write(""+Code.INPUT+Code.DELIM+(counter++)
+                                     +Code.DELIM+String.class.getName()
+                                     +Code.DELIM+locationToString(node));
+                result = ECodeUtilities.readString();
+            } 
 
             ECodeUtilities.write(""+Code.INPUTTED+Code.DELIM+counter
                                  +Code.DELIM+result.toString()
