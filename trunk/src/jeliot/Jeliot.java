@@ -1,4 +1,4 @@
-/* Jeliot 3.4.3 */
+/* Jeliot 3.4.2 */
 
 /*
  * This program is free software; you can redistribute it and/or modify
@@ -19,8 +19,6 @@ package jeliot;
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PipedReader;
 import java.io.PipedWriter;
@@ -68,6 +66,10 @@ public class Jeliot {
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
             "jeliot.gui.resources.properties", Locale.getDefault());
+    
+    /**
+     * The resource bundle for gui package
+     */
     static private ResourceBundle bundle2 = ResourceBundle.getBundle(
             "jeliot.gui.resources.messages", Locale.getDefault());
     
@@ -75,6 +77,7 @@ public class Jeliot {
      * 
      */
     private Pattern p = Pattern.compile("import\\s+jeliot.io.*\\s*;");
+    
     /**
      * 
      */
@@ -100,6 +103,9 @@ public class Jeliot {
      */
     MCodeInterpreter mCodeInterpreterForTheater = null;
 
+    /**
+     * 
+     */
     MCodeInterpreter mCodeInterpreterForCallTree = null;
 
     /**
@@ -494,6 +500,10 @@ public class Jeliot {
     	hv.addImage(i, h);
     }
     
+    /**
+     * 
+     * @return
+     */
     public JeliotWindow getGUI() {
         return gui;
     }
@@ -603,28 +613,11 @@ public class Jeliot {
         return jeliot;
     }
 
+    /**
+     *
+     */
     public static void close() {
         Tracker.writeToFile("JeliotClose", System.currentTimeMillis());
         Tracker.closeFile();
-    }
-    
-    public static String readFile(File f) {
-        String str = "";
-        
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(f));
-            String line;
-                while ((line = br.readLine()) != null) {
-                    str += line + "\n";
-                }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e1) {
-            e1.printStackTrace();
-            return null;
-        }
-        return str;
-    }
-    
+    }    
 }
