@@ -22,6 +22,8 @@ import jeliot.ecode.*;
   */
 public class Director {
 
+	private boolean messagePause = false;
+	
     /** True, if the director should stop after executing one statement. */
     private boolean stepByStep;
 
@@ -142,10 +144,14 @@ public class Director {
     //Changed for Jeliot 3
     public void highlight(Highlight h) {
         if (!eCodeInterpreter.starting()) {
-            if (stepByStep) {
+	        
+            if (stepByStep && !messagePause) {
                 jeliot.directorPaused();
                 controller.checkPoint();
+            } else {
+	            messagePause = false;
             }
+            
             if (h != null) {
                 codePane.highlightStatement(h);
             }
@@ -158,7 +164,7 @@ public class Director {
         }
         currentScratch = new Scratch();
         theatre.getManager().addScratch(currentScratch);
-//        return currentScratch;
+        //return currentScratch;
     }
 
     public void closeScratch() {
@@ -1114,6 +1120,8 @@ public class Director {
     private void showMessage(MessageActor message, Point p) {
         theatre.capture();
         engine.showAnimation(message.appear(p));
+ 		highlight(null);
+        messagePause = true;
         theatre.removeActor(message);
         theatre.release();
     }
@@ -1146,7 +1154,7 @@ public class Director {
     }
 
     public void exitLoop(String statementName, Value check) {
-        //highlight(null);
+        highlight(null);
         showMessage("Exiting the " + statementName + " loop.", check);
     }
 
@@ -1156,7 +1164,7 @@ public class Director {
     }
 
     public void skipLoop(String statementName, Value check) {
-        //highlight(null);
+        highlight(null);
         showMessage("Not entering the " + statementName + " loop.", check);
     }
 
@@ -1182,7 +1190,6 @@ public class Director {
 
     public void arrayCreation(int[] dims, Highlight h) {
 	    
-        highlight(h);	    
         String dimensions = "";
         int n = dims.length;
         for (int i = 0; i < n; i++) {
@@ -1193,6 +1200,7 @@ public class Director {
             }
         }
 
+        highlight(h);	    
         showMessage(new String[] {"A " + n +
         "-dimensional array is created.",
         "The dimensions of the array are: " + dimensions + "."});
