@@ -204,7 +204,7 @@ public class TreeInterpreter implements Interpreter {
             //throw new InterpreterException(e);
 
         } catch (Error e) {
-            String code = ""+Code.ERROR+Code.DELIM+"<H1>ERROR</H1><BR>";
+            String code = ""+Code.ERROR+Code.DELIM+"<H1>Error</H1><BR>";
 
             if (e.getCause() != null) {
                 String cause = ECodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
@@ -224,10 +224,10 @@ public class TreeInterpreter implements Interpreter {
             code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0;
             ECodeUtilities.write(code);
 
-            //throw new InterpreterException(e);
+            e.printStackTrace();
 
         } catch (Exception e) {
-            String code = ""+Code.ERROR+Code.DELIM+"<H1>ERROR</H1><BR>";
+            String code = ""+Code.ERROR+Code.DELIM+"<H1>Exception</H1><BR>";
 
             if (e.getCause() != null) {
                 String cause = ECodeUtilities.replace(e.getCause().toString(), "<", "&lt;");

@@ -45,9 +45,9 @@ public class CodePane extends JComponent {
         area.setMargin(insets);
         area.setFont(font);
         area.setTabSize(4);
-        area.setBackground(new Color(0xFFF8F0));
-        area.setSelectionColor(new Color(0x990000));
-        area.setSelectedTextColor(Color.white);
+        area.setBackground(new Color(Integer.decode(bundle.getString("color.code_pane.background")).intValue()));
+        area.setSelectionColor(new Color(Integer.decode(bundle.getString("color.code_pane.selection")).intValue()));
+        area.setSelectedTextColor(new Color(Integer.decode(bundle.getString("color.code_pane.selection.text")).intValue()));
         area.setEditable(false);
     }
 
@@ -134,7 +134,11 @@ public class CodePane extends JComponent {
             public void run() {
                 area.requestFocus();
                 area.setCaretPosition(left+1);
-                area.select(left, right);
+                if (left != 0 && left == right) {
+                    area.select(left, right+1);
+                } else {
+                    area.select(left, right);
+                }
             }
         };
         SwingUtilities.invokeLater(updateAComponent);

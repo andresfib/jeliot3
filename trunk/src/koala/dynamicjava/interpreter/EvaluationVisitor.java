@@ -1291,7 +1291,9 @@ public class EvaluationVisitor extends VisitorObject {
             }
             throw new ThrownException(e.getTargetException());
         } catch (NullPointerException e) {
-            throw new CatchedExceptionError("j3.not.static.method", e, node);
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { m.getName() });
+            throw new ExecutionError("j3.not.static.method", node);
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }
@@ -1339,7 +1341,8 @@ public class EvaluationVisitor extends VisitorObject {
 
 
     /**
-     * Displays a QualifiedName without worrying about initialization
+     * Displays a QualifiedName if it is declared without worrying
+     * about initialization
      * @param node the node to visit
      * @return the value of the local variable represented by this node
      */
@@ -1470,13 +1473,34 @@ public class EvaluationVisitor extends VisitorObject {
         ECodeUtilities.write(""+Code.CONSCN+Code.DELIM+EvaluationVisitor.getConstructorCallNumber());
 
         //}
-        Object result = context.invokeConstructor(node, args);
-        //System.out.println(consName+" wtf");
-        ECodeUtilities.write("" + Code.SAC+Code.DELIM+
-                             simpleAllocationCounter+Code.DELIM+
-                             Integer.toHexString(result.hashCode())+Code.DELIM+
-                             locationToString(node));//0 arguments
-        return result;
+        try {
+            Object result = context.invokeConstructor(node, args);
+            //System.out.println(consName+" wtf");
+            ECodeUtilities.write("" + Code.SAC+Code.DELIM+
+                                 simpleAllocationCounter+Code.DELIM+
+                                 Integer.toHexString(result.hashCode())+Code.DELIM+
+                                 locationToString(node));//0 arguments
+
+            return result;
+
+        } catch (NoSuchMethodError e) {
+            Class[] paramTypes = cons.getParameterTypes();
+            int n = paramTypes.length;
+            String params = "(";
+            for (int i = 0; i < n; i++) {
+                params += paramTypes[i].getName();
+                if (i == n-1) {
+                    break;
+                }
+                    params += ",";
+            }
+            params += ")";
+
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { consName + params, declaringClass });
+            throw new ExecutionError("j3.no.such.constructor", node);
+        }
+
     }
 
     /**

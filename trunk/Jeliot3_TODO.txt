@@ -13,9 +13,9 @@ Urgent:
 
 Bugs regarding inheritance:
 
-* When using a non-static method as a static method and proper error message should be shown.
-* ERROR Rectangle: method <init>()V not found
-* Fix the problem with RuntimeException: 'No Variable bigSquare' when bigSquare does not exist in the classes MethodStage and ObjectStage. 
+* When using a non-static method as a static method and proper error message should be shown. (done)
+* ERROR Rectangle: method <init>()V not found (done)
+* Fix the problem with RuntimeException: 'No Variable bigSquare' when bigSquare does not exist in the classes MethodStage and ObjectStage. (done)
 * Instability in the animation engine, reporting unknown runtime exceptions randomly (Due to some bug in ThreadController??) (Should be fixed, problem was in Launcher class)
 * SuperClass variables with some kind of temp name(this$0) produced by DJava (Should be fixed)
 
@@ -42,13 +42,12 @@ Graphical:
 
 Otherwise low priority:
 * Array variables could be references
-* Super method call with parameters in object creation with inheritance
 
 Speculative or not needed at all:
 * Command line parameters
 
 Conceptually/Technically challenging:
-* Execute until feature
+* Execute until feature (done partially)
 * Going backwards
 * New editor (e.g. from BlueJ or JEdit)
 * Instance garbage collection
