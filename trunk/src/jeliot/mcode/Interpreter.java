@@ -2548,18 +2548,21 @@ public class Interpreter {
 
                         String value = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
+                        String breakLine = tokenizer.nextToken();
                         Highlight highlight = MCodeUtilities
                                 .makeHighlight(tokenizer.nextToken());
 
-                       /* Value output = (Value) values.remove(new Long(
+                       Value output = (Value) values.remove(new Long(
                                 expressionReference));
                        
                         if (output == null) {
                             output = new Value(value, type);
                         }
-                        */
+                        if(breakLine.equals("1")){
+                            output.setValue(output.getValue()+"\\n");
+                        }
                         
-                        Value output = new Value(value, type);
+                        //Value output = new Value(value, type);
                         
                         director.output(output, highlight);
                         

@@ -112,7 +112,12 @@ public class Value implements Cloneable {
 	public void setActor(ValueActor actor) {
         this.actor = actor;
     }
-
+    /**
+     * @param actor
+     */
+    public void setValue(String value) {
+        this.val = value;
+    }
     /* (non-Javadoc)
 	 * @see java.lang.Object#clone()
 	 */

@@ -1954,7 +1954,7 @@ public class Director {
         theatre.removeActor(hand);
         theatre.release();
 
-        this.output(val.getValue() + "\n");
+        this.output(val.getValue()); //+ "\n");
     }
 
     /**
