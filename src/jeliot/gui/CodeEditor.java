@@ -193,6 +193,7 @@ public class CodeEditor extends JComponent {
         File wd = new File(wdname);
         fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(wd);
+        fileChooser.setFileFilter(new JavaFileFilter());
     }
 
 

@@ -23,10 +23,10 @@ import java.awt.*;
 public class AnimationEngine implements Controlled {
 
     /** Amount of action for one second period */
-    private double volume   = 1000.0;
+    private double volume   = 750.0;
 
     /** Number of times to act per second */
-    private double fps      = 18.0;
+    private double fps      = 20.0;
 
     /** True if the animation engine is running */
     private boolean running;
