@@ -479,8 +479,8 @@ public class Jeliot {
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
 
-        if (args.length >= 1) {
-            Tracker.setTrack(Boolean.valueOf(args[0]).booleanValue());
+        if (args.length >= 2) {
+            Tracker.setTrack(Boolean.valueOf(args[1]).booleanValue());
         }
        
         boolean experiment = false;
@@ -503,10 +503,10 @@ public class Jeliot {
             }
         });
         
-        if (args.length >=2) {
+        if (args.length >=1) {
             File file = new File(udir);
             file = new File(file, "examples");
-            final File file1 = new File(file, args[1]);
+            final File file1 = new File(file, args[0]);
             if (file.exists()) {
                 javax.swing.SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
