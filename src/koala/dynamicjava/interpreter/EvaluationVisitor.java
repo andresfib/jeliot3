@@ -82,7 +82,7 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(WhileStatement node) {
 	long condcounter=counter;
 	long round=0;       // Number of iterations
-	boolean breakc=false;// Exitng while loop because of break
+	boolean breakc=false;// Exiting while loop because of break
         try {
 	    
             while (((Boolean)node.getCondition().acceptVisitor(this)).booleanValue()) {
@@ -90,9 +90,12 @@ public class EvaluationVisitor extends VisitorObject {
 		    Code.write(""+Code.WHI+Code.DELIM+condcounter+Code.DELIM+Code.TRUE+
 			       Code.DELIM+round+Code.DELIM+locationToString(node.getBody()));
 		    node.getBody().acceptVisitor(this);
+		    condcounter=counter;
+		    System.out.println("Condcounter="+condcounter);
 		    round++;
                 } catch (ContinueException e) {
 		    Code.write(""+Code.CONT+Code.DELIM+Code.WHI+Code.DELIM+locationToString(node.getBody()));
+		    condcounter=counter;
                     // 'continue' statement management
                     if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
                         throw e;
