@@ -1065,7 +1065,7 @@ public class JeliotWindow {
                     methodCall = ((methodCall != null) ? methodCall : "");
                     String inputValue = JOptionPane.showInputDialog(bundle
                             .getString("dialog.ask_for_method"), methodCall);
-                    if (!inputValue.trim().equals("")) {
+                    if (inputValue != null && !inputValue.trim().equals("")) {
                         methodCall = inputValue + ";";
                     }
                 } 
