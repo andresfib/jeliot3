@@ -23,10 +23,15 @@ application is open source and can be freely obtained from
 almost fully compliant with Java language specifications and supports
 multi-threading.
 
-To make these two separate systems communicate (section~\ref{sec:Communications_Model})
-with each other a new intermediate code (section~\ref{sec:Intermediate_Code}and
-Intermediate Language Specification) and intermediate code interpreter (section~\ref{sec:Intermediate_Code_Interpreter})were designed. In this way
-the system should be more flexible for modifications and new extensions (sections~\ref{sec:Managing_Jeliot_3_System} and \ref{sec:Extending_Jeliot_System}).
+To make these two separate systems communicate
+(section~\ref{sec:Communications_Model}) with each other a new
+intermediate code (section~\ref{sec:Intermediate_Code} and
+Intermediate Language Specification) and intermediate code
+interpreter (section~\ref{sec:Intermediate_Code_Interpreter}) were
+designed. In this way the system should be more flexible for
+modifications and new extensions
+(sections~\ref{sec:Managing_Jeliot_3_System} and
+\ref{sec:Extending_Jeliot_System}).
 
 \subsection{History}
 
@@ -57,45 +62,39 @@ history of \jel{}, see \citep{Benari2002a}.
 \subsection{Release Notes}
 \label{sec:Release_Notes}
 
-\paragraph{version 3.2} contains a documentation and supports inheritance.
-In addition to the previously supported features it has a support for:
-\begin{itemize}
-\item Inheritance of classes.
-\item \p{super()} method calls at the beginning of a constructor.
-\end{itemize}
-Includes also minor bug fixes.
+\paragraph{version 3.2} contains documentation and supports
+inheritance, supports: inheritance of classes and \p{super()}
+method calls at the beginning of a constructor.
 
-\paragraph{version 3.1} supports objects creation and object method calls.
-Line numbering was added for source code editor and viewer.
-In addition to the previously supported features it has a support for:
-\begin{itemize}
-\item User made classes, however, inheritance is not yet supported. 
-\item Constructor calls.
-\item Object method calls.
-\item Object field access.
+\paragraph{version 3.1} supports objects creation and object method
+calls. Line numbering was added for source code editor and viewer.
+Supports:
+\begin{itemize} \item User made classes, however,
+inheritance is not yet supported. \item Constructor calls. \item
+Object method calls. \item Object field access.
 \end{itemize}
-Includes also minor bug fixes.
 
-\paragraph{version 3.01} is a maintenance release. Bugs of the initial
+
+\paragraph{Version 3.01} is a maintenance release. Bugs of the initial
 release were fixed. Support for \p{switch} statement was added.
 
-\paragraph{version 3.0} is the initial public release. It has a support for:
+\paragraph{Version 3.0} is the initial public release. Supports:
 \begin{itemize}
-\item Values of type \p{String}, all primitive types.
-\item One-dimensional arrays with primitive types or Strings as its component type.
-\item Expressions including all unary and binary operations except \p{instanceof}.
-\item All the control statements (\p{if}, \p{while}, etc.) except \p{switch} statement
-and conditional expression (\p{exp?exp1:exp2}).
-\item Method invocation, including recursive invocation.
+\item Values of type \p{String}, all primitive types. \item
+One-dimensional arrays with primitive types or strings as its
+component type. \item Expressions including all unary and binary
+operations except \p{instanceof}. \item All the control statements
+(\p{if}, \p{while}, etc.) except \p{switch} statement and
+conditional expression (\p{exp?exp1:exp2}). \item Method
+invocation, including recursive invocation.
 \end{itemize}
 
-\paragraph{Not implemented features are:}
+\paragraph{Not implemented:}
 \begin{itemize}
-\item Static variables.
-\item Calls to \p{super(\ldots)}.
-\item Super field accesses.
-\item Arrays with components of reference type (except \p{String}).
-\item Conditional expressions (\p{exp?exp1:exp2}).
-\item Array initializers.
-\item Java 2 SDK API classes' methods cannot return object or array types.
+\item Static variables. \item Calls to \p{super()} with
+parameters. \item Super field accesses. \item Arrays with
+components of reference type (except \p{String}). \item
+Conditional expressions (\p{exp?exp1:exp2}). \item Array
+initializers. \item Java 2 SDK API classes' methods cannot return
+object or array types.
 \end{itemize}

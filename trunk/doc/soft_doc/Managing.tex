@@ -1,9 +1,9 @@
-\section{Managing \jel{} System}
+\section{Managing the \jel{} System}
 \label{sec:Managing_Jeliot_3_System}
 
-In this chapter we explain what are the system requirements of \jel{},
-what files and directories different distributions contain and
-how the source code distribution can be build.
+In this chapter we explain the system requirements of \jel{}, the
+files and directories in the distributions and how the system can
+be built form the source code code distribution can be build.
 
 \subsection{System Requirements}
 \label{sec:System_Requirements}
@@ -17,22 +17,21 @@ how the source code distribution can be build.
 \subsubsection{Directory Hierarchy}
 
 \jel{} is available as zip file containing all the sources
-and files needed to build it. After unzipping the file we will
+and files needed to build it. After unzipping the file you will
 find the following directories:
 
 \begin{description}
 \item[\p{lib}] Contains the tools needed for the automated build process.
-\item[\p{resources}] Contains information messages used by DynamicJava
-to alert from errors.
+\item[\p{resources}] Contains messages used by DynamicJava.
 \item[\p{src}] Contains the source code for \jel{}. It is divided into
-the following subfolders.
+the following subdirectories.
 \begin{description}
 \item[\p{docs}] Contains the web pages that are used for the help page
 and the about page. It also contains the licenses under which
 \jel{} is distributed.
 \item[\p{examples}] Contains the examples that will be available for users
-of \jel{}, new examples can be added here.
-\item[\p{images}] Those images used in the user interface of \jel{}.
+of \jel{}; new examples can be added here.
+\item[\p{images}] Images used in the user interface of \jel{}.
 \item[\p{jeliot}] All source files related to \jel{} visualization engine (\p{theatre}),
 m-code interpretation (\p{ecode}) and the graphical user interface (\p{gui}).
 \item[\p{koala}] The modified source code of \djava{}.
@@ -41,7 +40,7 @@ m-code interpretation (\p{ecode}) and the graphical user interface (\p{gui}).
 
 \subsubsection{How to Build Jeliot 3 From the Sources}
 
-\jel{} uses the build tool called {\bf Ant}.
+\jel{} uses a build tool called {\bf Ant}.
 Ant is a UNIX make-clone oriented to build Java
 programs based on an XML configuration file \citep{Ant}.
 When unzipping the source code, three files will appear on the
@@ -58,9 +57,9 @@ will invoke Ant with one of the arguments (targets) that you
 provide to it:
 \begin{description}
 \item[compile] \jel{} source code will be compiled and classes obtained
-will be located at classes subfolder. To run \jel{} from this
+will be located in the classes subdirectory. To run \jel{} from this
 point you should enter the command java jeliot.Jeliot inside
-the classes subfolder.
+the classes subdirectory.
 \item[dist] This argument will first compile the source files if
 necessary and create a jar file of the classes and compress them
 into zip file. This way we will obtain the binary executables
@@ -90,9 +89,7 @@ Jeliot can be run with the command above. But if we want to make a
 distribution we need to do as follows and we will get two separate
 distributions as described above.
 \begin{verbatim}
-c:\jeliot3\classes> cd ..
 c:\jeliot3> build dist
 c:\jeliot3> cd Jeliot3
 c:\jeliot3\Jeliot3> jeliot
 \end{verbatim}
-
