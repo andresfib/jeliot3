@@ -80,7 +80,11 @@ public class ImageLoader {
         //String realName = (String)mapping.get(name);
         //return getImage(realName);
 		//return getImage(bundle.getString(name));
-        return getImage(Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+bundle.getString(name)));
+        URL imageURL = Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+bundle.getString(name));
+        if (imageURL == null) {
+            imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+name));
+        }
+        return getImage(imageURL); 
     }
 
 
@@ -92,10 +96,13 @@ public class ImageLoader {
         Image image = (Image)images.get(name);
         if (image == null) {
             //image = toolkit.getImage(bundle.getString("directory.images")+name);
-        	//URL imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+name));
-        	//System.out.println(imageURL);
-        	//image = toolkit.getImage(imageURL);
-        	image = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+name)).getImage();
+            //System.out.println(imageURL);
+            //image = toolkit.getImage(imageURL);
+            URL imageURL = Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+name);
+            if (imageURL == null) {
+                imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+name));
+            }
+        	image = new ImageIcon(imageURL).getImage();
             images.put(name, image);
         }
         return image;
