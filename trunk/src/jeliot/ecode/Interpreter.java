@@ -37,6 +37,10 @@ public class Interpreter {
 
     private Hashtable postIncsDecs = new Hashtable();
 
+    private ClassInfo currentClass = null;
+    
+    private Hashtable classes = new Hashtable();
+    
     /**
     * currentMethodInvocation keeps track of all the information that
     * is collected during the method invocation.
@@ -67,6 +71,9 @@ public class Interpreter {
         running = true;
         start = true;
         Actor returnActor = null;
+        currentMethodInvocation = null;
+        currentClass = null;
+        classes = new Hashtable();
         commands = new Stack();
         exprs = new Stack();
         values = new Hashtable();
@@ -76,6 +83,7 @@ public class Interpreter {
         Actor ReturnActor= null;
         postIncsDecs = new Hashtable();
         instances = new Hashtable();
+        classes = new Hashtable();
     }
 
     public boolean starting() {
@@ -1191,7 +1199,21 @@ public class Interpreter {
                             } else {
 
                                 Value ret = (Value) values.remove(new Integer(expressionReference));
-                                Value casted = new Value(value, type);
+                                
+                                Value casted = null;
+                                
+                                if (ECodeUtilities.isPrimitive(type)) {
+	                                casted = new Value(value, type);
+                                } else {
+                                    Instance inst = (Instance) instances.get(
+                                                ECodeUtilities.getHashCode(value));
+                                    if (inst != null) {
+                                        casted = new Reference(inst);
+                                    } else {
+                                        casted = new Reference();
+                                    }
+                                }
+                                
                                 returnActor = director.animateReturn(ret, casted, h);
                                 returnValue = (Value) casted.clone();
                                 returnExpressionCounter = expressionCounter;
@@ -1970,6 +1992,67 @@ public class Interpreter {
                             break;
                         }
 
+                        case Code.CLASS: {
+	                        
+	                        String name = tokenizer.nextToken();
+	                        currentClass = new ClassInfo(name);
+	                        
+	                    	break;   
+                        }
+
+                        case Code.END_CLASS: {
+	                        
+	                        if (currentClass != null) {
+		                    	classes.put(currentClass.getName(), currentClass);   
+	                        }
+	                        
+	                        currentClass = null;
+	                        
+	                    	break;   
+                        }
+                        
+                        case Code.CONSTRUCTOR: {
+	                        
+	                        String listOfParameters = "";
+	                        if (tokenizer.hasMoreTokens()) {
+		                        listOfParameters = tokenizer.nextToken();
+							}
+	                        
+							currentClass.declareConstructor(currentClass.getName()+","+listOfParameters, "");
+							
+	                    	break;   
+                        }
+                        
+                        case Code.METHOD: {
+	                        
+	                        String name = tokenizer.nextToken();
+	                        String returnType = tokenizer.nextToken();
+	                        int modifiers = Integer.parseInt(tokenizer.nextToken());
+
+	                        String listOfParameters = "";
+	                        if (tokenizer.hasMoreTokens()) {
+		                        listOfParameters = tokenizer.nextToken();
+							}
+							                        
+	                        currentClass.declareMethod(name+","+listOfParameters,
+	                                                   "" + modifiers + Code.DELIM + returnType);
+	                        
+	                    	break;   
+                        }
+                        
+                        case Code.FIELD: {
+	                        
+	                        String name = tokenizer.nextToken();
+	                        String type = tokenizer.nextToken();
+	                        int modifiers = Integer.parseInt(tokenizer.nextToken());
+	                        String value = tokenizer.nextToken();
+	                        
+	                        currentClass.declareField(name,
+	                                                   "" + modifiers + Code.DELIM + type + Code.DELIM + value);	                        
+	                        
+	                    	break;   
+                        }
+                                                
                         case Code.ERROR: {
 
                             String message = tokenizer.nextToken();
