@@ -120,7 +120,7 @@ public class JeliotWindow {
             int w = d.width;
             int h = d.height;
             if (backImage == null) {
-                backImage = iLoad.getImage(bundle.getString("panel"));
+                backImage = iLoad.getImage(bundle.getString("image.panel"));
             }
             int biw = backImage.getWidth(this);
             int bih = backImage.getHeight(this);

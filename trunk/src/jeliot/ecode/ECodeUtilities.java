@@ -231,12 +231,32 @@ public class ECodeUtilities {
         int l = c.length();
         while(index != -1) {
             from = from.substring(0, index) +
-            with +
-            from.substring(index + l, from.length());
+                   with +
+                   from.substring(index + l, from.length());
             index = from.indexOf(c);
         }
         return from;
     }
+
+    public static int findNumber(String from, String identifier) {
+        int number = 0;
+        int index = from.toLowerCase().indexOf(identifier);
+        if (index > -1) {
+            String message = from.substring(index + identifier.length()).trim();
+            int i = 1;
+            while (true) {
+                if (!Character.isDigit(message.substring(i-1,i).charAt(0))) {
+                    break;
+                }
+                i++;
+            }
+            if (i > 1) {
+                number = Integer.parseInt(message.substring(0, i-1));
+            }
+        }
+        return number;
+    }
+
 
     public static int resolveBinOperator(int operator) {
         switch (operator) {
@@ -546,7 +566,9 @@ public class ECodeUtilities {
     }
 
     public static void write(String str) {
-        if ( !EvaluationVisitor.isSetPreparing() ) {
+        StringTokenizer tokenizer = new StringTokenizer(str, Code.DELIM);
+        int token = Integer.parseInt(tokenizer.nextToken());
+        if (!EvaluationVisitor.isSetPreparing() || token == Code.ERROR) {
 
             str = ECodeUtilities.replace(str, "\n", "\\n");
             str = ECodeUtilities.replace(str, "\r", "");
