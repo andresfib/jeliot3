@@ -30,6 +30,12 @@ import jeliot.theater.ValueActor;
 public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     //  DOC: document!
+    
+    /**
+     * 
+     */
+    protected Stack stackOfExprsStacks = new Stack();
+    
     /**
      * 
      */
@@ -187,6 +193,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         superMethodsReading = null;
         superMethodCallNumber = 0;
         arrayInitialization = new Stack();
+        //expressionStack = new Stack();
         
         super.initialize();
 
@@ -749,16 +756,20 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             director.openScope();
             director.closeScratch();
             director.openScratch();
-
+            openNewExpressionStack();
+            
             //Close the scope
         } else if (scope == 0) {
 
             director.closeScope();
             director.closeScratch();
             director.openScratch();
+            closeExpressionStack();
         }
     }
 
+    
+    
     /**
      * @param expressionCounter
      * @param value
@@ -1056,6 +1067,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (!returned) {
 
             director.finishMethod(null, 0);
+            closeExpressionStack();
 
         } else {
 
@@ -1070,8 +1082,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             ValueActor va = director.finishMethod(returnActor,
                     returnExpressionCounter);
+            closeExpressionStack();
             rv.setActor(va);
-
             handleExpression(rv, returnExpressionCounter);
         }
 
@@ -1252,6 +1264,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             }
 
             invokingMethod = false;
+            openNewExpressionStack();
         }
     }
 
@@ -1333,7 +1346,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (!returned) {
 
             director.finishMethod(null, 0);
-
+            closeExpressionStack();
         } else {
 
             Value rv = null;
@@ -1347,8 +1360,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             ValueActor va = director.finishMethod(returnActor,
                     returnExpressionCounter);
+            closeExpressionStack();
             rv.setActor(va);
-
             handleExpression(rv, returnExpressionCounter);
         }
 
@@ -1437,19 +1450,48 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeOFA(long expressionCounter, long objectCounter,
             String variableName, String value, String type, Highlight h) {
+        
         Reference objVal = (Reference) values.remove(new Long(objectCounter));
+        
         if (objVal == null && !objectCreation.empty()) {
             objVal = (Reference) objectCreation.peek();
         }
 
         ObjectFrame obj = (ObjectFrame) objVal.getInstance();
 
+        /*
+         * This is here because if the object is just under creation
+         * (i.e. were are currently in constructor) it is possiple
+         * there the reference in values don't have any instance as
+         * it's reference point and then the ObjectFrame obj is null
+         * after previous line.
+         */ 
         if (obj == null && !objectCreation.empty()) {
             objVal = (Reference) objectCreation.peek();
             obj = (ObjectFrame) objVal.getInstance();
         }
 
         Variable var = obj.getVariable(variableName);
+        
+        /*
+         * This is a static field access if there isn't such variable in the object.
+         * If the code is like this:
+         * class Ware {
+         *   int i = 0;
+         *   static int z = 0;
+         *   Ware (int i) {
+         *       this.i  = i;
+         *       z++;                
+         *   }           
+         * }
+         * access to z in (z++) is a object field access in Dynamic Java and thus
+         * it is necessary to transfer those actions to static field accesses in
+         * Jeliot side.    
+         */
+        if (var == null)  {
+            handleCodeSFA(expressionCounter, obj.getType(), variableName, value, type, h);
+            return;
+        }
 
         //command that waits for this expression
         int command = -1;
@@ -1629,6 +1671,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
 
         ValueActor va = director.finishMethod(returnActor, expressionCounter);
+        closeExpressionStack();
+        
         rv.setActor(va);
         handleExpression(rv, expressionCounter);
     }
@@ -1802,8 +1846,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             expressionReference = Long.parseLong(expressionTokenizer
                     .nextToken());
 
-            //Make the location information for the location
-            // token
+            //Make the location information for the location token
             highlight = MCodeUtilities.makeHighlight(expressionTokenizer
                     .nextToken());
         }
@@ -1830,7 +1873,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
 
         /*
-         * Do different kind of things depending on in what expression the
+         * Do different kinds of things depending on in what expression the
          * variable is used.
          */
 
@@ -3034,4 +3077,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     public void beforeExecution() {
     }
  
+    protected void openNewExpressionStack() {
+        stackOfExprsStacks.push(exprs);
+        exprs = new Stack();
+    }
+    
+    protected void closeExpressionStack() {
+        exprs = (Stack) stackOfExprsStacks.pop();
+    }
 }

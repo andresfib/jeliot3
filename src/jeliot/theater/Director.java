@@ -2465,6 +2465,7 @@ public class Director {
 
             variableAct.bind();
             theatre.removePassive(valueAct);
+            variableAct.setLight(Actor.NORMAL);
             release();
 
         } else {
