@@ -38,6 +38,7 @@ public class ECodeUtilities {
     public static final int RSHIFT = 6;         // Bitwise Right Shift
     public static final int URSHIFT = 7;        // Bitwise Unsigned Right Shift
     public static final int XOR = 16;           // Bitwise Xor
+    public static final int LXOR = 20;          // Logical Xor
 
     //Types
     public static final int VOID = -1;
@@ -150,6 +151,11 @@ public class ECodeUtilities {
             //Logical AND expression (&& sign)
             case Code.AND: {
                 return ANDAND;
+            }
+
+            // Logical Xor Expression (^ sign)
+            case Code.XOR: {
+                return LXOR;
             }
 
             //Arithmetic multiplication (* sign)
@@ -305,24 +311,30 @@ public class ECodeUtilities {
 
     public static boolean isBinary(int operator) {
         switch (operator) {
+
             case Code.BITOR:    // Bitwise Or Expression
             case Code.BITXOR:   // Bitwise Xor Expression
             case Code.BITAND:   // Bitwise And Expression
             case Code.LSHIFT:   // Bitwise Left Shift Expression
             case Code.RSHIFT:   // Bitwise Right Shift Expression
             case Code.URSHIFT:  // Bitwise Unsigned Right Shift Expression
-            case Code.OR:       // Or Expression
+
             case Code.EE:       // Equal Expression
             case Code.NE:       // Not Equal Expression
             case Code.LE:       // Less Expression
             case Code.GT:       // Greater Than
             case Code.LQE:      // Less or Equal Expression
             case Code.GQT:      // Greater or Equal Expression
+
             case Code.A:        // Assignment Expression
+
+            case Code.OR:       // Or Expression
+            case Code.XOR:      // Xor Expression
+            case Code.AND:      // And Expression
+
             case Code.ME:       // Multiplication Expression
             case Code.RE:       // Remainder (mod) Expression
             case Code.DE:       // Division Expression
-            case Code.AND:      // And Expression
             case Code.SE:       // Substract Expression
             case Code.AE: {     // Add Expression
                 return true;

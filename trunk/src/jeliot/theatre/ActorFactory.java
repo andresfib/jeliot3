@@ -1,10 +1,11 @@
 package jeliot.theatre;
 
 import java.awt.*;
-//import jeliot.parser.*;
 import jeliot.lang.*;
 
 import jeliot.ecode.*;
+
+//import jeliot.parser.*;
 
 /**
   * @author Pekka Uronen
@@ -47,8 +48,8 @@ public class ActorFactory {
             new Color(0x99CC99),    // char
             new Color(0xFFCCFF),    // float
             new Color(0xFFCCCC),    // double
-            new Color(0xFFCC99),    //String needed
-            new Color(0xFFCC99)     //Reference needed?
+            new Color(0xFFCC99),    // String needed
+            new Color(0xFFCC99)     // Reference needed?
         };
 
     private Color[] varColor = {
@@ -65,26 +66,27 @@ public class ActorFactory {
         };
 
     private String[][] binOpImageName = {
-        {"mulop.gif",   "assignop.gif"},
-        {"divop.gif",   "assignop.gif"},
-        {"modop.gif",   "assignop.gif"},
-        {"plusop.gif",  "assignop.gif"},
-        {"minusop.gif", "assignop.gif"},
-        {"lshift.gif", "assignop.gif"}, // lshift
-        {"rshift.gif", "assignop.gif"}, // rshift
-        {"urshift.gif", "assignop.gif"}, // urshift
-        {"lessop.gif",  "assignop.gif"},
-        {"greatop.gif", "assignop.gif"},
-        {"lequop.gif",  "assignop.gif"},
-        {"gequop.gif",  "assignop.gif"},
-        {null, null}, // instanceof not yet implemented
+        {"mulop.gif",    "assignop.gif"},
+        {"divop.gif",    "assignop.gif"},
+        {"modop.gif",    "assignop.gif"},
+        {"plusop.gif",   "assignop.gif"},
+        {"minusop.gif",  "assignop.gif"},
+        {"lshift.gif",   "assignop.gif"}, // lshift
+        {"rshift.gif",   "assignop.gif"}, // rshift
+        {"urshift.gif",  "assignop.gif"}, // urshift
+        {"lessop.gif",   "assignop.gif"},
+        {"greatop.gif",  "assignop.gif"},
+        {"lequop.gif",   "assignop.gif"},
+        {"gequop.gif",   "assignop.gif"},
+        {null,           null},           // instanceof not yet implemented
         {"equop.gif",    "assignop.gif"},
         {"nequop.gif",   "assignop.gif"},
-        {"bitandop.gif",   "assignop.gif"},
-        {"bitxorop.gif",   "assignop.gif"},
-        {"bitorop.gif",    "assignop.gif"},
-        {"candop.gif",  "assignop.gif"},
-        {"corop.gif",   "assignop.gif"}
+        {"bitandop.gif", "assignop.gif"},
+        {"bitxorop.gif", "assignop.gif"},
+        {"bitorop.gif",  "assignop.gif"},
+        {"candop.gif",   "assignop.gif"},
+        {"corop.gif",    "assignop.gif"},
+        {"cxorop.gif",   "assignop.gif"}
     };
 
     private String[][] unaOpImageName = {
@@ -289,14 +291,15 @@ public class ActorFactory {
     }
 
     public OperatorActor produceOperatorActor(Image image) {
-        OperatorActor actor = new OperatorActor(
-                image, iLoad.darken(image));
+        OperatorActor actor = new OperatorActor(image, iLoad.darken(image));
         actor.calculateSize();
         int hh = valueHeight - actor.getHeight();
+
         if (hh > 0) {
             actor.setInsets(new Insets(hh/2, 0, (hh+1)/2, 0));
             actor.setSize(actor.getWidth(), valueHeight);
         }
+
         actor.setShadowImage(shadowImage);
         return actor;
     }
@@ -373,8 +376,7 @@ public class ActorFactory {
     }
 
     public AnimatingActor produceHand() {
-        AnimatingActor hand = new AnimatingActor(
-            produceImage("Hand"));
+        AnimatingActor hand = new AnimatingActor(produceImage("Hand"));
         hand.calculateSize();
         return hand;
     }
