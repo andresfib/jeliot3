@@ -12,7 +12,7 @@ import jeliot.theater.*;
   */
 public class Variable {
 
-//  TODO: documentation.
+//  DOC: document!
 
     /**
      *

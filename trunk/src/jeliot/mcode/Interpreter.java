@@ -30,7 +30,7 @@ import jeliot.theater.*;
  */
 public class Interpreter {
     
-//  TODO: documentation.
+//  DOC: document!
 	/**
 	 *
 	 */

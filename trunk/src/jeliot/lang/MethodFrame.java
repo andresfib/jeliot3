@@ -13,7 +13,7 @@ import jeliot.theater.*;
   */
 public class MethodFrame {
 
-//  TODO: documentation.
+//  DOC: document!
 
     /**
 	 *

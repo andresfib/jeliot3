@@ -13,7 +13,7 @@ package jeliot.lang;
   */
 public class VariableInArray extends Variable {
 
-//  TODO: documentation.
+//  DOC: document!
     /**
 	 *
 	 */

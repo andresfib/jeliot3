@@ -196,7 +196,7 @@ public class MCodeUtilities {
 	 */
 	public static final int REFERENCE = 9;
 
-//  TODO: documentation.
+//  DOC: document!
 
 	/**
 	 *

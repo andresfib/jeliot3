@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 /**
+ * The base class for all the actors. 
  * 
  * @author Pekka Uronen
  * @author Niko Myller

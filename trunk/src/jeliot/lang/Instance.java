@@ -10,7 +10,7 @@ import jeliot.theater.*;
  */
 public class Instance {
 
-//  TODO: documentation.
+//  DOC: document!
 
     /**
 	 *

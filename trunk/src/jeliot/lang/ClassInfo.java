@@ -16,7 +16,7 @@ import jeliot.mcode.*;
  */
 public class ClassInfo {
 
-//TODO: documentation.
+//DOC: document!
 
     /**
 	 *

@@ -9,7 +9,7 @@ package jeliot.mcode;
  */
 public class Command {
 
-//  TODO: documentation.
+//  DOC: document!
     /**
 	 *
 	 */
