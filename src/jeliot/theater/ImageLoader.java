@@ -9,6 +9,7 @@ import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -93,7 +94,8 @@ public class ImageLoader {
 	public Image getLogicalImage(String name) {
         //String realName = (String)mapping.get(name);
         //return getImage(realName);
-        return getImage(bundle.getString(name));
+		//return getImage(bundle.getString(name));
+        return getImage(this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+bundle.getString(name)));
     }
 
 
@@ -104,7 +106,10 @@ public class ImageLoader {
 	public Image getImage(String name) {
         Image image = (Image)images.get(name);
         if (image == null) {
-            image = toolkit.getImage(bundle.getString("directory.images")+name);
+            //image = toolkit.getImage(bundle.getString("directory.images")+name);
+        	URL imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+name));
+        	System.out.println(imageURL);
+        	image = toolkit.getImage(imageURL);
             tracker.addImage(image, 0);
             try {
                 tracker.waitForID(0);
@@ -115,6 +120,24 @@ public class ImageLoader {
         return image;
     }
 
+    /**
+	 * @param name
+	 * @return
+	 */
+	public Image getImage(URL name) {
+        Image image = (Image)images.get(name);
+        if (image == null) {
+            image = toolkit.getImage(name);
+            tracker.addImage(image, 0);
+            try {
+                tracker.waitForID(0);
+            }
+            catch (InterruptedException e) { }
+            images.put(name, image);
+        }
+        return image;
+    }
+	
     /**
 	 * @param image
 	 * @return
