@@ -61,7 +61,7 @@ public class JeliotExtension extends Extension implements PackageListener{
      * version number of the extension
      */
     public String  getVersion () { 
-        	return ("3.5.0"); 
+        	return ("3.5.1"); 
     }
 
     /**

@@ -4,7 +4,7 @@
 
 [Setup]
 AppName=Jeliot 3
-AppVerName=Jeliot 3.5.0
+AppVerName=Jeliot 3.5.1
 DefaultDirName={pf}\Jeliot3
 DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe
