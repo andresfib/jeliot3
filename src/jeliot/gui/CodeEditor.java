@@ -31,7 +31,7 @@ public class CodeEditor extends JComponent {
      * The String for the basic code template that is shown to the user on the start of the Jeliot 2000.
      */
     private String template =
-        "import jeliot.io.*;\n\n" +
+        "\n" +
         "public class MyClass {\n" +
         "    public static void main() {\n\n" +
         "        // Your algorithm goes here.\n" +
@@ -158,7 +158,6 @@ public class CodeEditor extends JComponent {
     private void initFileChooser() {
         // set up the file chooser with user's working
         // directory as default directory
-
         Properties prop = System.getProperties();
         String wdname = prop.getProperty("user.dir");
         File wd = new File(wdname);
@@ -390,21 +389,23 @@ public class CodeEditor extends JComponent {
 
     /**
      * Method returns the program code inside the JTextArea as String -object
+     * Tabulators are changed to spaces for uniform handling of spaces.
      *
      * @return  The program code inside the JTextArea area.
      */
     public String getProgram() {
         String programCode = area.getText() + "\n";
-        replaceChar(programCode, '\t', "    ");
+        programCode = replace(programCode, "\t", "    ");
         return programCode;
     }
 
-    public String replaceChar(String from, char c, String to) {
+
+    public String replace(String from, String c, String with) {
         int index = from.indexOf(c);
         while(index != -1) {
-            from = from.substring(0,index) +
-            to +
-            from.substring(index+1,from.length());
+            from = from.substring(0, index) +
+            with +
+            from.substring(index + 1, from.length());
             index = from.indexOf(c);
         }
         return from;

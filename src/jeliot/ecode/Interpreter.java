@@ -12,10 +12,10 @@ import jeliot.theatre.*;
 
 public class Interpreter {
 
-    private Director director;
-    private BufferedReader ecode;
+    private Director director = null;
+    private BufferedReader ecode = null;
 
-    private String programCode;
+    private String programCode = "";
 
     private boolean running = true;
     private boolean start = true;
@@ -98,6 +98,7 @@ public class Interpreter {
 
                         //Gives a reference to the left hand side of the expression
                         case Code.LEFT: {
+
                             int token1 = Integer.parseInt(tokenizer.nextToken());
                             commands.push("" + Code.LEFT + Code.DELIM + token1);
                             break;
@@ -105,6 +106,7 @@ public class Interpreter {
 
                         //Gives a reference to the right hand side of the expression
                         case Code.RIGHT: {
+
                             int token1 = Integer.parseInt(tokenizer.nextToken());
                             commands.push("" + Code.RIGHT + Code.DELIM + token1);
                             break;
@@ -112,6 +114,7 @@ public class Interpreter {
 
                         //Begins an expression
                         case Code.BEGIN: {
+
                             //first token
                             int expressionType = Integer.parseInt(tokenizer.nextToken());
                             int expressionReference = Integer.parseInt(tokenizer.nextToken());
@@ -126,7 +129,6 @@ public class Interpreter {
                             int expressionReference = Integer.parseInt(tokenizer.nextToken());
                             commands.push("" + Code.TO + Code.DELIM + expressionReference);
                             break;
-
                         }
 
                         //Assignment
@@ -159,7 +161,6 @@ public class Interpreter {
                             director.openScratch();
 
                             break;
-
                         }
 
 
@@ -202,8 +203,8 @@ public class Interpreter {
                                                                  result,
                                                                  expressionCounter,
                                                                  h);
-
-                            //This is not needed after the change.
+                            //NOT NEEDED ANY MORE!
+                            //This is not needed after the changes.
                             //Value expressionValue =
                             //        director.animateUnaryExpression(operator,
                             //                                        val,
@@ -841,8 +842,8 @@ public class Interpreter {
                                                     expressionTokenizer.nextToken());
                                 }
 
-                                //Do different things depending on in what expression
-                                //the literal is used.
+                                //Do different things to the return value
+                                //depending on in what expression the return value is used.
 
                                 //If operator is assignment we just store the value
                                 if (oper == Code.A){
@@ -1124,7 +1125,7 @@ public class Interpreter {
                             Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
                             director.showErrorMessage(new InterpreterError(message, h));
-                        	running = false;
+                            running = false;
                             break;
                         }
 
