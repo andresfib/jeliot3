@@ -765,8 +765,13 @@ public class TreeInterpreter implements Interpreter {
         context.set(current.getName(), params[i++]);
         argnames.add(current.getName());
     }
+    
     ECodeUtilities.write(Code.PARAMETERS+Code.DELIM+ECodeUtilities.argToString(argnames));
     ECodeUtilities.write(Code.MD+Code.DELIM+locationToString(meth));
+    // Hack for providing e-code for "outside" classes
+    // EvaluationVisitor will display PARAMETERS and MD just before SMCC
+    EvaluationVisitor.setInside();
+
     // Set the final local variables values
     if (md.contextField != null) {
         Map vars = null;

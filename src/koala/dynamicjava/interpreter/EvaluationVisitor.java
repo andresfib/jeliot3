@@ -63,11 +63,15 @@ public class EvaluationVisitor extends VisitorObject {
     /**
      * Identifies each expression
      */
-    private static long counter=1;
-    private boolean evaluating=true;
-    private static boolean preparing=false; // Indicates when ArrayModifier
-                                            // is preparing the array, and
-                                            // and thus we don't want info
+    private static long counter = 1;
+    private boolean evaluating = true;
+    private static boolean preparing = false; // Indicates when ArrayModifier
+                                              // is preparing the array, and
+                                              // and thus we don't want info
+    private static boolean inside = false; // Used in Static Method Call, and 
+                                           // TreeInterpreter.interpretMethod
+                                           // to decide wheter to print MD and 
+                                           // PARAMETER
     /**
      * Set preparing value to true. So ArrayModifier is preparing the array
      * to visit
@@ -91,7 +95,35 @@ public class EvaluationVisitor extends VisitorObject {
     public static boolean isSetPreparing() {
         return preparing;
     }
+    
+    /**       
+     * Set inside value to true. So we have the information required (MD and PARAMETER)
+     * in a static method call
+     */
+    public static void setInside() {
+        //        inside = true;
+        domesticStack.push(returnExpressionCounterStack.peek());
+    }
+
+    /**
+     * Unset inside value to false. 
+     */
+    public static void unsetInside() {
+        //        inside = false;
+        domesticStack.pop();
+    }
+
+    /**
+     * Returns preparing value
+     *
+     */
+    public static boolean isSetInside() {
+        return ((Long) returnExpressionCounterStack.peek()).equals((Long) domesticStack.peek());            
+    }
+    //DOC
     private static Stack returnExpressionCounterStack = new Stack();
+    //DOC
+    private static Stack domesticStack = new Stack();
 
     // Stack to keep cell numbers of arrays. Each element stores the cell number of one array in one list
 
@@ -456,16 +488,15 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(ReturnStatement node) {
 
         Object o = null;
+        Long l = (Long) returnExpressionCounterStack.peek();
 
         if (node.getExpression() != null) {
 
             long auxcounter=counter;
-            ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.R+Code.DELIM+counter+
+            ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.R+Code.DELIM+l.toString()+
                        Code.DELIM+locationToString(node));
 
             o = node.getExpression().acceptVisitor(this);//
-
-            Long l = (Long) returnExpressionCounterStack.pop();
 
             ECodeUtilities.write("" + Code.R+Code.DELIM+
                        l.toString()+
@@ -479,7 +510,7 @@ public class EvaluationVisitor extends VisitorObject {
                                       node);
         } else {
 
-            returnExpressionCounterStack.pop();
+            //returnExpressionCounterStack.pop();
 
             ECodeUtilities.write("" + Code.R+Code.DELIM+(counter++)+
                        Code.DELIM+Code.NO_REFERENCE+Code.DELIM+
@@ -887,7 +918,7 @@ public class EvaluationVisitor extends VisitorObject {
         returnExpressionCounterStack.push(l);
         counter++;
 
-        // Fill the arguments
+        // Fill the arguments        
         if (larg != null) {
 
             args = new Object[larg.size()];
@@ -913,7 +944,42 @@ public class EvaluationVisitor extends VisitorObject {
         // Invoke the method
         try {
             Object o = m.invoke(null, args);
+
+            if (! isSetInside()){
+                //visit(o)
+                
+                ECodeUtilities.write(Code.PARAMETERS+Code.DELIM+ECodeUtilities.arrayToString(m.getParameterTypes()));
+                ECodeUtilities.write(Code.MD+Code.DELIM+locationToString(node));
+
+                if (! m.getReturnType().getName().equals(Void.TYPE.getName())) {
+                    
+                    long auxcounter = counter;
+                    ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.R+Code.DELIM+l.toString()+
+                                         Code.DELIM+locationToString(node));
+                    // Don't try this with objects, foreign method calls don't provide enough info to handle them
+                    if (o == null) {
+                        ECodeUtilities.write("" + Code.L+Code.DELIM+(counter++)+Code.DELIM+"null"+
+                                             Code.DELIM+Code.REFERENCE+Code.DELIM+locationToString(node));
+                    }
+                    else {
+                        ECodeUtilities.write(Code.L+Code.DELIM+(counter++)+Code.DELIM+o.toString()+
+                                             Code.DELIM+o.getClass().getName()+Code.DELIM+locationToString(node));
+                    }
+
+                    ECodeUtilities.write("" + Code.R+Code.DELIM+
+                                         l.toString()+
+                                         Code.DELIM+auxcounter+
+                                         Code.DELIM+o.toString()+Code.DELIM+
+                                         o.getClass().getName()+
+                                         Code.DELIM+locationToString(node));
+                }
+               
+            } else {
+                unsetInside();
+            }
+
             ECodeUtilities.write("" + Code.SMCC); //the method call is closed
+            
             if (((Long) returnExpressionCounterStack.peek()).equals(l)) {
 
                 returnExpressionCounterStack.pop();
