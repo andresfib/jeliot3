@@ -870,7 +870,7 @@ public class EvaluationVisitor extends VisitorObject {
 
             ECodeUtilities.write(""+Code.INPUTTED+Code.DELIM+counter
                                  +Code.DELIM+result.toString()
-                                 +Code.DELIM+result.getClass()
+                                 +Code.DELIM+result.getClass().getName()
                                  +Code.DELIM+locationToString(node));
 
             return result;
