@@ -51,7 +51,7 @@ public class Director {
 
     private Scratch currentScratch;
     private ConstantBox cbox;
-    private ConstantBox input;
+//  private ConstantBox input;
 
     private ThreadController controller;
 
@@ -99,7 +99,7 @@ public class Director {
 
     public void direct() throws Exception {
         cbox = factory.produceConstantBox();
-        input = factory.produceInputBox();
+        //input = factory.produceInputBox();
         theatre.addPassive(cbox);
         theatre.getManager().setConstantBox(cbox);
 
@@ -107,7 +107,7 @@ public class Director {
         //theatre.getManager().setInputBox(input);
 
         //Commented for Jeliot 3
-//      mainMethod.execute(this);
+        //mainMethod.execute(this);
 
         //Excecution of the program code takes place here.
         eCodeInterpreter.execute();
@@ -117,30 +117,29 @@ public class Director {
     }
 
     //Parameter Values need to be changed
-//     public void atStatement(PStatement sta) {
-//         if (stepByStep) {
-//             jeliot.directorPaused();
-//             controller.checkPoint();
-//         }
+/*  public void atStatement(PStatement sta) {
+        if (stepByStep) {
+            jeliot.directorPaused();
+            controller.checkPoint();
+        }
 
-//         highlight(sta.getLeftPos(), sta.getRightPos());
-
-//     }
-
+        highlight(sta.getLeftPos(), sta.getRightPos());
+    }
+*/
     public void setStep(boolean step) {
         this.stepByStep = step;
     }
 
     //Parameter Values need to be changed
-//     public void atExpression(PExpression ex) {
-//         highlight(ex.getLeftPos(), ex.getRightPos());
-//     }
+/*  public void atExpression(PExpression ex) {
+        highlight(ex.getLeftPos(), ex.getRightPos());
+    }
 
     //Parameter Values need to be changed
-//     public void atDeclarator(PVariableDeclarator decl) {
-//         highlight(decl.getLeftPos(), decl.getRightPos());
-//     }
-
+    public void atDeclarator(PVariableDeclarator decl) {
+        highlight(decl.getLeftPos(), decl.getRightPos());
+    }
+*/
     //Changed for Jeliot 3
     public void highlight(Highlight h) {
         if (!eCodeInterpreter.starting()) {
@@ -326,26 +325,24 @@ public class Director {
     /** Shows an animation of the invocation of a static foreign
       * method.
       */
-//     public Return animateSFMInvocation(
-//             ForeignMethodPointer method,
-//             Value[] args) {
+/*  public Return animateSFMInvocation(ForeignMethodPointer method,
+                                       Value[] args) {
+        // Get animator for the invocation.
+        Animator animator = method.getAnimator(args);
 
-//         // Get animator for the invocation.
-//         Animator animator = method.getAnimator(args);
+        // Get actors for the arguments.
+        int n = args.length;
+        ValueActor[] actors = new ValueActor[n];
+        for (int i = 0; i < n; ++i) {
+            actors[i] = args[i].getActor();
+        }
+        // Animate the invocation
+        animator.setArguments(args);
+        animator.setArgumentActors(actors);
+        animator.animate(this);
 
-//         // Get actors for the arguments.
-//         int n = args.length;
-//         ValueActor[] actors = new ValueActor[n];
-//         for (int i = 0; i < n; ++i) {
-//             actors[i] = args[i].getActor();
-//         }
-//         // Animate the invocation
-//         animator.setArguments(args);
-//         animator.setArgumentActors(actors);
-//         animator.animate(this);
-
-//         return new Return(animator.getReturnValue());
-//     }
+        return new Return(animator.getReturnValue());
+    }
 
 
     /** Animates the invocation of a domestic (user-defined) method.

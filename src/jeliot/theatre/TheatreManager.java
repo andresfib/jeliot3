@@ -109,11 +109,12 @@ public class TheatreManager implements ComponentListener {
         positionConstantBox();
     }
 
+/*
     public void setInputBox(ConstantBox input) {
         this.input = input;
         positionInputBox();
     }
-
+*/
 
     public void addScratch(Scratch scratch) {
         scratches.addElement(scratch);
