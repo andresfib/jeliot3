@@ -29,6 +29,11 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import jeliot.calltree.TreeDraw;
 import jeliot.gui.CodePane2;
 import jeliot.gui.HistoryView;
@@ -182,7 +187,8 @@ public class Jeliot {
      * @param udir
      * 
      */
-    public Jeliot(String udir, boolean experiment) {
+    public Jeliot(String udir, boolean experiment) {   
+        
         this.experiment = experiment;
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
         
@@ -191,6 +197,20 @@ public class Jeliot {
         Tracker.setCodePane2(codePane);
         
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir, callTree, hv);
+//    	Get the currently installed look and feel
+        LookAndFeel lf = UIManager.getLookAndFeel();
+    	
+//    	 Install a different look and feel; specifically, the Windows look and feel
+        try {
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.MetalLookAndFeel");
+            //SwingUtilities.updateComponentTreeUI(this);
+        } catch (InstantiationException e) {
+        } catch (ClassNotFoundException e) {
+        } catch (UnsupportedLookAndFeelException e) {
+        } catch (IllegalAccessException e) {
+        }
+    
     }
 
     /**
@@ -486,6 +506,21 @@ public class Jeliot {
      */
     public static void main(String args[]) throws IOException {
 
+    	//Install a different look and feel; specifically, the Windows look and feel
+        try {
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (InstantiationException e) {
+        	e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+        	e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+        	e.printStackTrace();
+        } catch (IllegalAccessException e) {
+        	e.printStackTrace();
+        }
+
+    	
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
 
@@ -527,6 +562,20 @@ public class Jeliot {
      */
     public static Jeliot start(String args[]) throws IOException {
 
+    	//Install a different look and feel; specifically, the Windows look and feel
+        try {
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (InstantiationException e) {
+        	e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+        	e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+        	e.printStackTrace();
+        } catch (IllegalAccessException e) {
+        	e.printStackTrace();
+        }
+    	
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
         

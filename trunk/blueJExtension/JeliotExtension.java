@@ -271,15 +271,7 @@ class MenuBuilder extends MenuGenerator {
     				
     				//print the path in the debug file
     				printCurrentStatus(path);
-    				/*
-    				//we create the jeliot file in which we will put all the classes
-    				outputFile = new File(path + "\\jeliot.txt");
-    				
-    				//we delete the file if it already exists
-    				if (outputFile.exists()) outputFile.delete();
-    				*/
-    				
-    				//projectName = bpackage.getProject().getName();
+    		
     				packages = bpackage.getProject().getPackages();
     				sizePackages = packages.length;
     				while (i < sizePackages) {//for each package in the project 
@@ -392,11 +384,39 @@ class MenuBuilder extends MenuGenerator {
     			
     		}
     		
+    		//we call the main method of an object
     		if (event.getMethodName()=="main") {
-    			System.out.println("main method called\n");
-    			//jeliot.compile();
-    			jeliot.recompile(generateJeliotString(), null);
-    			System.out.println("main compiled\n");
+    			String paramMethod = new String("");//string of the parameters
+    			//System.out.println("main method called\n");//print in the debug file
+    			
+    			//we get the parameters of the main method
+    			//we check if there is at least one parameter, it returns null otherwise
+    			if (event.getParameters()!=null){
+    				
+    				
+    				//we write the parameters in a string, all parameters are separated by coma
+    				
+    				//1 parameter	
+    				if (event.getParameters().length==1){ 
+    					paramMethod = event.getParameters()[0];
+    				}
+    				//several parameters
+    				else {  	
+    					for(int i=0; i<=event.getParameters().length - 2; i++) {
+    						paramMethod += event.getParameters()[i] + ",";
+    					}
+    					paramMethod += event.getParameters()[event.getParameters().length - 1];
+    				}
+    				//System.out.println("main arguments: " + paramMethod + "\n");
+    				jeliot.recompile(generateJeliotString(), "Andres.main(new String[]" + paramMethod + ");" );
+    			
+    			}
+    			else {//there are no parameters
+    				//System.out.println("no main arguments\n");
+    				jeliot.recompile(generateJeliotString(), null);
+    			}
+    			
+    			
     		}
     		
     		//it´s a method called on an object

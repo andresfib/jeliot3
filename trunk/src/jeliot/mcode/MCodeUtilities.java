@@ -5,6 +5,9 @@ import koala.dynamicjava.tree.Node;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.io.Writer;
+import java.io.FileOutputStream;
+import java.io.File;
 import java.util.*;
 
 /**
@@ -885,20 +888,37 @@ public class MCodeUtilities {
      */
     public static void write(String str) {
         StringTokenizer tokenizer = new StringTokenizer(str, Code.DELIM);
+              
         int token = Integer.parseInt(tokenizer.nextToken());
         if (!EvaluationVisitor.isSetPreparing() || token == Code.ERROR) {
             str = MCodeUtilities.replace(str, "\n", "\\n");
             str = MCodeUtilities.replace(str, "\r", "");
-            //System.out.println("Hello");
             if (!redirectOutput) {
                 writer.println(str);
             } else {
                 addToRedirectBuffer(str);
             }
-            // connected to jeliot
-            //System.out.println("Hello2");
-
-            //System.out.println(str);// Output to stdout ; debugging only
+            
+            str += "\n";
+            
+            //we get the user directory path
+            Properties prop = System.getProperties();
+            String udir = prop.getProperty("user.dir");
+            
+            String filePath = udir + "\\" + getFilename() + ".txt";
+            
+            //we write the string into the file
+            try {
+            	
+            	File outputFile = new File(filePath);
+            	//we delete the file if it already exists
+    			if (outputFile.exists()) outputFile.delete();        	
+            	FileOutputStream out = new FileOutputStream(new File(filePath), true);       
+            	out.write(str.getBytes());
+            }
+            catch(Exception e){
+            	e.printStackTrace(System.out);    
+            }
         }
     }
 
