@@ -1182,4 +1182,14 @@ public class MCodeUtilities {
             return null;
         }
     }
+    
+    static String filename = "untitled";
+    
+    public static void setFilename(String name) {
+    	filename = name;
+    }
+    
+    public static String getFilename() {
+    	return filename;
+    }
 }

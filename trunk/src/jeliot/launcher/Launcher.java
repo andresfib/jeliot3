@@ -89,8 +89,6 @@ public class Launcher extends Thread {
 	 */
 	private boolean compiling = false;
     
-    //private boolean executing = false;
-    
 	/**
 	 * @return
 	 */
@@ -122,7 +120,6 @@ public class Launcher extends Thread {
 
 			getInput = new PipedReader(putInput);
 		} catch (IOException e) {
-			//System.err.println("When creating Pipe reader:" + e);
 		}
 
 		reader = new BufferedReader(pipedReader);
@@ -142,9 +139,8 @@ public class Launcher extends Thread {
 	/**
 	 * 
 	 */
-	public void compile() /* throws InterpreterException */ {
-		//System.out.println("Compiling");
-		interpreter.interpret(r, "buffer"); // (stream,"buffer");
+	public void compile() {
+		interpreter.interpret(r, "buffer");
 	}
 
 	/* (non-Javadoc)
@@ -152,57 +148,29 @@ public class Launcher extends Thread {
 	 */
 	public void run() {
 
-		//System.out.println("Before Compilation");
-
 		while (running && this == Thread.currentThread()) {
 			if (compiling) {
 				compile();
 
-				//             synchronized(this) {
-				//                 try {
-				//                     this.wait();
-				//                 } catch(InterruptedException e) {
-				//                     throw new RuntimeException(e);
-				//                 }
-				//             }
-
-				//         try {
-				//             Thread.sleep(100);
-				//         } catch (InterruptedException e) {
-				//             throw new RuntimeException(e);
-				//         }
-				//         //System.out.println("After Compilation");
-
-				//         if (running && this == Thread.currentThread()) {
-
-				//System.out.println("Before interpretation");
-
 				interpreter.interpret(
 					new BufferedReader(new StringReader(methodCall)),
 					"buffer");
-				// (stream,"buffer");
 
+				/*
+				 * TODO: If we are allowing open scope execution of statements
+				 * we should not send Code.END statements.
+				 */
 				MCodeUtilities.write("" + Code.END);
-				//System.out.println("After interpretation");
 				compiling = false;
 			}
 			synchronized (this) {
 				try {
 					this.wait();
-					//                    Thread.sleep(100);
 				} catch (InterruptedException e) {
 					throw new RuntimeException(e);
 				}
 			}
 		}
-
-		//         try {
-		//             Thread.sleep(100);
-		//         } catch (InterruptedException e) {
-		//             throw new RuntimeException(e);
-		//         }
-		//System.out.println("After execution");
-
 	}
 
 	/**
@@ -218,10 +186,6 @@ public class Launcher extends Thread {
 	public void setCompiling(boolean value) {
 		compiling = value;
 	}
-    //     public void setExecuting(boolean value) {
-    //         executing = value;
-    //     }
-
 
 	/**
 	 * @return
@@ -243,5 +207,4 @@ public class Launcher extends Thread {
 	public PrintWriter getInputWriter() {
 		return inputWriter;
 	}
-
 }

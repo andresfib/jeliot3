@@ -792,13 +792,15 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param highlight
      */
     protected void handleCodeOUTPUT(long expressionReference, String className, String methodName, String value,
-            String type, String breakLine, Highlight highlight) {
+            String type, boolean breakLine, Highlight highlight) {
         Value output = (Value) values.remove(new Long(expressionReference));
 
         if (output == null) {
             output = new Value(value, type);
+            director.introduceLiteral(output);
         }
-        if (breakLine.equals("1")) {
+        
+        if (breakLine) {
             output.setValue(output.getValue() + "\\n");
         }
 

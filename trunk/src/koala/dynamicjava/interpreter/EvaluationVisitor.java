@@ -983,39 +983,52 @@ public class EvaluationVisitor extends VisitorObject {
 			{
 				if (m.getName().equals("println")
 						|| m.getName().equals("print")) {
+					
 					List larg = node.getArguments();
-					Object[] args = new Object[larg.size()];
-					Class[] typs;
-					Iterator it = larg.iterator();
-					int i = 0;
-					long auxcounter; //Records the previous counter value
-					Object auxarg; //Stores the current argument
+					if (larg != null) {
+						Object[] args = new Object[larg.size()];
+						Class[] typs;
+						Iterator it = larg.iterator();
+						int i = 0;
+						long auxcounter; //Records the previous counter value
+						Object auxarg; //Stores the current argument
 
-					typs = m.getParameterTypes();
+						typs = m.getParameterTypes();
 
-					//It should only get once in the while loop!!!
-					while (it.hasNext()) {
-						long outputCounter = counter;
-						MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
+						//It should only get once in the while loop!!!
+						while (it.hasNext()) {
+							long outputCounter = counter;
+							MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
 								+ Code.OUTPUT + Code.DELIM + outputCounter
 								+ Code.DELIM
 								+ MCodeUtilities.locationToString(node));
-						args[i] = ((Expression) it.next()).acceptVisitor(this);
-						MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
+							args[i] = ((Expression) it.next()).acceptVisitor(this);
+							MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
 								+ outputCounter + Code.DELIM + "System.out"
 								+ Code.DELIM + m.getName() + Code.DELIM
 								+ args[i].toString() + Code.DELIM
 								+ typs[i].getName() + Code.DELIM
-								+ (m.getName().equals("println") ? "1" : "0") //To
-																			  // indicate
-																			  // newline
-																			  // or
-																			  // not
+								//To indicate newline or not
+								+ (m.getName().equals("println") ? "1" : "0") 
 								+ Code.DELIM
 								+ MCodeUtilities.locationToString(node));
-						i++;
+							i++;
+						}
+					} else {
+						MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
+								+ Code.OUTPUT + Code.DELIM + Code.NO_REFERENCE
+								+ Code.DELIM
+								+ MCodeUtilities.locationToString(node));
+						MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
+								+ Code.NO_REFERENCE + Code.DELIM + "System.out"
+								+ Code.DELIM + m.getName() + Code.DELIM
+								+ "" + Code.DELIM
+								+ String.class.getName() + Code.DELIM
+								//To indicate newline or not
+								+ (m.getName().equals("println") ? "1" : "0") 
+								+ Code.DELIM
+								+ MCodeUtilities.locationToString(node));
 					}
-
 				}
 				return null;
 			}
