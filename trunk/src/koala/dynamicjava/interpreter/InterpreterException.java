@@ -60,22 +60,32 @@ public class InterpreterException extends ThrownException {
         super(e);
 
         String m = e.getMessage();
+
         int index = m.indexOf('\n');
-        while(index != -1) {
-            m = m.substring(0,index) + "<BR>" + m.substring(index+1,m.length());
-            index = m.indexOf('\t');
+        while(index > -1) {
+            m = m.substring(0, index) + "<BR>" + m.substring(index + 1, m.length());
+            index = m.indexOf('\n');
         }
+
+        index = m.indexOf('\r');
+        while(index > -1) {
+            m = m.substring(0,index) + m.substring(index + 1, m.length());
+            index = m.indexOf('\r');
+        }
+
 
         if (e.getLine() != -1) {
             sourceInformation = new SourceInformation(e.getFilename(),
                                                       e.getLine(),
                                                       e.getColumn());
 
-            message = "<H2>Syntax Error</H2><P><B>Line "+e.getLine()+
-                      ", Column "+e.getColumn()+":</P><P>"+m+"</B></P>";
+            message = "<H2>Syntax Error</H2><P><B>Line " + e.getLine() +
+                      ", Column " + e.getColumn() + ":</P><P>" + m + "</B></P>";
+            //System.out.println(message);
 
         } else {
             message = "<H2>Syntax Error</H2><P>" + m + "</P>";
+            //System.out.println(message);
         }
     }
 
@@ -83,8 +93,11 @@ public class InterpreterException extends ThrownException {
      * Constructs an <code>InterpreterException</code> from a ExecutionError
      */
     public InterpreterException(ExecutionError e) {
+
         super(e);
+
         Node n = e.getNode();
+
         if (n != null && n.getFilename() != null) {
             message = "<H2>Execution Error</H2><P><B>Line "+
             n.getBeginLine()+", Column "+n.getBeginColumn()+
@@ -97,30 +110,55 @@ public class InterpreterException extends ThrownException {
 
             String m = ((CatchedExceptionError)e).getException().toString();
             int index = m.indexOf('\n');
-            while(index != -1) {
-                m = m.substring(0,index) + "<BR>" + m.substring(index+1,m.length());
-                index = m.indexOf('\t');
+            while(index > -1) {
+                m = m.substring(0,index) + "<BR>" + m.substring(index + 1, m.length());
+                index = m.indexOf('\n');
             }
 
-            message += "<P>"+m+"</P>";
+            index = m.indexOf('\r');
+            while(index > -1) {
+                m = m.substring(0,index) + m.substring(index + 1, m.length());
+                index = m.indexOf('\r');
+            }
+
+
+            message += "<P>" + m + "</P>";
+
         } else if (e instanceof ThrownException) {
+
             String m = ((ThrownException)e).getException().toString();
             int index = m.indexOf('\n');
-            while(index != -1) {
-                m = m.substring(0,index) + "<BR>" + m.substring(index+1,m.length());
-                index = m.indexOf('\t');
+
+            while(index > -1) {
+                m = m.substring(0, index) + "<BR>" + m.substring(index + 1, m.length());
+                index = m.indexOf('\n');
             }
 
-            message += "<P>"+m+"</P>";
+            index = m.indexOf('\r');
+            while(index > -1) {
+                m = m.substring(0,index) + m.substring(index + 1, m.length());
+                index = m.indexOf('\r');
+            }
+
+            message += "<P>" + m + "</P>";
+
         } else {
+
             String m = e.getMessage();
+
             int index = m.indexOf('\n');
-            while(index != -1) {
-                m = m.substring(0,index) + "<BR>" + m.substring(index+1,m.length());
-                index = m.indexOf('\t');
+            while(index > -1) {
+                m = m.substring(0,index) + "<BR>" + m.substring(index + 1, m.length());
+                index = m.indexOf('\n');
             }
 
-            message += "<P>"+m+"</P>";
+            index = m.indexOf('\r');
+            while(index > -1) {
+                m = m.substring(0,index) + m.substring(index + 1, m.length());
+                index = m.indexOf('\r');
+            }
+
+            message += "<P>" + m + "</P>";
         }
     }
 
