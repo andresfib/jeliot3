@@ -1486,8 +1486,8 @@ public class JeliotWindow implements PauseListener {
         stepButton.setEnabled(false);
         playButton.setEnabled(false);
         pauseButton.setEnabled(false);
-        rewindButton.setEnabled(false);
-
+        rewindButton.setEnabled(true);
+        
         String[] s1 = { messageBundle.getString("menu.control.edit") };
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
@@ -1698,6 +1698,9 @@ public class JeliotWindow implements PauseListener {
      */
     void rewindAnimation() {
 
+        tabbedPane.setSelectedIndex(0);
+        changeTheatrePane(tabbedPane);
+        
         String[] s1 = { messageBundle.getString("menu.animation.step"),
                 messageBundle.getString("menu.animation.play"),
                 messageBundle.getString("menu.animation.run_until"),
@@ -1786,14 +1789,14 @@ public class JeliotWindow implements PauseListener {
             stepButton.setEnabled(false);
             playButton.setEnabled(false);
             pauseButton.setEnabled(false);
-            rewindButton.setEnabled(false);
+            rewindButton.setEnabled(true);
 
-            String[] s1 = { messageBundle.getString("menu.control.edit") };
+            String[] s1 = { messageBundle.getString("menu.control.edit"),
+                    		messageBundle.getString("menu.animation.rewind") };
             setEnabledMenuItems(true, s1);
             String[] s2 = { messageBundle.getString("menu.animation.step"),
                     messageBundle.getString("menu.animation.play"),
                     messageBundle.getString("menu.animation.run_until"),
-                    messageBundle.getString("menu.animation.rewind"),
                     messageBundle.getString("menu.animation.pause") };
             setEnabledMenuItems(false, s2);
         }
