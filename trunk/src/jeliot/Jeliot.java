@@ -32,6 +32,7 @@ import jeliot.calltree.TreeDraw;
 import jeliot.gui.CodePane2;
 import jeliot.gui.HistoryView;
 import jeliot.gui.JeliotWindow;
+import jeliot.gui.LoadJeliot;
 import jeliot.launcher.Launcher;
 import jeliot.mcode.CallTreeMCodeInterpreter;
 import jeliot.mcode.Highlight;
@@ -461,8 +462,7 @@ public class Jeliot {
 
         final Jeliot jeliot = new Jeliot(udir);
 
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
+        (new LoadJeliot()).start(new Runnable() {
             public void run() {
                 jeliot.run();
             }
