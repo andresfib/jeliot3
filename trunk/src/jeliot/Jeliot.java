@@ -523,9 +523,7 @@ public class Jeliot {
         //f = new File(f, "examples");
         //prop.put("user.dir", f.toString());
 
-        final Jeliot jeliot = new Jeliot(udir, experiment);
-
-        (new LoadJeliot()).start(jeliot);
+        final Jeliot jeliot = (new LoadJeliot()).start(udir, experiment);
         /*
         new Runnable() {
             public void run() {
@@ -574,9 +572,6 @@ public class Jeliot {
         }
         
         final Jeliot jeliot = new Jeliot(udir, experiment);
-
-        Runnable r = null;
-
         
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
