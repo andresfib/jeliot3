@@ -108,33 +108,6 @@ public abstract class MCodeInterpreter {
     public void initialize() {
         running = true;
         start = true;
-        try {
-            line = mcode.readLine();
-            //TODO: comment the next line in the released versions
-            System.out.println(line);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //TODO: Change this to be something more meaningful!
-        if (line == null) {
-            line = "" + Code.ERROR + Code.DELIM + bundle.getString("unknown.exception")
-                    + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
-                    + Code.LOC_DELIM + "0";
-        }
-
-        StringTokenizer tokenizer = new StringTokenizer(line, Code.DELIM);
-
-        if (Long.parseLong(tokenizer.nextToken()) == Code.ERROR) {
-            String message = tokenizer.nextToken();
-            Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-
-            showErrorMessage(new InterpreterError(message, h));
-            running = false;
-        } else {
-            firstLineRead = true;
-        }
-
     }
 
     public abstract void showErrorMessage(InterpreterError error);
@@ -156,31 +129,7 @@ public abstract class MCodeInterpreter {
     /**
      * @return
      */
-    public String readLine() {
-        String readLine = null;
-        if (readNew()) {
-            try {
-                readLine = mcode.readLine();
-            } catch (Exception e) {}
-        } else {
-            if (!superMethods.isEmpty()) {
-                readLine = (String) superMethods.remove(0);
-            } else {
-                constructorCalls.pop();
-                if (!constructorCalls.empty()) {
-                    superMethods = (Vector) constructorCalls.peek();
-                }
-                return readLine();
-            }
-        }
-        
-        if (readLine == null) {
-            readLine = "" + Code.ERROR + Code.DELIM + bundle.getString("unknown.exception")
-            + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0";
-        }
-        System.out.println(readLine);
-        return readLine;
-    }
+    public abstract String readLine();
 
     public abstract void openScratch();
 
@@ -191,10 +140,9 @@ public abstract class MCodeInterpreter {
      */
     public void execute() {
 
-        /*
-         * TODO: Take the next line out of the comments for the versions to be realeased
-         * try {
-         */
+        //TODO: Take the next line out of the comments for the versions to be realeased
+        //try {
+         
         openScratch();
 
         while (running) {
@@ -244,10 +192,10 @@ public abstract class MCodeInterpreter {
         }
         closeScratch();
 
-        /*
-         * TODO: Take this out of the comments for the versions to be
+        /* TODO: Take this out of the comments for the versions to be
          * realeased.
-         * } catch (Exception e) {
+         */
+        /* } catch (Exception e) {
          *    director.showErrorMessage(new InterpreterError(" <H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null));
          * }
          */
@@ -261,6 +209,7 @@ public abstract class MCodeInterpreter {
      * @param line
      */
     public void interpret(String line) {
+        beforeInterpretation(line);
 
         if (!line.equals("" + Code.END)) {
 
@@ -904,11 +853,8 @@ public abstract class MCodeInterpreter {
 
                     case Code.CONSCN:
                         {
-                            constructorCall = true;
-                            superMethodsReading = new Vector();
-                            superMethodCallNumber = Long.parseLong(tokenizer.nextToken());
                             //Normally nothing needs to be done for this!
-                            handleCodeCONSCN(superMethodCallNumber);
+                            handleCodeCONSCN(Long.parseLong(tokenizer.nextToken()));
                             break;
                         }
 
@@ -950,9 +896,13 @@ public abstract class MCodeInterpreter {
                             String methodName = tokenizer.nextToken();
                             int parameterCount = Integer.parseInt(tokenizer.nextToken());
                             long objectCounter = Long.parseLong(tokenizer.nextToken());
+                            String objectValue = "";
+                            if (tokenizer.countTokens() > 1) {
+                                objectValue = tokenizer.nextToken();
+                            }
                             Highlight highlight = MCodeUtilities.makeHighlight(tokenizer
                                     .nextToken());
-                            handleCodeOMC(methodName, parameterCount, objectCounter, highlight);
+                            handleCodeOMC(methodName, parameterCount, objectCounter, objectValue, highlight);
                             break;
                         }
 
@@ -979,9 +929,10 @@ public abstract class MCodeInterpreter {
                     case Code.P:
                         {
                             long expressionReference = Long.parseLong(tokenizer.nextToken());
+                            String value = tokenizer.nextToken();
                             String argType = tokenizer.nextToken();
 
-                            handleCodeP(expressionReference, argType);
+                            handleCodeP(expressionReference, value, argType);
                             break;
                         }
 
@@ -1359,16 +1310,9 @@ public abstract class MCodeInterpreter {
     }
 
     /**
-     * @param expressionCounter
-     * @param leftExpressionReference
-     * @param rightExpressionReference
-     * @param value
-     * @param type
-     * @param h
-     * @param operator
+     * @param line2
      */
-    protected void handleCodeLQE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    public abstract void beforeInterpretation(String line);
 
     /**
      * @param expressionCounter
@@ -1379,8 +1323,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeLE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeLQE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1391,15 +1334,24 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeNE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeLE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
+
+    /**
+     * @param expressionCounter
+     * @param leftExpressionReference
+     * @param rightExpressionReference
+     * @param value
+     * @param type
+     * @param h
+     * @param operator
+     */
+    protected abstract void handleCodeNE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param message
      * @param h
      */
-    protected void handleCodeERROR(String message, Highlight h) {
-    }
+    protected abstract void handleCodeERROR(String message, Highlight h);
 
     /**
      * @param name
@@ -1408,8 +1360,7 @@ public abstract class MCodeInterpreter {
      * @param value
      * @param h
      */
-    protected void handleCodeFIELD(String name, String type, int modifiers, String value, String h) {
-    }
+    protected abstract void handleCodeFIELD(String name, String type, int modifiers, String value, String h);
 
     /**
      * @param name
@@ -1417,27 +1368,23 @@ public abstract class MCodeInterpreter {
      * @param modifiers
      * @param listOfParameters
      */
-    protected void handleCodeMETHOD(String name, String returnType, int modifiers, String listOfParameters) {
-    }
+    protected abstract void handleCodeMETHOD(String name, String returnType, int modifiers, String listOfParameters);
 
     /**
      * @param listOfParameters
      */
-    protected void handleCodeCONSTRUCTOR(String listOfParameters) {
-    }
+    protected abstract void handleCodeCONSTRUCTOR(String listOfParameters);
 
     /**
      * 
      */
-    protected void handleCodeEND_CLASS() {
-    }
+    protected abstract void handleCodeEND_CLASS();
 
     /**
      * @param name
      * @param extendedClass
      */
-    protected void handleCodeCLASS(String name, String extendedClass) {
-    }
+    protected abstract void handleCodeCLASS(String name, String extendedClass);
 
     /**
      * @param expressionCounter
@@ -1447,8 +1394,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param highlight
      */
-    protected void handleCodeAL(long expressionCounter, long arrayCounter, String name, String value, String type, Highlight highlight) {
-    }
+    protected abstract void handleCodeAL(long expressionCounter, long arrayCounter, String name, String value, String type, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1460,8 +1406,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeAAC(long expressionCounter, long expressionReference, int dims, String cellNumberReferences, String cellNumbers, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeAAC(long expressionCounter, long expressionReference, int dims, String cellNumberReferences, String cellNumbers, String value, String type, Highlight h);
 
     /**
      * @param expressionReference
@@ -1472,14 +1417,12 @@ public abstract class MCodeInterpreter {
      * @param dimensionSizes
      * @param h
      */
-    protected void handleCodeAA(long expressionReference, String hashCode, String compType, int dims, String dimensionReferences, String dimensionSizes, Highlight h) {
-    }
+    protected abstract void handleCodeAA(long expressionReference, String hashCode, String compType, int dims, String dimensionReferences, String dimensionSizes, Highlight h);
 
     /**
      * @param scope
      */
-    protected void handleCodeSCOPE(int scope) {
-    }
+    protected abstract void handleCodeSCOPE(int scope);
 
     /**
      * @param expressionCounter
@@ -1487,16 +1430,14 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeINPUTTED(long expressionCounter, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeINPUTTED(long expressionCounter, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
      * @param type
      * @param h
      */
-    protected void handleCodeINPUT(long expressionCounter, String type, Highlight h) {
-    }
+    protected abstract void handleCodeINPUT(long expressionCounter, String type, Highlight h);
 
     /**
      * @param expressionReference
@@ -1505,51 +1446,36 @@ public abstract class MCodeInterpreter {
      * @param breakLine
      * @param highlight
      */
-    protected void handleCodeOUTPUT(long expressionReference, String value, String type, String breakLine, Highlight highlight) {
-    }
+    protected abstract void handleCodeOUTPUT(long expressionReference, String value, String type, String breakLine, Highlight highlight);
 
     /**
      * @param statementName
      * @param h
      */
-    protected void handleCodeCONT(int statementName, Highlight h) {
-    }
+    protected abstract void handleCodeCONT(int statementName, Highlight h);
 
     /**
      * @param statementName
      * @param h
      */
-    protected void handleCodeBR(int statementName, Highlight h) {
-    }
+    protected abstract void handleCodeBR(int statementName, Highlight h);
 
     /**
      * @param h
      */
-    protected void handleCodeSWITCH(Highlight h) {
-    }
+    protected abstract void handleCodeSWITCH(Highlight h);
 
     /**
      * @param selectorReference
      * @param switchBlockReference
      * @param h
      */
-    protected void handleCodeSWIBF(long selectorReference, long switchBlockReference, Highlight h) {
-    }
+    protected abstract void handleCodeSWIBF(long selectorReference, long switchBlockReference, Highlight h);
 
     /**
      * @param h
      */
-    protected void handleCodeSWITCHB(Highlight h) {
-    }
-
-    /**
-     * @param expressionReference
-     * @param value
-     * @param round
-     * @param h
-     */
-    protected void handleCodeDO(long expressionReference, String value, long round, Highlight h) {
-    }
+    protected abstract void handleCodeSWITCHB(Highlight h);
 
     /**
      * @param expressionReference
@@ -1557,8 +1483,7 @@ public abstract class MCodeInterpreter {
      * @param round
      * @param h
      */
-    protected void handleCodeFOR(long expressionReference, String value, long round, Highlight h) {
-    }
+    protected abstract void handleCodeDO(long expressionReference, String value, long round, Highlight h);
 
     /**
      * @param expressionReference
@@ -1566,30 +1491,34 @@ public abstract class MCodeInterpreter {
      * @param round
      * @param h
      */
-    protected void handleCodeWHI(long expressionReference, String value, int round, Highlight h) {
-    }
+    protected abstract void handleCodeFOR(long expressionReference, String value, long round, Highlight h);
+
+    /**
+     * @param expressionReference
+     * @param value
+     * @param round
+     * @param h
+     */
+    protected abstract void handleCodeWHI(long expressionReference, String value, int round, Highlight h);
 
     /**
      * @param expressionReference
      * @param value
      * @param h
      */
-    protected void handleCodeIFTE(long expressionReference, String value, Highlight h) {
-    }
+    protected abstract void handleCodeIFTE(long expressionReference, String value, Highlight h);
 
     /**
      * @param expressionReference
      * @param value
      * @param h
      */
-    protected void handleCodeIFT(long expressionReference, String value, Highlight h) {
-    }
+    protected abstract void handleCodeIFT(long expressionReference, String value, Highlight h);
 
     /**
      * 
      */
-    protected void handleCodeSMCC() {
-    }
+    protected abstract void handleCodeSMCC();
 
     /**
      * @param expressionCounter
@@ -1598,27 +1527,23 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeR(long expressionCounter, long expressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeR(long expressionCounter, long expressionReference, String value, String type, Highlight h);
 
     /**
      * @param parameters
      */
-    protected void handleCodePARAMETERS(String parameters) {
-    }
+    protected abstract void handleCodePARAMETERS(String parameters);
 
     /**
      * @param h
      */
-    protected void handleCodeMD(Highlight h) {
-    }
+    protected abstract void handleCodeMD(Highlight h);
 
     /**
      * @param expressionReference
      * @param argType
      */
-    protected void handleCodeP(long expressionReference, String argType) {
-    }
+    protected abstract void handleCodeP(long expressionReference, String value, String argType);
 
     /**
      * @param methodName
@@ -1626,14 +1551,12 @@ public abstract class MCodeInterpreter {
      * @param parameterCount
      * @param h
      */
-    protected void handleCodeSMC(String methodName, String className, int parameterCount, Highlight h) {
-    }
+    protected abstract void handleCodeSMC(String methodName, String className, int parameterCount, Highlight h);
 
     /**
      * 
      */
-    protected void handleCodeOMCC() {
-    }
+    protected abstract void handleCodeOMCC();
 
     /**
      * @param methodName
@@ -1641,8 +1564,7 @@ public abstract class MCodeInterpreter {
      * @param objectCounter
      * @param highlight
      */
-    protected void handleCodeOMC(String methodName, int parameterCount, long objectCounter, Highlight highlight) {
-    }
+    protected abstract void handleCodeOMC(String methodName, int parameterCount, long objectCounter, String objectValue, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1652,22 +1574,19 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeOFA(long expressionCounter, long objectCounter, String variableName, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeOFA(long expressionCounter, long objectCounter, String variableName, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
      * @param hashCode
      * @param h
      */
-    protected void handleCodeSAC(long expressionCounter, String hashCode, Highlight h) {
-    }
+    protected abstract void handleCodeSAC(long expressionCounter, String hashCode, Highlight h);
 
     /**
      * @param superMethodCallNumber2
      */
-    protected void handleCodeCONSCN(long superMethodCallNumber) {
-    }
+    protected abstract void handleCodeCONSCN(long superMethodCallNumber);
 
     /**
      * @param expressionCounter
@@ -1676,8 +1595,7 @@ public abstract class MCodeInterpreter {
      * @param parameterCount
      * @param highlight
      */
-    protected void handleCodeSA(long expressionCounter, String declaringClass, String constructorName, int parameterCount, Highlight highlight) {
-    }
+    protected abstract void handleCodeSA(long expressionCounter, String declaringClass, String constructorName, int parameterCount, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1685,8 +1603,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param highlight
      */
-    protected void handleCodeL(long expressionCounter, String value, String type, Highlight highlight) {
-    }
+    protected abstract void handleCodeL(long expressionCounter, String value, String type, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1695,8 +1612,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param highlight
      */
-    protected void handleCodeQN(long expressionCounter, String variableName, String value, String type, Highlight highlight) {
-    }
+    protected abstract void handleCodeQN(long expressionCounter, String variableName, String value, String type, Highlight highlight);
 
     /**
      * @param variableName
@@ -1706,8 +1622,7 @@ public abstract class MCodeInterpreter {
      * @param modifier
      * @param highlight
      */
-    protected void handleCodeVD(String variableName, long initializerExpression, String value, String type, String modifier, Highlight highlight) {
-    }
+    protected abstract void handleCodeVD(String variableName, long initializerExpression, String value, String type, String modifier, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1718,8 +1633,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeAE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeAE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1730,8 +1644,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeSE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeSE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1742,8 +1655,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeDE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeDE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1754,8 +1666,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeRE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeRE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1766,8 +1677,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeME(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeME(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1778,8 +1688,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeGQT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeGQT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1790,8 +1699,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeGT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeGT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
 
     /**
@@ -1803,8 +1711,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeEE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeEE(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1815,8 +1722,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeOR(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeOR(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1827,8 +1733,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeAND(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeAND(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1839,8 +1744,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeXOR(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeXOR(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1851,8 +1755,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeURSHIFT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeURSHIFT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1863,8 +1766,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeRSHIFT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeRSHIFT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1875,8 +1777,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeLSHIFT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeLSHIFT(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1887,8 +1788,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeBITAND(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeBITAND(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1899,8 +1799,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeBITXOR(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeBITXOR(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1911,8 +1810,7 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected void handleCodeBITOR(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeBITOR(long expressionCounter, long leftExpressionReference, long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1921,8 +1819,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodePRDE(long expressionCounter, long expressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodePRDE(long expressionCounter, long expressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1931,8 +1828,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodePRIE(long expressionCounter, long expressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodePRIE(long expressionCounter, long expressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1941,8 +1837,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodePDE(long expressionCounter, long expressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodePDE(long expressionCounter, long expressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1951,8 +1846,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodePIE(long expressionCounter, long expressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodePIE(long expressionCounter, long expressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1961,8 +1855,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeNO(long expressionCounter, long unaryExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeNO(long expressionCounter, long unaryExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1971,8 +1864,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeMINUS(long expressionCounter, long unaryExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeMINUS(long expressionCounter, long unaryExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1981,8 +1873,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodePLUS(long expressionCounter, long unaryExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodePLUS(long expressionCounter, long unaryExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1991,8 +1882,7 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeCOMP(long expressionCounter, long unaryExpressionReference, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeCOMP(long expressionCounter, long unaryExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2002,40 +1892,39 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeA(long expressionCounter, long fromExpression, long toExpression, String value, String type, Highlight h) {
-    }
+    protected abstract void handleCodeA(long expressionCounter, long fromExpression, long toExpression, String value, String type, Highlight h);
 
     /**
      * @param expressionReference
      */
-    protected void handleCodeTO(long expressionReference) {
-    }
+    protected abstract void handleCodeTO(long expressionReference);
 
     /**
      * @param expressionType
      * @param expressionReference
      * @param location
      */
-    protected void handleCodeBEGIN(long expressionType, long expressionReference, String location) {
-    }
+    protected abstract void handleCodeBEGIN(long expressionType, long expressionReference, String location);
 
     /**
      * @param token1
      */
-    protected void handleCodeRIGHT(long token1) {
-    }
+    protected abstract void handleCodeRIGHT(long token1);
 
     /**
      * @param token1
      */
-    protected void handleCodeLEFT(long token1) {
-    }
+    protected abstract void handleCodeLEFT(long token1);
 
     /**
      * 
      */
     protected abstract void endRunning();
     
+    /**
+     * 
+     * @return
+     */
     public abstract boolean emptyScratch();
 
 

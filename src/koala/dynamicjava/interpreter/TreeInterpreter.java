@@ -291,6 +291,7 @@ public class TreeInterpreter implements Interpreter {
 			e.printStackTrace();
 
 		} catch (Exception e) {
+            e.printStackTrace();
 			String code =
 				"" + Code.ERROR + Code.DELIM + "<H1>Exception</H1><BR>";
 
@@ -799,6 +800,8 @@ public class TreeInterpreter implements Interpreter {
 						+ "0"
 						+ Code.DELIM
 						+ counter
+                        + Code.DELIM
+                        + "this"
 						+ Code.DELIM
 						+ "0,0,0,0");
 
@@ -824,7 +827,9 @@ public class TreeInterpreter implements Interpreter {
 						+ Code.DELIM
 						+ numParameters
 						+ Code.DELIM
-						+ counter
+                        + counter
+                        + Code.DELIM
+						+ "this"
 						+ Code.DELIM
 						+ "0,0,0,0");
 				//TODO: Print out the parameters info 
@@ -1205,6 +1210,8 @@ public class TreeInterpreter implements Interpreter {
 						+ Code.P
 						+ Code.DELIM
 						+ auxCounter
+                        + Code.DELIM
+                        + result[i-1].toString()
 						+ Code.DELIM
 						+ result[i-1].getClass().getName());
 			}
