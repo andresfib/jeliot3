@@ -1382,7 +1382,7 @@ public class Interpreter {
                                 if (value.equals(Boolean.TRUE.toString())) {
                                     director.enterLoop("while", result, h);
                                 } else {
-                                    director.skipLoop("while", result, h);
+                                    director.skipLoop("while", result);
                                 }
 
                             } else {
@@ -1390,7 +1390,7 @@ public class Interpreter {
                                 if (value.equals(Boolean.TRUE.toString())) {
                                     director.continueLoop("while", result, h);
                                 } else {
-                                    director.exitLoop("while", result, h);
+                                    director.exitLoop("while", result);
                                 }
 
                             }
@@ -1416,7 +1416,7 @@ public class Interpreter {
                                 if (value.equals(Boolean.TRUE.toString())) {
                                     director.enterLoop("for", result, h);
                                 } else {
-                                    director.skipLoop("for", result, h);
+                                    director.skipLoop("for", result);
                                 }
 
                             } else {
@@ -1424,7 +1424,7 @@ public class Interpreter {
                                 if (value.equals(Boolean.TRUE.toString())) {
                                     director.continueLoop("for", result, h);
                                 } else {
-                                    director.exitLoop("for", result, h);
+                                    director.exitLoop("for", result);
                                 }
 
                             }
@@ -1454,7 +1454,7 @@ public class Interpreter {
                                 if (value.equals(Boolean.TRUE.toString())) {
                                     director.continueLoop("do - while", result, h);
                                 } else {
-                                    director.exitLoop("do - while", result, h);
+                                    director.exitLoop("do - while", result);
                                 }
 
                             }
