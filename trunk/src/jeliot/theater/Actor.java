@@ -536,9 +536,11 @@ public abstract class Actor implements Cloneable {
 			}
 
 			public void animate(double pulse) {
-                Tracker.writeToFile("Move", (int)x, (int)y, Actor.this.getWidth(), Actor.this.getHeight(), System.currentTimeMillis());
+                setLocation((int) x, (int) y);
                 
-				setLocation((int) x, (int) y);
+                Point p = getRootLocation();
+                Tracker.writeToFile("Move", p.x, p.y, Actor.this.getWidth(), Actor.this.getHeight(), System.currentTimeMillis());
+
 				x += pulse * step * cos;
 				y += pulse * step * sin;
 				l += pulse * step;
@@ -589,7 +591,8 @@ public abstract class Actor implements Cloneable {
 			}
 
 			public void animate(double pulse) {
-                Tracker.writeToFile("Appear", x, y, Actor.this.getWidth(), Actor.this.getHeight(), System.currentTimeMillis());
+                Point p = getRootLocation();
+                Tracker.writeToFile("Appear", p.x, p.y, Actor.this.getWidth(), Actor.this.getHeight(), System.currentTimeMillis());
             }
 
 			public void finish() {

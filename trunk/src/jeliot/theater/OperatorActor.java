@@ -75,7 +75,8 @@ public class OperatorActor extends Actor {
             }
 
             public void animate(double pulse) {
-                Tracker.writeToFile("Appear", loc.x, loc.y, OperatorActor.this.getWidth(), OperatorActor.this.getHeight(), System.currentTimeMillis());
+                Point p = getRootLocation();
+                Tracker.writeToFile("Appear", p.x, p.y, OperatorActor.this.getWidth(), OperatorActor.this.getHeight(), System.currentTimeMillis());
             }
 
             public void finish() {
