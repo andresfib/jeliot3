@@ -1,4 +1,4 @@
-package jeliot.theater;
+package jeliot.mcode;
 
 /**
  * Highlight represents a single highlight of the source code

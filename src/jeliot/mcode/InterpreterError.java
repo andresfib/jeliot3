@@ -1,6 +1,5 @@
 package jeliot.mcode;
 
-import jeliot.theater.*;
 
 /**
  * This class encapsulates all the errors related to the interpretation

@@ -25,8 +25,9 @@ import java.util.Properties;
 import jeliot.gui.CodePane;
 import jeliot.gui.JeliotWindow;
 import jeliot.launcher.Launcher;
-import jeliot.mcode.Interpreter;
 import jeliot.mcode.InterpreterError;
+import jeliot.mcode.MCodeInterpreter;
+import jeliot.mcode.TheaterMCodeInterpreter;
 import jeliot.theater.ActorFactory;
 import jeliot.theater.AnimationEngine;
 import jeliot.theater.Director;
@@ -69,7 +70,7 @@ public class Jeliot {
 	/**
 	 *
 	 */
-	Interpreter mCodeInterpreter = null;
+	MCodeInterpreter mCodeInterpreter = null;
 
 	/**
 	 *
@@ -286,7 +287,7 @@ public class Jeliot {
 		director.setActorFactory(af);
 
 		mCodeInterpreter =
-			new Interpreter(ecode, director, gui.getProgram(), pr);
+			new TheaterMCodeInterpreter(ecode, director, gui.getProgram(), pr);
 
 		director.setInterpreter(mCodeInterpreter);
 
