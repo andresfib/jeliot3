@@ -93,6 +93,12 @@ public class TheatreManager implements ComponentListener {
         actor.setLocation(loc);
     }
 
+    public void removeInstance(InstanceActor actor) {
+	    objects.removeElement(actor);
+	    theatre.removePassive(actor);
+	    theatre.repaint();
+    }
+    
     public void removeStage(Stage stage) {
         stages.removeElement(stage);
         theatre.removePassive(stage);
