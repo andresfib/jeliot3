@@ -22,7 +22,9 @@ import java.io.PipedReader;
 import java.io.PipedWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import jeliot.calltree.TreeDraw;
@@ -52,7 +54,15 @@ import jeliot.theater.ThreadController;
 public class Jeliot {
 
     //  DOC: Document!
-
+    
+    /**
+     * The resource bundle for gui package
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+            "jeliot.gui.resources.properties", Locale.getDefault());
+    /**
+     * 
+     */
     private Pattern p = Pattern.compile("import\\s+jeliot.io.*\\s*;");
     /**
      * 
@@ -310,7 +320,7 @@ public class Jeliot {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);
             MCodeUtilities.addRegisteredSecondaryMCodeConnections(new PrintWriter(pw));
-            mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(new BufferedReader(pr), callTree, gui.getProgram());
+            mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(new BufferedReader(pr), callTree, gui.getProgram(), this, gui.getTabNumber(bundle.getString("tab.title.call_tree")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -432,10 +442,23 @@ public class Jeliot {
         gui.runUntilDone();
     }
 
+    /**
+     * 
+     * @param program
+     */
     public void setProgram(String program) {
         gui.setProgram(program);
     }
 
+    /**
+     * 
+     * @param highlight
+     * @param tabNumber
+     */
+    public void highlightTabTitle(boolean highlight, int tabNumber) {
+        gui.highlightTabTitle(highlight, tabNumber);
+    }
+    
     /**
      * @param args
      * @throws IOException
@@ -459,6 +482,12 @@ public class Jeliot {
         });
     }
 
+    /**
+     * 
+     * @param args
+     * @return
+     * @throws IOException
+     */
     public static Jeliot start(String args[]) throws IOException {
 
         Properties prop = System.getProperties();
