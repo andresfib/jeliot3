@@ -5,17 +5,14 @@ import java.util.*;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         9.8.1999
-  * revised         18.9.1999
-  *
+  * @author Niko Myller
   */
 public class Stage extends Actor implements ActorContainer {
 
-    //Indicates how many variables is defined in this scope
+    /** Indicates how many variables is defined in this scope. */
     private int scopeVarCount = 0;
 
-    //Keeps track of scopes and the amount of variables in each scope.
+    /** Keeps track of scopes and the amount of variables in each scope. */
     private Stack scopes = new Stack();
 
     /** Variable actors in this stage. */
@@ -38,14 +35,29 @@ public class Stage extends Actor implements ActorContainer {
 
     /** Maximum possible number of variables on the stage at the moment. */
     private int varCount = 1;
+
+    /** How many variables actually is on the stages at the moment. */
     private int totalVarCount = 0;
 
+    /** Actors Width */
     private int actWidth;
+
+    /** Actors Height */
     private int actHeight;
 
+    /** Value is true if the variables of the method are supposed to be shown.
+      * Normally, the value is true only on some animations variables are not shown.
+      * For example during appearing and disappearing this variable is set to false.
+      */
     private boolean paintVars = true;
 
+    /** Actor that is going to be added to the method stage but is not yet bind on it.
+      * For example an actor that is animated at the moment and then added to the stage
+      * (e.g. variable appearing).
+      */
     private Actor reserved;
+
+    /** The location where reserved actor is reserved. */
     private Point resLoc;
 
     public Stage(String name) {
@@ -54,15 +66,14 @@ public class Stage extends Actor implements ActorContainer {
     }
 
     public VariableActor findVariableActor(String name) {
+
+        //Find the variable with the given name.
         for (int i = 0; i < variables.size(); i++) {
             VariableActor va = (VariableActor) variables.elementAt(i);
             if (name.equals(va.getName())) {
                 return va;
             }
         }
-
-        //here find the variable "this" and go through the
-        //variables inside that object if that is found.
 
         return null;
     }

@@ -89,8 +89,7 @@ public class AnimationEngine implements Controlled {
         boolean capture = !theatre.isCaptured();
         if (capture) {
             theatre.capture();
-        }
-        else {
+        } else {
             theatre.updateCapture();
         }
 

@@ -7,8 +7,7 @@ import jeliot.gui.*;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         19.8.1999
+  * @author Niko Myller
   */
 public class Scratch extends Actor implements ActorContainer {
 
