@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.Vector;
 /**
  * This is the <code>Theatre</code> component that is added in the left pane
@@ -26,6 +27,11 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 	 * Graphics object for captured image when the animation is going on.
 	 */
 	private Graphics csg;
+	
+	/**
+	 * 
+	 */
+	private Rectangle clipRect;
 	
 	/**
 	 * True, if the theatre is in active mode or captured. Active mode means
@@ -135,6 +141,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 	 * @see java.awt.Component#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g) {
+		clipRect = g.getClipBounds();
 		// If the component contains other components paint them first.
 		if (showComponents) {
 			super.paint(g);
@@ -394,5 +401,9 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		gr = i.getGraphics();
 		paint(gr);
 		return i;
+	}
+	
+	public Rectangle getClipRect() {
+		return clipRect;
 	}
 }

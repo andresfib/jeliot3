@@ -41,6 +41,13 @@ import org.syntax.jedit.tokenmarker.TokenMarker;
  */
 public class TextAreaPainter extends JComponent implements TabExpander
 {
+	
+	Rectangle clipRect;
+	
+	public Rectangle getClipRect() {
+		return clipRect;
+	}
+	
 	/**
 	 * Creates a new repaint manager. This should be not be called
 	 * directly.
@@ -380,7 +387,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			.getDocument().getProperty(
 			PlainDocument.tabSizeAttribute)).intValue();
 
-		Rectangle clipRect = gfx.getClipBounds();
+		clipRect = gfx.getClipBounds();
 
 		gfx.setColor(getBackground());
 		gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
