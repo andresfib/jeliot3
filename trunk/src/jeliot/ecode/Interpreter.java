@@ -180,13 +180,36 @@ public class Interpreter {
                             Value result = new Value(value, type);
                             Value val = (Value) values.remove(new Integer(expressionReference));
 
+                            int operator = ECodeUtilities.resolveUnOperator(token);
+
                             //ExpressionActor expr = director.getCurrentScratch().findActor(expressionCounter);
 
-                            int operator = ECodeUtilities.resolveUnOperator(token);
-                            // director.beginUnaryExpression(operator, lit, expressionCounter, highlight);
-                            // Value expressionValue = director.finishUnaryExpression(operator, expr, result, expressionCounter, h);
-                            Value expressionValue = director.animateUnaryExpression(operator, val, result, expressionCounter, h);
+                            //if (expr == null) {
+
+                                //expr = director.beginUnaryExpression(operator,
+                                //                                     val,
+                                //                                     expressionCounter,
+                                //                                     h);
+
+                            //}
+
+                            //Value expressionValue =
+                            //      director.finishUnaryExpression(operator,
+                            //                                     expr,
+                            //                                     result,
+                            //                                     expressionCounter,
+                            //                                     h);
+
+                            //This is not needed after the change.
+                            Value expressionValue =
+                                    director.animateUnaryExpression(operator,
+                                                                    val,
+                                                                    result,
+                                                                    expressionCounter,
+                                                                    h);
+
                             values.put(new Integer(expressionCounter), expressionValue);
+
 
                             //exprs.pop();
 
@@ -278,19 +301,74 @@ public class Interpreter {
 
                             ExpressionActor expr = director.getCurrentScratch().findActor(expressionCounter);
 
-                            Value expressionValue = director.finishBinaryExpression(result,
-                                // token is declared and assigned in the line 91.
-                                ECodeUtilities.resolveBinOperator(token),
-                                expr, h);
+                            /*
+                            * The expression is created because
+                            * its left side consists of literal or variable.
+                            */
+                            if (expr != null) {
 
-                            exprs.pop();
+                                /*
+                                * It is possible that the right hand side is not
+                                * yet set thus we need to check that to be sure.
+                                */
 
-                            values.put(new Integer(expressionCounter), expressionValue);
+                                Value right = (Value) values.remove(new Integer(rightExpressionReference));
+
+                                if (right != null) {
+                                    director.rightBinaryExpression(right, expr, h);
+                                }
+
+                                Value expressionValue = director.finishBinaryExpression(result,
+                                            // token is declared and assigned in the line 91.
+                                            ECodeUtilities.resolveBinOperator(token),
+                                            expr, h);
+
+                                exprs.pop();
+
+                                values.put(new Integer(expressionCounter), expressionValue);
+
+                            /*
+                            * The expression is not created before because
+                            * its left side consists of expression.
+                            */
+                            } else {
+
+                                Value left = (Value) values.remove(new Integer(leftExpressionReference));
+                                Value right = (Value) values.remove(new Integer(rightExpressionReference));
+
+                                expr = director.beginBinaryExpression(left,
+                                                ECodeUtilities.resolveBinOperator(token),
+                                                expressionCounter,
+                                                h);
+
+                                director.rightBinaryExpression(right, expr, h);
+
+
+                                Value expressionValue = director.finishBinaryExpression(result,
+                                            // token is declared and assigned in the line 91.
+                                            ECodeUtilities.resolveBinOperator(token),
+                                            expr, h);
+
+/*                              Value expressionValue = director.animateBinaryExpression(
+                                                        ECodeUtilities.resolveBinOperator(token),
+                                                        left,
+                                                        right,
+                                                        result,
+                                                        expressionCounter,
+                                                        h);
+*/
+                                exprs.pop();
+
+                                values.put(new Integer(expressionCounter), expressionValue);
+
+                            }
+
                             break;
                         }
 
                         //Variable Declaration
                         case Code.VD: {
+
                             String variableName = tokenizer.nextToken();
                             int initializerExpression = Integer.parseInt(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
@@ -365,6 +443,10 @@ public class Interpreter {
                                 expressionTokenizer.nextToken());
                             }
 
+                            Value val = new Value(value, type);
+                            ValueActor va = var.getActor().getValue();
+                            val.setActor(va);
+
                             /**
                             * Do different kind of things depending on
                             * in what expression the variable is used.
@@ -379,9 +461,6 @@ public class Interpreter {
 
                                 } else {
 
-                                    Value val = new Value(value, type);
-                                    ValueActor va = var.getActor().getValue();
-                                    val.setActor(va);
                                     values.put(new Integer(expressionCounter), val);
                                 }
 
@@ -391,10 +470,6 @@ public class Interpreter {
 
                                 int operator = ECodeUtilities.resolveBinOperator(oper);
 
-                                Value val = new Value(value, type);
-                                ValueActor va = var.getActor().getValue();
-                                val.setActor(va);
-
                                 if (command == Code.LEFT) {
 
                                     director.beginBinaryExpression(val, operator,
@@ -403,8 +478,16 @@ public class Interpreter {
                                 } else if (command == Code.RIGHT) {
 
                                     ExpressionActor ea = (ExpressionActor)
-                                    director.getCurrentScratch().findActor(expressionReference);
-                                    director.rightBinaryExpression(val, ea, highlight);
+                                        director.getCurrentScratch().findActor(expressionReference);
+                                    if (ea != null) {
+
+                                        director.rightBinaryExpression(val, ea, highlight);
+
+                                    } else {
+
+                                        values.put(new Integer(expressionCounter), val);
+                                    }
+
                                 }
 
                             //If oper is a unary operator we will show it
@@ -420,9 +503,6 @@ public class Interpreter {
 
                                 } else {
 
-                                    Value val = new Value(value, type);
-                                    ValueActor va = var.getActor().getValue();
-                                    val.setActor(va);
                                     int operator = ECodeUtilities.resolveUnOperator(oper);
                                     director.beginUnaryExpression(operator, val,
                                                     expressionReference, highlight);
@@ -431,9 +511,6 @@ public class Interpreter {
                             //If it is something else we will store it for later use.
                             } else {
 
-                                Value val = new Value(value, type);
-                                ValueActor va = var.getActor().getValue();
-                                val.setActor(va);
                                 values.put(new Integer(expressionCounter), val);
                                 //variables.put(new Integer(expressionCounter), var);
 
@@ -525,8 +602,12 @@ public class Interpreter {
                                 } else if (command == Code.RIGHT) {
 
                                     ExpressionActor ea = (ExpressionActor)
-                                    director.getCurrentScratch().findActor(expressionReference);
-                                    director.rightBinaryExpression(lit, ea, highlight);
+                                        director.getCurrentScratch().findActor(expressionReference);
+                                    if (ea != null) {
+                                        director.rightBinaryExpression(lit, ea, highlight);
+                                    } else {
+                                        values.put(new Integer(expressionCounter), lit);
+                                    }
 
                                 }
 
