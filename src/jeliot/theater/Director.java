@@ -228,7 +228,6 @@ public class Director {
     /**
      * @param h
      */
-    //Changed for Jeliot 3
     public void highlight(Highlight h) {
         //requestHistoryImage();
         this.hPrev = h;
@@ -301,13 +300,13 @@ public class Director {
     }
 
     public void updateCapture() {
-        requestHistoryImage();
         theatre.updateCapture();
+        requestHistoryImage();
     }
 
     public void release() {
-        requestHistoryImage();
         theatre.release();
+        requestHistoryImage();
     }
 
     /**

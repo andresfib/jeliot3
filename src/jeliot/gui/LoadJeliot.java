@@ -1,6 +1,8 @@
 package jeliot.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -9,6 +11,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JWindow;
 
 import jeliot.Jeliot;
@@ -48,15 +51,19 @@ public class LoadJeliot {
 				g.drawImage(image, 0, 0, this);
 			}
 		};
+		JLabel label = new JLabel(bundle2.getString("label.splash_screen"));
 		final JWindow window = new JWindow();
-		window.getContentPane().add(splash);
+		Container c = window.getContentPane();
+		c.setLayout(new BorderLayout());
+		c.add("Center", splash);
+		c.add("South", label);
 
 		// Set the window size to conform to the image and put the
 		// window the center of the screen
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screen = toolkit.getScreenSize();
-		int iw = image.getWidth(window);
-		int ih = image.getHeight(window);
+		int iw = Math.max(image.getWidth(window), label.getWidth());
+		int ih = image.getHeight(window) + label.getHeight();
 
 		window.setBounds((screen.width - iw) / 2, (screen.height - ih) / 2, iw, ih);
 		window.setVisible(true);

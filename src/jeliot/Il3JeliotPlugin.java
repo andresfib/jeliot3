@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2004 Roland Küstermann. All Rights Reserved.
- */
 package jeliot;
 
 import java.io.BufferedReader;
@@ -25,6 +22,7 @@ import jeliot.tracker.Tracker;
  * This is an extension of the application class of Jeliot 3 that
  * adds features for JavaWS and Url Loading
  *
+ * @author Roland Küstermann
  */
 public class Il3JeliotPlugin extends Jeliot {
 
