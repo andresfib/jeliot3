@@ -5,16 +5,22 @@ package jeliot;
 
 import java.io.*;
 import java.util.*;
-//import Lex.*;
-//import java_cup.runtime.*;
+
 import jeliot.theatre.*;
-//import jeliot.parser.*;
 import jeliot.gui.*;
 import jeliot.launcher.*;
+
+//import Lex.*;
+//import java_cup.runtime.*;
+//import jeliot.parser.*;
+
+
 /**
-* This is the application class of Jeliot 2000 that binds together the theatre, GUI and parser.
+* This is the application class of Jeliot 3
+* that binds together the theatre and GUI.
 *
 * @author Pekka Uronen
+* @modified Niko Myller
 */
 public class Jeliot implements Runnable {
 
@@ -22,7 +28,7 @@ public class Jeliot implements Runnable {
     BufferedReader ecode;
 
     /** The program that was last compiled. */
-//    private PCompilationUnit program;
+    //private PCompilationUnit program;
 
     /** The graphical user inteface. */
     private JeliotWindow gui;
@@ -64,9 +70,10 @@ public class Jeliot implements Runnable {
     public void run() {
         gui.setUp();
     }
-    public void createLauncher(Reader r){
-        launcher= new Launcher(r);
-    }
+
+    //public void createLauncher(Reader r){
+        //launcher= new Launcher(r);
+    //}
 
     /**
     * Creates the Lexer and Java11Parser.
@@ -77,58 +84,64 @@ public class Jeliot implements Runnable {
       */
     public void compile(Reader r, String methodCall) throws Exception {
         // create the lexer and the parser
-//         Lex.Lexer l = new Lex.Lexer(r, false);
-//         Java11Parser g = new Java11Parser(l);
+        //Lex.Lexer l = new Lex.Lexer(r, false);
+        //Java11Parser g = new Java11Parser(l);
 
         // parse the program
 
         // the try-catch structure is because of the braindead habit of
         // the lexer to report exceptions throwing ERRORS!
 
-//         try {
-//             Symbol symbol = g.parse();
-//             this.program = (PCompilationUnit)symbol.value;
-//         }
-//         catch (Error error) {
-//             String msg = error.getMessage();
-//             throw new SyntaxErrorException(msg, 0, 0);
-//         }
+        //try {
+            //Symbol symbol = g.parse();
+            //this.program = (PCompilationUnit)symbol.value;
+        //}
+        //catch (Error error) {
+            //String msg = error.getMessage();
+            //throw new SyntaxErrorException(msg, 0, 0);
+        //}
 
         // make a compile-time check
-
-//         NameSpace space = new NameSpace(program);
-//         TypeChecker check = new TypeChecker(space);
-//         program.acceptVisitor(check);
+        //NameSpace space = new NameSpace(program);
+        //TypeChecker check = new TypeChecker(space);
+        //program.acceptVisitor(check);
 
         ecode = null;
-        //launcher= new Launcher(r);
+
+        launcher= new Launcher(r);
         launcher.setMethodCall(methodCall);
         launcher.start();
+
         ecode = launcher.getReader();
-        codePane.installProgram(null, gui.getProgram());
+
+        codePane.installProgram(gui.getProgram());
     }
 
     /** Initializes the compiled program to be animated.
       */
     public void rewind() {
-        // clear the remnants of previous animation
+
+        //clear the remnants of previous animation
         theatre.cleanUp();
 
-        // create director and the other equipment
+        //create director and the other equipment
         ActorFactory af = new ActorFactory(iLoad);
-//      ScriptWriter sw = new ScriptWriter(engine, theatre, af);
+
+        //ScriptWriter sw = new ScriptWriter(engine, theatre, af);
+
         director = new Director(theatre, codePane, this, engine);
         director.setActorFactory(af);
 
-        // find the main method
-//         Enumeration enum = program.getClasses();
-//         PClass c = (PClass)enum.nextElement();
-//         PMethod m = c.getMainMethod();
-//         director.setMainMethod(m);
+        //find the main method
+        //Enumeration enum = program.getClasses();
+        //PClass c = (PClass)enum.nextElement();
+        //PMethod m = c.getMainMethod();
+        //director.setMainMethod(m);
 
         synchronized(launcher){
             launcher.notify();
         }
+
         director.setInterpreterSource(ecode, gui.getProgram());
 
         // create the main loop for visualization
@@ -145,6 +158,7 @@ public class Jeliot implements Runnable {
                 }
             }
         );
+
         engine.setController(controller);
         director.setController(controller);
     }
@@ -198,12 +212,13 @@ public class Jeliot implements Runnable {
     /** Called by gui to get a tree view of the program.
     *
     * @return   The treeview of the program. Used for the debugging.
-      */
-//     public ProgramView getTree() {
-//         return new ProgramView(program);
-//     }
+    */
+    //public ProgramView getTree() {
+        //return new ProgramView(program);
+    //}
 
     public static void main(String args[]) throws IOException {
+
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
 
