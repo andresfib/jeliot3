@@ -2479,7 +2479,7 @@ public class Director {
                 variableAct.setLight(Actor.NORMAL);
             }
         });
-
+        currentScratch.removeCrap();
     }
     
     

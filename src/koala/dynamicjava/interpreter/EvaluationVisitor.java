@@ -1709,11 +1709,11 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(ArrayAllocation node) {
 
-        long arrayAllocationCounter = counter++;
-
         // Visits the initializer if one
         if (node.getInitialization() != null) { return node.getInitialization().acceptVisitor(this); }
 
+        long arrayAllocationCounter = counter++;
+        
         // Evaluate the size expressions
         int[] dims = new int[node.getSizes().size()];
         // It will store here the references to the expressions used for every dimension
@@ -1769,7 +1769,7 @@ public class EvaluationVisitor extends VisitorObject {
         int dimensions = 1;
         String arrayHashCode = Integer.toHexString(result.hashCode());
         String dimensionsReferences = MCodeUtilities.arrayToString(dimExpressionReferences);
-        String componentType = node.getElementType().getProperty("type").toString();
+        String componentType = ((Class) node.getElementType().getProperty("type")).getName();
         
         MCodeUtilities.write("" + Code.AA + Code.DELIM + arrayAllocationCounter + Code.DELIM
                 + arrayHashCode + Code.DELIM
