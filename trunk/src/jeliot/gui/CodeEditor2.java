@@ -305,9 +305,10 @@ public class CodeEditor2 extends JComponent {
      */
     private JButton makeToolButton(String label, String iconName,
             ActionListener listener) {    	
-        ImageIcon icon = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+iconName));
-        		//bundle.getString("directory.images")              + iconName);//iLoad.getIconImage(iconName);
-        	//
+        ImageIcon icon = new ImageIcon(this.getClass().getClassLoader().getResource("directory.images") + iconName);
+        //Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+iconName));
+        //iLoad.getIconImage(iconName);
+        
         JButton b = new JButton(label, icon);
         b.setVerticalTextPosition(AbstractButton.BOTTOM);
         b.setHorizontalTextPosition(AbstractButton.CENTER);
