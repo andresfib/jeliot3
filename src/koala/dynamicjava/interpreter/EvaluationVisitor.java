@@ -1771,7 +1771,7 @@ public class EvaluationVisitor extends VisitorObject {
 		MCodeUtilities.superClassesStack.push(new Integer(0));
 		
 		//To handle "this" method calls we store the constructor name, and it parameters list
-		pushConstructorInfo(consName, paramTypes);
+		pushConstructorInfo(consName, types);
 		MCodeUtilities.previousClassStack.push(consName);
 		MCodeUtilities.previousClassParametersStack.push(types);
 		//Hack to avoid problems when jeliot is started with a constructor
