@@ -146,7 +146,7 @@ public class ObjectStage extends Actor implements ActorContainer {
 
     public void bind() {
         reserved.setLocation(resLoc);
-        variables.addElements(actor);
+        variables.addElement(reserved);
         reserved.setParent(this);
     }
 

@@ -210,6 +210,9 @@ public class ActorFactory {
                 if (ECodeUtilities.isPrimitive(ct)) {
                     int ti = ECodeUtilities.resolveType(ct);
                     refAct.setBackground(varColor[ti]);
+                } else {
+                    //This is not implemented properly
+                    refAct.setBackground(varColor[typeInfo]);
                 }
 
                 String resolvedType = ECodeUtilities.changeComponentTypeToPrintableForm(ct);
@@ -426,8 +429,8 @@ public class ActorFactory {
         actor.calculateSize();
         actor.setShadowImage(shadowImage);
         return actor;
-    }    
-    
+    }
+
 //     public SMIActor produceSMIActor(MethodPointer fmp, int n) {
 //         ReferenceType type = fmp.getDeclaringClass();
 //         String name = type.getSimpleName() + "." + fmp.getName();

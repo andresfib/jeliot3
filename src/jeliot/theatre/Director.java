@@ -22,8 +22,8 @@ import jeliot.ecode.*;
   */
 public class Director {
 
-	private boolean messagePause = false;
-	
+    private boolean messagePause = false;
+
     /** True, if the director should stop after executing one statement. */
     private boolean stepByStep;
 
@@ -144,14 +144,14 @@ public class Director {
     //Changed for Jeliot 3
     public void highlight(Highlight h) {
         if (!eCodeInterpreter.starting()) {
-	        
+
             if (stepByStep && !messagePause) {
                 jeliot.directorPaused();
                 controller.checkPoint();
             } else {
-	            messagePause = false;
+                messagePause = false;
             }
-            
+
             if (h != null) {
                 codePane.highlightStatement(h);
             }
@@ -1123,7 +1123,7 @@ public class Director {
     private void showMessage(MessageActor message, Point p) {
         theatre.capture();
         engine.showAnimation(message.appear(p));
- 	highlight(null);
+    highlight(null);
         messagePause = true;
         theatre.removeActor(message);
         theatre.release();
@@ -1153,7 +1153,7 @@ public class Director {
 
     public void continueLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage("Continuing the " + statementName + " loop in the next round."); //, check);
+        showMessage("Continuing the " + statementName + " loop."); //, check);
     }
 
     public void exitLoop(String statementName, Value check) {
@@ -1173,7 +1173,7 @@ public class Director {
 
     public void continueLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage("Continuing the " + statementName + " loop in the next round.");
+        showMessage("Continuing the " + statementName + " loop.");
     }
 
     public void branchThen(Value check, Highlight h) {
@@ -1192,7 +1192,7 @@ public class Director {
     }
 
     public void arrayCreation(int[] dims, Highlight h) {
-	    
+
         String dimensions = "";
         int n = dims.length;
         for (int i = 0; i < n; i++) {
@@ -1203,7 +1203,7 @@ public class Director {
             }
         }
 
-        highlight(h);	    
+        highlight(h);
         showMessage(new String[] {"A " + n +
         "-dimensional array is created.",
         "The dimensions of the array are: " + dimensions + "."});
@@ -1447,13 +1447,13 @@ public class Director {
         currentScratch.registerCrap(act);
         //theatre.addActor(act);
         ea.cut();
-		ea.reserve(act);
-		ea.bind(act);
-        
+        ea.reserve(act);
+        ea.bind(act);
+
         return val;
     }
 
-    
+
     public void showArrayCreation(ArrayInstance array, jeliot.lang.Reference ref,
                                   Value[] lenVal, int expressionCounter,
                                   Highlight h) {
@@ -1466,7 +1466,7 @@ public class Director {
         if (lenVal != null) {
              n = lenVal.length;
         }
-        
+
         ACActor actor = factory.produceACActor("new " + array.getComponentType(), n);
         ExpressionActor ea = currentScratch.getExpression(1, -1);
         currentScratch.registerCrap(actor);
@@ -1503,9 +1503,9 @@ public class Director {
         for (int i = 0; i < n; ++i) {
             actor.bind(argact[i]);
         }
-        
+
         highlight(h);
-        
+
         ArrayActor arrayAct = factory.produceArrayActor(array);
         array.setActor(arrayAct);
 
@@ -1527,10 +1527,10 @@ public class Director {
         expr.bind(refAct);
 
         theatre.release();
-        
+
         //Make the array creation disappear.
         ea.cut();
-        
+
 
     }
 
@@ -1588,9 +1588,9 @@ public class Director {
     }
 
     public void removeInstance(InstanceActor actor) {
-		manager.removeInstance(actor);
+        manager.removeInstance(actor);
     }
-    
+
 /*
     public void showArrayVariableAccess(VariableInArray var,
                                         Value indexVal) {

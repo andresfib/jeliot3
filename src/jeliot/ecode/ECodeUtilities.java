@@ -187,7 +187,12 @@ public class ECodeUtilities {
 
     public static String resolveComponentType(String type) {
         if (isArray(type)) {
-            return replace(type, "[", "");
+            String cType = replace(replace(type, "[", ""), ";", "");
+            if (cType.substring(0, 1).equals("L") {
+                return cType.substring(1);
+            } else {
+                return cType;
+            }
         } else {
             return null;
         }

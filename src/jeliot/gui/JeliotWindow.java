@@ -953,7 +953,7 @@ public class JeliotWindow {
                     if (classNameIndex > -1) {
                         String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main(new String[0]);";
                         mainMethodCall = replaceChar(mainMethodCall, '{', "");
-                        System.out.println(mainMethodCall);
+                        //System.out.println(mainMethodCall);
                         return mainMethodCall;
                     }
                 } else {
@@ -964,13 +964,14 @@ public class JeliotWindow {
                         if (classNameIndex > -1) {
                             String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main(new String[0]);";
                             mainMethodCall = replaceChar(mainMethodCall, '{', "");
-                            System.out.println(mainMethodCall);
+                            //System.out.println(mainMethodCall);
                             return mainMethodCall;
                         }
                     }
                 }
             }
-            methodIndex =  commentsRemoved.indexOf(mainMethod, methodIndex);
+            methodIndex =  commentsRemoved.indexOf(mainMethod, methodIndex + 1);
+            //System.out.println(methodIndex);
         }
 
         mainMethod="static void main(";
@@ -980,9 +981,12 @@ public class JeliotWindow {
         while (methodIndex > -1) {
             int parenthesisIndex = commentsRemoved.indexOf(")", methodIndex);
 
+            //System.out.println("" + (methodIndex + mainMethod.length()));
+            //System.out.println("" + parenthesisIndex);
+
             if (commentsRemoved.substring(methodIndex +
                                           mainMethod.length(),
-                                          parenthesisIndex - 1).length() != 0) {
+                                          parenthesisIndex).trim().length() == 0) {
 
                 String partProgramCode = commentsRemoved.substring(0, methodIndex);
                 int classIndex = partProgramCode.lastIndexOf(classString);
@@ -994,7 +998,7 @@ public class JeliotWindow {
                     if (classNameIndex > -1) {
                         String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main();";
                         mainMethodCall = replaceChar(mainMethodCall, '{', "");
-                        System.out.println(mainMethodCall);
+                        //System.out.println(mainMethodCall);
                         return mainMethodCall;
                     }
                 } else {
@@ -1005,14 +1009,15 @@ public class JeliotWindow {
                         if (classNameIndex > -1) {
                             String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main();";
                             mainMethodCall = replaceChar(mainMethodCall, '{', "");
-                            System.out.println(mainMethodCall);
+                            //System.out.println(mainMethodCall);
                             return mainMethodCall;
                         }
 
                     }
                 }
-                methodIndex = commentsRemoved.indexOf(mainMethod, methodIndex);
             }
+            methodIndex = commentsRemoved.indexOf(mainMethod, methodIndex + 1);
+            //System.out.println(methodIndex);
         }
         return null;
     }

@@ -110,23 +110,33 @@ public class ArrayActor extends InstanceActor {
         FontMetrics fm = getFontMetrics();
         this.valuew = valuew;
         this.valueh = valueh;
+        this.indexw = fm.stringWidth("[00]");
 
         if (dimensions.length == 1) {
-            this.indexw = fm.stringWidth("[00]");
-            int n = dimensions[0];
-            int w = 6 + valuew + indexw;
-            int h = 3 + (valueh + 1) * n;
-            setSize(w, h);
 
-            int x = 2;
-            int y = 2;
-            for (int i = 0; i < n; ++i) {
-                VariableInArrayActor viaa =
-                    (VariableInArrayActor) Array.get(variableActors, i);
-                viaa.setSize(valuew, valueh);
-                viaa.setLocation(x, y);
-                viaa.calculateSize(indexw, valuew, valueh);
-                y += 1 + valueh;
+            if (dimensions[0] == 0) {
+                int w = indexw + Math.max(fm.stringWidth("EMPTY"),
+                                     fm.stringWidth("ARRAY"));
+                int h = 10 + 2 * (fm.getHeight());
+                setSize(w, h);
+
+            } else {
+
+                int n = dimensions[0];
+                int w = 6 + valuew + indexw;
+                int h = 3 + (valueh + 1) * n;
+                setSize(w, h);
+
+                int x = 2;
+                int y = 2;
+                for (int i = 0; i < n; ++i) {
+                    VariableInArrayActor viaa =
+                        (VariableInArrayActor) Array.get(variableActors, i);
+                    viaa.setSize(valuew, valueh);
+                    viaa.setLocation(x, y);
+                    viaa.calculateSize(indexw, valuew, valueh);
+                    y += 1 + valueh;
+                }
             }
         } else if (dimensions.length == 2) {
             //Two dimensional array
@@ -139,44 +149,75 @@ public class ArrayActor extends InstanceActor {
     }
 
     public void paintActor(Graphics g) {
+
         int w = this.width;
         int h = this.height;
         int bw = 2;
+        FontMetrics fm = getFontMetrics();
+        int fonth = fm.getHeight();
+        int word1w = fm.stringWidth("EMPTY");
+        int word2w = fm.stringWidth("ARRAY");
 
         if (dimensions.length == 1) {
 
             int n = dimensions[0];
 
-            // draw cells
-            for (int i = 0; i < n; ++i) {
+            if (n == 0) {
 
-                VariableInArrayActor a =
-                     (VariableInArrayActor) Array.get(variableActors, i);
+                int word1x = (w - word1w) / 2;
+                int word2x = (w - word2w) / 2;
 
-                int x = a.getX();
-                int y = a.getY();
-                g.translate(x, y);
-                a.paintActor(g);
-                g.translate(-x, -y);
-            }
+                int word1y = h/2 - fonth/2;
+                int word2y = h/2 + fonth/2;
 
-            // draw border
-            g.setColor(borderColor);
-            g.drawRect(0, 0, w-1, h-1);
-            g.setColor(darkColor);
-            g.drawRect(1, 1, w-3, h-3);
+                // fill the area
+                g.setColor(lightColor);
+                g.fillRect(0, 0, w-1, h-1);
 
-            // draw vertical line
-            int vlinex = 2 + indexw;
-            g.drawLine(vlinex, bw, vlinex, h-2);
-            g.drawLine(vlinex+1, bw, vlinex+1, h-2);
+                // draw border
+                g.setColor(borderColor);
+                g.drawRect(0, 0, w-1, h-1);
+                g.setColor(darkColor);
+                g.drawRect(1, 1, w-3, h-3);
 
-            // draw horizontal lines
-            int x1 = bw, x2 = w - 2 * bw;
-            int yc = bw - 1;
-            for (int i = 1; i < n; ++i) {
-                yc += 1 + valueh;
-                g.drawLine(x1, yc, x2, yc);
+                g.setColor(fgcolor);
+                g.setFont(font);
+                g.drawString("EMPTY", word1x, word1y);
+                g.drawString("ARRAY", word2x, word2y);
+
+            } else {
+
+                // draw cells
+                for (int i = 0; i < n; ++i) {
+
+                    VariableInArrayActor a =
+                         (VariableInArrayActor) Array.get(variableActors, i);
+
+                    int x = a.getX();
+                    int y = a.getY();
+                    g.translate(x, y);
+                    a.paintActor(g);
+                    g.translate(-x, -y);
+                }
+
+                // draw border
+                g.setColor(borderColor);
+                g.drawRect(0, 0, w-1, h-1);
+                g.setColor(darkColor);
+                g.drawRect(1, 1, w-3, h-3);
+
+                // draw vertical line
+                int vlinex = 2 + indexw;
+                g.drawLine(vlinex, bw, vlinex, h-2);
+                g.drawLine(vlinex+1, bw, vlinex+1, h-2);
+
+                // draw horizontal lines
+                int x1 = bw, x2 = w - 2 * bw;
+                int yc = bw - 1;
+                for (int i = 1; i < n; ++i) {
+                    yc += 1 + valueh;
+                    g.drawLine(x1, yc, x2, yc);
+                }
             }
 
         } else if (dimensions.length == 2) {
