@@ -70,3 +70,5 @@ Ideas for next versions:
 * Combining Jeliot and JHave supporting self-assesment and explanations
 * Generating explanations from the intermediate code
 * Integrating Jeliot into BlueJ
+* Integrating Jeliot into Eclipse
+* Extensible Canvas for Theater (zooming possible)
