@@ -14,17 +14,17 @@ public class Actor implements Cloneable {
 
     static Component dummy = new Panel();
     static Image shadowImage;
-    
+
     private static Font defaultFont =
             new Font("SansSerif", Font.PLAIN, 12);
 
     public static final int HIGHLIGHT   =  -1;
     public static final int NORMAL      =   0;
     public static final int SHADED      =   1;
-    
+
     /** Actor's x-coordinate in parent. */
     private int x;
-    
+
     /** Actor's y-coordinate in parent. */
     private int y;
 
@@ -93,7 +93,7 @@ public class Actor implements Cloneable {
 
     /** Paints the shadow of the actor. Override this. */
     public void paintShadow(Graphics g) {
-        if (shadoww > 0 ) {
+        if (shadoww > 0 && shadowImage != null) {
             Shape clip = g.getClip();
             g.clipRect(shadoww, height, width, shadoww);
             for (int x = 0; x < width; x += 24) {
@@ -106,7 +106,7 @@ public class Actor implements Cloneable {
                 g.drawImage(shadowImage, width, y + shadoww, dummy);
             }
             g.setClip(clip);
-        }   
+        }
     }
 
     /** Paints the actor. Override this. */
@@ -150,7 +150,7 @@ public class Actor implements Cloneable {
     public void setLocation(Point loc) {
         setLocation(loc.x, loc.y);
     }
-    
+
     public Point getLocation() {
         return new Point(x, y);
     }
@@ -165,7 +165,7 @@ public class Actor implements Cloneable {
             y += p.y;
             parent = p.parent;
         }
-        return new Point(x, y);         
+        return new Point(x, y);
     }
 
     public int getX() {
@@ -232,7 +232,7 @@ public class Actor implements Cloneable {
     }
 
     public void calculateSize() { }
-    
+
     public Object clone() {
         try {
             return super.clone();
@@ -249,14 +249,14 @@ public class Actor implements Cloneable {
             Image backImage,
             int xx, int yy,
             int w, int h ) {
-                
+
         Dimension d = getSize();
         int biw = backImage.getWidth(dummy);
         int bih = backImage.getHeight(dummy);
         Shape clip = g.getClip();
         g.clipRect(xx, yy, w, h);
-            
-        if (biw >= 1 && bih >= 1) {    
+
+        if (biw >= 1 && bih >= 1) {
             for (int x = 0; x < w; x += biw) {
                 for (int y = 0; y < h; y += bih) {
                     g.drawImage(backImage, xx+x, yy+y, null);
@@ -265,12 +265,12 @@ public class Actor implements Cloneable {
         }
         g.setClip(clip);
     }
-    
+
     public Animation fly(Point p) {
         return fly(p, 4);
     }
-    
-    
+
+
     /** Makes the actor move to given point in given time (millis)
       * Returns a reference to the animation object. */
     public Animation fly(Point p, final int shadow) {
@@ -280,26 +280,26 @@ public class Actor implements Cloneable {
         final double starty = loc.y;
         final double destx = p.x;
         final double desty = p.y;
-        
+
         double xd = destx - startx;
         double yd = desty - starty;
-        
+
         final double len = Math.sqrt(xd*xd + yd*yd);
 
         final double angle = Math.atan2(yd, xd);
-      
+
         final double cos = Math.cos(angle);
         final double sin = Math.sin(angle);
 
-        return new Animation() {        
+        return new Animation() {
             double x = startx;
             double y = starty;
             double l = 0;
             double step;
-            
+
             double traceSpace = 20;
             double tracel = traceSpace;
-            
+
             public void init() {
                 this.addActor(Actor.this);
                 step = len / getDuration();
@@ -307,7 +307,7 @@ public class Actor implements Cloneable {
                 x -= shadow;
                 y -= shadow;
             }
-            
+
             public void animate(double pulse) {
                 setLocation( (int)x, (int)y );
                 x += pulse * step * cos;
@@ -333,10 +333,10 @@ public class Actor implements Cloneable {
                 setLocation( (int)destx, (int)desty);
                 //this.repaint();
             }
-            
+
             public void finalFinish() {
                 this.passivate(Actor.this);
-            }     
+            }
         };
     }
 
@@ -345,20 +345,20 @@ public class Actor implements Cloneable {
       * milliseconds.
       */
     public Animation appear(final Point loc) {
-        return new Animation() {        
+        return new Animation() {
             public void init() {
                 this.addActor(Actor.this);
                 setLocation(loc);
                 setLight(HIGHLIGHT);
                 repaint();
             }
-            
+
             public void animate(double pulse) { }
-            
+
             public void finish() {
                 setLight(NORMAL);
             }
-            
+
             public void finalFinish() {
                 this.passivate(Actor.this);
             }
@@ -369,6 +369,6 @@ public class Actor implements Cloneable {
         return (x >= 0 && x < width &&
                 y >= 0 && y < height) ?
                this : null;
-    }       
-        
+    }
+
 }

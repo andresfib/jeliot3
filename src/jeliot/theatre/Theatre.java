@@ -109,6 +109,7 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
     private void paintActors(Graphics g, Vector actors) {
         synchronized(actors) {
             int n = actors.size();
+//            System.out.println(n);
             for (int i = 0; i < n; ++i) {
                 Actor act = (Actor)actors.elementAt(i);
                 int x = act.getX();

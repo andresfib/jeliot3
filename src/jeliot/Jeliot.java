@@ -9,6 +9,7 @@ import java.util.*;
 import jeliot.theatre.*;
 import jeliot.gui.*;
 import jeliot.launcher.*;
+import jeliot.ecode.*;
 
 //import Lex.*;
 //import java_cup.runtime.*;
@@ -125,6 +126,8 @@ public class Jeliot implements Runnable {
         launcher= new Launcher(new BufferedReader(
                                new StringReader(sourceCode)));
 
+        launcher.compile();
+
         launcher.setMethodCall(methodCall);
         launcher.start();
 
@@ -150,12 +153,15 @@ public class Jeliot implements Runnable {
             }
 
             launcher= new Launcher(new BufferedReader(
-                               new StringReader(this.sourceCode)));
+                                   new StringReader(this.sourceCode)));
+
+            launcher.compile();
 
             launcher.setMethodCall(this.methodCall);
             launcher.start();
 
             ecode = launcher.getReader();
+
         }
 
     }
@@ -252,6 +258,10 @@ public class Jeliot implements Runnable {
       */
     public void output(String str) {
         gui.output(str);
+    }
+
+    public void showErrorMessage(InterpreterError e) {
+        gui.showErrorMessage(e);
     }
 
     /** Called by gui to get a tree view of the program.

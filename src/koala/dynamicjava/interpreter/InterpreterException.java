@@ -58,15 +58,25 @@ public class InterpreterException extends ThrownException {
      */
     public InterpreterException(ParseError e) {
         super(e);
-	if (e.getLine() != -1) {
-	    sourceInformation = new SourceInformation(e.getFilename(),
-						      e.getLine(),
-						      e.getColumn());
-	    message = "L"+e.getLine()+", C"+e.getColumn()+" ("+e.getFilename()+"):\n"+
-		e.getMessage();
-	} else {
-	    message = e.getMessage();
-	}
+
+        String m = e.getMessage();
+        int index = m.indexOf('\n');
+        while(index != -1) {
+            m = m.substring(0,index) + "<BR>" + m.substring(index+1,m.length());
+            index = m.indexOf('\t');
+        }
+
+        if (e.getLine() != -1) {
+            sourceInformation = new SourceInformation(e.getFilename(),
+                                                      e.getLine(),
+                                                      e.getColumn());
+
+            message = "<H2>Syntax Error</H2><P><B>Line "+e.getLine()+
+                      ", Column "+e.getColumn()+":</P><P>"+m+"</B></P>";
+
+        } else {
+            message = "<H2>Syntax Error</H2><P>" + m + "</P>";
+        }
     }
 
     /**
@@ -74,80 +84,101 @@ public class InterpreterException extends ThrownException {
      */
     public InterpreterException(ExecutionError e) {
         super(e);
-	Node n = e.getNode();
-	if (n != null && n.getFilename() != null) {
-	    sourceInformation = new SourceInformation(n.getFilename(),
-						      n.getBeginLine(),
-						      n.getBeginColumn());
-	    message = "L"+n.getBeginLine()+", C"+n.getBeginColumn()+
-		" ("+n.getFilename()+"):\n";
-	} else {
-	    message = "";
-	}
-	if (e instanceof CatchedExceptionError) {
-	    message += ((CatchedExceptionError)e).getException();
-	} else if (e instanceof ThrownException) {
-	    message += ((ThrownException)e).getException();
-	} else {
-	    message += e.getMessage();
-	}
+        Node n = e.getNode();
+        if (n != null && n.getFilename() != null) {
+            message = "<H2>Execution Error</H2><P><B>Line "+
+            n.getBeginLine()+", Column "+n.getBeginColumn()+
+            ":</B></P>";
+        } else {
+            message = "<H2>Execution Error</H2>";
+        }
+
+        if (e instanceof CatchedExceptionError) {
+
+            String m = ((CatchedExceptionError)e).getException().toString();
+            int index = m.indexOf('\n');
+            while(index != -1) {
+                m = m.substring(0,index) + "<BR>" + m.substring(index+1,m.length());
+                index = m.indexOf('\t');
+            }
+
+            message += "<P>"+m+"</P>";
+        } else if (e instanceof ThrownException) {
+            String m = ((ThrownException)e).getException().toString();
+            int index = m.indexOf('\n');
+            while(index != -1) {
+                m = m.substring(0,index) + "<BR>" + m.substring(index+1,m.length());
+                index = m.indexOf('\t');
+            }
+
+            message += "<P>"+m+"</P>";
+        } else {
+            String m = e.getMessage();
+            int index = m.indexOf('\n');
+            while(index != -1) {
+                m = m.substring(0,index) + "<BR>" + m.substring(index+1,m.length());
+                index = m.indexOf('\t');
+            }
+
+            message += "<P>"+m+"</P>";
+        }
     }
 
     public Throwable getError() {
         return thrown;
     }
- 
+
     /**
      * Returns the source code information if available, or null
      */
     public SourceInformation getSourceInformation() {
-	return sourceInformation;
-    }
-
-    /**
-     * To represent the source code informations
-     */
-    public static class SourceInformation {
-	// The fields
-	private String filename;
-	private int    line;
-	private int    column;
-
-	/**
-	 * Creates a source information
-	 */
-	public SourceInformation(String filename, int line, int column) {
-	    this.filename = filename;
-	    this.line     = line;
-	    this.column   = column;
-	}
-
-	/**
-	 * Returns the filename
-	 */
-	public String getFilename() {
-	    return filename;
-	}
-
-	/**
-	 * Returns the line where the error occurs
-	 */
-	public int getLine() {
-	    return line;
-	}
-
-	/**
-	 * Returns the column where the error occurs
-	 */
-	public int getColumn() {
-	    return column;
-	}
+        return sourceInformation;
     }
 
     /**
      * Returns the detailed message
      */
     public String getMessage() {
-	return message;
+        return message;
+    }
+
+    /**
+     * To represent the source code informations
+     */
+    public static class SourceInformation {
+        // The fields
+        private String filename;
+        private int    line;
+        private int    column;
+
+        /**
+        * Creates a source information
+        */
+        public SourceInformation(String filename, int line, int column) {
+            this.filename = filename;
+            this.line     = line;
+            this.column   = column;
+        }
+
+        /**
+        * Returns the filename
+        */
+        public String getFilename() {
+            return filename;
+        }
+
+        /**
+        * Returns the line where the error occurs
+        */
+        public int getLine() {
+            return line;
+        }
+
+        /**
+         * Returns the column where the error occurs
+         */
+        public int getColumn() {
+            return column;
+        }
     }
 }

@@ -90,7 +90,9 @@ public class Code {
     public static final int DO=43;          // DO-While statement
     public static final int OUTPUT=44;      // Output statement
 
-    //Highest code is now 52
+    public static final int ERROR=53;       // Error statement
+
+    //Highest code is now 53
 
     // private static PrintWriter writer=Launcher.getWriter();
     private static PrintWriter writer=null;
