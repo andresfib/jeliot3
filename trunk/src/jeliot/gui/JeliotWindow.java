@@ -316,10 +316,10 @@ public class JeliotWindow {
             File f = new File(udir);
             prop.put("user.dir", f.toString());
 
-            if (Jeliot.isSystemExit()) {
-                System.exit(0);
-            } else {
+            if (Jeliot.isnoSystemExit()) {
                 frame.dispose();
+            } else {
+                System.exit(0);
             }
         }
     };
@@ -459,10 +459,10 @@ public class JeliotWindow {
                 File f = new File(udir);
                 prop.put("user.dir", f.toString());
 
-                if (Jeliot.isSystemExit()) {
-                    System.exit(0);
-                } else {
+                if (Jeliot.isnoSystemExit()) {
                     frame.dispose();
+                } else {
+                    System.exit(0);
                 }
             }
         });
