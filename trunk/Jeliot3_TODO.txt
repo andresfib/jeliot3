@@ -8,6 +8,7 @@
 * dependencies between classes should not affect the compilation (done partially, circular dependencies are not handled correctly.)
 * Problem handling static variables when DynamicJava thinks it is an object field access and with ++ operation. (done and added a expression stack handling expressions separately in each scope -> testing needed)
 * Problems with memory when history view has a large images in store.
+* Problems with threads. The previous threads are left running when new threads are created. They should be cleaned before creating new ones.
 
 ----- JELIOT 3 TODO-LIST for next version 4.X:------
 
