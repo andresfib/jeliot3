@@ -5,7 +5,7 @@ import jeliot.theatre.*;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.*;
-
+import koala.dynamicjava.interpreter.EvaluationVisitor;
 
 public class ECodeUtilities {
 
@@ -375,8 +375,12 @@ public class ECodeUtilities {
     }
 
     public static void write(String str){
-        writer.println(str); // connected to jeliot
-        // System.out.println(str);// Output to stdout
+        if ( !EvaluationVisitor.isSetPreparing() ) {
+
+            // writer.println(str); // connected to jeliot
+            
+            System.out.println(str);// Output to stdout ; debugging only
+        }
     }
 
     public static Object readInt(){
@@ -419,5 +423,15 @@ public class ECodeUtilities {
             return "";
         }
     }
-
+    public static String arrayToString(Object[] array){
+    //Displays the array as an string
+        String result="";
+        for (int i=0;i<array.length;i++) {
+            result+=array[i];
+            if (i<array.length-1)
+                result+=Code.LOC_DELIM;
+        }
+        return result;
+    }
+    
 }

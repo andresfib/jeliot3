@@ -72,7 +72,7 @@ public class Code {
     // Statements, control structures and others
     public static final int VD=26;          // Variable Declaration
     public static final int QN=27;          // Qualified Name
-    public static final int L=28;           // Literal
+    public static final int L=28;           // Literal    
     public static final int SMC=29;         // Static Method Call
     public static final int P=30;           // Parameter
     public static final int PARAMETERS=31;  // Parameters list
@@ -90,9 +90,14 @@ public class Code {
     public static final int DO=43;          // DO-While statement
     public static final int OUTPUT=44;      // Output statement
     public static final int INPUT=54;       // Input statement
-    public static final int INPUTTED=55;       // Input statement
+    public static final int INPUTTED=55;    // Input statement
     public static final int ERROR=53;       // Error statement
-
+    
+    // Arrays and objects handling
+    public static final int AA=56;          // Array allocation
+    public static final int AAC=57;          // Array access
+    
+    //Last int used -> 57
 }
 
 //package jeliot.ecode;
