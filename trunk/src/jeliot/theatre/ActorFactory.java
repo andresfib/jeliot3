@@ -131,7 +131,7 @@ public class ActorFactory {
             m + fm.stringWidth("xm"),
             m + fm.stringWidth("0.00E10"),
             m + fm.stringWidth("0.0000E10"),
-            m + fm.stringWidth("Normal string.")
+            m + fm.stringWidth("Normal string")
         };
     }
 
@@ -704,7 +704,9 @@ public class ActorFactory {
     ObjectStage produceObjectStage(ObjectFrame m) {
         ObjectStage stage = new ObjectStage("Object of the class " + m.getObjectName(), m.getVarCount());
         stage.setFont(stageFont);
-        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] + 20,
+
+        //The width of the object stage is not correct but we have not found any better.
+        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] - 20,
                             valueHeight + 8 +
                             variableInsets.top +
                             variableInsets.bottom);
