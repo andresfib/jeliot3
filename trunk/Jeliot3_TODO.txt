@@ -1,7 +1,9 @@
------ JELIOT 3.4.X bugs: ------
+----- JELIOT 3.4.X bugs and features: ------
 * null values caused crashing in constructors and methods (done)
 * maximize window when starting (done)
 * mnemonic for file menu (done)
+* configure Jeliot through properties file (done)
+* Replace '\t' characters with spaces when saving (done)
 
 ----- JELIOT 3 TODO-LIST for next version 4.X:------
 
@@ -10,17 +12,17 @@ Documentation:
 * The guide to install and use Jeliot in Finnish / Suomenkieliset asennus- ja käyttöohjeet.
 
 Jeliot features:
-* Replace '\t' characters with spaces when saving 
 * Interaction mode (like BlueJ's object bench)
 
 Language support:
 * Support for Java 1.5.0 with the DrJava/DynamicJava.
+* Support for wrapper classes
+* Constructor calls highlighted correctly
+* super method calls go in the correct order
 * 2 -dimensional arrays
 * Super field access
 * Instance garbage collection
-* Wrapper classes
-* super method calls go in the correct order
-* Constructor calls highlighted correctly
+* Support for inner classes
 
 Graphical:
 * Returned value should not stay in the return "bubble" after it has been used or should it? 
