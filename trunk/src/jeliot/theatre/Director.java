@@ -587,14 +587,20 @@ public class Director {
             Value second,
             Value result, int expressionCounter, Highlight h) {
 
+        highlight(h);
+
         // prepare the actors
         Actor firstAct = first.getActor();
+
         Actor secondAct = (second == null) ?
                 factory.produceEllipsis() :
                 second.getActor();
+
         Actor resultAct = factory.produceValueActor(result);
+
         OperatorActor operatorAct =
                 factory.produceBinOpActor(operator);
+
         OperatorActor eqAct = factory.produceBinOpResActor(operator);
 
         ExpressionActor expr = currentScratch.getExpression(5, expressionCounter);
@@ -613,6 +619,7 @@ public class Director {
                 firstAct.fly(firstLoc),
                 secondAct.fly(secondLoc)
             });
+
         expr.bind(firstAct);
         expr.bind(secondAct);
 
@@ -759,29 +766,38 @@ public class Director {
 
         highlight(h);
 
-        VariableActor varact = var.getActor();
+        VariableActor varAct = var.getActor();
         //Value value = var.getValue();
-        ValueActor resact = factory.produceValueActor(result);
-        ValueActor valact = var.getActor().getValue();
+        ValueActor resAct = factory.produceValueActor(result);
+        ValueActor valAct = var.getActor().getValue();
         //ValueActor valact = factory.produceValueActor(value);
-        Actor opact = factory.produceUnaOpActor(operator);
+        Actor opAct = factory.produceUnaOpActor(operator);
 
-        Point resLoc = varact.reserve(valact);
-        Point opLoc = varact.getRootLocation();
-        opLoc.translate(varact.getWidth() + 2, 8);
+        Point resLoc = varAct.reserve(valAct);
+        Point opLoc = varAct.getRootLocation();
+        opLoc.translate(varAct.getWidth() + 2, 8);
 
         theatre.capture();
 
-        engine.showAnimation(opact.appear(opLoc));
-        engine.showAnimation(resact.appear(resLoc));
-        varact.bind();
+        engine.showAnimation(opAct.appear(opLoc));
+        engine.showAnimation(resAct.appear(resLoc));
+        varAct.bind();
 
-	//value.setActor(valact);
-        result.setActor(resact);
-	var.assign(result);
+        //value.setActor(valact);
+        result.setActor(resAct);
 
-        theatre.removeActor(opact);
-        currentScratch.registerCrap(resact);
+        //Jeliot 3
+        Value val = (Value) result.clone();
+        ValueActor rAct = factory.produceValueActor(val);
+        rAct.setLight(Actor.NORMAL);
+        rAct.setLocation(resAct.getRootLocation());
+        val.setActor(rAct);
+        //var.assign(val);
+        var.getActor().setValue(rAct);
+
+        theatre.removeActor(resAct);
+        theatre.removeActor(opAct);
+        currentScratch.registerCrap(rAct);
 
         theatre.release();
     }
@@ -794,7 +810,7 @@ public class Director {
         VariableActor varact = var.getActor();
         //Value value = var.getValue();
         ValueActor valact = var.getActor().getValue();
-	//ValueActor valact = factory.produceValueActor(value);
+        //ValueActor valact = factory.produceValueActor(value);
         ValueActor resact = (resval == null) ?
                 null :
                 factory.produceValueActor(resval);
@@ -812,6 +828,7 @@ public class Director {
             engine.showAnimation(resact.appear(resLoc));
             engine.showAnimation(resact.fly(movLoc));
         }
+
         engine.showAnimation(opact.appear(opLoc));
         engine.showAnimation(valact.appear(resLoc));
         varact.bind();
@@ -819,7 +836,8 @@ public class Director {
         //value.setActor(valact);
         if (resval != null) {
             resval.setActor(resact);
-	    var.assign(resval); //jeliot 3
+            //var.assign(resval); //jeliot 3
+            var.getActor().setValue(resact);
             currentScratch.registerCrap(resact);
         }
 
