@@ -502,7 +502,7 @@ public class EvaluationVisitor extends VisitorObject {
                        l.toString()+
                        Code.DELIM+auxcounter+
                        Code.DELIM+o.toString()+Code.DELIM+
-                       NodeProperties.getType(node.getExpression())+
+                       NodeProperties.getType(node.getExpression()).getName()+
                        Code.DELIM+locationToString(node));//+Code.DELIM+m.getName());
 
             throw new ReturnException("return.statement",
@@ -693,10 +693,11 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(ObjectFieldAccess node) {
         Class c = NodeProperties.getType(node.getExpression());
-
+        
+        long objectCounter=counter;
         // Evaluate the object
         Object obj  = node.getExpression().acceptVisitor(this);
-
+        Object value;
         if (!c.isArray()) {
             Field f = (Field)node.getProperty(NodeProperties.FIELD);
             // Relax the protection for members
@@ -704,10 +705,17 @@ public class EvaluationVisitor extends VisitorObject {
                 f.setAccessible(true);
             }
             try {
-                return f.get(obj);
+                value = f.get(obj);
             } catch (Exception e) {
                 throw new CatchedExceptionError(e, node);
             }
+
+            ECodeUtilities.write(""+Code.OFA+Code.DELIM+(counter++)+Code.DELIM+
+                                 f.getName()+Code.DELIM+objectCounter+Code.DELIM+
+                                 value.toString()+Code.DELIM+f.getType().getName()+Code.DELIM+
+                                 locationToString(node));
+
+            return value;
         } else {
             // If the object is an array, the field must be 'length'.
             // This field is not a normal field and it is the only
@@ -1105,13 +1113,47 @@ public class EvaluationVisitor extends VisitorObject {
         List        larg = node.getArguments();
         Object[]    args = Constants.EMPTY_OBJECT_ARRAY;
 
+        Constructor cons = (Constructor)node.getProperty(NodeProperties.CONSTRUCTOR);
+        String consName = cons.getName();
+        String declaringClass = cons.getDeclaringClass().getName();
+        // Fill the arguments
+
+       if (larg != null) {
+
+           ECodeUtilities.write("" + Code.SA+Code.DELIM+
+                                consName+Code.DELIM+
+                                declaringClass+Code.DELIM+
+                                larg.size()+Code.DELIM+
+                                locationToString(node));
+
+        } else {
+
+            ECodeUtilities.write("" + Code.SA+Code.DELIM+
+                                 consName+Code.DELIM+
+                                 declaringClass+Code.DELIM+
+                                 "0"+Code.DELIM+
+                                 locationToString(node));//0 arguments
+        }
+
         // Fill the arguments
         if (larg != null) {
             args = new Object[larg.size()];
             Iterator it = larg.iterator();
             int      i  = 0;
+            long     auxcounter; //Records the previous counter value
+            Object   auxarg; //Stores the current argument
+
             while (it.hasNext()) {
-                args[i++] = ((Expression)it.next()).acceptVisitor(this);
+
+                ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.P+Code.DELIM+counter+
+                           Code.DELIM+locationToString(node));//arguments construction
+                auxcounter=counter;
+                args[i] = ((Expression)it.next()).acceptVisitor(this);
+
+                ECodeUtilities.write("" + Code.P+Code.DELIM+auxcounter);
+                i++;
+
+                //                args[i++] = ((Expression)it.next()).acceptVisitor(this);
             }
         }
 

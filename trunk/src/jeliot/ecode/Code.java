@@ -103,7 +103,9 @@ public class Code {
     public static final int METHOD=61;
     public static final int FIELD=62;
 
-    //Last int used -> 62
+    public static final int SA=63;          // Simplea class allocation
+    public static final int OFA=64;         // Object field access
+    //Last int used -> 63
 }
 
 //package jeliot.ecode;
