@@ -5,13 +5,23 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
+ * ReferenceVariableActor represents graphically the
+ * variables of the reference type. It can bind
+ * ReferenceActor instances and render them.  
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
+ * @see jeliot.lang.Variable
+ * @see jeliot.theater.VariableActor
+ * @see jeliot.theater.VariableInArrayActor
+ * @see jeliot.theater.MethodStage
+ * @see jeliot.theater.ObjectStage
  */
 public class ReferenceVariableActor extends VariableActor {
 
 //  DOC: Document!
+
     /**
 	 *
 	 */

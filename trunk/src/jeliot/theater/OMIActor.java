@@ -7,9 +7,13 @@ import java.awt.Point;
 /**
  * OMIActor represents graphically the object method invocation. The
  * actor shows the object reference, the method name and the parameters
- * in a similar way as Java syntax. 
- * 
+ * in a similar way as Java syntax just replaces the variable references with
+ * their actual values.
+ *  
  * @author Niko Myller
+ * 
+ * @see jeliot.theater.SMIActor
+ * @see jeliot.theater.ObjectStage
  */
 public class OMIActor extends Actor implements ActorContainer{
 

@@ -11,6 +11,8 @@ import java.awt.Image;
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
+ * @see jeliot.lang.Value
  */
 public class ImageValueActor extends ValueActor {
 

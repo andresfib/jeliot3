@@ -5,6 +5,10 @@ import java.awt.Point;
 import java.util.Vector;
 
 /**
+ * Scratch controls the expression evaluation area. It
+ * allocates the space for each <code>ExpressionEvaluationActor</code>
+ * and possible other <code>Actor</code>s that area there
+ * temporarily.
  * 
  * @author Pekka Uronen
  * @author Niko Myller

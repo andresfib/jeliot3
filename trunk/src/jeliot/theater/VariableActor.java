@@ -7,9 +7,18 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * <code>VariableActor</code> represent graphically the language construct
+ * <code>Variable</code> for primitive data types and Strings.
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ * 
+ * @see jeliot.lang.Variable
+ * @see jeliot.theater.ReferenceVariableActor
+ * @see jeliot.theater.VariableInArrayActor
+ * @see jeliot.theater.MethodStage
+ * @see jeliot.theater.ObjectStage
+ */
 public class VariableActor extends Actor implements ActorContainer {
 
     /**

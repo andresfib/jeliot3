@@ -5,9 +5,15 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 /**
+ * <code>VariableInArrayActor</code> represent graphically the language construct
+ * <code>VariableInArray</code> for primitive data types and Strings.
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
+ * @see jeliot.lang.VariableInArray
+ * @see jeliot.theater.VariableActor
+ * @see jeliot.theater.ArrayActor
  */
 public class VariableInArrayActor extends VariableActor {
 
