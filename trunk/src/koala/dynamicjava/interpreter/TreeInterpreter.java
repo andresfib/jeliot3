@@ -1081,7 +1081,7 @@ public class TreeInterpreter implements Interpreter {
         while (ite.hasNext()) {
             current = (FormalParameter) ite.next();
             argnames.add(current.getName());
-            types[k] = NodeProperties.resolveClass(current.getType()); 
+            types[k] = NodeProperties.resolveClass(current.getType(), this.classLoader); 
             k++;
         }
         //Jeliot 3 addition ends

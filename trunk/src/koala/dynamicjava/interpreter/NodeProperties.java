@@ -174,21 +174,36 @@ public class NodeProperties {
      * 
      * Jeliot 3
      */
-    public static Class resolveClass(Type type) {
+    public static Class resolveClass(Type type, ClassLoader cl) {
         if (type instanceof PrimitiveType) {
             return ((PrimitiveType) type).getValue();
         } else if (type instanceof ArrayType) {
-            Class componentType = NodeProperties
-                    .resolveClass(((ArrayType) type).getElementType());
+            Class componentType = NodeProperties.resolveClass(
+                    ((ArrayType) type).getElementType(), cl);
             return Array.newInstance(componentType, 1).getClass();
         } else if (type instanceof ReferenceType) {
             try {
-                return Class.forName(((ReferenceType) type).getRepresentation());
+                return Class
+                        .forName(((ReferenceType) type).getRepresentation());
             } catch (ClassNotFoundException e) {
                 try {
-                    return Class.forName("java.lang." + ((ReferenceType) type).getRepresentation());
-                } catch (ClassNotFoundException e1) {
-                    DebugUtil.handleThrowable(e1);
+                    return cl.loadClass(((ReferenceType) type)
+                            .getRepresentation());
+                } catch (ClassNotFoundException e3) {
+                    try {
+                        return Class.forName(((ReferenceType) type)
+                                .getRepresentation(), true, Thread
+                                .currentThread().getContextClassLoader());
+                    } catch (ClassNotFoundException e2) {
+
+                        try {
+                            return Class.forName("java.lang."
+                                    + ((ReferenceType) type)
+                                            .getRepresentation());
+                        } catch (ClassNotFoundException e1) {
+                            DebugUtil.handleThrowable(e1);
+                        }
+                    }
                 }
             }
         }
