@@ -1,22 +1,25 @@
-/**
- * Jeliot Extension for blueJ
- * 
- * @author Antoine Pineau 
- * @version 1.1
- */
-
 import bluej.extensions.*;
 import bluej.extensions.event.*;
 import jeliot.*;
 
-import java.net.URL;
 import javax.swing.*;
+import java.net.URL;
 import java.awt.event.*;
-
 import java.io.*;
-import java.lang.*;
+import java.lang.String;
 
 
+
+
+/**
+ * 
+ * @author apineau
+ *
+ * Jeliot extension for BlueJ
+ * 
+ * 
+ * Main Class
+ */
 public class JeliotExtension extends Extension implements PackageListener {
     /**
      * When this method is called, the extension may start its work.
@@ -55,7 +58,7 @@ public class JeliotExtension extends Extension implements PackageListener {
      * version number of the extension
      */
     public String  getVersion () { 
-        return ("2004.07");  
+        return ("version 1.0");  
     }
 
     /**
@@ -89,14 +92,14 @@ public class JeliotExtension extends Extension implements PackageListener {
 }
 
 /* This class binds different menus to different parts of BlueJ
- * It is important to remembar the rules you have to follow.
+ * It is important to remember the rules you have to follow.
  * - getToolsMenuItem can be called at any time.
  * - It must generate a new JMenuItem every time.
  * - No reference to the JMenuItem should be stored in the extension.
  * - You must be quick in generating your menu.
  */
 class MenuBuilder extends MenuGenerator {
-    private ToolsAction aToolsAction;//object that instantiate the jeliot window
+    private ToolsAction aToolsAction;//object that instantiates the jeliot window
     private BPackage curPackage;//wrapper of the current blueJ package
     private BClass curClass;//wrapper of the current bluej class
     private BObject curObject;//wrapper of the current bluej object
@@ -133,7 +136,9 @@ class MenuBuilder extends MenuGenerator {
                 System.out.println("  Current Class=" + curClass);
             if (curObject != null)
                 System.out.println("  Current Object=" + curObject);
-        } catch (Exception exc) { }
+        } catch (Exception exc) { 
+        	System.out.println("JeliotExtension:PrintCurrentStatusError");
+			}
     }
 
     /**
@@ -141,118 +146,118 @@ class MenuBuilder extends MenuGenerator {
      */
     class ToolsAction extends AbstractAction {
     	private BlueJ bluej;//proxy object
+    	private String source;
     	
-
-	/**
-	 * Constructor, adds a "menuname" entry to the tool menu
-	 */
-        public ToolsAction(String menuName, BlueJ bluej) {
-            this.bluej = bluej;
-	    putValue(AbstractAction.NAME, menuName);
-        }
-
-	/**
-	 *action performed on click on the menu
-	 *
-	 */
-        public void actionPerformed(ActionEvent anEvent) {
-            printCurrentStatus("Jeliot click:");
-            try {
-            	generateJeliotFile();
-            	printCurrentStatus("Jeliot call");
-            	Jeliot.start(new String[] {"test programCode", "true"});
-            	printCurrentStatus("Jeliot launched");
-            } catch (Exception e) { 
-            	printCurrentStatus("error while launching jeliot");
-	    }
-        }
-        
-        /**
-	 * get the name of the current project
-	 */
-        public void generateJeliotFile() {
-	    //String projectName = new String();
-	    String path = new String();
-	    BPackage currentPackage;
-	    BClass currentClass;
-	    BPackage[] packages;
-	    BClass[] classes;
-	    int sizePackages;
-	    int sizeClasses;
-	    int i = 0;
-	    int j = 0;
-	    File inputFile;
-	    File outputFile;  
-	    FileInputStream in;
-	    FileOutputStream out;
-	    
-	    //we copy the content of each java file of the project  in a file named 
-	    //jeliot.txt, using FileReader and FileWriter
-	    
-	    BPackage bpackage = bluej.getCurrentPackage();
-	    if (bpackage != null) { // there may be no package open at all
-		try {
-		    
-		    path = bpackage.getDir().getPath();
-		    printCurrentStatus(path);
-		    
-		    //we create the jeliot file in which we will put all the classes
-		    outputFile = new File(path + "\\jeliot.txt");
-		    
-		    //we delete the file if it already exists
-		    if (outputFile.exists()) outputFile.delete();
-		    
-		    //projectName = bpackage.getProject().getName();
-		    packages = bpackage.getProject().getPackages();
-		    sizePackages = packages.length;
-		    while (i < sizePackages) {//for each package in the project 
-			try {
-			    currentPackage = packages[i];
-			    classes = currentPackage.getClasses();
-			    sizeClasses = classes.length;
-			    
-			    //for all classes in each package
-			    while (j < sizeClasses) {
-				
-				printCurrentStatus(classes[j].getJavaFile().getPath());
-				
-				in = new FileInputStream(classes[j].getJavaFile().getPath());
-				out = new FileOutputStream(outputFile, true);							
-				
-				//we copy the content from the input file(.java) to the ouput file (jeliot.txt)
-				int c;
-				while ((c = in.read()) != -1)
-				    out.write(c);
-				//we close the file reader and the file writer
-				in.close();
-				out.close();		            
-				
-				// and we go to the next file
-				j++;
-			    }
-			    //we check the next package
-			    i++;
-			    
-			}catch (PackageNotFoundException pnfe) {
-			    printCurrentStatus("jeliot extension error2: no name for the project");
-			}    				
-		    }  			     			
-		} catch(ProjectNotOpenException e) {
-		    printCurrentStatus("jeliot extension error3: The project has been unexpectedly closed!");
-		}catch (IOException e){
-		    printCurrentStatus("jeliot extension error4: error while creating jeliot.txt file");	
-		}catch (PackageNotFoundException e){
-		    printCurrentStatus("jeliot extension error5: package not found");
-		}
-	    }
-        }
+    	/**
+    	 * Constructor, adds a "menuname" entry to the tool menu
+    	 */
+    	public ToolsAction(String menuName, BlueJ bluej) {
+    		this.bluej = bluej;
+    		putValue(AbstractAction.NAME, menuName);
+    	}
+    	
+    	/**
+    	 *action performed on click on the menu
+    	 *
+    	 */
+    	public void actionPerformed(ActionEvent anEvent) {
+    		try {
+    			Jeliot.start(new String[] {generateJeliotString(), "true"});//
+    			printCurrentStatus("Jeliot launched");//print in the debug file
+    		} catch (Exception e) { 
+    			printCurrentStatus("error while launching jeliot");
+    		}
+    	}
+    	
+    	/**
+    	 * get the name of the current project
+    	 */
+    	public String generateJeliotString() {
+    		//String projectName = new String();
+    		source = new String();
+    		String path = new String();
+    		BPackage currentPackage;
+    		BClass currentClass;
+    		BPackage[] packages;
+    		BClass[] classes;
+    		int sizePackages;
+    		int sizeClasses;
+    		int i = 0;
+    		int j = 0;
+    		File inputFile;
+    		File outputFile;  
+    		  		
+    		//we copy the content of each java file of the project  in the source string
+    		//using a bufferedReader
+    		
+    		BPackage bpackage = bluej.getCurrentPackage();
+    		if (bpackage != null) { // there may be no package open at all
+    			try {
+    				
+    				path = bpackage.getDir().getPath();
+    				
+    				//print the path in the debug file
+    				printCurrentStatus(path);
+    				/*
+    				//we create the jeliot file in which we will put all the classes
+    				outputFile = new File(path + "\\jeliot.txt");
+    				
+    				//we delete the file if it already exists
+    				if (outputFile.exists()) outputFile.delete();
+    				*/
+    				
+    				//projectName = bpackage.getProject().getName();
+    				packages = bpackage.getProject().getPackages();
+    				sizePackages = packages.length;
+    				while (i < sizePackages) {//for each package in the project 
+    					try {
+    						currentPackage = packages[i];
+    						classes = currentPackage.getClasses();
+    						sizeClasses = classes.length;
+    						
+    						//for all classes in each package
+    						while (j < sizeClasses) {
+    							
+    							//print the path in the debug file	
+    							printCurrentStatus(classes[j].getJavaFile().getPath());
+    							  
+    							//create a bufferdReader 
+    							BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(classes[j].getJavaFile().getPath())));
+    							String line = new String();
+    							
+    							//we put each line in the source string
+    							while  ((line = in.readLine()) != null) { 
+    								printCurrentStatus(line);
+    								source += "\n" + line; 
+    								}
+    							// and we go to the next file
+    							j++;
+    						}
+    						//we check the next package
+    						i++;
+    						
+    					}catch (PackageNotFoundException pnfe) {
+    						printCurrentStatus("jeliot extension error2: no name for the project");
+    					}    				
+    				}  				     			
+    			} catch(ProjectNotOpenException e) {
+    				printCurrentStatus("jeliot extension error3: The project has been unexpectedly closed!");
+    			} catch (IOException e){
+    				printCurrentStatus("jeliot extension error4: error while creating jeliot.txt file");	
+    			} catch (PackageNotFoundException e){
+    				printCurrentStatus("jeliot extension error5: package not found");
+    			}
+    		}
+    		return source;
+    	}	
+    	
+    	// and the methods which will be called in the main class when
+    	// each of the different menus are about to be invoked.
+    	public void notifyPostToolsMenu(BPackage bp, JMenuItem jmi) {
+    		System.out.println("Post on Tools menu");
+    		curPackage = bp ; 
+    		curClass = null ; 
+    		curObject = null;
+    	}   
     }
-    
-    // and the methods which will be called in the main class when
-    // each of the different menus are about to be invoked.
-    public void notifyPostToolsMenu(BPackage bp, JMenuItem jmi) {
-        System.out.println("Post on Tools menu");
-        curPackage = bp ; curClass = null ; curObject = null;
-    }
-    
 }

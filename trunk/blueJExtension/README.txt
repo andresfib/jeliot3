@@ -1,7 +1,3 @@
-author: Antoine Pineau
-mailto: apineau@cs.joensuu.fi
-
-
 Installing extensions
 
 
