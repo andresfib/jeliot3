@@ -192,11 +192,15 @@ class MenuBuilder extends MenuGenerator {
     		if (parameters.length==1){ 
     			return parameters[0];
     		}
-    		else {  	
-    			for(int i=0; i<=parameters.length - 2; i++) {
+    		if (parameters.length==2){ 
+    			return parameters[0]+", "+parameters[1];
+    		}
+    		
+    		else {  
+    			param += parameters[0];
+    			for(int i=1; i<=parameters.length - 1; i++) {
     				param += "," + parameters[i];
     			}
-    			param += parameters[parameters.length - 1];
     		}
     		return param;
     	}
