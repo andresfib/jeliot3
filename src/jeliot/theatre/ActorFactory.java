@@ -70,19 +70,19 @@ public class ActorFactory {
         {"modop.gif",   "assignop.gif"},
         {"plusop.gif",  "assignop.gif"},
         {"minusop.gif", "assignop.gif"},
-        {null, null}, // lshift
-        {null, null}, // rshift
-        {null, null}, // urshift
+        {"lshift.gif", "assignop.gif"}, // lshift
+        {"rshift.gif", "assignop.gif"}, // rshift
+        {"urshift.gif", "assignop.gif"}, // urshift
         {"lessop.gif",  "assignop.gif"},
         {"greatop.gif", "assignop.gif"},
         {"lequop.gif",  "assignop.gif"},
         {"gequop.gif",  "assignop.gif"},
-        {null, null}, // instanceof
+        {null, null}, // instanceof not yet implemented
         {"equop.gif",    "assignop.gif"},
         {"nequop.gif",   "assignop.gif"},
-        {"andop.gif",   "assignop.gif"},
-        {"xorop.gif",   "assignop.gif"},
-        {"orop.gif",    "assignop.gif"},
+        {"bitandop.gif",   "assignop.gif"},
+        {"bitxorop.gif",   "assignop.gif"},
+        {"bitorop.gif",    "assignop.gif"},
         {"candop.gif",  "assignop.gif"},
         {"corop.gif",   "assignop.gif"}
     };
@@ -92,7 +92,7 @@ public class ActorFactory {
         {"minusop.gif", "assignop.gif"},
         {"plusplusop.gif", null},
         {"minusminusop.gif", null},
-        {null, null}, //complement
+        {"compop.gif", "assignop.gif"}, //complement
         {"notop.gif",   "assignop.gif"},
         {"plusplusop.gif", null},
         {"minusminusop.gif", null}

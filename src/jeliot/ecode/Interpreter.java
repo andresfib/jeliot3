@@ -164,6 +164,7 @@ public class Interpreter {
 
 
                         // Unary Expressions
+                        case Code.COMP:     // Complement
                         case Code.PLUS:     // Plus operator
                         case Code.MINUS:    // Minus operator
                         case Code.NO: {     // Boolean Not
@@ -270,6 +271,12 @@ public class Interpreter {
                         }
 
                         // Binary Expressions
+                        case Code.BITOR:
+                        case Code.BITXOR:
+                        case Code.BITAND:
+                        case Code.LSHIFT:
+                        case Code.RSHIFT:
+                        case Code.URSHIFT:
                         case Code.OR:       // Or Expression
                         case Code.EE:       // Equal Expression
                         case Code.NE:       // Not Equal Expression
