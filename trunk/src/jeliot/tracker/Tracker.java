@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import jeliot.gui.CodePane2;
 import jeliot.theater.Theater;
 
+//TODO: Change this class to use Singleton pattern
+
 /**
  * @author Niko Myller
  */

@@ -414,6 +414,7 @@ public class Jeliot {
      * @param e
      */
     public void showErrorMessage(InterpreterError e) {
+        Tracker.writeToFile("Error", e.getMessage(), System.currentTimeMillis());
         gui.showErrorMessage(e);
     }
 
