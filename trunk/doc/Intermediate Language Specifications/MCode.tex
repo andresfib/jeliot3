@@ -31,6 +31,15 @@ item{Related References} Most of the m-code sentences refer to previous m-code s
 \item{Location} This contains the location of the expression in the original source code file.
 \end{description}
 
+\section{Grammar}
+
+%\begin{mcodegrammar}
+
+Program: StaticMethodCall .
+Declaration: MD ; CD .
+
+%\end{mcodegrammar}
+
 \section{Constants}
 \label{sec:constans}
 
@@ -199,10 +208,14 @@ As before it just closes the object method call.
 \subsection{Class Allocation}
 \minstr{SA ir declaringClass constructorName numArgs loc}
 The class allocation instruction happens everytime a \p{new} appears on the source code. It will provide the information needed for the constructor: declaring class, constructor name and the number of arguments it is being called with.
+
 \minstr{SAC ir ObjectId loc}
 \subsection{Object Field Access}
-\minstr{OFA ir name value type loc}
+\minstr{OFA ir objectReference name value type loc}
+This instruction accesses to the value of an object field, thus it references to the instruction that evaluate the object (objectReference) (normaly a Qualified Name (\p{QN} one). It contains the name, the type and the value of the accessed field.
 \subsection{Return}
 \minstr{R callIr loc}
+This first return instruction is just used for the "void" return, those that doesn't return anything.NIKO what do we say about the callIr.
 
 \minstr{R callIr valueIr value type loc}
+This second instruction is used whe a value is returned. Thus we need a reference to the evaluation of the expression corresponding to the returned value (valueIr) and the result of this expression, its value and type.
