@@ -259,9 +259,25 @@ the information it produces while interpreting the source code.
 \subsubsection{Tree package}
 \label{sec:Tree_package}
 
-See the Figures~\ref{fig:several_tree_classes},
-\ref{fig:primary_expression_classes}, \ref{fig:statement_classes},
-\ref{fig:un_and_bin_exp_classes}.
+The \p{Tree} package has a class for every different Java language
+construct. These classes are organized also as a tree. The class
+Node is the one that every other class inherits, directly or
+indirectly. It defines only one thing, the location of the node in
+the source code, both the file and the position inside it. Most of
+the other classes also define properties that later are inherited
+by more specific classes.
+
+The tree organization is shown in the
+Diagrams~\ref{fig:several_tree_classes},
+\ref{fig:primary_expression_classes}, \ref{fig:statement_classes}
+and \ref{fig:un_and_bin_exp_classes}. These figures do not depict
+all the nodes. Especially those that do not add more information.
+
+Figure~\ref{fig:several_tree_classes} shows the different kind of
+declarations, initializers and types. Two main types are used by
+\djava{}: Array type and and primitive types. String are not
+considered as a different type as it is a class. It is Java that
+supports it by normal String methods.
 
 \begin{figure}[!htb]
 \begin{center}
@@ -271,6 +287,40 @@ See the Figures~\ref{fig:several_tree_classes},
 \end{center}
 \end{figure}
 
+Figure~\ref{fig:primary_expression_classes} shows the primary
+expressions classes. Its super class, Expression, is also super
+class for binary and unary expressions. All properties are defined
+by Primary Expression subclasses. Some of those also implement
+interfaces, even more than one. Interfaces are used by \djava{} to
+know when certain conditions hold. Those that implement
+\p{LeftHandSide} interface (\p{ArrayAccess}, \p{QualifiedName},
+\p{FieldAccess}) are available to be the left hand side of an
+assignment. Those that implement Figure 5 shows the primary
+expressions classes. Its super class, Expression, is also super
+class for binary and unary expressions. All properties are defined
+by Primary Expression subclasses. Some of those also implement
+interfaces, even more than one. Interfaces are used by \djava{} to
+know when certain conditions hold. Those that implement
+\p{LeftHandSide} interface (\p{ArrayAccess}, \p{QualifiedName},
+\p{FieldAccess}) are available to be the left hand side of an
+assignment. Those that implement \p{ExpressionContainer}
+(\p{ObjectMethodCall}, \p{ReturnStatement},
+\p{ConstructorInvocation}, \p{Object\-Field\-Access},
+\p{ArrayAccess}, \p{UnaryExpression}) are those that need another
+expression to be completed. An array access needs a qualified name
+where to look for the data, that qualified name is the expression
+contained. The interface \p{ExpressionStatement} is used only when
+\djava{} parses the source code to build up the \p{ForStatement}
+node. \p{ExpressionContainer} (\p{ObjectMethodCall},
+\p{ReturnStatement}, \p{Constructor\-Invocation},
+\p{ObjectFieldAccess}, \p{ArrayAccess}, \p{UnaryExpression}) are
+those that need another expression to be completed. An array
+access needs a qualified name where to look for the data, that
+qualified name is the expression contained. The interface
+\p{ExpressionStatement} is used only when \p{DynamicJava} parses
+the source code to build up the \p{ForStatement} node.
+
+
 \begin{figure}[!htb]
 \begin{center}
 \includegraphics[width=\textwidth]{images/primaryexpressions.eps}
@@ -279,6 +329,14 @@ See the Figures~\ref{fig:several_tree_classes},
 \end{center}
 \end{figure}
 
+Figure~\ref{fig:statement_classes} contains all the possible Java
+statements. \p{ReturnStatement} is implementing
+\p{ExpressionContainer} because it needs that interface when it is
+returning an expression. p{Do}, p{While} and p{For} statements are
+implementing the \p{ContinueTarget} interface in order to allow
+\p{ContinueStatements} inside them.
+
+
 \begin{figure}[!htb]
 \begin{center}
 \includegraphics[width=\textwidth]{images/statements.eps}
@@ -286,6 +344,11 @@ See the Figures~\ref{fig:several_tree_classes},
 \label{fig:statement_classes}
 \end{center}
 \end{figure}
+
+Figure~\ref{fig:un_and_bin_exp_classes} illustrates unary and
+binary expressions. It only contains one as an example of each
+their subclasses. So \p{AndExpression} also refers to
+\p{OrExpression} and so on.
 
 \begin{figure}[!htb]
 \begin{center}
@@ -316,20 +379,20 @@ There are several important data structures in the \p{Interpreter} class:
 \item[\p{exprs}] variable is a reference to a stack (\p{Stack}) containing the information about each read expression. The information consist of each expressions type (e.g. addition or subtraction operation), expression reference and the location in the code. It is used to
 identify which operands (i.e. values or variables) belong to which operation.
 \item[\p{values}] variable is a reference to a hash table (\p{Hashtable}) that contains the values of literals, variables and operations encountered during the execution. Each of the value is stored in a form of \p{Value} object (containing also the \p{Actor}) and the expression reference is used as a key for the hash table. These values are then used when an expression evaluation is animated.
-\item[\p{variables}] variable is a reference to a hash table (\p{Hashtable})that contains the visited variables as instances of the \p{Variable} class. 
+\item[\p{variables}] variable is a reference to a hash table (\p{Hashtable})that contains the visited variables as instances of the \p{Variable} class.
 \item[\p{instances}]
 \item[\p{methodInvocation}]
 \item[\p{postIncsDecs}]
 \item[\p{currentClass}]
 \item[\p{classes}]
-\item[\p{currentMethodInvocation}] 
+\item[\p{currentMethodInvocation}]
 \item[\p{objectCreation}]
 \item[\p{returned, returnValue, returnActor, returnExpressionCounter}] are variables for handling the return value of a method.
 \end{description}
 
 Class \p{ECodeUtilities} is used by the interpreter to help type identification and
 translating the intermediate code into the commands used in the visualization engine because they differ in some parts. It also handles some issues related to user input
-and communication between \djava{} and the intermediate code interpreter. 
+and communication between \djava{} and the intermediate code interpreter.
 
 \subsection{Language Constructs}
 \label{sec:Language_package}
@@ -447,4 +510,3 @@ See the Figure~\ref{fig:theatre_and_actorcontainers}.
 
 
 \subsubsection{ActorFactory class}
-
