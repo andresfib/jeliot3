@@ -5,13 +5,12 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.JWindow;
+
+import jeliot.theater.ImageLoader;
 
 
 /**
@@ -41,10 +40,10 @@ public class LoadJeliot {
     JWindow window;
 
     /**
-     * Initializes the Jeliot's window.
+     * Initializes the Jeliot's splash screen window.
      * Initializes the jeliot.Jeliot object.
      */
-    public void start() {
+    public void start(Runnable jeliot) {
         // Get the splash screen image
         final Image image = iLoad.getImage(bundle.getString("image.splash_screen"));
 
@@ -68,35 +67,16 @@ public class LoadJeliot {
                (screen.height - ih)/2, iw, ih);
         window.setVisible(true);
         window.toFront();
-
+        
         try {
-            Class jeliotClass = Class.forName("jeliot.Jeliot");
-            Runnable jeliot = (Runnable)jeliotClass.newInstance();
-            jeliot.run();
-        }
-        catch (Exception e) {
+            Thread.sleep(1000);
+            javax.swing.SwingUtilities.invokeLater(jeliot);
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        
         window.dispose();
 
-    }
-
-
-    /**
-     * Starts the jeliot program.
-     *
-     * @param   args    Command line arguments for the program.
-     * @throws  IOException If there is a problem in the opening of the file.
-     */
-    public static void main(String args[]) throws IOException {
-        Properties prop = System.getProperties();
-        String udir = prop.getProperty("user.dir");
-
-        File f = new File(udir);
-        f = new File(f.getParent(), "examples");
-        prop.put("user.dir", f.toString());
-
-        new LoadJeliot().start();
     }
 
 }

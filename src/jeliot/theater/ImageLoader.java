@@ -36,22 +36,6 @@ public class ImageLoader {
     /** Maps images to their dark counterpants. */
     private Hashtable darks = new Hashtable();
 
-	/* SHOULD BE REPLACED WITH RESOURCE BUNDLE! */
-    // Maps logical image names to their real names.
-    /*
-    private Hashtable mapping = new Hashtable(); {
-        mapping.put("Splash screen", "splash.jpg");
-        mapping.put("Panel", "curtain.gif");
-        mapping.put("Panel-left", "curtleft.gif");
-        mapping.put("Panel-right", "curtright.gif");
-        mapping.put("Background", "misc040.jpg");
-        mapping.put("Jeliot-icon", "jelicon.gif");
-        mapping.put("Hand",     "hand1.gif");
-        mapping.put("Fist-1",   "hand2.gif");
-        mapping.put("Fist-2",   "hand3.gif");
-    }
-    */
-
 //DOC: Document!
 
     /**
@@ -108,7 +92,7 @@ public class ImageLoader {
         if (image == null) {
             //image = toolkit.getImage(bundle.getString("directory.images")+name);
         	URL imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+name));
-        	System.out.println(imageURL);
+        	//System.out.println(imageURL);
         	image = toolkit.getImage(imageURL);
             tracker.addImage(image, 0);
             try {

@@ -53,13 +53,6 @@ public class CodeEditor2 extends JComponent {
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
             "jeliot.gui.resources.properties", Locale.getDefault());
-
-	/**
-	 * Image loader
-	 * 
-	 */
-	
-	private ImageLoader iLoad;
     
     /**
      * The String for the basic code template that is shown to the user in the
