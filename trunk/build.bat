@@ -8,7 +8,7 @@
 :: ----- Verify and Set Required Environment Variables -------------------------
 
 
-set JAVA_HOME=c:\j2sdk1.4.0_01
+set JAVA_HOME=C:\j2sdk1.4.2_04
 if not "%JAVA_HOME%" == "" goto gotJavaHome
 echo %JAVA_HOME%
 echo You must set JAVA_HOME to point at your Java Development Kit installation
@@ -22,7 +22,7 @@ set ANT_HOME=.
 :: ----- Set Up The Runtime Classpath ------------------------------------------
 
 
-set CP=%JAVA_HOME%\lib\tools.jar;%ANT_HOME%\lib\build\ant.jar;%ANT_HOME%\lib\build\crimson.jar;%ANT_HOME%\lib\build\jaxp.jar
+set CP=%JAVA_HOME%\lib\tools.jar;%ANT_HOME%\lib\build\ant.jar;%ANT_HOME%\lib\build\ant-launcher.jar;%ANT_HOME%\lib\build\jaxp.jar
  
 
 :: ----- Execute The Requested Build -------------------------------------------
