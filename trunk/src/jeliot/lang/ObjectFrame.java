@@ -33,7 +33,7 @@ public class ObjectFrame extends Instance {
     }
 
     public Variable getVariable(String name) {
-        Variable var = vars.get(name);
+        Variable var = (Variable) vars.get(name);
         if (var != null) {
             return var;
         } else {

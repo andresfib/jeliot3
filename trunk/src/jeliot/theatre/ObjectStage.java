@@ -13,7 +13,7 @@ public class ObjectStage extends Actor implements ActorContainer {
 
 
     /** Variable actors in this stage. */
-    private Hashtable variables = new Hashtable();
+    private Vector variables = new Vector();
 
     /** Name of the stage. */
     private String name;
@@ -31,7 +31,7 @@ public class ObjectStage extends Actor implements ActorContainer {
     private int actorMargin = 3;
 
     /** Maximum possible number of variables on the stage at the moment. */
-    private int varCount = 1;
+    private int varCount = 0;
 
     private int actWidth;
     private int actHeight;
@@ -48,9 +48,10 @@ public class ObjectStage extends Actor implements ActorContainer {
     }
 
     public VariableActor findVariableActor(String name) {
-        for (int i = 0; i < variables.size(); i++) {
-            VariableActor va = (VariableActor) variables.elementAt(i);
-            if (name.equals(va.getName())) {
+        Enumeration enum = variables.elements();
+        while (enum.hasMoreElements()) {
+            VariableActor va = (VariableActor) enum.nextElement();
+            if (va.getName().equals(name)) {
                 return va;
             }
         }
@@ -145,7 +146,7 @@ public class ObjectStage extends Actor implements ActorContainer {
 
     public void bind() {
         reserved.setLocation(resLoc);
-        variables.push(reserved);
+        variables.addElements(actor);
         reserved.setParent(this);
     }
 
@@ -159,8 +160,8 @@ public class ObjectStage extends Actor implements ActorContainer {
 
         for (int i = n-1; i >= 0; --i) {
              Actor actor = (Actor)variables.elementAt(i);
-             Actor at = actor.getActorAt(
-                     xc - actor.getX(), yc - actor.getY());
+             Actor at = actor.getActorAt(xc - actor.getX(),
+                                         yc - actor.getY());
              if (at != null) {
                  return at;
              }
@@ -180,7 +181,7 @@ public class ObjectStage extends Actor implements ActorContainer {
                 h = size.height;
                 full = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor) Stage.this);
+                this.addActor((Actor) ObjectStage.this);
                 setLocation(loc);
                 setSize(size);
                 setLight(HIGHLIGHT);
@@ -190,7 +191,7 @@ public class ObjectStage extends Actor implements ActorContainer {
 
             public void animate(double pulse) {
                 h += plus * pulse;
-                size.height = (int)h;
+                size.height = (int) h;
                 setSize(size);
                 this.repaint();
             }
@@ -203,7 +204,7 @@ public class ObjectStage extends Actor implements ActorContainer {
             }
 
             public void finalFinish() {
-                this.passivate((Actor)Stage.this);
+                this.passivate((Actor) ObjectStage.this);
             }
         };
     }
@@ -220,7 +221,7 @@ public class ObjectStage extends Actor implements ActorContainer {
                 full = nheight + margin * 3;
                 h = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor)Stage.this);
+                this.addActor((Actor) ObjectStage.this);
                 setSize(size);
                 paintVars = false;
                 repaint();
@@ -228,13 +229,13 @@ public class ObjectStage extends Actor implements ActorContainer {
 
             public void animate(double pulse) {
                 h += plus * pulse;
-                size.height = (int)h;
+                size.height = (int) h;
                 setSize(size);
                 this.repaint();
             }
 
             public void finish() {
-                this.removeActor((Actor)Stage.this);
+                this.removeActor((Actor) ObjectStage.this);
             }
         };
     }

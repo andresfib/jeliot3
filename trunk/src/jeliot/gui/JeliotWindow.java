@@ -970,12 +970,12 @@ public class JeliotWindow {
                     }
                 }
             }
-            methodIndex =  = commentsRemoved.indexOf(mainMethod, methodIndex);
+            methodIndex =  commentsRemoved.indexOf(mainMethod, methodIndex);
         }
 
         mainMethod="static void main(";
 
-        int methodIndex = commentsRemoved.indexOf(mainMethod);
+        methodIndex = commentsRemoved.indexOf(mainMethod);
         //System.out.println(methodIndex);
         while (methodIndex > -1) {
             int parenthesisIndex = commentsRemoved.indexOf(")", methodIndex);
@@ -1011,7 +1011,7 @@ public class JeliotWindow {
 
                     }
                 }
-                methodIndex =  = commentsRemoved.indexOf(mainMethod, methodIndex);
+                methodIndex = commentsRemoved.indexOf(mainMethod, methodIndex);
             }
         }
         return null;

@@ -71,7 +71,7 @@ public class ClassInfo {
         }
 
         //Secondly the methods
-        Hashtable hm = ci.getMehthods();
+        Hashtable hm = ci.getMethods();
         enum = hm.keys();
         while (enum.hasMoreElements()) {
             String name = (String) enum.nextElement();

@@ -2056,7 +2056,7 @@ public class Interpreter {
                             }
 
                             currentClass = new ClassInfo(name);
-                            ClassInfo ci = classes.get(extendedClass);
+                            ClassInfo ci = (ClassInfo) classes.get(extendedClass);
 
                             if (ci != null) {
                                 currentClass.extendClass(ci);
