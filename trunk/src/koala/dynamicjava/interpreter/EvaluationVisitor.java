@@ -1322,7 +1322,7 @@ public class EvaluationVisitor extends VisitorObject {
 
 		if (inputHandler != null) {
 			inputHandler.setInputReader(MCodeUtilities.getReader());
-
+			long inputCounter = counter++;
 			String prompt = (larg != null) ? "" : null;
 
 			if (larg != null) {
@@ -1333,7 +1333,9 @@ public class EvaluationVisitor extends VisitorObject {
 				long auxcounter; //Records the previous counter value
 				Object auxarg; //Stores the current argument
 				Class[] typs = m.getParameterTypes();
-
+				if ((typs.length == 1 && typs[0].getName().equals(String.class.getName()))) {
+                    
+                }
 				while (it.hasNext()) {
 
 					//HACK: If we can assure that the type of the argument is a
@@ -1346,23 +1348,24 @@ public class EvaluationVisitor extends VisitorObject {
 					} else {
 						argType = typs[i].getName();
 					}
-					MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
+                    /*
+                    MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
 							+ Code.DELIM + counter + Code.DELIM
 							+ MCodeUtilities.locationToString(node));
+                    */
 					//arguments construction
 					auxcounter = counter;
 					args[i] = ((Expression) it.next()).acceptVisitor(this);
 
 					prompt += MCodeUtilities.getValue(args[i]);
 					i++;
-
 				}
 			}
 
-			result = inputHandler.handleInput(m.getReturnType(), counter++, m,
+			result = inputHandler.handleInput(m.getReturnType(), inputCounter /* counter++ */, m,
 					node, prompt);
 
-			MCodeUtilities.write("" + Code.INPUTTED + Code.DELIM + (counter++)
+			MCodeUtilities.write("" + Code.INPUTTED + Code.DELIM + inputCounter /*(counter++)*/
 					+ Code.DELIM + result + Code.DELIM + m.getReturnType()
 					+ Code.DELIM + MCodeUtilities.locationToString(node));
 
@@ -1436,7 +1439,7 @@ public class EvaluationVisitor extends VisitorObject {
 				// Useful for external method call . Not working completely, or
 				// none at all, arg retrieved as null
 				String argType;
-				if (args[i] instanceof String) {
+				if (typs[i].getName().equals(String.class.getName())) {
 					argType = String.class.getName();
 				} else {
 					argType = typs[i].getName();
