@@ -72,7 +72,7 @@ public class HistoryView extends JComponent implements ActionListener {
     /**
      * Comment for <code>ic</code>
      */
-    private ImageCanvas ic = new ImageCanvas();
+    private ImageCanvas imageCanvas = new ImageCanvas();
 
     /**
      * Comment for <code>codePane</code>
@@ -151,7 +151,7 @@ public class HistoryView extends JComponent implements ActionListener {
         bottomComponent.add("West", buttonL);
         bottomComponent.add("East", buttonR);
 
-        add("Center", new JScrollPane(ic));
+        add("Center", new JScrollPane(imageCanvas));
         add("South", bottomComponent);
 
         buttonL.setEnabled(false);
@@ -180,7 +180,7 @@ public class HistoryView extends JComponent implements ActionListener {
                     }
                     if (imageNumber < imageFiles.size() && imageNumber >= 0) {
                         if (newImageAdded) {
-                            ic.setImage(current);
+                            imageCanvas.setImage(current);
                         } else {
                             try {
                                 current = ImageIO.read((File) imageFiles.get(imageNumber));
@@ -190,7 +190,7 @@ public class HistoryView extends JComponent implements ActionListener {
                                     e1.printStackTrace();
                                 }
                             }
-                            ic.setImage(current);
+                            imageCanvas.setImage(current);
                         }
                     }
 
@@ -200,7 +200,7 @@ public class HistoryView extends JComponent implements ActionListener {
                         }
                     }
                     newImageAdded = false;
-                    ic.repaint();
+                    imageCanvas.repaint();
                     validate();
                 } catch (Exception e1) {
                     if (DebugUtil.DEBUGGING) {
@@ -220,7 +220,7 @@ public class HistoryView extends JComponent implements ActionListener {
         current = null;
         imageFiles.removeAllElements();
         highlights.removeAllElements();
-        ic.setImage(null);
+        imageCanvas.setImage(null);
         File[] files = imageTemp.listFiles();
         int n = files.length;
         for (int i = 0; i < n; i++) {
@@ -229,7 +229,7 @@ public class HistoryView extends JComponent implements ActionListener {
         slider.setEnabled(false);
         buttonL.setEnabled(false);
         buttonR.setEnabled(false);
-        ic.repaint();
+        imageCanvas.repaint();
         validate();
     }
 
@@ -237,7 +237,7 @@ public class HistoryView extends JComponent implements ActionListener {
         initialize();
         imageTemp.delete();
     }
-    
+
     /**
      * @param i
      * @param h
@@ -318,5 +318,12 @@ public class HistoryView extends JComponent implements ActionListener {
         if (enabled) {
             initialize();
         }
+    }
+
+    /**
+     * @return Returns the imageCanvas.
+     */
+    public ImageCanvas getImageCanvas() {
+        return imageCanvas;
     }
 }

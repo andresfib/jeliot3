@@ -11,6 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -583,6 +584,10 @@ public class JeliotWindow implements PauseListener {
         menuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //TODO: add also theater printing here and move the selection to a dialog!
+
+                //TODO: change the title to a resource
+                //int selected = JOptionPane.showOptionDialog(JeliotWindow.this.frame, "Select the printing target:", "Select the printing target", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE , null, new String[] {"Text Editor", "Current Visualization"}, "Text Editor");
+                
                 JEditTextArea area = editor.getTextArea();
                 area.getPainter().setPrinting(true);
                 int caretPosition = area.getCaretPosition();
@@ -946,6 +951,50 @@ public class JeliotWindow implements PauseListener {
 
             public void actionPerformed(ActionEvent e) {
                 runUntil();
+            }
+        });
+        menu.add(menuItem);
+
+        menu.addSeparator();
+
+        menuItem = new JMenuItem(messageBundle
+                .getString("menu.animation.print"));
+        menuItem.setMnemonic(KeyEvent.VK_P);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+                ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                JComponent component = JeliotWindow.this.getTheaterPane();
+                if (component instanceof JTabbedPane) {
+                    Component componentForPrinting = ((JTabbedPane) component).getComponentAt(((JTabbedPane) component).getSelectedIndex());
+                    if (componentForPrinting instanceof JComponent) {
+                        if (componentForPrinting instanceof JScrollPane) {
+                            JScrollPane jsr = (JScrollPane) componentForPrinting;
+                            Component comp = (Component) jsr.getViewport().getView();
+                            if (comp instanceof Theater) {
+                                Theater t = (Theater) comp;
+                                Rectangle r = new Rectangle();
+                                r.height = t.getPreferredSize().height;
+                                r.width = t.getPreferredSize().width;
+                                PrintingUtil.printComponent(t, r);
+                            } else if (comp instanceof TreeDraw) {
+                                TreeDraw t = (TreeDraw) comp;
+                                Rectangle r = new Rectangle();
+                                r.height = t.getPreferredSize().height;
+                                r.width = t.getPreferredSize().width;
+                                PrintingUtil.printComponent(t, r);
+                            }
+                        } else if (componentForPrinting instanceof HistoryView) {
+                            HistoryView h = (HistoryView) componentForPrinting;
+                            Rectangle r = new Rectangle();
+                            h.getImageCanvas().repaint();
+                            r.height = h.getImageCanvas().getPreferredSize().height;
+                            r.width = h.getImageCanvas().getPreferredSize().width;
+                            PrintingUtil.printComponent(h.getImageCanvas(), r);
+                        }
+                    }
+                }
             }
         });
         menu.add(menuItem);
