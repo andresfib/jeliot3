@@ -210,8 +210,10 @@ public class Interpreter {
                             Variable var = (Variable) variables.remove(new Integer(expressionReference));
 
                             int operator = ECodeUtilities.resolveUnOperator(token);
-                            Value expressionValue = director.animatePreIncDec(operator, var, result, h);
-                            values.put(new Integer(expressionCounter), expressionValue);
+                            director.animatePostIncDec(operator, var, result, h);
+                            values.put(new Integer(expressionCounter), result);
+
+                            exprs.pop();
 
                             break;
                         }
@@ -232,8 +234,10 @@ public class Interpreter {
                             Variable var = (Variable) variables.remove(new Integer(expressionReference));
 
                             int operator = ECodeUtilities.resolveUnOperator(token);
-                            Value expressionValue = director.animatePostIncDec(operator, var, result, h);
-                            values.put(new Integer(expressionCounter), expressionValue);
+                            director.animatePreIncDec(operator, var, result, h);
+                            values.put(new Integer(expressionCounter), result);
+
+                            exprs.pop();
 
                             break;
                         }
@@ -407,10 +411,10 @@ public class Interpreter {
                             //on the screen with operator
                             } else if (ECodeUtilities.isUnary(oper)) {
 
-                                if (command == Code.PIE  ||
-                                    command == Code.PRIE ||
-                                    command == Code.PDE  ||
-                                    command == Code.PRDE) {
+                                if (oper == Code.PIE  ||
+                                    oper == Code.PRIE ||
+                                    oper == Code.PDE  ||
+                                    oper == Code.PRDE) {
 
                                         variables.put(new Integer(expressionCounter), var);
 
@@ -880,7 +884,7 @@ public class Interpreter {
 
                             int expressionReference = Integer.parseInt(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
-
+                            int round = Integer.parseInt(tokenizer.nextToken());
                             Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
                             Value result = (Value) values.remove(new Integer(expressionReference));
@@ -914,7 +918,7 @@ public class Interpreter {
 
                             int expressionReference = Integer.parseInt(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
-
+                            int round = Integer.parseInt(tokenizer.nextToken());
                             Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
                             Value result = (Value) values.remove(new Integer(expressionReference));

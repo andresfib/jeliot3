@@ -74,6 +74,7 @@ public class Code{
     public static final int WHI=40;         // While statement
     public static final int FOR=41;         // For statement
     public static final int CONT=42;        // Continue statement
+    public static final int DO=43;          // DO-While statement
 
     // private static PrintWriter writer=Launcher.getWriter();
     private static PrintWriter writer=null;
