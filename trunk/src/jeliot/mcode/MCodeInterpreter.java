@@ -1465,6 +1465,8 @@ public abstract class MCodeInterpreter {
                         Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                         
                         handleCodeAIBEGIN(cells, highlight);
+                        
+                        break;
                     }
                 
                 //Array Initializer's element
@@ -1479,6 +1481,8 @@ public abstract class MCodeInterpreter {
                         Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                         
                         handleCodeAIE(arrayReference, cellNumber, expressionReference, value, type, literal, highlight);
+                        
+                        break;
                     }
                 
                 case Code.AI:
@@ -1486,6 +1490,8 @@ public abstract class MCodeInterpreter {
                         Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                         
                         handleCodeAI(highlight);
+                        
+                        break;
                     }
                 
                 //Class information starts for a class
