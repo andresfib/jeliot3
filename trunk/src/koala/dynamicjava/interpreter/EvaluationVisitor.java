@@ -754,32 +754,50 @@ public class EvaluationVisitor extends VisitorObject {
 
 	// Check if the static method call is one of our Input methods
 	// Hardcoded!!! TO BE CHANGED
-
-        if( m.getDeclaringClass().getName().equals("Input")){
+        Object result=null;
+        if( m.getDeclaringClass().getName().equals("jeliot.io.Input")){
 	    if (m.getName().equals("readInt")){
 		ECodeUtilities.write(""+Code.INPUT+Code.DELIM+Integer.TYPE.getName()
-                           +Code.DELIM+locationToString(node));
-		return ECodeUtilities.readInt();
+                                     +Code.DELIM+locationToString(node));
+		result = ECodeUtilities.readInt();
 	    }	
 	    else if( m.getName().equals("readDouble")){
 		ECodeUtilities.write(""+Code.INPUT+Code.DELIM+Double.TYPE.getName()
-                           +Code.DELIM+locationToString(node));
-		return ECodeUtilities.readDouble();
+                                     +Code.DELIM+locationToString(node));
+		result = ECodeUtilities.readDouble();
 	    }	
+            ECodeUtilities.write(""+Code.INPUTTED+Code.DELIM+(counter++)
+                                 +Code.DELIM+result.toString()
+                                 +Code.DELIM+result.getClass()
+                                 +Code.DELIM+locationToString(node));
+            return result;
         }
-        else if( m.getDeclaringClass().getName().equals("Input")){
-	    if (m.getName().equals("readInt")){
-		ECodeUtilities.write(""+Code.INPUT+Code.DELIM+Integer.TYPE.getName()
-                           +Code.DELIM+locationToString(node));
-		return ECodeUtilities.readInt();
-	    }
-	    else if( m.getName().equals("readDouble")){
-		ECodeUtilities.write(""+Code.INPUT+Code.DELIM+Integer.TYPE.getName()
-                           +Code.DELIM+locationToString(node));
-		return ECodeUtilities.readDouble();
-	    }	
-        }
-
+        else if( m.getDeclaringClass().getName().equals("jeliot.io.Output")){
+	    if (m.getName().equals("println")){
+                args = new Object[larg.size()];
+                Iterator it = larg.iterator();
+                int      i  = 0;
+                long     auxcounter; //Records the previous counter value
+                Object   auxarg; //Stores the current argument
+                Class[]  typs = m.getParameterTypes();
+                
+                //It should only get once in the while loop!!!
+                while (it.hasNext()) {
+                    auxcounter=counter;
+                    args[i] = ((Expression)it.next()).acceptVisitor(this);
+                    ECodeUtilities.write("" + Code.OUTPUT+Code.DELIM+auxcounter
+                                         +Code.DELIM+args[i].toString()
+                                         +Code.DELIM+typs[i].getName()
+                                         +Code.DELIM+locationToString(node));
+                    i++;
+                }
+                //Exit output function!!!
+                return null;
+            }
+            
+            
+        }	
+    
         /* JELIOT 3 */
         if (larg != null) {
 
