@@ -8,11 +8,13 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.text.PlainDocument;
 
 import jeliot.mcode.Highlight;
+
+import org.syntax.jedit.JEditTextArea;
+import org.syntax.jedit.tokenmarker.JavaTokenMarker;
 
 /**
  * This is the component that shows and highlights the program while
@@ -21,7 +23,7 @@ import jeliot.mcode.Highlight;
  * @author Pekka Uronen
  * @author Niko Myller
  */
-public class CodePane extends JComponent {
+public class CodePane2 extends JComponent {
 
 	/**
 	 * The resource bundle for gui package.
@@ -31,11 +33,17 @@ public class CodePane extends JComponent {
 			"jeliot.gui.resources.properties",
 			Locale.getDefault());
 
+
 	/**
+     * Text area that is used from the JEdit project.
+     */
+    private JEditTextArea area;
+    
+    /**
 	 * Line numbering component that handles the correct
      * line numbering in the code view.
 	 */
-	private LineNumbers nb;
+    private LineNumbers ln;
 
 	/**
 	 * Font for the code view area.
@@ -45,66 +53,55 @@ public class CodePane extends JComponent {
 			bundle.getString("font.code_pane.family"),
 			Font.PLAIN,
 			Integer.parseInt(bundle.getString("font.code_pane.size")));
-	/**
-	 * Insets for the text. Used for the layout.
-	 */
-	private Insets insets = new Insets(5, 5, 5, 5);
+	
+	
 
-	/**
-	 * Pane that handles the scrolling of the code view or the
-     * TextArea. 
-	 */
-	private JScrollPane jsp;
 
-	/**
-	 * The text area where the program code is shown and
-     * highlighted.
-	 */
-	JTextArea area = new JTextArea();
-	{
-		area.setMargin(insets);
-		area.setFont(font);
-		area.setTabSize(4);
-		area.setBackground(
-			new Color(
-				Integer
-					.decode(bundle.getString("color.code_pane.background"))
-					.intValue()));
-		area.setSelectionColor(
-			new Color(
-				Integer
-					.decode(bundle.getString("color.code_pane.selection"))
-					.intValue()));
-		area.setSelectedTextColor(
-			new Color(
-				Integer
-					.decode(bundle.getString("color.code_pane.selection.text"))
-					.intValue()));
-		area.setEditable(false);
-	}
 
 	/**
 	 * Constructs the CodePane -object, sets the layout and
 	 * adds the JScrollPane with JTextArea in the layout.
 	 */
-	public CodePane() {
+	public CodePane2() {
 		setLayout(new BorderLayout());
-		add("Center", makeScrollPane());
-		validateScrollPane();
-	}
-
-	/**
-	 * Creates the ScrollPane that shows the line
-	 * numbering on the left side and the text area
-	 * in the center. 
-	 * @return the set up scrollpane.
-	 */
-	public JComponent makeScrollPane() {
-		jsp = new JScrollPane(area);
-		nb = new LineNumbers(font, insets);
-		jsp.setRowHeaderView(nb);
-		validateScrollPane();
-		return jsp;
+		
+	    //Special for JEditTextArea for syntax highlighting
+        area = new JEditTextArea();
+        area.setTokenMarker(new JavaTokenMarker());
+        area.getPainter().setFont(new Font(bundle.getString("font.code_editor.family"),
+                                     Font.PLAIN,
+                                     Integer.parseInt(bundle.getString("font.code_editor.size"))));
+        area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute, new Integer(3));
+        area.setHorizontalOffset(5);
+        ln = new LineNumbers(new Font(bundle.getString("font.code_editor.family"),
+                Font.PLAIN,
+                Integer.parseInt(bundle.getString("font.code_editor.size"))), new Insets(1,0,0,0));
+        area.addToLeft(ln);
+        LineNumbersAdjustHandler lnah = new LineNumbersAdjustHandler(area, ln);
+        area.addAdjustListernerForVertical(lnah);
+        add("Center", area);
+		area.getPainter().setBackground(
+			new Color(
+				Integer
+					.decode(bundle.getString("color.code_pane.background"))
+					.intValue()));
+		area.getPainter().setLineHighlightEnabled(false);
+		/*
+		area.getPainter().setSelectionColor(
+			new Color(
+				Integer
+					.decode(bundle.getString("color.code_pane.selection"))
+					.intValue()));
+		
+		area.getPainter().setSelectedTextColor(
+			new Color(
+				Integer
+					.decode(bundle.getString("color.code_pane.selection.text"))
+					.intValue()));
+		*/
+        lnah.adjustmentValueChanged(null);
+		area.setEditable(false);
+        area.revalidate();
 	}
 
 	/**
@@ -116,7 +113,7 @@ public class CodePane extends JComponent {
 	 */
 	public void installProgram(String text) {
 		area.setText(text);
-		validateScrollPane();
+		area.setCaretPosition(1);
 	}
 
 	/**
@@ -133,23 +130,6 @@ public class CodePane extends JComponent {
 			index = text.indexOf("\n", index);
 		}
 		return lines;
-	}
-
-	/**
-	 * Validates the scroll pane by setting the correct
-     * number of lines to the LineNumbers component. 
-	 */
-	public void validateScrollPane() {
-		final int lines = calculateLines(area.getText());
-
-		if (nb != null) {
-			Runnable updateAComponent = new Runnable() {
-				public void run() {
-					nb.setHeightByLines(lines);
-				}
-			};
-			SwingUtilities.invokeLater(updateAComponent);
-		}
 	}
 
 	/**
@@ -181,14 +161,19 @@ public class CodePane extends JComponent {
 			public void run() {
 				area.requestFocus();
 				area.setCaretPosition(left + 1);
-				if (left != 0 && left == right) {
-					area.select(left, right + 1);
-				} else {
-					area.select(left, right);
+				if (left >= 0) {
+				    if (left != 0 && left == right) {
+				        area.select(left, right + 1);
+				    } else {
+				        area.select(left, right);
+				    }
 				}
 			}
 		};
 		SwingUtilities.invokeLater(updateAComponent);
 	}
 
+	public JEditTextArea getTextArea() {
+	    return area;
+	}
 }

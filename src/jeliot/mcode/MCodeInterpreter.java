@@ -135,6 +135,8 @@ public abstract class MCodeInterpreter {
 
     public abstract void closeScratch();
 
+    public abstract void beforeExecution();
+    
     /**
      *  
      */
@@ -143,6 +145,8 @@ public abstract class MCodeInterpreter {
         //TODO: Take the next line out of the comments for the versions to be realeased
         //try {
          
+        beforeExecution();
+        
         openScratch();
 
         while (running) {
@@ -944,6 +948,42 @@ public abstract class MCodeInterpreter {
                         break;
                     }
 
+                //Static field access
+                case Code.SFA:
+                	{
+                    
+                   //Second token is the expression counter
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    
+                    String declaringClass = tokenizer.nextToken();  
+                    
+                    String variableName = tokenizer.nextToken();
+                    
+                    String value = null;
+                    if (tokenizer.countTokens() >= 3) {
+                        //Third token is the value of the literal
+                        value = tokenizer.nextToken();
+                    } else {
+                        /*
+                         * There is no third token because the
+                         * literal is an empty string.
+                         */
+                        value = "";
+                    }
+
+                    //Fourth token is the type of the literal
+                    String type = tokenizer.nextToken();
+
+                    //Fifth token is the highlight information.
+                    //Not normally used because the whole expression is highlighted.
+                    Highlight highlight = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
+
+                    handleCodeSFA(expressionCounter, declaringClass, variableName, value, type, highlight);
+                    	break;
+                	}
+                
                 //Literal
                 case Code.L:
                     {
@@ -1511,17 +1551,25 @@ public abstract class MCodeInterpreter {
 
     /**
      * @param expressionCounter
+     * @param value
+     * @param type
+     * @param highlight
+     */
+    protected abstract void handleCodeSFA(long expressionCounter, String declaringClass, String variableName, String value, String type, Highlight highlight);
+
+    /**
+     * @param expressionCounter
      * @param expressionReference
      * @param value
      * @param type
      * @param h
      */
-    public abstract void handleCodeCAST(long expressionCounter, long expressionReference, String value, String type, Highlight h);
+    protected abstract void handleCodeCAST(long expressionCounter, long expressionReference, String value, String type, Highlight h);
 
     /**
      * @param line2
      */
-    public abstract void beforeInterpretation(String line);
+    protected abstract void beforeInterpretation(String line);
 
     /**
      * @param expressionCounter

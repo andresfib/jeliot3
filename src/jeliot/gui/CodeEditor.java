@@ -231,6 +231,7 @@ public class CodeEditor extends JComponent {
      */
     private ActionListener allSelector = new ActionListener() {
          public void actionPerformed(ActionEvent e) {
+            area.requestFocus();
             area.selectAll();
         }
     };
@@ -676,5 +677,6 @@ public class CodeEditor extends JComponent {
             area.select(left, right);
         }
     }
+    
 
 }

@@ -1,6 +1,7 @@
 package jeliot.lang;
 
-import jeliot.theater.*;
+import jeliot.mcode.Highlight;
+import jeliot.theater.VariableActor;
 
 /**
   * Variable is an instance of a variable - a field or a local
@@ -39,6 +40,12 @@ public class Variable {
 	 */
 	String modifier;
 
+	/**
+	 * 
+	 *
+	 */
+	Highlight locationInCode = null;
+	
     /**
 	 * 
 	 */
@@ -118,4 +125,16 @@ public class Variable {
         this.modifier = modifier;
     }
 
+    /**
+     * @return Returns the locationInCode.
+     */
+    public Highlight getLocationInCode() {
+        return locationInCode;
+    }
+    /**
+     * @param locationInCode The locationInCode to set.
+     */
+    public void setLocationInCode(Highlight locationInCode) {
+        this.locationInCode = locationInCode;
+    }
 }

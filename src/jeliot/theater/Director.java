@@ -2,6 +2,7 @@ package jeliot.theater;
 
 import java.awt.Point;
 import java.text.MessageFormat;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Stack;
@@ -10,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import jeliot.Jeliot;
-import jeliot.gui.CodePane;
+import jeliot.gui.CodePane2;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.MethodFrame;
 import jeliot.lang.ObjectFrame;
@@ -56,7 +57,7 @@ public class Director {
     private Theater theatre;
 
     /** Pane showing the code. For highlighting. */
-    private CodePane codePane;
+    private CodePane2 codePane;
 
     /** Master Jeliot. */
     private Jeliot jeliot;
@@ -132,7 +133,7 @@ public class Director {
      */
     public Director(
         Theater theatre,
-        CodePane codePane,
+        CodePane2 codePane,
         Jeliot jeliot,
         AnimationEngine engine) {
 
@@ -2437,7 +2438,72 @@ public class Director {
     
         }
     */
+
+    /**
+     * @param of
+     * @param h
+     */
+    public void showClassCreation(jeliot.lang.Class c) {
+        
+        highlight(null);
+        
+        ClassActor ca = factory.produceClassActor(c);
+        c.setClassActor(ca);
+
+        Point loc = manager.reserve(ca);
+        theatre.capture();
+        engine.showAnimation(ca.appear(loc));
+        theatre.release();
+        manager.bind(ca);
+        
+        ListIterator li = c.getVariables();
+        
+        while (li.hasNext()) {
+            Variable v = (Variable) li.next();
+            declareClassVariable(c, v, v.getValue());
+        }
+    }    
     
+    public void declareClassVariable(jeliot.lang.Class c, Variable var, Value val) {
+        
+        highlight(var.getLocationInCode());
+        
+        ClassActor ca = c.getClassActor();
+        VariableActor actor = factory.produceVariableActor(var);
+        var.setActor(actor);
+
+        Point loc2 = ca.reserve(actor);
+
+        Animation a = ca.extend();
+        if (a != null) {
+            engine.showAnimation(a);
+        }        
+        
+        theatre.capture();
+
+        engine.showAnimation(actor.appear(loc2));
+        ca.bind();
+
+        theatre.release();
+        /*
+        if (val != null) {
+            introduceLiteral(val);
+            
+            Value casted = (Value) val.clone();
+            casted.setActor(factory.produceValueActor(val));
+            
+            Value returned = (Value) val.clone();
+            returned.setActor(factory.produceValueActor(val));
+            
+            animateAssignment(var,
+                    val,
+                    casted,
+                    returned,
+                    var.getLocationInCode());
+            var.assign(casted);
+        } 
+        */  
+    }
     
     //Jeliot 3
  	/**

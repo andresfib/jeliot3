@@ -161,7 +161,13 @@ public class ActorFactory {
      */
     private Color objectStageColor = new Color(Integer.decode(
             bundle.getString("color.object_stage.background")).intValue());
-
+    
+    /**
+     *  
+     */
+    private Color classColor = new Color(Integer.decode(
+            bundle.getString("color.class.background")).intValue());
+    
     /**
      *  
      */
@@ -1019,5 +1025,25 @@ public class ActorFactory {
         lat.setForeground(LATForegroundColor);
         lat.setFont(LATFont);
         return lat;
+    }
+
+    /**
+     *  
+     */
+    private MessageFormat classTitle = new MessageFormat(bundle
+            .getString("title.class"));
+
+    
+    public ClassActor produceClassActor(jeliot.lang.Class c) {
+        ClassActor ca = new ClassActor(classTitle.format(new String[] { c
+                .getName()}), c.getVariableCount());
+        ca.setFont(stageFont);
+        //The width of the object stage is not correct but we have not found
+        // any better.
+        ca.calculateSize(getMaxObjectStageWidth(), valueHeight + 8 + variableInsets.top
+                + variableInsets.bottom);
+        ca.setBackground(classColor);
+        ca.setShadow(6);        
+        return ca;
     }
 }

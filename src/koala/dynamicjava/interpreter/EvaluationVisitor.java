@@ -1177,11 +1177,20 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(StaticFieldAccess node) {
         Field f = (Field) node.getProperty(NodeProperties.FIELD);
-        MCodeUtilities.write(Code.SFA+Code.DELIM+(counter++)+Code.DELIM+f.getName()+
-        		Code.DELIM+f.getType().getName()+Code.DELIM+f.getDeclaringClass().getName()+
-				Code.DELIM+locationToString(node));
         try {
-            return f.get(null);
+            Object o = f.get(null);
+            String value = "null";
+            if (o != null) {
+                value = o.toString();
+            }
+            MCodeUtilities.write(Code.SFA+
+                    Code.DELIM+(counter++)+
+                    Code.DELIM+f.getDeclaringClass().getName()+
+    				Code.DELIM+f.getName()+
+            		Code.DELIM+value+
+            		Code.DELIM+f.getType().getName()+
+    				Code.DELIM+locationToString(node));
+            return o;
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }

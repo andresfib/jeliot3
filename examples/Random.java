@@ -2,7 +2,7 @@ import jeliot.io.*;
 
 public class Random {
     public static void main() {
-		int n = 6;
+		int n = 50;
 		int[] array = new int[n];
 		int i, j, tmp; 
 
