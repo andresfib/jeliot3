@@ -155,7 +155,6 @@ public class Editor extends JTextArea implements ActionMap {
                                           new String(buffer, 0, nch), null);
                 }
             } catch (Exception ex) {
-                // TODO : dialog
                 System.err.println(ex.toString());
             }
         }
@@ -187,7 +186,6 @@ public class Editor extends JTextArea implements ActionMap {
                 out.write(document.getText(0, document.getLength()));
                 out.flush();
             } catch (Exception ex) {
-                // TODO : dialog
                 System.err.println(ex.toString());
             }
         }
@@ -234,7 +232,7 @@ public class Editor extends JTextArea implements ActionMap {
             try {
                 undo.undo();
             } catch (CannotUndoException ex) {
-                // TODO : dialog
+
                 System.out.println(ex);
             }
             update();
@@ -265,8 +263,7 @@ public class Editor extends JTextArea implements ActionMap {
             try {
                 undo.redo();
             } catch (CannotRedoException ex) {
-                // TODO : dialog
-                System.out.println(ex);
+          	    System.out.println(ex);
             }
             update();
             undoAction.update();
@@ -336,7 +333,7 @@ public class Editor extends JTextArea implements ActionMap {
 			messageHandler.setMainMessage("Status.current",
 						      currentFile.getCanonicalPath());
                     } catch (Exception ex) {
-                        // TODO : dialog
+
                         System.err.println(ex.toString());
                     }
                 }
@@ -386,8 +383,7 @@ public class Editor extends JTextArea implements ActionMap {
 		    messageHandler.setMainMessage("Status.current",
 						  currentFile.getCanonicalPath());
                 } catch (Exception ex) {
-                    // TODO : dialog
-                    System.err.println(ex.toString());
+                     System.err.println(ex.toString());
                 }
             }
         }
