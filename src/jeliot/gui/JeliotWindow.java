@@ -63,6 +63,7 @@ import jeliot.theater.PanelController;
 import jeliot.theater.PauseListener;
 import jeliot.theater.Theater;
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
@@ -82,20 +83,17 @@ public class JeliotWindow implements PauseListener {
     /**
      * The resource bundle for gui package
      */
-    static private UserProperties propertiesBundle = ResourceBundles
-            .getGuiUserProperties();
+    static private UserProperties propertiesBundle = ResourceBundles.getGuiUserProperties();
 
     /**
      * The resource bundle for gui package
      */
-    static private ResourceBundle messageBundle = ResourceBundles
-            .getGuiMessageResourceBundle();
+    static private ResourceBundle messageBundle = ResourceBundles.getGuiMessageResourceBundle();
 
     /**
      * User properties that were saved from previous run.
      */
-    private UserProperties jeliotUserProperties = ResourceBundles
-            .getJeliotUserProperties();
+    private UserProperties jeliotUserProperties = ResourceBundles.getJeliotUserProperties();
 
     /**
      * The version information about Jeliot from name and version from the
@@ -128,13 +126,11 @@ public class JeliotWindow implements PauseListener {
 
     /** Color for highlighting a tab name when its content has changed. */
     private Color highlightTabColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.tab.foreground.highlight"))
-            .intValue());
+            propertiesBundle.getStringProperty("color.tab.foreground.highlight")).intValue());
 
     /** Color for highlighting a tab name when its content has changed. */
     private Color normalTabColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.tab.foreground.normal"))
-            .intValue());
+            propertiesBundle.getStringProperty("color.tab.foreground.normal")).intValue());
 
     /** The previous speed before the run until line is set. */
     private int previousSpeed;
@@ -149,9 +145,13 @@ public class JeliotWindow implements PauseListener {
 
             public void stateChanged(ChangeEvent e) {
                 highlightTabTitle(false, tabbedPane.getSelectedIndex());
+                codePane.clearHighlights();
+                selectedIndexInTabbedPane = ((JTabbedPane) e.getSource()).getSelectedIndex();
             }
         });
     }
+
+    private int selectedIndexInTabbedPane = 0;
 
     /** TreeDraw view that shows the call tree of the program execution. */
     private TreeDraw callTree;
@@ -234,9 +234,8 @@ public class JeliotWindow implements PauseListener {
     {
         errorJEditorPane.setEditable(false);
         errorJEditorPane.setContentType("text/html");
-        errorJEditorPane.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLoweredBevelBorder(), BorderFactory
-                        .createEmptyBorder(10, 10, 10, 10)));
+        errorJEditorPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+                .createLoweredBevelBorder(), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
     }
 
     /**
@@ -244,8 +243,7 @@ public class JeliotWindow implements PauseListener {
      */
     private JScrollPane errorPane = new JScrollPane(errorJEditorPane);
     {
-        errorPane
-                .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        errorPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //errorPane.setPreferredSize(new Dimension(250, 145));
     }
 
@@ -301,8 +299,9 @@ public class JeliotWindow implements PauseListener {
     private ActionListener stepAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.writeToFile("StepButton", System.currentTimeMillis());
+            Tracker.writeToFile("StepButton", TrackerClock.currentTimeMillis(), -1);
             stepAnimation();
+            Tracker.writeToFile("AnimationStarted", TrackerClock.currentTimeMillis(), -1);
         }
     };
 
@@ -312,8 +311,9 @@ public class JeliotWindow implements PauseListener {
     private ActionListener playAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.writeToFile("PlayButton", System.currentTimeMillis());
+            Tracker.writeToFile("PlayButton", TrackerClock.currentTimeMillis(), -1);
             playAnimation();
+            Tracker.writeToFile("AnimationStarted", TrackerClock.currentTimeMillis(), -1);
         }
     };
 
@@ -323,7 +323,7 @@ public class JeliotWindow implements PauseListener {
     private ActionListener pauseAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.writeToFile("PauseButton", System.currentTimeMillis());
+            Tracker.writeToFile("PauseButton", TrackerClock.currentTimeMillis(), -1);
             pauseAnimation();
         }
     };
@@ -334,7 +334,7 @@ public class JeliotWindow implements PauseListener {
     private ActionListener rewindAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.writeToFile("RewindButton", System.currentTimeMillis());
+            Tracker.writeToFile("RewindButton", TrackerClock.currentTimeMillis(), -1);
             rewindAnimation();
         }
     };
@@ -348,8 +348,7 @@ public class JeliotWindow implements PauseListener {
             WindowListener[] wl = frame.getWindowListeners();
             int n = wl.length;
             for (int i = 0; i < n; i++) {
-                wl[i].windowClosing(new WindowEvent(frame,
-                        WindowEvent.WINDOW_CLOSING));
+                wl[i].windowClosing(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
             /*
              if (editor.isChanged()) {
@@ -412,9 +411,8 @@ public class JeliotWindow implements PauseListener {
      * @param udir
      *            The user directory
      */
-    public JeliotWindow(Jeliot jeliot, CodePane2 codePane, Theater theatre,
-            AnimationEngine engine, ImageLoader iLoad, String udir,
-            TreeDraw td, HistoryView hv) {
+    public JeliotWindow(Jeliot jeliot, CodePane2 codePane, Theater theatre, AnimationEngine engine,
+            ImageLoader iLoad, String udir, TreeDraw td, HistoryView hv) {
 
         this.jeliot = jeliot;
         this.codePane = codePane;
@@ -442,26 +440,20 @@ public class JeliotWindow implements PauseListener {
             //theaterScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             //theaterScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-            this.tabbedPane.addTab(
-                    messageBundle.getString("tab.title.theater"),
-                    theaterScrollPane);
+            this.tabbedPane.addTab(messageBundle.getString("tab.title.theater"), theaterScrollPane);
             this.tabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
 
             if (!jeliot.isExperiment()) {
-                this.tabbedPane.addTab(messageBundle
-                        .getString("tab.title.call_tree"), callTree
+                this.tabbedPane.addTab(messageBundle.getString("tab.title.call_tree"), callTree
                         .getComponent());
                 this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
 
-                this.tabbedPane.addTab(messageBundle
-                        .getString("tab.title.history"), hv);
+                this.tabbedPane.addTab(messageBundle.getString("tab.title.history"), hv);
                 this.tabbedPane.setMnemonicAt(2, KeyEvent.VK_Y);
-                this.tabbedPane.setEnabledAt(tabbedPane
-                        .indexOfTab(messageBundle
-                                .getString("tab.title.call_tree")), false);
-                this.tabbedPane.setEnabledAt(tabbedPane
-                        .indexOfTab(messageBundle
-                                .getString("tab.title.history")), false);
+                this.tabbedPane.setEnabledAt(tabbedPane.indexOfTab(messageBundle
+                        .getString("tab.title.call_tree")), false);
+                this.tabbedPane.setEnabledAt(tabbedPane.indexOfTab(messageBundle
+                        .getString("tab.title.history")), false);
             }
 
             this.frame.setIconImage(iLoad.getImage(propertiesBundle
@@ -469,8 +461,7 @@ public class JeliotWindow implements PauseListener {
 
             frame.setJMenuBar(makeMenuBar());
 
-            JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                    editor, tabbedPane);
+            JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editor, tabbedPane);
             pane.setOneTouchExpandable(true);
             codeNest = pane;
 
@@ -542,8 +533,7 @@ public class JeliotWindow implements PauseListener {
         if (editor.isChanged()) {
             int n = JOptionPane.showConfirmDialog(frame, messageBundle
                     .getString("quit.without.saving.message"), messageBundle
-                    .getString("quit.without.saving.title"),
-                    JOptionPane.YES_NO_OPTION);
+                    .getString("quit.without.saving.title"), JOptionPane.YES_NO_OPTION);
             if (n == JOptionPane.YES_OPTION) {
                 editor.saveProgram();
             }
@@ -584,9 +574,9 @@ public class JeliotWindow implements PauseListener {
 
         menuItem = new JMenuItem(messageBundle.getString("menu.program.print"));
         menuItem.setMnemonic(KeyEvent.VK_P);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() instanceof Component) {
                     if (!((Component) e.getSource()).isEnabled()) {
@@ -611,16 +601,15 @@ public class JeliotWindow implements PauseListener {
                     area.setCaretPosition(caretPosition);
                 }
                 area.getPainter().setPrinting(false);
-            }       
+            }
         });
-        programMenu.add(menuItem);        
-        
+        programMenu.add(menuItem);
+
         programMenu.addSeparator();
-        
+
         menuItem = new JMenuItem(messageBundle.getString("menu.program.exit"));
         menuItem.setMnemonic(KeyEvent.VK_X);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(exit);
         programMenu.add(menuItem);
 
@@ -645,7 +634,7 @@ public class JeliotWindow implements PauseListener {
         JMenu helpMenu = makeHelpMenu();
         menuBar.add(helpMenu);
 
-        JMenu[] jm = { controlMenu, animationMenu };
+        JMenu[] jm = { controlMenu, animationMenu};
         addInAnimationMenuItems(jm);
 
         return menuBar;
@@ -675,29 +664,25 @@ public class JeliotWindow implements PauseListener {
         //Save Automatically on compilation.
         if (jeliotUserProperties.containsKey("save_automatically")) {
             editor.setSaveAutomatically(Boolean.valueOf(
-                    jeliotUserProperties.getStringProperty("save_automatically"))
-                    .booleanValue());
+                    jeliotUserProperties.getStringProperty("save_automatically")).booleanValue());
         } else {
-            jeliotUserProperties.setStringProperty("save_automatically", Boolean
-                    .toString(editor.isSaveAutomatically()));
+            jeliotUserProperties.setStringProperty("save_automatically", Boolean.toString(editor
+                    .isSaveAutomatically()));
         }
         final JCheckBoxMenuItem saveAutomaticallyOnCompilationMenuItem = new JCheckBoxMenuItem(
-                messageBundle.getString("menu.options.save_automatically"),
-                editor.isSaveAutomatically());
-        saveAutomaticallyOnCompilationMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_S, ActionEvent.CTRL_MASK+ActionEvent.ALT_MASK));
+                messageBundle.getString("menu.options.save_automatically"), editor
+                        .isSaveAutomatically());
+        saveAutomaticallyOnCompilationMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+                ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 
-        saveAutomaticallyOnCompilationMenuItem
-                .addActionListener(new ActionListener() {
+        saveAutomaticallyOnCompilationMenuItem.addActionListener(new ActionListener() {
 
-                    public void actionPerformed(ActionEvent e) {
-                        boolean saveAutomatically = saveAutomaticallyOnCompilationMenuItem
-                                .getState();
-                        editor.setSaveAutomatically(saveAutomatically);
-                        jeliotUserProperties.setBooleanProperty("save_automatically",
-                                saveAutomatically);
-                    }
-                });
+            public void actionPerformed(ActionEvent e) {
+                boolean saveAutomatically = saveAutomaticallyOnCompilationMenuItem.getState();
+                editor.setSaveAutomatically(saveAutomatically);
+                jeliotUserProperties.setBooleanProperty("save_automatically", saveAutomatically);
+            }
+        });
         menu.add(saveAutomaticallyOnCompilationMenuItem);
 
         //Ask for method
@@ -707,12 +692,11 @@ public class JeliotWindow implements PauseListener {
             jeliotUserProperties.setBooleanProperty("ask_for_method", askForMethod);
         }
 
-        final JCheckBoxMenuItem askForMethodMenuItem = new JCheckBoxMenuItem(
-                messageBundle.getString("menu.options.ask_for_method"),
-                askForMethod);
+        final JCheckBoxMenuItem askForMethodMenuItem = new JCheckBoxMenuItem(messageBundle
+                .getString("menu.options.ask_for_method"), askForMethod);
         askForMethodMenuItem.setMnemonic(KeyEvent.VK_M);
-        askForMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_M, ActionEvent.CTRL_MASK+ActionEvent.ALT_MASK));
+        askForMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,
+                ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
         askForMethodMenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -725,25 +709,21 @@ public class JeliotWindow implements PauseListener {
 
         //Pause on message
         if (jeliotUserProperties.containsKey("pause_on_message")) {
-            showMessagesInDialogs = jeliotUserProperties
-                    .getBooleanProperty("pause_on_message");
+            showMessagesInDialogs = jeliotUserProperties.getBooleanProperty("pause_on_message");
         } else {
-            jeliotUserProperties.setBooleanProperty("pause_on_message",
-                    showMessagesInDialogs);
+            jeliotUserProperties.setBooleanProperty("pause_on_message", showMessagesInDialogs);
         }
 
-        final JCheckBoxMenuItem pauseOnMessageMenuItem = new JCheckBoxMenuItem(
-                messageBundle.getString("menu.options.pause_on_message"),
-                showMessagesInDialogs);
+        final JCheckBoxMenuItem pauseOnMessageMenuItem = new JCheckBoxMenuItem(messageBundle
+                .getString("menu.options.pause_on_message"), showMessagesInDialogs);
         pauseOnMessageMenuItem.setMnemonic(KeyEvent.VK_U);
-        pauseOnMessageMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_U, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        pauseOnMessageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U,
+                ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
         pauseOnMessageMenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 showMessagesInDialogs = pauseOnMessageMenuItem.getState();
-                jeliotUserProperties.setBooleanProperty("pause_on_message",
-                        showMessagesInDialogs);
+                jeliotUserProperties.setBooleanProperty("pause_on_message", showMessagesInDialogs);
             }
         });
         menu.add(pauseOnMessageMenuItem);
@@ -751,23 +731,21 @@ public class JeliotWindow implements PauseListener {
         //Show history view        
         final Jeliot j = jeliot;
         final JTabbedPane jtp = this.tabbedPane;
-        final int index = jtp.indexOfTab(messageBundle
-                .getString("tab.title.history"));
+        final int index = jtp.indexOfTab(messageBundle.getString("tab.title.history"));
 
         if (jeliotUserProperties.containsKey("show_history_view")) {
             j.getHistoryView().setEnabled(
                     jeliotUserProperties.getBooleanProperty("show_history_view"));
         } else {
-            jeliotUserProperties.setBooleanProperty("show_history_view", j
-                    .getHistoryView().isEnabled());
+            jeliotUserProperties.setBooleanProperty("show_history_view", j.getHistoryView()
+                    .isEnabled());
         }
 
-        final JCheckBoxMenuItem enableHistoryViewMenuItem = new JCheckBoxMenuItem(
-                messageBundle.getString("menu.options.show_history_view"),
-                jeliot.getHistoryView().isEnabled());
+        final JCheckBoxMenuItem enableHistoryViewMenuItem = new JCheckBoxMenuItem(messageBundle
+                .getString("menu.options.show_history_view"), jeliot.getHistoryView().isEnabled());
         enableHistoryViewMenuItem.setMnemonic(KeyEvent.VK_H);
-        enableHistoryViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_H, ActionEvent.CTRL_MASK));
+        enableHistoryViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H,
+                ActionEvent.CTRL_MASK));
         enableHistoryViewMenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -776,8 +754,8 @@ public class JeliotWindow implements PauseListener {
                 if (codeNest.getLeftComponent() instanceof CodePane2) {
                     jtp.setEnabledAt(index, state);
                 }
-                jeliotUserProperties.setBooleanProperty("show_history_view", j
-                        .getHistoryView().isEnabled());
+                jeliotUserProperties.setBooleanProperty("show_history_view", j.getHistoryView()
+                        .isEnabled());
             }
         });
         menu.add(enableHistoryViewMenuItem);
@@ -785,27 +763,24 @@ public class JeliotWindow implements PauseListener {
         menu.addSeparator();
 
         //Select font for editor and code pane.        
-        menuItem = new JMenuItem(messageBundle
-                .getString("menu.options.font_select"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.options.font_select"));
         menuItem.setMnemonic(KeyEvent.VK_F);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 Font f = null;
                 try {
-                    f = JFontChooser.showDialog(frame, editor.getTextArea()
-                            .getPainter().getFont());
+                    f = JFontChooser.showDialog(frame, editor.getTextArea().getPainter().getFont());
                 } catch (Exception e1) {
                     DebugUtil.handleThrowable(e1);
                     /*
                      if (DebugUtil.DEBUGGING) {
-                     	jeliot.output(e1.toString());
-                     	StackTraceElement[] s = e1.getStackTrace();
-                     	for (int i = 0; i < s.length; i++) {
-                     		jeliot.output(s[i].toString() + "\n");
-                     	}
+                     jeliot.output(e1.toString());
+                     StackTraceElement[] s = e1.getStackTrace();
+                     for (int i = 0; i < s.length; i++) {
+                     jeliot.output(s[i].toString() + "\n");
+                     }
                      }
                      */
                 }
@@ -813,11 +788,11 @@ public class JeliotWindow implements PauseListener {
                     getCodePane().setFont(f);
                     editor.setFont(f);
                     /*
-                    getCodePane().getTextArea().getPainter().setFont(f);
-                    propertiesBundle.setFontProperty("font.code_pane", f);
-                    editor.getTextArea().getPainter().setFont(f);
-                    propertiesBundle.setFontProperty("font.code_editor", f);
-                    */
+                     getCodePane().getTextArea().getPainter().setFont(f);
+                     propertiesBundle.setFontProperty("font.code_pane", f);
+                     editor.getTextArea().getPainter().setFont(f);
+                     propertiesBundle.setFontProperty("font.code_editor", f);
+                     */
                 }
                 codeNest.getLeftComponent().requestFocusInWindow();
             }
@@ -890,11 +865,10 @@ public class JeliotWindow implements PauseListener {
             }
         });
         menu.add(menuItem);
-        
+
         menuItem = new JMenuItem(messageBundle.getString("menu.animation.play"));
         menuItem.setMnemonic(KeyEvent.VK_L);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -902,12 +876,10 @@ public class JeliotWindow implements PauseListener {
             }
         });
         menu.add(menuItem);
-        
-        menuItem = new JMenuItem(messageBundle
-                .getString("menu.animation.pause"));
+
+        menuItem = new JMenuItem(messageBundle.getString("menu.animation.pause"));
         menuItem.setMnemonic(KeyEvent.VK_U);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -916,12 +888,9 @@ public class JeliotWindow implements PauseListener {
         });
         menu.add(menuItem);
 
-
-        menuItem = new JMenuItem(messageBundle
-                .getString("menu.animation.rewind"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.animation.rewind"));
         menuItem.setMnemonic(KeyEvent.VK_R);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -930,12 +899,9 @@ public class JeliotWindow implements PauseListener {
         });
         menu.add(menuItem);
 
-
-        menuItem = new JMenuItem(messageBundle
-                .getString("menu.animation.faster"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.animation.faster"));
         menuItem.setMnemonic(KeyEvent.VK_F);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -944,11 +910,9 @@ public class JeliotWindow implements PauseListener {
         });
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(messageBundle
-                .getString("menu.animation.slower"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.animation.slower"));
         menuItem.setMnemonic(KeyEvent.VK_L);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -957,11 +921,9 @@ public class JeliotWindow implements PauseListener {
         });
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(messageBundle
-                .getString("menu.animation.run_until"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.animation.run_until"));
         menuItem.setMnemonic(KeyEvent.VK_L);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -972,17 +934,16 @@ public class JeliotWindow implements PauseListener {
 
         menu.addSeparator();
 
-        menuItem = new JMenuItem(messageBundle
-                .getString("menu.animation.print"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.animation.print"));
         menuItem.setMnemonic(KeyEvent.VK_P);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 JComponent component = JeliotWindow.this.getTheaterPane();
                 if (component instanceof JTabbedPane) {
-                    Component componentForPrinting = ((JTabbedPane) component).getComponentAt(((JTabbedPane) component).getSelectedIndex());
+                    Component componentForPrinting = ((JTabbedPane) component)
+                            .getComponentAt(((JTabbedPane) component).getSelectedIndex());
                     if (componentForPrinting instanceof JComponent) {
                         if (componentForPrinting instanceof JScrollPane) {
                             JScrollPane jsr = (JScrollPane) componentForPrinting;
@@ -1028,8 +989,7 @@ public class JeliotWindow implements PauseListener {
 
         menuItem = new JMenuItem(messageBundle.getString("menu.control.edit"));
         menuItem.setMnemonic(KeyEvent.VK_E);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -1040,11 +1000,9 @@ public class JeliotWindow implements PauseListener {
 
         animWidgets.addElement(menuItem);
 
-        menuItem = new JMenuItem(messageBundle
-                .getString("menu.control.compile"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.control.compile"));
         menuItem.setMnemonic(KeyEvent.VK_M);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,
-                ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -1072,10 +1030,8 @@ public class JeliotWindow implements PauseListener {
         URL imageURL = this.getClass().getClassLoader().getResource(
                 propertiesBundle.getStringProperty("directory.images") + iconName);
         if (imageURL == null) {
-            imageURL = Thread.currentThread().getContextClassLoader()
-                    .getResource(
-                            propertiesBundle.getStringProperty("directory.images")
-                                    + iconName);
+            imageURL = Thread.currentThread().getContextClassLoader().getResource(
+                    propertiesBundle.getStringProperty("directory.images") + iconName);
         }
         ImageIcon icon = new ImageIcon(imageURL);
         //new ImageIcon(bundle.getString("directory.images")+ iconName);
@@ -1095,11 +1051,10 @@ public class JeliotWindow implements PauseListener {
      */
     private JPanel makeControlPanel() {
 
-        editButton = makeControlButton(messageBundle.getString("button.edit"),
-                propertiesBundle.getStringProperty("image.edit_icon"));
-        compileButton = makeControlButton(messageBundle
-                .getString("button.compile"), propertiesBundle
-                .getStringProperty("image.compile_icon"));
+        editButton = makeControlButton(messageBundle.getString("button.edit"), propertiesBundle
+                .getStringProperty("image.edit_icon"));
+        compileButton = makeControlButton(messageBundle.getString("button.compile"),
+                propertiesBundle.getStringProperty("image.compile_icon"));
 
         editButton.setMnemonic(KeyEvent.VK_E);
         compileButton.setMnemonic(KeyEvent.VK_M);
@@ -1110,7 +1065,7 @@ public class JeliotWindow implements PauseListener {
         editButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Tracker.writeToFile("EditButton", System.currentTimeMillis());
+                Tracker.writeToFile("EditButton", TrackerClock.currentTimeMillis(), -1);
                 enterEdit();
             }
         });
@@ -1118,8 +1073,7 @@ public class JeliotWindow implements PauseListener {
         compileButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Tracker.writeToFile("AnimationButton", System
-                        .currentTimeMillis());
+                Tracker.writeToFile("AnimationButton", TrackerClock.currentTimeMillis(), -1);
 
                 tryToEnterAnimate();
             }
@@ -1139,18 +1093,16 @@ public class JeliotWindow implements PauseListener {
         // pauseButton = makeControlButton("Pause", "pauseicon.gif");
         // rewindButton = makeControlButton("Rewind", "rewindicon.gif");
 
-        stepButton = makeControlButton(messageBundle.getString("button.step"),
-                propertiesBundle.getStringProperty("image.step_icon"));
+        stepButton = makeControlButton(messageBundle.getString("button.step"), propertiesBundle
+                .getStringProperty("image.step_icon"));
         stepButton.setMnemonic(KeyEvent.VK_S);
-        playButton = makeControlButton(messageBundle.getString("button.play"),
-                propertiesBundle.getStringProperty("image.play_icon"));
+        playButton = makeControlButton(messageBundle.getString("button.play"), propertiesBundle
+                .getStringProperty("image.play_icon"));
         playButton.setMnemonic(KeyEvent.VK_P);
-        pauseButton = makeControlButton(
-                messageBundle.getString("button.pause"), propertiesBundle
-                        .getStringProperty("image.pause_icon"));
+        pauseButton = makeControlButton(messageBundle.getString("button.pause"), propertiesBundle
+                .getStringProperty("image.pause_icon"));
         pauseButton.setMnemonic(KeyEvent.VK_U);
-        rewindButton = makeControlButton(messageBundle
-                .getString("button.rewind"), propertiesBundle
+        rewindButton = makeControlButton(messageBundle.getString("button.rewind"), propertiesBundle
                 .getStringProperty("image.rewind_icon"));
         rewindButton.setMnemonic(KeyEvent.VK_R);
 
@@ -1176,8 +1128,7 @@ public class JeliotWindow implements PauseListener {
             public void stateChanged(ChangeEvent e) {
                 int volume = speedSlider.getValue();
                 engine.setVolume(volume * 50.0);
-                Tracker.writeToFile("Slider", "" + volume, System
-                        .currentTimeMillis());
+                Tracker.writeToFile("Slider", "" + volume, TrackerClock.currentTimeMillis(), -1);
             }
         });
 
@@ -1205,11 +1156,9 @@ public class JeliotWindow implements PauseListener {
                 propertiesBundle.getStringProperty("directory.images")
                         + propertiesBundle.getStringProperty("image.jeliot"));
         if (imageURL == null) {
-            imageURL = Thread.currentThread().getContextClassLoader()
-                    .getResource(
-                            propertiesBundle.getStringProperty("directory.images")
-                                    + propertiesBundle
-                                            .getStringProperty("image.jeliot"));
+            imageURL = Thread.currentThread().getContextClassLoader().getResource(
+                    propertiesBundle.getStringProperty("directory.images")
+                            + propertiesBundle.getStringProperty("image.jeliot"));
         }
 
         JLabel jicon = new JLabel(new ImageIcon(imageURL));
@@ -1233,8 +1182,7 @@ public class JeliotWindow implements PauseListener {
         c.gridwidth = 1;
         c.insets = new Insets(0, 0, 0, 0);
         c.anchor = GridBagConstraints.WEST;
-        JLabel label = new JLabel(messageBundle
-                .getString("label.animation_speed1"));
+        JLabel label = new JLabel(messageBundle.getString("label.animation_speed1"));
         pl.setConstraints(label, c);
         p.add(label);
 
@@ -1249,9 +1197,8 @@ public class JeliotWindow implements PauseListener {
         pl.setConstraints(speedSlider, c);
         p.add(speedSlider);
 
-        p.setBorder(BorderFactory.createCompoundBorder(BorderFactory
-                .createEmptyBorder(5, 2, 2, 10), BorderFactory
-                .createEtchedBorder()));
+        p.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(5, 2, 2, 10), BorderFactory.createEtchedBorder()));
 
         return p;
     }
@@ -1393,11 +1340,16 @@ public class JeliotWindow implements PauseListener {
                     methodCall = findMainMethodCall(programCode);
                     if (askForMethod || methodCall == null) {
                         methodCall = ((methodCall != null) ? methodCall : null);
-                        String inputValue = JOptionPane.showInputDialog(
-                                (methodCall != null)?
-                                        messageBundle.getString("dialog.ask_for_method"):
-                                        messageBundle.getString("dialog.ask_for_method_when_main_method_not_found") + "\n"+ messageBundle.getString("dialog.ask_for_method"),
-                                methodCall);
+                        String inputValue = JOptionPane
+                                .showInputDialog(
+                                        (methodCall != null) ? messageBundle
+                                                .getString("dialog.ask_for_method")
+                                                : messageBundle
+                                                        .getString("dialog.ask_for_method_when_main_method_not_found")
+                                                        + "\n"
+                                                        + messageBundle
+                                                                .getString("dialog.ask_for_method"),
+                                        methodCall);
                         if (inputValue != null && !inputValue.trim().equals("")) {
                             methodCall = inputValue + ";";
                         }
@@ -1427,17 +1379,16 @@ public class JeliotWindow implements PauseListener {
                                     pauseButton.setEnabled(false);
                                     rewindButton.setEnabled(false);
 
-                                    int index = tabbedPane
-                                            .indexOfTab(messageBundle
-                                                    .getString("tab.title.call_tree"));
+                                    int index = tabbedPane.indexOfTab(messageBundle
+                                            .getString("tab.title.call_tree"));
                                     if (index > 0) {
                                         tabbedPane.setEnabledAt(index, true);
                                     }
                                     index = tabbedPane.indexOfTab(messageBundle
                                             .getString("tab.title.history"));
                                     if (index > 0) {
-                                        tabbedPane.setEnabledAt(index, jeliot
-                                                .getHistoryView().isEnabled());
+                                        tabbedPane.setEnabledAt(index, jeliot.getHistoryView()
+                                                .isEnabled());
                                     }
                                 }
                             });
@@ -1485,7 +1436,6 @@ public class JeliotWindow implements PauseListener {
     private static final Pattern class1 = Pattern.compile("\\s+class\\s+");
 
     private static final Pattern class2 = Pattern.compile("\\s");
-
 
     /**
      * Tries to find the main method declaration
@@ -1586,14 +1536,14 @@ public class JeliotWindow implements PauseListener {
         playButton.setEnabled(false);
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(true);
-        
-        String[] s1 = { messageBundle.getString("menu.control.edit") };
+
+        String[] s1 = { messageBundle.getString("menu.control.edit")};
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
                 messageBundle.getString("menu.animation.play"),
                 messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.animation.run_until"),
-                messageBundle.getString("menu.animation.pause") };
+                messageBundle.getString("menu.animation.pause")};
         setEnabledMenuItems(false, s2);
 
         errorJEditorPane.setText(e);
@@ -1681,13 +1631,13 @@ public class JeliotWindow implements PauseListener {
         stepButton.setEnabled(false);
         pauseButton.setEnabled(true);
 
-        String[] s1 = { messageBundle.getString("menu.animation.pause") };
+        String[] s1 = { messageBundle.getString("menu.animation.pause")};
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
                 messageBundle.getString("menu.animation.play"),
                 messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.control.edit"),
-                messageBundle.getString("menu.animation.run_until") };
+                messageBundle.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
 
         try {
@@ -1710,13 +1660,13 @@ public class JeliotWindow implements PauseListener {
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
 
-        String[] s1 = { messageBundle.getString("menu.animation.pause") };
+        String[] s1 = { messageBundle.getString("menu.animation.pause")};
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
                 messageBundle.getString("menu.animation.play"),
                 messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.control.edit"),
-                messageBundle.getString("menu.animation.run_until") };
+                messageBundle.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
 
         try {
@@ -1735,7 +1685,7 @@ public class JeliotWindow implements PauseListener {
 
         pauseButton.setEnabled(false);
 
-        String[] s1 = { messageBundle.getString("menu.animation.pause") };
+        String[] s1 = { messageBundle.getString("menu.animation.pause")};
         setEnabledMenuItems(false, s1);
 
         try {
@@ -1757,13 +1707,13 @@ public class JeliotWindow implements PauseListener {
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
 
-        String[] s1 = { messageBundle.getString("menu.animation.pause") };
+        String[] s1 = { messageBundle.getString("menu.animation.pause")};
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
                 messageBundle.getString("menu.animation.play"),
                 messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.control.edit"),
-                messageBundle.getString("menu.animation.run_until") };
+                messageBundle.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
     }
 
@@ -1778,13 +1728,13 @@ public class JeliotWindow implements PauseListener {
         rewindButton.setEnabled(false);
         editButton.setEnabled(true);
 
-        String[] s1 = { messageBundle.getString("menu.control.edit") };
+        String[] s1 = { messageBundle.getString("menu.control.edit")};
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
                 messageBundle.getString("menu.animation.play"),
                 messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.animation.pause"),
-                messageBundle.getString("menu.animation.run_until") };
+                messageBundle.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
     }
 
@@ -1799,13 +1749,13 @@ public class JeliotWindow implements PauseListener {
 
         tabbedPane.setSelectedIndex(0);
         changeTheatrePane(tabbedPane);
-        
+
         String[] s1 = { messageBundle.getString("menu.animation.step"),
                 messageBundle.getString("menu.animation.play"),
                 messageBundle.getString("menu.animation.run_until"),
                 messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.control.edit"),
-                messageBundle.getString("menu.animation.pause") };
+                messageBundle.getString("menu.animation.pause")};
         setEnabledMenuItems(false, s1);
 
         editButton.setEnabled(false);
@@ -1851,11 +1801,10 @@ public class JeliotWindow implements PauseListener {
                 String[] s2 = { messageBundle.getString("menu.animation.step"),
                         messageBundle.getString("menu.animation.play"),
                         messageBundle.getString("menu.control.edit"),
-                        messageBundle.getString("menu.animation.run_until") };
+                        messageBundle.getString("menu.animation.run_until")};
                 setEnabledMenuItems(true, s2);
-                String[] s3 = {
-                        messageBundle.getString("menu.animation.rewind"),
-                        messageBundle.getString("menu.animation.pause") };
+                String[] s3 = { messageBundle.getString("menu.animation.rewind"),
+                        messageBundle.getString("menu.animation.pause")};
                 setEnabledMenuItems(false, s3);
             }
         });
@@ -1874,12 +1823,12 @@ public class JeliotWindow implements PauseListener {
             editButton.setEnabled(true);
 
             String[] s1 = { messageBundle.getString("menu.control.edit"),
-                    messageBundle.getString("menu.animation.rewind") };
+                    messageBundle.getString("menu.animation.rewind")};
             setEnabledMenuItems(true, s1);
             String[] s2 = { messageBundle.getString("menu.animation.step"),
                     messageBundle.getString("menu.animation.play"),
                     messageBundle.getString("menu.animation.run_until"),
-                    messageBundle.getString("menu.animation.pause") };
+                    messageBundle.getString("menu.animation.pause")};
             setEnabledMenuItems(false, s2);
 
         } else {
@@ -1891,12 +1840,12 @@ public class JeliotWindow implements PauseListener {
             rewindButton.setEnabled(true);
 
             String[] s1 = { messageBundle.getString("menu.control.edit"),
-                    		messageBundle.getString("menu.animation.rewind") };
+                    messageBundle.getString("menu.animation.rewind")};
             setEnabledMenuItems(true, s1);
             String[] s2 = { messageBundle.getString("menu.animation.step"),
                     messageBundle.getString("menu.animation.play"),
                     messageBundle.getString("menu.animation.run_until"),
-                    messageBundle.getString("menu.animation.pause") };
+                    messageBundle.getString("menu.animation.pause")};
             setEnabledMenuItems(false, s2);
         }
     }
@@ -1925,8 +1874,8 @@ public class JeliotWindow implements PauseListener {
      * Method is used to implement the run until feature.
      */
     public void runUntil() {
-        String inputValue = JOptionPane.showInputDialog(messageBundle
-                .getString("dialog.run_until"), new Integer(0));
+        String inputValue = JOptionPane.showInputDialog(
+                messageBundle.getString("dialog.run_until"), new Integer(0));
         int lineNumber = 0;
 
         try {
@@ -2075,13 +2024,21 @@ public class JeliotWindow implements PauseListener {
         rewindButton.setEnabled(true);
         editButton.setEnabled(true);
 
-        String[] s1 = { messageBundle.getString("menu.animation.pause") };
+        String[] s1 = { messageBundle.getString("menu.animation.pause")};
         setEnabledMenuItems(false, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
                 messageBundle.getString("menu.animation.play"),
                 messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.control.edit"),
-                messageBundle.getString("menu.animation.run_until") };
+                messageBundle.getString("menu.animation.run_until")};
         setEnabledMenuItems(true, s2);
+        Tracker.writeToFile("AnimationStopped", TrackerClock.currentTimeMillis(), -1);
+    }
+
+    /**
+     * @return Returns the selectedIndexInTabbedPane.
+     */
+    public int getSelectedIndexInTabbedPane() {
+        return selectedIndexInTabbedPane;
     }
 }

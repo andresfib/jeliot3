@@ -28,6 +28,7 @@ import javax.swing.text.TabExpander;
 import javax.swing.text.Utilities;
 
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 
 import org.syntax.jedit.tokenmarker.Token;
 import org.syntax.jedit.tokenmarker.TokenMarker;
@@ -40,6 +41,8 @@ import org.syntax.jedit.tokenmarker.TokenMarker;
  */
 public class TextAreaPainter extends JComponent implements TabExpander {
 
+    int id = -1;
+    
     boolean printing = false;
 
     Rectangle clipRect;
@@ -354,6 +357,9 @@ public class TextAreaPainter extends JComponent implements TabExpander {
      * @param g The graphics context
      */
     public void paint(Graphics gfx) {
+        
+        id = -1;
+        
         tabSize = fm.charWidth(' ')
                 * ((Integer) textArea.getDocument().getProperty(PlainDocument.tabSizeAttribute))
                         .intValue();
@@ -579,8 +585,8 @@ public class TextAreaPainter extends JComponent implements TabExpander {
             if (lineHighlight) {
                 gfx.setColor(lineHighlightColor);
                 gfx.fillRect(0, y, getWidth(), height);
-                Tracker.writeToFileFromCodeView("CodeHighlight", 0, y, getWidth(), height, System
-                        .currentTimeMillis());
+                this.id = Tracker.writeToFileFromCodeView("CodeHighlight", 0, y, getWidth(), height, TrackerClock
+                        .currentTimeMillis(), this.id);
             }
         } else {
             gfx.setColor(selectionColor);
@@ -614,8 +620,8 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 
             // "inlined" min/max()
             gfx.fillRect(x1 > x2 ? x2 : x1, y, x1 > x2 ? (x1 - x2) : (x2 - x1), height);
-            Tracker.writeToFileFromCodeView("CodeHighlight", x1 > x2 ? x2 : x1, y,
-                    x1 > x2 ? (x1 - x2) : (x2 - x1), height, System.currentTimeMillis());
+            this.id = Tracker.writeToFileFromCodeView("CodeHighlight", x1 > x2 ? x2 : x1, y,
+                    x1 > x2 ? (x1 - x2) : (x2 - x1), height, TrackerClock.currentTimeMillis(), this.id);
         }
     }
 

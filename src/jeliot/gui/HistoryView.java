@@ -24,6 +24,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import jeliot.mcode.Highlight;
+import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
 import jeliot.util.Util;
 
@@ -120,7 +121,7 @@ public class HistoryView extends JComponent implements ActionListener {
         File userPath = Util.createUserPath();
 
         do {
-            String dirName = "images" + System.currentTimeMillis();
+            String dirName = "images" + TrackerClock.currentTimeMillis();
             imageTemp = new File(userPath, dirName);
         } while (imageTemp.exists());
         imageTemp.mkdir();

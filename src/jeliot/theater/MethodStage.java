@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.util.Stack;
 
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 
 /**
  * MethodStage is the graphical representation of the MethodFrame.
@@ -304,7 +305,7 @@ public class MethodStage extends Actor implements ActorContainer {
             double h;
             double plus;
             int full;
-            
+            int id = -1;
             public void init() {
                 size = new Dimension(getWidth(), nheight + margin * 3);
                 h = size.height;
@@ -320,7 +321,7 @@ public class MethodStage extends Actor implements ActorContainer {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                Tracker.writeToFile("Appear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Appear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                 
                 h += plus * pulse;
                 size.height = (int)h;
@@ -351,7 +352,7 @@ public class MethodStage extends Actor implements ActorContainer {
             double h;
             double plus;
             int full;
-            
+            int id = -1;
             public void init() {
                 size = getSize();
                 full = nheight + margin * 3;
@@ -365,7 +366,7 @@ public class MethodStage extends Actor implements ActorContainer {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                Tracker.writeToFile("Disappear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Disappear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                 
                 h += plus * pulse;
                 size.height = (int)h;
@@ -394,7 +395,8 @@ public class MethodStage extends Actor implements ActorContainer {
                 double h;
                 double plus;
                 int full;
-
+                int id = -1;
+                
                 public void init() {
                     size = getSize();
                     h = size.height;
@@ -407,7 +409,7 @@ public class MethodStage extends Actor implements ActorContainer {
 
                 public void animate(double pulse) {
                     Point p = getRootLocation();
-                    Tracker.writeToFile("Extend", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), System.currentTimeMillis());
+                    id = Tracker.writeToFile("Extend", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                     
                     h += plus * pulse;
                     size.height = (int)h;

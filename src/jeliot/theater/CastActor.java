@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Shape;
 
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 
 /**
  * CastActor handles the animation of the casting of the
@@ -88,6 +89,7 @@ public class CastActor extends Actor {
         return new Animation() {
             double plus;
             double h;
+            int id = -1;
             
             public void init() {
                 plus = (double)getHeight() / getDuration();
@@ -95,7 +97,7 @@ public class CastActor extends Actor {
             
             public void animate(double pulse) { 
                 Point p = getRootLocation();
-                Tracker.writeToFile("Cast", p.x, p.y, CastActor.this.getWidth(), CastActor.this.getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Cast", p.x, p.y, CastActor.this.getWidth(), CastActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                 h += plus * pulse;
                 line = (int)h;
                 this.repaint();

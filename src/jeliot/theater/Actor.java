@@ -14,6 +14,7 @@ import java.awt.Shape;
 import java.util.Vector;
 
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
@@ -513,6 +514,8 @@ public abstract class Actor implements Cloneable {
 
             double tracel = traceSpace;
 
+            int id = -1;
+            
             public void init() {
                 this.addActor(Actor.this);
                 step = len / getDuration();
@@ -525,8 +528,8 @@ public abstract class Actor implements Cloneable {
                 setLocation((int) x, (int) y);
 
                 Point p = getRootLocation();
-                Tracker.writeToFile("Move", p.x, p.y, Actor.this.getWidth(),
-                        Actor.this.getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Move", p.x, p.y, Actor.this.getWidth(),
+                        Actor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
 
                 x += pulse * step * cos;
                 y += pulse * step * sin;
@@ -572,6 +575,8 @@ public abstract class Actor implements Cloneable {
 
             int y = loc.y;
 
+            int id = -1;
+            
             public void init() {
                 this.addActor(Actor.this);
                 setLocation(loc);
@@ -581,8 +586,8 @@ public abstract class Actor implements Cloneable {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                Tracker.writeToFile("Appear", p.x, p.y, Actor.this.getWidth(), Actor.this
-                        .getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Appear", p.x, p.y, Actor.this.getWidth(), Actor.this
+                        .getHeight(), TrackerClock.currentTimeMillis(), id);
             }
 
             public void finish() {

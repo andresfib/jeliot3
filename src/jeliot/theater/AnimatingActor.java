@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Point;
 
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 
 /**
  * 
@@ -61,12 +62,14 @@ public class AnimatingActor extends Actor {
 	 */
     public Animation changeImage(final Image chim ) {
         return new Animation() {
-                        
+                     
+            int id = -1;
+            
             public void animate(double pulse) { }
 
             public void finish() {
                 Point p = getRootLocation();
-                Tracker.writeToFile("ChangeImage", p.x, p.y, chim.getWidth(null), chim.getHeight(null), System.currentTimeMillis());
+                id = Tracker.writeToFile("ChangeImage", p.x, p.y, chim.getWidth(null), chim.getHeight(null), TrackerClock.currentTimeMillis(), id);
                 setImage(chim);
             }
         };

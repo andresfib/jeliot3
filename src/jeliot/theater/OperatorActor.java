@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Point;
 
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 
 /**
  * An instance of the OperatorActor class represents a operator in 
@@ -67,6 +68,8 @@ public class OperatorActor extends Actor {
 	 */
     public Animation appear(final Point loc) {
         return new Animation() {
+            int id = -1;
+            
             public void init() {
                 this.addActor(OperatorActor.this);
                 setLocation(loc);
@@ -76,7 +79,7 @@ public class OperatorActor extends Actor {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                Tracker.writeToFile("Appear", p.x, p.y, OperatorActor.this.getWidth(), OperatorActor.this.getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Appear", p.x, p.y, OperatorActor.this.getWidth(), OperatorActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
             }
 
             public void finish() {
