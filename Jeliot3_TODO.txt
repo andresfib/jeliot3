@@ -4,6 +4,7 @@
 * mnemonic for file menu (done)
 * configure Jeliot through properties file (done)
 * Replace '\t' characters with spaces when saving (done)
+  but fix the caret position after saving. (done)
 
 ----- JELIOT 3 TODO-LIST for next version 4.X:------
 
@@ -17,6 +18,7 @@ Jeliot features:
 Language support:
 * Support for Java 1.5.0 with the DrJava/DynamicJava.
 * Support for wrapper classes
+* Support other API classes and objects
 * Constructor calls highlighted correctly
 * super method calls go in the correct order
 * 2 -dimensional arrays
@@ -26,7 +28,7 @@ Language support:
 
 Graphical:
 * Returned value should not stay in the return "bubble" after it has been used or should it? 
-* Zoomable canvas for Theater (see JAZZ project)
+* Zoomable canvas for Theater (see Piccolo project, requires quite a lot of work to transform all the drawing in piccolo)
 * Customize the visualization (change visual attributes or change the granularity of visualization)
 
 Web:
