@@ -23,6 +23,7 @@ import jeliot.theater.Actor;
 import jeliot.theater.Director;
 import jeliot.theater.ExpressionActor;
 import jeliot.theater.ValueActor;
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserPropertyResourceBundle;
 
@@ -254,13 +255,13 @@ public class Interpreter {
         superMethodCallNumber = 0;
         try {
             line = ecode.readLine();
-            //TODO: comment the next line in the released versions
-            //System.out.println(line);
+            DebugUtil.printDebugInfo(line);
         } catch (Exception e) {
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
         }
 
-        //TODO: Change this to be something more meaningful!
         if (line == null) {
             line = "" + Code.ERROR + Code.DELIM
                     + messageBundle.getString("unknown.exception") + Code.DELIM + "0"
@@ -338,7 +339,8 @@ public class Interpreter {
                     + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM
                     + "0" + Code.LOC_DELIM + "0";
         }
-        System.out.println(readLine);
+        DebugUtil.printDebugInfo(line);
+
         return readLine;
     }
 
@@ -347,10 +349,7 @@ public class Interpreter {
      */
     public void execute() {
 
-        /*
-         * TODO: Take this out of the comments for the versions to be realeased
-         */
-          try {
+        try {
          
         director.openScratch();
 
@@ -401,11 +400,10 @@ public class Interpreter {
         }
         director.closeScratch();
 
-        /*
-         * TODO: Take this out of the comments for the versions to be
-         * realeased.
-         */
           } catch (Exception e) { 
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
           	director.showErrorMessage(new InterpreterError(
           			" <H1> Runtime Error </H1> "+ " <P> The feature is not yet implemented. </P> ", null)); 
           	}

@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import jeliot.mcode.Util;
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 
 
@@ -81,7 +81,7 @@ public abstract class InfoWindow extends JFrame implements HyperlinkListener {
             File f = new File(udir, fileName);
             showURL(f.toURI().toURL());
         } catch (Exception e) {
-            if (Util.DEBUGGING) {
+            if (DebugUtil.DEBUGGING) {
                 e.printStackTrace();
             }
         }

@@ -18,6 +18,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import jeliot.gui.LoadJeliot;
+import jeliot.util.DebugUtil;
 
 import com.incors.plaf.kunststoff.KunststoffLookAndFeel;
 
@@ -76,7 +77,9 @@ public class Il3JeliotPlugin extends Jeliot {
                     if (content.length() > 0)
                         gui.setProgram(content.toString());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    if (DebugUtil.DEBUGGING) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -89,7 +92,9 @@ public class Il3JeliotPlugin extends Jeliot {
                 setProgram(u);
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
         }
     }
 

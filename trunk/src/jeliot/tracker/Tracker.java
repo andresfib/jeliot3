@@ -11,8 +11,7 @@ import java.io.FileWriter;
 
 import jeliot.gui.CodePane2;
 import jeliot.theater.Theater;
-
-//TODO: Change this class to use Singleton pattern
+import jeliot.util.DebugUtil;
 
 /**
  * @author Niko Myller
@@ -74,7 +73,9 @@ public class Tracker {
 				file.createNewFile();
 				out = new BufferedWriter(new FileWriter(file));
 			} catch (Exception e) {
-				e.printStackTrace();
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
 			}
 		}
 	}
@@ -89,7 +90,9 @@ public class Tracker {
 				out.close();
 				out = null;
 			} catch (Exception e) {
-				e.printStackTrace();
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
 			}
 		}
 	}
@@ -115,7 +118,9 @@ public class Tracker {
 					out.newLine();
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
 			}
 		}
 	}
@@ -141,7 +146,9 @@ public class Tracker {
                     out.newLine();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -178,7 +185,9 @@ public class Tracker {
 					out.newLine();
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
 			}
 		}
 	}
@@ -203,7 +212,9 @@ public class Tracker {
                             + millis);
                     out.newLine();
             } catch (Exception e) {
-                e.printStackTrace();
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -218,7 +229,9 @@ public class Tracker {
 				out.write(name + ":" + millis);
 				out.newLine();
 			} catch (Exception e) {
-				e.printStackTrace();
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
 			}
 		}
 	}
@@ -234,7 +247,9 @@ public class Tracker {
 				out.write(name + ":" + fileName + ":" + millis);
 				out.newLine();
 			} catch (Exception e) {
-				e.printStackTrace();
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
 			}
 		}
 	}

@@ -4,7 +4,7 @@
  * To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-package jeliot.mcode;
+package jeliot.util;
 
 
 /**
@@ -13,16 +13,18 @@ package jeliot.mcode;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class Util {
+public class DebugUtil {
 
    //TODO: Change this to false for released versions.
-   public static boolean DEBUGGING = false; 
+   public static boolean DEBUGGING = true; 
     
-   private Util() {
+   private DebugUtil() {
    }
 
    public static void printDebugInfo(String str) {
-       System.out.println(str);
+       if (DEBUGGING) {
+           System.out.println(str);
+       }
    }
    
 }

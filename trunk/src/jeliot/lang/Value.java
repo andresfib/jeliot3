@@ -1,6 +1,7 @@
 package jeliot.lang;
 
 import jeliot.theater.*;
+import jeliot.util.DebugUtil;
 
 /**
  * Value represents any primitive type of value and a String type and
@@ -126,7 +127,10 @@ public class Value implements Cloneable {
             return super.clone();
         }
         catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            //TODO: report to user that something went wrong!
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
             return null;
         }
     }

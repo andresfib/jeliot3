@@ -38,6 +38,7 @@ import javax.swing.text.PlainDocument;
 import jeliot.mcode.Highlight;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.tracker.Tracker;
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserPropertyResourceBundle;
 
@@ -469,8 +470,6 @@ public class CodeEditor2 extends JComponent {
         menuItem.addActionListener(allSelector);
         menu.add(menuItem);
 
-        menu.addSeparator();
-
         return menu;
     }
 
@@ -747,7 +746,10 @@ public class CodeEditor2 extends JComponent {
             r.close();
             return buff.toString();
         } catch (IOException e) {
-            e.printStackTrace();
+            //TODO: report to user that something went wrong!
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
             return null;
         }
     }

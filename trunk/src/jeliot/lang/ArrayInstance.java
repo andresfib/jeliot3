@@ -44,8 +44,6 @@ public class ArrayInstance extends Instance {
     public ArrayInstance(String hashCode, String componentType, int[] dimensions) {
         super(hashCode);
         
-        // TODO: a support for reference types is needed here.
-
         String type = componentType;
         for (int i = 0; i < dimensions.length; i++) {
                type = "[" + type;

@@ -23,6 +23,7 @@ import jeliot.theater.Actor;
 import jeliot.theater.Director;
 import jeliot.theater.ExpressionActor;
 import jeliot.theater.ValueActor;
+import jeliot.util.DebugUtil;
 
 /**
  * @author Niko Myller
@@ -201,12 +202,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             line = readLine();
             MCodeUtilities.printToRegisteredSecondaryMCodeConnections(line);
             //This is for debugging purposes.
-            Util.printDebugInfo(line);
+            DebugUtil.printDebugInfo(line);
         } catch (Exception e) {
-            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
         }
 
-        //TODO: Change this to be something more meaningful!
         if (line == null) {
             line = "" + Code.ERROR + Code.DELIM
                     + messageBundle.getString("unknown.exception") + Code.DELIM + "0"
@@ -253,8 +255,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
                     + Code.LOC_DELIM + "0";
         }
-        //TODO: comment the next line in the released versions
-        System.out.println(readLine);
+        DebugUtil.printDebugInfo(readLine);
+        
         return readLine;
     }
 

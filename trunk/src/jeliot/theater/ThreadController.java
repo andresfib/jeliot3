@@ -1,6 +1,11 @@
 package jeliot.theater;
 
+import java.util.Iterator;
+import java.util.Vector;
+
 import jeliot.mcode.StoppingRequestedError;
+
+import jeliot.gui.PauseListener;
 
 /**
   * <p>
@@ -62,6 +67,8 @@ public class ThreadController {
      * Indicates when this thread should be stopped.
      */
     private boolean stoppingRequested = false;
+    
+    private Vector pauseListeners = new Vector();
     
 	/**
 	 * Constructs a new controller for given Runnable.
@@ -127,6 +134,9 @@ public class ThreadController {
 				if (cont != null) {
 					cont.suspend();
 				}
+                for (Iterator i = pauseListeners.iterator();i.hasNext();) {
+                    ((PauseListener) i.next()).paused();
+                }
 				try {
 					wait();
 				} catch (InterruptedException e) {}
@@ -157,4 +167,13 @@ public class ThreadController {
 		checkPoint(null);
 	}
 
+    public void addPauseListener(PauseListener p) {
+        pauseListeners.add(p);
+    }
+
+    public void removePauseListener(PauseListener p) {
+        pauseListeners.remove(p);
+    }
+    
+    
 }
