@@ -2403,7 +2403,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeNO(long expressionCounter,
             long unaryExpressionReference, String value, String type,
             Highlight h) {
-
+        handleUnaryExpression(expressionCounter, unaryExpressionReference,
+                value, type, h, MCodeUtilities.resolveUnOperator(Code.NO));
     }
 
     /**

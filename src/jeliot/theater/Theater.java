@@ -1,110 +1,109 @@
 package jeliot.theater;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.util.Vector;
-
 /**
- * This is the <code>Theatre</code> component that is added in the left pane of the
- * user interface and on which the program animation produced in the theater
- * package is currently drawn.
- *
+ * This is the <code>Theatre</code> component that is added in the left pane
+ * of the user interface and on which the program animation produced in the
+ * theater package is currently drawn.
+ * 
  * @author Pekka Uronen
  * @author Niko Myller
  */
 public class Theater extends javax.swing.JComponent implements ActorContainer {
-
 	/**
 	 * Background image.
 	 */
 	private Image backImage;
-
 	/**
 	 * Captured image of the screen, used on active mode for extra efficiency.
 	 */
 	private Image captScreen;
-
 	/**
 	 * Graphics object for captured image when the animation is going on.
 	 */
 	private Graphics csg;
-
-	/** True, if the theatre is in active mode or captured. Active mode
-	  * means that something is or is going to be animated. This means
-	  * that the extra efficiency is needed and needless painting of all
-	  * the actors is not done.
-	  * @see Animation
-	  */
+	
+	/**
+	 * True, if the theatre is in active mode or captured. Active mode means
+	 * that something is or is going to be animated. This means that the extra
+	 * efficiency is needed and needless painting of all the actors is not done.
+	 * 
+	 * @see Animation
+	 */
 	private boolean active;
-
+	
 	/**
 	 * Vector of passive actors which are drawn in passive mode.
 	 */
 	private Vector pasAct = new Vector();
-
+	
 	/**
-	 * Vector of active, moving actors which are drawn in active
-	 * mode (during animation).
+	 * Vector of active, moving actors which are drawn in active mode (during
+	 * animation).
 	 */
 	private Vector actAct = new Vector();
-
+	
 	/**
 	 * Highlighted actor if any.
 	 */
 	private Actor highActor;
-
+	
 	/**
-	 *
+	 *  
 	 */
 	private TheaterManager manager = new TheaterManager(this);
-
-	/** Variable is set true if there are other <code>JComponents</code>
-	  * on the Theatre component. At the moment this happens only when
-	  * input is requested. The state of the variable changes the
-	  * operation of the <code>paint</code> method.
-	  *
-	  * @see #paint(Graphics g)
-	  */
+	
+	/**
+	 * Variable is set true if there are other <code>JComponents</code> on the
+	 * Theatre component. At the moment this happens only when input is
+	 * requested. The state of the variable changes the operation of the
+	 * <code>paint</code> method.
+	 * 
+	 * @see #paint(Graphics g)
+	 */
 	private boolean showComponents;
-
+	
+	/**
+	 *  
+	 */
 	private boolean runUntil = false;
-
+	
 	/**
 	 * Sets the opaque of the component to be true.
-	 *
+	 * 
 	 * @see #setOpaque(boolean)
 	 */
 	public Theater() {
 		setOpaque(true);
 	}
-
 	/**
 	 * Returns the TheatreManager
+	 * 
 	 * @return TheatreManager object
 	 */
 	public TheaterManager getManager() {
 		return manager;
 	}
-
 	/**
 	 * Sets the background image (<code>backImage</code>) of this theatre.
-	 *
-	 * @param backImage Image for background.
+	 * 
+	 * @param backImage
+	 *            Image for background.
 	 */
 	public void setBackground(Image backImage) {
 		this.backImage = backImage;
 	}
-
 	/**
-	 * Paints the theatre.
-	 * If theatre is in active mode then a captured picture and only active
-	 * actors are painted otherwise background, the passive, highlighted
-	 * and active actors are painted.
-	 *
-	 * @param g Everything is painted on the given Graphics object.
+	 * Paints the theatre. If theatre is in active mode then a captured picture
+	 * and only active actors are painted otherwise background, the passive,
+	 * highlighted and active actors are painted.
+	 * 
+	 * @param g
+	 *            Everything is painted on the given Graphics object.
 	 */
 	public void paintComponent(Graphics g) {
 		if (!runUntil) {
@@ -126,36 +125,35 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 			//Finally the active actors are painted.
 			paintActors(g, actAct);
 		} else {
-            paintBackground(g);
+			paintBackground(g);
 		}
 	}
-
 	/**
-	 * Painting the component and other components if it contains any
-	 * to the given Graphics object.
+	 * Painting the component and other components if it contains any to the
+	 * given Graphics object.
 	 * 
 	 * @see java.awt.Component#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g) {
-	    //If the component contains other components paint them first.
+		// If the component contains other components paint them first.
 		if (showComponents) {
 			super.paint(g);
-		//Otherwise just paint the current component.
+		// Otherwise just paint the current component.
 		} else {
 			paintComponent(g);
 		}
 	}
-
 	/**
 	 * Paints the image of captured screen.
+	 * 
 	 * @param g
 	 */
 	private void paintCapturedScreen(Graphics g) {
 		g.drawImage(captScreen, 0, 0, this);
 	}
-
 	/**
 	 * Fills the background with background image.
+	 * 
 	 * @param g
 	 */
 	private void paintBackground(Graphics g) {
@@ -164,7 +162,6 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		int h = d.height;
 		int biw = backImage.getWidth(this);
 		int bih = backImage.getHeight(this);
-
 		if (biw >= 1 || bih >= 1) {
 			for (int x = 0; x < w; x += biw) {
 				for (int y = 0; y < h; y += bih) {
@@ -173,16 +170,15 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 			}
 		}
 	}
-
 	/**
 	 * Paints the actors contained in given vector.
+	 * 
 	 * @param g
 	 * @param actors
 	 */
 	private void paintActors(Graphics g, Vector actors) {
 		synchronized (actors) {
 			int n = actors.size();
-
 			for (int i = 0; i < n; ++i) {
 				Actor act = (Actor) actors.elementAt(i);
 				int x = act.getX();
@@ -192,23 +188,18 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 				act.paintActor(g);
 				g.translate(-x, -y);
 			}
-
-			/* Old version: Not valid code.
-			for (int i = 0; i < n; ++i) {
-			    Actor act = (Actor)actors.elementAt(i);
-			
-			    int x = act.getX();
-			    int y = act.getY();
-			    g.translate(x, y);
-			    act.paintActor(g);
-			    g.translate(-x, -y);
-			}
-			*/
+			/*
+			 * Old version: Not valid code. for (int i = 0; i < n; ++i) { Actor
+			 * act = (Actor)actors.elementAt(i);
+			 * 
+			 * int x = act.getX(); int y = act.getY(); g.translate(x, y);
+			 * act.paintActor(g); g.translate(-x, -y); }
+			 */
 		}
 	}
-
 	/**
 	 * Paints the highlight marker around highlighted actor.
+	 * 
 	 * @param g
 	 */
 	private void paintHighlight(Graphics g) {
@@ -218,7 +209,6 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 			int y = loc.y;
 			int w = highActor.getWidth();
 			int h = highActor.getHeight();
-
 			g.setColor(Color.white);
 			g.drawRect(x - 1, y - 1, w + 1, h + 1);
 			g.drawRect(x - 3, y - 3, w + 5, h + 5);
@@ -226,17 +216,13 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 			g.drawRect(x - 2, y - 2, w + 3, h + 3);
 		}
 	}
-
 	//  DOC: Document!
-	
 	/**
-	 * 
 	 * @param b
 	 */
 	public void setRunUntilEnabled(boolean b) {
 		runUntil = b;
 	}
-	
 	/**
 	 * @param actor
 	 */
@@ -244,7 +230,6 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		pasAct.addElement(actor);
 		actor.setParent(this);
 	}
-
 	/**
 	 * @param actor
 	 */
@@ -254,7 +239,6 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 			highActor = null;
 		}
 	}
-
 	/**
 	 * @param actor
 	 */
@@ -262,7 +246,6 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		actAct.addElement(actor);
 		actor.setParent(this);
 	}
-
 	/**
 	 * @param actor
 	 */
@@ -274,7 +257,6 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 			addActor(actor);
 		}
 	}
-
 	/**
 	 * @param actor
 	 */
@@ -284,8 +266,9 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		}
 		pasAct.addElement(actor);
 	}
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
 	 */
 	public void removeActor(Actor actor) {
@@ -295,58 +278,55 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 			pasAct.removeElement(actor);
 		}
 	}
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Component#getWidth()
 	 */
 	public int getWidth() {
 		return getSize().width;
 	}
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Component#getHeight()
 	 */
 	public int getHeight() {
 		return getSize().height;
 	}
-
 	/**
-	 * 
+	 *  
 	 */
 	public void updateCapture() {
 		int w = getWidth();
 		int h = getHeight();
-		if (captScreen == null || captScreen.getWidth(this) != w || captScreen.getHeight(this) != h) {
-
+		if (captScreen == null || captScreen.getWidth(this) != w
+				|| captScreen.getHeight(this) != h) {
 			captScreen = createImage(w, h);
 			csg = captScreen.getGraphics();
-			
 		}
 		synchronized (csg) {
 			paintBackground(csg);
 			paintActors(csg, pasAct);
 		}
 	}
-
 	/**
-	 * 
+	 *  
 	 */
 	public void capture() {
 		updateCapture();
 		active = true;
 		flush();
 	}
-
 	/**
-	 * 
+	 *  
 	 */
 	public void release() {
 		active = false;
 		flush();
 	}
-
 	/**
-	 * 
+	 *  
 	 */
 	public void cleanUp() {
 		removeAll();
@@ -354,17 +334,16 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		pasAct.removeAllElements();
 		manager.cleanUp();
 	}
-
 	/**
-	 * 
+	 *  
 	 */
 	public void flush() {
 		repaint();
 		try {
 			Thread.sleep(50);
-		} catch (InterruptedException e) {}
+		} catch (InterruptedException e) {
+		}
 	}
-
 	/**
 	 * @param x
 	 * @param y
@@ -383,7 +362,6 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		}
 		return null;
 	}
-
 	/**
 	 * @param actor
 	 */
@@ -393,28 +371,25 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 			repaint();
 		}
 	}
-
 	/**
 	 * @param show
 	 */
 	public void showComponents(boolean show) {
 		this.showComponents = show;
 	}
-
 	/**
 	 * @return
 	 */
 	public boolean isCaptured() {
 		return active;
 	}
-
+	
 	Image i;
 	Graphics gr;
-
+	
 	public Image requestImage() {
 		int w = getWidth();
 		int h = getHeight();
-
 		i = createImage(w, h);
 		gr = i.getGraphics();
 		paint(gr);

@@ -19,6 +19,8 @@ import jeliot.mcode.Highlight;
  * @author nmyller
  */
 public class HistoryView extends JComponent {
+
+	private int historySize = 10;
 	
 	private Vector images = new Vector();
 	
@@ -32,6 +34,8 @@ public class HistoryView extends JComponent {
 		
 	public HistoryView(final CodePane2 c) {
 		this.c = c;
+        slider.setMajorTickSpacing(5);
+        slider.setMinorTickSpacing(1);
         setLayout(new BorderLayout());
         add("Center", new JScrollPane(ic));
         add("South", slider);
@@ -60,6 +64,19 @@ public class HistoryView extends JComponent {
 	public void addImage(Image i, Highlight h) {
 		images.add(i);
 		highlights.add(h);
-		slider.setMaximum(images.size());
+		if (images.size() > historySize) {
+			images.remove(0);
+			highlights.remove(0);
+		}		
+		int size = images.size();
+		slider.setMaximum(size - 1);
+		slider.setValue(size - 1);
+		int value = slider.getValue();
+    	ic.setImage((Image) images.get(value));
+    	if (highlights.get(value) != null) {
+    		c.highlightStatement((Highlight) highlights.get(value));
+    	}
+    	ic.repaint();
+		repaint();
 	}
 }
