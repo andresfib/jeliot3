@@ -249,7 +249,7 @@ public class JeliotWindow {
      */
     public void setUp() {
 
-        frame = new JFrame("Jeliot 3 - Beta Version");
+        frame = new JFrame("Jeliot 3");
         frame.setIconImage(iLoad.getLogicalImage("Jeliot-icon"));
 
         frame.setJMenuBar(makeMenuBar());
@@ -278,7 +278,20 @@ public class JeliotWindow {
         rootPane.add("South", bottomPane);
 
         frame.setContentPane(rootPane);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        /* frame.setSize(screenSize.width, screenSize.height - 30); // To maximize the window*/
         frame.setSize(800, 600);
+
+        Dimension frameSize = frame.getSize();
+        if (frameSize.height > screenSize.height)
+            frameSize.height = screenSize.height;
+        if (frameSize.width > screenSize.width)
+            frameSize.width = screenSize.width;
+
+        frame.setLocation((screenSize.width - frameSize.width) / 2,
+                           (screenSize.height - frameSize.height) / 2);
+
 
         frame.addWindowListener(
             new WindowAdapter() {
@@ -470,7 +483,7 @@ public class JeliotWindow {
         );
         menu.add(menuItem);
 
-        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem("Pause in message",
+        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem("Pause on message",
                                          showMessagesInDialogs);
         cbmenuItem.setMnemonic(KeyEvent.VK_D);
         cbmenuItem.setAccelerator(KeyStroke.getKeyStroke(
