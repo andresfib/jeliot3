@@ -1779,7 +1779,7 @@ public class EvaluationVisitor extends VisitorObject {
 			Object result = context.invokeConstructor(node, args);
 			MCodeUtilities.write("" + Code.SAC + Code.DELIM
 					+ simpleAllocationCounter + Code.DELIM
-					+ Integer.toHexString(result.hashCode()) + Code.DELIM
+					+ Integer.toHexString(System.identityHashCode(result)) + Code.DELIM
 					+ MCodeUtilities.locationToString(node));
 			//0 arguments
 			MCodeUtilities.popConstructorInfo();
@@ -1892,7 +1892,7 @@ public class EvaluationVisitor extends VisitorObject {
 				+ Code.DELIM + MCodeUtilities.locationToString(node));
 		Long[] dimExpressionReferences = { new Long(sizeCounter) };
 		int dimensions = 1;
-		String arrayHashCode = Integer.toHexString(result.hashCode());
+		String arrayHashCode = Integer.toHexString(System.identityHashCode(result));
 		String dimensionsReferences = MCodeUtilities
 				.arrayToString(dimExpressionReferences);
 		String componentType = ((Class) node.getElementType().getProperty(
