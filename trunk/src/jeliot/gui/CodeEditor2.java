@@ -114,6 +114,8 @@ public class CodeEditor2 extends JComponent {
      */
     private boolean saveAutomatically = false;
 
+    private UndoRedo undoredo = new UndoRedo();
+    
     /**
      * returns true if the document is changed and false if it is not changed.
      * This is the value of the changed field.
@@ -292,6 +294,7 @@ public class CodeEditor2 extends JComponent {
         lnah.adjustmentValueChanged(null);
         area.revalidate();
         clearProgram();
+        area.getDocument().addUndoableEditListener(undoredo.myundoable);
     }
 
     /**
@@ -424,6 +427,16 @@ public class CodeEditor2 extends JComponent {
         menu.setMnemonic(KeyEvent.VK_E);
         JMenuItem menuItem;
 
+        menuItem = menu.add(undoredo.undoAction);
+        menuItem.setMnemonic(KeyEvent.VK_D);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+        
+        menuItem = menu.add(undoredo.redoAction);
+        menuItem.setMnemonic(KeyEvent.VK_R);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+        
+        menu.addSeparator();
+        
         menuItem = new JMenuItem(messageBundle.getString("menu.edit.cut"));
         menuItem.setMnemonic(KeyEvent.VK_U);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
@@ -488,6 +501,11 @@ public class CodeEditor2 extends JComponent {
         area.setFirstLine(0);
         area.setCaretPosition(0);
         area.requestFocus();
+        //Clear undo/redo
+        undoredo.undo.discardAllEdits();
+        undoredo.undoAction.updateUndoState();
+        undoredo.redoAction.updateRedoState();
+
     }
 
     /**
