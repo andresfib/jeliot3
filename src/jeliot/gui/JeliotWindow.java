@@ -472,26 +472,7 @@ public class JeliotWindow {
             frame.addWindowListener(new WindowAdapter() {
 
                 public void windowClosing(WindowEvent e) {
-                    if (editor.isChanged()) {
-                        int n = JOptionPane.showConfirmDialog(frame, messageBundle
-                                .getString("quit.without.saving.message"), messageBundle
-                                .getString("quit.without.saving.title"), JOptionPane.YES_NO_OPTION);
-                        if (n == JOptionPane.YES_OPTION) {
-                            editor.saveProgram();
-                        }
-                    }
-
-                    Properties prop = System.getProperties();
-                    File f = new File(udir);
-                    prop.put("user.dir", f.toString());
-                    Jeliot.close();
-
-                    if (Jeliot.isnoSystemExit()) {
-                        frame.dispose();
-                    } else {
-                        //frame.dispose();
-                        System.exit(0);
-                    }
+                    closeWindow();
                 }
             });
 
@@ -515,6 +496,29 @@ public class JeliotWindow {
         }
     }
 
+    public void closeWindow() {
+        if (editor.isChanged()) {
+            int n = JOptionPane.showConfirmDialog(frame, messageBundle
+                    .getString("quit.without.saving.message"), messageBundle
+                    .getString("quit.without.saving.title"), JOptionPane.YES_NO_OPTION);
+            if (n == JOptionPane.YES_OPTION) {
+                editor.saveProgram();
+            }
+        }
+
+        Properties prop = System.getProperties();
+        File f = new File(udir);
+        prop.put("user.dir", f.toString());
+        jeliot.close();
+
+        if (Jeliot.isnoSystemExit()) {
+            frame.dispose();
+        } else {
+            //frame.dispose();
+            System.exit(0);
+        }
+    }
+    
     public JFrame getFrame() {
         return frame;
     }
@@ -1007,6 +1011,14 @@ public class JeliotWindow {
     }
 
     /**
+     * 
+     * @return
+     */
+    public JComponent getTheaterPane() {
+        return (JComponent) codeNest.getRightComponent();
+    }
+   
+    /**
      * This method is called when user clicks the "Edit" button.
      */
     void enterEdit() {
@@ -1028,6 +1040,7 @@ public class JeliotWindow {
                 SwingUtilities.invokeLater(new Runnable() {
 
                     public void run() {
+                        //jeliot.stopThreads();
                         enterEditTrue();
                     }
                 });
@@ -1536,9 +1549,11 @@ public class JeliotWindow {
     void rewindAnimation() {
 
         unhighlightTabTitles();
-
+        
         errorOccured = false;
 
+        //jeliot.stopThreads();
+        
         jeliot.compile();
 
         /*
@@ -1551,7 +1566,9 @@ public class JeliotWindow {
             jeliot.runUntil(0);
             runUntilFinished();
         }
-
+        jeliot.rewind();
+        theatre.repaint();
+        
         stepButton.setEnabled(true);
         playButton.setEnabled(true);
         pauseButton.setEnabled(false);
@@ -1563,10 +1580,7 @@ public class JeliotWindow {
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.animation.pause")};
-        setEnabledMenuItems(false, s2);
-
-        jeliot.rewind();
-        theatre.repaint();
+        setEnabledMenuItems(false, s2);        
     }
 
     /**
@@ -1751,5 +1765,23 @@ public class JeliotWindow {
         for (int i = 0; i < n; i++) {
             tabbedPane.setForegroundAt(i, normalTabColor);
         }
+    }
+    
+    // These methods are for testing
+    
+    public JButton getPlayButton() {
+        return playButton;
+    }
+    
+    public JButton getRewindButton() {
+        return rewindButton;
+    }
+    
+    public JButton getEditButton() {
+        return editButton;
+    }
+    
+    public JSlider getSpeedSlider() {
+        return speedSlider;
     }
 }

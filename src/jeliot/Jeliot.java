@@ -62,24 +62,25 @@ import jeliot.tracker.Tracker;
 public class Jeliot {
 
     //  DOC: Document!
-    
+
     /**
      * The resource bundle for gui package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
             "jeliot.gui.resources.properties", Locale.getDefault());
-    
+
     /**
      * The resource bundle for gui package
      */
     static private ResourceBundle bundle2 = ResourceBundle.getBundle(
             "jeliot.gui.resources.messages", Locale.getDefault());
-    
+
     /**
      * 
      */
-    private Pattern p = Pattern.compile("import\\s+jeliot.io.*\\s*;");
-    
+    static final private Pattern p = Pattern
+            .compile("import\\s+jeliot.io.*\\s*;");
+
     /**
      * 
      */
@@ -93,12 +94,12 @@ public class Jeliot {
     /**
      *
      */
-    BufferedReader ecode = null;
+    BufferedReader ecodeReader = null;
 
     /**
      *
      */
-    PrintWriter pr = null;
+    PrintWriter inputWriter = null;
 
     /**
      *
@@ -119,6 +120,11 @@ public class Jeliot {
      *
      */
     String methodCall = "";
+
+    /**
+     * 
+     */
+    Thread callTreeThread;
 
     /**
      *
@@ -161,7 +167,7 @@ public class Jeliot {
      * 
      */
     private HistoryView hv = new HistoryView(codePane);
-    
+
     /**
      * A director for animating the program.
      */
@@ -177,7 +183,7 @@ public class Jeliot {
      * 
      */
     private boolean experiment = false;
-    
+
     /**
      * The only constructor of the Jeliot 3.
      * Loads Theatre theatre -object's background.
@@ -187,16 +193,17 @@ public class Jeliot {
      * @param udir
      * 
      */
-    public Jeliot(String udir, boolean experiment) {   
-        
+    public Jeliot(String udir, boolean experiment) {
+
         this.experiment = experiment;
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
-        
+
         //Just to track the animation happenings
         Tracker.setTheater(theatre);
         Tracker.setCodePane2(codePane);
-        
-        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir, callTree, hv);
+
+        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir,
+                callTree, hv);
     }
 
     /**
@@ -225,8 +232,8 @@ public class Jeliot {
         } else {
             this.sourceCode = "import jeliot.io.*;\n\n" + srcCode;
             gui.getCodePane().getTextArea().setText(this.sourceCode);
-        }                
-                
+        }
+
         this.methodCall = methodCall;
 
         compiled = false;
@@ -240,7 +247,7 @@ public class Jeliot {
 
         if (!compiled) {
 
-            this.ecode = null;
+            this.ecodeReader = null;
 
             if (launcher != null) {
                 launcher.stopThread();
@@ -250,15 +257,16 @@ public class Jeliot {
                 launcher = null;
             }
 
-            launcher = new Launcher(new BufferedReader(new StringReader(this.sourceCode)));
+            launcher = new Launcher(new BufferedReader(new StringReader(
+                    this.sourceCode)));
             launcher.setMethodCall(this.methodCall);
 
             launcher.setCompiling(true);
 
             launcher.start();
 
-            ecode = launcher.getReader();
-            pr = launcher.getInputWriter();
+            ecodeReader = launcher.getReader();
+            inputWriter = launcher.getInputWriter();
             MCodeUtilities.clearRegisteredSecondaryMCodeConnections();
 
             codePane.installProgram(this.sourceCode);
@@ -278,7 +286,7 @@ public class Jeliot {
     public void compile(String methodCall) {
         gui.tryToEnterAnimate(methodCall);
     }
-    
+
     /**
      * Can be called outside Jeliot to make Jeliot compile the given source code
      * and call the method that is given. If null is provided standard main method
@@ -288,10 +296,21 @@ public class Jeliot {
      * @param methodCall Method call that is made first in the program
      */
     public void recompile(String programCode, String methodCall) {
-    	setProgram(programCode);
+        setProgram(programCode);
         gui.tryToEnterAnimate(methodCall);
     }
-    
+
+    /**
+     *
+     */
+    public boolean playAnimation() {
+        if (gui.getPlayButton().isEnabled()) {
+            gui.getPlayButton().doClick();
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Initializes the compiled program to be animated.
      */
@@ -312,14 +331,18 @@ public class Jeliot {
         director = new Director(theatre, codePane, this, engine);
         director.setActorFactory(af);
 
-        mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecode, director, gui.getProgram(), pr);
+        mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader,
+                director, gui.getProgram(), inputWriter);
         director.setInterpreter(mCodeInterpreterForTheater);
 
         try {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);
-            MCodeUtilities.addRegisteredSecondaryMCodeConnections(new PrintWriter(pw));
-            mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(new BufferedReader(pr), callTree, gui.getProgram(), this, gui.getTabNumber(bundle2.getString("tab.title.call_tree")));
+            MCodeUtilities
+                    .addRegisteredSecondaryMCodeConnections(new PrintWriter(pw));
+            mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(
+                    new BufferedReader(pr), callTree, gui.getProgram(), this,
+                    gui.getTabNumber(bundle2.getString("tab.title.call_tree")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -328,6 +351,12 @@ public class Jeliot {
         controller = new ThreadController(new Runnable() {
             public void run() {
                 try {
+                    /* 
+                    //This should be used when the thread killing works.
+                    if (director.direct()) {
+                        gui.animationFinished();
+                    }
+                    */
                     director.direct();
                     gui.animationFinished();
                 } catch (Exception e) {
@@ -335,18 +364,18 @@ public class Jeliot {
                 }
             }
         });
-        
-        Thread t = new Thread(new Runnable() {
+
+        callTreeThread = new Thread(new Runnable() {
             public void run() {
                 try {
                     mCodeInterpreterForCallTree.execute();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
         });
-        t.start();
-        
+        callTreeThread.start();
+
         engine.setController(controller);
         director.setController(controller);
     }
@@ -397,7 +426,7 @@ public class Jeliot {
     public void directorResumed() {
         gui.resumeAnimation();
     }
-
+    
     /**
      * Called by the director when user's program outputs a string.
      *
@@ -412,7 +441,9 @@ public class Jeliot {
      * @param e
      */
     public void showErrorMessage(InterpreterError e) {
-        Tracker.writeToFile("Error", e.getMessage(), System.currentTimeMillis());
+        Tracker
+                .writeToFile("Error", e.getMessage(), System
+                        .currentTimeMillis());
         gui.showErrorMessage(e);
     }
 
@@ -452,7 +483,7 @@ public class Jeliot {
     public void setProgram(File f) {
         gui.setProgram(f);
     }
-    
+
     /**
      * 
      * @return
@@ -460,7 +491,7 @@ public class Jeliot {
     public boolean isExperiment() {
         return experiment;
     }
-    
+
     /**
      * 
      * @param highlight
@@ -469,16 +500,16 @@ public class Jeliot {
     public void highlightTabTitle(boolean highlight, int tabNumber) {
         gui.highlightTabTitle(highlight, tabNumber);
     }
-    
+
     /**
      * 
      * @param i
      * @param h
      */
     public void addImageToHistory(Image i, Highlight h) {
-    	hv.addImage(i, h);
+        hv.addImage(i, h);
     }
-    
+
     /**
      * 
      * @return
@@ -486,32 +517,113 @@ public class Jeliot {
     public JeliotWindow getGUI() {
         return gui;
     }
-    
+
+    /*
+    public void stopThreads() {
+        //This kills the Animation and Call Tree threads.
+        if (mCodeInterpreterForTheater != null) {
+            mCodeInterpreterForTheater.setRunning(false);
+        }
+        if (mCodeInterpreterForCallTree != null) {
+            mCodeInterpreterForCallTree.setRunning(false);
+        }
+        if (controller != null) {
+            controller.quit();
+        }
+    */    
+        //This should kill the Launcher thread but it doesn't work!
+        /*if (launcher != null) {
+            launcher.stopThread();
+        }
+        BufferedReader r = MCodeUtilities.getReader();
+        BufferedWriter w = MCodeUtilities.getWriter();
+        MCodeUtilities.setReader(null);
+        MCodeUtilities.setWriter(null);
+        if (w != null) {
+            synchronized (w) {
+                w.notifyAll();
+            }
+            
+            try {
+                w.flush();
+            } catch (IOException e) {
+            }
+            try {
+                w.close();
+            } catch (IOException e) {
+            }            
+        }
+        w = null;
+        if (r != null) {
+            synchronized (r) {
+                r.notifyAll();
+            }
+            try {
+                r.close();
+            } catch (IOException e1) {
+            }
+        }
+        r = null;
+        if (ecode != null) {
+            synchronized (ecode) {
+                ecode.notifyAll();
+            }
+            try {
+                ecode.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (inputWriter != null) {
+            synchronized (inputWriter) {
+                inputWriter.notifyAll();
+            }
+            inputWriter.flush();
+            inputWriter.close();
+        }
+                
+        if (launcher != null) {
+            synchronized (launcher) {
+                launcher.notify();
+            }
+        }
+        launcher = null;
+        controller = null;
+        callTreeThread = null;
+        MCodeUtilities.clearRegisteredSecondaryMCodeConnections();
+        inputWriter = null;
+        ecodeReader = null;
+        */
+    //}
+
     /**
-     * @param args
+     * @param args is a String array that contains parameter values for Jeliot.
+     * First cell contains a file name that is wanted to be loaded into Jeliot from examples directory.
+     * Second cell contains a boolean value ("true" or "false") that tells if Jeliot tracker should be used.
+     * Third cell contains a boolean value ("true" or "false") that tells that experimental settings should be loaded.
      * @throws IOException
      */
     public static void main(String args[]) {
-    	
+
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
 
         if (args.length >= 2) {
             Tracker.setTrack(Boolean.valueOf(args[1]).booleanValue());
         }
-       
+
         boolean experiment = false;
         if (args.length >= 3) {
             experiment = Boolean.valueOf(args[2]).booleanValue();
         }
-        
+
         //Just for tracking the user
         File f = new File(udir);
         Tracker.openFile(f);
-        
+
         final Jeliot jeliot = (new LoadJeliot()).start(udir, experiment);
-        		
-        if (args.length >=1) {
+
+        if (args.length >= 1) {
             File file = new File(udir);
             file = new File(file, "examples");
             final File file1 = new File(file, args[0]);
@@ -523,41 +635,46 @@ public class Jeliot {
                 });
             }
         }
-        
+
     }
 
     /**
+     * This is meant to be used outside Jeliot to launch an instance of Jeliot.
      * 
-     * @param args
-     * @return
-     * @throws IOException
+     * @param args is a String array that contains parameter values for Jeliot.
+     * First argument is a program source code that should be loaded into Jeliot from examples directory.
+     * Second is a boolean value ("true" or "false") that tells if a system exit call is not desired when Jeliot is closed.
+     * Third parameter is a file name that is wanted to be loaded into Jeliot from examples directory.
+     * Fourth is telling that experimental settings should be loaded.
+     *
+     * @return instance of Jeliot
      */
     public static Jeliot start(String args[]) {
-    	
+
         //Install a different look and feel; specifically, the Windows look and feel
-    	/*
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (InstantiationException e) {
-        } catch (ClassNotFoundException e) {
-        } catch (UnsupportedLookAndFeelException e) {
-        } catch (IllegalAccessException e) {
-        }    
-    	*/
+        /*
+         try {
+         UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+         } catch (InstantiationException e) {
+         } catch (ClassNotFoundException e) {
+         } catch (UnsupportedLookAndFeelException e) {
+         } catch (IllegalAccessException e) {
+         }
+         */
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
-        
+
         if (args.length >= 2) {
             Jeliot.noSystemExit = Boolean.valueOf(args[1]).booleanValue();
         }
-        
+
         boolean experiment = false;
         if (args.length >= 4) {
             experiment = Boolean.valueOf(args[3]).booleanValue();
         }
-        
+
         final Jeliot jeliot = new Jeliot(udir, experiment);
-        
+
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 jeliot.run();
@@ -590,8 +707,12 @@ public class Jeliot {
     /**
      *
      */
-    public static void close() {
+    public void close() {
+        //stopThreads();
+        //director = null;
+        //gui = null;
+        //theatre = null;
         Tracker.writeToFile("JeliotClose", System.currentTimeMillis());
         Tracker.closeFile();
-    }    
+    }
 }

@@ -187,7 +187,7 @@ public class Director {
         theatre.addPassive(lat);
 
         //Excecution of the program code takes place here.
-        mCodeInterpreter.execute();
+        mCodeInterpreter.execute(); 
         if (!errorOccured) {
             highlight(new Highlight(0, 0, 0, 0));
         }
@@ -2208,6 +2208,8 @@ public class Director {
      */
     public Value getInput(String prompt, InputValidator validator) {
 
+        jeliot.directorFreezed();
+        
         validator.setController(controller);
         final InputComponent ic = new InputComponent(prompt, validator);
 
