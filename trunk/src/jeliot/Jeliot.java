@@ -797,7 +797,7 @@ public class Jeliot {
      * Clean up.
      */
     public void close() {
-        hv.initialize();
+        hv.close();
         stopThreads();
         director = null;
         gui = null;
