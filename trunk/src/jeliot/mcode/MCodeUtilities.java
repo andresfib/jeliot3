@@ -1099,6 +1099,24 @@ public class MCodeUtilities {
     }
     
     /**
+     * 
+     * @param node
+     * @return
+     */
+    public static String getValue(Object o){   
+        if (o == null) { 
+            return "null"; 
+        } 
+        if (o.getClass().isPrimitive() || String.class.isInstance ( o )
+        		||	Integer.class.isInstance( o ) || Double.class.isInstance( o )
+				||	Byte.class.isInstance( o ) || Long.class.isInstance( o )
+				|| Short.class.isInstance ( o )) {	 
+            return o.toString();   
+        } else { 
+            return Integer.toHexString(o.hashCode());            
+        } 
+    }
+    /**
      * Converts the node location into a string list. Each element is delimited
      * by Code.LOC_DELIM
      * @param node the node to visit

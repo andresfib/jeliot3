@@ -189,7 +189,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             line = readLine();
             MCodeUtilities.printToRegisteredSecondaryMCodeConnections(line);
             //TODO: comment the next line in the released versions
-            System.out.println(line);
+            //System.out.println(line);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -242,7 +242,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     + Code.LOC_DELIM + "0";
         }
         //TODO: comment the next line in the released versions
-        System.out.println(readLine);
+        //System.out.println(readLine);
         return readLine;
     }
 
