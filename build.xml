@@ -60,9 +60,11 @@ To display the available targets type:
     <property name="src"             value="src"/>
     <property name="resources"       value="resources"/>
     <property name="dest"            value="classes"/>
+    <property name="release"         value="Release"/>
     <!-- dest : Compiled classes will be stored here, if no exists, create it -->
     <mkdir dir="${dest}"/>
-    <copy todir="${dest}">
+    <mkdir dir="${release}"/>
+          <copy todir="${dest}">
       <fileset dir="${resources}"/>
     </copy>
 
@@ -103,8 +105,8 @@ To display the available targets type:
   <target name="dist" depends="prepare-dist, jars">
   <!-- After targets prepare-dist and jars we create the 2 diferent zip files
     that will contain the 2 distribuition files (source and binary)-->
-    <zip zipfile="Release/${dist}${minor}.zip" basedir="${dist}" includes="**/*"/>
-    <zip zipfile="Release/${dist}${minor}-src.zip">
+    <zip zipfile="${release}/${dist}${minor}.zip" basedir="${dist}" includes="**/*"/>
+    <zip zipfile="${release}/${dist}${minor}-src.zip">
      <zipfileset dir="src" prefix="src"/>
      <zipfileset dir="lib" prefix="lib"/>
      <zipfileset dir="resources" prefix="resources"/>
