@@ -733,9 +733,17 @@ public class EvaluationVisitor extends VisitorObject {
 
 			o = node.getExpression().acceptVisitor(this); //
 			String value = MCodeUtilities.getValue(o);
+			
+			String typeString = "";
+			Class type = NodeProperties.getType(node.getExpression());
+			if (type != null) {
+			    typeString = type.getName();
+			} else {
+			    typeString = "null";
+			}
 			MCodeUtilities.write("" + Code.R + Code.DELIM + l.toString()
 					+ Code.DELIM + auxcounter + Code.DELIM + value + Code.DELIM
-					+ NodeProperties.getType(node.getExpression()).getName()
+					+ typeString
 					+ Code.DELIM + MCodeUtilities.locationToString(node));
 
 			throw new ReturnException("return.statement", o, node);
@@ -2284,7 +2292,7 @@ public class EvaluationVisitor extends VisitorObject {
 	public Object visit(AddExpression node) {
 		
 		Class c = NodeProperties.getType(node);
-		if (c == String.class){
+		if (c.getName().equals(String.class.getName())){
 			return concatenate (node);
 		} else {
 			long addcounter = counter++;

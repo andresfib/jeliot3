@@ -5,7 +5,6 @@ import jeliot.theater.ArrayActor;
 
  /**
   * The objects of this class represents an array of n-dimensions.
-  * TODO: Maybe this should be changed to be arrays of one dimension and the chain them properly.
   * @author Pekka Uronen
   * @author Niko Myller
   */

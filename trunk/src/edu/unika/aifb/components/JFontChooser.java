@@ -327,16 +327,16 @@ class FontStyleList extends JList {
         switch (style) {
             case Font.PLAIN:
                 setSelectedValue(getModel().getElementAt(0), true);
-                ;
                 break;
             case Font.BOLD:
-                setSelectedValue(getModel().getElementAt(1), true);
-                break;
-            case Font.ITALIC:
                 setSelectedValue(getModel().getElementAt(2), true);
                 break;
-            default:
-                setSelectedIndices(new int[] { 3});
+            case Font.ITALIC:
+                setSelectedValue(getModel().getElementAt(1), true);
+                break;
+            case Font.BOLD + Font.ITALIC:
+                setSelectedValue(getModel().getElementAt(3), true);
+            	break;
         }
     }
 

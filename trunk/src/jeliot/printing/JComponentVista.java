@@ -1,9 +1,3 @@
-/*
- * Created on 8.12.2004
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package jeliot.printing;
 
 import java.awt.*;
@@ -11,10 +5,7 @@ import java.awt.print.*;
 import javax.swing.*;
 
 /**
- * @author Niko Myller
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * Taken from Sun's Java pages.
  */
 public class JComponentVista extends Vista implements Printable {
 
@@ -45,27 +36,22 @@ public class JComponentVista extends Vista implements Printable {
         setPageFormat(format);
         setPrintable(this);
         setComponent(c);
-        /* Tell the Vista we subclassed the size of the canvas.
-         */
+        //Tell the Vista we subclassed the size of the canvas.
         //Rectangle componentBounds = c.getBounds(null);
         Rectangle componentBounds = area;
-        System.out.println(componentBounds);
+        //System.out.println(componentBounds);
         setSize(componentBounds.width, componentBounds.height);
         setScale(1, 1);
 
     }
 
     protected void setComponent(JComponent c) {
-
         mComponent = c;
-
     }
 
     protected void setScale(double scaleX, double scaleY) {
-
         mScaleX = scaleX;
         mScaleY = scaleY;
-
     }
 
     public void scaleToFitX() {
@@ -76,7 +62,8 @@ public class JComponentVista extends Vista implements Printable {
         double scaleY = scaleX;
         if (scaleX < 1) {
 
-            setSize((float) format.getImageableWidth(), (float) (componentBounds.height * scaleY));
+            setSize((float) format.getImageableWidth(),
+                    (float) (componentBounds.height * scaleY));
             setScale(scaleX, scaleY);
 
         }
@@ -91,7 +78,8 @@ public class JComponentVista extends Vista implements Printable {
         double scaleX = scaleY;
         if (scaleY < 1) {
 
-            setSize((float) (componentBounds.width * scaleX), (float) format.getImageableHeight());
+            setSize((float) (componentBounds.width * scaleX), (float) format
+                    .getImageableHeight());
             setScale(scaleX, scaleY);
 
         }
@@ -104,28 +92,19 @@ public class JComponentVista extends Vista implements Printable {
         Rectangle componentBounds = mComponent.getBounds(null);
         double scaleX = format.getImageableWidth() / componentBounds.width;
         double scaleY = format.getImageableHeight() / componentBounds.height;
-        System.out.println("Scale: " + scaleX + " " + scaleY);
+        //System.out.println("Scale: " + scaleX + " " + scaleY);
         if (scaleX < 1 || scaleY < 1) {
-
             if (useSymmetricScaling) {
-
                 if (scaleX < scaleY) {
-
                     scaleY = scaleX;
-
                 } else {
-
                     scaleX = scaleY;
-
                 }
-
             }
             setSize((float) (componentBounds.width * scaleX),
                     (float) (componentBounds.height * scaleY));
             setScale(scaleX, scaleY);
-
         }
-
     }
 
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
@@ -140,7 +119,5 @@ public class JComponentVista extends Vista implements Printable {
         mComponent.paint(g2);
         mComponent.setDoubleBuffered(wasBuffered);
         return PAGE_EXISTS;
-
     }
-
 }

@@ -21,7 +21,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * 
      */
     private String currentMethodCall;
-    
+        
     /**
      * 
      */
@@ -58,7 +58,11 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
         initialize();
     }
     
-
+    public void initialize() {
+        super.initialize();
+    }
+    
+    
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#readLine()
      */
@@ -150,6 +154,9 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
                 callTree.insertMethodCall(currentMethodCall + ")");
             }
             currentMethodCall = null;
+            if (!methodCalls.isEmpty()) {
+                currentMethodCall = (String) methodCalls.pop();
+            }
             jeliot.highlightTabTitle(true, tabNumber);
         }
     }

@@ -561,7 +561,7 @@ public class JEditTextArea extends JComponent {
             }
 
             int offset = 0;
-            Toolkit toolkit = painter.getToolkit();
+            //Toolkit toolkit = painter.getToolkit();
             Font defaultFont = painter.getFont();
             SyntaxStyle[] styles = painter.getStyles();
 

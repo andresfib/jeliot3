@@ -85,6 +85,7 @@ public class SyntaxStyle
 			(bold ? Font.BOLD : 0)
 			| (italic ? Font.ITALIC : 0),
 			font.getSize());
+        fontMetrics = dummy.getFontMetrics(lastStyledFont);
 		return lastStyledFont;
 	}
 

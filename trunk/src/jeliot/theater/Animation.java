@@ -31,6 +31,13 @@ import java.awt.Point;
  */
 public abstract class Animation {
 
+    /**
+     * Desired duration that is set to be the duration of the animation
+     * as a defaul value. This will be changed when a run until is set to
+     * speed up the execution.
+     */
+    public static int defaultDuration = 1000;
+    
 	/**
      * This flag is set by the doFinish() method when the animation
      * is at end.
@@ -58,6 +65,13 @@ public abstract class Animation {
      */
     private Actor actor;
 
+    /**
+     * 
+     */
+    public Animation() {
+        duration = defaultDuration;
+    }
+    
 	/** Initializes the animation. This method is called by the
       * animation engine before starting the animation, after duration
       * and theatre have been set. To be overriden by subclasses;
@@ -110,7 +124,9 @@ public abstract class Animation {
       * @param duration The desired duration in milliseconds.
       */
     public void setDuration(int duration) {
-         this.duration = duration;
+         if (defaultDuration > 0) {
+             this.duration = duration;
+         }
     }
 
 	/** Returns the desired duration of this animation in milliseconds.

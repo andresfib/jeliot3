@@ -252,7 +252,7 @@ public class Director {
     }
 
     public void requestHistoryImage() {
-        if (!jeliot.isExperiment() && theatre.isVisible()) {
+        if (!jeliot.isExperiment() && theatre.isVisible() && jeliot.getHistoryView().isEnabled()) {
             jeliot.addImageToHistory(theatre.requestImage(), hPrev);
         }
     }

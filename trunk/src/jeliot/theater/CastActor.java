@@ -67,7 +67,7 @@ public class CastActor extends Actor {
             Shape clip = g.getClip();
             
             
-            //TODO: DOESN'T WORK! BUGBUG!
+            
             g.clipRect(-1000, -1000, 1000, line);
             fromActor.paintActor(g);
             

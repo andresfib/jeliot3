@@ -3,6 +3,7 @@ package jeliot;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -88,7 +89,13 @@ public class Il3JeliotPlugin extends Jeliot {
     public void handleArgs(String args[]) {
         try {
             if (args.length > 0) {
-                URL u = new URL(URLDecoder.decode(args[0]));
+                URL u = null;
+                try {
+                    u = new URL(URLDecoder.decode(args[0], "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    if (DebugUtil.DEBUGGING)
+                    e.printStackTrace();
+                }
                 setProgram(u);
             }
         } catch (MalformedURLException e) {

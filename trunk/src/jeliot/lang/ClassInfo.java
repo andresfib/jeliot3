@@ -263,9 +263,9 @@ public class ClassInfo {
 
         //Secondly the methods
         Hashtable hm = ci.getMethods();
-        Enumeration enum = hm.keys();
-        while (enum.hasMoreElements()) {
-            String name = (String) enum.nextElement();
+        Enumeration enumeration = hm.keys();
+        while (enumeration.hasMoreElements()) {
+            String name = (String) enumeration.nextElement();
             String info = (String) hm.get(name);
             if (name != null && info != null) {
                 declareMethod(name, info + Code.DELIM + "<E>");

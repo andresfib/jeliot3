@@ -166,7 +166,6 @@ public class AnimationEngine implements Controlled {
                 try {
                 controller.checkPoint(this, false);
                 } catch (Exception e) {
-                    //TODO: should something be done here?
                 }
             }
         }

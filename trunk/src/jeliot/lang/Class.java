@@ -56,7 +56,7 @@ public class Class {
                 return var;
             }
         }
-        throw new RuntimeException("Static variable " + varName + " was not found from the class " + this.name + ".");
+        throw new StaticVariableNotFoundException("Static variable " + varName + " was not found from the class " + this.name + ".");
     }
     
     /**

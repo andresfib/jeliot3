@@ -91,9 +91,9 @@ public class ObjectStage extends InstanceActor {
 	 * @return
 	 */
 	public VariableActor findVariableActor(String name) {
-        Enumeration enum = variables.elements();
-        while (enum.hasMoreElements()) {
-            VariableActor va = (VariableActor) enum.nextElement();
+        Enumeration enumeration = variables.elements();
+        while (enumeration.hasMoreElements()) {
+            VariableActor va = (VariableActor) enumeration.nextElement();
             if (va.getName().equals(name)) {
                 return va;
             }

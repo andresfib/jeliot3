@@ -28,9 +28,16 @@
 
 package koala.dynamicjava.interpreter;
 
+import java.lang.reflect.Array;
+
+import jeliot.util.DebugUtil;
 import koala.dynamicjava.classinfo.ClassInfo;
 import koala.dynamicjava.interpreter.modifier.LeftHandSideModifier;
+import koala.dynamicjava.tree.ArrayType;
 import koala.dynamicjava.tree.Node;
+import koala.dynamicjava.tree.PrimitiveType;
+import koala.dynamicjava.tree.ReferenceType;
+import koala.dynamicjava.tree.Type;
 
 /**
  * This interface contains the names of the syntax tree properties
@@ -160,5 +167,26 @@ public class NodeProperties {
      * so it is not useful to create instances of it.
      */
     protected NodeProperties() {
+    }
+    
+    /**
+     * Resolves the Class object out of a Type object.
+     * 
+     * Jeliot 3
+     */
+    public static Class resolveClass(Type type) {
+        if (type instanceof PrimitiveType) {
+            return ((PrimitiveType) type).getValue();
+        } else if (type instanceof ArrayType) {
+            Class componentType = NodeProperties.resolveClass(((ArrayType) type).getElementType());
+            return Array.newInstance(componentType, 1).getClass();
+        } else if (type instanceof ReferenceType) {
+            try {
+                return Class.forName(((ReferenceType) type).getRepresentation());
+            } catch (ClassNotFoundException e) {
+                DebugUtil.handleThrowable(e);
+            }
+        }
+        return null;
     }
 }

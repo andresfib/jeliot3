@@ -151,7 +151,7 @@ public class CodePane2 extends JComponent {
         Runnable updateAComponent = new Runnable() {
 
             public void run() {
-                //area.requestFocus();
+                //area.requestFocusInWindow();
                 area.setCaretPosition(left + 1);
                 if (left >= 0) {
                     if (left != 0 && left == right) {
@@ -177,5 +177,13 @@ public class CodePane2 extends JComponent {
      */
     public void highlightLineNumber(int line) {
         ln.setHighlightedLine(line);
+    }
+    
+    public void setFont(Font font) {
+        super.setFont(font);
+        ln.setFont(font);
+        this.font = font;
+        getTextArea().getPainter().setFont(font);
+        propertiesBundle.setFontProperty("font.code_pane", font);
     }
 }

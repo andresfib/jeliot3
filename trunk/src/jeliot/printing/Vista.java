@@ -1,9 +1,3 @@
-/*
- * Created on 8.12.2004
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package jeliot.printing;
 
 import java.awt.Graphics;
@@ -16,13 +10,8 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterGraphics;
 
 /**
- * @author Niko Myller
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
-
-/**
+ * Taken from Sun's Java pages.
+ *  
  * A simple Pageable class that can
  * split a large drawing canvas over multiple
  * pages.
@@ -49,7 +38,7 @@ public class Vista implements Pageable {
      * A Vista can be passed to PrinterJob.setPageable.
      *
      * @param width The width, in 1/72nds of an inch, 
-     * of the vist's canvas.
+     * of the vista's canvas.
      *
      * @param height The height, in 1/72nds of an inch, 
      * of the vista's canvas.
