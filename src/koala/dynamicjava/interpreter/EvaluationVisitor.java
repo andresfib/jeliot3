@@ -159,12 +159,19 @@ public class EvaluationVisitor extends VisitorObject {
             + node.getEndColumn();
     }
     
-    //DOC: Document!
+    /**
+     * Sets the initial values to the different flags used in EvaluationVisitor
+     * @see counter
+     * @see evaluating
+     * @see preparing
+     * @see constructorCallNames
+     * @see superClasses
+     * @see constructorCallNumbers
+     */
     public void initialize() {
         counter = 1;
         evaluating = true;
         preparing = false;
-        inside = false;
         constructorCallNames = new Stack();
         superClasses = new Stack();
         constructorCallNumbers = new Stack();
@@ -174,27 +181,43 @@ public class EvaluationVisitor extends VisitorObject {
      * Identifies each expression
      */
     private static long counter = 1;
+    
+    /**
+     * When set to true it means it is evaluating the expression.
+     * It is used mainly when the production of MCode needs to re-visit a node
+     * and thus it is set to FALSE so not to re evaluate the node. 
+     */
     private boolean evaluating = true;
-    private static boolean preparing = false; // Indicates when ArrayModifier
-    // is preparing the array, and
-    // and thus we don't want info
-    private static boolean inside = false; // Used in Static Method Call, and
-    // TreeInterpreter.interpretMethod
-    // to decide wheter to print MD and
-    // PARAMETER
+    
+    /**
+     * Indicates when ArrayModifier is preparing the array, and and thus we 
+     * don't want info
+     */
+    private static boolean preparing = false; 
+     
 
+    /**
+     * Used in Simple Allocation and TreeInterpreter.interpretMethod
+     * Used to identify the name of the constructor and distinguish it from its 
+     * super constructors
+     */
     private static Stack constructorCallNames = new Stack();
-    // Used in Simple Allocation and
-    // TreeInterpreter.interpretMethod
-    //Used to identify the name of the constructor
-    //and distinguish it from its super constructors
+    //DOC NIKO
     private static Stack superClasses = new Stack();
     private static Stack constructorCallNumbers = new Stack();
 
+    /**
+     * Method to get the counter, also called Instruction Reference
+     * @return actual value of counter 
+     */
     public static long getCounter() {
         return counter;
     }
-
+    /**
+     * Increments the instruction counter. To be used when it has already been 
+     * asigned to an instruction
+     *
+     */
     public static void incrementCounter() {
         counter++;
     }
@@ -234,7 +257,7 @@ public class EvaluationVisitor extends VisitorObject {
     public static String getConstructorCallName() {
         return (String) constructorCallNames.peek();
     }
-
+    //DOC NIKO
     public static void newConstructorCall(
         String name,
         Vector superClassesNames,
@@ -293,16 +316,27 @@ public class EvaluationVisitor extends VisitorObject {
         return ((Long) returnExpressionCounterStack.peek()).equals(
             (Long) domesticStack.peek());
     }
+    /**
+     * Stack to keep track of the references of the return expression. 
+     * Used to allow method calls inside them.
+     */
     private static Stack returnExpressionCounterStack = new Stack();
 
+    /**
+     * Stack with the references of those methods where we can access to its 
+     * source ("domestic") 
+     */
     private static Stack domesticStack = new Stack();
 
-    // Stack to keep cell numbers of arrays. Each element stores the cell number of one array in one list
-
-    private List arrayCellNumbersList;
-    private List arrayCellReferencesList;
+    /**
+     * Stack to keep cell numbers of arrays. Each element stores the cell number
+     * of one array in one list
+     */
 
     private Stack arrayCellNumbersStack = new Stack();
+    /**
+     * Stack to keep the references of the cell expressions 
+     */
     private Stack arrayCellReferencesStack = new Stack();
 
     /**
@@ -323,13 +357,11 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(WhileStatement node) {
-        long condcounter = counter;
-        long round = 0; // Number of iterations
+        long condcounter = counter; //Reference number for the condition expression
+        long round = 0; // Number of iterations in the loop
         boolean breakc = false; // Exiting while loop because of break
         try {
-
-            while (((Boolean) node.getCondition().acceptVisitor(this))
-                .booleanValue()) {
+            while (((Boolean) node.getCondition().acceptVisitor(this)).booleanValue()) {
                 try {
                     MCodeUtilities.write(
                         ""
@@ -401,6 +433,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         try {
             Set vars = (Set) node.getProperty(NodeProperties.VARIABLES);
+            //Open scope for the declaration of the loop indexes
             MCodeUtilities.write(Code.SCOPE+Code.DELIM+"1");
             context.enterScope(vars);
 
@@ -685,8 +718,9 @@ public class EvaluationVisitor extends VisitorObject {
 
     /**
      * Visits a LabeledStatement
+     * Not implemented in Jeliot 3
      * @param node the node to visit
-     */
+     */    
     public Object visit(LabeledStatement node) {
         try {
             node.getStatement().acceptVisitor(this);
@@ -700,7 +734,8 @@ public class EvaluationVisitor extends VisitorObject {
     }
 
     /**
-     * Visits a SynchronizedStatement
+     * Visits a SynchronizedStatement.
+     * Not implemented in Jeliot 3
      * @param node the node to visit
      */
     public Object visit(SynchronizedStatement node) {
@@ -727,7 +762,8 @@ public class EvaluationVisitor extends VisitorObject {
     }
 
     /**
-     * Visits a TryStatement
+     * Visits a TryStatement.
+     * Not implemented in Jeliot 3
      * @param node the node to visit
      */
     public Object visit(TryStatement node) {
@@ -786,7 +822,8 @@ public class EvaluationVisitor extends VisitorObject {
     }
 
     /**
-     * Visits a ThrowStatement
+     * Visits a ThrowStatement. 
+     * Not implemented in Jeliot 3
      * @param node the node to visit
      */
     public Object visit(ThrowStatement node) {
@@ -799,8 +836,9 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ReturnStatement node) {
-
-        Object o = null;
+        
+        Object o = null; // Object to be returned
+        //We get the reference assigned in the call method to this return statement
         Long l = (Long) returnExpressionCounterStack.peek();
 
         if (node.getExpression() != null) {
@@ -832,7 +870,6 @@ public class EvaluationVisitor extends VisitorObject {
                         + NodeProperties.getType(node.getExpression()).getName()
                         + Code.DELIM
                         + locationToString(node));
-                //+Code.DELIM+m.getName());
             } else {
                 MCodeUtilities.write(
                     ""
@@ -847,14 +884,12 @@ public class EvaluationVisitor extends VisitorObject {
                         + Code.REFERENCE
                         + Code.DELIM
                         + locationToString(node));
-                //+Code.DELIM+m.getName());
-
+                
             }
 
             throw new ReturnException("return.statement", o, node);
+         // If there is nothing to return we indicate this with the NO_REFERENCE flag   
         } else {
-
-            //returnExpressionCounterStack.pop();
 
             MCodeUtilities.write(
                 ""
@@ -1008,12 +1043,13 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(VariableDeclaration node) {
+        
         Class c = NodeProperties.getType(node.getType());
-        int type;
+        int type; //FINAL or NOT_FINAL
         String value = Code.UNKNOWN;
-        ;
+        
         long auxcounter = Code.NO_REFERENCE;
-        //        long auxcounter=counter;
+        
         Object o;
 
         if (node.isFinal()) {
@@ -1218,6 +1254,47 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(ObjectMethodCall node) {
 
+        //Check for System System output
+        if ((node.hasProperty(NodeProperties.METHOD)) && 
+        ((Method) node.getProperty(NodeProperties.METHOD)).getDeclaringClass().getName().equals("java.io.PrintStream")) {
+            Method m = (Method) node.getProperty(NodeProperties.METHOD);{
+                if (m.getName().equals("println")) {
+                       List larg = node.getArguments();
+                       Object[] args = new Object[larg.size()];
+                       Class[] typs;
+                       Iterator it = larg.iterator();
+                       int i = 0;
+                       long auxcounter; //Records the previous counter value
+                       Object auxarg; //Stores the current argument
+                    
+                       typs = m.getParameterTypes();
+
+                       //It should only get once in the while loop!!!
+                       while (it.hasNext()) {
+                           auxcounter = counter;
+                           args[i] = ((Expression) it.next()).acceptVisitor(this);
+                           MCodeUtilities.write(
+                               ""
+                                   + Code.OUTPUT
+                                   + Code.DELIM
+                                   + auxcounter
+                                   + Code.DELIM
+                                   + args[i].toString()
+                                   + Code.DELIM
+                                   + typs[i].getName()
+                                   + Code.DELIM
+                                   + locationToString(node));
+                           i++;
+                       }
+                   
+                  }
+             
+               return null;
+             
+           }    
+        }else{
+        
+        
         Long l = new Long(counter);
         returnExpressionCounterStack.push(l);
         counter++;
@@ -1230,7 +1307,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         if (node.hasProperty(NodeProperties.METHOD)) {
             Method m = (Method) node.getProperty(NodeProperties.METHOD);
-            typs = m.getParameterTypes();
+            typs = m.getParameterTypes();            
 
             // Relax the protection for members?
             if (context.getAccessible()) {
@@ -1451,7 +1528,7 @@ public class EvaluationVisitor extends VisitorObject {
             return result;
         }
     }
-
+    }
     /**
      * Visits a StaticFieldAccess
      * @param node the node to visit
