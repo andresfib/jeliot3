@@ -92,6 +92,13 @@ public class CodeEditor extends JComponent {
     };
 
 
+    private ActionListener exit = new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            System.exit(0);
+        }
+    };
+
+
     /**
      * ActionListener that handels the clearing of the code area.
      */
@@ -127,7 +134,6 @@ public class CodeEditor extends JComponent {
             area.selectAll();
         }
     };
-
 
 
     /**
@@ -249,6 +255,13 @@ public class CodeEditor extends JComponent {
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_S, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(saver);
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Exit");
+        menuItem.setMnemonic(KeyEvent.VK_Q);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(exit);
         menu.add(menuItem);
 
         return menu;

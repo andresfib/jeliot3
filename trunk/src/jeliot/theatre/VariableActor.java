@@ -36,21 +36,22 @@ public class VariableActor extends Actor implements ActorContainer {
     protected ValueActor reserved;
 
     public void paintActor(Graphics g) {
+
         int w = width;
         int h = height;
         int bw = borderWidth;
 
         // fill background
-        g.setColor( (light == HIGHLIGHT) ?
-                darkColor :
-                bgcolor );
+        g.setColor((light == HIGHLIGHT)   ?
+                   darkColor              :
+                   bgcolor);
         g.fillRect(bw, bw, w - 2 * bw, h - 2 * bw);
 
         // draw the name
         g.setFont(font);
-        g.setColor( (light == HIGHLIGHT) ?
-                lightColor :
-                fgcolor );
+        g.setColor((light == HIGHLIGHT)   ?
+                   lightColor             :
+                   fgcolor);
         g.drawString(name, namex, namey);
 
         // draw value box
@@ -71,14 +72,14 @@ public class VariableActor extends Actor implements ActorContainer {
 
         // draw border
         ActorContainer parent = getParent();
-        g.setColor( (parent instanceof Actor)   ?
-                ( (Actor)parent ).darkColor     :
-                fgcolor );
+        g.setColor((parent instanceof Actor)    ?
+                  ((Actor)parent).darkColor     :
+                  fgcolor);
         g.drawLine(0, 0, w-1, 0);
         g.drawLine(0, 0, 0, h-1);
-        g.setColor( (parent instanceof Actor)   ?
-                ( (Actor)parent ).lightColor     :
-                fgcolor );
+        g.setColor((parent instanceof Actor)    ?
+                  ((Actor) parent).lightColor   :
+                  fgcolor);
         g.drawLine(1, h-1, w-1, h-1);
         g.drawLine(w-1, 1, w-1, h-1);
 
@@ -109,7 +110,7 @@ public class VariableActor extends Actor implements ActorContainer {
         return rp;
     }
 
-    public void removeActor(Actor actor) {  }
+    public void removeActor(Actor actor) { }
 
     public void bind() {
         this.value = this.reserved;
@@ -183,4 +184,5 @@ public class VariableActor extends Actor implements ActorContainer {
                 Math.max(valueh, sh));
         calcLabelPosition();
     }
+
 }

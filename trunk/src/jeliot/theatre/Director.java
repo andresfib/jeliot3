@@ -101,6 +101,9 @@ public class Director {
         theatre.addPassive(cbox);
         theatre.getManager().setConstantBox(cbox);
 
+        //theatre.addPassive(input);
+        //theatre.getManager().setInputBox(input);
+
         //Commented for Jeliot 3
 //      mainMethod.execute(this);
 
@@ -462,7 +465,7 @@ public class Director {
             scratch.removeCrap();
             if (eCodeInterpreter.emptyScratch()) {
                 scratch.clean();
-        	}
+            }
             manager.removeScratch(scratch);
             Point p = new Point(scratch.getX(), -scratch.getHeight());
             theatre.updateCapture();
@@ -491,7 +494,11 @@ public class Director {
         ExpressionActor expr = null;
         if (returnAct != null) {
             expr = currentScratch.findActor(-1);
-            expr.setId(expressionCounter);
+            if (expr != null) {
+                expr.setId(expressionCounter);
+            } else {
+                expr = currentScratch.getExpression(1, expressionCounter);
+        	}
         }
 
         // Get the old location of the scratch
@@ -516,7 +523,7 @@ public class Director {
                     scratchLoc.y - currentScratch.getY());
 
             Animation flyReturn = returnAct.fly(returnLoc);
-            anim = new Animation[] { flyScratch , flyReturn };
+            anim = new Animation[] {flyScratch , flyReturn};
 
             engine.showAnimation(anim);
             expr.bind(returnAct);

@@ -66,38 +66,38 @@ public class ActorFactory {
         };
 
     private String[][] binOpImageName = {
-        {"mulop.gif",    "assignop.gif"},
-        {"divop.gif",    "assignop.gif"},
-        {"modop.gif",    "assignop.gif"},
-        {"plusop.gif",   "assignop.gif"},
-        {"minusop.gif",  "assignop.gif"},
-        {"lshiftop.gif",   "assignop.gif"}, // lshift
-        {"rshiftop.gif",   "assignop.gif"}, // rshift
-        {"urshiftop.gif",  "assignop.gif"}, // urshift
-        {"lessop.gif",   "assignop.gif"},
-        {"greatop.gif",  "assignop.gif"},
-        {"lequop.gif",   "assignop.gif"},
-        {"gequop.gif",   "assignop.gif"},
-        {null,           null},           // instanceof not yet implemented
-        {"equop.gif",    "assignop.gif"},
-        {"nequop.gif",   "assignop.gif"},
-        {"bitandop.gif", "assignop.gif"},
-        {"bitxorop.gif", "assignop.gif"},
-        {"bitorop.gif",  "assignop.gif"},
-        {"candop.gif",   "assignop.gif"},
-        {"corop.gif",    "assignop.gif"},
-        {"cxorop.gif",   "assignop.gif"}
+        {"mulop.gif",      "assignop.gif"}, //multiplication
+        {"divop.gif",      "assignop.gif"}, //division
+        {"modop.gif",      "assignop.gif"}, //remaider
+        {"plusop.gif",     "assignop.gif"}, //addition
+        {"minusop.gif",    "assignop.gif"}, //subtraction
+        {"lshiftop.gif",   "assignop.gif"}, //left shift
+        {"rshiftop.gif",   "assignop.gif"}, //right shift
+        {"urshiftop.gif",  "assignop.gif"}, //unsigned right shift
+        {"lessop.gif",     "assignop.gif"}, //lesser than
+        {"greatop.gif",    "assignop.gif"}, //greater than
+        {"lequop.gif",     "assignop.gif"}, //lesser than or equals
+        {"gequop.gif",     "assignop.gif"}, //greater than or equals
+        {null,             null},           //instanceof not yet implemented
+        {"equop.gif",      "assignop.gif"}, //equals
+        {"nequop.gif",     "assignop.gif"}, //not equals
+        {"bitandop.gif",   "assignop.gif"}, //bitwise and
+        {"bitxorop.gif",   "assignop.gif"}, //bitwise xor
+        {"bitorop.gif",    "assignop.gif"}, //bitwise or
+        {"candop.gif",     "assignop.gif"}, //logical and
+        {"corop.gif",      "assignop.gif"}, //logical or
+        {"cxorop.gif",     "assignop.gif"}  //logical xor
     };
 
     private String[][] unaOpImageName = {
-        {"plusop.gif",  "assignop.gif"},
-        {"minusop.gif", "assignop.gif"},
-        {"plusplusop.gif", null},
-        {"minusminusop.gif", null},
-        {"compop.gif", "assignop.gif"}, //complement
-        {"notop.gif",   "assignop.gif"},
-        {"plusplusop.gif", null},
-        {"minusminusop.gif", null}
+        {"plusop.gif",       "assignop.gif"}, //plus
+        {"minusop.gif",      "assignop.gif"}, //minus
+        {"plusplusop.gif",   null},           //postdec
+        {"minusminusop.gif", null},           //predec
+        {"compop.gif",       "assignop.gif"}, //complement
+        {"notop.gif",        "assignop.gif"}, //not
+        {"plusplusop.gif",   null},           //postinc
+        {"minusminusop.gif", null}            //postdec
     };
 
     private static int[] typeValWidth;
@@ -153,8 +153,10 @@ public class ActorFactory {
          //Actually it is not easy to know how many variables there are.
         Stage stage = new Stage(m.getMethodName(), 6);// m.getVarCount());
         stage.setFont(stageFont);
-        stage.calculateSize(typeValWidth[8] + 60, valueHeight+8+variableInsets.top +
-                variableInsets.bottom);
+        stage.calculateSize(typeValWidth[8] + 60,
+                            valueHeight + 8 +
+                            variableInsets.top +
+                            variableInsets.bottom);
         stage.setBackground(new Color(0xFFCCCC));
         stage.setShadow(6);
         stage.setShadowImage(shadowImage);
@@ -162,18 +164,20 @@ public class ActorFactory {
     }
 
     VariableActor produceVariableActor(Variable v) {
+
         String type = v.getType();
         VariableActor actor = null;
         int typeInfo = ECodeUtilities.resolveType(type);
 
         if (typeInfo != ECodeUtilities.REFERENCE) {
+
             actor = new VariableActor();
 
             ImageValueActor vact = new ImageValueActor(
                      iLoad.getImage("mystery.gif"));
             vact.calculateSize();
 
-            actor.setName(v.getName());
+            actor.setName(type + " " + v.getName());
             actor.setFont(variableFont);
             actor.setForeground(Color.black);
             actor.setInsets(variableInsets);
@@ -184,9 +188,11 @@ public class ActorFactory {
             actor.setShadowImage(shadowImage);
             actor.reserve(vact);
             actor.bind();
+
             return actor;
-        }
-        else if (typeInfo == ECodeUtilities.REFERENCE) {
+
+        } else if (typeInfo == ECodeUtilities.REFERENCE) {
+
             ReferenceVariableActor refAct =
                     new ReferenceVariableActor();
 
@@ -210,13 +216,13 @@ public class ActorFactory {
 
             actor = refAct;
         }
+
         return actor;
     }
 
     public ValueActor produceValueActor(Value val) {
 
         ValueActor actor = new ValueActor();
-
         String type = val.getType();
         int typeInfo = ECodeUtilities.resolveType(type);
 
@@ -228,28 +234,33 @@ public class ActorFactory {
 
         if (ECodeUtilities.isPrimitive(type)) {
             actor.setBackground(valColor[typeInfo]);
-
             String label = val.getValue();
 
-//            String label = valObj instanceof Exception ?
-//                "ERROR" :
-//                valObj.toString();
+//          String label = valObj instanceof Exception ?
+//          "ERROR" :
+//          valObj.toString();
             if (typeInfo == ECodeUtilities.DOUBLE) {
+
                 if (label.indexOf('E') == -1) {
                     int dot = label.indexOf('.');
+
                     if (dot > -1 && dot < label.length() -5) {
                         label = label.substring(0, dot + 5);
                     }
-                //typeValWidth[type.getIndex()];
+                    //typeValWidth[type.getIndex()];
                 }
             }
+
             actor.setLabel(label);
             actor.setShadowImage(shadowImage);
             //actor.setActor(val.getActor());
             actor.calculateSize();
+
             return actor;
         }
+
         return null;
+
     }
 
     public ValueActor produceValueActor(ValueActor cloneActor) {
