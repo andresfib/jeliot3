@@ -1292,7 +1292,7 @@ public class JeliotWindow implements PauseListener {
 
                 if (methodCall == null) {
                     methodCall = findMainMethodCall(programCode);
-                    if (askForMethod) {
+                    if (askForMethod || methodCall == null) {
                         methodCall = ((methodCall != null) ? methodCall : null);
                         String inputValue = JOptionPane.showInputDialog(
                                 messageBundle
