@@ -722,6 +722,7 @@ public class EvaluationVisitor extends VisitorObject {
         if (node.getExpression() != null) {
 
             long auxcounter = counter;
+            
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.R + Code.DELIM + l.toString()
                     + Code.DELIM + MCodeUtilities.locationToString(node));
 
@@ -743,9 +744,12 @@ public class EvaluationVisitor extends VisitorObject {
             // If there is nothing to return we indicate this with the NO_REFERENCE flag   
         } else {
 
+        	MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.R + Code.DELIM + Code.NO_REFERENCE
+                    + Code.DELIM + MCodeUtilities.locationToString(node));
+        	
             MCodeUtilities.write("" + Code.R + Code.DELIM + (counter++) + Code.DELIM
-                    + Code.NO_REFERENCE + Code.DELIM + Void.TYPE.getName() + Code.DELIM
-                    + Code.UNKNOWN + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.NO_REFERENCE + Code.DELIM + Code.UNKNOWN +
+					Code.DELIM + Void.TYPE.getName() + Code.DELIM + MCodeUtilities.locationToString(node));
 
             throw new ReturnException("return.statement", node);
         }
