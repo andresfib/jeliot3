@@ -48,12 +48,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.Stack;
 import java.util.Vector;
 
 import jeliot.mcode.Code;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.mcode.StoppingRequestedError;
 import jeliot.util.DebugUtil;
+import koala.dynamicjava.classinfo.JavaClassInfo;
 import koala.dynamicjava.interpreter.context.Context;
 import koala.dynamicjava.interpreter.context.GlobalContext;
 import koala.dynamicjava.interpreter.context.MethodContext;
@@ -70,6 +72,7 @@ import koala.dynamicjava.tree.Node;
 import koala.dynamicjava.tree.visitor.Visitor;
 import koala.dynamicjava.util.ImportationManager;
 import koala.dynamicjava.util.LibraryFinder;
+import koala.dynamicjava.util.ParamTypes;
 
 /**
  * This class contains method to interpret the constructs
@@ -564,8 +567,7 @@ public class TreeInterpreter implements Interpreter {
         evalVisitorContext.define(name, new Double(value));
     }
 
-    /**
-     * Sets the value of a variable
+    /**     * Sets the value of a variable
      * @param name  the variable's name
      * @param value the value of the variable
      * @exception IllegalStateException if the assignment is invalid
@@ -749,71 +751,11 @@ public class TreeInterpreter implements Interpreter {
         String name = meth.getName();
         Context context = null;
 
-        // Jeliot 3
-
-        //System.out.println(c.getName());
-        //System.out.println(name);
-        if (EvaluationVisitor.isSetConstructorCall()
-                && c.getName().equals(EvaluationVisitor.getConstructorCallName())
-                && name.equals("<init>")) {
-        	
-            Long callNumber = new Long(EvaluationVisitor.getConstructorCallNumber());
-        	EvaluationVisitor.returnExpressionCounterStack.push(callNumber);
-            MCodeUtilities.write("" + Code.CONSCN + Code.DELIM + callNumber);
-            
-            EvaluationVisitor.constructorCallFinished();
-
-        } else if (EvaluationVisitor.isSetConstructorCall()
-                && !c.getName().equals(EvaluationVisitor.getConstructorCallName())
-                && name.equals("<init>")
-                && EvaluationVisitor.getSuperClasses().contains(c.getName())) {
-
-            int depth = MCodeUtilities.numParametersStack.size();
-            String superName = "";
-            for (int k = 0; k < depth - 1; k++) {
-                superName += "super.";
-            }
-            superName += "super";
-
-            int numParameters = ((Integer) MCodeUtilities.numParametersStack.pop()).intValue();
-
-            long counter = EvaluationVisitor.getCounter();
-            EvaluationVisitor.incrementCounter();
-
-            if (numParameters == 0) {
-
-                // Fake OMC with super() when
-                // !c.getName().equals(EvaluationVisitor.getConstructorCallName())
-                // so to describe a super call,
-
-                meth.getClass();
-                MCodeUtilities.write("" + Code.QN + Code.DELIM + counter + Code.DELIM + "this"
-                        + Code.DELIM + MCodeUtilities.getValue(obj) + Code.DELIM + obj.getClass().getName());
-
-                MCodeUtilities.write("" + Code.OMC + Code.DELIM + superName + Code.DELIM + "0"
-                        + Code.DELIM + counter + Code.DELIM + "this" + Code.DELIM + "0,0,0,0"
-                        + MCodeUtilities.locationToString(meth));
-
-            } else {
-
-                MCodeUtilities.write("" + Code.QN + Code.DELIM + counter + Code.DELIM + "this"
-                        + Code.DELIM + MCodeUtilities.getValue(obj) + Code.DELIM + obj.getClass().getName()
-                        + Code.DELIM + "0,0,0,0");
-
-                MCodeUtilities.write("" + Code.OMC + Code.DELIM + superName + Code.DELIM
-                        + numParameters + Code.DELIM + counter + Code.DELIM + "this" + Code.DELIM
-                        + MCodeUtilities.locationToString(meth));
-                //Print out the parameters info 
-                Vector redirectBuffer = (Vector) MCodeUtilities.redirectBufferStack.pop();
-                //MCodeUtilities.numParametersStack.pop();
-                MCodeUtilities.writeRedirectBuffer(redirectBuffer);
-                //MCodeUtilities.clearRedirectBuffer(); 
-                //TODO: Set to 0 parameter count
-                //MCodeUtilities.clearNumParameters();
-            }
-
-        }
-
+        //Jeliot 3
+        // We store the class of the parameters
+        
+        Class[] paramTypes = new Class[mparams.size()];
+        
         if (Modifier.isStatic(md.method.getAccessFlags())) {
             if (md.variables == null) {
                 md.importationManager.setClassLoader(classLoader);
@@ -840,10 +782,14 @@ public class TreeInterpreter implements Interpreter {
                 ctx = new StaticContext(this, c, md.importationManager);
                 ctx.setAdditionalClassLoaderContainer(classLoader);
                 v = new TypeChecker(ctx);
-
+                
                 it = mparams.listIterator();
+                
+                int i= 0;
                 while (it.hasNext()) {
-                    ((Node) it.next()).acceptVisitor(v);
+                	//Jeliot 3
+                	Node aux = (Node) it.next();
+                    paramTypes[i++]=(Class) aux.acceptVisitor(v);
                 }
 
                 it = stmts.listIterator();
@@ -932,8 +878,11 @@ public class TreeInterpreter implements Interpreter {
 
                 // Visit the parameters and the body of the method
                 it = mparams.listIterator();
+                int i = 0;
                 while (it.hasNext()) {
-                    ((Node) it.next()).acceptVisitor(v);
+                	//Jeliot 3
+                	Node aux = (Node) it.next();
+                    paramTypes[i++]=(Class) aux.acceptVisitor(v);
                 }
 
                 it = stmts.listIterator();
@@ -969,7 +918,6 @@ public class TreeInterpreter implements Interpreter {
 
         List argnames = new LinkedList(); //Jeliot3
         FormalParameter current; //Jeliot3
-
         while (it.hasNext()) {
             current = (FormalParameter) it.next();
             context.set(current.getName(), params[i++]);
@@ -977,9 +925,7 @@ public class TreeInterpreter implements Interpreter {
             // JELIOT 3
             argnames.add(current.getName());
         }
-
-        MCodeUtilities.write(Code.PARAMETERS + Code.DELIM + MCodeUtilities.argToString(argnames));
-        MCodeUtilities.write(Code.MD + Code.DELIM + MCodeUtilities.locationToString(meth));
+        
         // Hack for providing e-code for "outside" classes
         // EvaluationVisitor will display PARAMETERS and MD just before SMCC
         EvaluationVisitor.setInside();        
@@ -1001,8 +947,43 @@ public class TreeInterpreter implements Interpreter {
                 }
             }
         }
+        Class[] typesAux = new Class[params.length];
+        int j = 0;
+        while (j<params.length){
+        	typesAux[j] = params[j].getClass();
+        	j++;
+        }
+	    boolean inSuperCall = EvaluationVisitor.isSetConstructorCall()
+	    	&& !c.getName().equals(EvaluationVisitor.getConstructorCallName())
+			&& name.equals("<init>")
+			&& EvaluationVisitor.getSuperClasses().contains(c.getName());
+    
+	    boolean inThisCall = EvaluationVisitor.isSetConstructorCall()
+		 	&& c.getName().equals(MCodeUtilities.getConstructorName())//MCodeUtilities.previousClassStack.peek())
+			&& !ParamTypes.compareSignatures(typesAux, //paramTypes,
+					(Class[]) MCodeUtilities.getConstructorParamTypes())
+			&& name.equals("<init>");
 
-        Visitor v = new EvaluationVisitor(context);
+    	boolean inConstructorCall = !inSuperCall && !inThisCall &&  EvaluationVisitor.isSetConstructorCall()&& name.equals("<init>");
+    	
+    	
+    	if (inConstructorCall){
+    		
+    		Long callNumber = new Long(EvaluationVisitor.getConstructorCallNumber());
+    		MCodeUtilities.write("" + Code.CONSCN + Code.DELIM + callNumber);
+    		
+    	}
+        
+    	if (!EvaluationVisitor.isSetConstructorCall() || inConstructorCall || !name.equals("<init>")){
+        	
+           	MCodeUtilities.write(Code.PARAMETERS + Code.DELIM + MCodeUtilities.argToString(argnames));
+        	MCodeUtilities.write(Code.MD + Code.DELIM + MCodeUtilities.locationToString(meth));
+        }
+    	if (inConstructorCall){	
+    		EvaluationVisitor.constructorCallFinished();
+    		MCodeUtilities.superClassesStack.pop();
+    	}
+    	Visitor v = new EvaluationVisitor(context);
         it = stmts.iterator();
 
         try {
@@ -1011,28 +992,14 @@ public class TreeInterpreter implements Interpreter {
             }
         } catch (ReturnException e) {
 
-            //This is for super method call in the constructors first line
-            if (EvaluationVisitor.isSetConstructorCall()
-                    && !c.getName().equals(EvaluationVisitor.getConstructorCallName())
-                    && name.equals("<init>")
-                    && EvaluationVisitor.getSuperClasses().contains(c.getName())) {
-
-                MCodeUtilities.write("" + Code.OMCC);
-                //the method call is closed
-            }
-
             return e.getValue();
         }
 
-        //This is for super method call in the constructors first line
-        if (EvaluationVisitor.isSetConstructorCall()
-                && !c.getName().equals(EvaluationVisitor.getConstructorCallName())
-                && name.equals("<init>")
-                && EvaluationVisitor.getSuperClasses().contains(c.getName())) {
-
+	    if (inThisCall || inSuperCall){
             MCodeUtilities.write("" + Code.OMCC); //the method call is closed
+            MCodeUtilities.previousClassStack.pop();
+            MCodeUtilities.previousClassParametersStack.pop();
         }
-
         return null;
     }
 
@@ -1055,6 +1022,10 @@ public class TreeInterpreter implements Interpreter {
     public static Object[] interpretArguments(String key, Object[] args) {
         ConstructorParametersDescriptor cpd = (ConstructorParametersDescriptor) constructorParameters
                 .get(key);
+        //Jeliot 3
+        
+        MethodDescriptor md = (MethodDescriptor) methods.get(key);
+        
         Class c = null;
         try {
             c = Class.forName(key.substring(0, key.lastIndexOf('#')), true, cpd.interpreter
@@ -1066,8 +1037,9 @@ public class TreeInterpreter implements Interpreter {
             }
         }
 
-        return cpd.interpreter.interpretArguments(c, cpd, args);
+        return cpd.interpreter.interpretArguments(c, md, cpd, args);
     }
+
 
     /**
      * This method is used to implement constructor invocation.
@@ -1077,11 +1049,33 @@ public class TreeInterpreter implements Interpreter {
      * @return the arguments to give to the 'super' or 'this' constructor
      *         followed by the new values of the constructor arguments
      */
-    protected Object[] interpretArguments(Class c, ConstructorParametersDescriptor cpd,
+    protected Object[] interpretArguments(Class c, MethodDescriptor md, ConstructorParametersDescriptor cpd,
             Object[] args) {
         //Jeliot3
-        String[] types = new String[cpd.parameters.size()];
+    	Class[] types;
+    	if (cpd.arguments != null){
+    		 types = new Class[cpd.arguments.size()];
+    	} else{
+    		types = new Class[0];
+    	}
+    	
+    	//Jeliot 3
+    	MethodDeclaration meth = md.method;    	
+        List params = meth.getParameters();
+    	List argnames = new LinkedList(); //Jeliot3
+    	Iterator ite = params.iterator();
+        int i = 0;
 
+        
+        FormalParameter current; //Jeliot3
+        while (ite.hasNext()) {
+            current = (FormalParameter) ite.next();
+                    // JELIOT 3
+            argnames.add(current.getName());
+        }
+
+        
+        String name = meth.getName();
         if (cpd.variables == null) {
             cpd.importationManager.setClassLoader(classLoader);
 
@@ -1093,24 +1087,30 @@ public class TreeInterpreter implements Interpreter {
             // Check the parameters
             if (cpd.parameters != null) {
                 ListIterator it = cpd.parameters.listIterator();
-                int i = 0;
+                
                 Node aux;
                 while (it.hasNext()) {
-                    //We get the parameters type from here
+
                     aux = (Node) it.next();
                     aux.acceptVisitor(tc);
-                    types[i++] = ((Class) aux.getProperty(NodeProperties.TYPE)).getName();
+                    //argnames.add(((FormalParameter) aux).getName());
                 }
             }
 
             if (cpd.arguments != null) {
                 ListIterator it = cpd.arguments.listIterator();
+                i = 0;
                 while (it.hasNext()) {
                     Node root = (Node) it.next();
+                    
                     Object res = root.acceptVisitor(nv);
+                    //We get the parameters type from here
+                    types[i] = ((Class) ((JavaClassInfo)root.getProperty(NodeProperties.TYPE)).getJavaClass());
                     if (res != null) {
                         it.set(res);
+                        //types[i] = ((Class) ((Node)res).getProperty(NodeProperties.TYPE)).getName();
                     }
+                    i++;
                 }
 
                 it = cpd.arguments.listIterator();
@@ -1127,19 +1127,108 @@ public class TreeInterpreter implements Interpreter {
         // Set the arguments values
         if (cpd.parameters != null) {
             Iterator it = cpd.parameters.iterator();
-            int i = 0;
+            i = 0;
             while (it.hasNext()) {
                 ctx.set(((FormalParameter) it.next()).getName(), args[i++]);
             }
         }
+        //From interpretMethod
+        // Jeliot 3
+        //We extract the types of the parameters of the method
+        //to identify when we are dealing with a "this" method call
+        //when they differ with the one that is at the top of the constructorInfoParamType stacl
+        
+        String previousClass = (String) MCodeUtilities.previousClassStack.peek();
+        Class[] previousParameters = (Class[]) MCodeUtilities.previousClassParametersStack.peek();
+        
+        // With previous values 
+        boolean signatureTest = ParamTypes.compareSignatures( previousParameters, 
+        			MCodeUtilities.getConstructorParamTypes());
+        boolean nameTest = previousClass.equals(c.getName());
+        
+        //With current values
+        boolean currentNameTest = c.getName().equals(MCodeUtilities.getConstructorName());
 
+        boolean inConstructorCall = signatureTest && currentNameTest; 
+        boolean inThisCall = (!signatureTest && currentNameTest) || (!signatureTest && nameTest);
+        boolean inSuperCall = !inThisCall && !inConstructorCall;
+
+        
+//        // With previous values 
+//        boolean signatureTest = ParamTypes.compareSignatures( previousParameters,types); 
+//        boolean nameTest = previousClass.equals(c.getName());
+//        
+//        // With original constructor
+//        boolean consNameTest = c.getName().equals(MCodeUtilities.getConstructorName());
+//        boolean consSignatureTest = ParamTypes.compareSignatures( types,
+//        							MCodeUtilities.getConstructorParamTypes());
+//        
+//        boolean inConstructorCall = consSignatureTest && consNameTest;
+//        boolean inThisCall = (!consSignatureTest && consNameTest) || (!signatureTest && nameTest);
+//        boolean inSuperCall = !inThisCall && !inConstructorCall;      
+        
+        
+        MCodeUtilities.previousClassStack.push(c.getName());
+        MCodeUtilities.previousClassParametersStack.push(types);
+        
+        //Check for special cases, first "this", then "super" method calls
+        if (inThisCall || inSuperCall){
+        	
+        	int numParameters = previousParameters.length;
+        	String methodName ="";
+        	if (inThisCall){
+        		methodName = "this";
+        	}else { //inSuperCall
+        		
+        		int depth = ((Integer) MCodeUtilities.superClassesStack.pop()).intValue();
+        		MCodeUtilities.superClassesStack.push(new Integer(++depth));
+        		for (int k = 0; k < depth - 1; k++) {
+        			methodName += "super.";
+        		}
+        		methodName += "super";
+        	}
+        	long counter = EvaluationVisitor.getCounter();
+        	
+        	EvaluationVisitor.incrementCounter();
+        	
+        	if (numParameters == 0) {
+        		
+        		// Fake OMC with this.this when
+        		// 
+        		// so to describe a this call,
+        		
+        		//meth.getClass();
+        		MCodeUtilities.write("" + Code.QN + Code.DELIM + counter + Code.DELIM + "this"
+        				+ Code.DELIM + Code.UNKNOWN + Code.DELIM + c.getName());
+        		
+        		MCodeUtilities.write("" + Code.OMC + Code.DELIM + methodName + Code.DELIM + "0"
+        				+ Code.DELIM + counter + Code.DELIM + "this" + Code.DELIM + "0,0,0,0");
+        		//+ MCodeUtilities.locationToString(meth));
+        		
+        	} else {
+        		
+        		MCodeUtilities.write("" + Code.QN + Code.DELIM + counter + Code.DELIM + "this"
+        				+ Code.DELIM + Code.UNKNOWN + Code.DELIM + c.getName()
+						+ Code.DELIM + "0,0,0,0");
+        		
+        		MCodeUtilities.write("" + Code.OMC + Code.DELIM + methodName + Code.DELIM
+        				+ numParameters + Code.DELIM + counter + Code.DELIM + "this" + Code.DELIM
+						+ "0,0,0,0");
+        		
+        	}
+        }
+        
         Object[] result = new Object[0];
-
+        if (!inConstructorCall){
+        	Vector redirectBuffer = (Vector) MCodeUtilities.redirectBufferStack.pop();
+            MCodeUtilities.writeRedirectBuffer(redirectBuffer);
+        	
+        }
         if (cpd.arguments != null) {
             Visitor v = new EvaluationVisitor(ctx);
             ListIterator it = cpd.arguments.listIterator();
             result = new Object[cpd.arguments.size()];
-            int i = 0;
+            i = 0;
             //Get data from node to be outputted later on
             //Modify flag to get output to data strucuture
             MCodeUtilities.setRedirectOutput(true);
@@ -1147,21 +1236,29 @@ public class TreeInterpreter implements Interpreter {
             while (it.hasNext()) {
                 long auxCounter = EvaluationVisitor.getCounter();
                 MCodeUtilities.incNumParameters();
-                MCodeUtilities.addToRedirectBuffer("" + Code.BEGIN + Code.DELIM + Code.P
-                        + Code.DELIM + auxCounter + Code.DELIM + "0,0,0,0");
+                
+                MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
+                		+ Code.DELIM + auxCounter + Code.DELIM + "0,0,0,0");
+                
                 result[i++] = ((Node) it.next()).acceptVisitor(v);
-                MCodeUtilities.addToRedirectBuffer("" + Code.P + Code.DELIM + auxCounter
-                        + Code.DELIM + MCodeUtilities.getValue(result[i - 1]) + Code.DELIM
-                        + result[i - 1].getClass().getName());
+                
+                
+                MCodeUtilities.write("" + Code.P + Code.DELIM + auxCounter
+                		+ Code.DELIM + MCodeUtilities.getValue(result[i - 1]) + Code.DELIM
+						+ result[i - 1].getClass().getName());
+                
             }
             MCodeUtilities.setRedirectOutput(false);
             MCodeUtilities.redirectBufferStack.push(new Vector(MCodeUtilities.getRedirectBuffer()));
             MCodeUtilities.clearRedirectBuffer();
-            MCodeUtilities.numParametersStack.push(new Integer(MCodeUtilities.getNumParameters()));
-            MCodeUtilities.clearNumParameters();
-
-        } else if (!c.getSuperclass().getName().equals("java.lang.Object")) {
-            MCodeUtilities.numParametersStack.push(new Integer(0));
+        } else {
+        	MCodeUtilities.redirectBufferStack.push(new Vector());
+        }
+        
+        if (inThisCall || inSuperCall){
+        	MCodeUtilities.write(Code.PARAMETERS + Code.DELIM + MCodeUtilities.argToString(argnames));
+        	MCodeUtilities.write(Code.MD + Code.DELIM + MCodeUtilities.locationToString(meth));
+        	
         }
         return result;
     }
