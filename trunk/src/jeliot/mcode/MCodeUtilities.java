@@ -908,11 +908,8 @@ public class MCodeUtilities {
                     throw new StoppingRequestedError();
                 }
                 writer.println(str);
-                System.out.println("      " + str);
-
             } else {
                 addToRedirectBuffer(str);
-                System.out.println("Redirected" + str);
             }
 
             //This prints all the commands that were generated to a file
@@ -1080,7 +1077,7 @@ public class MCodeUtilities {
 
     public static void addToRedirectBuffer(String string) {
         redirectBuffer.add(string);
-        System.out.println("Redirected" + string);
+        
     }
 
     /**
