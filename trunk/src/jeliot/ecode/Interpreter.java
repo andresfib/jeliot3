@@ -129,6 +129,8 @@ public class Interpreter {
 
     public void execute() {
 
+        try {
+
         director.openScratch();
 
         while (running) {
@@ -2723,6 +2725,12 @@ public class Interpreter {
 
         }
         director.closeScratch();
+
+        } catch (Exception e) {
+            director.showErrorMessage(new InterpreterError("<H1>Runtime Error</H1>"+
+                                 "<P>The feature is not yet implemented.</P>", null));
+        }
+
     }
 
 

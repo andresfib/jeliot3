@@ -1563,10 +1563,16 @@ public class ClassFactory extends ClassFile {
     try {
         write(out);
 
+        /*
+         * Only for debugging.
+         * This will produce a class file of each compiled class.
+         */
+        /*
         File f = new File(name+"xxx.class");
         FileOutputStream fos = new FileOutputStream(f);
         fos.write(out.toByteArray());
         fos.close();
+        */
 
     } catch (IOException e) {
         // Should never append
