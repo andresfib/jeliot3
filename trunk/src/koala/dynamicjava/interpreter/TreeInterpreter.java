@@ -238,7 +238,7 @@ public class TreeInterpreter implements Interpreter {
             MCodeUtilities.write(code);
 
             //throw new InterpreterException(e);
-
+            //return e;
         } catch (ParseError e) {
             e.printStackTrace();
 
@@ -260,7 +260,7 @@ public class TreeInterpreter implements Interpreter {
             MCodeUtilities.write(code);
 
             //throw new InterpreterException(e);
-
+            //return e;
         } catch (Error e) {
             e.printStackTrace();
 
@@ -270,15 +270,17 @@ public class TreeInterpreter implements Interpreter {
                 code += bundle.getString("j3.no.class.def.found");
             }
 
-            if (e.getCause() != null && !e.getCause().equals("")) {
-                String cause = MCodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
-                cause = MCodeUtilities.replace(cause, ">", "&gt;");
-                code += cause + "<BR>";
+            if (e.getCause() != null) {
+                code += removeBrackets(e.getCause().toString()) + "<BR>";
+                //String cause = MCodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
+                //cause = MCodeUtilities.replace(cause, ">", "&gt;");
+                //code += cause + "<BR>";
             }
             if (e.getMessage() != null && !e.getMessage().equals("")) {
-                String message = MCodeUtilities.replace(e.getMessage(), "<", "&lt;");
-                message = MCodeUtilities.replace(message, ">", "&gt;");
-                code += message;
+                code += removeBrackets(e.getMessage()) + "<BR>";
+                //String message = MCodeUtilities.replace(e.getMessage(), "<", "&lt;");
+                //message = MCodeUtilities.replace(message, ">", "&gt;");
+                //code += message;
 
             }
             code = MCodeUtilities.replace(code, "\n", "<BR>");
@@ -293,7 +295,7 @@ public class TreeInterpreter implements Interpreter {
             MCodeUtilities.write(code);
 
             //e.printStackTrace();
-
+            //return e;
         } catch (Exception e) {
             e.printStackTrace();
             e.toString();
@@ -304,16 +306,19 @@ public class TreeInterpreter implements Interpreter {
             }
 
             if (e.getCause() != null) {
-                String cause = MCodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
-                cause = MCodeUtilities.replace(cause, ">", "&gt;");
-                code += cause + "<BR>";
+                code += removeBrackets(e.getCause().toString()) + "<BR>";
+                //String cause = MCodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
+                //cause = MCodeUtilities.replace(cause, ">", "&gt;");
+                //code += cause + "<BR>";
             }
             if (e.getMessage() != null && !e.getMessage().equals("")) {
-                String message = MCodeUtilities.replace(e.getMessage(), "<", "&lt;");
-                message = MCodeUtilities.replace(message, ">", "&gt;");
-                code += message;
+                code += removeBrackets(e.getMessage()) + "<BR>";
+                //String message = MCodeUtilities.replace(e.getMessage(), "<", "&lt;");
+                //message = MCodeUtilities.replace(message, ">", "&gt;");
+                //code += message;
 
             }
+            
             code = MCodeUtilities.replace(code, "\n", "<BR>");
             code = MCodeUtilities.replace(code, "\r", "");
 
@@ -326,10 +331,16 @@ public class TreeInterpreter implements Interpreter {
             MCodeUtilities.write(code);
 
             //throw new InterpreterException(e);
+            //return e;
         }
         return null;
     }
 
+    public String removeBrackets(String str) {
+        str = MCodeUtilities.replace(str, "<", "&lt;");
+        str = MCodeUtilities.replace(str, ">", "&gt;");
+        return str;
+    }
     public String internalError(Throwable e) {
         String code = "";
         code += "<P>" + bundle.getString("j3.internal_error") + "</P>";
