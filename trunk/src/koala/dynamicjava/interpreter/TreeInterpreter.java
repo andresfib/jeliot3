@@ -69,6 +69,7 @@ import koala.dynamicjava.tree.ConstructorDeclaration;
 import koala.dynamicjava.tree.FormalParameter;
 import koala.dynamicjava.tree.MethodDeclaration;
 import koala.dynamicjava.tree.Node;
+import koala.dynamicjava.tree.Type;
 import koala.dynamicjava.tree.visitor.Visitor;
 import koala.dynamicjava.util.ImportationManager;
 import koala.dynamicjava.util.LibraryFinder;
@@ -756,6 +757,9 @@ public class TreeInterpreter implements Interpreter {
         
         Class[] paramTypes = new Class[mparams.size()];
         
+        if ((name.equals("toString") && (mparams.size()==0))) {//&& (meth.getReturnType().value)) {
+        	MCodeUtilities.setToStringOverloaded(true);
+        }
         if (Modifier.isStatic(md.method.getAccessFlags())) {
             if (md.variables == null) {
                 md.importationManager.setClassLoader(classLoader);

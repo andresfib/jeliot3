@@ -8,7 +8,10 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import jeliot.util.DebugUtil;
+
 import koala.dynamicjava.interpreter.EvaluationVisitor;
+import koala.dynamicjava.tree.Expression;
 import koala.dynamicjava.tree.Node;
 
 /**
@@ -313,7 +316,24 @@ public class MCodeUtilities {
         constructorParametersStack.pop();
         constructorNameStack.pop();
     }
-
+    /**
+     * Set to true when visiting overloaded toString method
+     */
+    public static boolean toStringOverloaded;
+    
+    /**
+     * 
+     */
+    public static boolean isToStringOverloaded(){
+    	return toStringOverloaded;
+    }
+    
+    /**
+     * 
+     */
+    public static void setToStringOverloaded(boolean value){
+    	toStringOverloaded = value;
+    }
     /**
      * 
      */
@@ -916,6 +936,7 @@ public class MCodeUtilities {
                     throw new StoppingRequestedError();
                 }
                 writer.println(str);
+                DebugUtil.printDebugInfo("    "+str);
             } else {
                 addToRedirectBuffer(str);
             }
@@ -1324,5 +1345,83 @@ public class MCodeUtilities {
 		previousParametersStack = new Stack();
 		constructorNameStack = new Stack();
 		constructorParametersStack = new Stack();
+	}
+
+	/**
+	 * @param visitor
+	 * @param robj
+	 * @return
+	 */
+	public static String toStringCall(Node expression, EvaluationVisitor visitor) {
+
+		Long l = new Long(EvaluationVisitor.getCounter());
+		EvaluationVisitor.returnExpressionCounterStack.push(l);
+		EvaluationVisitor.incrementCounter();
+		Class[] typs;
+		long counter = EvaluationVisitor.getCounter();
+
+		Object obj = expression.acceptVisitor(visitor);
+
+		setToStringOverloaded(false);
+		MCodeUtilities.write("" + Code.OMC + Code.DELIM
+				+ "toString" + Code.DELIM + "0"
+				+ Code.DELIM + counter + Code.DELIM
+				+ String.class.getName() + Code.DELIM
+				+ "0,0,0,0");
+		
+		String result = obj.toString();
+		if (!isToStringOverloaded()){
+			//fake everything
+			MCodeUtilities.write(Code.PARAMETERS
+					+ Code.DELIM
+					+ "");
+			MCodeUtilities.write(Code.MD + Code.DELIM
+					+ "0,0,0,0");
+			
+			long auxCounter = EvaluationVisitor.getCounter();
+
+			MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.R
+					+ Code.DELIM + l.toString() + Code.DELIM
+					+ MCodeUtilities.locationToString(expression));
+
+			MCodeUtilities.write(Code.L + Code.DELIM
+					+ auxCounter + Code.DELIM + result
+					+ Code.DELIM + String.class.getName() + Code.DELIM
+					+ "0,0,0,0");
+			EvaluationVisitor.incrementCounter();
+			MCodeUtilities.write("" + Code.R + Code.DELIM
+					+ EvaluationVisitor.returnExpressionCounterStack.pop() + Code.DELIM + auxCounter
+					+ Code.DELIM + result + Code.DELIM
+					+ String.class.getName() + Code.DELIM
+					+ "0,0,0,0");
+			
+		} else {
+			setToStringOverloaded(false);
+		}
+		MCodeUtilities.write("" + Code.OMCC);
+		
+		return result;
+	}
+	public static String stringConversion (Node exp, EvaluationVisitor visitor) {
+		if (MCodeUtilities.isString(exp)){ //ask for type implements tree.Literal
+			
+			return (String) exp.acceptVisitor(visitor);
+			
+		} else {
+			
+			return MCodeUtilities.toStringCall(exp, visitor);
+		}
+	}
+	public static boolean isString( Node exp){
+		
+		Class c = (Class) exp.getProperty("type");
+		boolean automaticStringConversion = (c.isPrimitive() 
+				|| String.class.equals(c) || Integer.class.equals(c)
+                || Double.class.equals(c) || Byte.class.equals(c)
+                || Long.class.equals(c) || Short.class.equals(c)
+                || Boolean.class.equals(c) || Float.class.equals(c)
+                || Character.class.equals(c));
+
+		return automaticStringConversion || (koala.dynamicjava.tree.Literal.class.isInstance(exp.getClass()));
 	}
 }
