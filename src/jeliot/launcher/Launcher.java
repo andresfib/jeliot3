@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 
-import jeliot.ecode.ECodeUtilities;
+import jeliot.mcode.*;
 import koala.dynamicjava.interpreter.Interpreter;
 import koala.dynamicjava.interpreter.TreeInterpreter;
 import koala.dynamicjava.parser.wrapper.JavaCCParserFactory;
@@ -67,8 +67,8 @@ public class Launcher extends Thread {
         reader = new BufferedReader(pipedReader);
         inputReader = new BufferedReader(getInput);
 
-        ECodeUtilities.setWriter(writer);
-        ECodeUtilities.setReader(inputReader);
+        MCodeUtilities.setWriter(writer);
+        MCodeUtilities.setReader(inputReader);
     }
 
     public void setMethodCall(String methodCall) {
@@ -112,7 +112,7 @@ public class Launcher extends Thread {
                                       "buffer");
                                       // (stream,"buffer");
 
-                ECodeUtilities.write(""+jeliot.ecode.Code.END);
+                MCodeUtilities.write(""+Code.END);
             //System.out.println("After interpretation");
                 compiling = false;
             }

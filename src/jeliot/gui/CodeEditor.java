@@ -35,7 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import jeliot.ecode.ECodeUtilities;
+import jeliot.mcode.*;
 import jeliot.theatre.Highlight;
 
 /**
@@ -506,7 +506,7 @@ public class CodeEditor extends JComponent {
      */
     public String getProgram() {
         String programCode = area.getText() + "\n";
-        programCode = ECodeUtilities.replace(programCode, "\t", "    ");
+        programCode = MCodeUtilities.replace(programCode, "\t", "    ");
         return programCode;
     }
 

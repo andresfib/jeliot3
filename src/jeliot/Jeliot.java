@@ -26,7 +26,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Properties;
 
-import jeliot.ecode.InterpreterError;
+import jeliot.mcode.*;
 import jeliot.gui.CodePane;
 import jeliot.gui.JeliotWindow;
 import jeliot.launcher.Launcher;

@@ -13,7 +13,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import jeliot.ecode.ECodeUtilities;
+import jeliot.mcode.*;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.ArrayUtilities;
 import jeliot.lang.Instance;
@@ -265,9 +265,9 @@ public class ActorFactory {
 
         String type = v.getType();
         VariableActor actor = null;
-        int typeInfo = ECodeUtilities.resolveType(type);
+        int typeInfo = MCodeUtilities.resolveType(type);
 
-        if (typeInfo != ECodeUtilities.REFERENCE) {
+        if (typeInfo != MCodeUtilities.REFERENCE) {
 
             actor = new VariableActor();
 
@@ -296,30 +296,30 @@ public class ActorFactory {
 
             return actor;
 
-        } else if (typeInfo == ECodeUtilities.REFERENCE) {
+        } else if (typeInfo == MCodeUtilities.REFERENCE) {
 
             ReferenceVariableActor refAct =
                     new ReferenceVariableActor();
 
-            if (ECodeUtilities.isArray(type)) {
+            if (MCodeUtilities.isArray(type)) {
                 String ct =
-                       ECodeUtilities.resolveComponentType(type);
+                       MCodeUtilities.resolveComponentType(type);
 
-                if (ECodeUtilities.isPrimitive(ct)) {
-                    int ti = ECodeUtilities.resolveType(ct);
+                if (MCodeUtilities.isPrimitive(ct)) {
+                    int ti = MCodeUtilities.resolveType(ct);
                     refAct.setBackground(varColor[ti]);
                 } else {
                     //This is not implemented properly
                     refAct.setBackground(varColor[typeInfo]);
                 }
 
-                String resolvedType = ECodeUtilities.changeComponentTypeToPrintableForm(ct);
+                String resolvedType = MCodeUtilities.changeComponentTypeToPrintableForm(ct);
                 int dotIndex = resolvedType.lastIndexOf(".");
                 if (dotIndex > -1) {
                     resolvedType = resolvedType.substring(dotIndex+1);
                 }
 
-                int dims = ECodeUtilities.getNumberOfDimensions(type);
+                int dims = MCodeUtilities.getNumberOfDimensions(type);
                 String arrayString = "";
                 for (int i = 0; i < dims; i++) {
                     arrayString += "[ ]";
@@ -359,13 +359,13 @@ public class ActorFactory {
 
         String type = v.getType();
         VariableActor actor = null;
-        int typeInfo = ECodeUtilities.resolveType(type);
+        int typeInfo = MCodeUtilities.resolveType(type);
 
-        if (typeInfo != ECodeUtilities.REFERENCE) {
+        if (typeInfo != MCodeUtilities.REFERENCE) {
 
             actor = new VariableActor();
 
-            ValueActor vact = produceValueActor(new Value(ECodeUtilities.getDefaultValue(type),
+            ValueActor vact = produceValueActor(new Value(MCodeUtilities.getDefaultValue(type),
                                                 type));
 
             int dotIndex = type.lastIndexOf(".");
@@ -386,30 +386,30 @@ public class ActorFactory {
 
             return actor;
 
-        } else if (typeInfo == ECodeUtilities.REFERENCE) {
+        } else if (typeInfo == MCodeUtilities.REFERENCE) {
 
             ReferenceVariableActor refAct =
                     new ReferenceVariableActor();
 
-            if (ECodeUtilities.isArray(type)) {
+            if (MCodeUtilities.isArray(type)) {
                 String ct =
-                       ECodeUtilities.resolveComponentType(type);
+                       MCodeUtilities.resolveComponentType(type);
 
-                if (ECodeUtilities.isPrimitive(ct)) {
-                    int ti = ECodeUtilities.resolveType(ct);
+                if (MCodeUtilities.isPrimitive(ct)) {
+                    int ti = MCodeUtilities.resolveType(ct);
                     refAct.setBackground(varColor[ti]);
                 } else {
                     //This is not implemented properly
                     refAct.setBackground(varColor[typeInfo]);
                 }
 
-                String resolvedType = ECodeUtilities.changeComponentTypeToPrintableForm(ct);
+                String resolvedType = MCodeUtilities.changeComponentTypeToPrintableForm(ct);
                 int dotIndex = resolvedType.lastIndexOf(".");
                 if (dotIndex > -1) {
                     resolvedType = resolvedType.substring(dotIndex+1);
                 }
 
-                int dims = ECodeUtilities.getNumberOfDimensions(type);
+                int dims = MCodeUtilities.getNumberOfDimensions(type);
                 String arrayString = "";
                 for (int i = 0; i < dims; i++) {
                     arrayString += "[ ]";
@@ -447,16 +447,16 @@ public class ActorFactory {
     public ValueActor produceValueActor(Value val) {
 
         String type = val.getType();
-        int typeInfo = ECodeUtilities.resolveType(type);
+        int typeInfo = MCodeUtilities.resolveType(type);
 
         //System.out.println(type);
-        if (ECodeUtilities.isPrimitive(type)) {
+        if (MCodeUtilities.isPrimitive(type)) {
 
             ValueActor actor = new ValueActor();
 
             actor.setForeground(valueForegroundColor);
 
-            if (typeInfo == ECodeUtilities.BOOLEAN) {
+            if (typeInfo == MCodeUtilities.BOOLEAN) {
                 boolean b = Boolean.getBoolean(val.getValue());
                 Color tcol = b ? trueColor : falseColor;
                 actor.setForeground(tcol);
@@ -468,7 +468,7 @@ public class ActorFactory {
 //          String label = valObj instanceof Exception ?
 //                                    "ERROR"          :
 //                                    valObj.toString();
-            if (typeInfo == ECodeUtilities.DOUBLE) {
+            if (typeInfo == MCodeUtilities.DOUBLE) {
 
                 if (label.indexOf('E') == -1) {
                     int dot = label.indexOf('.');
@@ -507,14 +507,14 @@ public class ActorFactory {
     public ReferenceActor produceReferenceActor(jeliot.lang.Reference rf) {
         Instance inst = rf.getInstance();
         ReferenceActor actor = null;
-        int typeInfo = ECodeUtilities.resolveType("null");
+        int typeInfo = MCodeUtilities.resolveType("null");
 
         if (inst != null) {
-            typeInfo = ECodeUtilities.resolveType(inst.getType());
+            typeInfo = MCodeUtilities.resolveType(inst.getType());
             actor = new ReferenceActor(inst.getActor());
         } else if (rf.getActor() instanceof ReferenceActor) {
             ReferenceActor rfa = (ReferenceActor) rf.getActor();
-            typeInfo = ECodeUtilities.resolveType(rf.getType());
+            typeInfo = MCodeUtilities.resolveType(rf.getType());
             actor = new ReferenceActor(rfa.getInstanceActor());
         } else {
             actor = new ReferenceActor();
@@ -718,9 +718,9 @@ public class ActorFactory {
         ArrayActor aactor = new ArrayActor(valueActors, dims);
 
         String ctype = array.getComponentType();
-        int typeInfo = ECodeUtilities.resolveType(ctype);
+        int typeInfo = MCodeUtilities.resolveType(ctype);
 
-        if (ECodeUtilities.isPrimitive(ctype)) {
+        if (MCodeUtilities.isPrimitive(ctype)) {
             aactor.setFont(indexFont);
             aactor.setBackground(varColor[typeInfo]);
             aactor.setValueColor(valColor[typeInfo]);

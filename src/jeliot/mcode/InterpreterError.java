@@ -1,4 +1,4 @@
-package jeliot.ecode;
+package jeliot.mcode;
 
 import jeliot.theatre.Highlight;
 

@@ -47,8 +47,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import jeliot.ecode.Code;
-import jeliot.ecode.ECodeUtilities;
+import jeliot.mcode.*;
 import koala.dynamicjava.interpreter.context.Context;
 import koala.dynamicjava.interpreter.context.GlobalContext;
 import koala.dynamicjava.interpreter.context.MethodContext;
@@ -199,7 +198,7 @@ public class TreeInterpreter implements Interpreter {
                 code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+
                         0+Code.LOC_DELIM+0;
             }
-            ECodeUtilities.write(code);
+            MCodeUtilities.write(code);
 
             //throw new InterpreterException(e);
 
@@ -221,7 +220,7 @@ public class TreeInterpreter implements Interpreter {
                 code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+
                         0+Code.LOC_DELIM+0;
             }
-            ECodeUtilities.write(code);
+            MCodeUtilities.write(code);
 
             //throw new InterpreterException(e);
 
@@ -229,22 +228,22 @@ public class TreeInterpreter implements Interpreter {
             String code = ""+Code.ERROR+Code.DELIM+"<H1>Error</H1><BR>";
 
             if (e.getCause() != null) {
-                String cause = ECodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
-                cause = ECodeUtilities.replace(cause, ">", "&gt;");
+                String cause = MCodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
+                cause = MCodeUtilities.replace(cause, ">", "&gt;");
                 code += cause+"<BR>";
             }
             if (e.getMessage() != null && !e.getMessage().equals("")) {
-                String message = ECodeUtilities.replace(e.getMessage(), "<", "&lt;");
-                message = ECodeUtilities.replace(message, ">", "&gt;");
+                String message = MCodeUtilities.replace(e.getMessage(), "<", "&lt;");
+                message = MCodeUtilities.replace(message, ">", "&gt;");
                 code += message;
 
             }
-            code = ECodeUtilities.replace(code, "\n", "<BR>");
-            code = ECodeUtilities.replace(code, "\r", "");
+            code = MCodeUtilities.replace(code, "\n", "<BR>");
+            code = MCodeUtilities.replace(code, "\r", "");
 
             code += ""+Code.DELIM;
             code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0;
-            ECodeUtilities.write(code);
+            MCodeUtilities.write(code);
 
             e.printStackTrace();
 
@@ -252,22 +251,22 @@ public class TreeInterpreter implements Interpreter {
             String code = ""+Code.ERROR+Code.DELIM+"<H1>Exception</H1><BR>";
 
             if (e.getCause() != null) {
-                String cause = ECodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
-                cause = ECodeUtilities.replace(cause, ">", "&gt;");
+                String cause = MCodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
+                cause = MCodeUtilities.replace(cause, ">", "&gt;");
                 code += cause+"<BR>";
             }
             if (e.getMessage() != null && !e.getMessage().equals("")) {
-                String message = ECodeUtilities.replace(e.getMessage(), "<", "&lt;");
-                message = ECodeUtilities.replace(message, ">", "&gt;");
+                String message = MCodeUtilities.replace(e.getMessage(), "<", "&lt;");
+                message = MCodeUtilities.replace(message, ">", "&gt;");
                 code += message;
 
             }
-            code = ECodeUtilities.replace(code, "\n", "<BR>");
-            code = ECodeUtilities.replace(code, "\r", "");
+            code = MCodeUtilities.replace(code, "\n", "<BR>");
+            code = MCodeUtilities.replace(code, "\r", "");
 
             code += ""+Code.DELIM;
             code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0;
-            ECodeUtilities.write(code);
+            MCodeUtilities.write(code);
 
             //throw new InterpreterException(e);
 
@@ -678,7 +677,7 @@ public class TreeInterpreter implements Interpreter {
             c.getName().equals(EvaluationVisitor.getConstructorCallName()) &&
             name.equals("<init>")) {
 
-            ECodeUtilities.write(""+Code.CONSCN+Code.DELIM+
+            MCodeUtilities.write(""+Code.CONSCN+Code.DELIM+
                           EvaluationVisitor.getConstructorCallNumber());
             EvaluationVisitor.constructorCallFinished();
 
@@ -693,12 +692,12 @@ public class TreeInterpreter implements Interpreter {
             long counter = EvaluationVisitor.getCounter();
             EvaluationVisitor.incrementCounter();
 
-            ECodeUtilities.write("" + Code.QN+Code.DELIM+
+            MCodeUtilities.write("" + Code.QN+Code.DELIM+
                     counter+Code.DELIM+"this"+
                     Code.DELIM+obj.toString()+
                     Code.DELIM+obj.getClass().getName());
 
-            ECodeUtilities.write("" + Code.OMC+Code.DELIM+
+            MCodeUtilities.write("" + Code.OMC+Code.DELIM+
                                  //m.getName()+Code.DELIM+
                                  "super"+Code.DELIM+
                                  "0"+Code.DELIM+
@@ -872,8 +871,8 @@ public class TreeInterpreter implements Interpreter {
             argnames.add(current.getName());
         }
 
-        ECodeUtilities.write(Code.PARAMETERS+Code.DELIM+ECodeUtilities.argToString(argnames));
-        ECodeUtilities.write(Code.MD+Code.DELIM+locationToString(meth));
+        MCodeUtilities.write(Code.PARAMETERS+Code.DELIM+MCodeUtilities.argToString(argnames));
+        MCodeUtilities.write(Code.MD+Code.DELIM+locationToString(meth));
         // Hack for providing e-code for "outside" classes
         // EvaluationVisitor will display PARAMETERS and MD just before SMCC
         EvaluationVisitor.setInside();
@@ -911,7 +910,7 @@ public class TreeInterpreter implements Interpreter {
                 name.equals("<init>") &&
                 EvaluationVisitor.getSuperClasses().contains(c.getName())) {
 
-                ECodeUtilities.write("" + Code.OMCC); //the method call is closed
+                MCodeUtilities.write("" + Code.OMCC); //the method call is closed
             }
 
             return e.getValue();
@@ -923,7 +922,7 @@ public class TreeInterpreter implements Interpreter {
             name.equals("<init>") &&
             EvaluationVisitor.getSuperClasses().contains(c.getName())) {
 
-            ECodeUtilities.write("" + Code.OMCC); //the method call is closed
+            MCodeUtilities.write("" + Code.OMCC); //the method call is closed
         }
 
         return null;

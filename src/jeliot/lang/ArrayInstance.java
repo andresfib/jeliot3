@@ -2,7 +2,7 @@ package jeliot.lang;
 
 import java.lang.reflect.Array;
 
-import jeliot.ecode.ECodeUtilities;
+import jeliot.mcode.*;
 import jeliot.theatre.ArrayActor;
 
 /**
@@ -35,49 +35,49 @@ public class ArrayInstance extends Instance {
         // The array will be initialized with neutral values (zeros or nulls).
         Value cloneValue = new Value("null", componentType);
 
-        switch(ECodeUtilities.resolveType(componentType)) {
+        switch(MCodeUtilities.resolveType(componentType)) {
 
-            case ECodeUtilities.BOOLEAN: {
+            case MCodeUtilities.BOOLEAN: {
                 cloneValue = new Value(Boolean.FALSE.toString(), boolean.class.getName());
                 break;
             }
 
-            case ECodeUtilities.BYTE: {
+            case MCodeUtilities.BYTE: {
                 cloneValue = new Value("" + ((byte)0), byte.class.getName());
                 break;
             }
 
-            case ECodeUtilities.SHORT: {
+            case MCodeUtilities.SHORT: {
                 cloneValue = new Value("" + ((short)0), short.class.getName());
                 break;
             }
 
-            case ECodeUtilities.INT: {
+            case MCodeUtilities.INT: {
                 cloneValue = new Value("0", int.class.getName());
                 break;
             }
 
-            case ECodeUtilities.LONG: {
+            case MCodeUtilities.LONG: {
                 cloneValue = new Value("" + (0l), long.class.getName());
                 break;
             }
 
-            case ECodeUtilities.CHAR: {
+            case MCodeUtilities.CHAR: {
                 cloneValue = new Value("" + '\0', char.class.getName());
                 break;
             }
 
-            case ECodeUtilities.FLOAT: {
+            case MCodeUtilities.FLOAT: {
                 cloneValue = new Value("" + (0.0f), float.class.getName());
                 break;
             }
 
-            case ECodeUtilities.DOUBLE: {
+            case MCodeUtilities.DOUBLE: {
                 cloneValue = new Value("" + (0.0), double.class.getName());
                 break;
             }
 
-            case ECodeUtilities.STRING: {
+            case MCodeUtilities.STRING: {
                 cloneValue = new Value("", double.class.getName());
                 break;
             }
