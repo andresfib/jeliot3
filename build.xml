@@ -51,13 +51,18 @@ To display the available targets type:
     <tstamp/>
 
     <property name="version"         value="3"/>
+    <property name="minor" 	       value="-0"/>
     <property name="dist"            value="Jeliot${version}"/>
     <property name="package-prefix"  value=""/>
 
     <property name="src"             value="src"/>
     <property name="resources"       value="resources"/>
     <property name="dest"            value="classes"/>
-  
+    <mkdir dir="${dest}"/>
+    <copy todir="${dest}">
+      <fileset dir="${resources}"/>
+    </copy>
+
 
   </target>
 
@@ -75,7 +80,6 @@ To display the available targets type:
 
   <!-- Compilation ==================================================== -->
   <target name="compile" depends="init">
-    <mkdir dir="${dest}"/>
 <!--    <javac srcdir="${src}" destdir="${dest}" deprecation="on"
     excludes="${src}/examples/**"/>-->
   <javac destdir="${dest}" deprecation="on">
@@ -94,15 +98,14 @@ To display the available targets type:
 
   <!-- Distribution ================================================= -->
   <target name="dist" depends="prepare-dist, jars">
-    <zip zipfile="${dist}.zip" basedir="${dist}" includes="**/*"/>
-    <zip zipfile="${dist}-src.zip">
+    <zip zipfile="${dist}${minor}.zip" basedir="${dist}" includes="**/*"/>
+    <zip zipfile="${dist}${minor}-src.zip">
      <zipfileset dir="src" prefix="src"/>
      <zipfileset dir="lib" prefix="lib"/>
      <zipfileset dir="resources" prefix="resources"/>
      <zipfileset dir="src/docs" prefix="docs/"/>
      <fileset dir="">
        <include name="**/build.*"/>
-       <include name="**/jeliot.mf"/>
      </fileset>
     </zip>
   </target>
@@ -115,8 +118,6 @@ To display the available targets type:
         <include name="${package-prefix}/**/*"/>
       </fileset>
     </jar>
-<!--    <jar manifest="${src}/jeliot3.mf"
-         jarfile="${dist}/jeliot3.jar"/>-->
   </target>
 
   <target name="prepare-dist" depends="init">
@@ -138,10 +139,11 @@ To display the available targets type:
     <copy todir="${dest}/examples">
       <fileset dir="${src}/examples"/>
     </copy>
-    
+
     <copy file="${src}/docs/license.txt" todir="${dist}"/>
     <copy file="${src}/docs/BSD_license.txt" todir="${dist}"/>
     <copy file="${src}/jeliot.bat" todir="${dist}"/>
+    <copy file="${src}/jeliot.ico" todir="${dist}"/>
   </target>
 
   <!-- Global clean ================================================= -->
