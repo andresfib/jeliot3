@@ -20,38 +20,53 @@ public class ParamTypes {
 	 	
 	 	String type = c.getName();
 	 	
-        if (type.equals(boolean.class.getName())){ 
+	       if (type.equals(boolean.class.getName()) ||
+	           type.equals(Boolean.class.getName())) {
+	            
+	            return Boolean.class;
 
-        	return Boolean.class; 
- 
-        } else if (type.equals(byte.class.getName())){ 
-            return Byte.class; 
- 
-        } else if (type.equals(short.class.getName())) {
+	        } else if (type.equals(byte.class.getName())
+	                || type.equals(Byte.class.getName())) {
 
-            return Short.class;
- 
-        } else if (type.equals(int.class.getName())) {
- 
-            return Integer.class;
- 
-        } else if (type.equals(long.class.getName())) {
- 
-            return Long.class;
- 
-        } else if (type.equals(char.class.getName())) {
- 
-        return Character.class;
- 
-        } else if (type.equals(float.class.getName())){ 
- 
-            return Float.class;
- 
-        } else if (type.equals(double.class.getName())) {
- 
-            return Double.class;
-         } 
-        else return c;
+	            return Byte.class;
+
+	        } else if (type.equals(short.class.getName())
+	                || type.equals(Short.class.getName())) {
+
+	            return Short.class;
+
+	        } else if (type.equals(int.class.getName())
+	                || type.equals(Integer.class.getName())) {
+
+	            return Integer.class;
+
+	        } else if (type.equals(long.class.getName())
+	                || type.equals(Long.class.getName())) {
+
+	            return Long.class;
+
+	        } else if (type.equals(char.class.getName())
+	                || type.equals(Character.class.getName())) {
+
+	            return Character.class;
+
+	        } else if (type.equals(float.class.getName())
+	                || type.equals(Float.class.getName())) {
+
+	            return Float.class;
+
+	        } else if (type.equals(double.class.getName())
+	                || type.equals(Double.class.getName())) {
+
+	            return Double.class;
+
+	        } else if (type.equals(String.class.getName()) || type.equals("L" + String.class.getName() + ";")) {
+
+	            return String.class;
+
+	        } else {
+	            return c;
+	        }
     }
 	/**
 	 * Compares two method's list of parameters
@@ -63,32 +78,31 @@ public class ParamTypes {
 	public static boolean compareSignatures(Class[] paramTypes1,
 			Class[] paramTypes2) {
 
-		boolean result = false;
-
 		if (paramTypes1.length == 0) {
 			if (paramTypes2.length == 0) {
-
-				result = true;
-
+				return true;
+			} else {
+			    return false;
 			}
 		} else if (paramTypes1.length == paramTypes2.length) {
 			// && paramTypes1.length > 0 && paramTypes2.length > 0
 			
-			int i = 0;
-			result = true;
-			while ((i < paramTypes1.length) && result) {
-				paramTypes1[i]=(paramTypes1[i].isPrimitive())?resolveType(paramTypes1[i]):paramTypes1[i];
-				paramTypes2[i]=(paramTypes2[i].isPrimitive())?resolveType(paramTypes2[i]):paramTypes2[i];
+			int n = paramTypes1.length;
+			for (int i = 0; i < n; i++) {
+				paramTypes1[i] = resolveType(paramTypes1[i]);
+				paramTypes2[i] = resolveType(paramTypes2[i]);
 				String p1 = paramTypes1[i].getName();
 				String p2 = paramTypes2[i].getName();
 				if (!p1.equals(p2)) {
-					result = false;
+					return false;
 				}
 				i++;
 			}
 
+		} else {
+		    return false;
 		}
-		return result;
+		return true;
 	}
 
 }

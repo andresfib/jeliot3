@@ -2139,8 +2139,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             expressionReference = Long.parseLong(expressionTokenizer
                     .nextToken());
 
-            //Make the location information for the location
-            // token
+            //Take the location information for the location token
             highlight = MCodeUtilities.makeHighlight(expressionTokenizer
                     .nextToken());
         }
