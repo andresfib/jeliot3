@@ -935,6 +935,13 @@ public class EvaluationVisitor extends VisitorObject {
 			}
 			try {
 				value = f.get(obj);
+            } catch (NullPointerException e) {
+                if (!Modifier.isStatic(f.getModifiers())) {
+                    node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { f
+                        .getName() });
+                    throw new ExecutionError("j3.not.static.field", node);
+                }
+                throw new CatchedExceptionError(e, node);
 			} catch (Exception e) {
 				throw new CatchedExceptionError(e, node);
 			}
