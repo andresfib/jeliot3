@@ -21,7 +21,7 @@ public class Launcher extends Thread {
     private BufferedReader reader = null;
     private boolean running=true; //indicates if interpreterThread is running
 
-    // Pipe communicating Director ->DynamicJava  
+    // Pipe communicating Director ->DynamicJava
     // For Input Requests!!!!!!
     private PipedWriter putInput = new PipedWriter();
     private PipedReader getInput = null;
@@ -59,8 +59,8 @@ public class Launcher extends Thread {
         //}
         reader = new BufferedReader(pipedReader);
         //For Input!!
-	inputReader = new BufferedReader(getInput);
-	ECodeUtilities.setReader(inputReader);
+        inputReader = new BufferedReader(getInput);
+        ECodeUtilities.setReader(inputReader);
 
 //        interpreter.interpret(r,"buffer");// (stream,"buffer");
     }
@@ -86,27 +86,28 @@ public class Launcher extends Thread {
 
             synchronized(this) {
                 try {
-
                     this.wait();
-
                 } catch(InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
-
     }
 
-    public void stopThread(){
+    public void stopThread() {
         running = false;
     }
 
-    public PrintWriter getWriter(){
+    public PrintWriter getWriter() {
         return writer;
     }
 
-    public BufferedReader getReader(){
+    public BufferedReader getReader() {
         return reader;
+    }
+
+    public PrintWriter getInputWriter() {
+        return inputWriter;
     }
 
 }
