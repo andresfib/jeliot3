@@ -131,6 +131,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * 6: Highlight info for declaration
      * 7: Parameter expression references
      * 8: Object reference if method is constructor or object method
+     * 9: Class name (for super or this calls) or object value
      */
     protected Object[] currentMethodInvocation = null;
 
@@ -1199,7 +1200,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             currentMethodInvocation[6] = h;
 
             //Object method call or constructor
-            if (currentMethodInvocation.length == 9) {
+            if (currentMethodInvocation.length >= 9) {
 
                 if (start) {
                     start = false;
@@ -1248,8 +1249,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 if (currentMethodInvocation[1] != null
                         && ((String) currentMethodInvocation[1]).equals("")) {
                     call = (String) currentMethodInvocation[0];
-                } else if (((String) currentMethodInvocation[0]).startsWith("super")) {
-                    call = "this." + (String) currentMethodInvocation[0];
+                } else if (((String) currentMethodInvocation[0]).startsWith("super") || ((String) currentMethodInvocation[0]).startsWith("this")) {
+                    call = /*"this." + */(String) currentMethodInvocation[9];
                 } else if (currentMethodInvocation[1] == null) {
                     call = ((Value) currentMethodInvocation[8]).getValue() + "."
                             + (String) currentMethodInvocation[0];
@@ -1438,7 +1439,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (currentMethodInvocation != null) {
             methodInvocation.push(currentMethodInvocation);
         }
-        currentMethodInvocation = new Object[9];
+        currentMethodInvocation = new Object[10];
 
         /*
          * int n = currentMethodInvocation.length;
@@ -1476,6 +1477,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         currentMethodInvocation[5] = highlight;
         currentMethodInvocation[7] = parameterExpressionReferences;
         currentMethodInvocation[8] = val;
+        currentMethodInvocation[9] = objectValue;
     }
 
     /**

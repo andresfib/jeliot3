@@ -332,10 +332,10 @@ public class ClassInfoCompiler {
             civ.acceptVisitor(cv);
 
             interpreter.registerConstructorArguments(sig, cd.getParameters(), civ.getArguments(),
-                    importationManager);
+                    importationManager, cd); //jeliot 3
         } else {
             interpreter.registerConstructorArguments(sig, new LinkedList(), new LinkedList(),
-                    importationManager);
+                    importationManager, cd); //jeliot 3
         }
 
         MethodDeclaration md = new MethodDeclaration(cd.getAccessFlags(), new VoidType(), "<init>",
