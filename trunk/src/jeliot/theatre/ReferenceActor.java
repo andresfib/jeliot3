@@ -111,18 +111,24 @@ public class ReferenceActor extends ValueActor {
                 Point p1 = bend[i-1];
                 Point p2 = bend[i];
 
-                g.setColor(bc);
-                g.drawLine(p1.x, p1.y, p2.x, p2.y);
                 g.setColor(fc);
-                if (p2.x > p1.x) {
-                    g.drawLine(p1.x+1, p1.y-1, p2.x, p1.y-1);
+                if (p1.y == p2.y) {
+                    g.drawLine(p1.x, p1.y-1, p2.x, p1.y-1);
                     g.drawLine(p1.x, p1.y+1, p2.x, p1.y+1);
-                } else {
-                    g.drawLine(p1.x-1, p1.y+1, p2.x-1, p2.y);
+                } else if (p2.x == p1.x) {
+                    g.drawLine(p1.x-1, p1.y, p2.x-1, p2.y);
                     g.drawLine(p1.x+1, p1.y, p2.x+1, p2.y);
                 }
             }
-            //Here should be drawn something that shows that
+
+            for (int i = 1; i < n; ++i) {
+                Point p1 = bend[i-1];
+                Point p2 = bend[i];
+                g.setColor(bc);
+                g.drawLine(p1.x, p1.y, p2.x, p2.y);
+            }
+
+            //Here is drawn something that shows that
             //the reference is pointing to this exact instance.
             g.setColor(fc);
             g.fillPolygon(arrowheadPolygon1);
@@ -200,15 +206,33 @@ public class ReferenceActor extends ValueActor {
         int vy1 = vp.y;
         int vy2 = vy1 + height;
 
-        int ix = ip.x;
-        int vx = vp.x + refWidth;
+        int ix  = ip.x;
+        int ix2 = ix + instance.getWidth();
+        int vx  = vp.x + refWidth;
 
         if (!instVarConnect) {
-            bend = new Point[4];
-            bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
-            bend[1] = new Point(vx + refLen + refWidthRandom /*- (vy1/6)*/, bend[0].y);
-            bend[2] = new Point(bend[1].x, iy1 + 12);
-            bend[3] = new Point(ix - 3, bend[2].y);
+            int xp2 = vx + refLen + refWidthRandom;
+            if (xp2 < ix) {
+                bend = new Point[4];
+                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+                bend[1] = new Point(xp2 /*- (vy1/6)*/, bend[0].y);
+                bend[2] = new Point(bend[1].x, iy1 + 12);
+                bend[3] = new Point(ix - 3, bend[2].y);
+                calculateArrowhead(2);
+            } else if (xp2 > ix2) {
+                bend = new Point[4];
+                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+                bend[1] = new Point(xp2 /*- (vy1/6)*/, bend[0].y);
+                bend[2] = new Point(bend[1].x, iy1 + 12);
+                bend[3] = new Point(ix2 - 3, bend[2].y);
+                calculateArrowhead(4);
+            } else {
+                bend = new Point[3];
+                bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
+                bend[1] = new Point(xp2 /*- (vy1/6)*/, bend[0].y);
+                bend[2] = new Point(bend[1].x, iy1);
+                calculateArrowhead(3);
+            }
         } else {
             //Change this!
             //It should contain 7 points with 5 bends
@@ -216,36 +240,127 @@ public class ReferenceActor extends ValueActor {
             bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
             bend[1] = new Point(vx + refLen + refWidthRandom /*- (vy1/6)*/, bend[0].y);
             bend[2] = new Point(bend[1].x, iy1 + 12);
-            bend[3] = new Point(ix - 3, bend[2].y);
+            bend[3] = new Point(ix + 3, bend[2].y);
+            calculateArrowhead(2);
         }
-        calculateArrowhead();
     }
 
-    public void calculateArrowhead() {
-        int n = bend.length;
+    /** dir is 1 up, 2 right, 3 down and 4 left */
+    public void calculateArrowhead(int dir) {
+        int n = bend.length - 1;
 
-        arrowhead = new Point[3];
-        arrowhead[0] = new Point(bend[n-1]);
-        arrowhead[1] = new Point(bend[n-1]);
-        arrowhead[2] = new Point(bend[n-1]);
-        arrowhead[0].translate(3, 0);
-        arrowhead[1].translate(-10, -7);
-        arrowhead[2].translate(-10, 7);
+        switch (dir) {
+            // left
+            case 4: {
+                arrowhead = new Point[3];
+                arrowhead[0] = new Point(bend[n]);
+                arrowhead[1] = new Point(bend[n]);
+                arrowhead[2] = new Point(bend[n]);
+                arrowhead[0].translate(-3, 0);
+                arrowhead[1].translate(10, -7);
+                arrowhead[2].translate(10, 7);
 
-        arrowheadPolygon1 = new Polygon();
-        for (int i = 0; i < 3; i++) {
-            arrowheadPolygon1.addPoint(arrowhead[i].x, arrowhead[i].y);
+                arrowheadPolygon1 = new Polygon();
+                for (int i = 0; i < 3; i++) {
+                    arrowheadPolygon1.addPoint(arrowhead[i].x,
+                                               arrowhead[i].y);
+                }
+
+                arrowhead[0].translate(3,0);
+                arrowhead[1].translate(-2, 3);
+                arrowhead[2].translate(-2, -3);
+
+                arrowheadPolygon2 = new Polygon();
+                for (int i = 0; i < 3; i++) {
+                    arrowheadPolygon2.addPoint(arrowhead[i].x,
+                                               arrowhead[i].y);
+                }
+                break;
+            }
+
+            // right
+            case 2: {
+                arrowhead = new Point[3];
+                arrowhead[0] = new Point(bend[n]);
+                arrowhead[1] = new Point(bend[n]);
+                arrowhead[2] = new Point(bend[n]);
+                arrowhead[0].translate(3, 0);
+                arrowhead[1].translate(-10, -7);
+                arrowhead[2].translate(-10, 7);
+
+                arrowheadPolygon1 = new Polygon();
+                for (int i = 0; i < 3; i++) {
+                    arrowheadPolygon1.addPoint(arrowhead[i].x,
+                                               arrowhead[i].y);
+                }
+
+                arrowhead[0].translate(-3,0);
+                arrowhead[1].translate(2, 3);
+                arrowhead[2].translate(2, -3);
+
+                arrowheadPolygon2 = new Polygon();
+                for (int i = 0; i < 3; i++) {
+                    arrowheadPolygon2.addPoint(arrowhead[i].x,
+                                               arrowhead[i].y);
+                }
+                break;
+            }
+            // down
+            case 3: {
+                arrowhead = new Point[3];
+                arrowhead[0] = new Point(bend[n]);
+                arrowhead[1] = new Point(bend[n]);
+                arrowhead[2] = new Point(bend[n]);
+                arrowhead[0].translate(0, 0);
+                arrowhead[1].translate(-7, -13);
+                arrowhead[2].translate(7, -13);
+
+                arrowheadPolygon1 = new Polygon();
+                for (int i = 0; i < 3; i++) {
+                    arrowheadPolygon1.addPoint(arrowhead[i].x,
+                                               arrowhead[i].y);
+                }
+
+                arrowhead[0].translate(0, -3);
+                arrowhead[1].translate(3, 2);
+                arrowhead[2].translate(-3, 2);
+
+                arrowheadPolygon2 = new Polygon();
+                for (int i = 0; i < 3; i++) {
+                    arrowheadPolygon2.addPoint(arrowhead[i].x,
+                                               arrowhead[i].y);
+                }
+                break;
+            }
+
+            // up
+            case 1: {
+                arrowhead = new Point[3];
+                arrowhead[0] = new Point(bend[n-1]);
+                arrowhead[1] = new Point(bend[n-1]);
+                arrowhead[2] = new Point(bend[n-1]);
+                arrowhead[0].translate(0, 0);
+                arrowhead[1].translate(-7, 13);
+                arrowhead[2].translate(7, 13);
+
+                arrowheadPolygon1 = new Polygon();
+                for (int i = 0; i < 3; i++) {
+                    arrowheadPolygon1.addPoint(arrowhead[i].x,
+                                               arrowhead[i].y);
+                }
+
+                arrowhead[0].translate(0, 3);
+                arrowhead[1].translate(3, -2);
+                arrowhead[2].translate(-3, -2);
+
+                arrowheadPolygon2 = new Polygon();
+                for (int i = 0; i < 3; i++) {
+                    arrowheadPolygon2.addPoint(arrowhead[i].x,
+                                               arrowhead[i].y);
+                }
+                break;
+            }
         }
-
-        arrowhead[0].translate(-3,0);
-        arrowhead[1].translate(2, 3);
-        arrowhead[2].translate(2, -3);
-
-        arrowheadPolygon2 = new Polygon();
-        for (int i = 0; i < 3; i++) {
-            arrowheadPolygon2.addPoint(arrowhead[i].x, arrowhead[i].y);
-        }
-
     }
 
     public void calculateSize() {

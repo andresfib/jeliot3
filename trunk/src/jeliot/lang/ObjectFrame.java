@@ -36,8 +36,8 @@ public class ObjectFrame extends Instance {
         if (var != null) {
             return var;
         } else {
-            throw new RuntimeException("No Variable " + name);
-            //return null;
+            //throw new RuntimeException("No Variable " + name);
+            return null;
         }
     }
 

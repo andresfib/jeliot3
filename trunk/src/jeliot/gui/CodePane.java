@@ -23,9 +23,17 @@ import jeliot.gui.*;
   */
 public class CodePane extends JComponent {
 
+    /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.gui.resources.properties",
+                                      Locale.getDefault());
 
     private LineNumbers nb;
-    private Font font = new Font("Courier", Font.PLAIN, 12);
+    private Font font = new Font(bundle.getString("font.code_pane.family"),
+                                 Font.PLAIN,
+                                 Integer.parseInt(bundle.getString("font.code_pane.size")));
     private Insets insets = new Insets(5, 5, 5, 5);
     private JScrollPane jsp;
 

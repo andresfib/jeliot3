@@ -5,22 +5,32 @@ import java.util.*;
 
 public class Code {
 
+    /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.ecode.resources.properties",
+                                      Locale.getDefault());
+
+    //Useful constants
+    public static final String DELIM = bundle.getString("delim");
+    public static final String LOC_DELIM = bundle.getString("delim.location");
+    public static final String UNKNOWN = bundle.getString("unknown_value");
+    public static final int NO_REFERENCE = Integer.parseInt(bundle.getString("no_reference"));
+    public static final int NOT_FINAL = Integer.parseInt(bundle.getString("not_final"));
+    public static final int FINAL = Integer.parseInt(bundle.getString("final"));
+    public static final String TRUE = Boolean.TRUE.toString();
+    public static final String FALSE = Boolean.FALSE.toString();
+    public static final String REFERENCE = "null"; // Literal Type is not primitive!!
+
     //Auxiliary statements
     public static final int LEFT=1;
     public static final int RIGHT=2;
     public static final int BEGIN=3;
     public static final int TO=4;
-
-    //Useful constants
-    public static final String DELIM="§";
-    public static final String LOC_DELIM=",";
-    public static final String UNKNOWN="?";
-    public static final int NO_REFERENCE=0;
-    public static final int NOT_FINAL=1;
-    public static final int FINAL=0;
-    public static final String TRUE=Boolean.TRUE.toString();
-    public static final String FALSE=Boolean.FALSE.toString();
-    public static final String REFERENCE="null"; // Literal Type is not primitive!!
+    public static final int ERROR=53;       // Error statement
+    public static final int END=36;         // End of Program
+    public static final int CONSCN=72;      // Constructor call number (special) used for a hack
 
     // JAVA statements and expressions
     public static final int A=5;            // Assignment
@@ -67,52 +77,60 @@ public class Code {
     // unary boolen exps
     public static final int NO=25;          // Boolean Not
 
-    // Statements, control structures and others
-    public static final int VD=26;          // Variable Declaration
+    // Literal constant and variable access
     public static final int QN=27;          // Qualified Name
     public static final int L=28;           // Literal
-    public static final int SMC=29;         // Static Method Call
-    public static final int P=30;           // Parameter
-    public static final int PARAMETERS=31;  // Parameters list
-    public static final int R=32;           // Return Statement
+
+    // Statements and others
+    public static final int VD=26;          // Variable Declaration
+    public static final int SCOPE=35;       // Opening and closing a scope
+
+    // Control Structures
     public static final int IFT=33;         // If Then Statement
     public static final int IFTE=34;        // If Then Else Statement
-    public static final int SCOPE=35;       // Opening and closing a scope
-    public static final int END=36;         // End of Program
-    public static final int MD=37;          // Method declaration
-    public static final int SMCC=38;        // Static Method call closed
     public static final int BR=39;          // Break statement
     public static final int WHI=40;         // While statement
     public static final int FOR=41;         // For statement
     public static final int CONT=42;        // Continue statement
     public static final int DO=43;          // DO-While statement
+    public static final int SWIBF=68;       // Switch block found
+    public static final int SWITCHB=69;     // Switch block begins
+    public static final int SWITCH=70;      // Switch
+
+    //Input and output
     public static final int OUTPUT=44;      // Output statement
     public static final int INPUT=54;       // Input statement
     public static final int INPUTTED=55;    // Input statement
-    public static final int ERROR=53;       // Error statement
 
-    // Arrays and objects handling
+    // Methods
+    public static final int SMC=29;         // Static Method Call
+    public static final int P=30;           // Parameter
+    public static final int PARAMETERS=31;  // Parameters list
+    public static final int R=32;           // Return Statement
+    public static final int SMCC=38;        // Static Method call closed
+    public static final int MD=37;          // Method declaration
+
+    //Methods related to objects
+    public static final int OMC=66;         // Object method call
+    public static final int OMCC=67;        // Object method call close
+    public static final int SA=63;          // Simple class allocation
+    public static final int SAC=64;         // Simple class allocation close
+
+    //Object field acces
+    public static final int OFA=65;         // Object field access
+
+    // Array handling
     public static final int AA=56;          // Array allocation
     public static final int AAC=57;         // Array access
+    public static final int AL=71;          // Array length
 
+    // Class information
     public static final int CLASS=58;
     public static final int END_CLASS=59;
     public static final int CONSTRUCTOR=60;
     public static final int METHOD=61;
     public static final int FIELD=62;
 
-    public static final int SA=63;          // Simple class allocation
-    public static final int SAC=64;         // Simple class allocation close
-    public static final int OFA=65;         // Object field access
-    public static final int OMC=66;         // Object method call
-    public static final int OMCC=67;        // Object method call close
-    public static final int CONSCN=72;      // Constructor call number (special) used for a hack
-
-    public static final int SWIBF=68;       // Switch block found
-    public static final int SWITCHB=69;     // Switch block begins
-    public static final int SWITCH=70;      // Switch
-
-    public static final int AL=71;          // Array length
     //Last int used = 72
 }
 

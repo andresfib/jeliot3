@@ -77,8 +77,8 @@ public class ObjectStage extends InstanceActor {
                 return va;
             }
         }
-        throw new RuntimeException("No Variable " + name);
-        //return null;
+        //throw new RuntimeException("No Variable " + name);
+        return null;
     }
 
     public void calculateSize(int maxActWidth, int actHeight) {

@@ -83,7 +83,7 @@ public class Jeliot {
     * Initializes JeliotWindow gui -object with parameters this, CodePane codepane, Theatre theatre,
     * AnimationEngine engine, ImageLoader iLoad */
     public Jeliot(String udir) {
-        theatre.setBackground(iLoad.getLogicalImage("Panel"));
+        theatre.setBackground(iLoad.getLogicalImage("image.panel"));
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir);
     }
 

@@ -17,11 +17,11 @@ public class TheatreManager implements ComponentListener {
       * after the last value of the table the first value is used
       * again.
       */
-    private Point[] methodStagePoints = {new Point(10, 10),
-                                         new Point(20, 20),
-                                         new Point(30, 30),
-                                         new Point(15, 40),
-                                         new Point(25, 35)};
+    private Point[] methodStagePoints = {new Point(10, 20),
+                                         new Point(20, 30),
+                                         new Point(30, 40),
+                                         new Point(15, 50),
+                                         new Point(25, 45)};
 
     /**
       * Reference to the current Theatre instance.
@@ -55,6 +55,9 @@ public class TheatreManager implements ComponentListener {
     /** */
     private Point lrCorner;
 
+    private int minInstanceY = Integer.MAX_VALUE;
+    private int minInstanceX = Integer.MAX_VALUE;
+
     /** */
     public TheatreManager(Theatre theatre) {
         this.theatre = theatre;
@@ -69,6 +72,8 @@ public class TheatreManager implements ComponentListener {
         objects.removeAllElements();
         scratches.removeAllElements();
         constantBox = null;
+        minInstanceY = Integer.MAX_VALUE;
+        minInstanceX = Integer.MAX_VALUE;
     }
 
 
@@ -122,11 +127,18 @@ public class TheatreManager implements ComponentListener {
         objects.addElement(actor);
         theatre.passivate(actor);
         actor.setLocation(loc);
+        if (loc.y < minInstanceY) {
+            minInstanceY = loc.y;
+        }
+        if (loc.x < minInstanceX) {
+            minInstanceX = loc.x;
+        }
     }
 
 
     /** */
     public void removeInstance(InstanceActor actor) {
+        //move also minInstanceX and -Y
         objects.removeElement(actor);
         theatre.removePassive(actor);
         theatre.flush();
@@ -150,14 +162,17 @@ public class TheatreManager implements ComponentListener {
     /** */
     public void addScratch(Scratch scratch) {
         scratches.addElement(scratch);
-        if (!methods.empty()) {
-            scratch.setLocation(maxMethodStageX + 45, 10);
-        } else {
-            scratch.setLocation((ActorFactory.getMaxMethodStageWidth()) + 45, 10);
-        }
+        scratch.setLocation(getScratchPositionX(), 10);
         theatre.addPassive(scratch);
     }
 
+    public int getScratchPositionX() {
+        if (!methods.empty()) {
+            return maxMethodStageX + 45;
+        } else {
+            return (ActorFactory.getMaxMethodStageWidth()) + 45;
+        }
+    }
 
     /** */
     public void removeScratch(Scratch scratch) {
@@ -175,6 +190,18 @@ public class TheatreManager implements ComponentListener {
         }
     }
 
+    public int getConstantPositionY() {
+        //Change this when static variables are visualized!
+        return theatre.getHeight() - 10 - constantBox.getHeight();
+    }
+
+    public int getMinInstanceY() {
+        return minInstanceY;
+    }
+
+    public int getMinInstanceX() {
+        return minInstanceX;
+    }
 
     /** */
     public void positionObjects(Point from, Point to) {
@@ -196,6 +223,14 @@ public class TheatreManager implements ComponentListener {
     }
 
 
+    /** Draws the lines separating different areas
+     *  and writes texts on them.
+     */
+    public void setLinesAndText(LinesAndText lat) {
+        lat.setManager(this);
+        lat.setTheatre(theatre);
+    }
+
     /** Called, when the theatre object is resized. Rearranges the
       * theatre after resizing.
       */
@@ -205,6 +240,7 @@ public class TheatreManager implements ComponentListener {
         positionObjects(
                 lrCorner,
                 lrCorner = new Point(d.width, d.height));
+        theatre.repaint();
     }
 
     /** These methods are needed to conform to the ComponentListener

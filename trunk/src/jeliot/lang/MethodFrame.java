@@ -45,8 +45,8 @@ public class MethodFrame {
                 }
             }
         }
-        throw new RuntimeException("No Variable " + name);
-        //return null;
+        //throw new RuntimeException("No Variable " + name);
+        return null;
     }
 
     public void openScope() {

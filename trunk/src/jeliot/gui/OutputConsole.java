@@ -1,5 +1,6 @@
 package jeliot.gui;
 
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -14,6 +15,14 @@ import javax.swing.border.*;
  * created         3.10.1999
  */
 public class OutputConsole extends JTextArea {
+
+   /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.gui.resources.properties",
+                                      Locale.getDefault());
+
 
     /** A scroll pane that contains the output console. */
     public final JScrollPane container = new JScrollPane(this) {
@@ -49,7 +58,7 @@ public class OutputConsole extends JTextArea {
     /** The console's popup menu has one choice for emptying the console. */
     private JPopupMenu menu = new JPopupMenu(); {
         JMenuItem menuItem;
-        menuItem = new JMenuItem("Clear");
+        menuItem = new JMenuItem(bundle.getString("popup_menu.clear"));
         menu.add(menuItem);
         menuItem.addActionListener(
             new ActionListener() {
@@ -70,12 +79,14 @@ public class OutputConsole extends JTextArea {
 
         this.model = model;
 
-        setFont(new Font("Courier", Font.BOLD, 14));
+        setFont(new Font(bundle.getString("font.output.family"),
+                Font.BOLD,
+                Integer.parseInt(bundle.getString("font.output.size"))));
         setEditable(false);
 
         // create titled border
         TitledBorder title = BorderFactory.createTitledBorder(
-                BorderFactory.createLoweredBevelBorder(), "Output");
+                BorderFactory.createLoweredBevelBorder(), bundle.getString("title.output"));
         title.setTitlePosition(TitledBorder.ABOVE_TOP);
         container.setBorder(title);
 

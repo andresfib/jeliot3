@@ -12,13 +12,22 @@ import java.util.*;
 
 public class ImageLoader {
 
+    /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.theatre.resources.properties",
+                                      Locale.getDefault());
+
     /** Maps image names to loaded images. */
     private Hashtable images = new Hashtable();
 
     /** Maps images to their dark counterpants. */
     private Hashtable darks = new Hashtable();
 
-    /** Maps logical image names to their real names. */
+    /* SHOULD BE REPLACED WITH RESOURCE BUNDLE! */
+    // Maps logical image names to their real names.
+    /*
     private Hashtable mapping = new Hashtable(); {
         mapping.put("Splash screen", "splash.jpg");
         mapping.put("Panel", "curtain.gif");
@@ -30,6 +39,7 @@ public class ImageLoader {
         mapping.put("Fist-1",   "hand2.gif");
         mapping.put("Fist-2",   "hand3.gif");
     }
+    */
 
     private Component comp = new Panel();
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -49,15 +59,18 @@ public class ImageLoader {
         }
     };
 
+
     public Image getLogicalImage(String name) {
-        String realName = (String)mapping.get(name);
-        return getImage(realName);
+        //String realName = (String)mapping.get(name);
+        //return getImage(realName);
+        return getImage(bundle.getString(name));
     }
+
 
     public Image getImage(String name) {
         Image image = (Image)images.get(name);
         if (image == null) {
-            image = toolkit.getImage("images/"+name);
+            image = toolkit.getImage(bundle.getString("directory.images")+name);
             tracker.addImage(image, 0);
             try {
                 tracker.waitForID(0);

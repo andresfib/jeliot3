@@ -20,6 +20,13 @@ import javax.swing.event.*;
 public class HelpWindow extends JFrame {
 
     /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.gui.resources.properties",
+                                      Locale.getDefault());
+
+    /**
      * The editor pane where the help will be shown.
      */
     private JEditorPane editorPane = new JEditorPane();
@@ -32,7 +39,8 @@ public class HelpWindow extends JFrame {
      * Sets the size of the JFrame as 400 x 600
      */
     public HelpWindow(Image icon, String udir) {
-        super("Help");
+        super();
+        setTitle(bundle.getString("window.help.title"));
         setIconImage(icon);
 
         editorPane.setEditable(false);
@@ -41,7 +49,7 @@ public class HelpWindow extends JFrame {
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         try {
-            File f = new File(udir, "docs/help.html");
+            File f = new File(udir, bundle.getString("window.help.content"));
             showURL(f.toURI().toURL());
         } catch (Exception e) { e.printStackTrace(); }
 
@@ -60,7 +68,7 @@ public class HelpWindow extends JFrame {
             editorPane.setPage(url);
             //show();
         } catch (IOException e) {
-            System.err.println("Attempted to read a bad URL: " + url);
+            System.err.println(bundle.getString("bad.URL") + " " + url);
         }
     }
 
