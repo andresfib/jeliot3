@@ -2110,7 +2110,6 @@ public class Interpreter {
 						//If Then Statement
 					case Code.IFT :
 						{
-
 							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 
@@ -2136,10 +2135,8 @@ public class Interpreter {
 						//IF Then Else Statement
 					case Code.IFTE :
 						{
-
 							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
-
 							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							Value result = (Value) values.remove(new Long(expressionReference));
@@ -2159,12 +2156,9 @@ public class Interpreter {
 						//While Statement
 					case Code.WHI :
 						{
-
 							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
-
 							int round = Integer.parseInt(tokenizer.nextToken());
-
 							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							Value result = (Value) values.remove(new Long(expressionReference));
@@ -2196,7 +2190,6 @@ public class Interpreter {
 						//For Statement
 					case Code.FOR :
 						{
-
 							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 							long round = Long.parseLong(tokenizer.nextToken());
@@ -2225,7 +2218,6 @@ public class Interpreter {
 						//Do-While Statement
 					case Code.DO :
 						{
-
 							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 							long round = Long.parseLong(tokenizer.nextToken());
@@ -2250,7 +2242,6 @@ public class Interpreter {
 
 					case Code.SWITCHB :
 						{
-
 							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							director.openSwitch(h);
@@ -2262,7 +2253,6 @@ public class Interpreter {
 
 					case Code.SWIBF :
 						{
-
 							long selectorReference = Long.parseLong(tokenizer.nextToken());
 							long switchBlockReference = Long.parseLong(tokenizer.nextToken());
 							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
@@ -2283,7 +2273,6 @@ public class Interpreter {
 
 					case Code.SWITCH :
 						{
-
 							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							director.closeSwitch(h);
@@ -2297,7 +2286,6 @@ public class Interpreter {
 						//Break Statement
 					case Code.BR :
 						{
-
 							int statementName = Integer.parseInt(tokenizer.nextToken());
 							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 							String stmt = "";
@@ -2324,7 +2312,6 @@ public class Interpreter {
 						//Continue Statement
 					case Code.CONT :
 						{
-
 							int statementName = Integer.parseInt(tokenizer.nextToken());
 							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 							String stmt = "";
@@ -2348,14 +2335,12 @@ public class Interpreter {
 						//Opening and closing scopes
 					case Code.OUTPUT :
 						{
-
 							long expressionReference = Long.parseLong(tokenizer.nextToken());
 
 							String value = tokenizer.nextToken();
 							String type = tokenizer.nextToken();
-
 							Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-
+                            
 							Value output = (Value) values.remove(new Long(expressionReference));
 
 							if (output == null) {
@@ -2370,17 +2355,12 @@ public class Interpreter {
 						//Input needs to be read
 					case Code.INPUT :
 						{
-
 							long expressionCounter = Long.parseLong(tokenizer.nextToken());
-
 							String type = tokenizer.nextToken();
-
 							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-
 							Value in = director.animateInputHandling(type, h);
 
 							input.println(in.getValue());
-
 							values.put(new Long(expressionCounter), in);
 
 							break;
