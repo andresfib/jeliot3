@@ -209,17 +209,37 @@ public class ECodeUtilities {
 
             //Logical NOT expression (! sign)
             case Code.NO: {
-                return NOT;
+                return this.NOT;
             }
 
             //Aritmetic minus expression (- sign)
             case Code.MINUS: {
-                return MINUS;
+                return this.MINUS;
             }
 
             //Aritmetic plus expression (+ sign)
             case Code.PLUS: {
-                return PLUS;
+                return this.PLUS;
+            }
+
+            //PostIncrement expression (++ sign)
+            case Code.PIE: {
+                return this.POSTPLUSPLUS;
+            }
+
+            //PreIncrement expression (sign ++)
+            case Code.PRIE: {
+                return this.PLUSPLUS;
+            }
+
+            //PostDecrement expression (-- sign)
+            case Code.PDE: {
+                return this.POSTMINUSMINUS;
+            }
+
+            //PreDecrement expression (sign --)
+            case Code.PRDE: {
+                return MINUSMINUS;
             }
 
             //This is an error.
@@ -233,7 +253,11 @@ public class ECodeUtilities {
         switch (operator) {
             case Code.MINUS:    //Unary minus expression
             case Code.PLUS:     //Unary plus expression
-            case Code.NO: {     //Not expression
+            case Code.NO:       //Unary not expression
+            case Code.PIE:      //PostIncrement expression (++ sign)
+            case Code.PRIE:     //PreIncrement expression (sign ++)
+            case Code.PDE:      //PostDecrement expression (-- sign)
+            case Code.PRDE: {   //PreDecrement expression (sign --)
                 return true;
             }
 

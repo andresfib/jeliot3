@@ -185,7 +185,7 @@ public class Interpreter {
                             int operator = ECodeUtilities.resolveUnOperator(token);
                             // director.beginUnaryExpression(operator, lit, expressionCounter, highlight);
                             // Value expressionValue = director.finishUnaryExpression(operator, expr, result, expressionCounter, h);
-                            Value expressionValue = director.animateUnaryExpression(operator, val, result, expressionCounter);
+                            Value expressionValue = director.animateUnaryExpression(operator, val, result, expressionCounter, h);
                             values.put(new Integer(expressionCounter), expressionValue);
 
                             //exprs.pop();
@@ -194,6 +194,49 @@ public class Interpreter {
 
                         }
 
+                        // Unary Expression
+                        case Code.PIE:      // PostIncrement
+                        case Code.PDE: {    // PostDecrement
+
+                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
+                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            String value = tokenizer.nextToken();
+                            String type = tokenizer.nextToken();
+
+                            Highlight h = ECodeUtilities.makeHighlight(
+                                                         tokenizer.nextToken());
+
+                            Value result = new Value(value, type);
+                            Variable var = (Variable) variables.remove(new Integer(expressionReference));
+
+                            int operator = ECodeUtilities.resolveUnOperator(token);
+                            Value expressionValue = director.animatePreIncDec(operator, var, result, h);
+                            values.put(new Integer(expressionCounter), expressionValue);
+
+                            break;
+                        }
+
+                        // Unary Expression
+                        case Code.PRIE:      // PreIncrement
+                        case Code.PRDE: {    // PreDecrement
+
+                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
+                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            String value = tokenizer.nextToken();
+                            String type = tokenizer.nextToken();
+
+                            Highlight h = ECodeUtilities.makeHighlight(
+                                                         tokenizer.nextToken());
+
+                            Value result = new Value(value, type);
+                            Variable var = (Variable) variables.remove(new Integer(expressionReference));
+
+                            int operator = ECodeUtilities.resolveUnOperator(token);
+                            Value expressionValue = director.animatePostIncDec(operator, var, result, h);
+                            values.put(new Integer(expressionCounter), expressionValue);
+
+                            break;
+                        }
 
                         // Binary Expressions
                         case Code.OR:       // Or Expression
@@ -364,12 +407,22 @@ public class Interpreter {
                             //on the screen with operator
                             } else if (ECodeUtilities.isUnary(oper)) {
 
-                                Value val = new Value(value, type);
-                                ValueActor va = var.getActor().getValue();
-                                val.setActor(va);
-                                int operator = ECodeUtilities.resolveUnOperator(oper);
-                                director.beginUnaryExpression(operator, val,
-                                                expressionReference, highlight);
+                                if (command == Code.PIE  ||
+                                    command == Code.PRIE ||
+                                    command == Code.PDE  ||
+                                    command == Code.PRDE) {
+
+                                        variables.put(new Integer(expressionCounter), var);
+
+                                } else {
+
+                                    Value val = new Value(value, type);
+                                    ValueActor va = var.getActor().getValue();
+                                    val.setActor(va);
+                                    int operator = ECodeUtilities.resolveUnOperator(oper);
+                                    director.beginUnaryExpression(operator, val,
+                                                    expressionReference, highlight);
+                                }
 
                             //If it is something else we will store it for later use.
                             } else {
@@ -786,6 +839,156 @@ public class Interpreter {
                             break;
                         }
 
+                        //While Statement
+                        case Code.WHI: {
+
+                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            String value = tokenizer.nextToken();
+
+                            int round = Integer.parseInt(tokenizer.nextToken());
+
+                            Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+
+                            Value result = (Value) values.remove(new Integer(expressionReference));
+
+                            if (round == 0) {
+
+                                if (value.equals(Boolean.TRUE.toString())) {
+                                    director.enterLoop("while", result, h);
+                                } else {
+                                    director.skipLoop("while", result, h);
+                                }
+
+                            } else {
+
+                                if (value.equals(Boolean.TRUE.toString())) {
+                                    director.continueLoop("while", result, h);
+                                } else {
+                                    director.exitLoop("while", result, h);
+                                }
+
+                            }
+
+                            director.closeScratch();
+                            director.openScratch();
+
+                            break;
+                        }
+
+                        //For Statement
+                        case Code.FOR: {
+
+                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            String value = tokenizer.nextToken();
+
+                            Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+
+                            Value result = (Value) values.remove(new Integer(expressionReference));
+
+                            if (round == 0) {
+
+                                if (value.equals(Boolean.TRUE.toString())) {
+                                    director.enterLoop("for", result, h);
+                                } else {
+                                    director.skipLoop("for", result, h);
+                                }
+
+                            } else {
+
+                                if (value.equals(Boolean.TRUE.toString())) {
+                                    director.continueLoop("for", result, h);
+                                } else {
+                                    director.exitLoop("for", result, h);
+                                }
+
+                            }
+
+                            director.closeScratch();
+                            director.openScratch();
+
+                            break;
+                        }
+
+                        //Do-While Statement
+                        case Code.DO: {
+
+                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            String value = tokenizer.nextToken();
+
+                            Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+
+                            Value result = (Value) values.remove(new Integer(expressionReference));
+
+                            if (round == 0) {
+
+                                if (value.equals(Boolean.TRUE.toString())) {
+                                    director.enterLoop("do - while", result, h);
+                                } else {
+                                    director.skipLoop("do - while", result, h);
+                                }
+
+                            } else {
+
+                                if (value.equals(Boolean.TRUE.toString())) {
+                                    director.continueLoop("do - while", result, h);
+                                } else {
+                                    director.exitLoop("do - while", result, h);
+                                }
+
+                            }
+
+                            director.closeScratch();
+                            director.openScratch();
+
+                            break;
+                        }
+
+                        //Break Statement
+                        case Code.BR: {
+
+                            int statementName = Integer.parseInt(tokenizer.nextToken());
+                            Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+                            String stmt = "";
+
+                            if (statementName == Code.WHI) {
+                                stmt = "while";
+                            } else if (statementName == Code.FOR) {
+                                stmt = "for";
+                            } else if (statementName == Code.DO) {
+                                stmt = "do - while";
+                            }
+
+                            director.breakLoop(stmt, h);
+
+                            director.closeScratch();
+                            director.openScratch();
+
+                            break;
+                        }
+
+                        //Continue Statement
+                        case Code.CONT: {
+
+                            int statementName = Integer.parseInt(tokenizer.nextToken());
+                            Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+                            String stmt = "";
+
+                            if (statementName == Code.WHI) {
+                                stmt = "while";
+                            } else if (statementName == Code.FOR) {
+                                stmt = "for";
+                            } else if (statementName == Code.DO) {
+                                stmt = "do - while";
+                            }
+
+                            director.continueLoop(stmt, h);
+
+                            director.closeScratch();
+                            director.openScratch();
+
+                            break;
+                        }
+
                         //Opening and closing scopes
                         case Code.SCOPE: {
 
@@ -812,7 +1015,7 @@ public class Interpreter {
                         //There is an error if the execution comes here.
                         default: {
                             System.out.println("Error! The feature not yet implemented or " +
-                                               "there is an error on the other side.");
+                                               "there is an error on the other side of the interface.");
                             break;
                         }
                     }

@@ -70,6 +70,10 @@ public class Code{
     public static final int END=36;         // End of Program
     public static final int MD=37;          // Method declaration
     public static final int SMCC=38;        // Static Method call closed
+    public static final int BR=39;          // Break statement
+    public static final int WHI=40;         // While statement
+    public static final int FOR=41;         // For statement
+    public static final int CONT=42;        // Continue statement
 
     // private static PrintWriter writer=Launcher.getWriter();
     private static PrintWriter writer=null;
