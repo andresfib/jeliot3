@@ -1646,7 +1646,7 @@ public class Director {
     /**
      * @param message
      */
-    private void showMessage(String[] message) {
+    private void showMessage(String[] message, Highlight h) {
 
         if (jeliot.showMessagesInDialogs()) {
 
@@ -1663,16 +1663,16 @@ public class Director {
                 JOptionPane.PLAIN_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
-            showMessage(actor);
+            showMessage(actor, h);
         }
     }
 
     /**
      * @param message
      */
-    private void showMessage(String message) {
+    private void showMessage(String message, Highlight h) {
         String[] ms = { message };
-        showMessage(ms);
+        showMessage(ms, h);
     }
 
     /*  Not Valid Code Any More
@@ -1716,7 +1716,7 @@ public class Director {
 	/**
 	 * @param message
 	 */
-    private void showMessage(MessageActor message) {
+    private void showMessage(MessageActor message, Highlight h) {
         //Dimension msize = message.getSize();
         //Dimension tsize = theatre.getSize();
         //int x = (tsize.width-msize.width)/2;
@@ -1725,7 +1725,7 @@ public class Director {
         Point loc = ea.getRootLocation();
         ea.reserve(message);
         ea.bind(message);
-        showMessage(message, loc);
+        showMessage(message, loc, h);
         ea.removeActor(message);
     }
 
@@ -1733,11 +1733,11 @@ public class Director {
      * @param message
      * @param p
      */
-    private void showMessage(MessageActor message, Point p) {
+    private void showMessage(MessageActor message, Point p, Highlight h) {
         capture();
         engine.showAnimation(message.appear(p));
         release();
-        highlight(null);
+        highlight(h);
         //messagePause = true;
         theatre.removeActor(message);
     }
@@ -1816,7 +1816,7 @@ public class Director {
      */
     public void enterLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage(enterLoop.format(new String[] { statementName }));
+        showMessage(enterLoop.format(new String[] { statementName }), h);
     }
 
     /**
@@ -1826,7 +1826,7 @@ public class Director {
      */
     public void enterLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage(enterLoop.format(new String[] { statementName }));
+        showMessage(enterLoop.format(new String[] { statementName }), h);
         //, check);
     }
 
@@ -1837,7 +1837,7 @@ public class Director {
      */
     public void continueLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage(continueLoop.format(new String[] { statementName }));
+        showMessage(continueLoop.format(new String[] { statementName }), h);
         //, check);
     }
 
@@ -1847,7 +1847,7 @@ public class Director {
      */
     public void exitLoop(String statementName, Value check) {
         highlight(null);
-        showMessage(exitLoop.format(new String[] { statementName }));
+        showMessage(exitLoop.format(new String[] { statementName }), null);
         //, check);
     }
 
@@ -1857,7 +1857,7 @@ public class Director {
      */
     public void breakLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage(breakLoop.format(new String[] { statementName }));
+        showMessage(breakLoop.format(new String[] { statementName }), h);
     }
 
     /**
@@ -1865,7 +1865,7 @@ public class Director {
      */
     public void breakSwitch(Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.break_switch"));
+        showMessage(bundle.getString("message.break_switch"), h);
     }
 
     /**
@@ -1874,7 +1874,7 @@ public class Director {
      */
     public void skipLoop(String statementName, Value check) {
         highlight(null);
-        showMessage(skipLoop.format(new String[] { statementName }));
+        showMessage(skipLoop.format(new String[] { statementName }), null);
         //, check);
     }
 
@@ -1884,7 +1884,7 @@ public class Director {
      */
     public void continueLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage(continueLoop.format(new String[] { statementName }));
+        showMessage(continueLoop.format(new String[] { statementName }), h);
     }
 
     /**
@@ -1893,7 +1893,7 @@ public class Director {
      */
     public void branchThen(Value check, Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.if_then")); //, check);
+        showMessage(bundle.getString("message.if_then"), h); //, check, h);
     }
 
     /**
@@ -1902,7 +1902,7 @@ public class Director {
      */
     public void branchElse(Value check, Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.if_else")); //, check);
+        showMessage(bundle.getString("message.if_else"), h); //, check, h);
     }
 
     /**
@@ -1911,7 +1911,7 @@ public class Director {
      */
     public void skipIf(Value check, Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.skip_if")); //, check);
+        showMessage(bundle.getString("message.skip_if"), h); //, check, h);
     }
 
     /**
@@ -1919,7 +1919,7 @@ public class Director {
      */
     public void openSwitch(Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.enter_switch")); //, check);
+        showMessage(bundle.getString("message.enter_switch"), h); //, check, h);
     }
 
     /**
@@ -1927,7 +1927,7 @@ public class Director {
      */
     public void closeSwitch(Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.exit_switch")); //, check);
+        showMessage(bundle.getString("message.exit_switch"), h); //, check, h);
     }
 
     /**
@@ -1935,7 +1935,7 @@ public class Director {
      */
     public void switchSelected(Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.select_switch")); //, check);
+        showMessage(bundle.getString("message.select_switch"), h); //, check, h);
     }
 
     /**
@@ -1943,9 +1943,19 @@ public class Director {
      */
     public void switchDefault(Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.default_switch")); //, check);
+        showMessage(bundle.getString("message.default_switch"), h); //, check, h);
     }
 
+    public void openArrayInitializer(Highlight h) {
+        highlight(h);
+        showMessage(bundle.getString("message.open_array_initializer"), h);
+    }
+    
+    public void closeArrayInitializer(Highlight h) {
+        highlight(h);
+        showMessage(bundle.getString("message.close_array_initializer"), h);
+    }
+    
     /**
      * @param dims
      * @param h
@@ -1969,7 +1979,7 @@ public class Director {
         message[0] = arrayCreation.format(dimensionNumber);
         message[1] =
             arrayCreationDimensions.format(new String[] { dimensions });
-        showMessage(message);
+        showMessage(message, h);
     }
 
     /**
@@ -2406,6 +2416,73 @@ public class Director {
         });
     }
 
+    public void initializeArrayVariable(VariableInArray variable, Value value, Value casted, boolean literal, Highlight h) {
+
+        highlight(h);
+
+        final VariableInArrayActor variableAct = (VariableInArrayActor) variable.getActor();
+        
+        String type = variable.getType();
+        ValueActor valueAct = value.getActor();
+        
+        if (MCodeUtilities.isPrimitive(type)) {
+            // Get/create actors.
+            ValueActor castAct = factory.produceValueActor(casted);
+            casted.setActor(castAct);
+
+            Point valueLoc = variableAct.reserve(castAct);
+
+            capture();
+            variableAct.setLight(Actor.HIGHLIGHT);
+            
+            if (!literal) {
+                engine.showAnimation(valueAct.fly(valueLoc));
+            }
+            
+            variableAct.bind();
+            theatre.removePassive(valueAct);
+            release();
+            
+        } else {
+            
+            // Get/create actors.
+            ReferenceActor refAct = (ReferenceActor) value.getActor();
+            //refAct.calculateBends();
+            ReferenceActor ra = factory.produceReferenceActor(refAct);
+            casted.setActor(ra);
+            
+            if (variableAct instanceof ReferenceVariableInArrayActor) {
+                ReferenceVariableInArrayActor rva = (ReferenceVariableInArrayActor) variableAct;
+
+                //refAct.setBackground(rva.getBackground());
+
+                //rva.setReference(refAct);
+                //instAct.addReference(refAct);
+                Point valueLoc = rva.reserve(ra);
+
+                capture();
+                
+                variableAct.setLight(Actor.HIGHLIGHT);
+                
+                if (!literal) {
+                    engine.showAnimation(refAct.fly(valueLoc));
+                }
+                
+                rva.bind();
+                theatre.removePassive(refAct);
+                release();              
+            }
+        }
+        
+        currentScratch.registerCrapRemover(new Runnable() {
+            public void run() {
+                variableAct.setLight(Actor.NORMAL);
+            }
+        });
+
+    }
+    
+    
     /**
      * @param length
      * @param ai

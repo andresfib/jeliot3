@@ -240,6 +240,7 @@ public class Code {
 	/** Indicates a field in the class information */
 	public static final int FIELD = 62;
 
+    /** Cast of the value */
 	public static final int CAST = 73;
 
 	/** Static field access */

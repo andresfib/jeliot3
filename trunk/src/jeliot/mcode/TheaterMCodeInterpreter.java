@@ -31,6 +31,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     //  DOC: document!
     /**
+     * 
+     */
+    protected Stack arrayInitialization = new Stack();
+    
+    /**
      *  
      */
     protected Director director = null;
@@ -176,7 +181,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         superMethods = null;
         superMethodsReading = null;
         superMethodCallNumber = 0;
-
+        arrayInitialization = new Stack();
+        
         super.initialize();
 
         try {
@@ -282,8 +288,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#cleanEvaluationArea(int)
      */
     public void cleanEvaluationArea(int token) {
-        if (exprs.empty() && !invokingMethod && token != Code.WHI
-                && token != Code.FOR && token != Code.DO && token != Code.IFT
+        if (exprs.empty() && !invokingMethod
+                && arrayInitialization.empty() 
+                && token != Code.WHI && token != Code.FOR
+                && token != Code.DO && token != Code.IFT
                 && token != Code.IFTE && token != Code.SWIBF
                 && token != Code.SWITCHB && token != Code.SWITCH
                 && token != Code.VD && token != Code.OUTPUT
@@ -1453,7 +1461,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             }
         }
 
-        /**
+        /*
          * Look from the expression stack what expression should be shown next
          */
         long expressionReference = 0;
@@ -1493,7 +1501,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             val.setActor(var.getActor().getValue());
         }
 
-        /**
+        /*
          * Do different kind of things depending on in what expression the
          * variable is used.
          */
@@ -2551,6 +2559,85 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     }
 
     /**
+     * 
+     */
+    protected void handleCodeCONSCN(long superMethodCallNumber) {
+        constructorCall = true;
+        superMethodsReading = new Vector();
+        this.superMethodCallNumber = superMethodCallNumber;
+    }
+
+    /**
+     * 
+     */
+    protected void handleCodeCAST(long expressionCounter,
+            long expressionReference, String value, String type, Highlight h) {
+        Value oldValue = (Value) values.remove(new Long(expressionReference));
+        Value newValue = new Value(value, type);
+        director.animateCastExpression(oldValue, newValue, h);
+        values.put(new Long(expressionCounter), newValue);
+    }
+
+    /**
+     * 
+     */
+    protected void handleCodeAIBEGIN(long cells, Highlight highlight) {
+        arrayInitialization.push(new Integer(arrayInitialization.size()));
+        director.openArrayInitializer(highlight);
+    }
+
+    /**
+     * 
+     */
+    protected void handleCodeAIE(String arrayReference, long cellNumber, long expressionReference, String value, String type, long l, Highlight highlight) {
+        
+        ArrayInstance ai = (ArrayInstance) instances.get(arrayReference);
+        VariableInArray v = (VariableInArray) ai.getVariableAt(new int[] {(int) cellNumber});
+        
+        boolean literal = ((l == 1) ? true : false);
+        Value fromValue = (Value) values.remove(new Long(expressionReference));
+
+        Value casted = null;
+        if (MCodeUtilities.isPrimitive(type) || type.equals("null")) {
+            casted = new Value(value, type);
+
+            if (!casted.getType().equals(fromValue.getType())
+                    && MCodeUtilities.resolveType(casted.getType()) != MCodeUtilities
+                            .resolveType(fromValue.getType())) {
+                director.animateCastExpression(fromValue, casted);
+                fromValue.setActor(casted.getActor());
+            }
+        } else {
+            Instance inst = (Instance) instances.get(MCodeUtilities
+                    .getHashCode(value));
+            if (inst != null) {
+                casted = new Reference(inst);
+                ((Reference) casted).makeReference();
+            } else {
+                casted = new Reference();
+            }
+            
+        }
+        
+        director.initializeArrayVariable(v, fromValue, casted, literal, highlight);
+        v.assign(casted); 
+
+        Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(expressionReference));
+
+        if (postIncDec != null) {
+            doPostIncDec(postIncDec);
+        }
+    }
+
+    /**
+     * 
+     */
+    protected void handleCodeAI(Highlight highlight) {
+        arrayInitialization.pop();
+        director.closeArrayInitializer(highlight);
+    }
+    
+    /**
      * @param ci
      * @param h
      * @return
@@ -2930,20 +3017,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         return exprs.empty();
     }
 
-    protected void handleCodeCONSCN(long superMethodCallNumber) {
-        constructorCall = true;
-        superMethodsReading = new Vector();
-        this.superMethodCallNumber = superMethodCallNumber;
-    }
-
-    protected void handleCodeCAST(long expressionCounter,
-            long expressionReference, String value, String type, Highlight h) {
-        Value oldValue = (Value) values.remove(new Long(expressionReference));
-        Value newValue = new Value(value, type);
-        director.animateCastExpression(oldValue, newValue, h);
-        values.put(new Long(expressionCounter), newValue);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -2951,5 +3024,5 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     public void beforeExecution() {
     }
-
+ 
 }
