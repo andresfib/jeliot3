@@ -162,7 +162,7 @@ public class Interpreter {
                             int fromExpression = Integer.parseInt(tokenizer.nextToken());
                             int toExpression =  Integer.parseInt(tokenizer.nextToken());
                             String value = null;
-                            if (tokenizer.countTokens() >= 4) {
+                            if (tokenizer.countTokens() >= 2) {
                                 value = tokenizer.nextToken();
                             } else {
                                 value = "";
@@ -456,7 +456,7 @@ public class Interpreter {
                             int leftExpressionReference = Integer.parseInt(tokenizer.nextToken());
                             int rightExpressionReference = Integer.parseInt(tokenizer.nextToken());
                             String value = null;
-                            if (tokenizer.countTokens() >= 4) {
+                            if (tokenizer.countTokens() >= 3) {
                                 value = tokenizer.nextToken();
                             } else {
                                 value = "";

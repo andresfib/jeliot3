@@ -3,23 +3,25 @@ package jeliot.theatre;
 import java.awt.*;
 
 /**
-  * Animation class represents one atomic animation in Jeliot.
+  * <P>Animation class represents one atomic animation in Jeliot.
   * Animation means here any event that includes movement of actors or
   * that is otherwise dependent of time. Examples of animation include
   * moving an actor from one place to another or flashing the colors of
-  * an actor as it is introduced to the theatre. 
-  *     <P>
+  * an actor as it is introduced to the theatre.
+  * </P>
+  * <P>
   * The animation is played by an instance of AnimationEngine class.
   * The animation engine takes care of scheduling the animation.
   * Animation class is the abstract superclass of various specialized
-  * animation classes. These subclasses must implement the animate() 
-  * method in which they make their changes to actors. The animation 
+  * animation classes. These subclasses must implement the animate()
+  * method in which they make their changes to actors. The animation
   * engine calls this method at even time intervals. If the animation
   * has to do something in prior to starting the animation, especially
   * if it has to set any parameters that depend on the duration of the
   * animation or it has to add any actors to the theatre, it may do
   * this in its init() method. When the animation finishes, the engine
   * calls its finish() method.
+  * </P>
   *
   * @author Pekka Uronen
   *
@@ -67,14 +69,14 @@ public abstract class Animation {
       * subclasses to do something after the animation has finished.
       */
     protected void finish() { }
-    
-    /** Finishes the animation. 
+
+    /** Finishes the animation.
       */
     public void doFinish() {
         finish();
         finished = true;
     }
-    
+
     /** Sets the starting time for this animation.
       *
       *@param startTime The desired starting time in milliseconds.
@@ -133,22 +135,22 @@ public abstract class Animation {
             theatre.promote(actor);
         }
     }
-    
+
     protected void passivate(Actor actor) {
         theatre.passivate(actor);
     }
-    
+
     protected void removeActor(Actor actor) {
         theatre.removeActor(actor);
     }
-    
+
     /** Repaints the theatre. This method is called by subclasses
       * between animation steps.
       */
     protected void repaint() {
         theatre.repaint();
     }
-    
-    public void finalFinish() { } 
-    
+
+    public void finalFinish() { }
+
 }

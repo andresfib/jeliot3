@@ -38,19 +38,19 @@ public class Stage extends Actor implements ActorContainer {
     /** Number of pixels between actors. */
     private int actorMargin = 3;
 
-    //We cannot know the maximum number before hand so we need to change
-    //this to the amout of variables we have now.
     /** Maximum number of variables on the stage at any time. */
-    private int varCount;
+    private int varCount = 3;
+
+    private int actWidth;
+    private int actHeight;
 
     private boolean paintVars = true;
 
     private Actor reserved;
     private Point resLoc;
 
-    public Stage(String name, int varCount) {
+    public Stage(String name) {
         this.name = name;
-        this.varCount = varCount;
         insets = new Insets(2, 6, 4, 6);
     }
 
@@ -65,13 +65,25 @@ public class Stage extends Actor implements ActorContainer {
     }
 
     public void calculateSize(int maxActWidth, int actHeight) {
+
+        this.actWidth = maxActWidth;
+        this.actHeight = actHeight;
+
+        Dimension d = calculateSizeDimensions();
+
+        setSize(d.width, d.height);
+    }
+
+    public Dimension calculateSizeDimensions() {
+
         int w = borderWidth * 2 + insets.right + insets.left +
-            Math.max(maxActWidth, nwidth) + 2 * margin;
+            Math.max(actWidth, nwidth) + 2 * margin;
+
         int h = borderWidth * 2 + insets.top + insets.bottom +
             nheight + 2 * margin + actorMargin +
             (actorMargin + actHeight) * varCount;
 
-        setSize(w, h);
+        return new Dimension(w, h);
     }
 
     public void paintActor(Graphics g) {
@@ -118,15 +130,12 @@ public class Stage extends Actor implements ActorContainer {
 
     public Point reserve(Actor actor) {
         Actor prev = (variables.isEmpty()) ?
-                null :
-                (Actor)variables.lastElement();
+                      null :
+                      (Actor)variables.lastElement();
 
-        int y = ( (prev == null) ?
-                    insets.top + nheight + margin*2 + borderWidth
-                :
-                    prev.getHeight() + prev.getY())
-
-                +   actorMargin;
+        int y = ((prev == null) ?
+                 insets.top + nheight + margin * 2 + borderWidth :
+                 prev.getHeight() + prev.getY()) + actorMargin;
 
         int x = getWidth() - insets.right - actor.getWidth();
 
@@ -143,6 +152,7 @@ public class Stage extends Actor implements ActorContainer {
         reserved.setParent(this);
 
         //Added for Jeliot 3
+        varCount++;
         scopeVarCount++;
     }
 
@@ -157,6 +167,7 @@ public class Stage extends Actor implements ActorContainer {
         for (int i = 0; i < scopeVarCount; i++) {
             variables.pop();
         }
+        varCount -= scopeVarCount;
         scopeVarCount = ((Integer) scopes.pop()).intValue();
     }
 
@@ -165,7 +176,9 @@ public class Stage extends Actor implements ActorContainer {
     }
 
     public Actor getActorAt(int xc, int yc) {
+
         int n = variables.size();
+
         for (int i = n-1; i >= 0; --i) {
              Actor actor = (Actor)variables.elementAt(i);
              Actor at = actor.getActorAt(
@@ -178,17 +191,18 @@ public class Stage extends Actor implements ActorContainer {
     }
 
     public Animation appear(final Point loc) {
+
         return new Animation() {
             Dimension size;
             double h;
             double plus;
             int full;
             public void init() {
-                size = new Dimension(getWidth(), nheight + margin *3);
+                size = new Dimension(getWidth(), nheight + margin * 3);
                 h = size.height;
                 full = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor)Stage.this);
+                this.addActor((Actor) Stage.this);
                 setLocation(loc);
                 setSize(size);
                 setLight(HIGHLIGHT);
@@ -217,6 +231,7 @@ public class Stage extends Actor implements ActorContainer {
     }
 
     public Animation disappear() {
+
         return new Animation() {
             Dimension size;
             double h;
@@ -224,7 +239,7 @@ public class Stage extends Actor implements ActorContainer {
             int full;
             public void init() {
                 size = getSize();
-                full = nheight + margin *3;
+                full = nheight + margin * 3;
                 h = getHeight();
                 plus = (full - h) / getDuration();
                 this.addActor((Actor)Stage.this);
@@ -246,4 +261,52 @@ public class Stage extends Actor implements ActorContainer {
         };
     }
 
+    public Animation extend()  {
+
+        final Dimension oldSize = getSize();
+        final Dimension newSize = calculateSizeDimensions();
+
+        if (newSize.height > oldSize.height) {
+
+            return new Animation() {
+
+                Dimension size;
+                double h;
+                double plus;
+                int full;
+
+                public void init() {
+                    size = getSize();
+                    h = size.height;
+                    full = newSize.height;
+                    plus = (full - h) / getDuration();
+                    setLight(HIGHLIGHT);
+                    this.repaint();
+                }
+
+                public void animate(double pulse) {
+                    h += plus * pulse;
+                    size.height = (int)h;
+                    setSize(size);
+                    this.repaint();
+                }
+
+                public void finish() {
+                    setLight(NORMAL);
+                    size.height = full;
+                    setSize(size);
+                    paintVars = true;
+                }
+
+                public void finalFinish() {
+                    this.passivate((Actor)Stage.this);
+                }
+            };
+
+        } else {
+
+            return null;
+
+        }
+    }
 }

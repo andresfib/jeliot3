@@ -151,7 +151,7 @@ public class ActorFactory {
          //the getVarCount method is changed to a constant for a while
          //because it is not set properly in our situation.
          //Actually it is not easy to know how many variables there are.
-        Stage stage = new Stage(m.getMethodName(), 6);// m.getVarCount());
+        Stage stage = new Stage(m.getMethodName());//, 6);// m.getVarCount());
         stage.setFont(stageFont);
         stage.calculateSize(typeValWidth[8] + 60,
                             valueHeight + 8 +
@@ -231,7 +231,7 @@ public class ActorFactory {
         String type = val.getType();
         int typeInfo = ECodeUtilities.resolveType(type);
 
-        System.out.println(type);
+        //System.out.println(type);
 
         if (typeInfo == ECodeUtilities.BOOLEAN) {
             boolean b = Boolean.getBoolean(val.getValue());

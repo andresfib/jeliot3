@@ -1114,6 +1114,7 @@ public class JeliotWindow {
      * @param   str String for output.
      */
     public void output(String str) {
+        //System.out.println("This is output: " + str);
         outputConsole.append(str);
     }
 
