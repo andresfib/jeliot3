@@ -1052,11 +1052,13 @@ public class Director {
     }
 
     public void openScope() {
+        highlight(null);
         showMessage("Opening new scope for variables.");
         getCurrentMethodFrame().openScope();
     }
 
     public void closeScope() {
+        highlight(null);
         showMessage("Closing a scope and erasing the scope variables.");
         getCurrentMethodFrame().closeScope();
     }
@@ -1076,8 +1078,8 @@ public class Director {
         showMessage("Continuing the " + statementName + " loop in the next round.", check);
     }
 
-    public void exitLoop(String statementName, Value check, Highlight h) {
-        highlight(h);
+    public void exitLoop(String statementName, Value check) {
+        highlight(null);
         showMessage("Exiting the " + statementName + " loop.", check);
     }
 
@@ -1086,8 +1088,8 @@ public class Director {
         showMessage("Exiting the loop because of break.");
     }
 
-    public void skipLoop(String statementName, Value check, Highlight h) {
-        highlight(h);
+    public void skipLoop(String statementName, Value check) {
+        highlight(null);
         showMessage("Not entering the " + statementName + " loop.", check);
     }
 
