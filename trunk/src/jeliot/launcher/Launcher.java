@@ -14,25 +14,26 @@ import jeliot.ecode.ECodeUtilities;
 
 public class Launcher extends Thread {
 
-    private PipedWriter pipedWriter = new PipedWriter();
+    private PipedWriter pipedWriter = null;
     private PipedReader pipedReader = null;
 
-    private PrintWriter writer = new PrintWriter(pipedWriter);
+    private PrintWriter writer = null;
     private BufferedReader reader = null;
     private boolean running=true; //indicates if interpreterThread is running
 
     // Pipe communicating Director ->DynamicJava
     // For Input Requests!!!!!!
-    private PipedWriter putInput = new PipedWriter();
+    private PipedWriter putInput = null;
     private PipedReader getInput = null;
-    private PrintWriter inputWriter = new PrintWriter(putInput);
+    private PrintWriter inputWriter = null;
     private BufferedReader inputReader = null;
 
     private String methodCall=null;
     private Reader r = null;
-    private Interpreter interpreter=createInterpreter();
+    private Interpreter interpreter = createInterpreter();
 
-    private boolean compiling = true;
+    private boolean compiling = false;
+//     private boolean executing = false;
 
     protected Interpreter createInterpreter() {
         Interpreter result = new TreeInterpreter(new JavaCCParserFactory());
@@ -41,30 +42,29 @@ public class Launcher extends Thread {
 
     public Launcher(Reader input) {
         this.r = input;
-        ECodeUtilities.setWriter(writer);
+
+        makePipedStreams();
+    }
+
+    public void makePipedStreams() {
+        pipedWriter = new PipedWriter();
+        writer = new PrintWriter(pipedWriter);
+        putInput = new PipedWriter();
+        inputWriter = new PrintWriter(putInput);
 
         try {
             pipedReader = new PipedReader(pipedWriter);
+
             getInput = new PipedReader(putInput);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("When creating Pipe reader:" + e);
-            // throw e;
         }
 
-        //  try{
-        //    r = new FileReader(s);
-        //}
-        //catch (IOException e) {
-        //    System.err.println(s+" file not found\n" + e);
-        //  throw e;
-        //}
         reader = new BufferedReader(pipedReader);
-        //For Input!!
         inputReader = new BufferedReader(getInput);
-        ECodeUtilities.setReader(inputReader);
 
-//        interpreter.interpret(r,"buffer");// (stream,"buffer");
+        ECodeUtilities.setWriter(writer);
+        ECodeUtilities.setReader(inputReader);
     }
 
     public void setMethodCall(String methodCall) {
@@ -79,51 +79,54 @@ public class Launcher extends Thread {
     public void run() {
 
         //System.out.println("Before Compilation");
-	
-        if (compiling && this == Thread.currentThread()) {
-            compile();
-
-            synchronized(this) {
-                try {
-                    this.wait();
-                } catch(InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-
-	try {
-		Thread.sleep(100);
-	} catch (InterruptedException e) {
-		throw new RuntimeException(e);	
-	}
-        //System.out.println("After Compilation");
 
         while (running && this == Thread.currentThread()) {
+            if (compiling) {
+                compile();
+
+//             synchronized(this) {
+//                 try {
+//                     this.wait();
+//                 } catch(InterruptedException e) {
+//                     throw new RuntimeException(e);
+//                 }
+//             }
+
+//         try {
+//             Thread.sleep(100);
+//         } catch (InterruptedException e) {
+//             throw new RuntimeException(e);
+//         }
+//         //System.out.println("After Compilation");
+
+//         if (running && this == Thread.currentThread()) {
 
             //System.out.println("Before interpretation");
-            interpreter.interpret(new BufferedReader(
+
+                interpreter.interpret(new BufferedReader(
                                       new StringReader(methodCall)),
                                       "buffer");
                                       // (stream,"buffer");
 
-            ECodeUtilities.write(""+jeliot.ecode.Code.END);
+                ECodeUtilities.write(""+jeliot.ecode.Code.END);
             //System.out.println("After interpretation");
-
+                compiling = false;
+            }
             synchronized(this) {
                 try {
                     this.wait();
+//                    Thread.sleep(100);
                 } catch(InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
 
-	try {
-		Thread.sleep(100);
-	} catch (InterruptedException e) {
-		throw new RuntimeException(e);	
-	}
+//         try {
+//             Thread.sleep(100);
+//         } catch (InterruptedException e) {
+//             throw new RuntimeException(e);
+//         }
         //System.out.println("After execution");
 
     }
@@ -135,6 +138,10 @@ public class Launcher extends Thread {
     public void setCompiling(boolean value) {
         compiling = value;
     }
+
+//     public void setExecuting(boolean value) {
+//         executing = value;
+//     }
 
     public PrintWriter getWriter() {
         return writer;

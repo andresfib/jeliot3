@@ -381,9 +381,7 @@ public class CodeEditor extends JComponent {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             writeProgram(file);
-
             currentFile = file; // Jeliot 3
-            changed = false; //Jeliot 3
         }
     }
 
@@ -397,6 +395,7 @@ public class CodeEditor extends JComponent {
             FileWriter w = new FileWriter(file);
             w.write(area.getText());
             w.close();
+            changed = false; //Jeliot 3
         }
         catch (IOException e) {
             e.printStackTrace();

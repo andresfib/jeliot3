@@ -12,36 +12,55 @@ public class ReferenceActor extends ValueActor {
 
     private InstanceActor instance = null;
     private VariableActor variable = null;
+
+    /**
+     * Reference width is the width of the rectangle
+     * in the variable end of the reference.
+     */
     private static int refWidth = 6;
 
+    /**
+     * Length of the null reference line and also the base for the
+     * first part of the reference when not null.
+     */
     private static int refLen = 18;
+
+    /**
+     * Used to make the first part of the reference line different in
+     * length.
+     */
+    private int refWidthRandom = 12;
 
     private boolean instVarConnect = false;
 
     private Point[] bend;
+    private Point[] arrowhead;
+    private Polygon arrowheadPolygon1;
+    private Polygon arrowheadPolygon2;
 
-    public ReferenceActor() { }
+    public ReferenceActor() {
+        refWidthRandom += (int) (Math.random() * 15);
+    }
 
     public ReferenceActor(InstanceActor inst) {
+        this();
         this.instance = inst;
     }
 
     public ReferenceActor(InstanceActor inst, boolean instVarConnect) {
-        this.instance = inst;
+        this(inst);
         this.instVarConnect = instVarConnect;
     }
 
     public ReferenceActor(InstanceActor inst, VariableActor var) {
-        this.instance = inst;
+        this(inst);
         this.variable = var;
     }
 
     public ReferenceActor(InstanceActor inst, VariableActor var, boolean instVarConnect) {
-        this.instance = inst;
-        this.variable = var;
+        this(inst, var);
         this.instVarConnect = instVarConnect;
     }
-
 
     public InstanceActor getInstanceActor() {
         return this.instance;
@@ -102,9 +121,13 @@ public class ReferenceActor extends ValueActor {
                     g.drawLine(p1.x-1, p1.y+1, p2.x-1, p2.y);
                     g.drawLine(p1.x+1, p1.y, p2.x+1, p2.y);
                 }
-                //Here should be drawn something that shows that
-                //the reference is pointing to this exact instance.
             }
+            //Here should be drawn something that shows that
+            //the reference is pointing to this exact instance.
+            g.setColor(fc);
+            g.fillPolygon(arrowheadPolygon1);
+            g.setColor(bc);
+            g.fillPolygon(arrowheadPolygon2);
 
             g.translate(vp.x, vp.y);
 
@@ -183,18 +206,46 @@ public class ReferenceActor extends ValueActor {
         if (!instVarConnect) {
             bend = new Point[4];
             bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
-            bend[1] = new Point(vx + 45 /*- (vy1/6)*/, bend[0].y);
+            bend[1] = new Point(vx + refLen + refWidthRandom /*- (vy1/6)*/, bend[0].y);
             bend[2] = new Point(bend[1].x, iy1 + 12);
-            bend[3] = new Point(ix, bend[2].y);
+            bend[3] = new Point(ix - 3, bend[2].y);
         } else {
             //Change this!
             //It should contain 7 points with 5 bends
             bend = new Point[4];
             bend[0] = new Point(vx - 3, (vy1 + vy2) / 2);
-            bend[1] = new Point(vx + 45 /*- (vy1/6)*/, bend[0].y);
+            bend[1] = new Point(vx + refLen + refWidthRandom /*- (vy1/6)*/, bend[0].y);
             bend[2] = new Point(bend[1].x, iy1 + 12);
-            bend[3] = new Point(ix, bend[2].y);
+            bend[3] = new Point(ix - 3, bend[2].y);
         }
+        calculateArrowhead();
+    }
+
+    public void calculateArrowhead() {
+        int n = bend.length;
+
+        arrowhead = new Point[3];
+        arrowhead[0] = new Point(bend[n-1]);
+        arrowhead[1] = new Point(bend[n-1]);
+        arrowhead[2] = new Point(bend[n-1]);
+        arrowhead[0].translate(3, 0);
+        arrowhead[1].translate(-10, -7);
+        arrowhead[2].translate(-10, 7);
+
+        arrowheadPolygon1 = new Polygon();
+        for (int i = 0; i < 3; i++) {
+            arrowheadPolygon1.addPoint(arrowhead[i].x, arrowhead[i].y);
+        }
+
+        arrowhead[0].translate(-3,0);
+        arrowhead[1].translate(2, 3);
+        arrowhead[2].translate(2, -3);
+
+        arrowheadPolygon2 = new Polygon();
+        for (int i = 0; i < 3; i++) {
+            arrowheadPolygon2.addPoint(arrowhead[i].x, arrowhead[i].y);
+        }
+
     }
 
     public void calculateSize() {
