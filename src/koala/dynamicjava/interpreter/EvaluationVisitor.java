@@ -1064,9 +1064,8 @@ public class EvaluationVisitor extends VisitorObject {
                     + (counter++)
                     + Code.DELIM
                     + node.getName()
-                    + 
-            //node.getRepresentation()+
-            Code.DELIM + value + Code.DELIM + c.getName());
+            		//+ node.getRepresentation()
+            		+ Code.DELIM + value + Code.DELIM + c.getName());
 
             if (o != null) {
                 value = o.toString();
@@ -1086,9 +1085,8 @@ public class EvaluationVisitor extends VisitorObject {
                     + auxcounter2
                     + Code.DELIM
                     + value
-                    + 
-            //o.toString()+
-            Code.DELIM + c.getName() + Code.DELIM + locationToString(node));
+            		//+ o.toString()
+            		+ Code.DELIM + c.getName() + Code.DELIM + locationToString(node));
 
             if (node.isFinal()) {
                 context.setConstant(node.getName(), o);
@@ -1344,7 +1342,7 @@ public class EvaluationVisitor extends VisitorObject {
 
                         long auxcounter = counter;
                         ECodeUtilities.write(
-                            ""
+                                ""
                                 + Code.BEGIN
                                 + Code.DELIM
                                 + Code.R
@@ -1357,7 +1355,7 @@ public class EvaluationVisitor extends VisitorObject {
                         if (o != null) {
 
                             ECodeUtilities.write(
-                                Code.L
+                                    Code.L
                                     + Code.DELIM
                                     + (counter++)
                                     + Code.DELIM
@@ -1368,7 +1366,7 @@ public class EvaluationVisitor extends VisitorObject {
                                     + locationToString(node));
 
                             ECodeUtilities.write(
-                                ""
+                                    ""
                                     + Code.R
                                     + Code.DELIM
                                     + l.toString()
@@ -1396,7 +1394,7 @@ public class EvaluationVisitor extends VisitorObject {
                                     + locationToString(node));
 
                             ECodeUtilities.write(
-                                ""
+                                    ""
                                     + Code.R
                                     + Code.DELIM
                                     + l.toString()
