@@ -572,6 +572,8 @@ public class JeliotWindow implements PauseListener {
         //a group of JMenuItems
         JMenu programMenu = editor.makeProgramMenu();
 
+        programMenu.addSeparator();
+        
         menuItem = new JMenuItem(messageBundle.getString("menu.program.exit"));
         menuItem.setMnemonic(KeyEvent.VK_X);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
