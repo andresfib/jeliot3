@@ -9,6 +9,17 @@ Urgent:
 * Static field access (into the constant area)
 * Documentation
 
+Bugs regarding inheritance:
+
+* Instability in the animation engine, reporting unknown runtime
+  exceptions randomly (Due to some bug in ThreadController??)
+* SuperClass variables with some kind of temp name(this$0) produced by
+  DJava
+* ERROR
+ Rectangle: method <init>()V not found
+* Fix the problem with RuntimeException: 'No Variable bigSquare' when
+  bigSquare does not exist in the classes MethodStage and ObjectStage. 
+
 Technical:
 
 * Use invokeLater method to build up the gui in the beginning of the 
