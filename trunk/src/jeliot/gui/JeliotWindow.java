@@ -392,7 +392,7 @@ public class JeliotWindow {
         this.panelController = new PanelController(theatre, iLoad);
         //this.editor = new CodeEditor(this.udir);
         this.editor = new CodeEditor2(this.udir);
-        
+        this.frame = new JFrame(jeliotVersion);
     }
 
     /**
@@ -417,11 +417,10 @@ public class JeliotWindow {
                     hv);
             this.tabbedPane.setMnemonicAt(2, KeyEvent.VK_Y);        
         }
-            
-        frame = new JFrame(jeliotVersion);
-        frame.setIconImage(iLoad
+        
+        this.frame.setIconImage(iLoad
                 .getImage(bundle.getString("image.jeliot_icon")));
-
+            
         frame.setJMenuBar(makeMenuBar());
         editor.setMasterFrame(frame);
 
