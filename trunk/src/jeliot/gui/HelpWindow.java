@@ -41,8 +41,9 @@ public class HelpWindow extends JFrame {
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         try {
-            showURL((new URL("file://" + udir + "\\docs\\help.html")).toString(), editorPane);
-        }catch (Exception e) { e.printStackTrace(); }
+            File f = new File(udir, "docs/help.html");
+            showURL(f.toURI().toURL());
+        } catch (Exception e) { e.printStackTrace(); }
 
         getContentPane().add(jsp);
         setSize(600, 600);
@@ -54,13 +55,11 @@ public class HelpWindow extends JFrame {
      *
      * @param   url The given url will be showed in JEditorPane editorPane.
      */
-
-    public void showURL(String url, JEditorPane pane) {
+    public void showURL(URL url) {
         try {
-            pane.setPage(url);
+            editorPane.setPage(url);
             //show();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Attempted to read a bad URL: " + url);
         }
     }
