@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -15,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JWindow;
 
 import jeliot.Jeliot;
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserPropertyResourceBundle;
 
 /**
  * LoadJeliot displays a splash screen and
@@ -28,14 +29,12 @@ public class LoadJeliot {
 	/**
 	 * The resource bundle for gui package
 	 */
-	static private ResourceBundle bundle2 = ResourceBundle.getBundle(
-			"jeliot.gui.resources.messages", Locale.getDefault());
+	static private ResourceBundle messageBundle = ResourceBundles.getGuiMessageResourceBundle();
 
 	/**
 	 * The resource bundle for gui package
 	 */
-	static private ResourceBundle bundle = ResourceBundle.getBundle(
-			"jeliot.gui.resources.properties", Locale.getDefault());
+	static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getGuiUserPropertyResourceBundle();
 
 	/**
 	 * Initializes the Jeliot's splash screen window. Initializes the
@@ -43,7 +42,7 @@ public class LoadJeliot {
 	 */
 	public Jeliot start(String udir, boolean experiment) {
 		// Get the splash screen image
-		final Image image = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images") + bundle2.getString("image.splash_screen"))).getImage();
+		final Image image = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(propertiesBundle.getString("directory.images") + messageBundle.getString("image.splash_screen"))).getImage();
 
 		// create the splash screen window
 		Component splash = new Component() {
@@ -51,7 +50,7 @@ public class LoadJeliot {
 				g.drawImage(image, 0, 0, this);
 			}
 		};
-		JLabel label = new JLabel(bundle2.getString("label.splash_screen"));
+		JLabel label = new JLabel(messageBundle.getString("label.splash_screen"));
 		final JWindow window = new JWindow();
 		Container c = window.getContentPane();
 		c.setLayout(new BorderLayout());

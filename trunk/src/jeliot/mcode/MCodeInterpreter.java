@@ -2,11 +2,13 @@ package jeliot.mcode;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserPropertyResourceBundle;
 
 /**
  * The MCode interpreter that interprets the MCode received
@@ -72,14 +74,12 @@ public abstract class MCodeInterpreter {
     /**
      * The resource bundle for mcode messages
      */
-    static protected ResourceBundle bundle = ResourceBundle.getBundle(
-            "jeliot.mcode.resources.messages", Locale.getDefault());
+    static protected ResourceBundle messageBundle = ResourceBundles.getMCodeMessageResourceBundle();
 
     /**
      * The resource bundle for mcode properties
      */
-    static protected ResourceBundle propertiesBundle = ResourceBundle.getBundle(
-            "jeliot.mcode.resources.properties", Locale.getDefault());
+    static protected UserPropertyResourceBundle propertiesBundle = ResourceBundles.getMCodeUserPropertyResourceBundle();
 
     /**
      * Related to Super method calls in constructor's first line in
@@ -167,7 +167,7 @@ public abstract class MCodeInterpreter {
                 int token = Integer.parseInt(tokenizer.nextToken());
                 if (token == Code.INPUT) {
                     interpret("" + Code.ERROR + Code.DELIM
-                            + bundle.getString("inputInConstructor.exception")
+                            + messageBundle.getString("inputInConstructor.exception")
                             // + "<H1>Feature not implemented</H1> " + "<P>Super classes' constructors cannot "
                             + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
                             + Code.LOC_DELIM + "0");

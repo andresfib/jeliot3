@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
@@ -17,6 +16,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
+
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserPropertyResourceBundle;
 
 /**
  * OutputConsole is a text area on which the output of a user's
@@ -30,16 +32,12 @@ public class OutputConsole extends JTextArea {
     /**
      * The resource bundle for gui package
      */
-    static private ResourceBundle bundle = ResourceBundle.getBundle(
-                                      "jeliot.gui.resources.properties",
-                                      Locale.getDefault());
+    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getGuiUserPropertyResourceBundle();
     
     /**
      * The resource bundle for gui package
      */
-    static private ResourceBundle bundle2 = ResourceBundle.getBundle(
-            "jeliot.gui.resources.messages",
-            Locale.getDefault());
+    static private ResourceBundle messageBundle = ResourceBundles.getGuiMessageResourceBundle();
 
 
     /** A scroll pane that contains the output console. */
@@ -76,7 +74,7 @@ public class OutputConsole extends JTextArea {
     /** The console's popup menu has one choice for emptying the console. */
     private JPopupMenu menu = new JPopupMenu(); {
         JMenuItem menuItem;
-        menuItem = new JMenuItem(bundle2.getString("popup_menu.clear"));
+        menuItem = new JMenuItem(messageBundle.getString("popup_menu.clear"));
         menu.add(menuItem);
         menuItem.addActionListener(
             new ActionListener() {
@@ -97,14 +95,14 @@ public class OutputConsole extends JTextArea {
 
         this.model = model;
 
-        setFont(new Font(bundle.getString("font.output.family"),
+        setFont(new Font(propertiesBundle.getString("font.output.family"),
                 Font.BOLD,
-                Integer.parseInt(bundle.getString("font.output.size"))));
+                Integer.parseInt(propertiesBundle.getString("font.output.size"))));
         setEditable(false);
 
         // create titled border
         TitledBorder title = BorderFactory.createTitledBorder(
-                BorderFactory.createLoweredBevelBorder(), bundle2.getString("title.output"));
+                BorderFactory.createLoweredBevelBorder(), messageBundle.getString("title.output"));
         title.setTitlePosition(TitledBorder.ABOVE_TOP);
         container.setBorder(title);
 

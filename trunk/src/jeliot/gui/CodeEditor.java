@@ -15,7 +15,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractButton;
@@ -35,8 +34,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import jeliot.mcode.MCodeUtilities;
 import jeliot.mcode.Highlight;
+import jeliot.mcode.MCodeUtilities;
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserPropertyResourceBundle;
 
 /**
  * NOT CURRENTLY USED IN JELIOT 3! CAN CONTAIN OLD AND NOT WORKING CODE!
@@ -50,26 +51,22 @@ public class CodeEditor extends JComponent {
     /**
      * The resource bundle for gui package
      */
-    static private ResourceBundle bundle = ResourceBundle.getBundle(
-                                      "jeliot.gui.resources.properties",
-                                      Locale.getDefault());
-    static private ResourceBundle bundle2 = ResourceBundle.getBundle(
-            "jeliot.gui.resources.messages",
-            Locale.getDefault());
+    static private UserPropertyResourceBundle propertiesbundle = ResourceBundles.getGuiUserPropertyResourceBundle();
+    static private ResourceBundle messagesBundle = ResourceBundles.getGuiMessageResourceBundle();
 
     /**
      * The String for the basic code template that is shown to the user in the beginning.
      */
-    private String template = bundle2.getString("code_editor.template");
+    private String template = messagesBundle.getString("code_editor.template");
 
-    private String title = bundle.getString("name") + bundle.getString("version");
+    private String title = propertiesbundle.getString("name") + propertiesbundle.getString("version");
     
     /**
 	 * Font for the editor area.
 	 */
-	private Font areaFont = new Font(bundle.getString("font.code_editor.family"),
+	private Font areaFont = new Font(propertiesbundle.getString("font.code_editor.family"),
                                      Font.PLAIN,
-                                     Integer.parseInt(bundle.getString("font.code_editor.size")));
+                                     Integer.parseInt(propertiesbundle.getString("font.code_editor.size")));
     /**
 	 * Insets for the text. Used for the layout.
 	 */
@@ -310,7 +307,7 @@ public class CodeEditor extends JComponent {
     private JButton makeToolButton(String label, String iconName,
             ActionListener listener) {
 
-        ImageIcon icon = new ImageIcon(bundle.getString("directory.images")+iconName);
+        ImageIcon icon = new ImageIcon(propertiesbundle.getString("directory.images")+iconName);
         JButton b = new JButton(label, icon);
         b.setVerticalTextPosition(AbstractButton.BOTTOM);
         b.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -329,18 +326,18 @@ public class CodeEditor extends JComponent {
      * @see #makeToolButton(String, String, ActionListener)
      */
     private JToolBar makeToolBar() {
-        JButton loadButton = makeToolButton(bundle2.getString("button.open"), bundle.getString("image.open_icon"), loader);
+        JButton loadButton = makeToolButton(messagesBundle.getString("button.open"), propertiesbundle.getString("image.open_icon"), loader);
         loadButton.setMnemonic(KeyEvent.VK_O);
-        JButton saveButton = makeToolButton(bundle2.getString("button.save"), bundle.getString("image.save_icon"), saver);
+        JButton saveButton = makeToolButton(messagesBundle.getString("button.save"), propertiesbundle.getString("image.save_icon"), saver);
         saveButton.setMnemonic(KeyEvent.VK_S);
-        JButton clearButton = makeToolButton(bundle2.getString("button.new"), bundle.getString("image.new_icon"), clearer);
+        JButton clearButton = makeToolButton(messagesBundle.getString("button.new"), propertiesbundle.getString("image.new_icon"), clearer);
         clearButton.setMnemonic(KeyEvent.VK_N);
 
-        JButton cutButton = makeToolButton(bundle2.getString("button.cut"), bundle.getString("image.cut_icon"), cutter);
+        JButton cutButton = makeToolButton(messagesBundle.getString("button.cut"), propertiesbundle.getString("image.cut_icon"), cutter);
         cutButton.setMnemonic(KeyEvent.VK_U);
-        JButton copyButton = makeToolButton(bundle2.getString("button.copy"), bundle.getString("image.copy_icon"), copyist);
+        JButton copyButton = makeToolButton(messagesBundle.getString("button.copy"), propertiesbundle.getString("image.copy_icon"), copyist);
         copyButton.setMnemonic(KeyEvent.VK_Y);
-        JButton pasteButton = makeToolButton(bundle2.getString("button.paste"), bundle.getString("image.paste_icon"), pasteur);
+        JButton pasteButton = makeToolButton(messagesBundle.getString("button.paste"), propertiesbundle.getString("image.paste_icon"), pasteur);
         pasteButton.setMnemonic(KeyEvent.VK_T);
 
         JToolBar p = new JToolBar();
@@ -361,25 +358,25 @@ public class CodeEditor extends JComponent {
      */
     JMenu makeProgramMenu() {
     	//TODO: add the mnemonics and accelerators to resources
-        JMenu menu = new JMenu(bundle2.getString("menu.program"));
+        JMenu menu = new JMenu(messagesBundle.getString("menu.program"));
         menu.setMnemonic(KeyEvent.VK_P);
         JMenuItem menuItem;
 
-        menuItem = new JMenuItem(bundle2.getString("menu.program.new"));
+        menuItem = new JMenuItem(messagesBundle.getString("menu.program.new"));
         menuItem.setMnemonic(KeyEvent.VK_N);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_N, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(clearer);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle2.getString("menu.program.open"));
+        menuItem = new JMenuItem(messagesBundle.getString("menu.program.open"));
         menuItem.setMnemonic(KeyEvent.VK_O);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_O, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(loader);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle2.getString("menu.program.save"));
+        menuItem = new JMenuItem(messagesBundle.getString("menu.program.save"));
         menuItem.setMnemonic(KeyEvent.VK_S);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_S, ActionEvent.CTRL_MASK));
@@ -396,25 +393,25 @@ public class CodeEditor extends JComponent {
      * @return  The Edit menu
      */
     JMenu makeEditMenu() {
-        JMenu menu = new JMenu(bundle2.getString("menu.edit"));
+        JMenu menu = new JMenu(messagesBundle.getString("menu.edit"));
         menu.setMnemonic(KeyEvent.VK_E);
         JMenuItem menuItem;
 
-        menuItem = new JMenuItem(bundle2.getString("menu.edit.cut"));
+        menuItem = new JMenuItem(messagesBundle.getString("menu.edit.cut"));
         menuItem.setMnemonic(KeyEvent.VK_U);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_X, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(cutter);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle2.getString("menu.edit.copy"));
+        menuItem = new JMenuItem(messagesBundle.getString("menu.edit.copy"));
         menuItem.setMnemonic(KeyEvent.VK_Y);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_C, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(copyist);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle2.getString("menu.edit.paste"));
+        menuItem = new JMenuItem(messagesBundle.getString("menu.edit.paste"));
         menuItem.setMnemonic(KeyEvent.VK_T);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_V, ActionEvent.CTRL_MASK));
@@ -423,7 +420,7 @@ public class CodeEditor extends JComponent {
 
         menu.addSeparator();
 
-        menuItem = new JMenuItem(bundle2.getString("menu.edit.select_all"));
+        menuItem = new JMenuItem(messagesBundle.getString("menu.edit.select_all"));
         menuItem.setMnemonic(KeyEvent.VK_A);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_A, ActionEvent.CTRL_MASK));

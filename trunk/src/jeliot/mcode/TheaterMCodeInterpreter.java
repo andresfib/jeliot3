@@ -203,7 +203,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         //TODO: Change this to be something more meaningful!
         if (line == null) {
             line = "" + Code.ERROR + Code.DELIM
-                    + bundle.getString("unknown.exception") + Code.DELIM + "0"
+                    + messageBundle.getString("unknown.exception") + Code.DELIM + "0"
                     + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
                     + Code.LOC_DELIM + "0";
         }
@@ -243,7 +243,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         if (readLine == null) {
             readLine = "" + Code.ERROR + Code.DELIM
-                    + bundle.getString("unknown.exception") + Code.DELIM + "0"
+                    + messageBundle.getString("unknown.exception") + Code.DELIM + "0"
                     + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
                     + Code.LOC_DELIM + "0";
         }
@@ -1662,7 +1662,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 //String message = "<H1>Runtime Error</H1>
                 // <P>The class that was supposed to be
                 // initiated could not be found.</P>";
-                director.showErrorMessage(new InterpreterError(bundle
+                director.showErrorMessage(new InterpreterError(messageBundle
                         .getString("notfoundclass.exception")));
             }
             ci = new ClassInfo(declaredClass);

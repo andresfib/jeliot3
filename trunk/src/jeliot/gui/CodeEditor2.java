@@ -16,7 +16,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractButton;
@@ -39,6 +38,8 @@ import javax.swing.text.PlainDocument;
 import jeliot.mcode.Highlight;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.tracker.Tracker;
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserPropertyResourceBundle;
 
 import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.tokenmarker.JavaTokenMarker;
@@ -56,26 +57,24 @@ public class CodeEditor2 extends JComponent {
     /**
      * The resource bundle for gui package
      */
-    static private ResourceBundle bundle = ResourceBundle.getBundle(
-            "jeliot.gui.resources.properties", Locale.getDefault());
-    
+    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getGuiUserPropertyResourceBundle();
+   
     /**
      * The resource bundle for gui package
      */
-    static private ResourceBundle bundle2 = ResourceBundle.getBundle(
-            "jeliot.gui.resources.messages", Locale.getDefault());
+    static private ResourceBundle messageBundle = ResourceBundles.getGuiMessageResourceBundle();
+    
     
     /**
      * The String for the basic code template that is shown to the user in the
      * beginning.
      */
-    private String template = bundle2.getString("code_editor.template");
+    private String template = messageBundle.getString("code_editor.template");
 
     /**
      * Comment for <code>title</code>
      */
-    private String title = bundle.getString("name") + " "
-            + bundle.getString("version");
+    private String title;
 
     /**
      * Tells whether or not the current file is changed since last loading or
@@ -265,7 +264,8 @@ public class CodeEditor2 extends JComponent {
      * Sets the layout and adds the JScrollPane with JTextArea area and JToolbar
      * in it. Initializes the FileChooser.
      */
-    public CodeEditor2(String udir) {
+    public CodeEditor2(String title, String udir) {
+        this.title = title;
         this.udir = udir;
         initFileChooser();
 
@@ -273,16 +273,16 @@ public class CodeEditor2 extends JComponent {
         area = new JEditTextArea();
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(
-                new Font(bundle.getString("font.code_editor.family"),
-                        Font.PLAIN, Integer.parseInt(bundle
+                new Font(propertiesBundle.getString("font.code_editor.family"),
+                        Font.PLAIN, Integer.parseInt(propertiesBundle
                                 .getString("font.code_editor.size"))));
         area.getDocument().getDocumentProperties().put(
-                PlainDocument.tabSizeAttribute, new Integer(4));
+                PlainDocument.tabSizeAttribute, Integer.valueOf(propertiesBundle.getString("editor.tab_size")));
         area.getDocument().addDocumentListener(dcl);
         area.setHorizontalOffset(5);
-        ln = new LineNumbers(new Font(bundle
+        ln = new LineNumbers(new Font(propertiesBundle
                 .getString("font.code_editor.family"), Font.PLAIN, Integer
-                .parseInt(bundle.getString("font.code_editor.size"))),
+                .parseInt(propertiesBundle.getString("font.code_editor.size"))),
                 new Insets(1, 0, 0, 0));
         area.addToLeft(ln);
         LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(area, ln);
@@ -307,7 +307,7 @@ public class CodeEditor2 extends JComponent {
         //String wdname = prop.getProperty("user.dir");
         //File wd = new File(wdname);
         File wd = new File(udir);
-        wd = new File(wd, bundle.getString("directory.examples"));
+        wd = new File(wd, propertiesBundle.getString("directory.examples"));
         fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(wd);
         fileChooser.setFileFilter(new JavaFileFilter());
@@ -327,9 +327,9 @@ public class CodeEditor2 extends JComponent {
     private JButton makeToolButton(String label, String iconName,
             ActionListener listener) {
         
-        URL imageURL = this.getClass().getClassLoader().getResource(bundle.getString("directory.images") + iconName);
+        URL imageURL = this.getClass().getClassLoader().getResource(propertiesBundle.getString("directory.images") + iconName);
         if (imageURL == null) {
-            imageURL = Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+iconName);
+            imageURL = Thread.currentThread().getContextClassLoader().getResource(propertiesBundle.getString("directory.images")+iconName);
         }
         ImageIcon icon = new ImageIcon(imageURL);
         
@@ -350,24 +350,24 @@ public class CodeEditor2 extends JComponent {
      * @see #makeToolButton(String, String, ActionListener)
      */
     private JToolBar makeToolBar() {
-        JButton loadButton = makeToolButton(bundle2.getString("button.open"),
-                bundle.getString("image.open_icon"), loader);
+        JButton loadButton = makeToolButton(messageBundle.getString("button.open"),
+                propertiesBundle.getString("image.open_icon"), loader);
         loadButton.setMnemonic(KeyEvent.VK_O);
-        JButton saveButton = makeToolButton(bundle2.getString("button.save"),
-                bundle.getString("image.save_icon"), saver);
+        JButton saveButton = makeToolButton(messageBundle.getString("button.save"),
+                propertiesBundle.getString("image.save_icon"), saver);
         saveButton.setMnemonic(KeyEvent.VK_S);
-        JButton clearButton = makeToolButton(bundle2.getString("button.new"),
-                bundle.getString("image.new_icon"), clearer);
+        JButton clearButton = makeToolButton(messageBundle.getString("button.new"),
+                propertiesBundle.getString("image.new_icon"), clearer);
         clearButton.setMnemonic(KeyEvent.VK_N);
 
-        JButton cutButton = makeToolButton(bundle2.getString("button.cut"),
-                bundle.getString("image.cut_icon"), cutter);
+        JButton cutButton = makeToolButton(messageBundle.getString("button.cut"),
+                propertiesBundle.getString("image.cut_icon"), cutter);
         cutButton.setMnemonic(KeyEvent.VK_U);
-        JButton copyButton = makeToolButton(bundle2.getString("button.copy"),
-                bundle.getString("image.copy_icon"), copyist);
+        JButton copyButton = makeToolButton(messageBundle.getString("button.copy"),
+                propertiesBundle.getString("image.copy_icon"), copyist);
         copyButton.setMnemonic(KeyEvent.VK_Y);
-        JButton pasteButton = makeToolButton(bundle2.getString("button.paste"),
-                bundle.getString("image.paste_icon"), pasteur);
+        JButton pasteButton = makeToolButton(messageBundle.getString("button.paste"),
+                propertiesBundle.getString("image.paste_icon"), pasteur);
         pasteButton.setMnemonic(KeyEvent.VK_T);
 
         JToolBar p = new JToolBar();
@@ -387,36 +387,36 @@ public class CodeEditor2 extends JComponent {
      * @return The Program menu
      */
     JMenu makeProgramMenu() {
-        JMenu menu = new JMenu(bundle2.getString("menu.program"));
+        JMenu menu = new JMenu(messageBundle.getString("menu.program"));
         menu.setMnemonic(KeyEvent.VK_F);
         JMenuItem menuItem;
 
-        menuItem = new JMenuItem(bundle2.getString("menu.program.new"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.program.new"));
         menuItem.setMnemonic(KeyEvent.VK_N);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(clearer);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle2.getString("menu.program.open"),
+        menuItem = new JMenuItem(messageBundle.getString("menu.program.open"),
                 KeyEvent.VK_O);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(loader);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle2.getString("menu.program.save"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.program.save"));
         menuItem.setMnemonic(KeyEvent.VK_S);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(saver);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle2.getString("menu.program.save_as"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.program.save_as"));
         menuItem.addActionListener(saveAs);
         menu.add(menuItem);
         
-        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(bundle2
+        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(messageBundle
                 .getString("menu.program.save_automatically"), saveAutomatically);
         cbmenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -434,25 +434,25 @@ public class CodeEditor2 extends JComponent {
      * @return The Edit menu
      */
     JMenu makeEditMenu() {
-        JMenu menu = new JMenu(bundle2.getString("menu.edit"));
+        JMenu menu = new JMenu(messageBundle.getString("menu.edit"));
         menu.setMnemonic(KeyEvent.VK_E);
         JMenuItem menuItem;
 
-        menuItem = new JMenuItem(bundle2.getString("menu.edit.cut"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.edit.cut"));
         menuItem.setMnemonic(KeyEvent.VK_U);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(cutter);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle2.getString("menu.edit.copy"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.edit.copy"));
         menuItem.setMnemonic(KeyEvent.VK_Y);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(copyist);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle2.getString("menu.edit.paste"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.edit.paste"));
         menuItem.setMnemonic(KeyEvent.VK_T);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
                 ActionEvent.CTRL_MASK));
@@ -461,7 +461,7 @@ public class CodeEditor2 extends JComponent {
 
         menu.addSeparator();
 
-        menuItem = new JMenuItem(bundle2.getString("menu.edit.select_all"));
+        menuItem = new JMenuItem(messageBundle.getString("menu.edit.select_all"));
         menuItem.setMnemonic(KeyEvent.VK_A);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
                 ActionEvent.CTRL_MASK));
@@ -628,24 +628,26 @@ public class CodeEditor2 extends JComponent {
     public void writeProgram(File file) {
         try {
             FileWriter w = new FileWriter(file);
-            w.write(area.getText());
+            String spaces = "";
+            int n = Integer.parseInt(propertiesBundle.getString("editor.tab_size"));
+            for (int i = 0; i < n; i++) {
+                spaces += " ";
+            }
+            String code = MCodeUtilities.replace(area.getText(), "\t", spaces);
+            w.write(code);
             w.close();
-
-            /*
-             * These are added here because JeliotWindow.tryToEnterAnimate()
-             * calls this method directly without calling saveProgram method
-             * first.
-             */
+            
             currentFile = file; // Jeliot 3
             setChanged(false); //Jeliot 3
             setTitle(file.getName()); // Jeliot 3
-
+            area.setText(code);
+            
         } catch (IOException e) {
             //e.printStackTrace();
             JOptionPane
                     .showMessageDialog(
                             masterFrame,
-							bundle2.getString("code_editor.save_failed"));
+							messageBundle.getString("code_editor.save_failed"));
         }
     }
 

@@ -1,16 +1,30 @@
 package jeliot.mcode;
 
-import jeliot.lang.*;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.lang.reflect.Modifier;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.ListIterator;
+import java.util.ResourceBundle;
+import java.util.Stack;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import jeliot.lang.ArrayInstance;
+import jeliot.lang.ClassInfo;
+import jeliot.lang.Instance;
+import jeliot.lang.ObjectFrame;
+import jeliot.lang.Reference;
+import jeliot.lang.Value;
+import jeliot.lang.Variable;
+import jeliot.lang.VariableInArray;
 import jeliot.theater.Actor;
 import jeliot.theater.Director;
 import jeliot.theater.ExpressionActor;
 import jeliot.theater.ValueActor;
-
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.lang.Class;
-import java.lang.reflect.Modifier;
-import java.util.*;
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserPropertyResourceBundle;
 
 /**
  * NOT IN USE IN THE CURRENT RELEASE, REPLACED BY MCodeInterpreter!
@@ -184,14 +198,12 @@ public class Interpreter {
     /**
      * The resource bundle for mcode messages
      */
-    static private ResourceBundle bundle = ResourceBundle.getBundle(
-            "jeliot.mcode.resources.messages", Locale.getDefault());
+    static private ResourceBundle messageBundle = ResourceBundles.getMCodeMessageResourceBundle();
 
     /**
      * The resource bundle for mcode properties
      */
-    static private ResourceBundle propertiesBundle = ResourceBundle.getBundle(
-            "jeliot.mcode.resources.properties", Locale.getDefault());
+    static private UserPropertyResourceBundle propertiesBundle = ResourceBundles.getMCodeUserPropertyResourceBundle();
 
     /**
      *  
@@ -250,7 +262,7 @@ public class Interpreter {
         //TODO: Change this to be something more meaningful!
         if (line == null) {
             line = "" + Code.ERROR + Code.DELIM
-                    + bundle.getString("unknown.exception") + Code.DELIM + "0"
+                    + messageBundle.getString("unknown.exception") + Code.DELIM + "0"
                     + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
                     + Code.LOC_DELIM + "0";
         }
@@ -314,7 +326,7 @@ public class Interpreter {
         //Change this to be something more meaningful!
         if (readLine == null) {
             readLine = "" + Code.ERROR + Code.DELIM
-                    + bundle.getString("unknown.exception")/*
+                    + messageBundle.getString("unknown.exception")/*
                                                             * + " <H1> Runtime
                                                             * Exception </H1> " + "
                                                             * <P> The reason
@@ -360,7 +372,7 @@ public class Interpreter {
                 int token = Integer.parseInt(tokenizer.nextToken());
                 if (token == Code.INPUT) {
                     interpret("" + Code.ERROR + Code.DELIM
-                            + bundle.getString("inputInConstructor.exception")
+                            + messageBundle.getString("inputInConstructor.exception")
                             + Code.DELIM + "0" + Code.LOC_DELIM + "0"
                             + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0");
                 }
@@ -1419,7 +1431,7 @@ public class Interpreter {
                                 // initiated could not be found.</P>";
                                 director
                                         .showErrorMessage(new InterpreterError(
-                                                bundle
+                                                messageBundle
                                                         .getString("notfoundclass.exception")));
                             }
                             ci = new ClassInfo(declaredClass);
@@ -3163,7 +3175,7 @@ public class Interpreter {
                 //There is an error if the execution comes here.
                 default:
                     {
-                        director.showErrorMessage(new InterpreterError(bundle
+                        director.showErrorMessage(new InterpreterError(messageBundle
                                 .getString("notImplemented.exception"), null));
                         /*
                          * " <H1> Runtime Error </H1><P> The feature is not

@@ -3,8 +3,9 @@ package jeliot.theater;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.util.Locale;
 import java.util.ResourceBundle;
+
+import jeliot.util.ResourceBundles;
 
 /**
  * This actor draws the dashed lines and titles to separate explicitly the
@@ -18,9 +19,7 @@ public class LinesAndText extends Actor {
     /**
      * The resource bundle for theater package
      */
-    static private ResourceBundle bundle = ResourceBundle.getBundle(
-                                      "jeliot.theater.resources.messages",
-                                      Locale.getDefault());
+    static private ResourceBundle bundle = ResourceBundles.getTheaterMessageResourceBundle();
 
 //DOC: Document!                                      
 
