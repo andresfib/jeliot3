@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import koala.dynamicjava.interpreter.EvaluationVisitor;
+import koala.dynamicjava.tree.Node;
 
 /**
  * This class contains helper methods for the MCode language
@@ -1096,4 +1097,19 @@ public class MCodeUtilities {
         }
         registeredSecondaryMCodeConnections.clear();
     }
+    
+    /**
+     * Converts the node location into a string list. Each element is delimited
+     * by Code.LOC_DELIM
+     * @param node the node to visit
+     */
+	public static String locationToString(Node node) {
+		return node.getBeginLine()
+			+ Code.LOC_DELIM
+			+ node.getBeginColumn()
+			+ Code.LOC_DELIM
+			+ node.getEndLine()
+			+ Code.LOC_DELIM
+			+ node.getEndColumn();
+	}
 }
