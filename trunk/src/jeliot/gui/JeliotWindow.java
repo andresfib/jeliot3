@@ -359,7 +359,7 @@ public class JeliotWindow {
 	 */
 	public void setUp() {
 
-		frame = new JFrame(jeliotVersion + " - Untitled");
+		frame = new JFrame(jeliotVersion);
 		frame.setIconImage(
 			iLoad.getImage(bundle.getString("image.jeliot_icon")));
 
