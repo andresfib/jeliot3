@@ -133,6 +133,9 @@ public class Jeliot {
      */
     private Theater theatre = new Theater();
 
+    /**
+     * 
+     */
     private TreeDraw callTree = new TreeDraw();
 
     /**
@@ -152,6 +155,9 @@ public class Jeliot {
      */
     private CodePane2 codePane = new CodePane2();
 
+    /**
+     * 
+     */
     private HistoryView hv = new HistoryView(codePane);
     
     /**
