@@ -5,12 +5,15 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
-  * @author Niko Myller
-  *
-  * created         23.6.2003
-  */
+ * Array Creation actor shows the "new Type[n]" is shown before the
+ * array is created. The structure is similar to SMIActor.
+ *  
+ * @author Niko Myller
+ * @see jeliot.theater.SMIActor
+ */
 public class ACActor extends Actor implements ActorContainer{
 
+//  DOC: document!
     /**
 	 *
 	 */
@@ -20,14 +23,17 @@ public class ACActor extends Actor implements ActorContainer{
 	 *
 	 */
 	Actor[] actors;
+    
     /**
 	 *
 	 */
 	Point[] locs;
+    
     /**
 	 *
 	 */
 	boolean[] bound;
+    
     /**
 	 *
 	 */
@@ -37,26 +43,32 @@ public class ACActor extends Actor implements ActorContainer{
 	 *
 	 */
 	int margin = 2;
+    
     /**
 	 *
 	 */
 	int titlemargin = 4;
+    
     /**
 	 *
 	 */
 	int namey;
+    
     /**
 	 *
 	 */
 	int namex;
+    
 	/**
 	 *
 	 */
 	int namew;
+    
 	/**
 	 *
 	 */
 	int nameh;
+    
     /**
 	 *
 	 */

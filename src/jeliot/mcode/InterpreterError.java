@@ -15,7 +15,7 @@ public class InterpreterError {
 	 */
 	protected String message;
 
-//  TODO: documentation.
+//  DOC: document!
 	/**
 	 *
 	 */

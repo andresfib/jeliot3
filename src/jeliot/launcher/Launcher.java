@@ -22,7 +22,7 @@ import koala.dynamicjava.parser.wrapper.JavaCCParserFactory;
  */
 public class Launcher extends Thread {
 
-//  TODO: documentation.
+//  DOC: document!
 	/**
 	 *
 	 */

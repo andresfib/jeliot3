@@ -10,7 +10,7 @@ package jeliot.lang;
  */
 public class Reference extends Value {
 
-//  TODO: documentation.
+//  DOC: document!
     /**
 	 *
 	 */

@@ -34,7 +34,7 @@ public class Value implements Cloneable {
 	 */
 	private int id;
 
-//  TODO: documentation.
+//  DOC: document!
     /**
 	 * @param val
 	 * @param type
