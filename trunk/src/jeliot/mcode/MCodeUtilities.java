@@ -415,7 +415,7 @@ public class MCodeUtilities {
             }
             return cType;
         }
-        return null;
+        return type;
     }
 
     /**

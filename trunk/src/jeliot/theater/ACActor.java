@@ -44,10 +44,6 @@ public class ACActor extends Actor implements ActorContainer{
 	 */
 	int margin = 2;
     
-    /**
-	 *
-	 */
-	int titlemargin = 4;
     
     /**
 	 *
@@ -83,8 +79,7 @@ public class ACActor extends Actor implements ActorContainer{
         actors = new Actor[n];
         locs = new Point[n];
         bound = new boolean[n];
-        FontMetrics fm = getFontMetrics();
-        bracketMargin = fm.stringWidth("][");        
+        bracketMargin = getFontMetrics().stringWidth("][") + 4;        
     }
 
     /**
@@ -101,13 +96,17 @@ public class ACActor extends Actor implements ActorContainer{
         if (next > 0) {
             if (actors[next-1] instanceof ReferenceActor) {
                 x = locs[next - 1].x +
-                    margin + bracketMargin + margin +
                     actors[next - 1].getWidth() +
-                    ((ReferenceActor) actors[next - 1]).getReferenceWidth();
+                    ((ReferenceActor) actors[next - 1]).getReferenceWidth() +
+                    margin + 
+                    bracketMargin +
+                    margin;
             } else {
                 x = locs[next - 1].x +
-                    margin + bracketMargin + margin +
-                    actors[next -1].getWidth();
+                    actors[next - 1].getWidth() +
+                    margin +
+                    bracketMargin +
+                    margin;
             }
         }
 
@@ -130,7 +129,7 @@ public class ACActor extends Actor implements ActorContainer{
                 return;
             }
         }
-        throw new RuntimeException();
+        throw new RuntimeException("This actor " + actor.getClass().getName() + " was not reserved.");
     }
 
     /**
@@ -138,7 +137,7 @@ public class ACActor extends Actor implements ActorContainer{
 	 */
 	public void paintActors(Graphics g) {
         int n = next;
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; i++) {
             if (bound[i]) {
                 g.translate(locs[i].x, locs[i].y);
                 actors[i].paintActor(g);
@@ -222,7 +221,7 @@ public class ACActor extends Actor implements ActorContainer{
         namew = fm.stringWidth(this.name + "[");
 
         int n = next;
-        int maxh = insets.top + titlemargin + nameh;
+        int maxh = insets.top + nameh;
         int maxw = insets.left + namew;
         for (int i = 0; i < n; ++i) {
             int h = locs[i].y + actors[i].getHeight();
@@ -232,7 +231,7 @@ public class ACActor extends Actor implements ActorContainer{
         }
         namex = insets.left;
         namey = insets.top + nameh;
-        setSize(maxw + insets.right, maxh + insets.bottom);
+        setSize(maxw + insets.right + fm.stringWidth("]"), maxh + insets.bottom);
     }
 
     /* (non-Javadoc)

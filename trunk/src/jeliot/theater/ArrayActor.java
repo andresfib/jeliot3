@@ -3,10 +3,8 @@ package jeliot.theater;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.lang.reflect.Array;
 import java.util.ResourceBundle;
 
-import jeliot.lang.ArrayUtilities;
 import jeliot.util.ResourceBundles;
 
 /**
@@ -43,7 +41,7 @@ public class ArrayActor extends InstanceActor {
     /**
      *
      */
-    private Object variableActors;
+    private VariableInArrayActor[] variableActors;
 
     /**
      *
@@ -74,7 +72,7 @@ public class ArrayActor extends InstanceActor {
     /**
      *
      */
-    private int[] dimensions;
+    private int length;
 
     /**
      * 
@@ -85,95 +83,56 @@ public class ArrayActor extends InstanceActor {
      * @param valueActors
      * @param dimensions
      */
-    public ArrayActor(Object valueActors, int[] dimensions, boolean primitive) {
+    public ArrayActor(ValueActor[] valueActors, int length, boolean primitive) {
 
-        this.dimensions = dimensions;
+        this.length = length;
         this.primitive = primitive;
         if (primitive) {
-            this.variableActors = Array.newInstance((new VariableInArrayActor()).getClass(),
-                    dimensions);
+            this.variableActors = new VariableInArrayActor[length];
         } else {
-            this.variableActors = Array.newInstance((new ReferenceVariableInArrayActor())
-                    .getClass(), dimensions);
+            this.variableActors = new ReferenceVariableInArrayActor[length];
         }
 
-        int n = dimensions.length;
-
-        int[] index = new int[n];
-
-        for (int i = 0; i < n; i++) {
-            index[i] = 0;
-        }
-
-        do {
-            Object tempArray = valueActors;
-            Object tempArray2 = variableActors;
-            String indexString = "";
-
-            for (int i = 0; i < n - 1; i++) {
-                indexString += "[" + Integer.toString(i) + "]";
-                tempArray = Array.get(tempArray, index[i]);
-                tempArray2 = Array.get(tempArray2, index[i]);
-            }
-
-            for (int i = 0; i < dimensions[n - 1]; i++) {
-                if (primitive) {
-                    VariableInArrayActor viaa = new VariableInArrayActor(this, indexString + "["
-                            + Integer.toString(i) + "]");
-                    ValueActor va = (ValueActor) Array.get(tempArray, i);
-                    viaa.setValue(va);
-                    viaa.setParent(this);
-                    Array.set(tempArray2, i, viaa);
+        for (int i = 0; i < length; i++) {
+            if (primitive) {
+                VariableInArrayActor viaa = new VariableInArrayActor(this, "[" + i + "]");
+                ValueActor va = (ValueActor) valueActors[i];
+                viaa.setValue(va);
+                viaa.setParent(this);
+                variableActors[i] = viaa;
+            } else {
+                ReferenceVariableInArrayActor viaa = new ReferenceVariableInArrayActor(this, "["
+                        + i + "]");
+                ValueActor va = (ValueActor) valueActors[i];
+                if (va instanceof ReferenceActor) {
+                    viaa.setValue((ReferenceActor) va);
                 } else {
-                    ReferenceVariableInArrayActor viaa = new ReferenceVariableInArrayActor(this,
-                            indexString + "[" + Integer.toString(i) + "]");
-                    ValueActor va = (ValueActor) Array.get(tempArray, i);
-                    if (va instanceof ReferenceActor) {
-                        viaa.setValue((ReferenceActor) va);
-                    } else {
-                        throw new RuntimeException(
-                                "Reference Variable in array needs to be initialized with reference.");
-                    }
-                    viaa.setParent(this);
-                    Array.set(tempArray2, i, viaa);
-
+                    throw new RuntimeException(
+                            "Reference Variable in array needs to be initialized with reference.");
                 }
+                viaa.setParent(this);
+                variableActors[i] = viaa;
+
             }
-
-        } while (ArrayUtilities.nextIndex(index, dimensions));
-
+        }
     }
 
     /**
      * @param valueColor
      */
     public void setValueColor(Color valueColor) {
-
-        int n = dimensions.length;
-
-        int[] index = new int[n];
-
-        for (int i = 0; i < n; i++) {
-            index[i] = 0;
+        for (int i = 0; i < length; i++) {
+            VariableInArrayActor viaa = (VariableInArrayActor) variableActors[i];
+            viaa.setValueColor(valueColor);
         }
-
-        do {
-            for (int i = 0; i < dimensions[n - 1]; i++) {
-                index[n - 1] = i;
-                VariableInArrayActor viaa = (VariableInArrayActor) ArrayUtilities.getObjectAt(
-                        variableActors, index);
-                viaa.setValueColor(valueColor);
-            }
-        } while (ArrayUtilities.nextIndex(index, dimensions));
-
     }
 
     /**
      * @param index
      * @return
      */
-    public VariableActor getVariableActor(int[] index) {
-        return (VariableActor) ArrayUtilities.getObjectAt(variableActors, index);
+    public VariableActor getVariableActor(int index) {
+        return (VariableActor) variableActors[index];
     }
 
     /**
@@ -187,32 +146,25 @@ public class ArrayActor extends InstanceActor {
         this.valueh = valueh;
         this.indexw = fm.stringWidth(messageBundle.getString("string.array_index"));
 
-        if (dimensions.length == 1) {
-            if (dimensions[0] == 0) {
-                int w = indexw + Math.max(fm.stringWidth(emptyArray1), fm.stringWidth(emptyArray2));
-                int h = 10 + 2 * (fm.getHeight());
-                setSize(w, h);
-            } else {
-                int n = dimensions[0];
-                int w = 6 + valuew + indexw;
-                int h = 3 + (valueh + 1) * n;
-                setSize(w, h);
-
-                int x = 2;
-                int y = 2;
-                for (int i = 0; i < n; ++i) {
-                    VariableInArrayActor viaa = (VariableInArrayActor) Array.get(variableActors, i);
-                    viaa.setSize(valuew, valueh);
-                    viaa.setLocation(x, y);
-                    viaa.calculateSize(indexw, valuew, valueh);
-                    y += 1 + valueh;
-                }
-            }
-        } else if (dimensions.length == 2) {
-            //TODO: Two dimensional arrays.
+        if (length == 0) {
+            int w = indexw + Math.max(fm.stringWidth(emptyArray1), fm.stringWidth(emptyArray2));
+            int h = 10 + 2 * (fm.getHeight());
+            setSize(w, h);
         } else {
-            //TODO: n dimensional arrays are not implemented (n > 2)
-            //Needs to be catched earlier.
+            int n = length;
+            int w = 6 + valuew + indexw;
+            int h = 3 + (valueh + 1) * n;
+            setSize(w, h);
+
+            int x = 2;
+            int y = 2;
+            for (int i = 0; i < n; ++i) {
+                VariableInArrayActor viaa = (VariableInArrayActor) variableActors[i];
+                viaa.setSize(valuew, valueh);
+                viaa.setLocation(x, y);
+                viaa.calculateSize(indexw, valuew, valueh);
+                y += 1 + valueh;
+            }
         }
     }
 
@@ -229,74 +181,65 @@ public class ArrayActor extends InstanceActor {
         int word1w = fm.stringWidth(emptyArray1);
         int word2w = fm.stringWidth(emptyArray2);
 
-        if (dimensions.length == 1) {
+        int n = length;
 
-            int n = dimensions[0];
+        if (n == 0) {
 
-            if (n == 0) {
+            int word1x = (w - word1w) / 2;
+            int word2x = (w - word2w) / 2;
 
-                int word1x = (w - word1w) / 2;
-                int word2x = (w - word2w) / 2;
+            int word1y = h / 2 - fonth / 2;
+            int word2y = h / 2 + fonth / 2;
 
-                int word1y = h / 2 - fonth / 2;
-                int word2y = h / 2 + fonth / 2;
+            // fill the area
+            g.setColor(lightColor);
+            g.fillRect(0, 0, w - 1, h - 1);
 
-                // fill the area
-                g.setColor(lightColor);
-                g.fillRect(0, 0, w - 1, h - 1);
+            // draw border
+            g.setColor(borderColor);
+            g.drawRect(0, 0, w - 1, h - 1);
+            g.setColor(darkColor);
+            g.drawRect(1, 1, w - 3, h - 3);
 
-                // draw border
-                g.setColor(borderColor);
-                g.drawRect(0, 0, w - 1, h - 1);
-                g.setColor(darkColor);
-                g.drawRect(1, 1, w - 3, h - 3);
+            g.setColor(fgcolor);
+            g.setFont(font);
+            g.drawString(emptyArray1, word1x, word1y);
+            g.drawString(emptyArray2, word2x, word2y);
 
-                g.setColor(fgcolor);
-                g.setFont(font);
-                g.drawString(emptyArray1, word1x, word1y);
-                g.drawString(emptyArray2, word2x, word2y);
+        } else {
 
-            } else {
+            // draw border
+            g.setColor(borderColor);
+            g.drawRect(0, 0, w - 1, h - 1);
+            g.setColor(darkColor);
+            g.drawRect(1, 1, w - 3, h - 3);
 
-                // draw border
-                g.setColor(borderColor);
-                g.drawRect(0, 0, w - 1, h - 1);
-                g.setColor(darkColor);
-                g.drawRect(1, 1, w - 3, h - 3);
+            // draw vertical line
+            int vlinex = 2 + indexw;
+            g.drawLine(vlinex, bw, vlinex, h - 2);
+            g.drawLine(vlinex + 1, bw, vlinex + 1, h - 2);
 
-                // draw vertical line
-                int vlinex = 2 + indexw;
-                g.drawLine(vlinex, bw, vlinex, h - 2);
-                g.drawLine(vlinex + 1, bw, vlinex + 1, h - 2);
-
-                // draw horizontal lines
-                int x1 = bw, x2 = w - 2 * bw;
-                int yc = bw - 1;
-                for (int i = 1; i < n; ++i) {
-                    yc += 1 + valueh;
-                    g.drawLine(x1, yc, x2, yc);
-                }
-
-                // draw cells
-                for (int i = 0; i < n; ++i) {
-
-                    VariableInArrayActor a = (VariableInArrayActor) Array.get(variableActors, i);
-
-                    int x = a.getX();
-                    int y = a.getY();
-                    g.translate(x, y);
-                    a.paintActor(g);
-                    g.translate(-x, -y);
-                }
+            // draw horizontal lines
+            int x1 = bw, x2 = w - 2 * bw;
+            int yc = bw - 1;
+            for (int i = 1; i < n; ++i) {
+                yc += 1 + valueh;
+                g.drawLine(x1, yc, x2, yc);
             }
 
-        } else if (dimensions.length == 2) {
-            //TODO: Two-dimensional array
-        } else {
-            //TODO: n-dimensional arrays are not implemented (n > 2)
-            //Needs to be catched earlier.
-        }
+            // draw cells
+            for (int i = 0; i < n; ++i) {
 
+                VariableInArrayActor a = (VariableInArrayActor) variableActors[i];
+
+                int x = a.getX();
+                int y = a.getY();
+                g.translate(x, y);
+                a.paintActor(g);
+                g.translate(-x, -y);
+            }
+
+        }
     }
 
 }
