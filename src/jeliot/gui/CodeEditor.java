@@ -39,49 +39,87 @@ import jeliot.mcode.*;
 import jeliot.theater.*;
 
 /**
-  * The simple code editor for the users to make the code for the animation theater.
+  * The simple code editor for the users to code their algorithm.
   *
   * @author Pekka Uronen
-  *
-  * created         10.8.1999
+  * @author Niko Myller
   */
 public class CodeEditor extends JComponent {
 
     /**
-     * The resource bundle
+     * The resource bundle for gui package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.gui.resources.properties",
                                       Locale.getDefault());
 
     /**
-     * The String for the basic code template that is shown to the user on the start of the Jeliot 2000.
+     * The String for the basic code template that is shown to the user in the beginning.
      */
     private String template = bundle.getString("code_editor.template");
 
-    private Font areaFont = new Font(bundle.getString("font.code_editor.family"),
+    
+    /**
+	 * Font for the editor area.
+	 */
+	private Font areaFont = new Font(bundle.getString("font.code_editor.family"),
                                      Font.PLAIN,
                                      Integer.parseInt(bundle.getString("font.code_editor.size")));
-    private Insets insets = new Insets(5, 5, 5, 5);
-    private LineNumbers nb;
+    /**
+	 * Insets for the text. Used for the layout.
+	 */
+	private Insets insets = new Insets(5, 5, 5, 5);
+    
+    /**
+	 * Line numbering component that handles the correct line numbering in the editor view.
+	 */
+	private LineNumbers nb;
 
-    private boolean changed = false; //Jeliot 3
+    /**
+	 * Tells whether or not the current file is changed since last loading or saving.
+     * Used to determine when the saving dialog should be popped up.
+	 */
+	private boolean changed = false;
 
-    private File currentFile = null; //Jeliot 3
+    /**
+	 * Pointing to the current file that is edited for saving before the compilation.
+	 */
+	private File currentFile = null;
 
-    public boolean isChanged() { //Jeliot 3
+    /**
+     * returns true if the document is changed and false
+     * if it is not changed. This is the value of the changed
+     * field.
+	 * @return if the document is changed or not.
+	 */
+	public boolean isChanged() {
         return changed;
     }
 
-    public File getCurrentFile() { //Jeliot 3
+    /**
+     * Returns the current file that is loaded.
+	 * @return The File object pointing to the current file.
+	 */
+	public File getCurrentFile() {
         return currentFile;
     }
 
-    public void setChanged(boolean changed) {
+    /**
+     * Set wheter or not the document is changed or not.
+	 * @param changed if true the document is changed if 
+     * false the document is not changed (means that it
+     * is just loaded or saved).
+	 */
+	public void setChanged(boolean changed) {
         this.changed = changed;
     }
 
-    private DocumentListener dcl = new DocumentListener() {
+    /**
+	 * Document listener is used to handle the line numbering
+     * correctly when the new line is created or the document
+     * is scrolled by the user
+	 */
+	private DocumentListener dcl = new DocumentListener() {
 
         public void changedUpdate(DocumentEvent e) {
             changed = true;
@@ -100,7 +138,7 @@ public class CodeEditor extends JComponent {
 
     };
 
-    /**
+	/**
      * Initialization of the text area for the user code.
      */
     JTextArea area = new JTextArea();
@@ -113,19 +151,20 @@ public class CodeEditor extends JComponent {
     }
 
 
-    /**
-     * The file chooser in which the users can load and save the program codes.
+	/**
+     * The file chooser in which the users can
+     * load and save the program codes.
      */
     private JFileChooser fileChooser;
 
 
-    /**
+	/**
      * The master frame.
      */
     private JFrame masterFrame;
 
 
-    /**
+	/**
      * ActionListener that handles the saving of the program code from the code area.
      */
     private ActionListener saver = new ActionListener() {
@@ -135,7 +174,7 @@ public class CodeEditor extends JComponent {
     };
 
 
-    /**
+	/**
      * ActionListener that handles the loading of the program code to the code area.
      */
     private ActionListener loader = new ActionListener() {
@@ -145,7 +184,7 @@ public class CodeEditor extends JComponent {
     };
 
 
-    /**
+	/**
      * ActionListener that handels the clearing of the code area.
      */
     private ActionListener clearer = new ActionListener() {
@@ -154,7 +193,7 @@ public class CodeEditor extends JComponent {
         }
     };
 
-    /**
+	/**
      * ActionListener that handels the clearing of the code area.
      */
     private ActionListener cutter = new ActionListener() {
@@ -163,7 +202,7 @@ public class CodeEditor extends JComponent {
         }
     };
 
-    /**
+	/**
      * ActionListener that handels the copying of the code area.
      */
     private ActionListener copyist = new ActionListener() {
@@ -172,7 +211,7 @@ public class CodeEditor extends JComponent {
         }
     };
 
-    /**
+	/**
      * ActionListener that handels the pasting of the code area.
      */
     private ActionListener pasteur = new ActionListener() {
@@ -181,7 +220,7 @@ public class CodeEditor extends JComponent {
         }
     };
 
-    /**
+	/**
      * ActionListener that handels the selection of the whole code area.
      */
     private ActionListener allSelector = new ActionListener() {
@@ -191,18 +230,19 @@ public class CodeEditor extends JComponent {
     };
 
 
-    /**
-     * Supposed to set the given frame as a masterframe
-     * Now it just sets the masterFrame as masterFrame
+	/**
+     * Set the given frame as the masterFrame.
      *
-     * @param   frame   The Frame that should be set as new masterFrame
+     * @param frame The Frame that is set as
+     * new masterFrame.
      */
     public void setMasterFrame(JFrame frame) {
         this.masterFrame = frame;
     }
 
-    /**
-     * Sets the layout and adds the JScrollPane with JTextArea area and JToolbar in it.
+	/**
+     * Sets the layout and adds the
+     * JScrollPane with JTextArea area and JToolbar in it.
      * Initializes the FileChooser.
      */
     public CodeEditor() {
@@ -214,7 +254,14 @@ public class CodeEditor extends JComponent {
     }
 
 
-    public JComponent makeScrollPane() {
+    /**
+     * Creates a ScrollPane object with a
+     * LineNumbers set as its left side.
+	 * @return a scroll pane with certain parameters
+     * and line numbering
+     * @see jeliot.gui.LineNumbers
+	 */
+	public JComponent makeScrollPane() {
         JScrollPane jsp = new JScrollPane(area);
         nb = new LineNumbers(areaFont, insets);
         nb.setPreferredHeight(area.getSize().height);
@@ -222,8 +269,9 @@ public class CodeEditor extends JComponent {
         return jsp;
     }
 
-    /**
-     * Sets up the file chooser with the user's working directory as default directory.
+	/**
+     * Sets up the file chooser with the user's
+     * working directory as default directory.
      */
     private void initFileChooser() {
         // set up the file chooser with user's working
@@ -237,7 +285,7 @@ public class CodeEditor extends JComponent {
     }
 
 
-    /**
+	/**
      * Makes the JButton from the parameters given.
      *
      * @param   label   The label of the button.
@@ -258,7 +306,7 @@ public class CodeEditor extends JComponent {
     }
 
 
-    /**
+	/**
      * The method makes the Buttons for the toolbar of the codearea.
      * Then it adds the button to the JToolBar and returns it.
      * Uses makeToolButton(String, String, ActionListener) -method.
@@ -292,10 +340,10 @@ public class CodeEditor extends JComponent {
         return p;
     }
 
-    /**
+	/**
      * Constructs the Program menu.
      *
-     * @return  The Program menu (JMenu) for Jeliot3
+     * @return The Program menu
      */
     JMenu makeProgramMenu() {
         JMenu menu = new JMenu(bundle.getString("menu.program"));
@@ -326,10 +374,10 @@ public class CodeEditor extends JComponent {
     }
 
 
-    /**
+	/**
      * Constructs the Edit menu.
      *
-     * @return  The Edit menu (JMenu) for the Jeliot 2000
+     * @return  The Edit menu
      */
     JMenu makeEditMenu() {
         JMenu menu = new JMenu(bundle.getString("menu.edit"));
@@ -369,7 +417,7 @@ public class CodeEditor extends JComponent {
         return menu;
     }
 
-    /**
+	/**
      * Loads the program from a file to the JTextArea area.
      * Uses readProgram(File file) method to read the file.
      * Uses setProgram(String str) method to set the content of the file
@@ -391,9 +439,10 @@ public class CodeEditor extends JComponent {
         }
     }
 
-    /**
-     * Saves the program from the JTextArea area to the file.
-     * Uses writeProgram(File file) method to write the code into a file.
+	/**
+     * Saves the program from the JTextArea area to
+     * the file. Uses writeProgram(File file) method
+     * to write the code into a file.
      *
      * @see #writeProgram(File)
      */
@@ -407,10 +456,12 @@ public class CodeEditor extends JComponent {
         }
     }
 
-    /**
-     * Saves the content of the JTextArea area to a given file.
+	/**
+     * Saves the content of the
+     * JTextArea area to a given file.
      *
-     * @param   file    The file where the content of the JTextArea is saved.
+     * @param file The file where the content of
+     * JTextArea is saved.
      */
     public void writeProgram(File file) {
         try {
@@ -424,11 +475,16 @@ public class CodeEditor extends JComponent {
         }
     }
 
-    /**
-     * Reads the content of the given file and returns the content of the file as String.
+	/**
+     * Reads the content of the given file and
+     * returns the content of the file as String.
      *
-     * @param   file    The file from which the content is read and returned for the use of loadProgram() method.
-     * @return  The content of the file that was given as parameter.
+     * @param file The file from which the content
+     * is read and returned for the use of loadProgram()
+     * method.
+     * @return The content of the file that was given
+     * as parameter.
+     * @see #loadProgram()
      */
     String readProgram(File file) {
         try {
@@ -452,6 +508,9 @@ public class CodeEditor extends JComponent {
 
 
     /**
+	 * 
+	 */
+	/**
      * Sets in JTextAre area the default text as given in template.
      */
     void clearProgram() {
@@ -461,10 +520,10 @@ public class CodeEditor extends JComponent {
     }
 
 
-    /**
+	/**
      * The given String program object will be set as the text inside the JTextArea area.
      *
-     * @param   program The string that will be set in JTextArea area as the program code.
+     * @param program The string that will be set in JTextArea area as the program code.
      */
     void setProgram(String program) {
         area.setText(program);
@@ -472,7 +531,11 @@ public class CodeEditor extends JComponent {
     }
 
 
-    public int calculateLines(String text) {
+    /**
+	 * @param text
+	 * @return
+	 */
+	public int calculateLines(String text) {
         int lines = 1;
         int index = text.indexOf("\n");
         while (index >= 0) {
@@ -483,7 +546,10 @@ public class CodeEditor extends JComponent {
         return lines;
     }
 
-    public void validateScrollPane() {
+    /**
+	 * 
+	 */
+	public void validateScrollPane() {
         final int lines = calculateLines(area.getText());
 
         if (nb != null) {
@@ -497,7 +563,7 @@ public class CodeEditor extends JComponent {
     }
 
 
-    /**
+	/**
      * Method returns the program code inside the JTextArea as String -object
      * Tabulators are changed to spaces for uniform handling of white spaces.
      * One tabulator corresponds four ASCII white spaces.
@@ -510,11 +576,9 @@ public class CodeEditor extends JComponent {
         return programCode;
     }
 
-    /**
+	/**
      * Method highlights the specified Statement area by selecting it.
-     *
-     * @param   left    The beginning of the selection.
-     * @param   right   The end of the selection.
+     * @param h
      */
     public void highlightStatement(Highlight h) {
         int l = 0, r = 0;
@@ -547,11 +611,9 @@ public class CodeEditor extends JComponent {
     }
 
 
-    /**
+	/**
      * Method highlights the specified code area by selecting it.
-     *
-     * @param   left    The beginning of the selection.
-     * @param   right   The end of the selection.
+     * @param h
      */
     public void highlight(Highlight h) {
         int l = 0, r = 0;

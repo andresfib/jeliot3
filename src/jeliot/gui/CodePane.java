@@ -14,135 +14,178 @@ import javax.swing.SwingUtilities;
 
 import jeliot.theater.*;
 
-/** This is the component that shows and highlights the program while
-  * Jeliot is animating.
-  *
-  * @author Pekka Uronen
-  *
-  * created         10.8.1999
-  */
+/**
+ * This is the component that shows and highlights the program while
+ * Jeliot is animating, called also code view.
+ *
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class CodePane extends JComponent {
 
-    /**
-     * The resource bundle
-     */
-    static private ResourceBundle bundle = ResourceBundle.getBundle(
-                                      "jeliot.gui.resources.properties",
-                                      Locale.getDefault());
+	/**
+	 * The resource bundle for gui package.
+	 */
+	static private ResourceBundle bundle =
+		ResourceBundle.getBundle(
+			"jeliot.gui.resources.properties",
+			Locale.getDefault());
 
-    private LineNumbers nb;
-    private Font font = new Font(bundle.getString("font.code_pane.family"),
-                                 Font.PLAIN,
-                                 Integer.parseInt(bundle.getString("font.code_pane.size")));
-    private Insets insets = new Insets(5, 5, 5, 5);
-    private JScrollPane jsp;
+	/**
+	 * Line numbering component that handles the correct line numbering in the code view.
+	 */
+	private LineNumbers nb;
 
-    /**
-     * The text area where the program code is shown and highlighted.
-     */
-    JTextArea area = new JTextArea();
-    {
-        area.setMargin(insets);
-        area.setFont(font);
-        area.setTabSize(4);
-        area.setBackground(new Color(Integer.decode(bundle.getString("color.code_pane.background")).intValue()));
-        area.setSelectionColor(new Color(Integer.decode(bundle.getString("color.code_pane.selection")).intValue()));
-        area.setSelectedTextColor(new Color(Integer.decode(bundle.getString("color.code_pane.selection.text")).intValue()));
-        area.setEditable(false);
-    }
+	/**
+	 * Font for the code view area.
+	 */
+	private Font font =
+		new Font(
+			bundle.getString("font.code_pane.family"),
+			Font.PLAIN,
+			Integer.parseInt(bundle.getString("font.code_pane.size")));
+	/**
+	 * Insets for the text. Used for the layout.
+	 */
+	private Insets insets = new Insets(5, 5, 5, 5);
 
+	/**
+	 * Pane that handles the scrolling of the code view or the TextArea. 
+	 */
+	private JScrollPane jsp;
 
-    /**
-     * Constructs the CodePane -objects.
-     * Sets the layout.
-     * Adds the JScrollPane with JTextArea in the layout.
-     */
-    public CodePane() {
-        setLayout(new BorderLayout());
-        add("Center", makeScrollPane());
-        validateScrollPane();
-    }
+	/**
+	 * The text area where the program code is shown and highlighted.
+	 */
+	JTextArea area = new JTextArea();
+	{
+		area.setMargin(insets);
+		area.setFont(font);
+		area.setTabSize(4);
+		area.setBackground(
+			new Color(
+				Integer
+					.decode(bundle.getString("color.code_pane.background"))
+					.intValue()));
+		area.setSelectionColor(
+			new Color(
+				Integer
+					.decode(bundle.getString("color.code_pane.selection"))
+					.intValue()));
+		area.setSelectedTextColor(
+			new Color(
+				Integer
+					.decode(bundle.getString("color.code_pane.selection.text"))
+					.intValue()));
+		area.setEditable(false);
+	}
 
-    public JComponent makeScrollPane() {
-        jsp = new JScrollPane(area);
-        nb = new LineNumbers(font, insets);
-        jsp.setRowHeaderView(nb);
-        validateScrollPane();
-        return jsp;
-    }
+	/**
+	 * Constructs the CodePane -object, sets the layout and
+	 * adds the JScrollPane with JTextArea in the layout.
+	 */
+	public CodePane() {
+		setLayout(new BorderLayout());
+		add("Center", makeScrollPane());
+		validateScrollPane();
+	}
 
-    /**
-     * Sets the given program code String text into the JTextArea area.
-     *
-     * @param text The program code to be set in the JTextArea area.
-     */
-    public void installProgram(String text) {
-        area.setText(text);
-        validateScrollPane();
-    }
+	/**
+	 * Creates the ScrollPane that shows the line
+	 * numbering on the left side and the text area
+	 * in the center. 
+	 * @return the set up scrollpane.
+	 */
+	public JComponent makeScrollPane() {
+		jsp = new JScrollPane(area);
+		nb = new LineNumbers(font, insets);
+		jsp.setRowHeaderView(nb);
+		validateScrollPane();
+		return jsp;
+	}
 
-    public int calculateLines(String text) {
-        int lines = 1;
-        int index = text.indexOf("\n");
-        while (index >= 0) {
-            lines++;
-            index++;
-            index = text.indexOf("\n", index);
-        }
-        return lines;
-    }
+	/**
+	 * Sets the given program code String text into
+	 * the JTextArea area.
+	 *
+	 * @param text The program code to be set in the
+	 * JTextArea area.
+	 */
+	public void installProgram(String text) {
+		area.setText(text);
+		validateScrollPane();
+	}
 
-    public void validateScrollPane() {
-        final int lines = calculateLines(area.getText());
+	/**
+     * Counts how many lines the current program code is taking.
+	 * @param text the program code
+	 * @return the number of lines the given program code takes.
+	 */
+	public int calculateLines(String text) {
+		int lines = 1;
+		int index = text.indexOf("\n");
+		while (index >= 0) {
+			lines++;
+			index++;
+			index = text.indexOf("\n", index);
+		}
+		return lines;
+	}
 
-        if (nb != null) {
-            Runnable updateAComponent = new Runnable() {
-                public void run() {
-                    nb.setHeightByLines(lines);
-                }
-            };
-            SwingUtilities.invokeLater(updateAComponent);
-        }
-    }
+	/**
+	 * Validates the scroll pane by setting the correct
+     * number of lines to the LineNumbers component. 
+	 */
+	public void validateScrollPane() {
+		final int lines = calculateLines(area.getText());
 
-    /**
-     * Method highlights the specified Statement area by selecting it.
-     *
-     * @param left The beginning of the selection.
-     * @param right The end of the selection.
-     */
-    public void highlightStatement(Highlight h) {
+		if (nb != null) {
+			Runnable updateAComponent = new Runnable() {
+				public void run() {
+					nb.setHeightByLines(lines);
+				}
+			};
+			SwingUtilities.invokeLater(updateAComponent);
+		}
+	}
 
-        int l = 0, r = 0;
+	/**
+	 * Method highlights the specified Statement area
+     * by selecting it.
+	 * 
+	 * @param h
+	 */
+	public void highlightStatement(Highlight h) {
 
-        try {
-            if (h.getBeginLine() > 0) {
-                l = area.getLineStartOffset(h.getBeginLine() - 1);
-            }
-            l += h.getBeginColumn();
+		int l = 0, r = 0;
 
-            if (h.getEndLine() > 0) {
-                r = area.getLineStartOffset(h.getEndLine() - 1);
-            }
-            r += h.getEndColumn();
-        } catch (Exception e) { }
+		try {
+			if (h.getBeginLine() > 0) {
+				l = area.getLineStartOffset(h.getBeginLine() - 1);
+			}
+			l += h.getBeginColumn();
 
-        final int left = l-1;
-        final int right = r;
+			if (h.getEndLine() > 0) {
+				r = area.getLineStartOffset(h.getEndLine() - 1);
+			}
+			r += h.getEndColumn();
+		} catch (Exception e) {}
 
-        Runnable updateAComponent = new Runnable() {
-            public void run() {
-                area.requestFocus();
-                area.setCaretPosition(left+1);
-                if (left != 0 && left == right) {
-                    area.select(left, right+1);
-                } else {
-                    area.select(left, right);
-                }
-            }
-        };
-        SwingUtilities.invokeLater(updateAComponent);
-    }
+		final int left = l - 1;
+		final int right = r;
 
+		Runnable updateAComponent = new Runnable() {
+			public void run() {
+				area.requestFocus();
+				area.setCaretPosition(left + 1);
+				if (left != 0 && left == right) {
+					area.select(left, right + 1);
+				} else {
+					area.select(left, right);
+				}
+			}
+		};
+		SwingUtilities.invokeLater(updateAComponent);
+	}
 
 }

@@ -13,32 +13,38 @@ import javax.swing.JScrollPane;
 
 /**
  *
- * The design of the help window that maybe will be added
- * inside Jeliot's next version.
+ * The design of the help window.
  *
- * @author Pekka Uronen
+ * @author Niko Myller
+ * @author Andrés Moreno
  *
  */
 public class HelpWindow extends JFrame {
 
     /**
-     * The resource bundle
+     * The resource bundle for gui package.
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.gui.resources.properties",
                                       Locale.getDefault());
 
     /**
-     * The editor pane where the help will be shown.
+     * The pane where helping information will be shown.
      */
     private JEditorPane editorPane = new JEditorPane();
-    private JScrollPane jsp;
+    
+    /**
+     * The pane that handles the scrolling of the
+     * editor pane showing the content.
+     */
+	private JScrollPane jsp;
 
     /**
-     * The Constructor constructs the HelpWindow.
-     * Constructs the JFrame.
+     * constructs the HelpWindow by creating a JFrame.
      * Sets inside the JFrame JScrollPane with JEditorPane editorPane.
      * Sets the size of the JFrame as 400 x 600
+     * @param icon Icon to be shown in the upper right corner of the window.
+     * @param udir directory of the current invocation 
      */
     public HelpWindow(Image icon, String udir) {
         super();
@@ -63,7 +69,7 @@ public class HelpWindow extends JFrame {
     /**
      * Shows the given url in the editor pane.
      *
-     * @param   url The given url will be showed in JEditorPane editorPane.
+     * @param   url The document in the url will be showed in JEditorPane editorPane.
      */
     public void showURL(URL url) {
         try {
