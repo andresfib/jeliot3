@@ -147,6 +147,7 @@ To display the available targets type:
       </fileset>
       <fileset dir="${resources}">
         <include name="${package-prefix}/**/*"/>
+        <exclude name="${package-prefix}/properties.properties"/>
       </fileset>
     </jar>
     <!--After creating the jar files we copy the instalation config file and run it-->
@@ -178,10 +179,16 @@ To display the available targets type:
     <copy file="${src}/docs/BSD_license.txt" todir="${dist}"/>
     <copy file="${src}/jeliot.bat" todir="${dist}"/>
     <copy file="${src}/jeliot.ico" todir="${dist}"/>
+    <copy file="${src}/properties.properties" todir="${dist}"/>
   </target>
+	
+	
   <target name="javadoc" depends="init">
   	<javadoc packagenames="*" sourcepath="${src}" destdir="${dist}/docs/javadoc" private="true" author="false" version="false" use="true" additionalparam="-breakiterator" windowtitle="Jeliot 3 Javadoc" doctitle="Jeliot 3 and DynamicJava API Specification" bottom="Copyright 2004 Stephane Hillion, Niko Myller, Andres Moreno, Erkki Sutinen, Mordechai Ben-Ari and Pekka Uronen. All Rights Reserved." /> 
   </target>
+	
+	
+	
   <target name="javadoc_tex" depends="init">
   	<javadoc packagenames="*" sourcepath="${src}" private="true" author="false" version="false" additionalparam="-breakiterator" docletpath="doclet.jar"> 
        <doclet name="com.c2_tech.doclets.TexDoclet">
@@ -190,6 +197,8 @@ To display the available targets type:
 	     </doclet>
   	</javadoc>
 
+  	
+  	
   </target>
   <!-- Global clean ================================================= -->
   <target name="clean" depends="clean-compile">
@@ -198,6 +207,8 @@ To display the available targets type:
     <delete file="${dist}${minor}.zip"/>
     <delete file="${dist}${minor}-src.zip"/>
   </target>
+	
+	
 	
   <!--create the jeliot extension for bluej -->
   <target name="blueJExt" depends="compile,jars">
