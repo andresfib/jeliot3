@@ -76,7 +76,14 @@ To display the available targets type:
   <!-- Compilation ==================================================== -->
   <target name="compile" depends="init">
     <mkdir dir="${dest}"/>
-    <javac srcdir="${src}" destdir="${dest}" deprecation="on" debug="true"/>
+<!--    <javac srcdir="${src}" destdir="${dest}" deprecation="on"
+    excludes="${src}/examples/**"/>-->
+  <javac destdir="${dest}" deprecation="on">
+    <src path="${src}"/>
+  </javac>
+   <delete>
+      <fileset dir="${dest}" includes="*.class"/>
+   </delete>
   </target>
 
   <target name="clean-compile" depends="init">
@@ -92,7 +99,7 @@ To display the available targets type:
      <zipfileset dir="src" prefix="src"/>
      <zipfileset dir="lib" prefix="lib"/>
      <zipfileset dir="resources" prefix="resources"/>
-     <zipfileset dir="docs" prefix="docs/"/>
+     <zipfileset dir="src/docs" prefix="docs/"/>
      <fileset dir="">
        <include name="**/build.*"/>
        <include name="**/jeliot.mf"/>
@@ -117,29 +124,24 @@ To display the available targets type:
    <!-- <mkdir dir="${dist}/docs"/>
     <mkdir dir="${dist}/docs/javadoc"/> -->
     <copy todir="${dist}/docs">
-      <fileset dir="${dest}/docs"/>
+      <fileset dir="${src}/docs"/>
     </copy>
     <copy todir="${dist}/images">
-      <fileset dir="${dest}/images"/>
+      <fileset dir="${src}/images"/>
     </copy>
     <copy todir="${dist}/examples">
-      <fileset dir="${dest}/examples"/>
+      <fileset dir="${src}/examples"/>
     </copy>
-
-<!--    <copy file="README" todir="${dist}"/>-->
-  </target>
-
-  <target name="javadoc" depends="init">
-    <javadoc packagenames="koala.*"
-             sourcepath="${src}"
-             destdir="${dist}/docs/javadoc"
-             author="false"
-             version="false"
-             use="true"
-             windowtitle="DynamicJava Javadoc"
-             doctitle="DynamicJava API Specification"
-             bottom="Copyright &#169; 2001 Stephane Hillion. All Rights Reserved.">
-    </javadoc>
+    <copy todir="${dest}/images">
+      <fileset dir="${src}/images"/>
+    </copy>
+    <copy todir="${dest}/examples">
+      <fileset dir="${src}/examples"/>
+    </copy>
+    
+    <copy file="${src}/docs/license.txt" todir="${dist}"/>
+    <copy file="${src}/docs/BSD_license.txt" todir="${dist}"/>
+    <copy file="${src}/jeliot.bat" todir="${dist}"/>
   </target>
 
   <!-- Global clean ================================================= -->

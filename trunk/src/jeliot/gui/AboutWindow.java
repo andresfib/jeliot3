@@ -21,9 +21,8 @@ public class AboutWindow extends JFrame {
 	/**
 	 * The tabbed pane where about info and GPL  will be shown.
 	 */
-    private JTabbedPane tabbedPane = new JTabbedPane();
     private JEditorPane aboutPane = new JEditorPane();
-    private JEditorPane gplPane = new JEditorPane();
+    private JScrollPane jsp = new JScrollPane();
 
 	/**
 	 * The Constructor constructs the HelpWindow.
@@ -38,16 +37,14 @@ public class AboutWindow extends JFrame {
         setIconImage(icon);
 
         aboutPane.setEditable(false);
-        gplPane.setEditable(false);
-
         try {
-            showURL((new URL("file://" + udir + "\\docs\\gpl.html")).toString(), gplPane);        
             showURL((new URL("file://" + udir + "\\docs\\about.html")).toString(), aboutPane);
         } catch (Exception e) { e.printStackTrace(); }
 
-        tabbedPane.addTab("About", new JScrollPane(aboutPane));
-        tabbedPane.addTab("License", new JScrollPane(gplPane));
-        getContentPane().add(tabbedPane);
+        jsp.add(aboutPane);
+        //jsp.setScrollbarPolicy(JScrollbar.ALWAYS_VERTICALSCROLLBAR);
+        getContentPane().add(jsp);
+
         /*
         addWindowListener(
             new WindowAdapter() {
