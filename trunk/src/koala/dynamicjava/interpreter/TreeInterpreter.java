@@ -65,6 +65,7 @@ import koala.dynamicjava.interpreter.throwable.ReturnException;
 import koala.dynamicjava.parser.wrapper.ParseError;
 import koala.dynamicjava.parser.wrapper.ParserFactory;
 import koala.dynamicjava.parser.wrapper.SourceCodeParser;
+import koala.dynamicjava.tree.ConstructorDeclaration;
 import koala.dynamicjava.tree.FormalParameter;
 import koala.dynamicjava.tree.MethodDeclaration;
 import koala.dynamicjava.tree.Node;
@@ -1006,9 +1007,9 @@ public class TreeInterpreter implements Interpreter {
      * Registers a constructor arguments
      */
     public void registerConstructorArguments(String sig, List params, List exprs,
-            ImportationManager im) {
+            ImportationManager im, ConstructorDeclaration cd) { //Jeliot 3
         localConstructorParameters.add(sig);
-        constructorParameters.put(sig, new ConstructorParametersDescriptor(params, exprs, im));
+        constructorParameters.put(sig, new ConstructorParametersDescriptor(params, exprs, im, cd)); //Jeliot 3
     }
 
     /**
@@ -1178,12 +1179,13 @@ public class TreeInterpreter implements Interpreter {
         	if (inThisCall){
         		methodName = "this";
         	}else { //inSuperCall
-        		
+        		/*
         		int depth = ((Integer) MCodeUtilities.superClassesStack.pop()).intValue();
         		MCodeUtilities.superClassesStack.push(new Integer(++depth));
         		for (int k = 0; k < depth - 1; k++) {
         			methodName += "super.";
         		}
+                */
         		methodName += "super";
         	}
         	long counter = EvaluationVisitor.getCounter();
@@ -1198,10 +1200,10 @@ public class TreeInterpreter implements Interpreter {
         		
         		//meth.getClass();
         		MCodeUtilities.write("" + Code.QN + Code.DELIM + counter + Code.DELIM + "this"
-        				+ Code.DELIM + Code.UNKNOWN + Code.DELIM + c.getName());
+        				+ Code.DELIM + Code.UNKNOWN + Code.DELIM + c.getName() + Code.DELIM + "0,0,0,0");
         		
         		MCodeUtilities.write("" + Code.OMC + Code.DELIM + methodName + Code.DELIM + "0"
-        				+ Code.DELIM + counter + Code.DELIM + "this" + Code.DELIM + "0,0,0,0");
+        				+ Code.DELIM + counter + Code.DELIM + c.getName() + Code.DELIM + MCodeUtilities.locationToString(cpd.cd));
         		//+ MCodeUtilities.locationToString(meth));
         		
         	} else {
@@ -1211,8 +1213,8 @@ public class TreeInterpreter implements Interpreter {
 						+ Code.DELIM + "0,0,0,0");
         		
         		MCodeUtilities.write("" + Code.OMC + Code.DELIM + methodName + Code.DELIM
-        				+ numParameters + Code.DELIM + counter + Code.DELIM + "this" + Code.DELIM
-						+ "0,0,0,0");
+        				+ numParameters + Code.DELIM + counter + Code.DELIM + c.getName() + Code.DELIM
+                        + MCodeUtilities.locationToString(cpd.cd));
         		
         	}
         }
@@ -1236,10 +1238,12 @@ public class TreeInterpreter implements Interpreter {
                 long auxCounter = EvaluationVisitor.getCounter();
                 MCodeUtilities.incNumParameters();
                 
+                Node n = (Node) it.next();
+
                 MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
-                		+ Code.DELIM + auxCounter + Code.DELIM + "0,0,0,0");
+                		+ Code.DELIM + auxCounter + Code.DELIM + MCodeUtilities.locationToString(n));
                 
-                result[i++] = ((Node) it.next()).acceptVisitor(v);
+                result[i++] = n.acceptVisitor(v);
                 
                 
                 MCodeUtilities.write("" + Code.P + Code.DELIM + auxCounter
@@ -1256,7 +1260,7 @@ public class TreeInterpreter implements Interpreter {
         
         if (inThisCall || inSuperCall){
         	MCodeUtilities.write(Code.PARAMETERS + Code.DELIM + MCodeUtilities.argToString(argnames));
-        	MCodeUtilities.write(Code.MD + Code.DELIM + MCodeUtilities.locationToString(meth));
+        	MCodeUtilities.write(Code.MD + Code.DELIM + MCodeUtilities.locationToString(cpd.cd));
         	
         }
         return result;
@@ -1318,6 +1322,8 @@ public class TreeInterpreter implements Interpreter {
 
         TreeInterpreter interpreter;
 
+        ConstructorDeclaration cd;
+        
         /**
          * Creates a new descriptor
          */
@@ -1326,6 +1332,12 @@ public class TreeInterpreter implements Interpreter {
             arguments = args;
             importationManager = im;
             interpreter = TreeInterpreter.this;
+        }
+        
+        //Jeliot 3
+        ConstructorParametersDescriptor(List params, List args, ImportationManager im, ConstructorDeclaration cd) {
+            this(params,args,im);
+            this.cd = cd;
         }
     }
 }
