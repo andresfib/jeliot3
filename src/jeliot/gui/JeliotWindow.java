@@ -321,7 +321,7 @@ public class JeliotWindow {
         JMenu programMenu = editor.makeProgramMenu();
 
         menuItem = new JMenuItem("Exit");
-        menuItem.setMnemonic(KeyEvent.VK_Q);
+        menuItem.setMnemonic(KeyEvent.VK_X);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(exit);
@@ -391,7 +391,7 @@ public class JeliotWindow {
         menu.add(menuItem);
         
         menuItem = new JMenuItem("About Jeliot");
-        menuItem.setMnemonic(KeyEvent.VK_A);
+        menuItem.setMnemonic(KeyEvent.VK_B);
         //        menuItem.setAccelerator(KeyStroke.getKeyStroke(
         //        KeyEvent.VK_M, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(
@@ -415,7 +415,7 @@ public class JeliotWindow {
     private JMenu makeAnimationMenu() {
 
         JMenu menu = new JMenu("Animation");
-        menu.setMnemonic(KeyEvent.VK_N);
+        menu.setMnemonic(KeyEvent.VK_A);
         JMenuItem menuItem;
 
         menuItem = new JMenuItem("Pause");
@@ -470,7 +470,7 @@ public class JeliotWindow {
         );
         menu.add(menuItem);
 
-        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem("Use dialogs",
+        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem("Pause in message",
                                          showMessagesInDialogs);
         cbmenuItem.setMnemonic(KeyEvent.VK_D);
         cbmenuItem.setAccelerator(KeyStroke.getKeyStroke(
@@ -485,7 +485,7 @@ public class JeliotWindow {
         menu.add(cbmenuItem);
 
         menuItem = new JMenuItem("Faster");
-        menuItem.setMnemonic(KeyEvent.VK_PLUS);
+        menuItem.setMnemonic(KeyEvent.VK_F);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_PLUS, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(
@@ -498,7 +498,7 @@ public class JeliotWindow {
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Slower");
-        menuItem.setMnemonic(KeyEvent.VK_MINUS);
+        menuItem.setMnemonic(KeyEvent.VK_L);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_MINUS, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(
@@ -520,7 +520,7 @@ public class JeliotWindow {
     private JMenu makeControlMenu() {
 
         JMenu menu = new JMenu("Control");
-        menu.setMnemonic(KeyEvent.VK_L);
+        menu.setMnemonic(KeyEvent.VK_C);
         JMenuItem menuItem;
 
         menuItem = new JMenuItem("Edit");

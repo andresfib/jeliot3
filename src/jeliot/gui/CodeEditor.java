@@ -235,11 +235,11 @@ public class CodeEditor extends JComponent {
         clearButton.setMnemonic(KeyEvent.VK_N);
 
         JButton cutButton = makeToolButton("Cut", "cuticon.gif", cutter);
-        cutButton.setMnemonic(KeyEvent.VK_X);
+        cutButton.setMnemonic(KeyEvent.VK_U);
         JButton copyButton = makeToolButton("Copy", "copyicon.gif", copyist);
-        copyButton.setMnemonic(KeyEvent.VK_C);
+        copyButton.setMnemonic(KeyEvent.VK_Y);
         JButton pasteButton = makeToolButton("Paste", "pasteicon.gif", pasteur);
-        pasteButton.setMnemonic(KeyEvent.VK_P);
+        pasteButton.setMnemonic(KeyEvent.VK_T);
 
         JToolBar p = new JToolBar();
         p.add(clearButton);
@@ -255,7 +255,7 @@ public class CodeEditor extends JComponent {
     /**
      * Constructs the Program menu.
      *
-     * @return  The Program menu (JMenu) for the Jeliot 2000
+     * @return  The Program menu (JMenu) for Jeliot3
      */
     JMenu makeProgramMenu() {
         JMenu menu = new JMenu("Program");
@@ -297,21 +297,21 @@ public class CodeEditor extends JComponent {
         JMenuItem menuItem;
 
         menuItem = new JMenuItem("Cut");
-        menuItem.setMnemonic(KeyEvent.VK_T);
+        menuItem.setMnemonic(KeyEvent.VK_U);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_X, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(cutter);
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Copy");
-        menuItem.setMnemonic(KeyEvent.VK_C);
+        menuItem.setMnemonic(KeyEvent.VK_Y);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_C, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(copyist);
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Paste");
-        menuItem.setMnemonic(KeyEvent.VK_P);
+        menuItem.setMnemonic(KeyEvent.VK_T);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_V, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(pasteur);
