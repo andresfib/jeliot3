@@ -145,6 +145,10 @@ public class Interpreter {
                             Value casted = new Value(value, type);
                             Value expressionValue = new Value(value, type);
 
+                            if (!casted.getType().equals(fromValue.getType())) {
+                                director.animateCastExpression(fromValue, casted);
+                            }
+
                             director.animateAssignment(toVariable, fromValue, casted, expressionValue, h);
                             toVariable.assign(casted);
                             values.put(new Integer(expressionCounter), expressionValue);
@@ -182,36 +186,34 @@ public class Interpreter {
 
                             int operator = ECodeUtilities.resolveUnOperator(token);
 
-                            //ExpressionActor expr = director.getCurrentScratch().findActor(expressionCounter);
+                            ExpressionActor expr = director.getCurrentScratch().findActor(expressionCounter);
 
-                            //if (expr == null) {
+                            if (expr == null) {
+                                expr = director.beginUnaryExpression(operator,
+                                                                     val,
+                                                                     expressionCounter,
+                                                                     h);
+                            }
 
-                                //expr = director.beginUnaryExpression(operator,
-                                //                                     val,
-                                //                                     expressionCounter,
-                                //                                     h);
-
-                            //}
-
-                            //Value expressionValue =
-                            //      director.finishUnaryExpression(operator,
-                            //                                     expr,
-                            //                                     result,
-                            //                                     expressionCounter,
-                            //                                     h);
+                            Value expressionValue =
+                                  director.finishUnaryExpression(operator,
+                                                                 expr,
+                                                                 result,
+                                                                 expressionCounter,
+                                                                 h);
 
                             //This is not needed after the change.
-                            Value expressionValue =
-                                    director.animateUnaryExpression(operator,
-                                                                    val,
-                                                                    result,
-                                                                    expressionCounter,
-                                                                    h);
+                            //Value expressionValue =
+                            //        director.animateUnaryExpression(operator,
+                            //                                        val,
+                            //                                        result,
+                            //                                        expressionCounter,
+                            //                                        h);
 
                             values.put(new Integer(expressionCounter), expressionValue);
 
 
-                            //exprs.pop();
+                            exprs.pop();
 
                             break;
 
@@ -239,7 +241,9 @@ public class Interpreter {
                             exprs.pop();
 
                             break;
+
                         }
+
 
                         // Unary Expression
                         case Code.PRIE:      // PreIncrement
