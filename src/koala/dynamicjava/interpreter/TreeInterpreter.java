@@ -689,7 +689,14 @@ public class TreeInterpreter implements Interpreter {
                    !c.getName().equals(EvaluationVisitor.getConstructorCallName()) &&
                    name.equals("<init>") &&
                    EvaluationVisitor.getSuperClasses().contains(c.getName())) {
-
+                   
+                   int depth = MCodeUtilities.numParametersStack.size();
+                   String superName="";
+                   for (int k=0;k<depth-1;k++){
+                       superName+="super().";
+                   }
+                   superName+="super";
+                   
                    int numParameters =((Integer) MCodeUtilities.numParametersStack.pop()).intValue();
 
                    long counter = EvaluationVisitor.getCounter();
@@ -701,15 +708,14 @@ public class TreeInterpreter implements Interpreter {
                         // !c.getName().equals(EvaluationVisitor.getConstructorCallName())
                         // so to describe a super call,
             
-                        
+                        meth.getClass();
                         MCodeUtilities.write("" + Code.QN+Code.DELIM+
                             counter+Code.DELIM+"this"+
                             Code.DELIM+obj.toString()+
                             Code.DELIM+obj.getClass().getName());
-                
+                        
                         MCodeUtilities.write("" + Code.OMC+Code.DELIM+
-                             //m.getName()+Code.DELIM+
-                             "super"+Code.DELIM+
+                             superName+Code.DELIM+
                              "0"+Code.DELIM+
                              counter+Code.DELIM+
                              "0,0,0,0");
@@ -722,8 +728,7 @@ public class TreeInterpreter implements Interpreter {
                                                    Code.DELIM+obj.getClass().getName());
                 
                        MCodeUtilities.write("" + Code.OMC+Code.DELIM+
-                                                    //m.getName()+Code.DELIM+
-                                                    "super"+Code.DELIM+
+                                                    superName+Code.DELIM+
                                                     numParameters+Code.DELIM+
                                                     counter+Code.DELIM+
                                                     "0,0,0,0");
