@@ -25,43 +25,110 @@ import jeliot.theatre.ExpressionActor;
 import jeliot.theatre.Highlight;
 import jeliot.theatre.ValueActor;
 
-/*
-* Created by Niko Myller 10.12.2002
-*
-**/
-
+/**
+ * 
+ * 
+ * Created by Niko Myller 10.12.2002
+ * 
+ * @author Niko Myller
+ */
 public class Interpreter {
 
+	/**
+	 *
+	 */
 	private Director director = null;
+	/**
+	 *
+	 */
 	private BufferedReader ecode = null;
+	/**
+	 *
+	 */
 	private PrintWriter input = null;
 
+	/**
+	 *
+	 */
 	private String programCode = "";
 
+	/**
+	 *
+	 */
 	private boolean running = true;
+	/**
+	 *
+	 */
 	private boolean start = true;
+	/**
+	 *
+	 */
 	private boolean firstLineRead = false;
+	/**
+	 *
+	 */
 	private boolean invokingMethod = false;
 
-	//Keeps track of current return value
+	/**
+	 * Keeps track of current return value
+	 */
 	private boolean returned = false;
+	/**
+	 *
+	 */
 	private Value returnValue = null;
+	/**
+	 *
+	 */
 	private Actor returnActor = null;
+	/**
+	 *
+	 */
 	private long returnExpressionCounter = 0;
 
+	/**
+	 *
+	 */
 	private Stack commands = new Stack();
+	/**
+	 *
+	 */
 	private Stack exprs = new Stack();
+	/**
+	 *
+	 */
 	private Hashtable values = new Hashtable();
+	/**
+	 *
+	 */
 	private Hashtable variables = new Hashtable();
+	/**
+	 *
+	 */
 	private Hashtable instances = new Hashtable();
+	/**
+	 *
+	 */
 	private Stack methodInvocation = new Stack();
 
+	/**
+	 *
+	 */
 	private Hashtable postIncsDecs = new Hashtable();
 
+	/**
+	 *
+	 */
 	private ClassInfo currentClass = null;
 
+	/**
+	 *
+	 */
 	private Hashtable classes = new Hashtable();
 
+	/**
+	 *
+	 */
 	private String line = null;
 
 	/**
@@ -80,18 +147,42 @@ public class Interpreter {
 	*/
 	private Object[] currentMethodInvocation = null;
 
+	/**
+	 *
+	 */
 	private Stack objectCreation = new Stack();
 
+	/**
+	 *
+	 */
 	private boolean readNew = true;
 
+	/**
+	 *
+	 */
 	//Related to Super method calls in constructor's first line
 	//in classes with inheritance.
 	private boolean constructorCall = false;
+	/**
+	 *
+	 */
 	private Stack constructorCalls = new Stack();
+	/**
+	 *
+	 */
 	private Vector superMethods = null;
+	/**
+	 *
+	 */
 	private Vector superMethodsReading = null;
+	/**
+	 *
+	 */
 	private long superMethodCallNumber = 0;
 
+	/**
+	 *
+	 */
 	/**
 	 * The resource bundle
 	 */
@@ -101,15 +192,27 @@ public class Interpreter {
 			Locale.getDefault());
 	;
 
+	/**
+	 *
+	 */
 	static private ResourceBundle propertiesBundle =
 		ResourceBundle.getBundle(
 			"jeliot.ecode.resources.properties",
 			Locale.getDefault());
 	;
 
+	/**
+	 * 
+	 */
 	protected Interpreter() {
 	}
 
+	/**
+	 * @param r
+	 * @param d
+	 * @param programCode
+	 * @param pr
+	 */
 	public Interpreter(
 		BufferedReader r,
 		Director d,
@@ -121,6 +224,9 @@ public class Interpreter {
 		this.input = pr;
 	}
 
+	/**
+	 * 
+	 */
 	public void initialize() {
 		running = true;
 		start = true;
@@ -182,18 +288,30 @@ public class Interpreter {
 
 	}
 
+	/**
+	 * @return
+	 */
 	public boolean starting() {
 		return start;
 	}
 
+	/**
+	 * @return
+	 */
 	public boolean emptyScratch() {
 		return exprs.empty();
 	}
 
+	/**
+	 * @return
+	 */
 	public boolean readNew() {
 		return constructorCalls.empty();
 	}
 
+	/**
+	 * @return
+	 */
 	public String readLine() {
 		String readLine = null;
 		if (readNew()) {
@@ -235,6 +353,9 @@ public class Interpreter {
 		return readLine;
 	}
 
+	/**
+	 * 
+	 */
 	public void execute() {
 
 		//This is for realease versions
@@ -309,6 +430,9 @@ public class Interpreter {
 		//}
 	}
 
+	/**
+	 * @param line
+	 */
 	public void interpret(String line) {
 
 		if (!line.equals("" + Code.END)) {
@@ -3419,6 +3543,11 @@ public class Interpreter {
 		}
 	}
 
+	/**
+	 * @param ci
+	 * @param h
+	 * @return
+	 */
 	public ObjectFrame createNewInstance(ClassInfo ci, Highlight h) {
 		ObjectFrame of =
 			new ObjectFrame("-1", ci.getName(), ci.getFieldNumber());
@@ -3490,7 +3619,9 @@ public class Interpreter {
 		return of;
 	}
 
-	//Not in use at the moment.
+	/**
+	 * Not in use at the moment.
+	 */
 	public void checkInstancesForRemoval() {
 		Enumeration enum = instances.keys();
 		while (enum.hasMoreElements()) {
@@ -3512,7 +3643,9 @@ public class Interpreter {
 		}
 	}
 
-	//Not in use at the moment
+	/**
+	 * Not in use at the moment 
+	 */
 	public void removeInstances() {
 		Enumeration enum = instances.keys();
 		while (enum.hasMoreElements()) {
@@ -3528,6 +3661,10 @@ public class Interpreter {
 		}
 	}
 
+	/**
+	 * @param val
+	 * @param expressionCounter
+	 */
 	private void handleExpression(Value val, long expressionCounter) {
 
 		//command that wait for this expression (left, right)
@@ -3549,7 +3686,7 @@ public class Interpreter {
 			}
 		}
 
-		/**
+		/*
 		 * Look from the expression stack
 		 * what expression should be shown next
 		 */
@@ -3629,6 +3766,9 @@ public class Interpreter {
 		}
 	}
 
+	/**
+	 * @param postIncDecInfo
+	 */
 	public void doPostIncDec(Object[] postIncDecInfo) {
 
 		Variable var = (Variable) variables.remove(((Long) postIncDecInfo[1]));
