@@ -1,14 +1,18 @@
 package jeliot.mcode;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+import java.util.Stack;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.tree.Node;
-
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.io.FileOutputStream;
-import java.io.File;
-import java.util.*;
 
 /**
  * This class contains helper methods for the MCode language
