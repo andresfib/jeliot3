@@ -25,7 +25,14 @@ public class LineNumbers extends JComponent {
     public void setPreferredHeight(int ph) {
         setPreferredSize(new Dimension(size, ph));
         revalidate();
-        repaint();
+    }
+
+
+    public void setHeightByLines(int lines) {
+        int height = insets.top + ascent + (lines * increment) + insets.bottom;
+        System.out.println("CodePane: " + height);
+        setPreferredSize(new Dimension(size, height));
+        revalidate();
     }
 
     public void paintComponent(Graphics g) {
