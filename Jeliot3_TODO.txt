@@ -6,10 +6,9 @@ Urgent:
 
 * Initialization of object when it inherits user made class (super() call)
 * Super method call with parameters in object creation with inheritance
-* Documentation
 * Array initializers (but only for on3 dimensional arrays)
 * Static field access (into the constant area)
-* Explicit mentioning of different areas in the theater area.
+* Documentation
 
 Technical:
 
@@ -31,6 +30,7 @@ Graphical:
 * Arrow heads or something to indicate that the reference ends to that 
   specific object.
 * Some randomness to the placement of references to prevent overlapping
+* Explicit mentioning of different areas in the theater (e.g. constant area, expression evaluation area, instance and array area and method frame area).
 
 -------These can be done later: ------------------------------------
 
