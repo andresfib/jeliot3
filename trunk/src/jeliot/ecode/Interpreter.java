@@ -1075,6 +1075,15 @@ public class Interpreter {
                         }
 
                         //Opening and closing scopes
+                        case Code.OUTPUT: {
+                            String value = tokenizer.nextToken();
+                            String type = tokenizer.nextToken();
+                            Highlight highlight = ECodeUtilities.makeHighlight(
+                                                tokenizer.nextToken());
+
+                        }
+
+                        //Opening and closing scopes
                         case Code.SCOPE: {
 
                             int scope = Integer.parseInt(tokenizer.nextToken());

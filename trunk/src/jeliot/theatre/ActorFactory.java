@@ -141,13 +141,14 @@ public class ActorFactory {
     public static int getTypeValueWidth(int n) {
         if (n >= 0 && n < typeValWidth.length) {
             return typeValWidth[n];
-    	}
+        }
         return 0;
     }
 
     Stage produceStage(MethodFrame m) {
-         //Should the getVarCount method be changed to a constant for a while
+         //the getVarCount method is changed to a constant for a while
          //because it is not set properly in our situation.
+         //Actually it is not easy to know how many variables there are.
         Stage stage = new Stage(m.getMethodName(), 6);// m.getVarCount());
         stage.setFont(stageFont);
         stage.calculateSize(typeValWidth[8] + 60, valueHeight+8+variableInsets.top +
