@@ -891,7 +891,9 @@ public class Director {
     }
 
     public Value animateUnaryExpression(int operator, Value arg,
-            Value result, int expressionCounter) {
+            Value result, int expressionCounter, Highlight h) {
+
+        highlight(h);
 
         ValueActor argAct = arg.getActor();
         ValueActor resAct = factory.produceValueActor(result);
@@ -996,24 +998,39 @@ public class Director {
         theatre.release();
     }
 
-    public void enterLoop(String statementName) {
-        showMessage("Entering " + statementName + " loop.");
+    public void enterLoop(String statementName, Highlight h) {
+        highlight(h);
+        showMessage("Entering the " + statementName + " loop.");
     }
 
-    public void enterLoop(String statementName, Value check) {
-        showMessage("Entering " + statementName + " loop.", check);
+    public void enterLoop(String statementName, Value check, Highlight h) {
+        highlight(h);
+        showMessage("Entering the " + statementName + " loop.", check);
     }
 
-    public void exitLoop(String statementName, Value check) {
-        showMessage("Exiting " + statementName + " loop.", check);
+    public void continueLoop(String statementName, Value check, Highlight h) {
+        highlight(h);
+        showMessage("Continuing the " + statementName + " loop in the next round.", check);
     }
 
-    public void skipLoop(String statementName, Value check) {
-        showMessage("Skipping " + statementName + " loop.", check);
+    public void exitLoop(String statementName, Value check, Highlight h) {
+        highlight(h);
+        showMessage("Exiting the " + statementName + " loop.", check);
     }
 
-    public void continueLoop(String statementName, Value check) {
-        showMessage("Continuing " + statementName + " loop.", check);
+    public void breakLoop(String statementName, Highlight h) {
+        highlight(h);
+        showMessage("Exiting the loop because of break.");
+    }
+
+    public void skipLoop(String statementName, Value check, Highlight h) {
+        highlight(h);
+        showMessage("Not entering the " + statementName + " loop.", check);
+    }
+
+    public void continueLoop(String statementName, Highlight h) {
+        highlight(h);
+        showMessage("Continuing the " + statementName + " loop in the next round.");
     }
 
     public void branchThen(Value check, Highlight h) {
