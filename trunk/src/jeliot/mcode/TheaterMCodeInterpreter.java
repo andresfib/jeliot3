@@ -2581,8 +2581,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         exprs.pop();
 
+        /*
         director.closeScratch();
         director.openScratch();
+        */
     }
 
     /**
