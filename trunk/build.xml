@@ -52,7 +52,7 @@ To display the available targets type:
     <!-- This properties modify the output of the 
     	build process-->
     <property name="version"         value="3"/>
-    <property name="minor"         value="-2"/>
+    <property name="minor"         value="-2P2"/>
     <property name="dist"            value="Jeliot${version}"/>
     <!-- dist: Used to create the folder where to place the binary distribuition, jar files and images-->
     <property name="package-prefix"  value=""/>
