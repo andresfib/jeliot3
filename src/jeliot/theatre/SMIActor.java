@@ -20,28 +20,35 @@ public class SMIActor extends Actor implements ActorContainer{
     int titlemargin = 4;
     int namey;
     int namex;
+	int namew;
+	int nameh;
+    int commaMargin;
 
     public SMIActor(String name, int n) {
         this.name = name;
         actors = new Actor[n];
         locs = new Point[n];
         bound = new boolean[n];
+        FontMetrics fm = getFontMetrics();
+        commaMargin = fm.stringWidth(",");        
     }
 
     public Point reserve(Actor actor) {
         actors[next] = actor;
-        int y = insets.top + namey + titlemargin;
-        int x = insets.left;
+        //int y = insets.top + namey + titlemargin;
+        //int x = insets.left;
+		int y = insets.top; 
+		int x = insets.left + namew + margin;
 
         if (next > 0) {
             if (actors[next-1] instanceof ReferenceActor) {
                 x = locs[next - 1].x +
-                    margin +
+                    margin + commaMargin + margin +
                     actors[next - 1].getWidth() +
                     ((ReferenceActor) actors[next - 1]).getReferenceWidth();
             } else {
-                x = locs[next -1].x +
-                    margin +
+                x = locs[next - 1].x +
+                    margin + commaMargin + margin +
                     actors[next -1].getWidth();
             }
         }
@@ -81,18 +88,38 @@ public class SMIActor extends Actor implements ActorContainer{
         int h = getHeight();
 
         // draw background
-        g.setColor(bgcolor);
-        g.fillRect(2, 2, w-4, h-4);
+        //g.setColor(bgcolor);
+        //g.fillRect(2, 2, w-4, h-4);
 
         // draw border
-        g.setColor(darkColor);
-        g.drawRect(1, 1, w-3, h-3);
+        //g.setColor(darkColor);
+        //g.drawRect(1, 1, w-3, h-3);
         g.setColor(fgcolor);
-        g.drawRect(0, 0, w-1, h-1);
+        //g.drawRect(0, 0, w-1, h-1);
 
         // draw text
         g.setFont(getFont());
-        g.drawString(name, namex, namey);
+        	    
+		if (next > 0) {        
+        	g.drawString(name + "(", namex, namey);
+        	
+        	for (int i = 0; i < next; i++) {
+	        	if (i != next - 1) {
+	   	     		g.drawString(",",
+	        					 locs[i].x +
+	        					 actors[i].getWidth() + margin,
+	        					 namey);
+        		}
+        	}
+        	       
+       		g.drawString(")",
+        				 locs[next-1].x +
+        				 actors[next-1].getWidth() +
+        				 margin,
+        				 namey);
+		} else {
+        	g.drawString(name + "()", namex, namey);			
+		}
 
         paintActors(g);
     }
@@ -100,8 +127,8 @@ public class SMIActor extends Actor implements ActorContainer{
     public void calculateSize() {
         // Get the size of the name.
         FontMetrics fm = getFontMetrics();
-        int nameh = fm.getHeight();
-        int namew = fm.stringWidth(this.name);
+        nameh = fm.getHeight();
+        namew = fm.stringWidth(this.name + "(");
 
         int n = next;
         int maxh = insets.top + titlemargin + nameh;
