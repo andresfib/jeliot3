@@ -81,16 +81,6 @@ public class TreeInterpreter implements Interpreter {
 
     private ResourceBundle bundle = ResourceBundle.getBundle(
             "koala.dynamicjava.interpreter.resources.messages", Locale.getDefault());
-    
-	private String locationToString(Node node) {
-		return node.getBeginLine()
-			+ Code.LOC_DELIM
-			+ node.getBeginColumn()
-			+ Code.LOC_DELIM
-			+ node.getEndLine()
-			+ Code.LOC_DELIM
-			+ node.getEndColumn();
-	}
 
 	/**
 	 * The parser
@@ -816,7 +806,8 @@ public class TreeInterpreter implements Interpreter {
                         + Code.DELIM
                         + "this"
 						+ Code.DELIM
-						+ "0,0,0,0");
+						+ "0,0,0,0"
+						+ MCodeUtilities.locationToString(meth));
 
 			} else {
 
@@ -830,7 +821,9 @@ public class TreeInterpreter implements Interpreter {
 						+ Code.DELIM
 						+ obj.toString()
 						+ Code.DELIM
-						+ obj.getClass().getName());
+						+ obj.getClass().getName()
+						+ Code.DELIM
+						+ "0,0,0,0");
 
 				MCodeUtilities.write(
 					""
@@ -844,7 +837,7 @@ public class TreeInterpreter implements Interpreter {
                         + Code.DELIM
 						+ "this"
 						+ Code.DELIM
-						+ "0,0,0,0");
+						+ MCodeUtilities.locationToString(meth));
 				//TODO: Print out the parameters info 
 				Vector redirectBuffer =
 					(Vector) MCodeUtilities.redirectBufferStack.pop();
@@ -1029,7 +1022,7 @@ public class TreeInterpreter implements Interpreter {
 			Code.PARAMETERS
 				+ Code.DELIM
 				+ MCodeUtilities.argToString(argnames));
-		MCodeUtilities.write(Code.MD + Code.DELIM + locationToString(meth));
+		MCodeUtilities.write(Code.MD + Code.DELIM + MCodeUtilities.locationToString(meth));
 		// Hack for providing e-code for "outside" classes
 		// EvaluationVisitor will display PARAMETERS and MD just before SMCC
 		EvaluationVisitor.setInside();

@@ -1941,7 +1941,7 @@ public class ClassInfoCompiler {
                                  +fi.getType().getName()+Code.DELIM
                                  +af+Code.DELIM
                                  +((Literal)init).getValue()+Code.DELIM
-                                 +EvaluationVisitor.locationToString(node));
+                                 +MCodeUtilities.locationToString(node));
             } else {
                 classFactory.addField(af, rt, fn);
             MCodeUtilities.write(""+Code.FIELD+Code.DELIM+
@@ -1949,7 +1949,7 @@ public class ClassInfoCompiler {
                                  +fi.getType().getName()+Code.DELIM
                                  +af+Code.DELIM
                                  +Code.UNKNOWN+Code.DELIM
-                                 +EvaluationVisitor.locationToString(node));
+                                 +MCodeUtilities.locationToString(node));
             }
             return null;
         }
