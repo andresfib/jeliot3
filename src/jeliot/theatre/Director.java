@@ -1276,7 +1276,7 @@ public class Director {
 */
     //Jeliot 3
     //Used for setting the reader for ecode interpreter
-    public void setInterpreterSource(BufferedReader br, String programCode) {
+    public void initializeInterpreter(BufferedReader br, String programCode) {
         this.eCodeInterpreter = new Interpreter(br, this, programCode);
         eCodeInterpreter.initialize();
     }
