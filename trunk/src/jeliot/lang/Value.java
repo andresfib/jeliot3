@@ -15,9 +15,9 @@ public class Value implements Cloneable {
 
     private String type;
 
-    /** An object describing the represented value. May be, for
+    /** An object describing the represented value. Can be, for
       * example Integer, Char or if the value is actually a reference
-      * it will be the hashcode that describes identifies the object.
+      * it will be the hashcode that identifies the object.
       */
     private String val;
     private ValueActor actor;

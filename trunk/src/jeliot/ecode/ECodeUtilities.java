@@ -467,6 +467,72 @@ public class ECodeUtilities {
         return str;
     }
 
+    public static String getDefaultValue(String type) {
+        if (type.equals(boolean.class.getName()) ||
+            type.equals((new Boolean(true)).getClass().getName()) ||
+            type.equals("Z")) {
+
+            return String.valueOf(false);
+
+        } else if (type.equals(byte.class.getName()) ||
+                   type.equals((new Byte((byte)0)).getClass().getName()) ||
+                   type.equals("B")) {
+
+            return String.valueOf((byte)0);
+
+        } else if (type.equals(short.class.getName()) ||
+                   type.equals((new Short((short)0)).getClass().getName()) ||
+                   type.equals("S")) {
+
+            return String.valueOf((short)0);
+
+        } else if (type.equals(int.class.getName()) ||
+                   type.equals((new Integer(0)).getClass().getName()) ||
+                   type.equals("I")) {
+
+            return String.valueOf(0);
+
+        } else if (type.equals(long.class.getName()) ||
+                   type.equals((new Long(0)).getClass().getName()) ||
+                   type.equals("J")) {
+
+            return String.valueOf(0L);
+
+        } else if (type.equals(char.class.getName()) ||
+                   type.equals((new Character('\0')).getClass().getName()) ||
+                   type.equals("C")) {
+
+            return String.valueOf('\u0000');
+
+        } else if (type.equals(float.class.getName()) ||
+                   type.equals((new Float(0.0f)).getClass().getName()) ||
+                   type.equals("F")) {
+
+            return String.valueOf(0.0f);
+
+        } else if (type.equals(double.class.getName()) ||
+                   type.equals((new Double(0.0)).getClass().getName()) ||
+                   type.equals("D")) {
+
+            return String.valueOf(0.0);
+
+        } else if (type.equals("".getClass().getName()) ||
+                   type.equals("L".getClass().getName())) {
+
+            return String.valueOf("null");
+
+        } else if (type.equals(Void.TYPE.getName()) ||
+                   type.equals("V")) {
+
+            return String.valueOf("null");
+
+        } else {
+
+            return String.valueOf("null");
+
+        }
+    }
+
     public static void setWriter(PrintWriter w){
         writer=w;
     }

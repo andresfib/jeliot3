@@ -519,6 +519,7 @@ public class Director {
                 thisValueActor = (ValueActor) thisValue.getActor();
             }
         }
+        thisValue.setActor(thisValueActor);
 
         Animation thisAnim = thisValueActor.fly(thisVariableActor.reserve(thisCastAct));
         engine.showAnimation(thisAnim);
@@ -926,7 +927,7 @@ public class Director {
 
         // Create a new variable and its actor.
         Variable v = of.declareVariable(new Variable(name, type));
-        VariableActor actor = factory.produceVariableActor(v);
+        VariableActor actor = factory.produceObjectVariableActor(v);
         v.setActor(actor);
 
         ObjectStage stage = of.getObjectStage();

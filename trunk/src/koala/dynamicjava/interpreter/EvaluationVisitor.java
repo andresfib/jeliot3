@@ -1338,7 +1338,7 @@ public class EvaluationVisitor extends VisitorObject {
                 auxcounter=counter;
                 args[i] = ((Expression)it.next()).acceptVisitor(this);
 
-                ECodeUtilities.write("" + Code.P+Code.DELIM+auxcounter);
+                ECodeUtilities.write("" + Code.P+Code.DELIM+auxcounter+Code.DELIM+args[i].getClass().getName());
                 i++;
 
                 //                args[i++] = ((Expression)it.next()).acceptVisitor(this);
