@@ -143,7 +143,7 @@ public abstract class MCodeInterpreter {
     public void execute() {
 
         //TODO: Take the next line out of the comments for the versions to be realeased
-        //try {
+        try {
          
         beforeExecution();
         
@@ -198,11 +198,11 @@ public abstract class MCodeInterpreter {
 
         /* TODO: Take this out of the comments for the versions to be
          * realeased.
-         
-         } catch (Exception e) {
-             director.showErrorMessage(new InterpreterError(" <H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null));
-          }
          */
+         } catch (Exception e) {
+         	 handleCodeERROR("<H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null);
+         }
+         
          
     }
 
@@ -1229,8 +1229,7 @@ public abstract class MCodeInterpreter {
                 //For Statement
                 case Code.FOR:
                     {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
                         long round = Long.parseLong(tokenizer.nextToken());
                         Highlight h = MCodeUtilities.makeHighlight(tokenizer
@@ -1342,10 +1341,13 @@ public abstract class MCodeInterpreter {
                         String className = tokenizer.nextToken();
                         String methodName = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
+                        
+                        String prompt = tokenizer.nextToken();
+
                         Highlight h = MCodeUtilities.makeHighlight(tokenizer
                                 .nextToken());
 
-                        handleCodeINPUT(expressionCounter, className, methodName, type, h);
+                        handleCodeINPUT(expressionCounter, className, methodName, type, ((prompt.equals("null")) ? null : prompt), h);
 
                         break;
                     }
@@ -1776,7 +1778,7 @@ public abstract class MCodeInterpreter {
      * @param h
      */
     protected abstract void handleCodeINPUT(long expressionCounter,
-            String className, String methodName, String type, Highlight h);
+            String className, String methodName, String type, String prompt, Highlight h);
 
     /**
      * @param expressionReference

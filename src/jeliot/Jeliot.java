@@ -117,7 +117,7 @@ public class Jeliot {
     /**
      * The graphical user inteface.
      */
-    private JeliotWindow gui;
+    protected JeliotWindow gui;
 
     /**
      * Theatre object for showing the animation.

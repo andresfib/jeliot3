@@ -1,23 +1,14 @@
-/*
- * Created on 2.5.2004
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package jeliot.mcode;
-
-import java.io.BufferedReader;
-import java.util.Stack;
 
 import jeliot.Jeliot;
 import jeliot.calltree.TreeDraw;
 
+import java.io.BufferedReader;
+import java.util.Stack;
+
 
 /**
  * @author Niko Myller
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class CallTreeMCodeInterpreter extends MCodeInterpreter {
 
@@ -104,7 +95,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeINPUT(long, java.lang.String, jeliot.mcode.Highlight)
      */
-    protected void handleCodeINPUT(long expressionCounter, String className, String methodName, String type, Highlight h) {
+    protected void handleCodeINPUT(long expressionCounter, String className, String methodName, String type, String prompt, Highlight h) {
         int n = type.lastIndexOf(".");
         if (n != -1) {
             type = type.substring(n, type.length());

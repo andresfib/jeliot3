@@ -1,15 +1,11 @@
 package jeliot.mcode;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.tree.Node;
+
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * This class contains helper methods for the MCode language
@@ -911,7 +907,6 @@ public class MCodeUtilities {
     public static Object readInt() {
         int result;
         try {
-
             result = Integer.parseInt(reader.readLine());
             return new Integer(result);
         } catch (Exception e) {
@@ -1023,24 +1018,18 @@ public class MCodeUtilities {
     }
 
     /**
-     * @param boolean1
+     * @param value
      */
     public static void setRedirectOutput(boolean value) {
         redirectOutput = value;
     }
 
-    /**
-     * @return
-     */
     public static void writeRedirectBuffer(Vector redirectBuffer) {
         for (int i = 0; i < redirectBuffer.size(); i++) {
             write((String) redirectBuffer.get(i));
         }
     }
 
-    /**
-     * @param string
-     */
     public static void clearRedirectBuffer() {
         redirectBuffer.clear();
     }
@@ -1100,18 +1089,24 @@ public class MCodeUtilities {
     
     /**
      * 
-     * @param node
+     * @param o
      * @return
      */
     public static String getValue(Object o){   
         if (o == null) { 
             return "null"; 
         } 
-        if (o.getClass().isPrimitive() || String.class.isInstance(o)
-        		||	Integer.class.isInstance(o) || Double.class.isInstance(o)
-				||	Byte.class.isInstance(o) || Long.class.isInstance(o)
-				|| Short.class.isInstance(o) || Boolean.class.isInstance(o)
-				|| Character.class.isInstance(o)) {	 
+        if (o.getClass().isPrimitive()
+            || String.class.isInstance ( o )
+            || Integer.class.isInstance( o )
+        	|| Double.class.isInstance( o )
+			|| Byte.class.isInstance( o )
+			|| Long.class.isInstance( o )
+			|| Short.class.isInstance ( o )
+			|| Boolean.class.isInstance(o)
+            || Float.class.isInstance(o) 
+            || Character.class.isInstance(o)) {
+                
             return o.toString();   
         } else { 
             return Integer.toHexString(o.hashCode());            
@@ -1131,4 +1126,59 @@ public class MCodeUtilities {
 			+ Code.LOC_DELIM
 			+ node.getEndColumn();
 	}
+
+    public static Object readLong() {
+        long result;
+        try {
+            result = Long.parseLong(reader.readLine());
+            return new Long(result);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Object readByte() {
+        byte result;
+        try {
+            result = Byte.parseByte(reader.readLine());
+            return new Byte(result);
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+    public static Object readFloat() {
+        float result;
+        try {
+            result = Float.parseFloat(reader.readLine());
+            return new Float(result);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Object readBoolean() {
+        boolean result;
+        try {
+            result = Boolean.getBoolean(reader.readLine());
+            return new Boolean(result);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static BufferedReader getReader () {
+        return reader;
+    }
+
+    public static Object readShort() {
+        short result;
+        try {
+            result = Short.parseShort(reader.readLine());
+            return new Short(result);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

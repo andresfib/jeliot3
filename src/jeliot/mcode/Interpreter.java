@@ -1,30 +1,16 @@
 package jeliot.mcode;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.lang.reflect.Modifier;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.ListIterator;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Stack;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import jeliot.lang.ArrayInstance;
-import jeliot.lang.ClassInfo;
-import jeliot.lang.Instance;
-import jeliot.lang.ObjectFrame;
-import jeliot.lang.Reference;
-import jeliot.lang.Value;
-import jeliot.lang.Variable;
-import jeliot.lang.VariableInArray;
+import jeliot.lang.*;
 import jeliot.theater.Actor;
 import jeliot.theater.Director;
 import jeliot.theater.ExpressionActor;
-import jeliot.mcode.Highlight;
 import jeliot.theater.ValueActor;
+
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.lang.Class;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * NOT IN USE IN THE CURRENT RELEASE, REPLACED BY MCodeInterpreter!
@@ -2586,9 +2572,10 @@ public class Interpreter {
                         long expressionCounter = Long.parseLong(tokenizer
                                 .nextToken());
                         String type = tokenizer.nextToken();
+
                         Highlight h = MCodeUtilities.makeHighlight(tokenizer
                                 .nextToken());
-                        Value in = director.animateInputHandling(type, h);
+                        Value in = director.animateInputHandling(type, null, h);
 
                         input.println(in.getValue());
                         values.put(new Long(expressionCounter), in);

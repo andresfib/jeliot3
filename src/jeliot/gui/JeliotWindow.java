@@ -1327,8 +1327,8 @@ public class JeliotWindow {
 
         if (e.getHighlight() != null) {
 
-            if (c instanceof CodeEditor) {
-                ((CodeEditor) c).highlight(e.getHighlight());
+            if (c instanceof CodeEditor2) {
+                ((CodeEditor2) c).highlight(e.getHighlight());
             }
 
             if (c instanceof CodePane2) {

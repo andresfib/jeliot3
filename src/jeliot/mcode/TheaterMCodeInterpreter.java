@@ -775,9 +775,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeINPUT(long expressionCounter, String className, String methodName, String type,
+    protected void handleCodeINPUT(long expressionCounter, String className, String methodName, String type, String prompt,
             Highlight h) {
-        Value in = director.animateInputHandling(type, h);
+        Value in = director.animateInputHandling(type, prompt, h);
 
         input.println(in.getValue());
         values.put(new Long(expressionCounter), in);
