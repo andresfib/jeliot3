@@ -417,6 +417,17 @@ public class ActorFactory {
         return actor;
     }
 
+    //Added for Jeliot 3
+    public ACActor produceACActor(String name, int paramCount) {
+        ACActor actor = new ACActor(name, paramCount);
+        actor.setFont(messageFont);
+        actor.setBackground(new Color(0xFFEAEA));
+        actor.setInsets(new Insets(6, 6, 6, 6));
+        actor.calculateSize();
+        actor.setShadowImage(shadowImage);
+        return actor;
+    }    
+    
 //     public SMIActor produceSMIActor(MethodPointer fmp, int n) {
 //         ReferenceType type = fmp.getDeclaringClass();
 //         String name = type.getSimpleName() + "." + fmp.getName();
