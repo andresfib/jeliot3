@@ -1330,7 +1330,7 @@ public class EvaluationVisitor extends VisitorObject {
                     ECodeUtilities.write(
                         Code.PARAMETERS
                             + Code.DELIM
-                            + ECodeUtilities.arrayToString(
+                            + ECodeUtilities.parameterArrayToString(
                                 m.getParameterTypes()));
                     ECodeUtilities.write(
                         Code.MD + Code.DELIM + locationToString(node));
@@ -1763,7 +1763,7 @@ public class EvaluationVisitor extends VisitorObject {
                 ECodeUtilities.write(
                     Code.PARAMETERS
                         + Code.DELIM
-                        + ECodeUtilities.arrayToString(m.getParameterTypes()));
+                        + ECodeUtilities.parameterArrayToString(m.getParameterTypes()));
                 ECodeUtilities.write(
                     Code.MD + Code.DELIM + locationToString(node));
 
