@@ -178,7 +178,7 @@ public class TreeInterpreter implements Interpreter {
                         0+Code.LOC_DELIM+0;
             }
             ECodeUtilities.write(code);
-            return null;
+
             //throw new InterpreterException(e);
 
         } catch (ParseError e) {
@@ -199,10 +199,10 @@ public class TreeInterpreter implements Interpreter {
                 code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+
                         0+Code.LOC_DELIM+0;
             }
-            System.out.print(code);
             ECodeUtilities.write(code);
-            return null;
+
             //throw new InterpreterException(e);
+
         } catch (Error e) {
             String code = ""+Code.ERROR+Code.DELIM+"<H1>ERROR</H1><BR>";
 
@@ -217,12 +217,40 @@ public class TreeInterpreter implements Interpreter {
                 code += message;
 
             }
+            code = ECodeUtilities.replace(code, "\n", "<BR>");
+            code = ECodeUtilities.replace(code, "\r", "");
+
             code += ""+Code.DELIM;
             code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0;
             ECodeUtilities.write(code);
-            //System.out.print(code);
-            return null;
+
             //throw new InterpreterException(e);
+
+        } catch (Exception e) {
+            String code = ""+Code.ERROR+Code.DELIM+"<H1>ERROR</H1><BR>";
+
+            if (e.getCause() != null) {
+                String cause = ECodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
+                cause = ECodeUtilities.replace(cause, ">", "&gt;");
+                code += cause+"<BR>";
+            }
+            if (e.getMessage() != null && !e.getMessage().equals("")) {
+                String message = ECodeUtilities.replace(e.getMessage(), "<", "&lt;");
+                message = ECodeUtilities.replace(message, ">", "&gt;");
+                code += message;
+
+            }
+            code = ECodeUtilities.replace(code, "\n", "<BR>");
+            code = ECodeUtilities.replace(code, "\r", "");
+
+            code += ""+Code.DELIM;
+            code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0;
+            ECodeUtilities.write(code);
+
+            //throw new InterpreterException(e);
+
+        } finally {
+            return null;
         }
     }
 

@@ -34,6 +34,8 @@ import koala.dynamicjava.tree.*;
 import koala.dynamicjava.parser.wrapper.*;
 import koala.dynamicjava.util.*;
 
+import jeliot.ecode.*;
+
 /**
  * This exception is thrown when an error append while
  * interpreting a statement
@@ -61,18 +63,11 @@ public class InterpreterException extends ThrownException {
 
         String m = e.getMessage();
 
-        int index = m.indexOf('\n');
-        while(index > -1) {
-            m = m.substring(0, index) + "<BR>" + m.substring(index + 1, m.length());
-            index = m.indexOf('\n');
-        }
+        m = ECodeUtilities.replace(m, "<", "&lt;");
+        m = ECodeUtilities.replace(m, ">", "&gt;");
 
-        index = m.indexOf('\r');
-        while(index > -1) {
-            m = m.substring(0,index) + m.substring(index + 1, m.length());
-            index = m.indexOf('\r');
-        }
-
+        m = ECodeUtilities.replace(m,"\n","<BR>");
+        m = ECodeUtilities.replace(m,"\r","");
 
         if (e.getLine() != -1) {
             sourceInformation = new SourceInformation(e.getFilename(),
@@ -84,45 +79,14 @@ public class InterpreterException extends ThrownException {
 
         } else {
 
-            //System.out.println(m);
-
             message = "<H2>Syntax Error</H2><P>" + m + "</P>";
 
             int line = 0;
             int column = 0;
             String file = "buffer";
 
-            index = m.toLowerCase().indexOf("line");
-            if (index > -1) {
-                String message = m.substring(index + "line".length()).trim();
-                int i = 1;
-                while (true) {
-                    if (!Character.isDigit(message.substring(i-1,i).charAt(0))) {
-                        break;
-                    }
-                    i++;
-                }
-                if (i > 1) {
-                    line = Integer.parseInt(message.substring(0, i-1));
-                }
-            }
-
-            index = m.toLowerCase().indexOf("column");
-            if (index > -1) {
-                String message = m.substring(index +
-                                    "column".length()).trim();
-                int numberEndIndex = message.indexOf(" ");
-                int i = 1;
-                while (true) {
-                    if (!Character.isDigit(message.substring(i-1,i).charAt(0))) {
-                        break;
-                    }
-                    i++;
-                }
-                if (i > 1) {
-                    column = Integer.parseInt(message.substring(0, i-1));
-                }
-            }
+            line = ECodeUtilities.findNumber(m, "line");
+            column = ECodeUtilities.findNumber(m, "column");
 
             //System.out.println(message);
             sourceInformation = new SourceInformation(file,
@@ -139,7 +103,6 @@ public class InterpreterException extends ThrownException {
         super(e);
 
         boolean sourceGot = false;
-
         Node n = e.getNode();
 
         if (n != null && n.getFilename() != null) {
@@ -160,18 +123,12 @@ public class InterpreterException extends ThrownException {
         if (e instanceof CatchedExceptionError) {
 
             String m = ((CatchedExceptionError)e).getException().toString();
-            int index = m.indexOf('\n');
-            while(index > -1) {
-                m = m.substring(0,index) + "<BR>" + m.substring(index + 1, m.length());
-                index = m.indexOf('\n');
-            }
 
-            index = m.indexOf('\r');
-            while(index > -1) {
-                m = m.substring(0,index) + m.substring(index + 1, m.length());
-                index = m.indexOf('\r');
-            }
+            m = ECodeUtilities.replace(m, "<", "&lt;");
+            m = ECodeUtilities.replace(m, ">", "&gt;");
 
+            m = ECodeUtilities.replace(m,"\n","<BR>");
+            m = ECodeUtilities.replace(m,"\r","");
 
             message += "<P>" + m + "</P>";
 
@@ -181,62 +138,24 @@ public class InterpreterException extends ThrownException {
                 int column = 0;
                 String file = "buffer";
 
-                index = m.toLowerCase().indexOf("line");
-                if (index > -1) {
-                    String message = m.substring(index + "line".length()).trim();
-                    int i = 1;
-                    while (true) {
-                        try {
-                            Integer.parseInt(message.substring(i-1,i));
-                            i++;
-                        } catch (NumberFormatException ex) {
-                            break;
-                        }
-                    }
-                    if (i > 1) {
-                        line = Integer.parseInt(message.substring(0,i-1));
-                    }
-                }
-
-                index = m.toLowerCase().indexOf("column");
-                if (index > -1) {
-                    String message = m.substring(index + "column".length()).trim();
-                    int numberEndIndex = message.indexOf(" ");
-                    int i = 1;
-                    while (true) {
-                        try {
-                            Integer.parseInt(message.substring(i-1,i));
-                            i++;
-                        } catch (NumberFormatException ex) {
-                            break;
-                        }
-                    }
-                    if (i > 1) {
-                        column = Integer.parseInt(message.substring(0,i-1));
-                    }
-                }
+                line = ECodeUtilities.findNumber(m, "line");
+                column = ECodeUtilities.findNumber(m, "column");
 
                 //System.out.println(message);
                 sourceInformation = new SourceInformation(file,
-                                                          line,
-                                                          column);
+                                                      line,
+                                                      column);
             }
 
         } else if (e instanceof ThrownException) {
 
             String m = ((ThrownException)e).getException().toString();
-            int index = m.indexOf('\n');
 
-            while(index > -1) {
-                m = m.substring(0, index) + "<BR>" + m.substring(index + 1, m.length());
-                index = m.indexOf('\n');
-            }
+            m = ECodeUtilities.replace(m, "<", "&lt;");
+            m = ECodeUtilities.replace(m, ">", "&gt;");
 
-            index = m.indexOf('\r');
-            while(index > -1) {
-                m = m.substring(0,index) + m.substring(index + 1, m.length());
-                index = m.indexOf('\r');
-            }
+            m = ECodeUtilities.replace(m,"\n","<BR>");
+            m = ECodeUtilities.replace(m,"\r","");
 
             message += "<P>" + m + "</P>";
 
@@ -246,40 +165,8 @@ public class InterpreterException extends ThrownException {
                 int column = 0;
                 String file = "buffer";
 
-                index = m.toLowerCase().indexOf("line");
-                if (index > -1) {
-                    String message = m.substring(index + "line".length()).trim();
-                    int i = 1;
-                    while (true) {
-                        try {
-                            Integer.parseInt(message.substring(i-1,i));
-                            i++;
-                        } catch (NumberFormatException ex) {
-                            break;
-                        }
-                    }
-                    if (i > 1) {
-                        line = Integer.parseInt(message.substring(0,i-1));
-                    }
-                }
-
-                index = m.toLowerCase().indexOf("column");
-                if (index > -1) {
-                    String message = m.substring(index + "column".length()).trim();
-                    int numberEndIndex = message.indexOf(" ");
-                    int i = 1;
-                    while (true) {
-                        try {
-                            Integer.parseInt(message.substring(i-1,i));
-                            i++;
-                        } catch (NumberFormatException ex) {
-                            break;
-                        }
-                    }
-                    if (i > 1) {
-                        column = Integer.parseInt(message.substring(0,i-1));
-                    }
-                }
+                line = ECodeUtilities.findNumber(m, "line");
+                column = ECodeUtilities.findNumber(m, "column");
 
                 //System.out.println(message);
                 sourceInformation = new SourceInformation(file,
@@ -290,17 +177,11 @@ public class InterpreterException extends ThrownException {
 
             String m = e.getMessage();
 
-            int index = m.indexOf('\n');
-            while(index > -1) {
-                m = m.substring(0,index) + "<BR>" + m.substring(index + 1, m.length());
-                index = m.indexOf('\n');
-            }
+            m = ECodeUtilities.replace(m, "<", "&lt;");
+            m = ECodeUtilities.replace(m, ">", "&gt;");
 
-            index = m.indexOf('\r');
-            while(index > -1) {
-                m = m.substring(0,index) + m.substring(index + 1, m.length());
-                index = m.indexOf('\r');
-            }
+            m = ECodeUtilities.replace(m,"\n","<BR>");
+            m = ECodeUtilities.replace(m,"\r","");
 
             message += "<P>" + m + "</P>";
 
@@ -310,40 +191,8 @@ public class InterpreterException extends ThrownException {
                 int column = 0;
                 String file = "buffer";
 
-                index = m.toLowerCase().indexOf("line");
-                if (index > -1) {
-                    String message = m.substring(index + "line".length()).trim();
-                    int i = 1;
-                    while (true) {
-                        try {
-                            Integer.parseInt(message.substring(i-1,i));
-                            i++;
-                        } catch (NumberFormatException ex) {
-                            break;
-                        }
-                    }
-                    if (i > 1) {
-                        line = Integer.parseInt(message.substring(0,i-1));
-                    }
-                }
-
-                index = m.toLowerCase().indexOf("column");
-                if (index > -1) {
-                    String message = m.substring(index + "column".length()).trim();
-                    int numberEndIndex = message.indexOf(" ");
-                    int i = 1;
-                    while (true) {
-                        try {
-                            Integer.parseInt(message.substring(i-1,i));
-                            i++;
-                        } catch (NumberFormatException ex) {
-                            break;
-                        }
-                    }
-                    if (i > 1) {
-                        column = Integer.parseInt(message.substring(0,i-1));
-                    }
-                }
+                line = ECodeUtilities.findNumber(m, "line");
+                column = ECodeUtilities.findNumber(m, "column");
 
                 //System.out.println(message);
                 sourceInformation = new SourceInformation(file,
