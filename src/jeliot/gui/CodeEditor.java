@@ -58,6 +58,7 @@ public class CodeEditor extends JComponent {
      */
     private String template = bundle.getString("code_editor.template");
 
+    private String title = bundle.getString("name") + bundle.getString("version");
     
     /**
 	 * Font for the editor area.
@@ -461,9 +462,6 @@ public class CodeEditor extends JComponent {
     	if (returnVal == JFileChooser.APPROVE_OPTION) {
     		File file = fileChooser.getSelectedFile();
     		writeProgram(file);
-    		currentFile = file; // Jeliot 3
-    		setChanged(false); //Jeliot 3
-            setTitle(file.getName()); // Jeliot 3
     	}
 
     }
@@ -474,12 +472,25 @@ public class CodeEditor extends JComponent {
      *
      * @param file The file where the content of
      * JTextArea is saved.
+     * 
+     * @see JeliotWindow#tryToEnterAnimate()
      */
     public void writeProgram(File file) {
         try {
             FileWriter w = new FileWriter(file);
             w.write(area.getText());
             w.close();
+            
+            /*
+             * These are added here because
+             * JeliotWindow.tryToEnterAnimate()
+             * calls this method directly without calling
+             * saveProgram method first.
+             */
+    		currentFile = file; // Jeliot 3
+    		setChanged(false); //Jeliot 3
+            setTitle(file.getName()); // Jeliot 3
+
         }
         catch (IOException e) {
             //e.printStackTrace();
@@ -526,7 +537,7 @@ public class CodeEditor extends JComponent {
         setProgram(template);
 
         currentFile = null; //Jeliot 3
-        setTitle("Untitled");
+        setTitle("");
     }
     
     /**
@@ -535,7 +546,11 @@ public class CodeEditor extends JComponent {
      */
     public void setTitle(String filename) {
         if (masterFrame != null) {
-            masterFrame.setTitle(bundle.getString("name") + bundle.getString("version") + " - " + filename);
+            if (filename != null && filename.equals("")) {
+                masterFrame.setTitle(title);                
+            } else {
+                masterFrame.setTitle(title + " - " + filename);
+            }
         }
     }
     
