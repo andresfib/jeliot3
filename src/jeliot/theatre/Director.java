@@ -61,6 +61,8 @@ public class Director {
     private Stack scratchStack = new Stack();
     private Stack frameStack = new Stack();
 
+    private boolean errorOccured = false;
+
     /** Not needed in Jeliot 3 */
     //private Stack exprStack = new Stack();
 
@@ -101,6 +103,8 @@ public class Director {
     }
 
     public void direct() throws Exception {
+        errorOccured = false;
+        highlight(new Highlight(0,0,0,0));
         cbox = factory.produceConstantBox();
         theatre.addPassive(cbox);
         manager.setConstantBox(cbox);
@@ -111,8 +115,9 @@ public class Director {
 
         //Excecution of the program code takes place here.
         eCodeInterpreter.execute();
-
-        highlight(new Highlight(0,0,0,0));
+        if (!errorOccured) {
+            highlight(new Highlight(0,0,0,0));
+        }
         theatre.flush();
     }
 
@@ -1555,6 +1560,7 @@ public class Director {
     }
 
     public void showErrorMessage(InterpreterError e) {
+        errorOccured = true;
         jeliot.showErrorMessage(e);
     }
 

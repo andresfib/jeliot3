@@ -490,19 +490,6 @@ public class CodeEditor extends JComponent {
         return programCode;
     }
 
-/*  //Jeliot 3
-    public String replace(String from, String c, String with) {
-        int index = from.indexOf(c);
-        while(index != -1) {
-            from = from.substring(0, index) +
-            with +
-            from.substring(index + 1, from.length());
-            index = from.indexOf(c);
-        }
-        return from;
-    }
-*/
-
     /**
      * Method highlights the specified Statement area by selecting it.
      *
@@ -529,7 +516,11 @@ public class CodeEditor extends JComponent {
         Runnable updateAComponent = new Runnable() {
             public void run() {
                 area.requestFocus();
-                area.select(left, right);
+                if (left != 0 && left == right) {
+                    area.select(left, right+1);
+                } else {
+                    area.select(left, right);
+                }
             }
         };
         SwingUtilities.invokeLater(updateAComponent);
@@ -560,7 +551,11 @@ public class CodeEditor extends JComponent {
         final int right = r;
 
         area.requestFocus();
-        area.select(left, right);
+        if (left != 0 && left == right) {
+            area.select(left, right+1);
+        } else {
+            area.select(left, right);
+        }
     }
 
 }

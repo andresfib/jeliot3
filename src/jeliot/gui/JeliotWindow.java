@@ -148,6 +148,9 @@ public class JeliotWindow {
             new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     changeTheatrePane(theatre);
+                    rewindButton.setEnabled(true);
+                    String[] s1 = {bundle.getString("menu.animation.rewind")};
+                    setEnabledMenuItems(true, s1);
                     //editButton.doClick();
                 }
            }
@@ -1104,6 +1107,24 @@ public class JeliotWindow {
     }
 
     public void showErrorMessage(String e) {
+        errorOccured = true;
+
+        pauseButton.setEnabled(false);
+        editButton.setEnabled(true);
+        stepButton.setEnabled(false);
+        playButton.setEnabled(false);
+        pauseButton.setEnabled(false);
+        rewindButton.setEnabled(false);
+
+        String[] s1 = {bundle.getString("menu.control.edit")};
+        setEnabledMenuItems(true, s1);
+        String[] s2 = {bundle.getString("menu.animation.step"),
+                       bundle.getString("menu.animation.play"),
+                       bundle.getString("menu.animation.rewind"),
+                       bundle.getString("menu.animation.run_until"),
+                       bundle.getString("menu.animation.pause")};
+        setEnabledMenuItems(false, s2);
+
         errorJEditorPane.setText(e);
         changeTheatrePane(errorViewer);
     }
@@ -1121,23 +1142,7 @@ public class JeliotWindow {
 
     public void showErrorMessage(InterpreterError e) {
 
-        pauseButton.setEnabled(false);
-        errorOccured = true;
         showErrorMessage(e.getMessage());
-
-        editButton.setEnabled(true);
-        stepButton.setEnabled(false);
-        playButton.setEnabled(false);
-        pauseButton.setEnabled(false);
-        rewindButton.setEnabled(true);
-
-        String[] s1 = {bundle.getString("menu.control.edit"),
-                       bundle.getString("menu.animation.rewind")};
-        setEnabledMenuItems(true, s1);
-        String[] s2 = {bundle.getString("menu.animation.step"),
-                       bundle.getString("menu.animation.play"),
-                       bundle.getString("menu.animation.pause")};
-        setEnabledMenuItems(false, s2);
 
         Component c = codeNest.getLeftComponent();
 
@@ -1368,14 +1373,14 @@ public class JeliotWindow {
             stepButton.setEnabled(false);
             playButton.setEnabled(false);
             pauseButton.setEnabled(false);
-            rewindButton.setEnabled(true);
+            rewindButton.setEnabled(false);
 
-            String[] s1 = {bundle.getString("menu.control.edit"),
-                           bundle.getString("menu.animation.rewind")};
+            String[] s1 = {bundle.getString("menu.control.edit")};
             setEnabledMenuItems(true, s1);
             String[] s2 = {bundle.getString("menu.animation.step"),
                            bundle.getString("menu.animation.play"),
                            bundle.getString("menu.animation.run_until"),
+                           bundle.getString("menu.animation.rewind"),
                            bundle.getString("menu.animation.pause")};
             setEnabledMenuItems(false, s2);
         }
