@@ -490,7 +490,7 @@ public class CodeEditor2 extends JComponent {
         Runnable updateAComponent = new Runnable() {
 
             public void run() {
-                requestFocus();
+                //area.requestFocus();
                 if (left != 0 && left == right) {
                     area.select(left, right + 1);
                 } else {
@@ -525,7 +525,7 @@ public class CodeEditor2 extends JComponent {
         final int left = l - 1;
         final int right = r;
 
-        requestFocus();
+        //area.requestFocus();
         if (left >= 0) {
             if (left != 0 && left == right) {
                 area.select(left, right + 1);
@@ -642,7 +642,7 @@ public class CodeEditor2 extends JComponent {
     void clearProgram() {
         setProgram(template);
         area.setCaretPosition(0);
-        area.requestFocus();
+        //area.requestFocus();
 
         currentFile = null; //Jeliot 3
         setTitle("");

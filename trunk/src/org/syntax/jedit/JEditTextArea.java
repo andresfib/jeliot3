@@ -1572,6 +1572,7 @@ public class JEditTextArea extends JComponent
 			inputHandler.keyReleased(evt);
 			break;
 		}
+        super.processKeyEvent(evt); //Jeliot 3
 	}
 
 	// protected members

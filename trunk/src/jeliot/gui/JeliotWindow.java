@@ -186,6 +186,7 @@ public class JeliotWindow {
     /** This variable will control the panels. */
     private PanelController panelController;
 
+    /** Showing the history of the program execution */
     private HistoryView hv;
     
     private boolean askForMethod = false;
@@ -342,6 +343,9 @@ public class JeliotWindow {
      */
     private String udir;
 
+    /** Control panel */
+    private JComponent conPan;
+    
     /**
      * Assigns the values of the parameters in the object values. Constructs the
      * panelController with theatre and iload.
@@ -415,7 +419,7 @@ public class JeliotWindow {
         editor.setMinimumSize(minimumSize);
 
         JPanel bottomPane = new JPanel(new BorderLayout());
-        final JComponent conPan = makeControlPanel();
+        conPan = makeControlPanel();
         bottomPane.add("West", conPan);
 
         OutputConsole oc = new OutputConsole(conPan);
@@ -485,7 +489,7 @@ public class JeliotWindow {
 
         frame.pack();
         frame.show();
-        editor.requestFocus();
+        //editor.requestFocus();
         //System.out.println(theatre.getSize());
     }
 
@@ -957,6 +961,7 @@ public class JeliotWindow {
         int loc = codeNest.getDividerLocation();
         codeNest.setLeftComponent(comp);
         codeNest.setDividerLocation(loc);
+        conPan.requestFocus();
     }
 
     /**
@@ -971,6 +976,7 @@ public class JeliotWindow {
         int loc = codeNest.getDividerLocation();
         codeNest.setRightComponent(comp);
         codeNest.setDividerLocation(loc);
+        conPan.requestFocus();
     }
 
     /**
