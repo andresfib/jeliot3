@@ -207,11 +207,11 @@ public class TheaterManager implements ComponentListener {
         
         Dimension d = theatre.getSize();
         
-        if (d.width < loc.x + actor.getWidth()) {
-            d.width = loc.x + actor.getWidth();
+        if (d.width < loc.x + actor.getWidth() + 35) {
+            d.width = loc.x + actor.getWidth() + 35;
         }
-        if (d.height < loc.y + actor.getHeight()) {
-            d.height = loc.y + actor.getHeight();
+        if (d.height < loc.y + actor.getHeight() + 35) {
+            d.height = loc.y + actor.getHeight() + 35;
         }
         theatre.setPreferredSize(d);
         theatre.revalidate();
