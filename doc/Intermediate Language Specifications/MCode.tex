@@ -43,57 +43,144 @@ The usual \mcode{} sentence will consist of:
 
 \section{Grammar}
 
-%\begin{mcodegrammar}
 
 <program> ::= <classes info> <static method call> \p{END}
-<classes info> ::= <class info> | <classes info> <class info>
-<class info> ::= \p{CLASS METHOD CONSTRUCTOR FIELD}\?  \p{END_CLASS}
+\begin{tabbing}
+<classes info> ::= \=<class info> \\
+				\> | <classes info> <class info>
+\end{tabbing}
+
+<class info> ::= \p{CLASS METHOD CONSTRUCTOR FIELD}$?$  \p{END\_CLASS}
 %<class info> ::= \p{CLASS} \p{METHOD} \p{CONSTRUCTOR} \p{FIELD}? \p{END_CLASS}
 
 
 <static method call> ::= \p{SMC} <method call info> <method body> \p{SMCC}
+
 <object method call> ::= \p{OMC} <method call info> <method body> \p{OMCC}
 
 <method call info> ::= \p{PARAMETER} \p{MD} <parameters info>?
-<parameters info> ::= <parameter info> | <parameters info> <parameter info>
-<parameter info> ::= \p{BEGIN} ??????????? \p{P}
+\begin{tabbing}
+<parameters info> ::= \=<parameter info> \\
+					  \> | <parameters info> <parameter info>
+\end{tabbing}
+<parameter info> ::= \p{BEGIN} <expression> \p{P}
 
 <method body> ::= <block statements>
-<block statements> ::= <block statement> | <block statements><block statement>
-<block statement> ::= <variable declaration> | <statement>
+\begin{tabbing}
+<block statements> ::= \= <block statement> \\
+					   \>| <block statements> <block statement>
+\end{tabbing}
+\begin{tabbing}					   
+<block statement> ::= \= <variable declaration> \\
+                      \> | <statement>
+\end{tabbing}
 <scoped block> ::= \p{SCOPE 1} <block statements> \p{SCOPE 0}
 
-<statement> ::= <simple statement> | <if statement> | <for statement> | <while statement> 
-<simple statement> ::= <scoped block> | <statement expression> | <switch statement> | <do statement> | <continue statement> | <break statement> | <return statement>
-<statement expression> ::= <assignment> | <pre expression> | <post expression> | <method call> | <class allocation>
+\begin{tabbing}
+<statement> ::= \= <simple statement> \\
+				\> | <if statement> \\
+				\> | <for statement> \\
+				\> | <while statement> 
+\end{tabbing}
+\begin{tabbing}				
+<simple statement> ::= \= <scoped block> \\
+					\> | <statement expression> \\
+					\> | <switch statement> \\
+					\> | <do statement> \\
+					\> | <continue statement> \\
+					\> | <break statement> \\
+					\> | <return statement>
+\end{tabbing}
+\begin{tabbing}					
+<statement expression> ::= \= <assignment> \\
+						   \> | <pre expression> \\
+						   \> | <post expression> \\
+						   \> | <method call> \\
+						   \> | <class allocation>
+\end{tabbing}
+\begin{tabbing}
+<if statement> ::= \= <expression> \p{IFT} <statement>? \\
+				   \> | <expression> \p{IFTE} <statement>? 
+\end{tabbing}				  
+<while statement> ::= <expression> \p{WHI} <statement>?
 
-<if statement> ::= <expression> \p{IFT} <statement>? |  <expression> \p{IFTE} <statement>? 
-<while statement> ::= <expression> \p{WHI} <statement>? | <expression> \p{WHI} <statement>
-<switch statement> ::= \p{SWITCHB} <expression> \p{SWITCHBF} <block>? SWITCH
-<for statement> ::= ..........
+<switch statement> ::= \p{SWITCHB} <expression> \p{SWITCHBF} <block>? \p{SWITCH}
+
+<for statement> ::= \p{SCOPE 1} <variable declarations> <expression> \p{FOR} <statement>? \p{SCOPE 0} 
+
 <do statement> ::= <block> <expression> \p{DO}
+
 <break statement> ::= \p{BREAK}
+
 <break statement> ::= \p{CONTINUE}
+
 <return statement> ::= <expression>? \p{RETURN}
 
-<expression> ::= <assignment> | <binary expression> | <unary expression> | <primary>
+\begin{tabbing}
+<expression> ::= \= <assignment> \\
+				 \> | <binary expression> \\
+				 \> | <unary expression> \\
+				 \> | <primary>
+\end{tabbing}
+<assignment> ::=  \p{BEGIN} <expression> \p{TO} <left hand side>
+\begin{tabbing}
+<left hand side> ::= \= <identifier> \\
+					 \> | <field access> \\
+					 \> | <array access>
+\end{tabbing}
 
-<assignments> ::=  \p{BEGIN} <expression> \p{TO} <left hand side>
-<left hand side> ::= <identifier> | <field access> | <array access>
+<binary expression> ::= \p{BEGIN} \p{LEFT} <expression> \p{RIGHT} <expression> <binary operator>
 
-<binary expression> ::= \p{BEGIN} p\{LEFT} <expression> \p{RIGHT} <expression> <binary operator>
 <unary expression> ::= \p{BEGIN} <expression> <unary operator>
-
-<primary> ::= <literal> | <field access> | <array access> | <class allocation> | <array allocation> | <method call>
-
+\begin{tabbing}
+<primary> ::= \= <literal> \\
+			  \> | <field access> \\
+			  \> | <array access> \\
+			  \> | <class allocation> \\
+			  \> | <array allocation> \\
+			  \>| <method call> 
+\end{tabbing}
 <literal> ::= \p{L}
-<field access> ::= <primary> <identifier> OFA
-<array access> ::= <identifier> <dim expressions> AAC
-<dim expressions> ::= <expression> | <dim expressions> <expression>
-<method call> ::= <static method call> | <object method call>
 
-<array allocation> ::= <dims expressions> AA
-<class allocation> ::= SA <method call info> <method body> SAC
+<identifier> ::= \p{QN}
+
+<variable declaration> ::= \p{VD}
+
+<field access> ::= <primary> <identifier> OFA
+
+<array access> ::= <identifier> <dim expressions> AAC
+\begin{tabbing}
+<dim expressions> ::= \= <expression> | \\
+					  \> <dim expressions> <expression>
+\end{tabbing}
+\begin{tabbing}					  
+<method call> ::= \= <static method call> \\
+				  \> | <object method call>
+\end{tabbing}
+<array allocation> ::= <dims expressions> \p{AA}
+
+<class allocation> ::= \p{SA} <method call info> <method body> \p{SAC}
+
+\begin{tabbing}
+<variable declarations> ::=\= <variable declaration> \\
+						   \> | <variable declarations> <variable declaration>	   
+						  						   
+\end{tabbing}
+
+<pre expression> ::= <identifier> \p{PRIE} | <identifier> \p{PRDE}
+
+<post expression> ::= <identifer> \p{PIE} | <identifier> \p{PDE}
+
+\begin{tabbing}
+<unary operator> ::= \p{PLUS} | \p{MINUS} | \p{COMP} | \p{NO} 
+\end{tabbing}
+\begin{tabbing}
+<binary operator> ::=\= \p{AE} | \p{SE} | \p{ME} | \p{DE} | \p{RE} \\
+				     \> | \p{BITOR} | \p{BITXOR} | \p{BITAND} \\
+				     \> | \p{LSHIFT}| \p{RSHIFT} | \p{URSHIFT} \\
+				     \> | \p{XOR} | \p{AND} | \p{OR} | \p{EE} | \p{NE} \\
+				     \> | \p{GT} | \p{LE} | \p{LQE} | \p{GQT} \\
+\end{tabbing}
 %\end{mcodegrammar}
 
 \section{Constants}
@@ -167,13 +254,9 @@ New blocks of Java code are delimited in \mcode{} through \p{SCOPE}. This instru
 CAUTION! This instruction is implementation specific and the need for the usage of this instruction depends on the implementation of the interpreter. If your interpreter traverses the tree in the right order there is no need to use the \p{CONSCN}. The usage of the instruction is next described in \djava{}.
 
 This instruction is created because in \djava{} the super method calls in the beginning of the constructor
-<<<<<<< MCode.tex
 are handled before the actual constructor invocation and thus the information is not extracted in the correct order. The constructor call number is used to correct the order so that during the simple allocation visit in EvaluationVisitor the constructor call number is send for the first time. When all the super method calls are finished and the constructor is really invoked the constructor call number is printed out again. The \mcode{} interpreter collects all the commands between the corresponding constructor call numbers and executes them after the constructor is really invoked that is two lines after the second constructor call number is read.
 However this instruction is due to \djava{} drawbacks. If your interpreter traverses the tree in a meaningful way, you should not use the CONSCN instruction.
-=======
-are handled before the actual constructor invocation and thus the information is not extracted in the correct order. The constructor call number is used to correct the order so that during the simple allocation visit in EvaluationVisitor the constructor call number is send for the first time. When all the super method calls are finished and the constructor is really invoked the constructor call number is printed out again. The \mcode{} interpreter collects all the commands between the corresponding constructor call numbers and executes them after the constructor is really invoked that is two lines after the second constructor call number is read. 
 
->>>>>>> 1.5
 \section{Statements}
 
 \subsection{A (Assignment)}
@@ -315,7 +398,9 @@ Array allocation instruction is a complicated one, as it carries a lot of inform
 
 \minstr{AAC ir arrayNameReference deep cellReferences cellNumbers value type loc}
 
-Array accesses instructions consist on different tokens. The common ones (\p{ir}, \p{value}, \p{type} and \p{loc}) are also present. But we can find very specific ones. The \p{arrayReference} points to the instruction produced when visiting an array name, normally a qualified name. deep refers to the level of deepness of the array access. This is useful for multidimensional arrays when they are not accessed till the last level, the one holding the data value. The \p{cellReferences} and the \p{cellNumber} meet the same purpose than \p{dimensionReferences} and \p{dimensionsSizes} in array allocation (\p{AA}) instruction. The \p{cellReferences} points to the instructions that evaluated the value of each cell pointer. The \p{cellNumbers} are the actual values of the cell access. Both of them are presented as a comma separated list. For example in ``\p{array[3][5]}'', \p{cellReferences} will point to the literal instruction of ``3'' and ``5'' and \p{cellNumbers} will contain ``3,5''.
+Array accesses instructions consist on different tokens. The common ones (\p{ir}, \p{value}, \p{type} and \p{loc}) are also present. But we can find very specific ones.
+
+The \p{arrayReference} points to the instruction produced when visiting an array name, normally a qualified name. deep refers to the level of deepness of the array access. This is useful for multidimensional arrays when they are not accessed till the last level, the one holding the data value. The \p{cellReferences} and the \p{cellNumber} meet the same purpose than \p{dimensionReferences} and \p{dimensionsSizes} in array allocation (\p{AA}) instruction. The \p{cellReferences} points to the instructions that evaluated the value of each cell pointer. The \p{cellNumbers} are the actual values of the cell access. Both of them are presented as a comma separated list. For example in ``\p{array[3][5]}'', \p{cellReferences} will point to the literal instruction of ``3'' and ``5'' and \p{cellNumbers} will contain ``3,5''.
 
 \subsection{Array Length}
 
