@@ -63,28 +63,68 @@ public class ECodeUtilities {
     private static BufferedReader reader=null;
 
     public static int resolveType(String type) {
-        if (type.equals(boolean.class.getName())) {
+        if (type.equals(boolean.class.getName()) ||
+            type.equals((new Boolean(true)).getClass().getName()) ||
+            type.equals("Z")) {
+
             return ECodeUtilities.BOOLEAN;
-        } else if (type.equals(byte.class.getName())) {
+
+        } else if (type.equals(byte.class.getName()) ||
+                   type.equals((new Byte((byte)0)).getClass().getName()) ||
+                   type.equals("B")) {
+
             return ECodeUtilities.BYTE;
-        } else if (type.equals(short.class.getName())) {
+
+        } else if (type.equals(short.class.getName()) ||
+                   type.equals((new Short((short)0)).getClass().getName()) ||
+                   type.equals("S")) {
+
             return ECodeUtilities.SHORT;
-        } else if (type.equals(int.class.getName())) {
+
+        } else if (type.equals(int.class.getName()) ||
+                   type.equals((new Integer(0)).getClass().getName()) ||
+                   type.equals("I")) {
+
             return ECodeUtilities.INT;
-        } else if (type.equals(long.class.getName())) {
+
+        } else if (type.equals(long.class.getName()) ||
+                   type.equals((new Long(0)).getClass().getName()) ||
+                   type.equals("J")) {
+
             return ECodeUtilities.LONG;
-        } else if (type.equals(char.class.getName())) {
+
+        } else if (type.equals(char.class.getName()) ||
+                   type.equals((new Character('\0')).getClass().getName()) ||
+                   type.equals("C")) {
+
             return ECodeUtilities.CHAR;
-        } else if (type.equals(float.class.getName())) {
+
+        } else if (type.equals(float.class.getName()) ||
+                   type.equals((new Float(0.0f)).getClass().getName()) ||
+                   type.equals("F")) {
+
             return ECodeUtilities.FLOAT;
-        } else if (type.equals(double.class.getName())) {
+
+        } else if (type.equals(double.class.getName()) ||
+                   type.equals((new Double(0.0)).getClass().getName()) ||
+                   type.equals("D")) {
+
             return ECodeUtilities.DOUBLE;
-        } else if (type.equals("".getClass().getName())) {
+
+        } else if (type.equals("".getClass().getName()) ||
+                   type.equals("L".getClass().getName())) {
+
             return ECodeUtilities.STRING;
-        } else if (type.equals(Void.TYPE.getName())) {
+
+        } else if (type.equals(Void.TYPE.getName()) ||
+                   type.equals("V")) {
+
             return ECodeUtilities.VOID;
+
         } else {
+
             return ECodeUtilities.REFERENCE;
+
         }
     }
 
@@ -117,17 +157,7 @@ public class ECodeUtilities {
 //     }
 
     public static boolean isPrimitive(String type) {
-        if (type.equals(boolean.class.getName()) ||
-            type.equals(byte.class.getName()) ||
-            type.equals(short.class.getName()) ||
-            type.equals(int.class.getName()) ||
-            type.equals(long.class.getName()) ||
-            type.equals(char.class.getName()) ||
-            type.equals(float.class.getName()) ||
-            type.equals(double.class.getName()) ||
-            type.equals("".getClass().getName()) ||
-            type.equals(Void.TYPE.getName())) {
-            //How about null?!?
+        if (resolveType(type) != ECodeUtilities.REFERENCE) {
             return true;
         } else {
             return false;
@@ -139,6 +169,65 @@ public class ECodeUtilities {
             return false;
         }
         return true;
+    }
+
+    public static int getNumberOfDimensions(String type) {
+        int n = type.length();
+        boolean stillArray = true;
+        int dims = 0;
+        for (int i = 0; i < n; i++) {
+            if (type.substring(i, i+1).equals("[")) {
+                dims++;
+            } else {
+                return dims;
+            }
+        }
+        return dims;
+    }
+
+    public static String resolveComponentType(String type) {
+        if (isArray(type)) {
+            return replace(type, "[", "");
+        } else {
+            return null;
+        }
+    }
+
+    public static String changeComponentTypeToPrintableForm(String type) {
+        if (type.equals(boolean.class.getName()) || type.equals("Z")) {
+            return boolean.class.getName();
+        } else if (type.equals(byte.class.getName()) || type.equals("B")) {
+            return byte.class.getName();
+        } else if (type.equals(short.class.getName()) || type.equals("S")) {
+            return short.class.getName();
+        } else if (type.equals(int.class.getName()) || type.equals("I")) {
+            return int.class.getName();
+        } else if (type.equals(long.class.getName()) || type.equals("J")) {
+            return long.class.getName();
+        } else if (type.equals(char.class.getName()) || type.equals("C")) {
+            return char.class.getName();
+        } else if (type.equals(float.class.getName()) || type.equals("F")) {
+            return float.class.getName();
+        } else if (type.equals(double.class.getName()) || type.equals("D")) {
+            return double.class.getName();
+        } else if (type.equals("".getClass().getName()) || type.equals("L".getClass().getName())) {
+            return "".getClass().getName();
+        } else if (type.equals(Void.TYPE.getName()) || type.equals("V")) {
+            return Void.TYPE.getName();
+        } else {
+            return type.substring(1);
+        }
+    }
+
+    public static String replace(String from, String c, String with) {
+        int index = from.indexOf(c);
+        while(index != -1) {
+            from = from.substring(0, index) +
+            with +
+            from.substring(index + 1, from.length());
+            index = from.indexOf(c);
+        }
+        return from;
     }
 
     public static int resolveBinOperator(int operator) {
@@ -365,6 +454,14 @@ public class ECodeUtilities {
         return new Highlight(bl, bc, el, ec);
     }
 
+    public static String getHashCode(String str) {
+        int index = str.indexOf('@');
+        if (index > 0) {
+            str = str.substring(index+1);
+        }
+        return str;
+    }
+
     public static void setWriter(PrintWriter w){
         writer=w;
     }
@@ -378,7 +475,7 @@ public class ECodeUtilities {
         if ( !EvaluationVisitor.isSetPreparing() ) {
 
             writer.println(str); // connected to jeliot
-            
+
             //System.out.println(str);// Output to stdout ; debugging only
         }
     }
@@ -433,5 +530,5 @@ public class ECodeUtilities {
         }
         return result;
     }
-    
+
 }

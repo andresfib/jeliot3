@@ -217,7 +217,7 @@ public class Director {
         engine.showAnimation(dotsAct.appear(dotsLoc));
         expr.bind(dotsAct);
 
-        // Se-activate the theatre after animation.
+        // Re-activate the theatre after animation.
         theatre.release();
 
         return expr;
@@ -448,11 +448,11 @@ public class Director {
         if (args != null && args.length > 0) {
 
             for (int i = 0; i < n; ++i) {
-                vars[i].assign(args[i]);
-                Value casted = vars[i].getValue();
-                ValueActor castact = factory.produceValueActor(casted);
-                valact[i] = args[i].getActor();
-                anim[i] = valact[i].fly(varact[i].reserve(castact));
+                    vars[i].assign(args[i]);
+                    Value casted = vars[i].getValue();
+                    ValueActor castact = factory.produceValueActor(casted);
+                    valact[i] = args[i].getActor();
+                    anim[i] = valact[i].fly(varact[i].reserve(castact));
             }
 
             engine.showAnimation(anim);
@@ -761,24 +761,45 @@ public class Director {
             if (returnValue != null) {
                 ValueActor returnAct =
                         factory.produceValueActor(returnValue);
+
                 returnAct.setLocation(castAct.getRootLocation());
                 returnValue.setActor(returnAct);
             }
         }
         else {
-            //Here is a problem. How to represent Instance variable?
+            // Get/create actors.
+            ReferenceActor refAct = (ReferenceActor) value.getActor();
+            //refAct.calculateBends();
+            ReferenceVariableActor rva =
+                                   (ReferenceVariableActor) variableAct;
 
-            //InstanceActor instAct = (InstanceActor) ((Instance)value.getValue()).getActor();
-//          ReferenceActor refAct =
-//             new ReferenceActor(instAct, variableAct);
-//          refAct.calculateBends();
-//          ((ReferenceVariableActor)variableAct).setReference(refAct);
-//          instAct.addReference(refAct);
-//          theatre.repaint();
+            //refAct.setBackground(rva.getBackground());
+
+            ReferenceActor ra = factory.produceReferenceActor(refAct);
+            casted.setActor(ra);
+            //rva.setReference(refAct);
+            //instAct.addReference(refAct);
+            Point valueLoc = rva.reserve(ra);
+
+            theatre.capture();
+            engine.showAnimation(refAct.fly(valueLoc));
+            rva.bind();
+            theatre.removePassive(refAct);
+            theatre.release();
+
+            if (returnValue != null) {
+                ValueActor returnAct =
+                  factory.produceReferenceActor((Reference)returnValue);
+                returnAct.setLocation(ra.getRootLocation());
+                returnValue.setActor(returnAct);
+            }
+
+/*
             try {
-                Thread.sleep(400);
+                Thread.sleep(200);
             }
             catch (InterruptedException e) { }
+*/
         }
 
     }
@@ -1330,7 +1351,15 @@ public class Director {
         return val;
     }
 
-/*    public void showArrayCreation(ArrayInstance array, Value lenVal) {
+    public void showArrayCreation(ArrayInstance array, jeliot.lang.Reference ref,
+                                  Value[] lenVal, int expressionCounter,
+                                  Highlight h) {
+
+        highlight(h);
+
+        //Array creation here
+        //Use SMIActor as base.
+
         ArrayActor arrayAct = factory.produceArrayActor(array);
         array.setActor(arrayAct);
 
@@ -1339,40 +1368,65 @@ public class Director {
         engine.showAnimation(arrayAct.appear(loc));
         theatre.release();
         manager.bind(arrayAct);
+
+        ReferenceActor refAct = factory.produceReferenceActor(ref);
+        ref.setActor(refAct);
+        refAct.setLocation(arrayAct.getRootLocation());
+
+        theatre.capture();
+
+        ExpressionActor expr = currentScratch.getExpression(1, expressionCounter);
+        Point firstLoc = expr.reserve(refAct);
+        engine.showAnimation(refAct.fly(firstLoc));
+        expr.bind(refAct);
+
+        theatre.release();
+
     }
 
+    public void showArrayAccess(VariableInArray var,
+                                Value[] indexVal,
+                                Value returnVal,
+                                Highlight h) {
 
-    public void showArrayAccess(
-            VariableInArray var,
-            Value indexVal,
-            Value returnVal) {
+        highlight(h);
 
         Value value = var.getValue();
 
-        final VariableInArrayActor varAct =
-                (VariableInArrayActor)var.getActor();
+        final VariableInArrayActor varAct = (VariableInArrayActor)var.getActor();
 
         ValueActor returnAct = factory.produceValueActor(returnVal);
         returnVal.setActor(returnAct);
         Point loc = value.getActor().getRootLocation();
+        returnAct.setLocation(loc);
 
-        ValueActor indexValAct = indexVal.getActor();
+        int n = indexVal.length;
 
-        IndexActor indexAct = new IndexActor(indexValAct);
-        Animation appear = indexValAct.appear(
-                indexValAct.getRootLocation());
-        appear.setDuration(600);
+        Animation[] appear = new Animation[n];
+        Animation[] index = new Animation[n];
+        IndexActor[] indexAct = new IndexActor[n];
+        ValueActor[] indexValAct = new ValueActor[n];
+
+        for (int i = 0; i < n; i++) {
+            indexValAct[i] = indexVal[i].getActor();
+            indexAct[i] = new IndexActor(indexValAct[i]);
+            appear[i] = indexValAct[i].appear(indexValAct[i].getRootLocation());
+            appear[i].setDuration(600);
+            index[i] = indexAct[i].index(varAct);
+        }
 
         theatre.capture();
         engine.showAnimation(appear);
-        engine.showAnimation(indexAct.index(varAct));
+        engine.showAnimation(index);
         varAct.setLight(Actor.HIGHLIGHT);
-        engine.showAnimation(returnAct.appear(loc));
+        //engine.showAnimation(returnAct.appear(loc));
         theatre.release();
 
-        currentScratch.registerCrap(indexValAct);
-        currentScratch.registerCrap(indexAct);
-        currentScratch.registerCrap(returnAct);
+        for (int i = 0; i < n; i++) {
+            currentScratch.registerCrap(indexValAct[i]);
+            currentScratch.registerCrap(indexAct[i]);
+        }
+        //currentScratch.registerCrap(returnAct);
 
         currentScratch.registerCrapRemover(
             new Runnable() {
@@ -1383,9 +1437,9 @@ public class Director {
         );
     }
 
-    public void showArrayVariableAccess(
-            VariableInArray var,
-            Value indexVal) {
+/*
+    public void showArrayVariableAccess(VariableInArray var,
+                                        Value indexVal) {
 
         //System.err.println("Wopee! " + var + " " + indexVal);
 

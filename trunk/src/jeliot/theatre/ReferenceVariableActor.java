@@ -13,8 +13,9 @@ import jeliot.lang.*;
 public class ReferenceVariableActor extends VariableActor {
 
     private int refWidth = 6;
-    private ReferenceActor refActor;
     private int refLen = 15;
+    private ReferenceActor refActor;
+    private ReferenceActor reservedRefActor;
 
     public void paintActor(Graphics g) {
         int w = width;
@@ -33,11 +34,6 @@ public class ReferenceVariableActor extends VariableActor {
                 lightColor :
                 fgcolor);
         g.drawString(name, namex, namey);
-
-        // draw reference area
-        g.setColor(darkColor);
-        g.fillRect(w - bw - refWidth, bw, refWidth, h - 2 *bw);
-
 
         // draw border
         ActorContainer parent = getParent();
@@ -63,24 +59,39 @@ public class ReferenceVariableActor extends VariableActor {
 
         // draw link
         if (refActor == null) {
+
+            // draw reference area
+            g.setColor(darkColor);
+            g.fillRect(w - bw - refWidth, bw, refWidth, h - 2 * bw);
+
             g.setColor(fgcolor);
-            int a = w-2+refLen;
+            int a = w - 2 + refLen;
+
+            //System.out.println("w = "+w +", h = " +h);
             g.drawLine(w-2, h/2-1, a, h/2-1);
             g.drawLine(w-2, h/2+1, a, h/2+1);
             g.drawLine(a, h/2 - 6, a, h/2 + 6);
-            g.drawLine(a+2, h/2 - 6, a+2, h/2 + 6);
+            g.drawLine(a + 2, h/2 - 6, a + 2, h/2 + 6);
 
             g.setColor(bgcolor);
-            g.drawLine(w-2, h/2, a, h/2);
-            g.drawLine(a+1, h/2 - 6, a+1, h/2 + 6);
-        }
-        else {
+            g.drawLine(w-2, valueh/2, a, valueh/2);
+            g.drawLine(a+1, valueh/2 - 6, a+1, valueh/2 + 6);
+
+        } else {
+            int actx = refActor.getX();
+            int acty = refActor.getY();
+            g.translate(actx, acty);
+            refActor.paintActor(g);
+            g.translate(-actx, -acty);
+
+            /*
             Point p = getRootLocation();
             g.translate(-p.x, -p.y);
             refActor.paintActor(g);
             g.translate(p.x, p.y);
-        }
+            */
 
+        }
     }
 
     public void setBounds(int x, int y, int w, int h) {
@@ -98,9 +109,9 @@ public class ReferenceVariableActor extends VariableActor {
         int sw = fm.stringWidth(name);
         int sh = fm.getHeight();
 
-        setSize(2*borderWidth + insets.right + insets.left +
+        setSize(2 * borderWidth + insets.right + insets.left +
                 refWidth + sw,
-                insets.top + insets.bottom + 4*borderWidth +
+                insets.top + insets.bottom + 4 * borderWidth +
                 Math.max(valueh, sh));
     }
 
@@ -108,10 +119,48 @@ public class ReferenceVariableActor extends VariableActor {
         this.refActor = refActor;
     }
 
+    public Point reserve(ValueActor actor) {
+        if (actor instanceof ReferenceActor) {
+               return reserve((ReferenceActor) actor);
+        } else {
+               return super.reserve(actor);
+        }
+    }
+
+    public Point reserve(ReferenceActor actor) {
+        this.reservedRefActor = actor;
+        Point rp = getRootLocation();
+        int w = actor.width;
+        int h = actor.height;
+        rp.translate(width - borderWidth - refWidth - 3,
+                    (height - actor.height)/2 + borderWidth);
+        return rp;
+    }
+
+    public void bind() {
+        this.refActor = this.reservedRefActor;
+        refActor.setParent(this);
+
+        refActor.setLocation(width - borderWidth - refWidth - 3,
+                            (height - refActor.height)/2 + borderWidth);
+    }
+
+    public void setValue(ReferenceActor actor) {
+        this.reservedRefActor = actor;
+        bind();
+    }
+
+    public ValueActor getValue() {
+        ValueActor act = (ReferenceActor) this.refActor.clone();
+        return act;
+    }
+
     public void theatreResized() {
         if (refActor != null) {
             refActor.calculateBends();
         }
     }
+
+
 
 }

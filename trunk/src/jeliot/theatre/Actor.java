@@ -309,7 +309,7 @@ public class Actor implements Cloneable {
             }
 
             public void animate(double pulse) {
-                setLocation( (int)x, (int)y );
+                setLocation((int)x, (int)y);
                 x += pulse * step * cos;
                 y += pulse * step * sin;
                 l += pulse * step;
