@@ -5,11 +5,13 @@ import java.awt.Point;
 import java.awt.Polygon;
 
 /**
- * Bubble actor is used to move the return value from the method
+ * BubbleActor is used to move the return value from the method
  * stage to the scratch (evaluation area).
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
+ * @see jeliot.theater.ValueActor
  */
 public class BubbleActor extends Actor implements ActorContainer{
 

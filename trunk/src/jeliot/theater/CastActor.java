@@ -4,8 +4,8 @@ import java.awt.Graphics;
 import java.awt.Shape;
 
 /**
- * CastActor handles the animation of the casting
- * of the primitive values.
+ * CastActor handles the animation of the casting of the
+ * primitive values.
  * 
  * @author Pekka Uronen
  * @author Niko Myller

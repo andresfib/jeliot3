@@ -10,7 +10,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 /**
- * MethodStage is the graphical representation of the ObjectFrame.
+ * ObjectStage is the graphical representation of the ObjectFrame.
  * It contains the field of the object as <code>VariableActor</code>s.
  * 
  * @author Pekka Uronen
