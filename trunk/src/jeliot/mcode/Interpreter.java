@@ -27,11 +27,14 @@ import jeliot.mcode.Highlight;
 import jeliot.theater.ValueActor;
 
 /**
+ * NOT IN USE IN THE CURRENT RELEASE, REPLACED BY MCodeInterpreter!
  * The MCode interpreter that interprets the MCode received during the
  * intepretation in DynamicJava.
  * 
  * @author Niko Myller
  * @author Andrés Moreno
+ * @see MCodeInterpreter
+ * @deprecated
  */
 public class Interpreter {
 
