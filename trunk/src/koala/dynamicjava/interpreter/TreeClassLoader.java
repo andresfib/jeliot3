@@ -28,6 +28,8 @@
 
 package koala.dynamicjava.interpreter;
 
+import koala.dynamicjava.tree.TypeDeclaration;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.CodeSource;
@@ -35,8 +37,6 @@ import java.security.SecureClassLoader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import koala.dynamicjava.tree.TypeDeclaration;
 
 /**
  * This class is responsible for loading bytecode classes
@@ -134,7 +134,7 @@ public class TreeClassLoader extends SecureClassLoader
      * @param i the object used to interpret the classes
      */
     public TreeClassLoader(Interpreter i) {
-        this(i, null);
+        this(i, Thread.currentThread().getContextClassLoader());
     }
 
     /**

@@ -129,7 +129,7 @@ public class TreeInterpreter implements Interpreter {
 	 * @param pf the parser factory
 	 */
 	public TreeInterpreter(ParserFactory pf) {
-		this(pf, null);
+		this(pf, Thread.currentThread().getContextClassLoader());
 	}
 
 	/**

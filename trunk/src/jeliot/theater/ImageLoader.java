@@ -1,9 +1,7 @@
 package jeliot.theater;
 
-import java.awt.Component;
 import java.awt.Image;
 import java.awt.MediaTracker;
-import java.awt.Panel;
 import java.awt.Toolkit;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
@@ -13,6 +11,9 @@ import java.net.URL;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 
 /**
@@ -37,22 +38,22 @@ public class ImageLoader {
     private Hashtable darks = new Hashtable();
 
 //DOC: Document!
-
+    
     /**
-     *
+     * 
      */
-    private Component comp = new Panel();
+    private JPanel comp = new JPanel();
+    
+    /**
+     * 
+     */
+    private MediaTracker tracker = new MediaTracker(comp);
     
     /**
 	 *
 	 */
 	private Toolkit toolkit = Toolkit.getDefaultToolkit();
     
-    /**
-	 *
-	 */
-	private MediaTracker tracker = new MediaTracker(comp);
-
     /**
 	 *
 	 */
@@ -79,7 +80,7 @@ public class ImageLoader {
         //String realName = (String)mapping.get(name);
         //return getImage(realName);
 		//return getImage(bundle.getString(name));
-        return getImage(this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+bundle.getString(name)));
+        return getImage(Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+bundle.getString(name)));
     }
 
 
@@ -91,14 +92,10 @@ public class ImageLoader {
         Image image = (Image)images.get(name);
         if (image == null) {
             //image = toolkit.getImage(bundle.getString("directory.images")+name);
-        	URL imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+name));
+        	//URL imageURL = (this.getClass().getClassLoader().getResource(bundle.getString("directory.images")+name));
         	//System.out.println(imageURL);
-        	image = toolkit.getImage(imageURL);
-            tracker.addImage(image, 0);
-            try {
-                tracker.waitForID(0);
-            }
-            catch (InterruptedException e) { }
+        	//image = toolkit.getImage(imageURL);
+        	image = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(bundle.getString("directory.images")+name)).getImage();
             images.put(name, image);
         }
         return image;
@@ -111,12 +108,8 @@ public class ImageLoader {
 	public Image getImage(URL name) {
         Image image = (Image)images.get(name);
         if (image == null) {
-            image = toolkit.getImage(name);
-            tracker.addImage(image, 0);
-            try {
-                tracker.waitForID(0);
-            }
-            catch (InterruptedException e) { }
+        	//image = toolkit.getImage(name);
+        	image = new ImageIcon(name).getImage();
             images.put(name, image);
         }
         return image;
@@ -131,7 +124,7 @@ public class ImageLoader {
         if (dark == null) {
             ImageProducer producer = new FilteredImageSource(
                     image.getSource(), darkFilter);
-            dark = comp.createImage(producer);
+            dark = toolkit.createImage(producer);
             tracker.addImage(dark, 0);
             try {
                 tracker.waitForID(0);
