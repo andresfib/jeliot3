@@ -242,7 +242,9 @@ public class Director {
                     theatre.repaint();
                 }
 
-                codePane.highlightStatement(h);
+                if (!jeliot.isHistoryViewVisible()) {
+                    codePane.highlightStatement(h);
+                }
             }
         }
     }
@@ -1255,7 +1257,9 @@ public class Director {
 
             Point valueLoc = variableAct.reserve(castAct);
 
+            theatre.addActor(valueAct);
             capture();
+            theatre.removeActor(valueAct);
             engine.showAnimation(valueAct.fly(valueLoc));
             variableAct.bind();
             theatre.removePassive(valueAct);
@@ -1308,7 +1312,6 @@ public class Director {
                 returnAct.setLocation(ra.getRootLocation());
                 returnValue.setActor(returnAct);
             }
-
             /*
              try {
              Thread.sleep(200);

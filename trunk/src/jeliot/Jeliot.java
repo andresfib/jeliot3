@@ -177,7 +177,7 @@ public class Jeliot {
     /**
      * 
      */
-    private HistoryView hv = new HistoryView(codePane);
+    private HistoryView hv;
 
     /**
      * A director for animating the program.
@@ -218,7 +218,8 @@ public class Jeliot {
         }
 
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
-
+        hv = new HistoryView(codePane, udir);
+        
         //Just to track the animation happenings
         Tracker.setTheater(theatre);
         Tracker.setCodePane2(codePane);
@@ -769,11 +770,16 @@ public class Jeliot {
         return "import " + getIOPackageName() + ";";
     }
 
+    public boolean isHistoryViewVisible() {
+        return hv.isVisible();
+    }
+    
     /**
      * Called when Jeliot is closed.
      * Clean up.
      */
     public void close() {
+        hv.initialize();
         stopThreads();
         director = null;
         gui = null;
