@@ -52,6 +52,9 @@ public class EvaluationVisitor extends VisitorObject {
 		constructorCallNames = new Stack();
 		superClasses = new Stack();
 		constructorCallNumbers = new Stack();
+		constructorInfoNames = new Stack();
+		constructorInfoParamTypes = new Stack();
+		MCodeUtilities.superClassesStack = new Stack();
 	}
 
 	/**
@@ -135,6 +138,37 @@ public class EvaluationVisitor extends VisitorObject {
      * TODO: place it somewhere more reasonable
 	 */
 	public boolean shortCircuit = true;
+
+	/**
+	 * Used in Simple Allocation and TreeInterpreter.interpretMethod Used to
+	 * identify the name of the constructor and compare it with the actual method interpreted
+	 */
+	private static Stack constructorInfoNames = new Stack();
+
+	/**
+     * Contains the list of parameters of the current interpreted constructors
+	 */
+	private static Stack constructorInfoParamTypes = new Stack();
+
+	/**
+	 * Returns constructorCall value
+	 */
+	public static boolean isSetConstructorInfo() {
+		return !constructorInfoNames.empty();
+	}
+
+	
+	/**
+	 * Adds the info of the current constructor to the stack.
+	 * Used to solve the "this" method call problem
+	 * @param name Name of the constructor
+	 * @param paramTypes List of constructor parameters types
+	 */
+	public static void pushConstructorInfo(String name,
+			Class[] paramTypes) {
+		MCodeUtilities.constructorParametersStack.push(paramTypes);
+		MCodeUtilities.constructorNameStack.push(name);		
+	}
 
 	/**
 	 * Returns constructorCall value
@@ -1666,6 +1700,12 @@ public class EvaluationVisitor extends VisitorObject {
 		Constructor cons = (Constructor) node
 				.getProperty(NodeProperties.CONSTRUCTOR);
         Class[] paramTypes = cons.getParameterTypes();
+        Class[] types;
+        if (larg != null) {
+        	types = new Class[larg.size()];
+        } else {
+        	types = new Class[0];
+        }
 		String consName = cons.getName();
 		String declaringClass = cons.getDeclaringClass().getName();
 		// Fill the arguments
@@ -1710,12 +1750,14 @@ public class EvaluationVisitor extends VisitorObject {
                 if (args[i] instanceof String) {
                     argType = String.class.getName();
                 } else {
-                    argType = paramTypes[i].getName();
+                    argType = args[i].getClass().getName();
                 }
                 
 				MCodeUtilities.write("" + Code.P + Code.DELIM + auxcounter
 						+ Code.DELIM + MCodeUtilities.getValue(args[i]) + Code.DELIM
 						+ argType/*args[i].getClass().getName()*/);
+				
+				types[i]= args[i].getClass();
 				i++;
 			}
 		}
@@ -1725,6 +1767,13 @@ public class EvaluationVisitor extends VisitorObject {
 		MCodeUtilities.write("" + Code.CONSCN + Code.DELIM
 				+ EvaluationVisitor.getConstructorCallNumber());
 
+		//To handle "super" recursive calls
+		MCodeUtilities.superClassesStack.push(new Integer(0));
+		
+		//To handle "this" method calls we store the constructor name, and it parameters list
+		pushConstructorInfo(consName, paramTypes);
+		MCodeUtilities.previousClassStack.push(consName);
+		MCodeUtilities.previousClassParametersStack.push(types);
 		//}
 		try { // Jeliot 3
 			Object result = context.invokeConstructor(node, args);
@@ -1733,7 +1782,9 @@ public class EvaluationVisitor extends VisitorObject {
 					+ Integer.toHexString(result.hashCode()) + Code.DELIM
 					+ MCodeUtilities.locationToString(node));
 			//0 arguments
-
+			MCodeUtilities.popConstructorInfo();
+			MCodeUtilities.previousClassStack.pop();
+			MCodeUtilities.previousClassParametersStack.pop();
 			return result;
 
 			/* Jeliot 3 addition begins */

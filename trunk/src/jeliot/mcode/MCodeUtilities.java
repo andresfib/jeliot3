@@ -267,10 +267,42 @@ public class MCodeUtilities {
     public static Stack redirectBufferStack = new Stack();
 
     /**
-     * 
+     * Stack with the Class of previous calls (constructors, this' and supers)
      */
-    public static Stack numParametersStack = new Stack();
+    public static Stack previousClassStack = new Stack();
+    
+    /**
+     * Stack with the parameters of previous calls (constructors, this' and supers)
+     */
+    public static Stack previousParametersStack = new Stack();
+    /**
+     * Stack to keep the name of the original constructor calls
+     * Pushed and popped at SimpleAllocation in EvaluationVisitor
+     */
+    public static Stack constructorNameStack = new Stack();
+    
+    /**
+     * Stack to keep the parameters of the original constructor calls
+     * Pushed and popped at SimpleAllocation in EvaluationVisitor
+     */
+    public static Stack constructorParametersStack = new Stack();
+    
+    public static String getConstructorName() {
+		return (String) constructorNameStack.peek();
+	}
 
+	public static Class[] getConstructorParamTypes() {
+		return (Class[]) constructorParametersStack.peek();
+	}
+	/**
+	 * Pops the info of the constructor. Called when they are not needed
+	 * anymore
+	 *
+	 */
+	public static void popConstructorInfo() {
+		constructorParametersStack.pop();
+		constructorNameStack.pop();		
+	}
     /**
      * 
      */
@@ -904,8 +936,11 @@ public class MCodeUtilities {
                     throw new StoppingRequestedError();
                 }
                 writer.println(str);
+                System.out.println("      " + str);
+                
             } else {
                 addToRedirectBuffer(str);
+                System.out.println("Redirected" + str);
             }
             
             //This prints all the commands that were generated to a file
@@ -1073,6 +1108,7 @@ public class MCodeUtilities {
 
     public static void addToRedirectBuffer(String string) {
         redirectBuffer.add(string);
+        System.out.println("Redirected" + string);
     }
 
     /**
@@ -1228,6 +1264,11 @@ public class MCodeUtilities {
     }
     
     static String filename = "untitled";
+
+    //Initialized in evalution visitor
+	public static Stack superClassesStack;
+
+	public static Stack previousClassParametersStack = new Stack();
     
     public static void setFilename(String name) {
     	filename = name;
