@@ -168,8 +168,8 @@ public class Jeliot {
     /**
      * @return
      */
-    public static boolean isSystemExit() {
-        return !noSystemExit;
+    public static boolean isnoSystemExit() {
+        return noSystemExit;
     }
 
     /**
@@ -479,24 +479,18 @@ public class Jeliot {
 
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
-
+        
+        if (args.length >= 2) {
+            Jeliot.noSystemExit = Boolean.getBoolean(args[1]);
+        }
+        
         //File f = new File(udir);
         //f = new File(f, "examples");
         //prop.put("user.dir", f.toString());
 
         final Jeliot jeliot = new Jeliot(udir);
 
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                jeliot.run();
-            }
-        });
-
         if (args.length >= 1) {
-            if (args.length >= 2) {
-                Jeliot.noSystemExit = Boolean.getBoolean(args[1]);
-            }
             if (!args[0].equals("")) {
                 final String program = args[0];
                 javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -507,6 +501,15 @@ public class Jeliot {
                 });
             }
         }
+        
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                jeliot.run();
+            }
+        });
+
+        
         return jeliot;
     }
 
