@@ -489,11 +489,15 @@ public class ActorFactory {
             if (dotIndex > -1) {
                 resolvedType = resolvedType.substring(dotIndex + 1);
             }
-            if (v.getName().equals(v.getType())) {
+            if (v.getName().equals(v.getType()) ||
+                (v.getName().equals("java.lang.Object") &&
+                 v.getType().equals("java.lang.String"))) {
+                
                 actor.setName(resolvedType);
             } else {
                 actor.setName(resolvedType + " " + v.getName());
             }
+            //actor.setName(resolvedType + " " + v.getName());
             actor.setFont(variableFont);
             actor.setForeground(variableForegroundColor);
             actor.setInsets(variableInsets);
@@ -525,14 +529,27 @@ public class ActorFactory {
                 for (int i = 0; i < dims; i++) {
                     arrayString += "[ ]";
                 }
-                refAct.setName(resolvedType + arrayString + " " + v.getName());
+                if (v.getName().equals(v.getType())) {
+                    refAct.setName(resolvedType + arrayString);
+                } else {
+                    refAct.setName(resolvedType + arrayString + " " + v.getName());
+                }
+                //refAct.setName(resolvedType + arrayString + " " + v.getName());
             } else {
                 String resolvedType = type;
                 int dotIndex = resolvedType.lastIndexOf(".");
                 if (dotIndex > -1) {
                     resolvedType = resolvedType.substring(dotIndex + 1);
                 }
-                refAct.setName(resolvedType + " " + v.getName());
+                if (v.getName().equals(v.getType()) ||
+                    (v.getName().equals("java.lang.Object") &&
+                     v.getType().equals("java.lang.String"))) {
+                    
+                    actor.setName(resolvedType);
+                } else {
+                    actor.setName(resolvedType + " " + v.getName());
+                }
+                //refAct.setName(resolvedType + " " + v.getName());
                 refAct.setBackground(varColor[typeInfo]);
             }
             refAct.setForeground(variableForegroundColor);
