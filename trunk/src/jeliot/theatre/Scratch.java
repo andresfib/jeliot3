@@ -2,7 +2,6 @@ package jeliot.theatre;
 
 import java.util.*;
 import java.awt.*;
-//import jeliot.parser.*;
 import jeliot.lang.*;
 import jeliot.gui.*;
 

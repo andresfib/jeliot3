@@ -402,7 +402,7 @@ public class JeliotWindow {
             }
         );
         menu.add(menuItem);
-        
+
         menuItem = new JMenuItem("About Jeliot");
         menuItem.setMnemonic(KeyEvent.VK_B);
         //        menuItem.setAccelerator(KeyStroke.getKeyStroke(
@@ -419,7 +419,7 @@ public class JeliotWindow {
             }
         );
         menu.add(menuItem);
-        
+
         return menu;
     }
     /**
@@ -875,7 +875,7 @@ public class JeliotWindow {
                     "<P>There was no method main found from any of the classes"+
                     "and thus the program cannot be run. Add a method main to one of the classes (the main class).</P>" +
                     "<P>For example like this:</P>" +
-                    "<CODE>public class MyClass {<BR>&nbsp;&nbsp;&nbsp;public static void main() {" +
+                    "<CODE>public class MyClass {<BR>&nbsp;&nbsp;&nbsp;public static void main(String[] args) {" +
                     "<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//Your Algorithm" +
                     "<BR>&nbsp;&nbsp;&nbsp;}<BR>}</CODE>");
                     editButton.setEnabled(false);
@@ -930,28 +930,65 @@ public class JeliotWindow {
         commentsRemoved = replaceChar(commentsRemoved, '\r', " ");
         commentsRemoved = replaceChar(commentsRemoved, '\t', " ");
 
-        String mainMethod="static void main()";
+        String mainMethod="static void main(";
         String classString = " class ";
 
         int methodIndex = commentsRemoved.indexOf(mainMethod);
         //System.out.println(methodIndex);
-        if (methodIndex > -1) {
-            String partProgramCode = commentsRemoved.substring(0, methodIndex);
-            int classIndex = partProgramCode.lastIndexOf(classString);
-            //System.out.println(classIndex);
-            if (classIndex > -1) {
-                partProgramCode = partProgramCode.substring(classIndex + classString.length()).trim();
-                int classNameIndex = partProgramCode.indexOf(" ");
-                //System.out.println(classNameIndex);
-                if (classNameIndex > -1) {
-                    String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main();";
-                    mainMethodCall = replaceChar(mainMethodCall, '{', "");
-                    System.out.println(mainMethodCall);
-                    return mainMethodCall;
+        while (methodIndex > -1) {
+            int parenthesisIndex = commentsRemoved.indexOf(")", methodIndex);
+            String partProgramCode = commentsRemoved.substring(0, parenthesisIndex);
+            String methodArea = commentsRemoved.substring(methodIndex, parenthesisIndex);
+
+            if (methodArea.indexOf(",") < 0 &&
+                methodArea.indexOf("String") >= 0 &&
+                methodArea.indexOf("[]") >= 0) {
+
+                int classIndex = partProgramCode.lastIndexOf(classString);
+                //System.out.println(classIndex);
+                if (classIndex > -1) {
+                    partProgramCode = partProgramCode.substring(classIndex + classString.length()).trim();
+                    int classNameIndex = partProgramCode.indexOf(" ");
+                    //System.out.println(classNameIndex);
+                    if (classNameIndex > -1) {
+                        String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main(new String[0]);";
+                        mainMethodCall = replaceChar(mainMethodCall, '{', "");
+                        System.out.println(mainMethodCall);
+                        return mainMethodCall;
+                    }
+                } else {
+                    if (partProgramCode.startsWith("class ")) {
+                        partProgramCode = partProgramCode.substring(classIndex + "class ".length()).trim();
+                        int classNameIndex = partProgramCode.indexOf(" ");
+                        //System.out.println(classNameIndex);
+                        if (classNameIndex > -1) {
+                            String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main(new String[0]);";
+                            mainMethodCall = replaceChar(mainMethodCall, '{', "");
+                            System.out.println(mainMethodCall);
+                            return mainMethodCall;
+                        }
+                    }
                 }
-            } else {
-                if (partProgramCode.startsWith("class ")) {
-                    partProgramCode = partProgramCode.substring(classIndex + "class ".length()).trim();
+            }
+            methodIndex =  = commentsRemoved.indexOf(mainMethod, methodIndex);
+        }
+
+        mainMethod="static void main(";
+
+        int methodIndex = commentsRemoved.indexOf(mainMethod);
+        //System.out.println(methodIndex);
+        while (methodIndex > -1) {
+            int parenthesisIndex = commentsRemoved.indexOf(")", methodIndex);
+
+            if (commentsRemoved.substring(methodIndex +
+                                          mainMethod.length(),
+                                          parenthesisIndex - 1).length() != 0) {
+
+                String partProgramCode = commentsRemoved.substring(0, methodIndex);
+                int classIndex = partProgramCode.lastIndexOf(classString);
+                //System.out.println(classIndex);
+                if (classIndex > -1) {
+                    partProgramCode = partProgramCode.substring(classIndex + classString.length()).trim();
                     int classNameIndex = partProgramCode.indexOf(" ");
                     //System.out.println(classNameIndex);
                     if (classNameIndex > -1) {
@@ -960,8 +997,21 @@ public class JeliotWindow {
                         System.out.println(mainMethodCall);
                         return mainMethodCall;
                     }
+                } else {
+                    if (partProgramCode.startsWith("class ")) {
+                        partProgramCode = partProgramCode.substring(classIndex + "class ".length()).trim();
+                        int classNameIndex = partProgramCode.indexOf(" ");
+                        //System.out.println(classNameIndex);
+                        if (classNameIndex > -1) {
+                            String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main();";
+                            mainMethodCall = replaceChar(mainMethodCall, '{', "");
+                            System.out.println(mainMethodCall);
+                            return mainMethodCall;
+                        }
 
+                    }
                 }
+                methodIndex =  = commentsRemoved.indexOf(mainMethod, methodIndex);
             }
         }
         return null;
