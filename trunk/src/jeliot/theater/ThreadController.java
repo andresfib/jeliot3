@@ -5,8 +5,6 @@ import java.util.Vector;
 
 import jeliot.mcode.StoppingRequestedError;
 
-import jeliot.gui.PauseListener;
-
 /**
  * <p>
  * <code>ThreadController</code> allows the execution of the
@@ -68,6 +66,9 @@ public class ThreadController {
      */
     private boolean stoppingRequested = false;
 
+    /**
+     * Pause listeners that need to be notified when the thread is paused.
+     */
     private Vector pauseListeners = new Vector();
 
     /**
@@ -118,7 +119,8 @@ public class ThreadController {
     /**
      * Pauses the execution, if pause() method has been called since
      * previous checkpoint.
-     * @param cont
+     * @param cont the controlled thread. Null is also accepted
+     * @param forInput if the pausing is for input when the pause listeners are not notified.
      */
     public synchronized void checkPoint(Controlled cont, boolean forInput) {
         if (stoppingRequested == true) { throw new StoppingRequestedError(); }
@@ -149,6 +151,9 @@ public class ThreadController {
         }
     }
 
+    /**
+     * Notify the thread controller that the thread should be finished.
+     */
     public synchronized void quit() {
         stoppingRequested = true;
         notify();
@@ -162,14 +167,25 @@ public class ThreadController {
         checkPoint(null, forInput);
     }
 
+    /**
+     * Checkpoint reached.
+     */
     public synchronized void checkPoint() {
         checkPoint(null, false);
     }
     
+    /**
+     * Add a pause listener.
+     * @param p listener to be added.
+     */
     public void addPauseListener(PauseListener p) {
         pauseListeners.add(p);
     }
 
+    /**
+     * Remove a pause listener.
+     * @param p listener to be removed.
+     */
     public void removePauseListener(PauseListener p) {
         pauseListeners.remove(p);
     }

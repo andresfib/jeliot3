@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import jeliot.Jeliot;
-import jeliot.gui.CodePane2;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.MethodFrame;
 import jeliot.lang.ObjectFrame;
@@ -53,11 +52,6 @@ public class Director {
      * Theatre to show the animation in.
      */
     private Theater theatre;
-
-    /**
-     * Pane showing the code. For highlighting.
-     */
-    private CodePane2 codePane;
 
     /**
      * Master Jeliot.
@@ -135,10 +129,9 @@ public class Director {
      * @param jeliot
      * @param engine
      */
-    public Director(Theater theatre, CodePane2 codePane, Jeliot jeliot, AnimationEngine engine) {
+    public Director(Theater theatre, Jeliot jeliot, AnimationEngine engine) {
 
         this.theatre = theatre;
-        this.codePane = codePane;
         this.jeliot = jeliot;
         this.engine = engine;
 
@@ -196,7 +189,7 @@ public class Director {
         boolean interrupted = mCodeInterpreter.execute();
 
         if (!errorOccured) {
-            codePane.highlightStatement(new Highlight(0, 0, 0, 0));
+            jeliot.highlightStatement(new Highlight(0, 0, 0, 0));
         }
         if (!interrupted) {
             theatre.repaint();
@@ -252,7 +245,7 @@ public class Director {
                 }
 
                 if (!jeliot.isHistoryViewVisible()) {
-                    codePane.highlightStatement(h);
+                    jeliot.highlightStatement(h);
                 }
             }
         }

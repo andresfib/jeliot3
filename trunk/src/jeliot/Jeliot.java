@@ -349,7 +349,7 @@ public class Jeliot {
 
         //ScriptWriter sw = new ScriptWriter(engine, theatre, af);
 
-        director = new Director(theatre, codePane, this, engine);
+        director = new Director(theatre, this, engine);
         director.setActorFactory(af);
 
         mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader, director, gui
@@ -790,6 +790,10 @@ public class Jeliot {
     
     public HistoryView getHistoryView() {
         return this.hv;
+    }
+    
+    public void highlightStatement(Highlight h) {
+        codePane.highlightStatement(h);
     }
     
     /**

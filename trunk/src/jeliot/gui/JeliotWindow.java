@@ -59,6 +59,7 @@ import jeliot.printing.PrintingUtil;
 import jeliot.theater.AnimationEngine;
 import jeliot.theater.ImageLoader;
 import jeliot.theater.PanelController;
+import jeliot.theater.PauseListener;
 import jeliot.theater.Theater;
 import jeliot.tracker.Tracker;
 import jeliot.util.DebugUtil;
