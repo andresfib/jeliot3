@@ -254,7 +254,7 @@ public class CodeEditor2 extends JComponent {
                 .parseInt(bundle.getString("font.code_editor.size"))),
                 new Insets(1, 0, 0, 0));
         area.addToLeft(ln);
-        LineNumbersAdjustHandler lnah = new LineNumbersAdjustHandler(area, ln);
+        LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(area, ln);
         area.addAdjustListernerForVertical(lnah);
 
         setLayout(new BorderLayout());
