@@ -45,9 +45,55 @@ The usual \mcode{} sentence will consist of:
 
 %\begin{mcodegrammar}
 
-Program: StaticMethodCall .
-Declaration: MD ; CD .
+<program> ::= <classes info> <static method call> \p{END}
+<classes info> ::= <class info> | <classes info> <class info>
+<class info> ::= \p{CLASS METHOD CONSTRUCTOR FIELD}\?  \p{END_CLASS}
+%<class info> ::= \p{CLASS} \p{METHOD} \p{CONSTRUCTOR} \p{FIELD}? \p{END_CLASS}
 
+
+<static method call> ::= \p{SMC} <method call info> <method body> \p{SMCC}
+<object method call> ::= \p{OMC} <method call info> <method body> \p{OMCC}
+
+<method call info> ::= \p{PARAMETER} \p{MD} <parameters info>?
+<parameters info> ::= <parameter info> | <parameters info> <parameter info>
+<parameter info> ::= \p{BEGIN} ??????????? \p{P}
+
+<method body> ::= <block statements>
+<block statements> ::= <block statement> | <block statements><block statement>
+<block statement> ::= <variable declaration> | <statement>
+<scoped block> ::= \p{SCOPE 1} <block statements> \p{SCOPE 0}
+
+<statement> ::= <simple statement> | <if statement> | <for statement> | <while statement> 
+<simple statement> ::= <scoped block> | <statement expression> | <switch statement> | <do statement> | <continue statement> | <break statement> | <return statement>
+<statement expression> ::= <assignment> | <pre expression> | <post expression> | <method call> | <class allocation>
+
+<if statement> ::= <expression> \p{IFT} <statement>? |  <expression> \p{IFTE} <statement>? 
+<while statement> ::= <expression> \p{WHI} <statement>? | <expression> \p{WHI} <statement>
+<switch statement> ::= \p{SWITCHB} <expression> \p{SWITCHBF} <block>? SWITCH
+<for statement> ::= ..........
+<do statement> ::= <block> <expression> \p{DO}
+<break statement> ::= \p{BREAK}
+<break statement> ::= \p{CONTINUE}
+<return statement> ::= <expression>? \p{RETURN}
+
+<expression> ::= <assignment> | <binary expression> | <unary expression> | <primary>
+
+<assignments> ::=  \p{BEGIN} <expression> \p{TO} <left hand side>
+<left hand side> ::= <identifier> | <field access> | <array access>
+
+<binary expression> ::= \p{BEGIN} p\{LEFT} <expression> \p{RIGHT} <expression> <binary operator>
+<unary expression> ::= \p{BEGIN} <expression> <unary operator>
+
+<primary> ::= <literal> | <field access> | <array access> | <class allocation> | <array allocation> | <method call>
+
+<literal> ::= \p{L}
+<field access> ::= <primary> <identifier> OFA
+<array access> ::= <identifier> <dim expressions> AAC
+<dim expressions> ::= <expression> | <dim expressions> <expression>
+<method call> ::= <static method call> | <object method call>
+
+<array allocation> ::= <dims expressions> AA
+<class allocation> ::= SA <method call info> <method body> SAC
 %\end{mcodegrammar}
 
 \section{Constants}
@@ -121,8 +167,13 @@ New blocks of Java code are delimited in \mcode{} through \p{SCOPE}. This instru
 CAUTION! This instruction is implementation specific and the need for the usage of this instruction depends on the implementation of the interpreter. If your interpreter traverses the tree in the right order there is no need to use the \p{CONSCN}. The usage of the instruction is next described in \djava{}.
 
 This instruction is created because in \djava{} the super method calls in the beginning of the constructor
+<<<<<<< MCode.tex
+are handled before the actual constructor invocation and thus the information is not extracted in the correct order. The constructor call number is used to correct the order so that during the simple allocation visit in EvaluationVisitor the constructor call number is send for the first time. When all the super method calls are finished and the constructor is really invoked the constructor call number is printed out again. The \mcode{} interpreter collects all the commands between the corresponding constructor call numbers and executes them after the constructor is really invoked that is two lines after the second constructor call number is read.
+However this instruction is due to \djava{} drawbacks. If your interpreter traverses the tree in a meaningful way, you should not use the CONSCN instruction.
+=======
 are handled before the actual constructor invocation and thus the information is not extracted in the correct order. The constructor call number is used to correct the order so that during the simple allocation visit in EvaluationVisitor the constructor call number is send for the first time. When all the super method calls are finished and the constructor is really invoked the constructor call number is printed out again. The \mcode{} interpreter collects all the commands between the corresponding constructor call numbers and executes them after the constructor is really invoked that is two lines after the second constructor call number is read. 
 
+>>>>>>> 1.5
 \section{Statements}
 
 \subsection{A (Assignment)}
