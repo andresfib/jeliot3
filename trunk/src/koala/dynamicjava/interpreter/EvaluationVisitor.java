@@ -1770,13 +1770,13 @@ public class EvaluationVisitor extends VisitorObject {
         String arrayHashCode = Integer.toHexString(result.hashCode());
         String dimensionsReferences = MCodeUtilities.arrayToString(dimExpressionReferences);
         String componentType = node.getElementType().getProperty("type").toString();
-        System.out.println("OK");
+        
         MCodeUtilities.write("" + Code.AA + Code.DELIM + arrayAllocationCounter + Code.DELIM
                 + arrayHashCode + Code.DELIM
                 + componentType + Code.DELIM + dimensions
                 + Code.DELIM + dimensionsReferences + Code.DELIM
-                + dimensions + Code.DELIM + MCodeUtilities.locationToString(node));
-        System.out.println("OK2");
+                + size + Code.DELIM + MCodeUtilities.locationToString(node));
+
         MCodeUtilities.write("" + Code.AIBEGIN + Code.DELIM + size
         		+ Code.DELIM + MCodeUtilities.locationToString(node));
 
@@ -1785,7 +1785,7 @@ public class EvaluationVisitor extends VisitorObject {
         while (it.hasNext()) {
         	long elementCounter = counter;
         	Expression expression = (Expression) it.next();
-        	System.out.println("OK cell" + i);
+        	
             Object o = expression.acceptVisitor(this);
             int isLiteral = (Literal.class.isInstance(expression))? 1 : 0;
             MCodeUtilities.write("" + Code.AIE + Code.DELIM + arrayHashCode 
