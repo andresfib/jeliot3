@@ -102,4 +102,7 @@ public class InputComponent extends JPanel implements ActionListener {
         validator.validate(text);
     }
 	
+    public void requestFocusForInputField() {
+        field.requestFocus();
+    }
 }
