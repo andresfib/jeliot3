@@ -448,12 +448,12 @@ public class EvaluationVisitor extends VisitorObject {
         } finally {
             // Always leave the current scope
             context.leaveScope();
+            if (!breakc) {
+                MCodeUtilities.write("" + Code.FOR + Code.DELIM + condcounter + Code.DELIM + Code.FALSE
+                        + Code.DELIM + round + Code.DELIM + locationToString(node.getBody()));
+            }
             MCodeUtilities.write(Code.SCOPE + Code.DELIM + "0");
         }
-        if (!breakc)
-            MCodeUtilities.write("" + Code.FOR + Code.DELIM + condcounter + Code.DELIM + Code.FALSE
-                    + Code.DELIM + round + Code.DELIM + locationToString(node.getBody()));
-
         return null;
     }
 

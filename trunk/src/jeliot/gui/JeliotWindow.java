@@ -359,7 +359,7 @@ public class JeliotWindow {
 	 */
 	public void setUp() {
 
-		frame = new JFrame(jeliotVersion);
+		frame = new JFrame(jeliotVersion + " - Untitled");
 		frame.setIconImage(
 			iLoad.getImage(bundle.getString("image.jeliot_icon")));
 
@@ -920,6 +920,9 @@ public class JeliotWindow {
 	 */
 	void enterEdit() {
 
+		enableWidgets(editWidgets.elements(), true);
+		enableWidgets(animWidgets.elements(), false);
+
         tabbedPane.setSelectedIndex(0);
 		changeTheatrePane(tabbedPane);
 
@@ -970,6 +973,11 @@ public class JeliotWindow {
 
 		try {
 			try {
+
+				enableWidgets(editWidgets.elements(), false);
+				enableWidgets(animWidgets.elements(), true);
+				pauseButton.setEnabled(false);
+				rewindButton.setEnabled(false);
 
 				String programCode = editor.getProgram();
 
@@ -1295,11 +1303,11 @@ public class JeliotWindow {
 	 * Rewinds the animation.
 	 */
 	public void enterAnimate() {
+	    
+		//enableWidgets(editWidgets.elements(), false);
+		//enableWidgets(animWidgets.elements(), true);
 
 		changeCodePane(codePane);
-		enableWidgets(editWidgets.elements(), false);
-		enableWidgets(animWidgets.elements(), true);
-
 		rewindAnimation();
 	}
 
@@ -1584,11 +1592,20 @@ public class JeliotWindow {
 		});
 	}
     
+	/**
+	 * 
+	 * @param program
+	 */
     public void setProgram(String program) {
         editor.setProgram(program);   
     }
     
+    /**
+     * 
+     * @return
+     */
     public CodePane getCodePane() {
         return codePane;
     }
+    
 }

@@ -224,9 +224,11 @@ public class Director {
             }
 
             if (h != null) {
-                if (runUntilLine >= h.getBeginLine()
-                    && runUntilLine <= h.getEndLine()) {
-
+                /*
+                if (runUntilLine >= h.getBeginLine() &&
+                      runUntilLine <= h.getEndLine()) {
+                */
+                if (runUntilLine == h.getBeginLine()) {
                     runUntilLine = -1;
                     theatre.setRunUntilEnabled(false);                    
                     jeliot.runUntilDone();

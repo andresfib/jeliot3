@@ -111,7 +111,10 @@ public class CodeEditor extends JComponent {
      * is just loaded or saved).
 	 */
 	public void setChanged(boolean changed) {
-        this.changed = changed;
+	    if (changed && this.changed != changed && masterFrame != null) {
+	        masterFrame.setTitle(masterFrame.getTitle() + " *");
+	    }
+	    this.changed = changed;
     }
 
     /**
@@ -122,17 +125,17 @@ public class CodeEditor extends JComponent {
 	private DocumentListener dcl = new DocumentListener() {
 
         public void changedUpdate(DocumentEvent e) {
-            changed = true;
+            setChanged(true);
             validateScrollPane();
         }
 
         public void insertUpdate(DocumentEvent e) {
-            changed = true;
+            setChanged(true);
             validateScrollPane();
         }
 
         public void removeUpdate(DocumentEvent e) {
-            changed = true;
+            setChanged(true);
             validateScrollPane();
         }
 
@@ -440,7 +443,8 @@ public class CodeEditor extends JComponent {
            setProgram(program);
 
            currentFile = file; // Jeliot 3
-           changed = false; //Jeliot 3
+           setChanged(false); //Jeliot 3
+           setTitle(file.getName());
         }
     }
 
@@ -458,6 +462,8 @@ public class CodeEditor extends JComponent {
     		File file = fileChooser.getSelectedFile();
     		writeProgram(file);
     		currentFile = file; // Jeliot 3
+    		setChanged(false); //Jeliot 3
+            setTitle(file.getName()); // Jeliot 3
     	}
 
     }
@@ -474,7 +480,6 @@ public class CodeEditor extends JComponent {
             FileWriter w = new FileWriter(file);
             w.write(area.getText());
             w.close();
-            changed = false; //Jeliot 3
         }
         catch (IOException e) {
             //e.printStackTrace();
@@ -521,8 +526,20 @@ public class CodeEditor extends JComponent {
         setProgram(template);
 
         currentFile = null; //Jeliot 3
+        setTitle("Untitled");
     }
-
+    
+    /**
+     * 
+     * @param filename
+     */
+    public void setTitle(String filename) {
+        if (masterFrame != null) {
+            masterFrame.setTitle(bundle.getString("name") + bundle.getString("version") + " - " + filename);
+        }
+    }
+    
+    
 	/**
      * The given String program object will be set as the text inside the JTextArea area.
      *
@@ -530,7 +547,7 @@ public class CodeEditor extends JComponent {
      */
     public void setProgram(String program) {
         area.setText(program);
-        changed = false; //Jeliot 3
+        setChanged(false); //Jeliot 3
     }
 
 
