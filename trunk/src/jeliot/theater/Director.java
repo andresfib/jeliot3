@@ -1,8 +1,6 @@
 package jeliot.theater;
 
 import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -104,7 +102,7 @@ public class Director {
     /**
      *
      */
-    private Interpreter eCodeInterpreter;
+    private Interpreter mCodeInterpreter;
 
     /**
      *
@@ -179,7 +177,7 @@ public class Director {
         theatre.addPassive(lat);
 
         //Excecution of the program code takes place here.
-        eCodeInterpreter.execute();
+        mCodeInterpreter.execute();
         if (!errorOccured) {
             highlight(new Highlight(0, 0, 0, 0));
         }
@@ -205,7 +203,7 @@ public class Director {
      */
     //Changed for Jeliot 3
     public void highlight(Highlight h) {
-        if (!eCodeInterpreter.starting()) {
+        if (!mCodeInterpreter.starting()) {
 
             if (stepByStep && !messagePause) {
                 jeliot.directorPaused();
@@ -734,7 +732,7 @@ public class Director {
             scratch.memorizeLocation();
 
             scratch.removeCrap();
-            if (eCodeInterpreter.emptyScratch()) {
+            if (mCodeInterpreter.emptyScratch()) {
                 scratch.clean();
             }
             manager.removeScratch(scratch);
@@ -848,7 +846,7 @@ public class Director {
             scratch.memorizeLocation();
 
             scratch.removeCrap();
-            if (eCodeInterpreter.emptyScratch()) {
+            if (mCodeInterpreter.emptyScratch()) {
                 scratch.clean();
             }
             manager.removeScratch(scratch);
@@ -2418,17 +2416,9 @@ public class Director {
     
     //Jeliot 3
  	/**
-	 * Used for setting the reader for ecode interpreter
-	 * @param br
-	 * @param programCode
-	 * @param pr
+	 * Used for setting the mcode interpreter
 	 */
-    public void initializeInterpreter(
-        BufferedReader br,
-        String programCode,
-        PrintWriter pr) {
-
-        this.eCodeInterpreter = new Interpreter(br, this, programCode, pr);
-        eCodeInterpreter.initialize();
+    public void setInterpreter(Interpreter mCodeInterpreter) {
+        this.mCodeInterpreter = mCodeInterpreter;
     }
 }

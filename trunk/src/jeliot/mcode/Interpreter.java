@@ -34,10 +34,12 @@ public class Interpreter {
 	 *
 	 */
 	private Director director = null;
+    
 	/**
 	 *
 	 */
 	private BufferedReader ecode = null;
+    
 	/**
 	 *
 	 */
@@ -52,14 +54,17 @@ public class Interpreter {
 	 *
 	 */
 	private boolean running = true;
+    
 	/**
 	 *
 	 */
 	private boolean start = true;
+    
 	/**
 	 *
 	 */
 	private boolean firstLineRead = false;
+    
 	/**
 	 *
 	 */
@@ -69,14 +74,17 @@ public class Interpreter {
 	 * Keeps track of current return value
 	 */
 	private boolean returned = false;
+    
 	/**
 	 *
 	 */
 	private Value returnValue = null;
+    
 	/**
 	 *
 	 */
 	private Actor returnActor = null;
+    
 	/**
 	 *
 	 */
@@ -86,22 +94,27 @@ public class Interpreter {
 	 *
 	 */
 	private Stack commands = new Stack();
+    
 	/**
 	 *
 	 */
 	private Stack exprs = new Stack();
+    
 	/**
 	 *
 	 */
 	private Hashtable values = new Hashtable();
+    
 	/**
 	 *
 	 */
 	private Hashtable variables = new Hashtable();
+    
 	/**
 	 *
 	 */
 	private Hashtable instances = new Hashtable();
+    
 	/**
 	 *
 	 */
@@ -154,31 +167,31 @@ public class Interpreter {
 	private boolean readNew = true;
 
 	/**
-	 *
+	 * Related to Super method calls in constructor's first
+	 * line in classes with inheritance.
 	 */
-	//Related to Super method calls in constructor's first line
-	//in classes with inheritance.
 	private boolean constructorCall = false;
+    
 	/**
 	 *
 	 */
 	private Stack constructorCalls = new Stack();
+    
 	/**
 	 *
 	 */
 	private Vector superMethods = null;
+    
 	/**
 	 *
 	 */
 	private Vector superMethodsReading = null;
+    
 	/**
 	 *
 	 */
 	private long superMethodCallNumber = 0;
 
-	/**
-	 *
-	 */
 	/**
 	 * The resource bundle
 	 */
@@ -186,7 +199,6 @@ public class Interpreter {
 		ResourceBundle.getBundle(
 			"jeliot.mcode.resources.messages",
 			Locale.getDefault());
-	;
 
 	/**
 	 *
@@ -195,13 +207,11 @@ public class Interpreter {
 		ResourceBundle.getBundle(
 			"jeliot.mcode.resources.properties",
 			Locale.getDefault());
-	;
 
 	/**
 	 * 
 	 */
-	protected Interpreter() {
-	}
+	protected Interpreter() {}
 
 	/**
 	 * @param r
@@ -221,7 +231,7 @@ public class Interpreter {
 	}
 
 	/**
-	 * 
+	 * Initializes the 
 	 */
 	public void initialize() {
 		running = true;
@@ -313,8 +323,7 @@ public class Interpreter {
 		if (readNew()) {
 			try {
 				readLine = ecode.readLine();
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 		} else {
 			if (!superMethods.isEmpty()) {
 				readLine = (String) superMethods.remove(0);
@@ -330,14 +339,14 @@ public class Interpreter {
 		if (readLine == null) {
 			readLine =
 				""
-				+ Code.ERROR
-				+ Code.DELIM
-				+ bundle.getString("unknown.exception")
-			    /*
-			    + "<H1>Runtime Exception</H1>" 
-			    + "<P>The reason for runtime exception is unknown.</P>"
-			    */
-				+ Code.DELIM
+					+ Code.ERROR
+					+ Code.DELIM
+					+ bundle.getString("unknown.exception")
+			/*
+			+ "<H1>Runtime Exception</H1>" 
+			+ "<P>The reason for runtime exception is unknown.</P>"
+			*/
+			+Code.DELIM
 				+ "0"
 				+ Code.LOC_DELIM
 				+ "0"
@@ -384,10 +393,10 @@ public class Interpreter {
 						+ Code.ERROR
 						+ Code.DELIM
 						+ bundle.getString("inputInConstructor.exception")
-					 /* + "<H1>Feature not implemented</H1>"
-					    + "<P>Super classes' constructors cannot "
-					    + "contain input requests.</P>" */
-						+ Code.DELIM
+					/* + "<H1>Feature not implemented</H1>"
+					   + "<P>Super classes' constructors cannot "
+					   + "contain input requests.</P>" */
+					+Code.DELIM
 						+ "0"
 						+ Code.LOC_DELIM
 						+ "0"
@@ -420,16 +429,16 @@ public class Interpreter {
 		}
 		director.closeScratch();
 
-		/*
-		 * TODO: Take this out of the comments for the versions to be realeased
+		/* TODO: Take this out of the comments for the versions to be realeased.
 		} catch (Exception e) {
 		    director.showErrorMessage(new InterpreterError("<H1>Runtime Error</H1>"+
 		                         "<P>The feature is not yet implemented.</P>", null));
 		}
 		*/
-	}	
+	}
 
 	/**
+     * Handles the interpretation of the single line of the mcode.
 	 * @param line
 	 */
 	public void interpret(String line) {
@@ -442,6 +451,9 @@ public class Interpreter {
 
 				int token = Integer.parseInt(tokenizer.nextToken());
 
+                /* Test whether or not the evaluation
+                 * area should be cleaned.
+                 */
 				if (exprs.empty()
 					&& !invokingMethod
 					&& token != Code.WHI
@@ -614,12 +626,18 @@ public class Interpreter {
 							break;
 						}
 
-						// Unary Expressions
-					case Code.COMP : // Complement
-					case Code.PLUS : // Plus operator
-					case Code.MINUS : // Minus operator
+						/*
+                         * Unary Expressions
+                         */
+						// Complement
+					case Code.COMP :
+						// Plus operator
+					case Code.PLUS :
+						// Minus operator
+					case Code.MINUS :
+						// Boolean Not
 					case Code.NO :
-						{ // Boolean Not
+						{
 
 							long expressionCounter =
 								Long.parseLong(tokenizer.nextToken());
@@ -705,7 +723,7 @@ public class Interpreter {
 							                                }
 							                            }
 							*/
-							/**
+							/*
 							* Look from the expression stack
 							* what expression should be shown next
 							*/
@@ -787,9 +805,11 @@ public class Interpreter {
 						}
 
 						// Unary Expression
-					case Code.PIE : // PostIncrement
+						// PostIncrement
+					case Code.PIE :
+						// PostDecrement
 					case Code.PDE :
-						{ // PostDecrement
+						{
 
 							long expressionCounter =
 								Long.parseLong(tokenizer.nextToken());
@@ -842,9 +862,11 @@ public class Interpreter {
 						}
 
 						// Unary Expression
-					case Code.PRIE : // PreIncrement
+						// PreIncrement
+					case Code.PRIE :
+						// PreDecrement
 					case Code.PRDE :
-						{ // PreDecrement
+						{
 
 							long expressionCounter =
 								Long.parseLong(tokenizer.nextToken());
@@ -880,32 +902,55 @@ public class Interpreter {
 							break;
 						}
 
-						// Binary Expressions
-					case Code.BITOR : // Bitwise Or
-					case Code.BITXOR : // Bitwise Xor
-					case Code.BITAND : // Bitwise And
+						/*
+						 * Binary Expressions 
+						 */
 
-					case Code.LSHIFT : // Bitwise Left Shift
-					case Code.RSHIFT : // Bitwise Right Shift
-					case Code.URSHIFT : // Unsigned Right Shift
+						// Bitwise Or
+					case Code.BITOR :
+						// Bitwise Xor
+					case Code.BITXOR :
+						// Bitwise And
+					case Code.BITAND :
 
-					case Code.XOR : // Xor Expression
-					case Code.AND : // And Expression
-					case Code.OR : // Or Expression
+						// Bitwise Left Shift
+					case Code.LSHIFT :
+						// Bitwise Right Shift
+					case Code.RSHIFT :
+						// Unsigned Right Shift
+					case Code.URSHIFT :
 
-					case Code.EE : // Equal Expression
-					case Code.NE : // Not Equal Expression
-					case Code.LE : // Less Expression
-					case Code.LQE : // Less or Equal Expression
-					case Code.GT : // Greater Than
-					case Code.GQT : // Greater or Equal Expression
+						// Xor Expression
+					case Code.XOR :
+						// And Expression
+					case Code.AND :
+						// Or Expression
+					case Code.OR :
 
-					case Code.ME : // Multiplication Expression
-					case Code.RE : // Remainder (mod) Expression
-					case Code.DE : // Division Expression
-					case Code.SE : // Substract Expression
+						// Equal Expression
+					case Code.EE :
+						// Not Equal Expression
+					case Code.NE :
+						// Less Expression
+					case Code.LE :
+						// Less or Equal Expression
+					case Code.LQE :
+						// Greater Than
+					case Code.GT :
+						// Greater or Equal Expression
+					case Code.GQT :
+
+						// Multiplication Expression
+					case Code.ME :
+						// Remainder (mod) Expression
+					case Code.RE :
+						// Division Expression
+					case Code.DE :
+						// Substract Expression                    
+					case Code.SE :
+						// Add Expression
 					case Code.AE :
-						{ // Add Expression
+						{
 
 							long expressionCounter =
 								Long.parseLong(tokenizer.nextToken());
@@ -954,14 +999,18 @@ public class Interpreter {
 										h);
 								}
 
+								// token is declared and assigned in the line 91.
 								expressionValue =
-									director.finishBinaryExpression(result,
-									// token is declared and assigned in the line 91.
-	MCodeUtilities.resolveBinOperator(token), expr, h);
+									director.finishBinaryExpression(
+										result,
+										MCodeUtilities.resolveBinOperator(
+											token),
+										expr,
+										h);
 
 								exprs.pop();
 
-								//                              values.put(new Long(expressionCounter), expressionValue);
+								//values.put(new Long(expressionCounter), expressionValue);
 
 								Object[] postIncDec =
 									(Object[]) postIncsDecs.remove(
@@ -1009,11 +1058,14 @@ public class Interpreter {
 								if (postIncDec != null) {
 									doPostIncDec(postIncDec);
 								}
-
+								// token is declared and assigned in the line 91.
 								expressionValue =
-									director.finishBinaryExpression(result,
-									// token is declared and assigned in the line 91.
-	MCodeUtilities.resolveBinOperator(token), expr, h);
+									director.finishBinaryExpression(
+										result,
+										MCodeUtilities.resolveBinOperator(
+											token),
+										expr,
+										h);
 
 								/*                              Value expressionValue = director.animateBinaryExpression(
 								                                                        ECodeUtilities.resolveBinOperator(token),
@@ -1052,7 +1104,7 @@ public class Interpreter {
 							                                }
 							                            }
 							*/
-							/**
+							/*
 							* Look from the expression stack
 							* what expression should be shown next
 							*/
@@ -2140,11 +2192,17 @@ public class Interpreter {
 								Value[] args = null;
 
 								if (currentMethodInvocation[1] != null
-									&& ((String) currentMethodInvocation[1]).equals("")) {
+									&& (
+										(
+											String) currentMethodInvocation[1])
+												.equals(
+										"")) {
 									//System.out.println("CI: " + "new " + ((String) currentMethodInvocation[0]));
 									args =
 										director.animateOMInvocation(
-											"new " + ((String) currentMethodInvocation[0]),
+											"new "
+												+ (
+													(String) currentMethodInvocation[0]),
 											(Value[]) currentMethodInvocation[2],
 											(Highlight) currentMethodInvocation[5]);
 
@@ -2155,7 +2213,7 @@ public class Interpreter {
 										createNewInstance(
 											(ClassInfo) currentMethodInvocation[8],
 											(Highlight) currentMethodInvocation[5]);
-											
+
 									Reference ref = new Reference(of);
 									currentMethodInvocation[8] = ref;
 									objectCreation.push(new Reference(of));
@@ -2164,7 +2222,9 @@ public class Interpreter {
 									//System.out.println("OMI: " + "." + ((String) currentMethodInvocation[0]));
 									args =
 										director.animateOMInvocation(
-											"."	+ ((String) currentMethodInvocation[0]),
+											"."
+												+ (
+													(String) currentMethodInvocation[0]),
 											(Value[]) currentMethodInvocation[2],
 											(Highlight) currentMethodInvocation[5],
 											(Value) currentMethodInvocation[8]);
@@ -2173,14 +2233,24 @@ public class Interpreter {
 								String call;
 
 								if (currentMethodInvocation[1] != null
-									&& ((String) currentMethodInvocation[1]).equals("")) {
+									&& (
+										(
+											String) currentMethodInvocation[1])
+												.equals(
+										"")) {
 									call = (String) currentMethodInvocation[0];
-								} else if (((String) currentMethodInvocation[0]).equals("this.super")) {
+								} else if (
+									(
+										(
+											String) currentMethodInvocation[0])
+												.equals(
+										"this.super")) {
 									call = (String) currentMethodInvocation[0];
 								} else if (
 									currentMethodInvocation[1] == null) {
 									call =
-										((Value) currentMethodInvocation[8]).getValue()
+										((Value) currentMethodInvocation[8])
+											.getValue()
 											+ "."
 											+ (String) currentMethodInvocation[0];
 								} else {

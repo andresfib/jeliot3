@@ -49,7 +49,7 @@ public class Jeliot {
     Launcher launcher = null;
     BufferedReader ecode = null;
     PrintWriter pr = null;
-
+    Interpreter mCodeInterpreter = null; 
     String sourceCode = "";
     String methodCall = "";
     boolean compiled = false;
@@ -229,8 +229,10 @@ public class Jeliot {
 
         director = new Director(theatre, codePane, this, engine);
         director.setActorFactory(af);
-
-        director.initializeInterpreter(ecode, gui.getProgram(), pr);
+        
+        mCodeInterpreter = new Interpreter(ecode, director, gui.getProgram(), pr);
+        
+        director.setInterpreter(mCodeInterpreter);
 
         //find the main method
         //Enumeration enum = program.getClasses();
