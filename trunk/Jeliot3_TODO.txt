@@ -37,6 +37,7 @@ Graphical:
 * Reference actors visualization needs to be fixed in instances and in short distances
 * Explicit mentioning of different areas in the theater (e.g. constant area, expression evaluation area, instance and array area and method frame area). (done)
 * Some randomness to the placement of references to prevent overlapping (done)
+* Returned value should not stay in the return "bubble" after it has been used or should it?
 
 -------These can be done later: ------------------------------------
 
