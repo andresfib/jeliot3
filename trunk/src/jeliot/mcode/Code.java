@@ -16,7 +16,7 @@ public class Code {
 	 */
 	static private ResourceBundle bundle =
 		ResourceBundle.getBundle(
-			"jeliot.ecode.resources.properties",
+			"jeliot.mcode.resources.properties",
 			Locale.getDefault());
 
 	//Useful constants

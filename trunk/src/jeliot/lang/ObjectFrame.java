@@ -2,7 +2,7 @@ package jeliot.lang;
 
 import java.util.Hashtable;
 
-import jeliot.theatre.ObjectStage;
+import jeliot.theater.*;
 
 /**
   *

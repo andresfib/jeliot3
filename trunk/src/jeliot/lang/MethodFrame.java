@@ -2,7 +2,7 @@ package jeliot.lang;
 
 import java.util.Stack;
 
-import jeliot.theatre.MethodStage;
+import jeliot.theater.*;
 
 /**
   * MethodFrame is an instance of a method under execution.

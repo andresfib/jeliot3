@@ -1,6 +1,6 @@
 package jeliot.mcode;
 
-import jeliot.theatre.Highlight;
+import jeliot.theater.*;
 
 public class InterpreterError {
 

@@ -12,7 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import jeliot.theatre.Highlight;
+import jeliot.theater.*;
 
 /** This is the component that shows and highlights the program while
   * Jeliot is animating.

@@ -19,11 +19,7 @@ import jeliot.lang.Reference;
 import jeliot.lang.Value;
 import jeliot.lang.Variable;
 import jeliot.lang.VariableInArray;
-import jeliot.theatre.Actor;
-import jeliot.theatre.Director;
-import jeliot.theatre.ExpressionActor;
-import jeliot.theatre.Highlight;
-import jeliot.theatre.ValueActor;
+import jeliot.theater.*;
 
 /**
  * 
@@ -188,7 +184,7 @@ public class Interpreter {
 	 */
 	static private ResourceBundle bundle =
 		ResourceBundle.getBundle(
-			"jeliot.ecode.resources.messages",
+			"jeliot.mcode.resources.messages",
 			Locale.getDefault());
 	;
 
@@ -197,7 +193,7 @@ public class Interpreter {
 	 */
 	static private ResourceBundle propertiesBundle =
 		ResourceBundle.getBundle(
-			"jeliot.ecode.resources.properties",
+			"jeliot.mcode.resources.properties",
 			Locale.getDefault());
 	;
 
