@@ -319,7 +319,8 @@ public class JeliotWindow {
             if (Jeliot.isnoSystemExit()) {
                 frame.dispose();
             } else {
-                System.exit(0);
+                frame.dispose();
+                //System.exit(0);
             }
         }
     };
@@ -462,7 +463,8 @@ public class JeliotWindow {
                 if (Jeliot.isnoSystemExit()) {
                     frame.dispose();
                 } else {
-                    System.exit(0);
+                    frame.dispose();
+                    //System.exit(0);
                 }
             }
         });
