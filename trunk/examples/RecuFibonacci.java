@@ -1,20 +1,26 @@
 import jeliot.io.*;
 
-class RecuFibonacci {
-
-    static void main() {
-		int n = Input.readInt();
-		Output.println(fibo(n));
+public class Side {
+    int  sides;
+    Side(int s){
+        sides=s;
     }
-
-	static int fibo(int n) {
-		if (n < 2) {
-			return 1;
-		}
-		else {
-			return fibo(n - 1) 
-				 + fibo(n - 2);
-		}
-	}
-		
+}
+public class Polygon {
+    int sides;
+    Polygon(){}
+    Polygon(int s){
+        sides=s;
+    }
+    public int getSides(){
+        return sides;
+    }
+    
+}
+public class MyClass {
+    public static void main() {
+        Polygon polygon;
+//        Integer sides = new Integer (3);
+//        polygon = new Polygon(sides);
+    }
 }
