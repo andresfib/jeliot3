@@ -87,7 +87,6 @@ public class CodePane extends JComponent {
         Runnable updateAComponent = new Runnable() {
             public void run() {
                 area.requestFocus();
-                // +1 is a kludge! Should be fixed in the P-classes.
                 area.select(left, right);
             }
         };

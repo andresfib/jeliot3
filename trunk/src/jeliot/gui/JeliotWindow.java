@@ -71,23 +71,22 @@ public class JeliotWindow {
     /** This variable will control the panels. */
     private PanelController panelController;
 
-    /** This JEditorPane errorPane will show the error messages for the users. */
-    private JEditorPane errorPane = new JEditorPane(); {
-        errorPane.setEditable(false);
-        errorPane.setContentType("text/html");
-        errorPane.setBorder(
+    /** This JEditorPane errorJEditorPane will show the error messages for the users. */
+    private JEditorPane errorJEditorPane = new JEditorPane(); {
+        errorJEditorPane.setEditable(false);
+        errorJEditorPane.setContentType("text/html");
+        errorJEditorPane.setBorder(
                 BorderFactory.createCompoundBorder(
                     BorderFactory.createLoweredBevelBorder(),
                     BorderFactory.createEmptyBorder(10, 10, 10, 10)
                 ));
     }
 
-/*
-    JScrollPane editorScrollPane = new JScrollPane(editorPane);
-    editorScrollPane.setVerticalScrollBarPolicy(
-        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-    editorScrollPane.setPreferredSize(new Dimension(250, 145));
-*/
+    private JScrollPane errorPane = new JScrollPane(errorJEditorPane); {
+        errorPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    }
+    //errorPane.setPreferredSize(new Dimension(250, 145));
+
 
 
     /** This JPanel errorViewer will help the showing of the error messages for the users. */
@@ -177,9 +176,9 @@ public class JeliotWindow {
     /**
      * JFrame treeFrame for DEBUGGING.
      */
-    private JFrame treeFrame = new JFrame("Program"); {
-        treeFrame.setSize(300, 400);
-    }
+//    private JFrame treeFrame = new JFrame("Program"); {
+//        treeFrame.setSize(300, 400);
+//    }
 
     /**
      * Helping to enable and disable the components.
@@ -614,9 +613,9 @@ public class JeliotWindow {
                         }
                     ).start();
                 } else {
-                    showErrorMessage("<H2>No main method call found</H2>"+
-                    "<P>No main method call was found from any class"+
-                    "and thus the program cannot be started. Add a main method.</P>");
+                    showErrorMessage("<H2>No main method found</H2>"+
+                    "<P>There was no method main found from any of the classes"+
+                    "and thus the program cannot be started. Add a method main to the main class.</P>");
                 }
             }
 
@@ -662,22 +661,23 @@ public class JeliotWindow {
      */
     public String findMainMethodCall(String programCode) {
         String commentsRemoved = removeComments(programCode);
-        replaceChar(commentsRemoved, '\n', " ");
-        replaceChar(commentsRemoved, '\t', " ");
+        commentsRemoved = replaceChar(commentsRemoved, '\n', " ");
+        commentsRemoved = replaceChar(commentsRemoved, '\r', " ");
+        commentsRemoved = replaceChar(commentsRemoved, '\t', " ");
 
         String mainMethod="static void main()";
         String classString = " class ";
 
         int methodIndex = commentsRemoved.indexOf(mainMethod);
-        System.out.println(methodIndex);
+        //System.out.println(methodIndex);
         if (methodIndex > -1) {
             String partProgramCode = commentsRemoved.substring(0,methodIndex);
             int classIndex = partProgramCode.lastIndexOf(classString);
-            System.out.println(classIndex);
+            //System.out.println(classIndex);
             if (classIndex > -1) {
                 partProgramCode = partProgramCode.substring(classIndex + classString.length()).trim();
                 int classNameIndex = partProgramCode.indexOf(" ");
-                System.out.println(classNameIndex);
+                //System.out.println(classNameIndex);
                 if (classNameIndex > -1) {
                     String mainMethodCall = partProgramCode.substring(0, classNameIndex) + ".main();";
                     System.out.println(mainMethodCall);
@@ -717,7 +717,7 @@ public class JeliotWindow {
     }
 
     public void showErrorMessage(String e) {
-        errorPane.setText(e);
+        errorJEditorPane.setText(e);
         changeTheatrePane(errorViewer);
     }
 

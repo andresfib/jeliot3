@@ -28,6 +28,8 @@
 
 package koala.dynamicjava.interpreter;
 
+import java.text.*;
+
 import koala.dynamicjava.interpreter.error.*;
 import koala.dynamicjava.interpreter.throwable.*;
 import koala.dynamicjava.tree.*;
@@ -84,8 +86,53 @@ public class InterpreterException extends ThrownException {
             //System.out.println(message);
 
         } else {
+
             message = "<H2>Syntax Error</H2><P>" + m + "</P>";
+
+            int line = 0;
+            int column = 0;
+            String file = "buffer";
+
+            index = m.toLowerCase().indexOf("line");
+            if (index > -1) {
+                String message = m.substring(index + "line".length()).trim();
+                int i = 1;
+                while (true) {
+                    try {
+                        Integer.parseInt(message.substring(i-1,i));
+                        i++;
+                    } catch (NumberFormatException ex) {
+                        break;
+                    }
+                }
+                if (i > 1) {
+                    line = Integer.parseInt(message.substring(0,i-1));
+                }
+            }
+
+            index = m.toLowerCase().indexOf("column");
+            if (index > -1) {
+                String message = m.substring(index +
+                                    "column".length()).trim();
+                int numberEndIndex = message.indexOf(" ");
+                int i = 1;
+                while (true) {
+                    try {
+                        Integer.parseInt(message.substring(i-1,i));
+                        i++;
+                    } catch (NumberFormatException ex) {
+                        break;
+                    }
+                }
+                if (i > 1) {
+                    column = Integer.parseInt(message.substring(0,i-1));
+                }
+            }
+
             //System.out.println(message);
+            sourceInformation = new SourceInformation(file,
+                                                      line,
+                                                      column);
         }
     }
 
