@@ -23,39 +23,41 @@
 \newcommand{\f}[1]{\textsf{#1}}
 
 
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{2ex}
+\setlength{\parindent}{0pt} \setlength{\parskip}{2ex}
 \linespread{1.3}
-\sloppy
+%\sloppy
+%\fussy
 
 \setpapersize{A4}
 \setmarginsrb{35mm}{30mm}{30mm}{20mm}{0pt}{0mm}{12pt}{13mm}
 
 
 \title{\jel{} Program Animation System\\Internal Documentation\\\mbox{}\\\large{Version 3.2}}
-\author{Niko Myller and Andr\'{e} Moreno-Garc\'{\i}a}
+\author{Niko Myller and Andr\'{e}s Moreno Garc\'{\i}a}
 %\date{}
 
 \begin{document}
+% ----------------- Coverpage -------------------------------
+
 \maketitle
 \thispagestyle{empty}
 
-% ----------------- Coverpage -------------------------------
+% --- Alternative coverpage ---
 %
 %\vspace*{4cm}
-
+%
 %\vspace{2cm}
-
-%{\LARGE \jel{}Program Animation System\\Internal Documentation}
-
+%
+%{\LARGE \jel{} Program Animation System\\Internal Documentation}
+%
 %{\Large Version 3.2}
-
+%
 %\vspace{2cm}
-
+%
 %{\large Andr\'{e} Moreno-Garc\'{\i}a and Niko Myller}
-
+%
 %\vspace{\stretch{1}}
-
+%
 %{\large
 %X.X.2003 \\ \\
 %University of Joensuu \\
@@ -63,22 +65,23 @@
 %Special Project in Computer Science\\
 %Software Documentation
 %}
-
+%
 %\vspace{1cm}
-
+%
 %\thispagestyle{empty} % no page numbering
 
 \newpage
 
 \thispagestyle{empty} % no page numbering
 \vfil
-Copyright 2003 by Niko Myller and Andr\'{e} Moreno-Garc\'{\i}a.
+Copyright 2003 by Niko Myller and Andr\'{e}s Moreno Garc\'{\i}a.
 \bigskip
 
 This document is to be considered as part of the program
 \emph{\jel} and can be used under the same terms.
 \bigskip
 
+{\small
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -91,6 +94,33 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 02111-1307, USA.
+}
+
+{\emph \djava{}} is distributed under the terms of a BSD-like license:
+
+\djava{} - Copyright \copyright 1999 Dyade
+
+{\small Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions: The above copyright notice and
+this permission notice shall be included in all copies or substantial
+portions of the Software. }
+
+{\small THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL DYADE BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE. }
+
+{\small Except as contained in this notice, the name of Dyade shall not be used
+in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from Dyade. }
 
 \vfil
 \newpage
@@ -106,18 +136,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 
 \setlength{\parskip}{2ex}
 
-% ----------------- Itse tarina alkaa ------------------------
+% ----------------- Document begins ------------------------
 
 \setcounter{page}{1}
-\pagenumbering{arabic} % sivunumerointi normaaleilla numeroilla
+\pagenumbering{arabic} % page numbering with arabic numbers
 
 %Introduction
 \include{Introduction}
 \newpage
 
 
-\include{Design}
+\include{Managing}
 \newpage
+
+
+%\include{Design}
+%\newpage
 
 
 \include{Components}
@@ -132,10 +166,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 \newpage
 
 
-\include{Managing}
-\newpage
-
-
 \include{Extending}
 \newpage
 
@@ -147,5 +177,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 \addcontentsline{toc}{section}{References}
 \bibliographystyle{plainnat}
 \bibliography{soft_doc}
+
+
+\appendix
+%\newpage
+%\include{Appendix1}
+
+%\newpage
+%\include{Appendix2}
 
 \end{document}
