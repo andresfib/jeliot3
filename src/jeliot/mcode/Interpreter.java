@@ -29,18 +29,18 @@ import jeliot.theater.*;
  * @author Andrés Moreno
  */
 public class Interpreter {
-    
-//  DOC: document!
+
+	//  DOC: document!
 	/**
 	 *
 	 */
 	private Director director = null;
-    
+
 	/**
 	 *
 	 */
 	private BufferedReader ecode = null;
-    
+
 	/**
 	 *
 	 */
@@ -55,17 +55,17 @@ public class Interpreter {
 	 *
 	 */
 	private boolean running = true;
-    
+
 	/**
 	 *
 	 */
 	private boolean start = true;
-    
+
 	/**
 	 *
 	 */
 	private boolean firstLineRead = false;
-    
+
 	/**
 	 *
 	 */
@@ -75,17 +75,17 @@ public class Interpreter {
 	 * Keeps track of current return value
 	 */
 	private boolean returned = false;
-    
+
 	/**
 	 *
 	 */
 	private Value returnValue = null;
-    
+
 	/**
 	 *
 	 */
 	private Actor returnActor = null;
-    
+
 	/**
 	 *
 	 */
@@ -95,27 +95,27 @@ public class Interpreter {
 	 *
 	 */
 	private Stack commands = new Stack();
-    
+
 	/**
 	 *
 	 */
 	private Stack exprs = new Stack();
-    
+
 	/**
 	 *
 	 */
 	private Hashtable values = new Hashtable();
-    
+
 	/**
 	 *
 	 */
 	private Hashtable variables = new Hashtable();
-    
+
 	/**
 	 *
 	 */
 	private Hashtable instances = new Hashtable();
-    
+
 	/**
 	 *
 	 */
@@ -172,22 +172,22 @@ public class Interpreter {
 	 * line in classes with inheritance.
 	 */
 	private boolean constructorCall = false;
-    
+
 	/**
 	 *
 	 */
 	private Stack constructorCalls = new Stack();
-    
+
 	/**
 	 *
 	 */
 	private Vector superMethods = null;
-    
+
 	/**
 	 *
 	 */
 	private Vector superMethodsReading = null;
-    
+
 	/**
 	 *
 	 */
@@ -439,7 +439,7 @@ public class Interpreter {
 	}
 
 	/**
-     * Handles the interpretation of the single line of the mcode.
+	 * Handles the interpretation of the single line of the mcode.
 	 * @param line
 	 */
 	public void interpret(String line) {
@@ -452,9 +452,9 @@ public class Interpreter {
 
 				int token = Integer.parseInt(tokenizer.nextToken());
 
-                /* Test whether or not the evaluation
-                 * area should be cleaned.
-                 */
+				/* Test whether or not the evaluation
+				 * area should be cleaned.
+				 */
 				if (exprs.empty()
 					&& !invokingMethod
 					&& token != Code.WHI
@@ -628,8 +628,8 @@ public class Interpreter {
 						}
 
 						/*
-                         * Unary Expressions
-                         */
+						 * Unary Expressions
+						 */
 						// Complement
 					case Code.COMP :
 						// Plus operator
@@ -2969,12 +2969,12 @@ public class Interpreter {
 							                                    break;
 							                                }
 							                            }
-							*/
-							/**
-							* Look from the expression stack
-							* what expression should be shown next
-							*/
-							/*
+							                     */
+							                     /*
+							                      * Look from the expression stack
+							                      * what expression should be shown next
+							                      */
+							                      /*
 							                            long expressionReference = 0;
 							                            Highlight highlight = null;
 							
