@@ -115,7 +115,7 @@ public class CodePane2 extends JComponent {
 	 */
 	public void installProgram(String text) {
 		area.setText(text);
-		area.setCaretPosition(1);
+		area.setCaretPosition(0);
 	}
 
 	/**

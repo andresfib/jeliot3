@@ -175,35 +175,12 @@ public class Jeliot {
     }
 
     /**
-     * Creates the Lexer and Java11Parser.
-     * Compiles a program that is given in a Reader object.
+     * 
      *
      * @param sourceCode The program source code as a String.
      * @param methodCall The main method call as a String.
      */
     public void setSourceCode(String sourceCode, String methodCall) {
-        // create the lexer and the parser
-        //Lex.Lexer l = new Lex.Lexer(r, false);
-        //Java11Parser g = new Java11Parser(l);
-
-        // parse the program
-
-        // the try-catch structure is because of the braindead habit of
-        // the lexer to report exceptions throwing ERRORS!
-
-        //try {
-        //Symbol symbol = g.parse();
-        //this.program = (PCompilationUnit)symbol.value;
-        //}
-        //catch (Error error) {
-        //String msg = error.getMessage();
-        //throw new SyntaxErrorException(msg, 0, 0);
-        //}
-
-        // make a compile-time check
-        //NameSpace space = new NameSpace(program);
-        //TypeChecker check = new TypeChecker(space);
-        //program.acceptVisitor(check);
 
         if (p.matcher(sourceCode).find()) {
             this.sourceCode = sourceCode;
