@@ -146,7 +146,7 @@ To display the available targets type:
       </fileset>
       <fileset dir="${resources}">
         <include name="${package-prefix}/**/*"/>
-        <exclude name="${package-prefix}/properties.properties"/>
+        <!-- <exclude name="${package-prefix}/properties.properties"/> -->
         <exclude name="${package-prefix}/jeliot.defs"/>
       </fileset>
     </jar>
@@ -188,7 +188,7 @@ To display the available targets type:
     <copy file="${src}/docs/KunststoffPLAF_license.txt" todir="${dist}/docs"/>
   	<copy file="${src}/jeliot.bat" todir="${dist}"/>
     <copy file="${src}/jeliot.ico" todir="${dist}"/>
-    <copy file="${src}/properties.properties" todir="${dist}"/>
+    <!-- <copy file="${src}/properties.properties" todir="${dist}"/> -->
     <!-- <copy file="${src}/jeliot.defs" todir="${dist}"/> -->
   </target>
 	
