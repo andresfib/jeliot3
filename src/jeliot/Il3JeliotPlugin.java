@@ -1,11 +1,8 @@
 package jeliot;
 
-import com.incors.plaf.kunststoff.KunststoffLookAndFeel;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -21,6 +18,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import jeliot.gui.LoadJeliot;
+
+import com.incors.plaf.kunststoff.KunststoffLookAndFeel;
 
 /**
  * This is an extension of the application class of Jeliot 3 that
