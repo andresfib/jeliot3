@@ -131,11 +131,13 @@ public class HistoryView extends JComponent implements ActionListener {
         //TODO: add some of the literals below to a resourceBundle.
         this.codePane = c;
         File userPath = Util.createUserPath();
-        imageTemp = new File(userPath, "images");
-        if (!imageTemp.exists()) {
-            imageTemp.mkdir();
-        }
-        
+
+        do {
+            String dirName = "images" + System.currentTimeMillis();
+            imageTemp = new File(userPath, dirName);
+        } while (imageTemp.exists());
+        imageTemp.mkdir();
+
         initialize();
         setLayout(new BorderLayout());
 
@@ -191,7 +193,7 @@ public class HistoryView extends JComponent implements ActionListener {
                             ic.setImage(current);
                         }
                     }
-                    
+
                     if (highlights.size() > imageNumber && highlights.get(imageNumber) != null) {
                         if (HistoryView.this.isVisible()) {
                             c.highlightStatement((Highlight) highlights.get(imageNumber));
@@ -231,6 +233,11 @@ public class HistoryView extends JComponent implements ActionListener {
         validate();
     }
 
+    public void close() {
+        initialize();
+        imageTemp.delete();
+    }
+    
     /**
      * @param i
      * @param h
@@ -282,7 +289,9 @@ public class HistoryView extends JComponent implements ActionListener {
      */
     public static BufferedImage getBufferedImage(Image img) {
         // if the image is already a BufferedImage, cast and return it
-        if ((img instanceof BufferedImage)) { return (BufferedImage) img; }
+        if ((img instanceof BufferedImage)) {
+            return (BufferedImage) img;
+        }
         // otherwise, create a new BufferedImage and draw the original 
         // image on it
         int w = img.getWidth(null);
