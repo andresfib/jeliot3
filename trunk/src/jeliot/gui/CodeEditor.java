@@ -447,25 +447,33 @@ public class CodeEditor extends JComponent {
     void setProgram(String program) {
         area.setText(program);
         changed = false; //Jeliot 3
-        validateScrollPane();
     }
 
 
+    public int calculateLines(String text) {
+        int lines = 1;
+        int index = text.indexOf("\n");
+        while (index >= 0) {
+            lines++;
+            index++;
+            index = text.indexOf("\n", index);
+        }
+        return lines;
+    }
+
     public void validateScrollPane() {
+        final int lines = calculateLines(area.getText());
+
         if (nb != null) {
             Runnable updateAComponent = new Runnable() {
                 public void run() {
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException ie) { }
-                    nb.setPreferredHeight(area.getSize().height);
-                    revalidate();
-                    repaint();
+                    nb.setHeightByLines(lines);
                 }
             };
             SwingUtilities.invokeLater(updateAComponent);
         }
     }
+
 
     /**
      * Method returns the program code inside the JTextArea as String -object

@@ -60,7 +60,7 @@ public class CodePane extends JComponent {
         jsp = new JScrollPane(area);
         nb = new LineNumbers(font, insets);
         jsp.setRowHeaderView(nb);
-        nb.setPreferredHeight(area.getSize().height);
+        validateScrollPane();
         return jsp;
     }
 
@@ -74,15 +74,24 @@ public class CodePane extends JComponent {
         validateScrollPane();
     }
 
-    //here is a problem!!!
+    public int calculateLines(String text) {
+        int lines = 1;
+        int index = text.indexOf("\n");
+        while (index >= 0) {
+            lines++;
+            index++;
+            index = text.indexOf("\n", index);
+        }
+        return lines;
+    }
+
     public void validateScrollPane() {
+        final int lines = calculateLines(area.getText());
+
         if (nb != null) {
             Runnable updateAComponent = new Runnable() {
                 public void run() {
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException ie) { }
-                    nb.setPreferredHeight(area.getSize().height);
+                    nb.setHeightByLines(lines);
                 }
             };
             SwingUtilities.invokeLater(updateAComponent);
