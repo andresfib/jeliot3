@@ -247,9 +247,6 @@ public class JeliotWindow {
 
             public void actionPerformed(ActionEvent e) {
                 changeTheatrePane(tabbedPane);
-                rewindButton.setEnabled(true);
-                String[] s1 = { bundle.getString("menu.animation.rewind")};
-                setEnabledMenuItems(true, s1);
                 //editButton.doClick();
             }
         });
@@ -1050,10 +1047,11 @@ public class JeliotWindow {
                     }).start();
 
                 } else {
-
-                    showErrorMessage(bundle
-                            .getString("main_method_not_found.exception"));
-                    editButton.setEnabled(false);
+                    errorJEditorPane.setText(bundle.getString("main_method_not_found.exception"));
+                    changeTheatrePane(errorViewer);
+                    
+                    enableWidgets(editWidgets.elements(), true);
+                    enableWidgets(animWidgets.elements(), false);
                 }
             } catch (FeatureNotImplementedException e) {
                 showErrorMessage(e);
