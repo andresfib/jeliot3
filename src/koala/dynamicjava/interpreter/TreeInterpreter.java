@@ -42,6 +42,7 @@ import koala.dynamicjava.tree.visitor.*;
 import koala.dynamicjava.util.*;
 
 import jeliot.ecode.Code;
+import jeliot.ecode.ECodeUtilities;
 
 /**
  * This class contains method to interpret the constructs
@@ -175,7 +176,7 @@ public class TreeInterpreter implements Interpreter {
                 code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+
                         0+Code.LOC_DELIM+0;
             }
-            Code.write(code);
+            ECodeUtilities.write(code);
             return null;
             //throw new InterpreterException(e);
 
@@ -197,7 +198,7 @@ public class TreeInterpreter implements Interpreter {
                 code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+
                         0+Code.LOC_DELIM+0;
             }
-            Code.write(code);
+            ECodeUtilities.write(code);
             return null;
             //throw new InterpreterException(e);
         }
@@ -764,8 +765,8 @@ public class TreeInterpreter implements Interpreter {
         context.set(current.getName(), params[i++]);
         argnames.add(current.getName());
     }
-    Code.write(Code.PARAMETERS+Code.DELIM+Code.argToString(argnames));
-    Code.write(Code.MD+Code.DELIM+locationToString(meth));
+    ECodeUtilities.write(Code.PARAMETERS+Code.DELIM+ECodeUtilities.argToString(argnames));
+    ECodeUtilities.write(Code.MD+Code.DELIM+locationToString(meth));
     // Set the final local variables values
     if (md.contextField != null) {
         Map vars = null;
