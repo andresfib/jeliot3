@@ -54,6 +54,7 @@ import jeliot.Jeliot;
 import jeliot.calltree.TreeDraw;
 import jeliot.mcode.InterpreterError;
 import jeliot.mcode.MCodeUtilities;
+import jeliot.printing.PrintingUtil;
 import jeliot.theater.AnimationEngine;
 import jeliot.theater.ImageLoader;
 import jeliot.theater.PanelController;
@@ -62,6 +63,9 @@ import jeliot.tracker.Tracker;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
+
+import org.syntax.jedit.JEditTextArea;
+
 import edu.unika.aifb.components.JFontChooser;
 
 /**
@@ -572,6 +576,35 @@ public class JeliotWindow implements PauseListener {
         //a group of JMenuItems
         JMenu programMenu = editor.makeProgramMenu();
 
+        menuItem = new JMenuItem(messageBundle.getString("menu.program.print"));
+        menuItem.setMnemonic(KeyEvent.VK_P);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+                ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //TODO: add also theater printing here and move the selection to a dialog!
+                JEditTextArea area = editor.getTextArea();
+                area.getPainter().setPrinting(true);
+                int caretPosition = area.getCaretPosition();
+                int selectionStart = area.getSelectionStart();
+                int selectionEnd = area.getSelectionEnd();
+                area.setCaretPosition(0);
+                PrintingUtil.printComponent(area.getPainter(), area.getTotalArea());
+                area.setCaretPosition(caretPosition);
+                if (selectionStart != selectionEnd) {
+                    if (caretPosition == selectionStart) {
+                        area.select(selectionEnd, selectionStart);
+                    } else {
+                        area.select(selectionStart, selectionEnd);
+                    }
+                } else {
+                    area.setCaretPosition(caretPosition);
+                }
+                area.getPainter().setPrinting(false);
+            }       
+        });
+        programMenu.add(menuItem);        
+        
         programMenu.addSeparator();
         
         menuItem = new JMenuItem(messageBundle.getString("menu.program.exit"));

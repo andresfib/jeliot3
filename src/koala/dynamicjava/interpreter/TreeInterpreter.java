@@ -69,7 +69,6 @@ import koala.dynamicjava.tree.ConstructorDeclaration;
 import koala.dynamicjava.tree.FormalParameter;
 import koala.dynamicjava.tree.MethodDeclaration;
 import koala.dynamicjava.tree.Node;
-import koala.dynamicjava.tree.Type;
 import koala.dynamicjava.tree.visitor.Visitor;
 import koala.dynamicjava.util.ImportationManager;
 import koala.dynamicjava.util.LibraryFinder;

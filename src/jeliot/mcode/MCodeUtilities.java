@@ -9,9 +9,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.util.DebugUtil;
-
 import koala.dynamicjava.interpreter.EvaluationVisitor;
-import koala.dynamicjava.tree.Expression;
 import koala.dynamicjava.tree.Node;
 
 /**
