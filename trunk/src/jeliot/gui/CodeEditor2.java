@@ -74,7 +74,8 @@ public class CodeEditor2 extends JComponent {
     /**
      * Comment for <code>title</code>
      */
-    private String title;
+    private String title = propertiesBundle.getString("name") + " "
+    + propertiesBundle.getString("version");
 
     /**
      * Tells whether or not the current file is changed since last loading or
@@ -264,9 +265,9 @@ public class CodeEditor2 extends JComponent {
      * Sets the layout and adds the JScrollPane with JTextArea area and JToolbar
      * in it. Initializes the FileChooser.
      */
-    public CodeEditor2(String title, String udir) {
-        this.title = title;
+    public CodeEditor2(String udir, String defaultIO) {
         this.udir = udir;
+        this.template = defaultIO + "\n\n" + template;
         initFileChooser();
 
         //Special for JEditTextArea for syntax highlighting
@@ -467,6 +468,8 @@ public class CodeEditor2 extends JComponent {
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(allSelector);
         menu.add(menuItem);
+
+        menu.addSeparator();
 
         return menu;
     }
@@ -822,4 +825,10 @@ public class CodeEditor2 extends JComponent {
         return saveAutomatically;
     }
     
+    /**
+     * @return Returns the area.
+     */
+    public JEditTextArea getTextArea() {
+        return area;
+    }
 }

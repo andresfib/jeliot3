@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -60,6 +61,7 @@ import jeliot.theater.Theater;
 import jeliot.tracker.Tracker;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserPropertyResourceBundle;
+import edu.unika.aifb.components.JFontChooser;
 
 /**
  * The main window of the Jeliot 3.
@@ -401,7 +403,7 @@ public class JeliotWindow {
 
         this.panelController = new PanelController(theatre, iLoad);
         //this.editor = new CodeEditor(this.udir);
-        this.editor = new CodeEditor2(this.jeliotVersion, this.udir);
+        this.editor = new CodeEditor2(this.udir, jeliot.getImportIOStatement());
         this.frame = new JFrame(jeliotVersion);
     }
 
@@ -553,6 +555,22 @@ public class JeliotWindow {
         editWidgets.addElement(programMenu);
 
         JMenu editMenu = editor.makeEditMenu();
+        
+        menuItem = new JMenuItem(messageBundle.getString("menu.edit.font_select"));
+        menuItem.setMnemonic(KeyEvent.VK_F);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
+                ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Font f = JFontChooser.showDialog(frame, editor.getTextArea().getPainter().getFont());
+                if (f != null) {
+                    editor.getTextArea().getPainter().setFont(f);
+                    getCodePane().getTextArea().getPainter().setFont(f);
+                }
+            }
+        });
+        editMenu.add(menuItem);        
+        
         menuBar.add(editMenu);
         editWidgets.addElement(editMenu);
 

@@ -40,7 +40,7 @@ public class LoadJeliot {
 	 * Initializes the Jeliot's splash screen window. Initializes the
 	 * jeliot.Jeliot object.
 	 */
-	public Jeliot start(String udir, boolean experiment) {
+	public static void start(final Jeliot jeliot) {
 		// Get the splash screen image
 		final Image image = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(propertiesBundle.getString("directory.images") + messageBundle.getString("image.splash_screen"))).getImage();
 
@@ -68,14 +68,12 @@ public class LoadJeliot {
 		window.setVisible(true);
 		//window.show();
 
-		final Jeliot jeliot = new Jeliot(udir, experiment);
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				jeliot.run();
 				window.dispose();
 			}
 		});
-		return jeliot;
 	}
 }
 
