@@ -507,6 +507,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeERROR(java.lang.String, jeliot.mcode.Highlight)
      */
     protected void handleCodeERROR(String message, Highlight h) {
+        running = false;
     }
 
     /* (non-Javadoc)
