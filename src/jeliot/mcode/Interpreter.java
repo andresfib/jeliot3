@@ -196,18 +196,12 @@ public class Interpreter {
 	/**
 	 * The resource bundle for mcode messages
 	 */
-	static private ResourceBundle bundle =
-		ResourceBundle.getBundle(
-			"jeliot.mcode.resources.messages",
-			Locale.getDefault());
+	static private ResourceBundle bundle = ResourceBundle.getBundle("jeliot.mcode.resources.messages", Locale.getDefault());
 
 	/**
 	 * The resource bundle for mcode properties
 	 */
-	static private ResourceBundle propertiesBundle =
-		ResourceBundle.getBundle(
-			"jeliot.mcode.resources.properties",
-			Locale.getDefault());
+	static private ResourceBundle propertiesBundle = ResourceBundle.getBundle("jeliot.mcode.resources.properties", Locale.getDefault());
 
 	/**
 	 * 
@@ -220,11 +214,7 @@ public class Interpreter {
 	 * @param programCode
 	 * @param pr
 	 */
-	public Interpreter(
-		BufferedReader r,
-		Director d,
-		String programCode,
-		PrintWriter pr) {
+	public Interpreter(BufferedReader r, Director d, String programCode, PrintWriter pr) {
 		this.ecode = r;
 		this.director = d;
 		this.programCode = programCode;
@@ -259,6 +249,7 @@ public class Interpreter {
 		superMethodCallNumber = 0;
 		try {
 			line = ecode.readLine();
+			//TODO: comment the next line in the released versions
 			System.out.println(line);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -338,23 +329,12 @@ public class Interpreter {
 		}
 		//Change this to be something more meaningful!
 		if (readLine == null) {
-			readLine =
-				""
-					+ Code.ERROR
-					+ Code.DELIM
-					+ bundle.getString("unknown.exception")
+			readLine = "" + Code.ERROR + Code.DELIM + bundle.getString("unknown.exception")
 			/*
 			+ "<H1>Runtime Exception</H1>" 
 			+ "<P>The reason for runtime exception is unknown.</P>"
 			*/
-			+Code.DELIM
-				+ "0"
-				+ Code.LOC_DELIM
-				+ "0"
-				+ Code.LOC_DELIM
-				+ "0"
-				+ Code.LOC_DELIM
-				+ "0";
+			+Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0";
 		}
 		System.out.println(readLine);
 		return readLine;
@@ -385,26 +365,14 @@ public class Interpreter {
 			} else {
 				String storedLine = readLine();
 
-				StringTokenizer tokenizer =
-					new StringTokenizer(storedLine, Code.DELIM);
+				StringTokenizer tokenizer = new StringTokenizer(storedLine, Code.DELIM);
 				int token = Integer.parseInt(tokenizer.nextToken());
 				if (token == Code.INPUT) {
-					interpret(
-						""
-						+ Code.ERROR
-						+ Code.DELIM
-						+ bundle.getString("inputInConstructor.exception")
+					interpret("" + Code.ERROR + Code.DELIM + bundle.getString("inputInConstructor.exception")
 					/* + "<H1>Feature not implemented</H1>"
 					   + "<P>Super classes' constructors cannot "
 					   + "contain input requests.</P>" */
-					+Code.DELIM
-						+ "0"
-						+ Code.LOC_DELIM
-						+ "0"
-						+ Code.LOC_DELIM
-						+ "0"
-						+ Code.LOC_DELIM
-						+ "0");
+					+Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0");
 				}
 				if (token == Code.ERROR) {
 					interpret(storedLine);
@@ -491,8 +459,7 @@ public class Interpreter {
 						{
 
 							long token1 = Long.parseLong(tokenizer.nextToken());
-							commands.push(
-								"" + Code.RIGHT + Code.DELIM + token1);
+							commands.push("" + Code.RIGHT + Code.DELIM + token1);
 							break;
 						}
 
@@ -501,17 +468,10 @@ public class Interpreter {
 						{
 
 							//first token
-							long expressionType =
-								Long.parseLong(tokenizer.nextToken());
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionType = Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String location = tokenizer.nextToken();
-							exprs.push(
-								expressionType
-									+ Code.DELIM
-									+ expressionReference
-									+ Code.DELIM
-									+ location);
+							exprs.push(expressionType + Code.DELIM + expressionReference + Code.DELIM + location);
 							break;
 						}
 
@@ -519,13 +479,8 @@ public class Interpreter {
 					case Code.TO :
 						{
 
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
-							commands.push(
-								""
-									+ Code.TO
-									+ Code.DELIM
-									+ expressionReference);
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
+							commands.push("" + Code.TO + Code.DELIM + expressionReference);
 							break;
 						}
 
@@ -533,54 +488,36 @@ public class Interpreter {
 					case Code.A :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
-							long fromExpression =
-								Long.parseLong(tokenizer.nextToken());
-							long toExpression =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
+							long fromExpression = Long.parseLong(tokenizer.nextToken());
+							long toExpression = Long.parseLong(tokenizer.nextToken());
 							String value = "";
 							if (tokenizer.countTokens() > 2) {
 								value = tokenizer.nextToken();
 							}
 							String type = tokenizer.nextToken();
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Variable toVariable =
-								(Variable) variables.remove(
-									new Long(toExpression));
+							Variable toVariable = (Variable) variables.remove(new Long(toExpression));
 
 							//just to get rid of extra references
 							variables.remove(new Long(fromExpression));
 
-							Value fromValue =
-								(Value) values.remove(new Long(fromExpression));
+							Value fromValue = (Value) values.remove(new Long(fromExpression));
 							Value casted = null;
 							Value expressionValue = null;
-							if (MCodeUtilities.isPrimitive(type)
-								|| type.equals("null")) {
+							if (MCodeUtilities.isPrimitive(type) || type.equals("null")) {
 								casted = new Value(value, type);
 								expressionValue = new Value(value, type);
 
-								if (!casted
-									.getType()
-									.equals(fromValue.getType())
-									&& MCodeUtilities.resolveType(
-										casted.getType())
-										!= MCodeUtilities.resolveType(
-											fromValue.getType())) {
-									director.animateCastExpression(
-										fromValue,
-										casted);
+								if (!casted.getType().equals(fromValue.getType())
+									&& MCodeUtilities.resolveType(casted.getType()) != MCodeUtilities.resolveType(fromValue.getType())) {
+									director.animateCastExpression(fromValue, casted);
 									fromValue.setActor(casted.getActor());
 								}
 
 							} else {
-								Instance inst =
-									(Instance) instances.get(
-										MCodeUtilities.getHashCode(value));
+								Instance inst = (Instance) instances.get(MCodeUtilities.getHashCode(value));
 								if (inst != null) {
 									casted = new Reference(inst);
 									((Reference) casted).makeReference();
@@ -591,29 +528,18 @@ public class Interpreter {
 								}
 							}
 
-							director.animateAssignment(
-								toVariable,
-								fromValue,
-								casted,
-								expressionValue,
-								h);
+							director.animateAssignment(toVariable, fromValue, casted, expressionValue, h);
 							toVariable.assign(casted);
 
-							values.put(
-								new Long(expressionCounter),
-								expressionValue);
+							values.put(new Long(expressionCounter), expressionValue);
 
-							Object[] postIncDec =
-								(Object[]) postIncsDecs.remove(
-									new Long(fromExpression));
+							Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(fromExpression));
 
 							if (postIncDec != null) {
 								doPostIncDec(postIncDec);
 							}
 
-							postIncDec =
-								(Object[]) postIncsDecs.remove(
-									new Long(toExpression));
+							postIncDec = (Object[]) postIncsDecs.remove(new Long(toExpression));
 
 							if (postIncDec != null) {
 								doPostIncDec(postIncDec);
@@ -640,52 +566,30 @@ public class Interpreter {
 					case Code.NO :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
-							long unaryExpressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
+							long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 							String type = tokenizer.nextToken();
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 							Value result = new Value(value, type);
-							Value val =
-								(Value) values.remove(
-									new Long(unaryExpressionReference));
+							Value val = (Value) values.remove(new Long(unaryExpressionReference));
 
-							int unaryOperator =
-								MCodeUtilities.resolveUnOperator(token);
+							int unaryOperator = MCodeUtilities.resolveUnOperator(token);
 
-							ExpressionActor expr =
-								director.getCurrentScratch().findActor(
-									expressionCounter);
+							ExpressionActor expr = director.getCurrentScratch().findActor(expressionCounter);
 
 							if (expr == null) {
-								expr =
-									director.beginUnaryExpression(
-										unaryOperator,
-										val,
-										expressionCounter,
-										h);
+								expr = director.beginUnaryExpression(unaryOperator, val, expressionCounter, h);
 							}
 
-							Object[] postIncDec =
-								(Object[]) postIncsDecs.remove(
-									new Long(unaryExpressionReference));
+							Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(unaryExpressionReference));
 
 							if (postIncDec != null) {
 								doPostIncDec(postIncDec);
 							}
 
-							Value expressionValue =
-								director.finishUnaryExpression(
-									unaryOperator,
-									expr,
-									result,
-									expressionCounter,
-									h);
+							Value expressionValue = director.finishUnaryExpression(unaryOperator, expr, result, expressionCounter, h);
 
 							//NOT NEEDED ANY MORE!
 							//This is not needed after the changes.
@@ -700,9 +604,7 @@ public class Interpreter {
 
 							exprs.pop();
 
-							handleExpression(
-								expressionValue,
-								expressionCounter);
+							handleExpression(expressionValue, expressionCounter);
 
 							/*
 							                            //command that wait for this expression (left, right)
@@ -812,17 +714,13 @@ public class Interpreter {
 					case Code.PDE :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 
 							String value = tokenizer.nextToken();
 							String type = tokenizer.nextToken();
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							Value result = new Value(value, type);
 
@@ -830,31 +728,15 @@ public class Interpreter {
 
 							if (exprs.empty()) {
 
-								Variable var =
-									(Variable) variables.remove(
-										new Long(expressionReference));
+								Variable var = (Variable) variables.remove(new Long(expressionReference));
 
-								int operator =
-									MCodeUtilities.resolveUnOperator(token);
-								director.animatePreIncDec(
-									operator,
-									var,
-									result,
-									h);
+								int operator = MCodeUtilities.resolveUnOperator(token);
+								director.animatePreIncDec(operator, var, result, h);
 
 							} else {
 
-								Object[] postIncDec =
-									{
-										new Long(
-											MCodeUtilities.resolveUnOperator(
-												token)),
-										new Long(expressionReference),
-										result,
-										h };
-								postIncsDecs.put(
-									new Long(expressionCounter),
-									postIncDec);
+								Object[] postIncDec = { new Long(MCodeUtilities.resolveUnOperator(token)), new Long(expressionReference), result, h };
+								postIncsDecs.put(new Long(expressionCounter), postIncDec);
 
 							}
 
@@ -869,32 +751,23 @@ public class Interpreter {
 					case Code.PRDE :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 							String type = tokenizer.nextToken();
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							Value result = new Value(value, type);
-							Variable var =
-								(Variable) variables.remove(
-									new Long(expressionReference));
+							Variable var = (Variable) variables.remove(new Long(expressionReference));
 
-							int operator =
-								MCodeUtilities.resolveUnOperator(token);
+							int operator = MCodeUtilities.resolveUnOperator(token);
 							director.animatePreIncDec(operator, var, result, h);
 							values.put(new Long(expressionCounter), result);
 
 							exprs.pop();
 
-							Object[] postIncDec =
-								(Object[]) postIncsDecs.remove(
-									new Long(expressionReference));
+							Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(expressionReference));
 
 							if (postIncDec != null) {
 								doPostIncDec(postIncDec);
@@ -953,12 +826,9 @@ public class Interpreter {
 					case Code.AE :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
-							long leftExpressionReference =
-								Long.parseLong(tokenizer.nextToken());
-							long rightExpressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
+							long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+							long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = null;
 							if (tokenizer.countTokens() >= 3) {
 								value = tokenizer.nextToken();
@@ -967,14 +837,10 @@ public class Interpreter {
 							}
 							String type = tokenizer.nextToken();
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 							Value result = new Value(value, type);
 
-							ExpressionActor expr =
-								director.getCurrentScratch().findActor(
-									expressionCounter);
+							ExpressionActor expr = director.getCurrentScratch().findActor(expressionCounter);
 
 							Value expressionValue = null;
 
@@ -989,33 +855,20 @@ public class Interpreter {
 								* yet set thus we need to check that to be sure.
 								*/
 
-								Value right =
-									(Value) values.remove(
-										new Long(rightExpressionReference));
+								Value right = (Value) values.remove(new Long(rightExpressionReference));
 
 								if (right != null) {
-									director.rightBinaryExpression(
-										right,
-										expr,
-										h);
+									director.rightBinaryExpression(right, expr, h);
 								}
 
 								// token is declared and assigned in the line 91.
-								expressionValue =
-									director.finishBinaryExpression(
-										result,
-										MCodeUtilities.resolveBinOperator(
-											token),
-										expr,
-										h);
+								expressionValue = director.finishBinaryExpression(result, MCodeUtilities.resolveBinOperator(token), expr, h);
 
 								exprs.pop();
 
 								//values.put(new Long(expressionCounter), expressionValue);
 
-								Object[] postIncDec =
-									(Object[]) postIncsDecs.remove(
-										new Long(rightExpressionReference));
+								Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(rightExpressionReference));
 
 								if (postIncDec != null) {
 									doPostIncDec(postIncDec);
@@ -1027,24 +880,12 @@ public class Interpreter {
 								*/
 							} else {
 
-								Value left =
-									(Value) values.remove(
-										new Long(leftExpressionReference));
-								Value right =
-									(Value) values.remove(
-										new Long(rightExpressionReference));
+								Value left = (Value) values.remove(new Long(leftExpressionReference));
+								Value right = (Value) values.remove(new Long(rightExpressionReference));
 
-								expr =
-									director.beginBinaryExpression(
-										left,
-										MCodeUtilities.resolveBinOperator(
-											token),
-										expressionCounter,
-										h);
+								expr = director.beginBinaryExpression(left, MCodeUtilities.resolveBinOperator(token), expressionCounter, h);
 
-								Object[] postIncDec =
-									(Object[]) postIncsDecs.remove(
-										new Long(leftExpressionReference));
+								Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(leftExpressionReference));
 
 								if (postIncDec != null) {
 									doPostIncDec(postIncDec);
@@ -1052,21 +893,13 @@ public class Interpreter {
 
 								director.rightBinaryExpression(right, expr, h);
 
-								postIncDec =
-									(Object[]) postIncsDecs.remove(
-										new Long(rightExpressionReference));
+								postIncDec = (Object[]) postIncsDecs.remove(new Long(rightExpressionReference));
 
 								if (postIncDec != null) {
 									doPostIncDec(postIncDec);
 								}
 								// token is declared and assigned in the line 91.
-								expressionValue =
-									director.finishBinaryExpression(
-										result,
-										MCodeUtilities.resolveBinOperator(
-											token),
-										expr,
-										h);
+								expressionValue = director.finishBinaryExpression(result, MCodeUtilities.resolveBinOperator(token), expr, h);
 
 								/*                              Value expressionValue = director.animateBinaryExpression(
 								                                                        ECodeUtilities.resolveBinOperator(token),
@@ -1082,9 +915,7 @@ public class Interpreter {
 
 							}
 
-							handleExpression(
-								expressionValue,
-								expressionCounter);
+							handleExpression(expressionValue, expressionCounter);
 
 							/*
 							                            int command = -1;
@@ -1189,8 +1020,7 @@ public class Interpreter {
 						{
 
 							String variableName = tokenizer.nextToken();
-							long initializerExpression =
-								Long.parseLong(tokenizer.nextToken());
+							long initializerExpression = Long.parseLong(tokenizer.nextToken());
 							String value = null;
 							if (tokenizer.countTokens() >= 4) {
 								value = tokenizer.nextToken();
@@ -1201,15 +1031,9 @@ public class Interpreter {
 							String modifier = tokenizer.nextToken();
 
 							//Make the location information for the location token
-							Highlight highlight =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Variable var =
-								director.declareVariable(
-									variableName,
-									type,
-									highlight);
+							Variable var = director.declareVariable(variableName, type, highlight);
 
 							Value casted = null;
 
@@ -1219,9 +1043,7 @@ public class Interpreter {
 								if (value.equals("null")) {
 									casted = new Reference();
 								} else {
-									Instance inst =
-										(Instance) instances.get(
-											MCodeUtilities.getHashCode(value));
+									Instance inst = (Instance) instances.get(MCodeUtilities.getHashCode(value));
 
 									if (inst != null) {
 										casted = new Reference(inst);
@@ -1234,19 +1056,10 @@ public class Interpreter {
 
 							if (initializerExpression > 0) {
 
-								Value val =
-									(Value) values.remove(
-										new Long(initializerExpression));
-								director.animateAssignment(
-									var,
-									val,
-									casted,
-									null,
-									highlight);
+								Value val = (Value) values.remove(new Long(initializerExpression));
+								director.animateAssignment(var, val, casted, null, highlight);
 
-								Object[] postIncDec =
-									(Object[]) postIncsDecs.remove(
-										new Long(initializerExpression));
+								Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(initializerExpression));
 
 								if (postIncDec != null) {
 									doPostIncDec(postIncDec);
@@ -1262,9 +1075,7 @@ public class Interpreter {
 						//Qualified Name (variable)
 					case Code.QN :
 						{
-
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
 							String variableName = tokenizer.nextToken();
 							String value = null;
 							if (tokenizer.countTokens() >= 2) {
@@ -1274,9 +1085,7 @@ public class Interpreter {
 							}
 							String type = tokenizer.nextToken();
 
-							Variable var =
-								director.getCurrentMethodFrame().getVariable(
-									variableName);
+							Variable var = director.getCurrentMethodFrame().getVariable(variableName);
 
 							//command that waits for this expression
 							int command = -1;
@@ -1285,16 +1094,9 @@ public class Interpreter {
 
 							//We find the command
 							for (int i = size - 1; i >= 0; i--) {
-								StringTokenizer commandTokenizer =
-									new StringTokenizer(
-										(String) commands.elementAt(i),
-										Code.DELIM);
-								int comm =
-									Integer.parseInt(
-										commandTokenizer.nextToken());
-								long cid =
-									Long.parseLong(
-										commandTokenizer.nextToken());
+								StringTokenizer commandTokenizer = new StringTokenizer((String) commands.elementAt(i), Code.DELIM);
+								int comm = Integer.parseInt(commandTokenizer.nextToken());
+								long cid = Long.parseLong(commandTokenizer.nextToken());
 
 								if (expressionCounter == cid) {
 									command = comm;
@@ -1311,23 +1113,14 @@ public class Interpreter {
 							long expressionReference = 0;
 							Highlight highlight = null;
 							if (!exprs.empty()) {
-								StringTokenizer expressionTokenizer =
-									new StringTokenizer(
-										(String) exprs.peek(),
-										Code.DELIM);
+								StringTokenizer expressionTokenizer = new StringTokenizer((String) exprs.peek(), Code.DELIM);
 
-								oper =
-									Integer.parseInt(
-										expressionTokenizer.nextToken());
+								oper = Integer.parseInt(expressionTokenizer.nextToken());
 
-								expressionReference =
-									Long.parseLong(
-										expressionTokenizer.nextToken());
+								expressionReference = Long.parseLong(expressionTokenizer.nextToken());
 
 								//Make the location information for the location token
-								highlight =
-									MCodeUtilities.makeHighlight(
-										expressionTokenizer.nextToken());
+								highlight = MCodeUtilities.makeHighlight(expressionTokenizer.nextToken());
 							}
 
 							Value val = null;
@@ -1339,9 +1132,7 @@ public class Interpreter {
 								if (value.equals("null")) {
 									val = new Reference();
 								} else {
-									Instance inst =
-										(Instance) instances.get(
-											MCodeUtilities.getHashCode(value));
+									Instance inst = (Instance) instances.get(MCodeUtilities.getHashCode(value));
 									if (inst != null) {
 										val = new Reference(inst);
 									} else {
@@ -1349,6 +1140,7 @@ public class Interpreter {
 									}
 								}
 								val.setActor(var.getActor().getValue());
+                                variables.put(new Long(expressionCounter), var);                                
 							}
 
 							/**
@@ -1359,80 +1151,42 @@ public class Interpreter {
 							//If operator is assignment we just store the value
 							if (oper == Code.A) {
 								if (command == Code.TO) {
-									variables.put(
-										new Long(expressionCounter),
-										var);
+									variables.put(new Long(expressionCounter), var);
 								} else {
-									values.put(
-										new Long(expressionCounter),
-										val);
+									values.put(new Long(expressionCounter), val);
 								}
 								//If oper is other binary operator we will show it
 								//on the screen with operator
 							} else if (MCodeUtilities.isBinary(oper)) {
-								int operator =
-									MCodeUtilities.resolveBinOperator(oper);
+								int operator = MCodeUtilities.resolveBinOperator(oper);
 								if (command == Code.LEFT) {
-									director.beginBinaryExpression(
-										val,
-										operator,
-										expressionReference,
-										highlight);
+									director.beginBinaryExpression(val, operator, expressionReference, highlight);
 								} else if (command == Code.RIGHT) {
-									ExpressionActor ea =
-										(ExpressionActor) director
-											.getCurrentScratch()
-											.findActor(
-											expressionReference);
+									ExpressionActor ea = (ExpressionActor) director.getCurrentScratch().findActor(expressionReference);
 									if (ea != null) {
-										director.rightBinaryExpression(
-											val,
-											ea,
-											highlight);
+										director.rightBinaryExpression(val, ea, highlight);
 									} else {
-										values.put(
-											new Long(expressionCounter),
-											val);
+										values.put(new Long(expressionCounter), val);
 									}
 								} else {
-									values.put(
-										new Long(expressionCounter),
-										val);
+									values.put(new Long(expressionCounter), val);
 								}
 
 								//If oper is a unary operator we will show it
 								//on the screen with operator
 							} else if (MCodeUtilities.isUnary(oper)) {
 								if (oper == Code.PRIE || oper == Code.PRDE) {
-									variables.put(
-										new Long(expressionCounter),
-										var);
-									values.put(
-										new Long(expressionCounter),
-										val);
-								} else if (
-									oper == Code.PIE || oper == Code.PDE) {
-									variables.put(
-										new Long(expressionCounter),
-										var);
-									values.put(
-										new Long(expressionReference),
-										val);
-									values.put(
-										new Long(expressionCounter),
-										val);
+									variables.put(new Long(expressionCounter), var);
+									values.put(new Long(expressionCounter), val);
+								} else if (oper == Code.PIE || oper == Code.PDE) {
+									variables.put(new Long(expressionCounter), var);
+									values.put(new Long(expressionReference), val);
+									values.put(new Long(expressionCounter), val);
 								} else {
-									values.put(
-										new Long(expressionCounter),
-										val);
-									int operator =
-										MCodeUtilities.resolveUnOperator(oper);
+									values.put(new Long(expressionCounter), val);
+									int operator = MCodeUtilities.resolveUnOperator(oper);
 									if (command == Code.RIGHT) {
-										director.beginUnaryExpression(
-											operator,
-											val,
-											expressionReference,
-											highlight);
+										director.beginUnaryExpression(operator, val, expressionReference, highlight);
 									}
 								}
 								//If it is something else we will store it for later use.
@@ -1449,8 +1203,7 @@ public class Interpreter {
 						{
 
 							//Second token is the expression counter
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
 
 							String value = null;
 							if (tokenizer.countTokens() >= 3) {
@@ -1580,21 +1333,16 @@ public class Interpreter {
 						{
 
 							//simpleAllocationCounter
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
 
 							String declaringClass = tokenizer.nextToken();
 							String constructorName = tokenizer.nextToken();
 
-							int parameterCount =
-								Integer.parseInt(tokenizer.nextToken());
-							Highlight highlight =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							int parameterCount = Integer.parseInt(tokenizer.nextToken());
+							Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							//Create here Object Stage with initial variables and values
-							ClassInfo ci =
-								(ClassInfo) classes.get(declaringClass);
+							ClassInfo ci = (ClassInfo) classes.get(declaringClass);
 
 							//If ci is not null it means that we are dealing with
 							//user defined class and can find the class information
@@ -1605,14 +1353,10 @@ public class Interpreter {
 							if (ci == null) {
 								Class declaredClass = null;
 								try {
-									declaredClass =
-										Class.forName(declaringClass);
+									declaredClass = Class.forName(declaringClass);
 								} catch (Exception e) {
 									//String message = "<H1>Runtime Error</H1> <P>The class that was supposed to be initiated could not be found.</P>";
-									director.showErrorMessage(
-										new InterpreterError(
-											bundle.getString(
-												"notfoundclass.exception")));
+									director.showErrorMessage(new InterpreterError(bundle.getString("notfoundclass.exception")));
 								}
 								ci = new ClassInfo(declaredClass);
 								classes.put(ci.getName(), ci);
@@ -1640,12 +1384,9 @@ public class Interpreter {
 							currentMethodInvocation[1] = "";
 
 							Value[] parameterValues = new Value[parameterCount];
-							String[] parameterTypes =
-								new String[parameterCount];
-							String[] parameterNames =
-								new String[parameterCount];
-							Long[] parameterExpressionReferences =
-								new Long[parameterCount];
+							String[] parameterTypes = new String[parameterCount];
+							String[] parameterNames = new String[parameterCount];
+							Long[] parameterExpressionReferences = new Long[parameterCount];
 
 							for (int i = 0; i < parameterCount; i++) {
 								parameterValues[i] = null;
@@ -1658,8 +1399,7 @@ public class Interpreter {
 							currentMethodInvocation[3] = parameterTypes;
 							currentMethodInvocation[4] = parameterNames;
 							currentMethodInvocation[5] = highlight;
-							currentMethodInvocation[7] =
-								parameterExpressionReferences;
+							currentMethodInvocation[7] = parameterExpressionReferences;
 							//Here we put the ClassInfo of the class in the array
 							//just to wait for the Method Declaration to be read and the
 							//object can be created from this method info.
@@ -1675,8 +1415,7 @@ public class Interpreter {
 
 							constructorCall = true;
 							superMethodsReading = new Vector();
-							superMethodCallNumber =
-								Long.parseLong(tokenizer.nextToken());
+							superMethodCallNumber = Long.parseLong(tokenizer.nextToken());
 
 							break;
 						}
@@ -1686,21 +1425,17 @@ public class Interpreter {
 						{
 
 							//simpleAllocationCounter
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
 
 							String hashCode = tokenizer.nextToken();
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							//This should handle the possible object
 							//assignment etc.
 							if (!objectCreation.empty()) {
 								//First reference to the created object is taken
-								Reference ref =
-									(Reference) objectCreation.pop();
+								Reference ref = (Reference) objectCreation.pop();
 								Instance inst = ref.getInstance();
 								inst.setHashCode(hashCode);
 								//The instance is putted in the hashtable that
@@ -1710,11 +1445,7 @@ public class Interpreter {
 								//concerning this reference.
 							}
 
-							Value ret =
-								director
-									.getCurrentMethodFrame()
-									.getVariable("this")
-									.getValue();
+							Value ret = director.getCurrentMethodFrame().getVariable("this").getValue();
 							Value casted = null;
 							Instance inst = (Instance) instances.get(hashCode);
 
@@ -1724,8 +1455,7 @@ public class Interpreter {
 								casted = new Reference();
 							}
 
-							Actor returnActor =
-								director.animateReturn(ret, casted, h);
+							Actor returnActor = director.animateReturn(ret, casted, h);
 							Value returnValue = (Value) casted.clone();
 							Value rv;
 
@@ -1735,10 +1465,7 @@ public class Interpreter {
 								rv = (Value) returnValue.clone();
 							}
 
-							ValueActor va =
-								director.finishMethod(
-									returnActor,
-									expressionCounter);
+							ValueActor va = director.finishMethod(returnActor, expressionCounter);
 							rv.setActor(va);
 							handleExpression(rv, expressionCounter);
 
@@ -1749,10 +1476,8 @@ public class Interpreter {
 					case Code.OFA :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
-							long objectCounter =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
+							long objectCounter = Long.parseLong(tokenizer.nextToken());
 							String variableName = tokenizer.nextToken();
 							String value = "";
 							if (tokenizer.countTokens() >= 3) {
@@ -1761,15 +1486,12 @@ public class Interpreter {
 
 							String type = tokenizer.nextToken();
 
-							Reference objVal =
-								(Reference) values.remove(
-									new Long(objectCounter));
+							Reference objVal = (Reference) values.remove(new Long(objectCounter));
 							if (objVal == null && !objectCreation.empty()) {
 								objVal = (Reference) objectCreation.peek();
 							}
 
-							ObjectFrame obj =
-								(ObjectFrame) objVal.getInstance();
+							ObjectFrame obj = (ObjectFrame) objVal.getInstance();
 
 							if (obj == null && !objectCreation.empty()) {
 								objVal = (Reference) objectCreation.peek();
@@ -1785,16 +1507,9 @@ public class Interpreter {
 
 							//We find the command
 							for (int i = size - 1; i >= 0; i--) {
-								StringTokenizer commandTokenizer =
-									new StringTokenizer(
-										(String) commands.elementAt(i),
-										Code.DELIM);
-								int comm =
-									Integer.parseInt(
-										commandTokenizer.nextToken());
-								long cid =
-									Long.parseLong(
-										commandTokenizer.nextToken());
+								StringTokenizer commandTokenizer = new StringTokenizer((String) commands.elementAt(i), Code.DELIM);
+								int comm = Integer.parseInt(commandTokenizer.nextToken());
+								long cid = Long.parseLong(commandTokenizer.nextToken());
 
 								if (expressionCounter == cid) {
 									command = comm;
@@ -1810,23 +1525,14 @@ public class Interpreter {
 							long expressionReference = 0;
 							Highlight highlight = null;
 							if (!exprs.empty()) {
-								StringTokenizer expressionTokenizer =
-									new StringTokenizer(
-										(String) exprs.peek(),
-										Code.DELIM);
+								StringTokenizer expressionTokenizer = new StringTokenizer((String) exprs.peek(), Code.DELIM);
 
-								oper =
-									Integer.parseInt(
-										expressionTokenizer.nextToken());
+								oper = Integer.parseInt(expressionTokenizer.nextToken());
 
-								expressionReference =
-									Long.parseLong(
-										expressionTokenizer.nextToken());
+								expressionReference = Long.parseLong(expressionTokenizer.nextToken());
 
 								//Make the location information for the location token
-								highlight =
-									MCodeUtilities.makeHighlight(
-										expressionTokenizer.nextToken());
+								highlight = MCodeUtilities.makeHighlight(expressionTokenizer.nextToken());
 							}
 
 							Value val = null;
@@ -1838,9 +1544,7 @@ public class Interpreter {
 								if (value.equals("null")) {
 									val = new Reference();
 								} else {
-									Instance inst =
-										(Instance) instances.get(
-											MCodeUtilities.getHashCode(value));
+									Instance inst = (Instance) instances.get(MCodeUtilities.getHashCode(value));
 									if (inst != null) {
 										val = new Reference(inst);
 									} else {
@@ -1860,55 +1564,35 @@ public class Interpreter {
 
 								if (command == Code.TO) {
 
-									variables.put(
-										new Long(expressionCounter),
-										var);
+									variables.put(new Long(expressionCounter), var);
 
 								} else {
 
-									values.put(
-										new Long(expressionCounter),
-										val);
+									values.put(new Long(expressionCounter), val);
 								}
 
 								//If oper is other binary operator we will show it
 								//on the screen with operator
 							} else if (MCodeUtilities.isBinary(oper)) {
 
-								int operator =
-									MCodeUtilities.resolveBinOperator(oper);
+								int operator = MCodeUtilities.resolveBinOperator(oper);
 
 								if (command == Code.LEFT) {
 
-									director.beginBinaryExpression(
-										val,
-										operator,
-										expressionReference,
-										highlight);
+									director.beginBinaryExpression(val, operator, expressionReference, highlight);
 
 								} else if (command == Code.RIGHT) {
 
-									ExpressionActor ea =
-										(ExpressionActor) director
-											.getCurrentScratch()
-											.findActor(
-											expressionReference);
+									ExpressionActor ea = (ExpressionActor) director.getCurrentScratch().findActor(expressionReference);
 									if (ea != null) {
 
-										director.rightBinaryExpression(
-											val,
-											ea,
-											highlight);
+										director.rightBinaryExpression(val, ea, highlight);
 
 									} else {
-										values.put(
-											new Long(expressionCounter),
-											val);
+										values.put(new Long(expressionCounter), val);
 									}
 								} else {
-									values.put(
-										new Long(expressionCounter),
-										val);
+									values.put(new Long(expressionCounter), val);
 								}
 
 								//If oper is a unary operator we will show it
@@ -1917,39 +1601,21 @@ public class Interpreter {
 
 								if (oper == Code.PRIE || oper == Code.PRDE) {
 
-									variables.put(
-										new Long(expressionCounter),
-										var);
-									values.put(
-										new Long(expressionCounter),
-										val);
+									variables.put(new Long(expressionCounter), var);
+									values.put(new Long(expressionCounter), val);
 
-								} else if (
-									oper == Code.PIE || oper == Code.PDE) {
+								} else if (oper == Code.PIE || oper == Code.PDE) {
 
-									variables.put(
-										new Long(expressionCounter),
-										var);
-									values.put(
-										new Long(expressionReference),
-										val);
-									values.put(
-										new Long(expressionCounter),
-										val);
+									variables.put(new Long(expressionCounter), var);
+									values.put(new Long(expressionReference), val);
+									values.put(new Long(expressionCounter), val);
 
 								} else {
 
-									values.put(
-										new Long(expressionCounter),
-										val);
-									int operator =
-										MCodeUtilities.resolveUnOperator(oper);
+									values.put(new Long(expressionCounter), val);
+									int operator = MCodeUtilities.resolveUnOperator(oper);
 									if (command == Code.RIGHT) {
-										director.beginUnaryExpression(
-											operator,
-											val,
-											expressionReference,
-											highlight);
+										director.beginUnaryExpression(operator, val, expressionReference, highlight);
 									}
 								}
 
@@ -1969,38 +1635,25 @@ public class Interpreter {
 						{
 
 							String methodName = tokenizer.nextToken();
-							int parameterCount =
-								Integer.parseInt(tokenizer.nextToken());
-							long objectCounter =
-								Long.parseLong(tokenizer.nextToken());
-							Highlight highlight =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							int parameterCount = Integer.parseInt(tokenizer.nextToken());
+							long objectCounter = Long.parseLong(tokenizer.nextToken());
+							Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Value val =
-								(Value) values.remove(new Long(objectCounter));
-							Variable var =
-								(Variable) variables.remove(
-									new Long(objectCounter));
+							Value val = (Value) values.remove(new Long(objectCounter));
+							Variable var = (Variable) variables.remove(new Long(objectCounter));
 
 							if (val == null && !objectCreation.empty()) {
 								val = (Reference) objectCreation.peek();
-							} else if (
-								val.getValue().equals("null")
-									&& !objectCreation.empty()) {
+							} else if (val.getValue().equals("null") && !objectCreation.empty()) {
 								val = (Reference) objectCreation.peek();
 							}
 
 							if (val instanceof Reference) {
-								ObjectFrame obj =
-									(ObjectFrame) ((Reference) val)
-										.getInstance();
+								ObjectFrame obj = (ObjectFrame) ((Reference) val).getInstance();
 
 								if (obj == null && !objectCreation.empty()) {
 									val = (Reference) objectCreation.peek();
-									obj =
-										(ObjectFrame) ((Reference) val)
-											.getInstance();
+									obj = (ObjectFrame) ((Reference) val).getInstance();
 								}
 							}
 
@@ -2012,9 +1665,11 @@ public class Interpreter {
 							currentMethodInvocation = new Object[9];
 
 							int n = currentMethodInvocation.length;
+							/*
 							for (int i = 0; i < n; i++) {
 								currentMethodInvocation[i] = null;
 							}
+							*/
 
 							currentMethodInvocation[0] = methodName;
 
@@ -2022,23 +1677,16 @@ public class Interpreter {
 								currentMethodInvocation[1] = var.getName();
 							} else {
 								if (val instanceof Reference) {
-									currentMethodInvocation[1] =
-										"new "
-											+ ((Reference) val)
-												.getInstance()
-												.getType();
+									currentMethodInvocation[1] = "new " + ((Reference) val).getInstance().getType();
 								} else {
 									currentMethodInvocation[1] = val.getValue();
 								}
 							}
 
 							Value[] parameterValues = new Value[parameterCount];
-							String[] parameterTypes =
-								new String[parameterCount];
-							String[] parameterNames =
-								new String[parameterCount];
-							Long[] parameterExpressionReferences =
-								new Long[parameterCount];
+							String[] parameterTypes = new String[parameterCount];
+							String[] parameterNames = new String[parameterCount];
+							Long[] parameterExpressionReferences = new Long[parameterCount];
 
 							for (int i = 0; i < parameterCount; i++) {
 								parameterValues[i] = null;
@@ -2051,8 +1699,7 @@ public class Interpreter {
 							currentMethodInvocation[3] = parameterTypes;
 							currentMethodInvocation[4] = parameterNames;
 							currentMethodInvocation[5] = highlight;
-							currentMethodInvocation[7] =
-								parameterExpressionReferences;
+							currentMethodInvocation[7] = parameterExpressionReferences;
 							currentMethodInvocation[8] = val;
 
 							break;
@@ -2071,18 +1718,13 @@ public class Interpreter {
 								Value rv = null;
 
 								if (returnValue instanceof Reference) {
-									rv =
-										(Value) ((Reference) returnValue)
-											.clone();
+									rv = (Value) ((Reference) returnValue).clone();
 								} else {
 
 									rv = (Value) returnValue.clone();
 								}
 
-								ValueActor va =
-									director.finishMethod(
-										returnActor,
-										returnExpressionCounter);
+								ValueActor va = director.finishMethod(returnActor, returnExpressionCounter);
 								rv.setActor(va);
 
 								handleExpression(rv, returnExpressionCounter);
@@ -2104,24 +1746,18 @@ public class Interpreter {
 							}
 							currentMethodInvocation = new Object[8];
 
-							for (int i = 0;
-								i < currentMethodInvocation.length;
-								i++) {
+							for (int i = 0; i < currentMethodInvocation.length; i++) {
 								currentMethodInvocation[i] = null;
 							}
 
 							currentMethodInvocation[0] = tokenizer.nextToken();
 							currentMethodInvocation[1] = tokenizer.nextToken();
-							int parameterCount =
-								Integer.parseInt(tokenizer.nextToken());
+							int parameterCount = Integer.parseInt(tokenizer.nextToken());
 
 							Value[] parameterValues = new Value[parameterCount];
-							String[] parameterTypes =
-								new String[parameterCount];
-							String[] parameterNames =
-								new String[parameterCount];
-							Long[] parameterExpressionReferences =
-								new Long[parameterCount];
+							String[] parameterTypes = new String[parameterCount];
+							String[] parameterNames = new String[parameterCount];
+							Long[] parameterExpressionReferences = new Long[parameterCount];
 
 							for (int i = 0; i < parameterCount; i++) {
 								parameterValues[i] = null;
@@ -2133,11 +1769,8 @@ public class Interpreter {
 							currentMethodInvocation[2] = parameterValues;
 							currentMethodInvocation[3] = parameterTypes;
 							currentMethodInvocation[4] = parameterNames;
-							currentMethodInvocation[5] =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
-							currentMethodInvocation[7] =
-								parameterExpressionReferences;
+							currentMethodInvocation[5] = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+							currentMethodInvocation[7] = parameterExpressionReferences;
 
 							break;
 						}
@@ -2146,19 +1779,13 @@ public class Interpreter {
 					case Code.P :
 						{
 
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 
-							Value[] parameterValues =
-								(Value[]) currentMethodInvocation[2];
-							String[] parameterTypes =
-								(String[]) currentMethodInvocation[3];
-							Long[] parameterExpressionReferences =
-								(Long[]) currentMethodInvocation[7];
+							Value[] parameterValues = (Value[]) currentMethodInvocation[2];
+							String[] parameterTypes = (String[]) currentMethodInvocation[3];
+							Long[] parameterExpressionReferences = (Long[]) currentMethodInvocation[7];
 
-							Value parameterValue =
-								(Value) values.remove(
-									new Long(expressionReference));
+							Value parameterValue = (Value) values.remove(new Long(expressionReference));
 
 							//if (parameterValue == null) {
 							//  System.out.println("Mistake");
@@ -2170,8 +1797,7 @@ public class Interpreter {
 							}
 							parameterValues[i] = parameterValue;
 							parameterTypes[i] = tokenizer.nextToken();
-							parameterExpressionReferences[i] =
-								new Long(expressionReference);
+							parameterExpressionReferences[i] = new Long(expressionReference);
 
 							exprs.pop();
 
@@ -2183,49 +1809,40 @@ public class Interpreter {
 						{
 
 							//Make the location information for the location token
-							currentMethodInvocation[6] =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							currentMethodInvocation[6] = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							//Object method call or constructor
 							if (currentMethodInvocation.length == 9) {
 
 								Value[] args = null;
 
-								if (currentMethodInvocation[1] != null
-									&& (
-										(
-											String) currentMethodInvocation[1])
-												.equals(
-										"")) {
+								if (currentMethodInvocation[1] != null && ((String) currentMethodInvocation[1]).equals("")) {
 									//System.out.println("CI: " + "new " + ((String) currentMethodInvocation[0]));
 									args =
 										director.animateOMInvocation(
-											"new "
-												+ (
-													(String) currentMethodInvocation[0]),
+											"new " + ((String) currentMethodInvocation[0]),
 											(Value[]) currentMethodInvocation[2],
 											(Highlight) currentMethodInvocation[5]);
 
 									//This works for not primitive classes.
 									//There needs to be a check whether invoked
 									//class is primitive or not.
+                                    if (!MCodeUtilities.isPrimitive(((ClassInfo) currentMethodInvocation[8]).getName())) {
 									ObjectFrame of =
-										createNewInstance(
-											(ClassInfo) currentMethodInvocation[8],
-											(Highlight) currentMethodInvocation[5]);
-
+										createNewInstance((ClassInfo) currentMethodInvocation[8], (Highlight) currentMethodInvocation[5]);
+                                   
 									Reference ref = new Reference(of);
 									currentMethodInvocation[8] = ref;
 									objectCreation.push(new Reference(of));
+                                    } else {
+                                        //TODO: Make the contructor call work for semi-primitive types
+                                    }                
 
 								} else {
 									//System.out.println("OMI: " + "." + ((String) currentMethodInvocation[0]));
 									args =
 										director.animateOMInvocation(
-											"."
-												+ (
-													(String) currentMethodInvocation[0]),
+											"." + ((String) currentMethodInvocation[0]),
 											(Value[]) currentMethodInvocation[2],
 											(Highlight) currentMethodInvocation[5],
 											(Value) currentMethodInvocation[8]);
@@ -2233,35 +1850,17 @@ public class Interpreter {
 
 								String call;
 
-								if (currentMethodInvocation[1] != null
-									&& (
-										(
-											String) currentMethodInvocation[1])
-												.equals(
-										"")) {
+								if (currentMethodInvocation[1] != null && ((String) currentMethodInvocation[1]).equals("")) {
 									call = (String) currentMethodInvocation[0];
-								} else if (
-									(
-										(
-											String) currentMethodInvocation[0])
-												.equals(
-										"this.super")) {
-									call = (String) currentMethodInvocation[0];
-								} else if (
-									currentMethodInvocation[1] == null) {
-									call =
-										((Value) currentMethodInvocation[8])
-											.getValue()
-											+ "."
-											+ (String) currentMethodInvocation[0];
+								} else if (((String) currentMethodInvocation[0]).startsWith("super")) {
+									call = "this." + (String) currentMethodInvocation[0];
+								} else if (currentMethodInvocation[1] == null) {
+									call = ((Value) currentMethodInvocation[8]).getValue() + "." + (String) currentMethodInvocation[0];
 								} else {
-									call =
-										(String) currentMethodInvocation[1]
-											+ "."
-											+ (String) currentMethodInvocation[0];
+									call = (String) currentMethodInvocation[1] + "." + (String) currentMethodInvocation[0];
+									//System.out.println("METHOD: " + call);
 								}
 
-								//System.out.println("METHOD: " + call);
 								director.setUpMethod(
 									call,
 									args,
@@ -2276,47 +1875,32 @@ public class Interpreter {
 								if (start) {
 									args =
 										director.animateSMInvocation(
-											(
-												(String) currentMethodInvocation[1])
-												+ "."
-												+ (
-													(String) currentMethodInvocation[0]),
+											((String) currentMethodInvocation[1]) + "." + ((String) currentMethodInvocation[0]),
 											(Value[]) currentMethodInvocation[2],
 											null);
 									start = false;
 								} else {
 									args =
 										director.animateSMInvocation(
-											(
-												(String) currentMethodInvocation[1])
-												+ "."
-												+ (
-													(String) currentMethodInvocation[0]),
+											((String) currentMethodInvocation[1]) + "." + ((String) currentMethodInvocation[0]),
 											(Value[]) currentMethodInvocation[2],
 											(Highlight) currentMethodInvocation[5]);
 								}
 
 								director.setUpMethod(
-									((String) currentMethodInvocation[1])
-										+ "."
-										+ ((String) currentMethodInvocation[0]),
+									((String) currentMethodInvocation[1]) + "." + ((String) currentMethodInvocation[0]),
 									args,
 									(String[]) currentMethodInvocation[4],
 									(String[]) currentMethodInvocation[3],
 									(Highlight) currentMethodInvocation[6]);
 							}
 
-							Long[] parameterExpressionReferences =
-								(Long[]) currentMethodInvocation[7];
+							Long[] parameterExpressionReferences = (Long[]) currentMethodInvocation[7];
 
 							if (parameterExpressionReferences != null) {
 								int i = 0;
-								while (i
-									< parameterExpressionReferences.length) {
-									Object[] postIncDec =
-										(Object[]) postIncsDecs.remove(
-											(
-												(Long) parameterExpressionReferences[i]));
+								while (i < parameterExpressionReferences.length) {
+									Object[] postIncDec = (Object[]) postIncsDecs.remove(((Long) parameterExpressionReferences[i]));
 									if (postIncDec != null) {
 										doPostIncDec(postIncDec);
 									}
@@ -2325,8 +1909,7 @@ public class Interpreter {
 							}
 
 							if (!methodInvocation.empty()) {
-								currentMethodInvocation =
-									(Object[]) methodInvocation.pop();
+								currentMethodInvocation = (Object[]) methodInvocation.pop();
 							} else {
 								currentMethodInvocation = null;
 							}
@@ -2342,13 +1925,9 @@ public class Interpreter {
 
 							if (tokenizer.hasMoreTokens()) {
 								String parameters = tokenizer.nextToken();
-								String[] parameterNames =
-									(String[]) currentMethodInvocation[4];
-								StringTokenizer names =
-									new StringTokenizer(parameters, ",");
-								for (int i = 0;
-									i < parameterNames.length;
-									i++) {
+								String[] parameterNames = (String[]) currentMethodInvocation[4];
+								StringTokenizer names = new StringTokenizer(parameters, ",");
+								for (int i = 0; i < parameterNames.length; i++) {
 									parameterNames[i] = names.nextToken();
 								}
 							}
@@ -2359,10 +1938,8 @@ public class Interpreter {
 					case Code.R :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = null;
 							if (tokenizer.countTokens() >= 3) {
 								value = tokenizer.nextToken();
@@ -2370,9 +1947,7 @@ public class Interpreter {
 								value = "";
 							}
 							String type = tokenizer.nextToken();
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							if (type.equals(Void.TYPE.getName())) {
 
@@ -2381,18 +1956,14 @@ public class Interpreter {
 
 							} else {
 
-								Value ret =
-									(Value) values.remove(
-										new Long(expressionReference));
+								Value ret = (Value) values.remove(new Long(expressionReference));
 
 								Value casted = null;
 
 								if (MCodeUtilities.isPrimitive(type)) {
 									casted = new Value(value, type);
 								} else {
-									Instance inst =
-										(Instance) instances.get(
-											MCodeUtilities.getHashCode(value));
+									Instance inst = (Instance) instances.get(MCodeUtilities.getHashCode(value));
 									if (inst != null) {
 										casted = new Reference(inst);
 									} else {
@@ -2400,8 +1971,7 @@ public class Interpreter {
 									}
 								}
 
-								returnActor =
-									director.animateReturn(ret, casted, h);
+								returnActor = director.animateReturn(ret, casted, h);
 								returnValue = (Value) casted.clone();
 								returnExpressionCounter = expressionCounter;
 								returned = true;
@@ -2426,18 +1996,13 @@ public class Interpreter {
 								Value rv = null;
 
 								if (returnValue instanceof Reference) {
-									rv =
-										(Value) ((Reference) returnValue)
-											.clone();
+									rv = (Value) ((Reference) returnValue).clone();
 								} else {
 
 									rv = (Value) returnValue.clone();
 								}
 
-								ValueActor va =
-									director.finishMethod(
-										returnActor,
-										returnExpressionCounter);
+								ValueActor va = director.finishMethod(returnActor, returnExpressionCounter);
 								rv.setActor(va);
 
 								handleExpression(rv, returnExpressionCounter);
@@ -2461,12 +2026,12 @@ public class Interpreter {
 							                                        break;
 							                                    }
 							                                }
-							*/
-							/**
-							* Look from the expression stack
-							* what expression should be shown next
-							*/
-							/*
+							                                  */
+							                                 /*
+							                                  * Look from the expression stack
+							                                  * what expression should be shown next
+							                                  */
+							                                 /*
 							                                int expressionReference = 0;
 							                                int oper = -1;
 							                                Highlight highlight = null;
@@ -2546,20 +2111,15 @@ public class Interpreter {
 					case Code.IFT :
 						{
 
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 
 							Highlight h = null;
 							if (tokenizer.hasMoreElements()) {
-								h =
-									MCodeUtilities.makeHighlight(
-										tokenizer.nextToken());
+								h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 							}
 
-							Value result =
-								(Value) values.remove(
-									new Long(expressionReference));
+							Value result = (Value) values.remove(new Long(expressionReference));
 
 							if (value.equals(Boolean.TRUE.toString())) {
 								director.branchThen(result, h);
@@ -2577,17 +2137,12 @@ public class Interpreter {
 					case Code.IFTE :
 						{
 
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Value result =
-								(Value) values.remove(
-									new Long(expressionReference));
+							Value result = (Value) values.remove(new Long(expressionReference));
 
 							if (value.equals(Boolean.TRUE.toString())) {
 								director.branchThen(result, h);
@@ -2605,48 +2160,29 @@ public class Interpreter {
 					case Code.WHI :
 						{
 
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 
 							int round = Integer.parseInt(tokenizer.nextToken());
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Value result =
-								(Value) values.remove(
-									new Long(expressionReference));
+							Value result = (Value) values.remove(new Long(expressionReference));
 
 							if (round == 0) {
 
 								if (value.equals(Boolean.TRUE.toString())) {
-									director.enterLoop(
-										propertiesBundle.getString(
-											"statement_name.while"),
-										result,
-										h);
+									director.enterLoop(propertiesBundle.getString("statement_name.while"), result, h);
 								} else {
-									director.skipLoop(
-										propertiesBundle.getString(
-											"statement_name.while"),
-										result);
+									director.skipLoop(propertiesBundle.getString("statement_name.while"), result);
 								}
 
 							} else {
 
 								if (value.equals(Boolean.TRUE.toString())) {
-									director.continueLoop(
-										propertiesBundle.getString(
-											"statement_name.while"),
-										result,
-										h);
+									director.continueLoop(propertiesBundle.getString("statement_name.while"), result, h);
 								} else {
-									director.exitLoop(
-										propertiesBundle.getString(
-											"statement_name.while"),
-										result);
+									director.exitLoop(propertiesBundle.getString("statement_name.while"), result);
 								}
 
 							}
@@ -2661,43 +2197,24 @@ public class Interpreter {
 					case Code.FOR :
 						{
 
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 							long round = Long.parseLong(tokenizer.nextToken());
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Value result =
-								(Value) values.remove(
-									new Long(expressionReference));
+							Value result = (Value) values.remove(new Long(expressionReference));
 
 							if (round == 0) {
 								if (value.equals(Boolean.TRUE.toString())) {
-									director.enterLoop(
-										propertiesBundle.getString(
-											"statement_name.for"),
-										result,
-										h);
+									director.enterLoop(propertiesBundle.getString("statement_name.for"), result, h);
 								} else {
-									director.skipLoop(
-										propertiesBundle.getString(
-											"statement_name.for"),
-										result);
+									director.skipLoop(propertiesBundle.getString("statement_name.for"), result);
 								}
 							} else {
 								if (value.equals(Boolean.TRUE.toString())) {
-									director.continueLoop(
-										propertiesBundle.getString(
-											"statement_name.for"),
-										result,
-										h);
+									director.continueLoop(propertiesBundle.getString("statement_name.for"), result, h);
 								} else {
-									director.exitLoop(
-										propertiesBundle.getString(
-											"statement_name.for"),
-										result);
+									director.exitLoop(propertiesBundle.getString("statement_name.for"), result);
 								}
 							}
 							director.closeScratch();
@@ -2709,35 +2226,20 @@ public class Interpreter {
 					case Code.DO :
 						{
 
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 							String value = tokenizer.nextToken();
 							long round = Long.parseLong(tokenizer.nextToken());
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Value result =
-								(Value) values.remove(
-									new Long(expressionReference));
+							Value result = (Value) values.remove(new Long(expressionReference));
 
 							if (round == 0) {
-								director.enterLoop(
-									propertiesBundle.getString(
-										"statement_name.do_while"),
-									h);
+								director.enterLoop(propertiesBundle.getString("statement_name.do_while"), h);
 							} else {
 								if (value.equals(Boolean.TRUE.toString())) {
-									director.continueLoop(
-										propertiesBundle.getString(
-											"statement_name.do_while"),
-										result,
-										h);
+									director.continueLoop(propertiesBundle.getString("statement_name.do_while"), result, h);
 								} else {
-									director.exitLoop(
-										propertiesBundle.getString(
-											"statement_name.do_while"),
-										result);
+									director.exitLoop(propertiesBundle.getString("statement_name.do_while"), result);
 								}
 							}
 							director.closeScratch();
@@ -2749,9 +2251,7 @@ public class Interpreter {
 					case Code.SWITCHB :
 						{
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							director.openSwitch(h);
 							director.closeScratch();
@@ -2763,30 +2263,16 @@ public class Interpreter {
 					case Code.SWIBF :
 						{
 
-							long selectorReference =
-								Long.parseLong(tokenizer.nextToken());
-							long switchBlockReference =
-								Long.parseLong(tokenizer.nextToken());
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							long selectorReference = Long.parseLong(tokenizer.nextToken());
+							long switchBlockReference = Long.parseLong(tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							if (switchBlockReference != -1) {
-								Value selector =
-									(Value) values.remove(
-										new Long(selectorReference));
-								Value switchBlock =
-									(Value) values.remove(
-										new Long(switchBlockReference));
+								Value selector = (Value) values.remove(new Long(selectorReference));
+								Value switchBlock = (Value) values.remove(new Long(switchBlockReference));
 								Value result = new Value("true", "boolean");
 
-								director.animateBinaryExpression(
-									MCodeUtilities.resolveBinOperator(Code.EE),
-									selector,
-									switchBlock,
-									result,
-									-3,
-									h);
+								director.animateBinaryExpression(MCodeUtilities.resolveBinOperator(Code.EE), selector, switchBlock, result, -3, h);
 								director.switchSelected(h);
 							} else {
 								director.switchDefault(h);
@@ -2798,9 +2284,7 @@ public class Interpreter {
 					case Code.SWITCH :
 						{
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							director.closeSwitch(h);
 
@@ -2814,27 +2298,18 @@ public class Interpreter {
 					case Code.BR :
 						{
 
-							int statementName =
-								Integer.parseInt(tokenizer.nextToken());
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							int statementName = Integer.parseInt(tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 							String stmt = "";
 
 							if (statementName == Code.WHI) {
-								stmt =
-									propertiesBundle.getString(
-										"statement_name.while");
+								stmt = propertiesBundle.getString("statement_name.while");
 								director.breakLoop(stmt, h);
 							} else if (statementName == Code.FOR) {
-								stmt =
-									propertiesBundle.getString(
-										"statement_name.for");
+								stmt = propertiesBundle.getString("statement_name.for");
 								director.breakLoop(stmt, h);
 							} else if (statementName == Code.DO) {
-								stmt =
-									propertiesBundle.getString(
-										"statement_name.do_while");
+								stmt = propertiesBundle.getString("statement_name.do_while");
 								director.breakLoop(stmt, h);
 							} else if (statementName == Code.SWITCH) {
 								director.breakSwitch(h);
@@ -2850,25 +2325,16 @@ public class Interpreter {
 					case Code.CONT :
 						{
 
-							int statementName =
-								Integer.parseInt(tokenizer.nextToken());
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							int statementName = Integer.parseInt(tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 							String stmt = "";
 
 							if (statementName == Code.WHI) {
-								stmt =
-									propertiesBundle.getString(
-										"statement_name.while");
+								stmt = propertiesBundle.getString("statement_name.while");
 							} else if (statementName == Code.FOR) {
-								stmt =
-									propertiesBundle.getString(
-										"statement_name.for");
+								stmt = propertiesBundle.getString("statement_name.for");
 							} else if (statementName == Code.DO) {
-								stmt =
-									propertiesBundle.getString(
-										"statement_name.do_while");
+								stmt = propertiesBundle.getString("statement_name.do_while");
 							}
 
 							director.continueLoop(stmt, h);
@@ -2883,19 +2349,14 @@ public class Interpreter {
 					case Code.OUTPUT :
 						{
 
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 
 							String value = tokenizer.nextToken();
 							String type = tokenizer.nextToken();
 
-							Highlight highlight =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Value output =
-								(Value) values.remove(
-									new Long(expressionReference));
+							Value output = (Value) values.remove(new Long(expressionReference));
 
 							if (output == null) {
 								output = new Value(value, type);
@@ -2910,14 +2371,11 @@ public class Interpreter {
 					case Code.INPUT :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
 
 							String type = tokenizer.nextToken();
 
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
 							Value in = director.animateInputHandling(type, h);
 
@@ -2932,18 +2390,13 @@ public class Interpreter {
 					case Code.INPUTTED :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
 
 							String value = tokenizer.nextToken();
 							String type = tokenizer.nextToken();
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Value in =
-								(Value) values.remove(
-									new Long(expressionCounter));
+							Value in = (Value) values.remove(new Long(expressionCounter));
 							if (in == null) {
 								in = new Value(value, type);
 							}
@@ -2970,80 +2423,80 @@ public class Interpreter {
 							                                }
 							                            }
 							                     */
-							                     /*
-							                      * Look from the expression stack
-							                      * what expression should be shown next
-							                      */
-							                      /*
-							                            long expressionReference = 0;
-							                            Highlight highlight = null;
+							/*
+							 * Look from the expression stack
+							 * what expression should be shown next
+							 */
+							/*
+							      long expressionReference = 0;
+							      Highlight highlight = null;
 							
-							                            if (!exprs.empty()) {
-							                                StringTokenizer expressionTokenizer =
-							                                                    new StringTokenizer(
-							                                                          (String) exprs.peek(),
-							                                                          Code.DELIM);
+							      if (!exprs.empty()) {
+							          StringTokenizer expressionTokenizer =
+							                              new StringTokenizer(
+							                                    (String) exprs.peek(),
+							                                    Code.DELIM);
 							
-							                                oper = Long.parseLong(
-							                                               expressionTokenizer.nextToken());
+							          oper = Long.parseLong(
+							                         expressionTokenizer.nextToken());
 							
-							                                expressionReference = Long.parseLong(
-							                                               expressionTokenizer.nextToken());
+							          expressionReference = Long.parseLong(
+							                         expressionTokenizer.nextToken());
 							
-							                                //Make the location information for the location token
-							                                highlight = ECodeUtilities.makeHighlight(
-							                                               expressionTokenizer.nextToken());
-							                            }
+							          //Make the location information for the location token
+							          highlight = ECodeUtilities.makeHighlight(
+							                         expressionTokenizer.nextToken());
+							      }
 							
-							                            //Do different things depending on in what expression
-							                            //the literal is used.
+							      //Do different things depending on in what expression
+							      //the literal is used.
 							
-							                            //If operator is assignment we just store the value
-							                            if (oper == Code.A){
-							                                values.put(new Long(expressionCounter), in);
+							      //If operator is assignment we just store the value
+							      if (oper == Code.A){
+							          values.put(new Long(expressionCounter), in);
 							
-							                            //If oper is other binary operator we will show it
-							                            //on the screen with operator
-							                            } else if (ECodeUtilities.isBinary(oper)) {
+							      //If oper is other binary operator we will show it
+							      //on the screen with operator
+							      } else if (ECodeUtilities.isBinary(oper)) {
 							
-							                                int operator = ECodeUtilities.resolveBinOperator(oper);
+							          int operator = ECodeUtilities.resolveBinOperator(oper);
 							
-							                                if (command == Code.LEFT) {
+							          if (command == Code.LEFT) {
 							
-							                                    director.beginBinaryExpression(in, operator,
-							                                                expressionReference, highlight);
+							              director.beginBinaryExpression(in, operator,
+							                          expressionReference, highlight);
 							
-							                                } else if (command == Code.RIGHT) {
+							          } else if (command == Code.RIGHT) {
 							
-							                                    ExpressionActor ea = (ExpressionActor)
-							                                        director.getCurrentScratch().findActor(expressionReference);
-							                                    if (ea != null) {
-							                                        director.rightBinaryExpression(in, ea, highlight);
-							                                    } else {
-							                                        values.put(new Long(expressionCounter), in);
-							                                    }
+							              ExpressionActor ea = (ExpressionActor)
+							                  director.getCurrentScratch().findActor(expressionReference);
+							              if (ea != null) {
+							                  director.rightBinaryExpression(in, ea, highlight);
+							              } else {
+							                  values.put(new Long(expressionCounter), in);
+							              }
 							
-							                                } else {
-							                                    values.put(new Long(expressionCounter), in);
-							                                }
+							          } else {
+							              values.put(new Long(expressionCounter), in);
+							          }
 							
-							                            //If oper is a unary operator we will show it
-							                            //on the screen with operator
-							                            } else if (ECodeUtilities.isUnary(oper)) {
+							      //If oper is a unary operator we will show it
+							      //on the screen with operator
+							      } else if (ECodeUtilities.isUnary(oper)) {
 							
-							                                int operator = ECodeUtilities.resolveUnOperator(oper);
+							          int operator = ECodeUtilities.resolveUnOperator(oper);
 							
-							                                values.put(new Long(expressionCounter), in);
+							          values.put(new Long(expressionCounter), in);
 							
-							                                if (command == Code.RIGHT) {
-							                                    director.beginUnaryExpression(operator, in,
-							                                                        expressionReference, highlight);
-							                                }
+							          if (command == Code.RIGHT) {
+							              director.beginUnaryExpression(operator, in,
+							                                  expressionReference, highlight);
+							          }
 							
-							                            //If it is something else we will store it for later use.
-							                            } else {
-							                                values.put(new Long(expressionCounter), in);
-							                            }
+							      //If it is something else we will store it for later use.
+							      } else {
+							          values.put(new Long(expressionCounter), in);
+							      }
 							*/
 							break;
 						}
@@ -3075,8 +2528,7 @@ public class Interpreter {
 						//Array Allocation
 					case Code.AA :
 						{
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 
 							String hashCode = tokenizer.nextToken();
 							String compType = tokenizer.nextToken();
@@ -3084,14 +2536,12 @@ public class Interpreter {
 
 							//References of the dimension values
 							String dimensionReferences = tokenizer.nextToken();
-							StringTokenizer st =
-								new StringTokenizer(dimensionReferences, ",");
+							StringTokenizer st = new StringTokenizer(dimensionReferences, ",");
 
 							long[] dimensionReference = new long[dims];
 
 							for (int i = 0; st.hasMoreTokens(); i++) {
-								dimensionReference[i] =
-									Long.parseLong(st.nextToken());
+								dimensionReference[i] = Long.parseLong(st.nextToken());
 							}
 
 							//int values of the dimension sizes
@@ -3100,40 +2550,26 @@ public class Interpreter {
 							int[] dimensionSize = new int[dims];
 
 							for (int i = 0; st.hasMoreTokens(); i++) {
-								dimensionSize[i] =
-									Integer.parseInt(st.nextToken());
+								dimensionSize[i] = Integer.parseInt(st.nextToken());
 							}
 
 							Highlight h = null;
 							if (tokenizer.hasMoreElements()) {
-								h =
-									MCodeUtilities.makeHighlight(
-										tokenizer.nextToken());
+								h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 							}
 
 							Value[] dimensionValues = new Value[dims];
 
 							for (int i = 0; i < dims; i++) {
-								dimensionValues[i] =
-									(Value) values.remove(
-										new Long(dimensionReference[i]));
+								dimensionValues[i] = (Value) values.remove(new Long(dimensionReference[i]));
 
 							}
 
-							ArrayInstance ai =
-								new ArrayInstance(
-									hashCode,
-									compType,
-									dimensionSize);
+							ArrayInstance ai = new ArrayInstance(hashCode, compType, dimensionSize);
 
 							Reference ref = new Reference(ai);
 
-							director.showArrayCreation(
-								ai,
-								ref,
-								dimensionValues,
-								expressionReference,
-								h);
+							director.showArrayCreation(ai, ref, dimensionValues, expressionReference, h);
 
 							//director.arrayCreation(dimensionSize, h);
 
@@ -3144,9 +2580,7 @@ public class Interpreter {
 							values.put(new Long(expressionReference), ref);
 
 							for (int i = 0; i < dims; i++) {
-								Object[] postIncDec =
-									(Object[]) postIncsDecs.remove(
-										new Long(dimensionReference[i]));
+								Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(dimensionReference[i]));
 
 								if (postIncDec != null) {
 									doPostIncDec(postIncDec);
@@ -3160,23 +2594,19 @@ public class Interpreter {
 					case Code.AAC :
 						{
 
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
 
-							long expressionReference =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionReference = Long.parseLong(tokenizer.nextToken());
 
 							int dims = Integer.parseInt(tokenizer.nextToken());
 
 							String cellNumberReferences = tokenizer.nextToken();
-							StringTokenizer st =
-								new StringTokenizer(cellNumberReferences, ",");
+							StringTokenizer st = new StringTokenizer(cellNumberReferences, ",");
 
 							long[] cellNumberReference = new long[dims];
 
 							for (int i = 0; st.hasMoreTokens(); i++) {
-								cellNumberReference[i] =
-									Long.parseLong(st.nextToken());
+								cellNumberReference[i] = Long.parseLong(st.nextToken());
 							}
 
 							//int values of the dimension sizes
@@ -3185,8 +2615,7 @@ public class Interpreter {
 							int[] cellNumber = new int[dims];
 
 							for (int i = 0; st.hasMoreTokens(); i++) {
-								cellNumber[i] =
-									Integer.parseInt(st.nextToken());
+								cellNumber[i] = Integer.parseInt(st.nextToken());
 							}
 
 							String value = null;
@@ -3201,28 +2630,20 @@ public class Interpreter {
 
 							Highlight h = null;
 							if (tokenizer.hasMoreElements()) {
-								h =
-									MCodeUtilities.makeHighlight(
-										tokenizer.nextToken());
+								h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 							}
 
 							//Finding the VariableInArray
 							values.remove(new Long(expressionReference));
-							Variable variable =
-								(Variable) variables.remove(
-									new Long(expressionReference));
+							Variable variable = (Variable) variables.remove(new Long(expressionReference));
 							Reference varRef = (Reference) variable.getValue();
-							ArrayInstance ainst =
-								(ArrayInstance) varRef.getInstance();
-							VariableInArray var =
-								ainst.getVariableAt(cellNumber);
+							ArrayInstance ainst = (ArrayInstance) varRef.getInstance();
+							VariableInArray var = ainst.getVariableAt(cellNumber);
 
 							//Getting the right Values that point to the cell in the array
 							Value[] cellNumberValues = new Value[dims];
 							for (int i = 0; i < dims; i++) {
-								cellNumberValues[i] =
-									(Value) values.remove(
-										new Long(cellNumberReference[i]));
+								cellNumberValues[i] = (Value) values.remove(new Long(cellNumberReference[i]));
 
 							}
 
@@ -3234,9 +2655,7 @@ public class Interpreter {
 								if (value.equals("null")) {
 									val = new Reference();
 								} else {
-									Instance inst =
-										(Instance) instances.get(
-											MCodeUtilities.getHashCode(value));
+									Instance inst = (Instance) instances.get(MCodeUtilities.getHashCode(value));
 									if (inst != null) {
 										val = new Reference(inst);
 									} else {
@@ -3245,11 +2664,7 @@ public class Interpreter {
 								}
 							}
 
-							director.showArrayAccess(
-								var,
-								cellNumberValues,
-								val,
-								h);
+							director.showArrayAccess(var, cellNumberValues, val, h);
 
 							exprs.pop();
 
@@ -3260,16 +2675,9 @@ public class Interpreter {
 
 							//We find the command
 							for (int i = size - 1; i >= 0; i--) {
-								StringTokenizer commandTokenizer =
-									new StringTokenizer(
-										(String) commands.elementAt(i),
-										Code.DELIM);
-								int comm =
-									Integer.parseInt(
-										commandTokenizer.nextToken());
-								long cid =
-									Long.parseLong(
-										commandTokenizer.nextToken());
+								StringTokenizer commandTokenizer = new StringTokenizer((String) commands.elementAt(i), Code.DELIM);
+								int comm = Integer.parseInt(commandTokenizer.nextToken());
+								long cid = Long.parseLong(commandTokenizer.nextToken());
 
 								if (expressionCounter == cid) {
 									command = comm;
@@ -3285,23 +2693,14 @@ public class Interpreter {
 							expressionReference = 0;
 							Highlight highlight = null;
 							if (!exprs.empty()) {
-								StringTokenizer expressionTokenizer =
-									new StringTokenizer(
-										(String) exprs.peek(),
-										Code.DELIM);
+								StringTokenizer expressionTokenizer = new StringTokenizer((String) exprs.peek(), Code.DELIM);
 
-								oper =
-									Integer.parseInt(
-										expressionTokenizer.nextToken());
+								oper = Integer.parseInt(expressionTokenizer.nextToken());
 
-								expressionReference =
-									Long.parseLong(
-										expressionTokenizer.nextToken());
+								expressionReference = Long.parseLong(expressionTokenizer.nextToken());
 
 								//Make the location information for the location token
-								highlight =
-									MCodeUtilities.makeHighlight(
-										expressionTokenizer.nextToken());
+								highlight = MCodeUtilities.makeHighlight(expressionTokenizer.nextToken());
 							}
 
 							/**
@@ -3314,55 +2713,35 @@ public class Interpreter {
 
 								if (command == Code.TO) {
 
-									variables.put(
-										new Long(expressionCounter),
-										var);
+									variables.put(new Long(expressionCounter), var);
 
 								} else {
 
-									values.put(
-										new Long(expressionCounter),
-										val);
+									values.put(new Long(expressionCounter), val);
 								}
 
 								//If oper is other binary operator we will show it
 								//on the screen with operator
 							} else if (MCodeUtilities.isBinary(oper)) {
 
-								int operator =
-									MCodeUtilities.resolveBinOperator(oper);
+								int operator = MCodeUtilities.resolveBinOperator(oper);
 
 								if (command == Code.LEFT) {
 
-									director.beginBinaryExpression(
-										val,
-										operator,
-										expressionReference,
-										highlight);
+									director.beginBinaryExpression(val, operator, expressionReference, highlight);
 
 								} else if (command == Code.RIGHT) {
 
-									ExpressionActor ea =
-										(ExpressionActor) director
-											.getCurrentScratch()
-											.findActor(
-											expressionReference);
+									ExpressionActor ea = (ExpressionActor) director.getCurrentScratch().findActor(expressionReference);
 									if (ea != null) {
 
-										director.rightBinaryExpression(
-											val,
-											ea,
-											highlight);
+										director.rightBinaryExpression(val, ea, highlight);
 
 									} else {
-										values.put(
-											new Long(expressionCounter),
-											val);
+										values.put(new Long(expressionCounter), val);
 									}
 								} else {
-									values.put(
-										new Long(expressionCounter),
-										val);
+									values.put(new Long(expressionCounter), val);
 								}
 
 								//If oper is a unary operator we will show it
@@ -3371,39 +2750,21 @@ public class Interpreter {
 
 								if (oper == Code.PRIE || oper == Code.PRDE) {
 
-									variables.put(
-										new Long(expressionCounter),
-										var);
-									values.put(
-										new Long(expressionCounter),
-										val);
+									variables.put(new Long(expressionCounter), var);
+									values.put(new Long(expressionCounter), val);
 
-								} else if (
-									oper == Code.PIE || oper == Code.PDE) {
+								} else if (oper == Code.PIE || oper == Code.PDE) {
 
-									variables.put(
-										new Long(expressionCounter),
-										var);
-									values.put(
-										new Long(expressionReference),
-										val);
-									values.put(
-										new Long(expressionCounter),
-										val);
+									variables.put(new Long(expressionCounter), var);
+									values.put(new Long(expressionReference), val);
+									values.put(new Long(expressionCounter), val);
 
 								} else {
 
-									values.put(
-										new Long(expressionCounter),
-										val);
-									int operator =
-										MCodeUtilities.resolveUnOperator(oper);
+									values.put(new Long(expressionCounter), val);
+									int operator = MCodeUtilities.resolveUnOperator(oper);
 									if (command == Code.RIGHT) {
-										director.beginUnaryExpression(
-											operator,
-											val,
-											expressionReference,
-											highlight);
+										director.beginUnaryExpression(operator, val, expressionReference, highlight);
 									}
 								}
 
@@ -3416,9 +2777,7 @@ public class Interpreter {
 							}
 
 							for (int i = 0; i < dims; i++) {
-								Object[] postIncDec =
-									(Object[]) postIncsDecs.remove(
-										new Long(cellNumberReference[i]));
+								Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(cellNumberReference[i]));
 
 								if (postIncDec != null) {
 									doPostIncDec(postIncDec);
@@ -3433,10 +2792,8 @@ public class Interpreter {
 						{
 
 							//Second token is the expression counter
-							long expressionCounter =
-								Long.parseLong(tokenizer.nextToken());
-							long arrayCounter =
-								Long.parseLong(tokenizer.nextToken());
+							long expressionCounter = Long.parseLong(tokenizer.nextToken());
+							long arrayCounter = Long.parseLong(tokenizer.nextToken());
 
 							String name = tokenizer.nextToken();
 							String value = "";
@@ -3450,15 +2807,10 @@ public class Interpreter {
 
 							//Fifth token is the highlight information.
 							//Not used because the whole expression is highlighted.
-							Highlight highlight =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							Reference ref =
-								(Reference) values.remove(
-									new Long(arrayCounter));
-							ArrayInstance array =
-								(ArrayInstance) ref.getInstance();
+							Reference ref = (Reference) values.remove(new Long(arrayCounter));
+							ArrayInstance array = (ArrayInstance) ref.getInstance();
 
 							Value length = new Value(value, type);
 							director.introduceArrayLength(length, array);
@@ -3479,8 +2831,7 @@ public class Interpreter {
 							}
 
 							currentClass = new ClassInfo(name);
-							ClassInfo ci =
-								(ClassInfo) classes.get(extendedClass);
+							ClassInfo ci = (ClassInfo) classes.get(extendedClass);
 
 							//if extended class is user defined class
 							if (ci != null) {
@@ -3495,9 +2846,7 @@ public class Interpreter {
 						{
 
 							if (currentClass != null) {
-								classes.put(
-									currentClass.getName(),
-									currentClass);
+								classes.put(currentClass.getName(), currentClass);
 							}
 
 							currentClass = null;
@@ -3514,11 +2863,7 @@ public class Interpreter {
 								listOfParameters = tokenizer.nextToken();
 							}
 
-							currentClass.declareConstructor(
-								currentClass.getName()
-									+ Code.DELIM
-									+ listOfParameters,
-								"");
+							currentClass.declareConstructor(currentClass.getName() + Code.DELIM + listOfParameters, "");
 
 							break;
 						}
@@ -3531,8 +2876,7 @@ public class Interpreter {
 							String returnType = tokenizer.nextToken();
 							int modifiers = -1;
 							if (tokenizer.hasMoreTokens()) {
-								modifiers =
-									Integer.parseInt(tokenizer.nextToken());
+								modifiers = Integer.parseInt(tokenizer.nextToken());
 							}
 
 							String listOfParameters = "";
@@ -3540,9 +2884,7 @@ public class Interpreter {
 								listOfParameters = tokenizer.nextToken();
 							}
 
-							currentClass.declareMethod(
-								name + Code.DELIM + listOfParameters,
-								"" + modifiers + Code.DELIM + returnType);
+							currentClass.declareMethod(name + Code.DELIM + listOfParameters, "" + modifiers + Code.DELIM + returnType);
 
 							break;
 						}
@@ -3553,8 +2895,7 @@ public class Interpreter {
 
 							String name = tokenizer.nextToken();
 							String type = tokenizer.nextToken();
-							int modifiers =
-								Integer.parseInt(tokenizer.nextToken());
+							int modifiers = Integer.parseInt(tokenizer.nextToken());
 							String value = "";
 							if (tokenizer.hasMoreTokens()) {
 								value = tokenizer.nextToken();
@@ -3564,14 +2905,7 @@ public class Interpreter {
 								value = MCodeUtilities.getDefaultValue(type);
 							}
 
-							currentClass.declareField(
-								name,
-								""
-									+ modifiers
-									+ Code.DELIM
-									+ type
-									+ Code.DELIM
-									+ value);
+							currentClass.declareField(name, "" + modifiers + Code.DELIM + type + Code.DELIM + value);
 
 							break;
 						}
@@ -3581,12 +2915,9 @@ public class Interpreter {
 						{
 
 							String message = tokenizer.nextToken();
-							Highlight h =
-								MCodeUtilities.makeHighlight(
-									tokenizer.nextToken());
+							Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-							director.showErrorMessage(
-								new InterpreterError(message, h));
+							director.showErrorMessage(new InterpreterError(message, h));
 							running = false;
 
 							break;
@@ -3595,11 +2926,7 @@ public class Interpreter {
 						//There is an error if the execution comes here.
 					default :
 						{
-							director.showErrorMessage(
-								new InterpreterError(
-									bundle.getString(
-										"notImplemented.exception"),
-									null));
+							director.showErrorMessage(new InterpreterError(bundle.getString("notImplemented.exception"), null));
 							/*"<H1>Runtime Error</H1> <P>The feature is not yet implemented or " +
 							  "there is an error on the other side of the ecode interface.</P>"*/
 							break;
@@ -3619,8 +2946,7 @@ public class Interpreter {
 	 * @return
 	 */
 	public ObjectFrame createNewInstance(ClassInfo ci, Highlight h) {
-		ObjectFrame of =
-			new ObjectFrame("-1", ci.getName(), ci.getFieldNumber());
+		ObjectFrame of = new ObjectFrame("-1", ci.getName(), ci.getFieldNumber());
 
 		//director: create object
 		director.showObjectCreation(of, h);
@@ -3640,11 +2966,9 @@ public class Interpreter {
 				value = st.nextToken();
 			}
 
-			if (!Modifier.isStatic(Integer.parseInt(mods))
-				&& name.indexOf("$") < 0) {
+			if (!Modifier.isStatic(Integer.parseInt(mods)) && name.indexOf("$") < 0) {
 
-				Variable var =
-					director.declareObjectVariable(of, name, type, null);
+				Variable var = director.declareObjectVariable(of, name, type, null);
 
 			}
 			/*
@@ -3701,8 +3025,7 @@ public class Interpreter {
 				//For testing
 				//System.out.println("number of references1: " + inst.getNumberOfReferences());
 				//System.out.println("number of references2: " + inst.getActor().getNumberOfReferences());
-				if (inst.getNumberOfReferences() == 0
-					&& inst.getActor().getNumberOfReferences() == 0) {
+				if (inst.getNumberOfReferences() == 0 && inst.getActor().getNumberOfReferences() == 0) {
 
 					instances.remove(obj);
 					director.removeInstance(inst.getActor());
@@ -3744,8 +3067,7 @@ public class Interpreter {
 
 		//We find the command
 		for (int i = size - 1; i >= 0; i--) {
-			StringTokenizer commandTokenizer =
-				new StringTokenizer((String) commands.elementAt(i), Code.DELIM);
+			StringTokenizer commandTokenizer = new StringTokenizer((String) commands.elementAt(i), Code.DELIM);
 
 			int comm = Integer.parseInt(commandTokenizer.nextToken());
 			long cid = Long.parseLong(commandTokenizer.nextToken());
@@ -3764,16 +3086,13 @@ public class Interpreter {
 		Highlight highlight = null;
 
 		if (!exprs.empty()) {
-			StringTokenizer expressionTokenizer =
-				new StringTokenizer((String) exprs.peek(), Code.DELIM);
+			StringTokenizer expressionTokenizer = new StringTokenizer((String) exprs.peek(), Code.DELIM);
 
 			oper = Integer.parseInt(expressionTokenizer.nextToken());
-			expressionReference =
-				Long.parseLong(expressionTokenizer.nextToken());
+			expressionReference = Long.parseLong(expressionTokenizer.nextToken());
 
 			//Make the location information for the location token
-			highlight =
-				MCodeUtilities.makeHighlight(expressionTokenizer.nextToken());
+			highlight = MCodeUtilities.makeHighlight(expressionTokenizer.nextToken());
 		}
 
 		//Do different things depending on in what expression
@@ -3791,17 +3110,11 @@ public class Interpreter {
 
 			if (command == Code.LEFT) {
 
-				director.beginBinaryExpression(
-					val,
-					operator,
-					expressionReference,
-					highlight);
+				director.beginBinaryExpression(val, operator, expressionReference, highlight);
 
 			} else if (command == Code.RIGHT) {
 
-				ExpressionActor ea =
-					(ExpressionActor) director.getCurrentScratch().findActor(
-						expressionReference);
+				ExpressionActor ea = (ExpressionActor) director.getCurrentScratch().findActor(expressionReference);
 
 				if (ea != null) {
 					director.rightBinaryExpression(val, ea, highlight);
@@ -3823,11 +3136,7 @@ public class Interpreter {
 			values.put(new Long(expressionCounter), val);
 
 			if (command == Code.RIGHT) {
-				director.beginUnaryExpression(
-					operator,
-					val,
-					expressionReference,
-					highlight);
+				director.beginUnaryExpression(operator, val, expressionReference, highlight);
 			}
 
 			//If it is something else we will store it for later use.
@@ -3843,11 +3152,7 @@ public class Interpreter {
 
 		Variable var = (Variable) variables.remove(((Long) postIncDecInfo[1]));
 
-		director.animatePreIncDec(
-			((Long) postIncDecInfo[0]).intValue(),
-			var,
-			((Value) postIncDecInfo[2]),
-			((Highlight) postIncDecInfo[3]));
+		director.animatePreIncDec(((Long) postIncDecInfo[0]).intValue(), var, ((Value) postIncDecInfo[2]), ((Highlight) postIncDecInfo[3]));
 	}
 
 }

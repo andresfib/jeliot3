@@ -14,9 +14,6 @@
  * MA 02111-1307, USA.
  */
 
-/**
-* This is the main package of the jeliot.
-*/
 package jeliot;
 
 import java.io.BufferedReader;
@@ -52,7 +49,7 @@ public class Jeliot {
 	/**
 	 * 
 	 */
-	static boolean systemExit = true;
+	static boolean noSystemExit = false;
 
 	/**
 	 *
@@ -145,7 +142,7 @@ public class Jeliot {
 	 * @return
 	 */
 	public static boolean isSystemExit() {
-		return systemExit;
+		return !noSystemExit;
 	}
 
 	/**
@@ -426,7 +423,7 @@ public class Jeliot {
 
 		if (args.length >= 1) {
 			if (args.length >= 2) {
-				Jeliot.systemExit = Boolean.getBoolean(args[1]);
+				Jeliot.noSystemExit = Boolean.getBoolean(args[1]);
 			}
 			if (!args[0].equals("")) {
 				final String program = args[0];
