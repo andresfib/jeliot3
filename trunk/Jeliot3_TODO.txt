@@ -1,7 +1,7 @@
 JELIOT 3 TODO-LIST
 
-* use Fontmetrics getHeight -method instead of getAscent and getDescent 
-  in line numbering.
+* Use invokeLater method to build up the gui in the beginning of the 
+  program.
 * Initialization of object when it inherits user made class (super() call)
 * Super method call with parameters in object creation with inheritance
 * Bad user code crashes Jeliot "}", error not being read by Interpreter

@@ -17,9 +17,7 @@ public class LineNumbers extends JComponent {
         this.insets = insets;
         FontMetrics fm = getFontMetrics(font);
         size = fm.stringWidth("000") + 6;
-        ascent = fm.getAscent();
-        descent = fm.getDescent();
-        increment = ascent + descent;
+        increment = fm.getHeight();
     }
 
     public void setPreferredHeight(int ph) {
