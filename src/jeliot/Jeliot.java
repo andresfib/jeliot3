@@ -488,7 +488,7 @@ public class Jeliot {
             experiment = Boolean.valueOf(args[2]).booleanValue();
         }
         
-        //Just for tracking what is showed during visualization
+        //Just for tracking the user
         File f = new File(udir);
         Tracker.openFile(f);
         
