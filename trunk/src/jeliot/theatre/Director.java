@@ -560,19 +560,34 @@ public class Director {
 
         Stage stage = currentMethodFrame.getStage();
         BubbleActor bubble = factory.produceBubble(stage);
-        Point bubbleLoc = new Point(
+
+        //The return value goes inside the Method stage in the last
+        //place for variables.
+
+        bubble.reserve(castAct);
+
+        Point bubbleLoc = stage.reserve(bubble);
+        Animation a = stage.extend();
+        if (a != null) {
+            engine.showAnimation(a);
+        }
+        bubble.setLocation(bubbleLoc);
+
+/*      Point bubbleLoc = new Point(
                 stage.getX() + stage.getWidth() / 2,
                 stage.getY() + stage.getHeight() + 25);
         bubble.setLocation(bubbleLoc);
+*/
         Point valueLoc = bubble.reserve(castAct);
 
+        bubble.removeTip();
         theatre.capture();
         engine.showAnimation(bubble.appear(bubbleLoc));
         engine.showAnimation(valueAct.fly(valueLoc));
         bubble.bind();
+        //stage.bind();
         theatre.removePassive(valueAct);
         theatre.release();
-        bubble.removeTip();
 
         return bubble;
     }
@@ -818,7 +833,12 @@ public class Director {
 
         Point resLoc = varAct.reserve(valAct);
         Point opLoc = varAct.getRootLocation();
-        opLoc.translate(varAct.getWidth() + 2, 8);
+
+        if (varAct instanceof VariableInArrayActor) {
+            opLoc.translate(-15, 8);
+        } else {
+            opLoc.translate(varAct.getWidth() + 2, 8);
+        }
 
         theatre.capture();
 
@@ -846,45 +866,50 @@ public class Director {
     }
 
     public void animatePostIncDec(int operator, Variable var,
-            Value resval, Highlight h) {
+            Value resVal, Highlight h) {
 
         highlight(h);
 
-        VariableActor varact = var.getActor();
+        VariableActor varAct = var.getActor();
         //Value value = var.getValue();
-        ValueActor valact = var.getActor().getValue();
+        ValueActor valAct = var.getActor().getValue();
         //ValueActor valact = factory.produceValueActor(value);
-        ValueActor resact = (resval == null) ?
+        ValueActor resAct = (resVal == null) ?
                 null :
-                factory.produceValueActor(resval);
+                factory.produceValueActor(resVal);
 
-        Actor opact = factory.produceUnaOpActor(operator);
+        Actor opAct = factory.produceUnaOpActor(operator);
 
-        Point resLoc = varact.reserve(valact);
-        Point opLoc = varact.getRootLocation();
-        opLoc.translate(varact.getWidth() + 2, 8);
+        Point resLoc = varAct.reserve(valAct);
+        Point opLoc = varAct.getRootLocation();
+
+        if (varAct instanceof VariableInArrayActor) {
+            opLoc.translate(-15, 8);
+        } else {
+            opLoc.translate(varAct.getWidth() + 2, 8);
+        }
 
         theatre.capture();
-        if (resact != null) {
+        if (resAct != null) {
             Point movLoc = new Point(opLoc);
-            movLoc.translate(6, -resact.getHeight() - 6);
-            engine.showAnimation(resact.appear(resLoc));
-            engine.showAnimation(resact.fly(movLoc));
+            movLoc.translate(6, -resAct.getHeight() - 6);
+            engine.showAnimation(resAct.appear(resLoc));
+            engine.showAnimation(resAct.fly(movLoc));
         }
 
-        engine.showAnimation(opact.appear(opLoc));
-        engine.showAnimation(valact.appear(resLoc));
-        varact.bind();
+        engine.showAnimation(opAct.appear(opLoc));
+        engine.showAnimation(valAct.appear(resLoc));
+        varAct.bind();
 
         //value.setActor(valact);
-        if (resval != null) {
-            resval.setActor(resact);
+        if (resVal != null) {
+            resVal.setActor(resAct);
             //var.assign(resval); //jeliot 3
-            var.getActor().setValue(resact);
-            currentScratch.registerCrap(resact);
+            var.getActor().setValue(resAct);
+            currentScratch.registerCrap(resAct);
         }
 
-        theatre.removeActor(opact);
+        theatre.removeActor(opAct);
 
         theatre.release();
     }
@@ -1000,19 +1025,54 @@ public class Director {
         return val;
     }
 
+
+    private void showMessage(String[] message) {
+
+        if (jeliot.showMessagesInDialogs()) {
+
+            String msg = "";
+            int n = message.length;
+            for (int i = 0; i < n; i++) {
+                msg += message[i] + "\n";
+            }
+
+            JOptionPane.showMessageDialog(null,
+                                          msg,
+                                          "Message",
+                                          JOptionPane.PLAIN_MESSAGE);
+        } else {
+            MessageActor actor = factory.produceMessageActor(message);
+            showMessage(actor);
+        }
+    }
+
     private void showMessage(String message) {
 
-        String[] ms = {message};
-        MessageActor actor = factory.produceMessageActor(ms);
-        showMessage(actor);
+        if (jeliot.showMessagesInDialogs()) {
+            JOptionPane.showMessageDialog(null,
+                                          message,
+                                          "Message",
+                                          JOptionPane.PLAIN_MESSAGE);
+        } else {
+            String[] ms = {message};
+            MessageActor actor = factory.produceMessageActor(ms);
+            showMessage(actor);
+        }
     }
 
     private void showMessage(String message, Value val) {
 
-        String[] ms = {message};
-        MessageActor actor = factory.produceMessageActor(ms);
-        ValueActor valact = val.getActor();
-        showMessage(actor, valact);
+        if (jeliot.showMessagesInDialogs()) {
+            JOptionPane.showMessageDialog(null,
+                                          message,
+                                          "Message",
+                                          JOptionPane.PLAIN_MESSAGE);
+        } else {
+            String[] ms = {message};
+            MessageActor actor = factory.produceMessageActor(ms);
+            ValueActor valact = val.getActor();
+            showMessage(actor, valact);
+        }
     }
 
     private void showMessage(MessageActor message, Actor anchor) {
@@ -1112,6 +1172,23 @@ public class Director {
         highlight(h);
         showMessage("Continuing without branching.", check);
     }
+
+    public void arrayCreation(int[] dims) {
+        String dimensions = "";
+        int n = dims.length;
+        for (int i = 0; i < n; i++) {
+            if (i == n - 1) {
+                dimensions += dims[i];
+            } else {
+                dimensions += dims[i] + ", ";
+            }
+        }
+
+        showMessage(new String[] {"A " + n +
+        "-dimensional array is created.",
+        "The dimensions of the array are: " + dimensions + "."});
+    }
+
 
     public void output(Value val, Highlight h)  {
 

@@ -14,7 +14,7 @@ public class SMIActor extends Actor implements ActorContainer{
     Actor[] actors;
     Point[] locs;
     boolean[] bound;
-    int next;
+    int next = 0;
 
     int margin = 2;
     int titlemargin = 4;
@@ -31,9 +31,21 @@ public class SMIActor extends Actor implements ActorContainer{
     public Point reserve(Actor actor) {
         actors[next] = actor;
         int y = insets.top + namey + titlemargin;
-        int x = (next == 0) ?
-                insets.left :
-                locs[next -1].x + margin + actors[next -1].getWidth();
+        int x = insets.left;
+
+        if (next > 0) {
+            if (actors[next-1] instanceof ReferenceActor) {
+                x = locs[next - 1].x +
+                    margin +
+                    actors[next - 1].getWidth() +
+                    ((ReferenceActor) actors[next - 1]).getReferenceWidth();
+            } else {
+                x = locs[next -1].x +
+                    margin +
+                    actors[next -1].getWidth();
+            }
+        }
+
         locs[next++] = new Point(x, y);
         Point rp = getRootLocation();
         rp.translate(x, y);

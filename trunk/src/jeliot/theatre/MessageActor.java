@@ -28,9 +28,9 @@ public class MessageActor extends Actor {
     public void calculateSize() {
         FontMetrics fm = getFontMetrics();
         int w = 0;
-        int h = fheight = fm.getHeight();
         int n = text.length;
-        for (int i = 0; i < n; ++i) {
+        int h = n * (fheight = fm.getHeight());
+        for (int i = 0; i < n; i++) {
             int l = fm.stringWidth(text[i]);
             w = (l > w) ? l : w;
         }
@@ -69,10 +69,10 @@ public class MessageActor extends Actor {
         // draw border
         g.setColor(darkColor);
         for (int i = 1; i < 2; ++i) {
-            g.drawRect(i, i, w-i*2-1, h-i*2-1); 
+            g.drawRect(i, i, w-i*2-1, h-i*2-1);
         }
         g.setColor(fgcolor);
         g.drawRect(0, 0, w-1, h-1);
 
     }
-}       
+}

@@ -38,8 +38,8 @@ public class Stage extends Actor implements ActorContainer {
     /** Number of pixels between actors. */
     private int actorMargin = 3;
 
-    /** Maximum number of variables on the stage at any time. */
-    private int varCount = 3;
+    /** Maximum possible number of variables on the stage at the moment. */
+    private int varCount = 1;
     private int totalVarCount = 0;
 
     private int actWidth;

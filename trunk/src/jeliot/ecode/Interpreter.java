@@ -101,6 +101,10 @@ public class Interpreter {
 
             } catch (Exception e) {}
 
+            if (line == null) {
+                line = "" + Code.ERROR + Code.DELIM + "<H1>Null Pointer Exception</H1>" + Code.DELIM + "0,0,0,0";
+            }
+
             if (!line.equals("" + Code.END)) {
 
                 StringTokenizer tokenizer = new StringTokenizer(line, Code.DELIM);
@@ -1744,6 +1748,8 @@ public class Interpreter {
                                                                  dimensionSize);
 
                             Reference ref = new Reference(ai);
+
+                            director.arrayCreation(dimensionSize);
 
                             director.showArrayCreation(ai, ref, dimensionValues,
                                               expressionReference, h);
