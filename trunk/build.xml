@@ -177,5 +177,19 @@ To display the available targets type:
     <delete file="${dist}${minor}.zip"/>
     <delete file="${dist}${minor}-src.zip"/>
   </target>
-
+	
+  <!--create the jeliot extension for bluej -->
+  <target name="blueJExt" depends="compile,jars">
+  	<javac sourcepath="blueJExtension/" destdir="blueJExtension/"  srcdir="blueJExtension/" classpath="${dist}/jeliot.jar;blueJExtension/bluejext.jar" />
+  	<jar manifest="blueJExtension/blueJExtension.mf" jarfile="${release}/jeliotExtension.jar" basedir="${dest}">
+      <fileset dir="blueJExtension">
+        <include name="*.class"/>
+      </fileset>
+  		<!--
+        <fileset dir="${dist}">
+          <include name="jeliot.jar"/>
+        </fileset>
+        -->
+    </jar>	
+  	</target>
 </project>
