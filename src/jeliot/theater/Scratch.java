@@ -11,6 +11,7 @@ import java.util.Vector;
  */
 public class Scratch extends Actor implements ActorContainer {
 
+//  DOC: Document!
     /**
 	 *
 	 */

@@ -1,6 +1,3 @@
-/**
-* This is the main pakage of the Jeliot 2000.
-*/
 package jeliot;
 
 /**
@@ -8,12 +5,13 @@ package jeliot;
   * feature that is not (yet) implemented in Jeliot.
   *
   * @author Pekka Uronen
-  * 
-  * created 6.8.1999
-  * last modified -
+  * @author Niko Myller
   */
 public class FeatureNotImplementedException extends RuntimeException {
 
+    /**
+     * Information abou the not implemented feature.
+     */
     String info;
 
     /**

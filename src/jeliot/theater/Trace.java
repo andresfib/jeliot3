@@ -9,6 +9,8 @@ import java.awt.Graphics;
  */
 public class Trace {
 
+//  DOC: Document!
+
     /**
 	 * @param g
 	 */

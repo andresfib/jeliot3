@@ -16,6 +16,8 @@ import java.util.Vector;
  */
 public class TheaterManager implements ComponentListener {
 
+
+
 	/**
       * Contains Points that are set as the rootlocations of the
       * new MethodStage instances. They are circulated so that
@@ -38,6 +40,8 @@ public class TheaterManager implements ComponentListener {
       * (<code>pasAct</code>) and active (<code>actAct</code>) actors.
       */
     private Theater theatre;
+
+//  DOC: Document!
 
     /**
 	 *

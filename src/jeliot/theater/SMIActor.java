@@ -11,6 +11,7 @@ import java.awt.Point;
  */
 public class SMIActor extends Actor implements ActorContainer{
 
+//  DOC: Document!
     /**
 	 *
 	 */

@@ -8,11 +8,15 @@ package jeliot.theater;
   * object in its constructor. After it has been constructed, the
   * controller can be called to start or pause the execution of its
   * runnable.
-  * </p><p>
+  * </p>
+  * 
+  * <p>
   * Calling the <code>pause</code> method does not pause the execution
   * immediately, but only when the <code>checkPoint</code> method is
   * next called in the controlled thread.
-  * </p><p>
+  * </p>
+  * 
+  * <p>
   * <b>Warning!</b> <code>ThreadController<code> does not check that
   * the <code>checkPoint</code> method is called from correct thread.
   *</P>
@@ -121,7 +125,8 @@ public class ThreadController {
 	}
 
 	/**
-	 * 
+	 * Calling the checkpoint(Controlled) method with null actual
+     * parameter value.
 	 */
 	public synchronized void checkPoint() {
 		checkPoint(null);

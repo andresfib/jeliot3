@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 /**
  * PanelController handles the curtains of the theater (PanelActor) by
  * controlling the opening and closing of the curtains and showing the
- * 
+ * panel and background images.
  * 
  * @author Pekka Uronen
  * @author Niko Myller

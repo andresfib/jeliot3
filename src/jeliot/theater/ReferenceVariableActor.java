@@ -11,18 +11,22 @@ import java.awt.Point;
  */
 public class ReferenceVariableActor extends VariableActor {
 
+//  DOC: Document!
     /**
 	 *
 	 */
 	private int refWidth = 6;
+    
     /**
 	 *
 	 */
 	private int refLen = 15;
+    
     /**
 	 *
 	 */
 	private ReferenceActor refActor;
+    
     /**
 	 *
 	 */

@@ -15,12 +15,13 @@ import java.util.ResourceBundle;
 public class ValueActor extends Actor {
 
    /**
-     * The resource bundle
+     * The resource bundle for theater package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
 
+//  DOC: Document!
     /**
 	 *
 	 */

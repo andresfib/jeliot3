@@ -62,6 +62,8 @@ public class VariableActor extends Actor implements ActorContainer {
      */
     protected Color valueColor;
 
+//  DOC: Document!
+
     /**
 	 *
 	 */
