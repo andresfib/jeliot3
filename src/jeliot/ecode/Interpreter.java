@@ -1017,11 +1017,7 @@ public class Interpreter {
 
                             if (round == 0) {
 
-                                if (value.equals(Boolean.TRUE.toString())) {
-                                    director.enterLoop("do - while", result, h);
-                                } else {
-                                    director.skipLoop("do - while", result, h);
-                                }
+                                director.enterLoop("do - while", h);
 
                             } else {
 
