@@ -5,11 +5,13 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-//import jeliot.parser.*;
+
 import jeliot.lang.*;
 import jeliot.gui.*;
 import jeliot.*;
 import jeliot.ecode.*;
+
+//import jeliot.parser.*;
 
 /**
   * @author Pekka Uronen
@@ -987,17 +989,11 @@ public class Director {
         Dimension tsize = theatre.getSize();
 
         if (aloc.x - msize.width/2 < 10) {
-
             aloc.x = 10;
-
         } else if (aloc.x + msize.width/2 > tsize.width-10) {
-
             aloc.x = tsize.width-10-msize.width;
-
         } else {
-
             aloc.x -= msize.width/2;
-
         }
 
         aloc.y += asize.height + 10;
@@ -1068,6 +1064,40 @@ public class Director {
     public void skipIf(Value check, Highlight h) {
         highlight(h);
         showMessage("Continuing without branching.", check);
+    }
+
+    public void output(Value val, Highlight h)  {
+
+        highlight(h);
+
+        ValueActor actor = factory.produceValueActor(val);
+        AnimatingActor hand = factory.produceHand();
+
+        Point dest = manager.getOutputPoint();
+        Point handp = new Point(dest.x, dest.y - hand.getHeight());
+        Point vdp = new Point(dest.x + hand.getWidth()/3,
+                              dest.y - hand.getHeight()*2/3);
+
+        Animation fist = hand.changeImage(factory.produceImage("Fist-1"));
+        fist.setDuration(800);
+
+        theatre.capture();
+
+        hand.setLocation(dest);
+        engine.showAnimation(new Animation[] {
+                            actor.fly(vdp),
+                            hand.fly(handp, 0),
+                            fist
+                            });
+
+        hand.setImage(factory.produceImage("Fist-2"));
+        theatre.removeActor(actor);
+        engine.showAnimation(hand.fly(dest,0));
+
+        theatre.removeActor(hand);
+        theatre.release();
+
+        this.output(val.getValue());
     }
 
     public void output(String str) {
