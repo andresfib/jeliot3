@@ -103,8 +103,8 @@ To display the available targets type:
   <target name="dist" depends="prepare-dist, jars">
   <!-- After targets prepare-dist and jars we create the 2 diferent zip files
     that will contain the 2 distribuition files (source and binary)-->
-    <zip zipfile="${dist}${minor}.zip" basedir="${dist}" includes="**/*"/>
-    <zip zipfile="${dist}${minor}-src.zip">
+    <zip zipfile="Release/${dist}${minor}.zip" basedir="${dist}" includes="**/*"/>
+    <zip zipfile="Release/${dist}${minor}-src.zip">
      <zipfileset dir="src" prefix="src"/>
      <zipfileset dir="lib" prefix="lib"/>
      <zipfileset dir="resources" prefix="resources"/>
@@ -124,6 +124,8 @@ To display the available targets type:
         <include name="${package-prefix}/**/*"/>
       </fileset>
     </jar>
+    <!--After creating the jar files we copy the instalation config file and run it-->
+    <copy file="${src}/jeliot.ico" todir="${dist}"/>
   </target>
 
   <target name="prepare-dist" depends="init">
@@ -161,6 +163,10 @@ To display the available targets type:
              <!-- <param name="-output" value="doc\JavaDoc.tex"/> -->
 	     </doclet>
   	</javadoc>
+  	<exec dir="${src}" executable="C:\temp\program files\Inno Setup 4\iscc.exe" output="output.txt">
+  		<arg line="jeliot.iss"/>
+	</exec>
+  
   </target>
   <!-- Global clean ================================================= -->
   <target name="clean" depends="clean-compile">
