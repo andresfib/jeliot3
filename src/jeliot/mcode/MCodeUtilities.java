@@ -414,7 +414,7 @@ public class MCodeUtilities {
      * @return
      */
     public static boolean isPrimitive(String type) {
-        if (resolveType(type) != MCodeUtilities.REFERENCE) {
+        if (resolveType(type) != MCodeUtilities.REFERENCE && resolveType(type) != MCodeUtilities.VOID) {
             return true;
         }
         return false;
