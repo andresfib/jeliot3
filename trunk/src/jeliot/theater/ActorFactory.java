@@ -545,9 +545,9 @@ public class ActorFactory {
                     (v.getName().equals("java.lang.Object") &&
                      v.getType().equals("java.lang.String"))) {
                     
-                    actor.setName(resolvedType);
+                    refAct.setName(resolvedType);
                 } else {
-                    actor.setName(resolvedType + " " + v.getName());
+                    refAct.setName(resolvedType + " " + v.getName());
                 }
                 //refAct.setName(resolvedType + " " + v.getName());
                 refAct.setBackground(varColor[typeInfo]);
