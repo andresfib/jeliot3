@@ -169,32 +169,32 @@ public class ECodeUtilities {
             }
 
             // Or Expression (|| sign)
-            case OR:     {
+            case Code.OR:     {
                 return OROR;
             }
 
             // Equal Expression (== sign)
-            case EE:     {
+            case Code.EE:     {
                 return EQEQ;
             }
 
             // Not Equal Expression (!= sign)
-            case NE:     {
+            case Code.NE:     {
                 return NOTEQ;
             }
 
             // Less Expression (< sign)
-            case LE:     {
+            case Code.LE:     {
                 return LT;
             }
 
             // Less or Equal Expression (<= sign)
-            case LQE:    {
+            case Code.LQE:    {
                 return LTEQ;
             }
 
             // Greater or Equal Expression (>= sign)
-            case GQT:    {
+            case Code.GQT:    {
                 return GTEQ;
             }
 
