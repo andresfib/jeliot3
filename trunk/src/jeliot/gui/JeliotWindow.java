@@ -191,7 +191,11 @@ public class JeliotWindow {
     /** Showing the history of the program execution */
     private HistoryView hv;
     
+    /** If a method call should be asked from the user */
     private boolean askForMethod = false;
+    
+    /** If animation is running until certain line */
+    private boolean runningUntil = false;
     
     /**
      * This JEditorPane errorJEditorPane will show the error messages for the
@@ -592,6 +596,7 @@ public class JeliotWindow {
             public void actionPerformed(ActionEvent e) {
                 if (hw != null) {
                     //hw.pack();
+                	hw.reload();
                     hw.show();
                 }
             }
@@ -1015,7 +1020,10 @@ public class JeliotWindow {
         changeTheatrePane(tabbedPane);
         unhighlightTabTitles();
         callTree.initialize();
-
+        if (runningUntil) {
+        	jeliot.runUntil(0);
+        	runUntilFinished();
+        }  
         panelController.slide(false, new Runnable() {
 
             public void run() {
@@ -1380,10 +1388,8 @@ public class JeliotWindow {
      * the animation.
      */
     public void enterAnimate() {
-
         //enableWidgets(editWidgets.elements(), false);
         //enableWidgets(animWidgets.elements(), true);
-
         changeCodePane(codePane);
         rewindAnimation();
     }
@@ -1527,6 +1533,12 @@ public class JeliotWindow {
          * try { Thread.sleep(25); } catch(InterruptedException e) { throw new
          * RuntimeException(e); }
          */
+        
+        if (runningUntil) {
+        	//TODO: Here ask if the user wants to continue with run until.
+        	jeliot.runUntil(0);
+        	runUntilFinished();
+        }        
 
         stepButton.setEnabled(true);
         playButton.setEnabled(true);
@@ -1622,22 +1634,33 @@ public class JeliotWindow {
             jeliot.runUntil(lineNumber);
             previousSpeed = speedSlider.getValue();
             speedSlider.setValue(speedSlider.getMaximum());
+            runningUntil = true;
+            codePane.highlightLineNumber(lineNumber);
             SwingUtilities.invokeLater(new Runnable() {
-
                 public void run() {
                     playButton.doClick();
                 }
             });
+        } else {
+        	if (runningUntil) {
+            	jeliot.runUntil(0);
+        		runUntilFinished();
+        	}
         }
+    }
+    
+    public void runUntilFinished() {
+        codePane.highlightLineNumber(-1);
+        speedSlider.setValue(previousSpeed);
+        runningUntil = false;
     }
 
     /**
      * Invoked when the runUntil is done.
      */
     public void runUntilDone() {
-        speedSlider.setValue(previousSpeed);
+    	runUntilFinished();
         SwingUtilities.invokeLater(new Runnable() {
-
             public void run() {
                 pauseButton.doClick();
             }

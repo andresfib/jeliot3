@@ -47,6 +47,17 @@ public class LineNumbers extends JComponent {
 
     private int startLine = 0;
 
+    //TODO: add to resources
+    private Color normalColor = Color.BLACK;
+    private Color highlightColor = Color.RED;
+    private Color backGroundColor = new Color(204, 204, 204);
+    
+    /**
+     * Highlights the line during drawing if
+     * it is set to some line
+     */
+    private int highlightedLine = -1;
+    
     /**
      * Sets the font and the insets and the determines the size increment and
      * ascent from the font's font metrics.
@@ -102,12 +113,12 @@ public class LineNumbers extends JComponent {
             lineNumber = (int) Math.floor(drawHere.y / increment) + 1;
         }
 
-        g.setColor(new Color(204, 204, 204));
+        g.setColor(backGroundColor);
         g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
 
         // Do the ruler labels in the font that's black.
         g.setFont(font);
-        g.setColor(Color.black);
+        g.setColor(normalColor);
 
         // Some vars we need.
         int end = 0;
@@ -122,7 +133,12 @@ public class LineNumbers extends JComponent {
 
         //labels
         for (int i = start; i < end; i += increment) {
-            g.drawString(Integer.toString(lineNumber), 3, i);
+        	if (lineNumber == highlightedLine) {
+        		g.setColor(highlightColor);
+        		g.fillRect(0, i - ascent, size, increment);
+        		g.setColor(normalColor);        		
+        	}
+        	g.drawString(Integer.toString(lineNumber), 3, i);
             lineNumber++;
         }
     }
@@ -132,5 +148,10 @@ public class LineNumbers extends JComponent {
         //System.out.println("CodePane: " + height);
         setPreferredSize(new Dimension(size, height));
         revalidate();
+    }
+    
+    public void setHighlightedLine(int line) {
+    	highlightedLine = line;
+    	repaint();
     }
 }
