@@ -1241,4 +1241,15 @@ public class MCodeUtilities {
     public static String getFilename() {
         return filename;
     }
+
+	/**
+	 * 
+	 */
+	public static void initialize() {
+	
+		previousClassStack = new Stack();
+		previousParametersStack = new Stack();
+		constructorNameStack = new Stack();
+		constructorParametersStack = new Stack();
+	}
 }
