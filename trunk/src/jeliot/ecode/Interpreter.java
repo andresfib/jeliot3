@@ -265,6 +265,9 @@ public class Interpreter {
 
                             exprs.pop();
 
+                            handleExpression(expressionValue, expressionCounter);
+
+/*
                             //command that wait for this expression (left, right)
                             int command = -1;
                             int oper = -1;
@@ -283,11 +286,12 @@ public class Interpreter {
                                     break;
                                 }
                             }
-
+*/
                             /**
                             * Look from the expression stack
                             * what expression should be shown next
                             */
+/*
                             int expressionReference = 0;
                             Highlight highlight = null;
 
@@ -359,7 +363,7 @@ public class Interpreter {
                                 values.put(new Integer(expressionCounter), expressionValue);
 
                             }
-
+*/
                             break;
 
                         }
@@ -558,6 +562,9 @@ public class Interpreter {
 
                             }
 
+                            handleExpression(expressionValue, expressionCounter);
+
+/*
                             int command = -1;
                             int oper = -1;
                             int size = commands.size();
@@ -575,11 +582,12 @@ public class Interpreter {
                                     break;
                                 }
                             }
-
+*/
                             /**
                             * Look from the expression stack
                             * what expression should be shown next
                             */
+/*
                             int expressionReference = 0;
                             Highlight highlight = null;
 
@@ -650,7 +658,7 @@ public class Interpreter {
                                 values.put(new Integer(expressionCounter), expressionValue);
 
                             }
-
+*/
                             break;
                         }
 
@@ -859,6 +867,12 @@ public class Interpreter {
                             //Highlight highlight =
                             //ECodeUtilities.makeHighlight(tokenizer.nextToken());
 
+                            Value lit = new Value(value, type);
+                            director.introduceLiteral(lit);
+
+                            handleExpression(lit, expressionCounter);
+
+/*
                             //command that wait for this expression (left, right)
                             int command = -1;
                             int oper = -1;
@@ -877,11 +891,12 @@ public class Interpreter {
                                     break;
                                 }
                             }
-
+*/
                             /**
                             * Look from the expression stack
                             * what expression should be shown next
                             */
+/*
                             int expressionReference = 0;
                             Highlight highlight = null;
 
@@ -951,7 +966,7 @@ public class Interpreter {
                             } else {
                                 values.put(new Integer(expressionCounter), lit);
                             }
-
+*/
                             break;
                         }
 
@@ -1142,7 +1157,11 @@ public class Interpreter {
                                                     returnExpressionCounter);
                                 rv.setActor(va);
 
+                                handleExpression(rv, returnExpressionCounter);
+                			}
+                            returned = false;
 
+/*
                                 //command that wait for this expression (left, right)
                                 int command = -1;
                                 int size = commands.size();
@@ -1158,11 +1177,12 @@ public class Interpreter {
                                         break;
                                     }
                                 }
-
+*/
                                 /**
                                 * Look from the expression stack
                                 * what expression should be shown next
                                 */
+/*
                                 int expressionReference = 0;
                                 int oper = -1;
                                 Highlight highlight = null;
@@ -1233,8 +1253,8 @@ public class Interpreter {
                                 }
 
                             }
-
                             returned = false;
+*/
 
                             break;
                         }
@@ -1494,6 +1514,9 @@ public class Interpreter {
                                 in = new Value(value, type);
                             }
 
+                            handleExpression(in, expressionCounter);
+
+/*
                             //command that wait for this expression (left, right)
                             int command = -1;
                             int oper = -1;
@@ -1512,11 +1535,12 @@ public class Interpreter {
                                     break;
                                 }
                             }
-
+*/
                             /**
                             * Look from the expression stack
                             * what expression should be shown next
                             */
+/*
                             int expressionReference = 0;
                             Highlight highlight = null;
 
@@ -1586,7 +1610,7 @@ public class Interpreter {
                             } else {
                                 values.put(new Integer(expressionCounter), in);
                             }
-
+*/
                             break;
                         }
 
@@ -1639,6 +1663,102 @@ public class Interpreter {
 
         }
         director.closeScratch();
+    }
+
+
+    private void handleExpression(Value val, int expressionCounter) {
+
+        //command that wait for this expression (left, right)
+        int command = -1;
+        int oper = -1;
+        int size = commands.size();
+
+        //We find the command
+        for (int i = size - 1; i >= 0; i--) {
+            StringTokenizer commandTokenizer = new StringTokenizer(
+                                                        (String) commands.elementAt(i),
+                                                        Code.DELIM);
+
+            int comm = Integer.parseInt(commandTokenizer.nextToken());
+            int cid = Integer.parseInt(commandTokenizer.nextToken());
+            if (expressionCounter == cid) {
+                command = comm;
+                commands.removeElementAt(i);
+                break;
+            }
+        }
+
+        /**
+         * Look from the expression stack
+         * what expression should be shown next
+         */
+        int expressionReference = 0;
+        Highlight highlight = null;
+
+        if (!exprs.empty()) {
+            StringTokenizer expressionTokenizer =
+                                        new StringTokenizer(
+                                            (String) exprs.peek(),
+                                            Code.DELIM);
+
+            oper = Integer.parseInt(expressionTokenizer.nextToken());
+            expressionReference = Integer.parseInt(expressionTokenizer.nextToken());
+
+            //Make the location information for the location token
+            highlight = ECodeUtilities.makeHighlight(expressionTokenizer.nextToken());
+        }
+
+        //Do different things depending on in what expression
+        //the value is used.
+
+        //If operator is assignment we just store the value
+        if (oper == Code.A) {
+            values.put(new Integer(expressionCounter), val);
+
+            //If oper is other binary operator we will show it
+            //on the screen with operator
+        } else if (ECodeUtilities.isBinary(oper)) {
+
+            int operator = ECodeUtilities.resolveBinOperator(oper);
+
+            if (command == Code.LEFT) {
+
+                director.beginBinaryExpression(val, operator,
+                                               expressionReference, highlight);
+
+            } else if (command == Code.RIGHT) {
+
+                ExpressionActor ea = (ExpressionActor)
+                                    director.getCurrentScratch().findActor(expressionReference);
+
+                if (ea != null) {
+                    director.rightBinaryExpression(val, ea, highlight);
+                } else {
+                    values.put(new Integer(expressionCounter), val);
+                }
+
+            } else {
+                values.put(new Integer(expressionCounter), val);
+            }
+
+        /* If oper is a unary operator we will show it
+         * on the screen with operator
+         */
+        } else if (ECodeUtilities.isUnary(oper)) {
+
+            int operator = ECodeUtilities.resolveUnOperator(oper);
+
+            values.put(new Integer(expressionCounter), val);
+
+            if (command == Code.RIGHT) {
+                director.beginUnaryExpression(operator, val,
+                                expressionReference, highlight);
+            }
+
+        //If it is something else we will store it for later use.
+        } else {
+            values.put(new Integer(expressionCounter), val);
+        }
     }
 
 
