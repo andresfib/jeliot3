@@ -1737,12 +1737,18 @@ public class EvaluationVisitor extends VisitorObject {
         }
 
         Object result = Array.get(t, ((Number)o).intValue());
-
+        String resultString;
+        if (result !=null){
+            resultString = result.toString();
+        }else{
+            resultString = Code.UNKNOWN;
+        }
+        
         if ( iAmFirst ) {
             ECodeUtilities.write(""+Code.AAC+Code.DELIM+arrayAccessCounter+Code.DELIM +arrayCounter+Code.DELIM + arrayCellNumbersList.size()
                                  +Code.DELIM+ECodeUtilities.arrayToString(arrayCellReferencesList.toArray())
                                  +Code.DELIM+ECodeUtilities.arrayToString(arrayCellNumbersList.toArray())
-                                 +Code.DELIM+result.toString()
+                                 +Code.DELIM+resultString
                                  +Code.DELIM+NodeProperties.getType(node).getName()
                                  +Code.DELIM+locationToString(node));
 
