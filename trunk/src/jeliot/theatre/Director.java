@@ -1586,8 +1586,6 @@ public class Director {
     }
 
     /**
-     * TODO: Change showMessage so that the message is shown in the next
-     * empty expressionActor from Scratch and nothing else is possible.
      * @param message
      */
     private void showMessage(String[] message) {
@@ -2060,6 +2058,11 @@ public class Director {
     }
 
     //possibly we will need some other input readers e.g. readString(), readChar()
+	/**
+	 * 
+	 * @author Pekka Uronen
+	 * @author Niko Myller
+	 */
     private static class InputAnimator extends Animator {
 
         private String prompt;
@@ -2078,13 +2081,12 @@ public class Director {
     }
 
     /**
+     * Shows an animation of the invocation of a static foreign
+     * method for handling input.
+     * 
      * @param type
      * @param h
      * @return
-     */
-    /**
-     * Shows an animation of the invocation of a static foreign
-     * method for handling input.
      */
     public Value animateInputHandling(String type, Highlight h) {
 
@@ -2105,6 +2107,7 @@ public class Director {
             animator.animate(this);
             return animator.getReturnValue();
         } else {
+        	//TODO: Here should be an exception
             return null;
         }
     }
@@ -2118,7 +2121,10 @@ public class Director {
 
         validator.setController(controller);
         final InputComponent ic = new InputComponent(prompt, validator);
+        
+		//TODO: -2 should be changed to a constant of its own
         final ExpressionActor ea = currentScratch.getExpression(1, -2);
+        
         Actor bga = factory.produceMessageActor(null);
         final Point p = ea.reserve(bga);
         ic.setBgactor(bga);
