@@ -24,6 +24,9 @@ public class JeliotWindow {
     boolean showMessagesInDialogs = false;
     boolean errorOccured = false;
 
+    AboutWindow aw = null;
+    HelpWindow hw = null;
+
     /** The frame in which all the action goes on. */
     private JFrame frame;
 
@@ -207,6 +210,7 @@ public class JeliotWindow {
      */
     private Vector animWidgets = new Vector();
 
+    private String udir;
 
     /**
      * Assigns the values of the parameters in the object values.
@@ -217,19 +221,22 @@ public class JeliotWindow {
      * @param   theatre The theatre where all the code is animated.
      * @param   engine  The engine that animates the code.
      * @param   iLoad       The imageloader that loads all the images.
+     * @param   udir    The user directory
      */
     public JeliotWindow(
             Jeliot jeliot,
             CodePane codePane,
             Theatre theatre,
             AnimationEngine engine,
-            ImageLoader iLoad ) {
+            ImageLoader iLoad ,
+            String udir) {
 
         this.jeliot = jeliot;
         this.codePane = codePane;
         this.theatre = theatre;
         this.engine = engine;
         this.iLoad = iLoad;
+        this.udir = udir;
 
         this.panelController = new PanelController(theatre, iLoad);
     }
@@ -272,6 +279,7 @@ public class JeliotWindow {
 
         frame.setContentPane(rootPane);
         frame.setSize(800, 600);
+
         frame.addWindowListener(
             new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
@@ -287,8 +295,12 @@ public class JeliotWindow {
         //theatre.addMouseListener(popup);
         //theatre.addMouseMotionListener(popup);
 
+        hw = new HelpWindow(iLoad.getLogicalImage("Jeliot-icon"), udir);
+        aw = new AboutWindow(iLoad.getLogicalImage("Jeliot-icon"), udir);
+
         frame.show();
     }
+
 
     /**
      * Makes and returns the menubar for the main frame.
@@ -329,6 +341,9 @@ public class JeliotWindow {
         menuBar.add(animationMenu);
         animWidgets.addElement(animationMenu);
 
+        JMenu helpMenu = makeHelpMenu();
+        menuBar.add(helpMenu);
+
         JMenu[] jm = {controlMenu, animationMenu};
         addInAnimationMenuItems(jm);
 
@@ -350,6 +365,50 @@ public class JeliotWindow {
         }
     }
 
+    /**
+     * Menu with the commands to enter to animate and edit.
+     */
+    private JMenu makeHelpMenu() {
+
+        JMenu menu = new JMenu("Help");
+        menu.setMnemonic(KeyEvent.VK_H);
+        JMenuItem menuItem;
+
+        menuItem = new JMenuItem("Help");
+        menuItem.setMnemonic(KeyEvent.VK_H);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_F1, 0));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (hw != null) {
+                        //hw.pack();
+                        hw.show();
+                    }
+                }
+            }
+        );
+        menu.add(menuItem);
+        
+        menuItem = new JMenuItem("About Jeliot");
+        menuItem.setMnemonic(KeyEvent.VK_A);
+        //        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+        //        KeyEvent.VK_M, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+                new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                    if (aw != null) {
+                        //aw.pack();
+                        aw.show();
+                    }
+                }
+            }
+        );
+        menu.add(menuItem);
+        
+        return menu;
+    }
     /**
      * Menu with the VCR commands
      */
@@ -595,7 +654,7 @@ public class JeliotWindow {
             new ChangeListener() {
                 public void stateChanged(ChangeEvent e) {
                     int volume = speedSlider.getValue();
-                    engine.setVolume((double)(volume * 100.0));
+                    engine.setVolume((double)(volume * 50.0));
                 }
             }
         );

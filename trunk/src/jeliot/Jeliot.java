@@ -66,9 +66,9 @@ public class Jeliot implements Runnable {
     * Loads Theatre theatre -object's background.
     * Initializes JeliotWindow gui -object with parameters this, CodePane codepane, Theatre theatre,
     * AnimationEngine engine, ImageLoader iLoad */
-    public Jeliot() {
+    public Jeliot(String udir) {
         theatre.setBackground(iLoad.getLogicalImage("Panel"));
-        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad);
+        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir);
     }
 
     /** Sets up the user interface.
@@ -282,12 +282,12 @@ public class Jeliot implements Runnable {
 
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
-
+        
         File f = new File(udir);
         f = new File(f, "examples");
         prop.put("user.dir", f.toString());
 
-        Jeliot jeliot = new Jeliot();
+        Jeliot jeliot = new Jeliot(udir);
         jeliot.run();
     }
 
