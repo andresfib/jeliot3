@@ -179,6 +179,23 @@ public class JeliotWindow {
             }
         };
 
+    private ActionListener exit = new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            if (editor.isChanged()) {
+                int n = JOptionPane.showConfirmDialog(frame,
+                            "You are quiting the program\n" +
+                            "without saving the edited file.\n" +
+                            "Do you want to save your file?",
+                            "Quiting without saving",
+                            JOptionPane.YES_NO_OPTION);
+                if (n == JOptionPane.YES_OPTION) {
+                    editor.saveProgram();
+        		}
+    		}
+            System.exit(0);
+        }
+    };
+
     /**
      * Helping to enable and disable the components.
      */
@@ -289,6 +306,14 @@ public class JeliotWindow {
 
         //a group of JMenuItems
         JMenu programMenu = editor.makeProgramMenu();
+
+        menuItem = new JMenuItem("Exit");
+        menuItem.setMnemonic(KeyEvent.VK_Q);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(exit);
+        programMenu.add(menuItem);
+
         menuBar.add(programMenu);
         editWidgets.addElement(programMenu);
 
@@ -715,6 +740,16 @@ public class JeliotWindow {
      * Sends it to "compilation".
      */
     void tryToEnterAnimate() {
+
+        // Jeliot 3
+        if (editor.isChanged()) {
+            if (editor.getCurrentFile() != null) {
+                editor.writeProgram(editor.getCurrentFile());
+            } else {
+                editor.saveProgram();
+            }
+            editor.setChanged(false);
+        }
 
         try {
             try {

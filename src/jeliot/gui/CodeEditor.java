@@ -38,6 +38,38 @@ public class CodeEditor extends JComponent {
         "    }\n" +
         "}";
 
+    private boolean changed = false; //Jeliot 3
+
+    private File currentFile = null; //Jeliot 3
+
+    public boolean isChanged() { //Jeliot 3
+        return changed;
+    }
+
+    public File getCurrentFile() { //Jeliot 3
+        return currentFile;
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
+    }
+
+    private DocumentListener dcl = new DocumentListener() {
+
+        public void changedUpdate(DocumentEvent e) {
+            changed = true;
+        }
+
+        public void insertUpdate(DocumentEvent e) {
+            changed = true;
+        }
+
+        public void removeUpdate(DocumentEvent e) {
+            changed = true;
+        }
+
+    };
+
     /**
      * Initialization of the text area for the user code.
      */
@@ -46,6 +78,7 @@ public class CodeEditor extends JComponent {
         area.setMargin(new Insets(10, 10, 10, 10));
         area.setFont(new Font("Courier", Font.PLAIN, 12));
         area.setTabSize(4);
+        area.getDocument().addDocumentListener(dcl);  //Jeliot 3
         clearProgram();
     }
 
@@ -90,14 +123,6 @@ public class CodeEditor extends JComponent {
             clearProgram();
         }
     };
-
-
-    private ActionListener exit = new ActionListener() {
-         public void actionPerformed(ActionEvent e) {
-            System.exit(0);
-        }
-    };
-
 
     /**
      * ActionListener that handels the clearing of the code area.
@@ -145,7 +170,6 @@ public class CodeEditor extends JComponent {
     public void setMasterFrame(JFrame frame) {
         this.masterFrame = masterFrame;
     }
-
 
     /**
      * Sets the layout and adds the JScrollPane with JTextArea area and JToolbar in it.
@@ -257,13 +281,6 @@ public class CodeEditor extends JComponent {
         menuItem.addActionListener(saver);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Exit");
-        menuItem.setMnemonic(KeyEvent.VK_Q);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
-        menuItem.addActionListener(exit);
-        menu.add(menuItem);
-
         return menu;
     }
 
@@ -327,6 +344,9 @@ public class CodeEditor extends JComponent {
            File file = fileChooser.getSelectedFile();
            String program = readProgram(file);
            setProgram(program);
+
+           currentFile = file; // Jeliot 3
+           changed = false; //Jeliot 3
         }
     }
 
@@ -342,6 +362,9 @@ public class CodeEditor extends JComponent {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             writeProgram(file);
+
+            currentFile = file; // Jeliot 3
+            changed = false; //Jeliot 3
         }
     }
 
@@ -350,7 +373,7 @@ public class CodeEditor extends JComponent {
      *
      * @param   file    The file where the content of the JTextArea is saved.
      */
-    void writeProgram(File file) {
+    public void writeProgram(File file) {
         try {
             FileWriter w = new FileWriter(file);
             w.write(area.getText());
@@ -393,6 +416,9 @@ public class CodeEditor extends JComponent {
      */
     void clearProgram() {
         area.setText(template);
+
+        currentFile = null; //Jeliot 3
+        changed = false; //Jeliot 3
     }
 
 
@@ -408,7 +434,8 @@ public class CodeEditor extends JComponent {
 
     /**
      * Method returns the program code inside the JTextArea as String -object
-     * Tabulators are changed to spaces for uniform handling of spaces.
+     * Tabulators are changed to spaces for uniform handling of white spaces.
+     * One tabulator corresponds four ASCII white spaces.
      *
      * @return  The program code inside the JTextArea area.
      */
@@ -418,7 +445,7 @@ public class CodeEditor extends JComponent {
         return programCode;
     }
 
-
+    //Jeliot 3
     public String replace(String from, String c, String with) {
         int index = from.indexOf(c);
         while(index != -1) {
