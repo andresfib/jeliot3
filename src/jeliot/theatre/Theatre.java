@@ -243,7 +243,7 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
     public void flush() {
         repaint();
         try {
-            Thread.sleep(50);
+            Thread.sleep(100);
         }
         catch (InterruptedException e) { }
     }

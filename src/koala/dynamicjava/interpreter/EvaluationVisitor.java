@@ -384,11 +384,13 @@ public class EvaluationVisitor extends VisitorObject {
                 ECodeUtilities.write(""+Code.SWIBF+Code.DELIM+
                                      selectorCounter+Code.DELIM+
                                      "-1"+Code.DELIM+
-                                     locationToString(sc.getExpression()));
+                                     locationToString(sc));
+
 
                 for(;;) {
 
                     if (sc.getStatements() != null) {
+
                         Iterator it2 = sc.getStatements().iterator();
                         while (it2.hasNext()) {
                             ((Node)it2.next()).acceptVisitor(this);
