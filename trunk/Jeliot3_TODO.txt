@@ -1,13 +1,13 @@
 JELIOT 3 TODO-LIST
 
 * Initialization of object when it inherits user made class
-* Simple build
 * Documentation
 * Reference actors needs to be fixed in instances and in short distances
 * Execute until feature
 * Instance garbage collection
-* Command line parameters
 * Array initializers
+* Array variables could be references
+* Command line parameters
 * 2+ -dimensional arrays
 * Default error message needs to be changed
 * Static field access
@@ -24,3 +24,5 @@ JELIOT 3 TODO-LIST
 * Error message when super class, does not include constructor without 
   parameters or default constructor (Done)
 * Object's fields initial values (Partially done, but should be changed)
+* Simple build (DONE)
+
