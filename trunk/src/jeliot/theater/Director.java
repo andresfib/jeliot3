@@ -707,6 +707,7 @@ public class Director {
 
         Animation thisAnim =
             thisValueActor.fly(thisVariableActor.reserve(thisCastAct));
+        
         engine.showAnimation(thisAnim);
 
         thisVariableActor.bind();

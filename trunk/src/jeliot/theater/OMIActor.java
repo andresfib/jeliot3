@@ -318,6 +318,11 @@ public class OMIActor extends Actor implements ActorContainer{
                 bound[i] = false;
             }
         }
+        
+        if (actor == thisActor) {
+            thisActor = null;
+            thisActorBound = false;
+        }
     }
 
     /* (non-Javadoc)
