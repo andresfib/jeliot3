@@ -4,7 +4,7 @@
 
 [Setup]
 AppName=Jeliot 3
-AppVerName=Jeliot 3.4.0 + Java Runtime Environment
+AppVerName=Jeliot 3.4.1 + Java Runtime Environment
 DefaultDirName={pf}\Jeliot3
 DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe

@@ -96,8 +96,9 @@ To display the available targets type:
    </delete>
   </target>
 
-  <target name="clean-compile" depends="">
-    <delete dir="${dest}"/>
+  <target name="clean-compile"  depends="">
+    <delete  dir="${dest}" quiet="false" verbose="true">
+   	</delete>
   </target>
 
   <!-- Applications ================================================= -->
