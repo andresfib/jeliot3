@@ -182,11 +182,18 @@ public class ActorFactory {
         return max;
     }
 
+    public static int getMaxMethodStageWidth() {
+        return getMaxTypeWidth() + typeValWidth[8] + 20;
+    }
+
+    public static int getMaxObjectStageWidth() {
+        return getMaxTypeWidth() + typeValWidth[8] + 20;
+    }
 
     Stage produceStage(MethodFrame m) {
         Stage stage = new Stage(m.getMethodName());
         stage.setFont(stageFont);
-        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] + 20,
+        stage.calculateSize(getMaxMethodStageWidth(),
                             valueHeight + 8 +
                             variableInsets.top +
                             variableInsets.bottom);
@@ -706,7 +713,7 @@ public class ActorFactory {
         stage.setFont(stageFont);
 
         //The width of the object stage is not correct but we have not found any better.
-        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] - 20,
+        stage.calculateSize(getMaxObjectStageWidth(),
                             valueHeight + 8 +
                             variableInsets.top +
                             variableInsets.bottom);
