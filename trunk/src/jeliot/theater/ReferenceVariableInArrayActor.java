@@ -144,9 +144,8 @@ public class ReferenceVariableInArrayActor extends VariableInArrayActor {
 	public Point reserve(ValueActor actor) {
         if (actor instanceof ReferenceActor) {
                return reserve((ReferenceActor) actor);
-        } else {
-               return super.reserve(actor);
         }
+        return super.reserve(actor);
     }
 
     /**

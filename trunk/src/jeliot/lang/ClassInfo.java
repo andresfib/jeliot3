@@ -139,7 +139,6 @@ public class ClassInfo {
             String name = methods[i].getName();
             String returnType = methods[i].getReturnType().getName();
             int modifiers = methods[i].getModifiers();
-            String listOfParameters = "";
             Class[] classes = methods[i].getParameterTypes();
             String typeList = "";
             int m = classes.length;
@@ -285,5 +284,9 @@ public class ClassInfo {
     public void setFieldNamesInDeclarationOrder(
             List fieldNamesInDeclarationOrder) {
         this.fieldNamesInDeclarationOrder = fieldNamesInDeclarationOrder;
+    }
+    
+    public String getExtendedClassName() {
+        return extendedClass;
     }
 }

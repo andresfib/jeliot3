@@ -490,9 +490,9 @@ public class ReferenceActor extends ValueActor {
         if (instance != null) {
             calculateBends();
             return bend[1].x - bend[0].x + 4;
-        } else {
-            return refLen + 15;
         }
+        //Null value is shown.
+        return refLen + 15;
     }
 
     /* (non-Javadoc)

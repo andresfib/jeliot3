@@ -258,7 +258,7 @@ public class ClassActor extends Actor implements ActorContainer {
                 h = size.height;
                 full = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor) ClassActor.this);
+                this.addActor(ClassActor.this);
                 setLocation(loc);
                 setSize(size);
                 setLight(HIGHLIGHT);
@@ -284,7 +284,7 @@ public class ClassActor extends Actor implements ActorContainer {
             }
 
             public void finalFinish() {
-                this.passivate((Actor) ClassActor.this);
+                this.passivate(ClassActor.this);
             }
         };
     }
@@ -303,7 +303,7 @@ public class ClassActor extends Actor implements ActorContainer {
                 full = nheight + margin * 3;
                 h = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor) ClassActor.this);
+                this.addActor(ClassActor.this);
                 setSize(size);
                 paintVars = false;
                 repaint();
@@ -320,7 +320,7 @@ public class ClassActor extends Actor implements ActorContainer {
             }
 
             public void finish() {
-                this.removeActor((Actor) ClassActor.this);
+                this.removeActor(ClassActor.this);
             }
         };
     }
@@ -370,8 +370,7 @@ public class ClassActor extends Actor implements ActorContainer {
                 }
             };
 
-        } else {
-            return null;
         }
+        return null;
     }
 }

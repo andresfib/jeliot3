@@ -59,15 +59,10 @@ public class CodePane2 extends JComponent {
         //Special for JEditTextArea for syntax highlighting
         area = new JEditTextArea();
         area.setTokenMarker(new JavaTokenMarker());
-        area.getPainter().setFont(
-                new Font(propertiesBundle.getString("font.code_editor.family"), Font.PLAIN, Integer
-                        .parseInt(propertiesBundle.getString("font.code_editor.size"))));
-        area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute,
-                new Integer(3));
+        area.getPainter().setFont(font);
+        area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute, new Integer(3));
         area.setHorizontalOffset(5);
-        ln = new LineNumbers(new Font(propertiesBundle.getString("font.code_editor.family"), Font.PLAIN,
-                Integer.parseInt(propertiesBundle.getString("font.code_editor.size"))),
-                new Insets(1, 0, 0, 0));
+        ln = new LineNumbers(font, new Insets(1, 0, 0, 0));
         area.addToLeft(ln);
         LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(area, ln);
         area.addAdjustListernerForVertical(lnah);

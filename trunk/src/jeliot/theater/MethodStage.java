@@ -310,7 +310,7 @@ public class MethodStage extends Actor implements ActorContainer {
                 h = size.height;
                 full = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor) MethodStage.this);
+                this.addActor(MethodStage.this);
                 setLocation(loc);
                 setSize(size);
                 setLight(HIGHLIGHT);
@@ -336,7 +336,7 @@ public class MethodStage extends Actor implements ActorContainer {
             }
 
             public void finalFinish() {
-                this.passivate((Actor)MethodStage.this);
+                this.passivate(MethodStage.this);
             }
         };
     }
@@ -357,7 +357,7 @@ public class MethodStage extends Actor implements ActorContainer {
                 full = nheight + margin * 3;
                 h = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor)MethodStage.this);
+                this.addActor(MethodStage.this);
                 setSize(size);
                 paintVars = false;
                 repaint();
@@ -374,7 +374,7 @@ public class MethodStage extends Actor implements ActorContainer {
             }
 
             public void finish() {
-                this.removeActor((Actor)MethodStage.this);
+                this.removeActor(MethodStage.this);
             }
         };
     }
@@ -427,10 +427,7 @@ public class MethodStage extends Actor implements ActorContainer {
                 }
             };
 
-        } else {
-
-            return null;
-
         }
+        return null;
     }
 }

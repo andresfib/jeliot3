@@ -388,6 +388,7 @@ public class ActorFactory {
      * @param font
      */
     public void setValueFont(Font font) {
+        this.valueFont = font;
         FontMetrics fm = dummy.getFontMetrics(font);
         valueHeight = fm.getHeight() + margin;
         int m = 4;
@@ -957,7 +958,6 @@ public class ActorFactory {
         for (int i = 0; i < n; i++) {
             index[i] = 0;
         }
-        int k = 0;
         do {
             for (int i = 0; i < dims[n - 1]; i++) {
                 index[n - 1] = i;
@@ -965,9 +965,6 @@ public class ActorFactory {
                 ValueActor va = produceValueActor(value);
                 value.setActor(va);
                 ArrayUtilities.setObjectAt(valueActors, index, va);
-                //Testing
-                //System.out.println(""+k);
-                //k++;
             }
         } while (ArrayUtilities.nextIndex(index, dims));
         String ctype = array.getComponentType();

@@ -443,7 +443,7 @@ public abstract class Actor implements Cloneable {
      */
     protected void paintBackground(Graphics g, Image backImage, int xx, int yy, int w, int h) {
 
-        Dimension d = getSize();
+        //Dimension d = getSize();
         int biw = backImage.getWidth(dummy);
         int bih = backImage.getHeight(dummy);
         Shape clip = g.getClip();

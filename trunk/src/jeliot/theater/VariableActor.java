@@ -244,11 +244,11 @@ public class VariableActor extends Actor implements ActorContainer {
         int w = getWidth();
         int h = getHeight();
 
-        int aw = w - insets.right - insets.left - 4;
-        int ah = h - insets.top - insets.bottom - 4;
+        //int aw = w - insets.right - insets.left - 4;
+        //int ah = h - insets.top - insets.bottom - 4;
 
         FontMetrics fm = getFontMetrics();
-        int sw = fm.stringWidth(name);
+        //int sw = fm.stringWidth(name);
         int sh = fm.getHeight();
 
         valuex = w - insets.right - 4 - valuew;

@@ -38,7 +38,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
@@ -530,10 +529,7 @@ public class JeliotWindow {
 
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu menu, submenu;
         JMenuItem menuItem;
-        JCheckBoxMenuItem cbMenuItem;
-        JRadioButtonMenuItem rbMenuItem;
 
         //a group of JMenuItems
         JMenu programMenu = editor.makeProgramMenu();
@@ -889,7 +885,7 @@ public class JeliotWindow {
 
             public void stateChanged(ChangeEvent e) {
                 int volume = speedSlider.getValue();
-                engine.setVolume((double) (volume * 50.0));
+                engine.setVolume(volume * 50.0);
                 Tracker.writeToFile("Slider", "" + volume, System.currentTimeMillis());
             }
         });

@@ -170,8 +170,8 @@ public class TheaterManager implements ComponentListener {
 	 * @return
 	 */
     public Point reserve(InstanceActor actor) {
-        int w = actor.getWidth();
-        int h = actor.getHeight();
+        //int w = actor.getWidth();
+        //int h = actor.getHeight();
 
         int x = objects.isEmpty() ?
                 getMinInstanceX() + 20 :
@@ -248,8 +248,8 @@ public class TheaterManager implements ComponentListener {
 	 * @return
 	 */
     public Point reserve(ClassActor actor) {
-        int w = actor.getWidth();
-        int h = actor.getHeight();
+        //int w = actor.getWidth();
+        //int h = actor.getHeight();
 
         int x = constantBox.getX();
         int y = classes.isEmpty() ? 

@@ -87,9 +87,8 @@ public class Tree {
     public int getSize() {
         if (root != null) {
             return root.getSize();
-        } else {
-            return 0;
         }
+        return 0;
     }
     
     /**
@@ -98,8 +97,7 @@ public class Tree {
     public int depth() {
         if (root != null) {
             return root.getDepth();
-        } else {
-            return 0;
         }
+        return 0;
     }
 }

@@ -166,7 +166,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     public void initialize() {
         running = true;
         start = true;
-        Actor returnActor = null;
+        returnActor = null;
         currentMethodInvocation = null;
         currentClass = null;
         classesWithStaticVariables = new LinkedList();
@@ -176,8 +176,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         values = new Hashtable();
         variables = new Hashtable();
         methodInvocation = new Stack();
-        Value returnValue = null;
-        Actor ReturnActor = null;
+        returnValue = null;
         postIncsDecs = new Hashtable();
         instances = new Hashtable();
         classes = new Hashtable();
@@ -619,7 +618,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             } else if (command == Code.RIGHT) {
 
-                ExpressionActor ea = (ExpressionActor) director
+                ExpressionActor ea = director
                         .getCurrentScratch().findActor(expressionReference);
                 if (ea != null) {
 
@@ -1238,7 +1237,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 int i = 0;
                 while (i < parameterExpressionReferences.length) {
                     Object[] postIncDec = (Object[]) postIncsDecs
-                            .remove(((Long) parameterExpressionReferences[i]));
+                            .remove(parameterExpressionReferences[i]);
                     if (postIncDec != null) {
                         doPostIncDec(postIncDec);
                     }
@@ -1389,8 +1388,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
         currentMethodInvocation = new Object[9];
 
-        int n = currentMethodInvocation.length;
         /*
+         * int n = currentMethodInvocation.length;
+         *
          * for (int i = 0; i < n; i++) { currentMethodInvocation[i] = null; }
          */
 
@@ -1540,7 +1540,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             } else if (command == Code.RIGHT) {
 
-                ExpressionActor ea = (ExpressionActor) director
+                ExpressionActor ea = director
                         .getCurrentScratch().findActor(expressionReference);
                 if (ea != null) {
 
@@ -1849,7 +1849,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 director.beginBinaryExpression(val, operator,
                         expressionReference, highlight);
             } else if (command == Code.RIGHT) {
-                ExpressionActor ea = (ExpressionActor) director
+                ExpressionActor ea = director
                         .getCurrentScratch().findActor(expressionReference);
                 if (ea != null) {
                     director.rightBinaryExpression(val, ea, highlight);
@@ -1982,7 +1982,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 director.beginBinaryExpression(val, operator,
                         expressionReference, highlight);
             } else if (command == Code.RIGHT) {
-                ExpressionActor ea = (ExpressionActor) director
+                ExpressionActor ea = director
                         .getCurrentScratch().findActor(expressionReference);
                 if (ea != null) {
                     director.rightBinaryExpression(val, ea, highlight);
@@ -2601,7 +2601,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeAIE(String arrayReference, long cellNumber, long expressionReference, String value, String type, long l, Highlight highlight) {
         
         ArrayInstance ai = (ArrayInstance) instances.get(arrayReference);
-        VariableInArray v = (VariableInArray) ai.getVariableAt(new int[] {(int) cellNumber});
+        VariableInArray v = ai.getVariableAt(new int[] {(int) cellNumber});
         
         boolean literal = ((l == 1) ? true : false);
         Value fromValue = (Value) values.remove(new Long(expressionReference));
@@ -2819,7 +2819,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             } else if (command == Code.RIGHT) {
 
-                ExpressionActor ea = (ExpressionActor) director
+                ExpressionActor ea = director
                         .getCurrentScratch().findActor(expressionReference);
 
                 if (ea != null) {
@@ -2858,7 +2858,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     public void doPostIncDec(Object[] postIncDecInfo) {
 
-        Variable var = (Variable) variables.remove(((Long) postIncDecInfo[1]));
+        Variable var = (Variable) variables.remove(postIncDecInfo[1]);
 
         director.animatePreIncDec(((Long) postIncDecInfo[0]).intValue(), var,
                 ((Value) postIncDecInfo[2]), ((Highlight) postIncDecInfo[3]));

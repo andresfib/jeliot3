@@ -373,9 +373,8 @@ public class MCodeUtilities {
     public static boolean isPrimitive(String type) {
         if (resolveType(type) != MCodeUtilities.REFERENCE) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -393,7 +392,6 @@ public class MCodeUtilities {
      */
     public static int getNumberOfDimensions(String type) {
         int n = type.length();
-        boolean stillArray = true;
         int dims = 0;
         for (int i = 0; i < n; i++) {
             if (type.substring(i, i + 1).equals("[")) {
@@ -414,12 +412,10 @@ public class MCodeUtilities {
             String cType = replace(replace(type, "[", ""), ";", "");
             if (cType.substring(0, 1).equals("L")) {
                 return cType.substring(1);
-            } else {
-                return cType;
             }
-        } else {
-            return null;
+            return cType;
         }
+        return null;
     }
 
     /**
@@ -1001,9 +997,8 @@ public class MCodeUtilities {
                 result += (String) it.next() + Code.LOC_DELIM;
             }
             return result.substring(0, result.length() - 1);
-        } else {
-            return "";
         }
+        return "";
     }
 
     /**
@@ -1134,9 +1129,9 @@ public class MCodeUtilities {
             || Character.class.isInstance(o)) {
                 
             return o.toString();   
-        } else { 
-            return Integer.toHexString(o.hashCode());            
-        } 
+        }
+        
+        return Integer.toHexString(o.hashCode());            
     }
     /**
      * Converts the node location into a string list. Each element is delimited

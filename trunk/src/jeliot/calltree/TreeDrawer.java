@@ -162,7 +162,7 @@ public class TreeDrawer extends EulerTour {
             int descent = ((Integer) pos.getProperty("descent")).intValue();
             int leading = ((Integer) pos.getProperty("leading")).intValue();
             Rectangle2D bounds = ((Rectangle2D) pos.getProperty("bounds"));
-            int height = (int) bounds.getHeight();
+            //int height = (int) bounds.getHeight();
             int width = (int) bounds.getWidth();
             int x = xPos(pos) - width / 2;
             int y = yPos(pos) - ascent / 2;
