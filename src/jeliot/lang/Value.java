@@ -1,35 +1,40 @@
 package jeliot.lang;
 
-//import jeliot.parser.*;
 import jeliot.theater.*;
 
 /**
-  *
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * Value represents any primitive type of value plus String type and
+ * is the base class for reference values.
+ *
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class Value implements Cloneable {
 
+
     /**
-	 *
+	 * A String representation of the type of the value.
 	 */
 	private String type;
 
-	/** A String describing the represented value. Can be, for
-      * example Integer, Char or if the value is actually a reference
-      * it will be the hashcode that identifies the object.
-      */
+	/**
+     * A String describing the represented value. Can be, for
+     * example Integer, Char or if the value is actually a reference
+     * it will be the hashcode that identifies the object.
+     */
     private String val;
+    
     /**
-	 *
+	 * The actor of this values.
 	 */
 	private ValueActor actor;
 
     /**
-	 *
+	 * The id of the value. This is used for searching a certain value.
 	 */
 	private int id;
 
+//  TODO: documentation.
     /**
 	 * @param val
 	 * @param type

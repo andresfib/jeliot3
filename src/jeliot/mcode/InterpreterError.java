@@ -3,6 +3,8 @@ package jeliot.mcode;
 import jeliot.theater.*;
 
 /**
+ * This class encapsulates all the errors related to the interpretation
+ * of the user program.
  * 
  * @author Niko Myller
  */
@@ -13,13 +15,15 @@ public class InterpreterError {
 	 */
 	protected String message;
 
+//  TODO: documentation.
 	/**
 	 *
 	 */
 	protected Highlight highlight;
 
 	/**
-     * Constructs an <code>InterpreterException</code> from a ParseError
+     * Constructs an <code>InterpreterException</code> from an error message and
+     * a highlighting information.
      * 
 	 * @param message
 	 * @param h

@@ -14,13 +14,15 @@ import koala.dynamicjava.interpreter.TreeInterpreter;
 import koala.dynamicjava.parser.wrapper.JavaCCParserFactory;
 
 /**
+ * Launcher creates a new thread to handle the DynamicJava Interpreter's
+ * intepretation. It also handles the piped streams between the two threads
+ * one running the Jeliot's GUI and other one DynamicJava.
+ * 
  * @author Niko Myller
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class Launcher extends Thread {
 
+//  TODO: documentation.
 	/**
 	 *
 	 */
