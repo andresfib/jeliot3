@@ -189,7 +189,7 @@ To display the available targets type:
   	<copy file="${src}/jeliot.bat" todir="${dist}"/>
     <copy file="${src}/jeliot.ico" todir="${dist}"/>
     <copy file="${src}/properties.properties" todir="${dist}"/>
-    <copy file="${src}/jeliot.defs" todir="${dist}"/>
+    <!-- <copy file="${src}/jeliot.defs" todir="${dist}"/> -->
   </target>
 	
 	
