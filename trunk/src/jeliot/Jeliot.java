@@ -173,6 +173,7 @@ public class Jeliot {
         
         //Just to track the animation happenings
         Tracker.setTheater(theatre);
+        Tracker.setCodePane2(codePane);
         
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir, callTree, hv);
     }
