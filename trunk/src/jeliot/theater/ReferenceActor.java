@@ -14,6 +14,8 @@ import java.awt.Polygon;
  */
 public class ReferenceActor extends ValueActor {
 
+//  DOC: Document!
+
     /**
 	 *
 	 */

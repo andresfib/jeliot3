@@ -7,12 +7,14 @@ import java.awt.Image;
 import java.awt.Point;
 import java.util.Vector;
 
-/** This is the theatre component that is added in the left pane of the
-  * user interface.
-  *
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+/**
+ * This is the theatre component that is added in the left pane of the
+ * user interface and on which the program animation produced in the theater
+ * package is currently drawn.
+ *
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class Theater extends javax.swing.JComponent implements ActorContainer {
 
 	/**
@@ -218,6 +220,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
+//  DOC: Document!
     /**
 	 * @param actor
 	 */

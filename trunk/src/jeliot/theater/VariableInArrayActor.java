@@ -11,6 +11,8 @@ import java.awt.Graphics;
  */
 public class VariableInArrayActor extends VariableActor {
 
+//  DOC: Document!
+
     /**
 	 *
 	 */
