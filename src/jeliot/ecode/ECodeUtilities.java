@@ -80,7 +80,6 @@ public class ECodeUtilities {
 
 //     public static int resolveType(Class type) {
 //         if (type.isPrimitive()) {
-
 //             if (type.toString().equals(boolean.class.toString())) {
 //                 return ECodeUtilities.BOOLEAN;
 //             } else if (type.toString().equals(byte.class.toString())) {
