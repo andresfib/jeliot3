@@ -4,6 +4,7 @@
 package jeliot.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -18,7 +19,9 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -58,8 +61,7 @@ public class CodeEditor2 extends JComponent {
     /**
      * The resource bundle for gui package
      */
-    static private UserProperties propertiesBundle = ResourceBundles
-            .getGuiUserProperties();
+    static private UserProperties propertiesBundle = ResourceBundles.getGuiUserProperties();
 
     /**
      * The resource bundle for gui package
@@ -115,8 +117,16 @@ public class CodeEditor2 extends JComponent {
      */
     private boolean saveAutomatically = false;
 
+    /**
+     * 
+     */
     private UndoRedo undoredo = new UndoRedo();
-    
+
+    /**
+     * 
+     */
+    private FindDialog findDialog;
+
     /**
      * returns true if the document is changed and false if it is not changed.
      * This is the value of the changed field.
@@ -135,7 +145,8 @@ public class CodeEditor2 extends JComponent {
      *            changed (means that it is just loaded or saved).
      */
     public void setChanged(boolean changed) {
-        if (changed && this.changed != changed && masterFrame != null && !masterFrame.getTitle().endsWith("*")) {
+        if (changed && this.changed != changed && masterFrame != null
+                && !masterFrame.getTitle().endsWith("*")) {
             masterFrame.setTitle(masterFrame.getTitle() + " *");
         }
         this.changed = changed;
@@ -276,15 +287,17 @@ public class CodeEditor2 extends JComponent {
         area = new JEditTextArea();
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(
-                new Font(propertiesBundle.getStringProperty("font.code_editor.family"), Font.PLAIN, Integer
-                        .parseInt(propertiesBundle.getStringProperty("font.code_editor.size"))));
+                new Font(propertiesBundle.getStringProperty("font.code_editor.family"), Font.PLAIN,
+                        Integer.parseInt(propertiesBundle
+                                .getStringProperty("font.code_editor.size"))));
         area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute,
                 Integer.valueOf(propertiesBundle.getStringProperty("editor.tab_size")));
         area.getDocument().addDocumentListener(dcl);
         area.setHorizontalOffsetForScrollBar(5);
         area.setHorizontalOffset(5);
-        ln = new LineNumbers(new Font(propertiesBundle.getStringProperty("font.code_editor.family"),
-                Font.PLAIN, Integer.parseInt(propertiesBundle.getStringProperty("font.code_editor.size"))),
+        ln = new LineNumbers(new Font(
+                propertiesBundle.getStringProperty("font.code_editor.family"), Font.PLAIN, Integer
+                        .parseInt(propertiesBundle.getStringProperty("font.code_editor.size"))),
                 new Insets(1, 0, 0, 0));
         area.addToLeft(ln);
         LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(area, ln);
@@ -432,13 +445,13 @@ public class CodeEditor2 extends JComponent {
         menuItem = menu.add(undoredo.undoAction);
         menuItem.setMnemonic(KeyEvent.VK_D);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
-        
+
         menuItem = menu.add(undoredo.redoAction);
         menuItem.setMnemonic(KeyEvent.VK_R);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
-        
+
         menu.addSeparator();
-        
+
         menuItem = new JMenuItem(messageBundle.getString("menu.edit.cut"));
         menuItem.setMnemonic(KeyEvent.VK_U);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
@@ -464,6 +477,52 @@ public class CodeEditor2 extends JComponent {
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(allSelector);
         menu.add(menuItem);
+
+        menu.addSeparator();
+
+        Action findAction = new AbstractAction("Find...") {
+
+            public void actionPerformed(ActionEvent e) {
+                if (findDialog == null) {
+                    findDialog = new FindDialog(CodeEditor2.this, 0, CodeEditor2.this.masterFrame);
+                } else {
+                    findDialog.setSelectedIndex(0);
+                }
+                Dimension d1 = findDialog.getSize();
+                Dimension d2 = CodeEditor2.this.masterFrame.getSize();
+                int x = Math.max((d2.width - d1.width) / 2, 0);
+                int y = Math.max((d2.height - d1.height) / 2, 0);
+                findDialog.setBounds(x + CodeEditor2.this.masterFrame.getX(), y
+                        + CodeEditor2.this.masterFrame.getY(), d1.width, d1.height);
+                findDialog.show();
+            }
+        };
+
+        menuItem = menu.add(findAction);
+        menuItem.setMnemonic('f');
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_MASK));
+
+        Action replaceAction = new AbstractAction("Replace...") {
+
+            public void actionPerformed(ActionEvent e) {
+                if (findDialog == null) {
+                    findDialog = new FindDialog(CodeEditor2.this, 1, CodeEditor2.this.masterFrame);
+                } else {
+                    findDialog.setSelectedIndex(1);
+                }
+                Dimension d1 = findDialog.getSize();
+                Dimension d2 = CodeEditor2.this.masterFrame.getSize();
+                int x = Math.max((d2.width - d1.width) / 2, 0);
+                int y = Math.max((d2.height - d1.height) / 2, 0);
+                findDialog.setBounds(x + CodeEditor2.this.masterFrame.getX(),
+                        y + CodeEditor2.this.masterFrame.getY(), d1.width, d1.height);
+                findDialog.show();
+            }
+        };
+
+        menuItem = menu.add(replaceAction);
+        menuItem.setMnemonic('r');
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
 
         return menu;
     }
@@ -555,7 +614,8 @@ public class CodeEditor2 extends JComponent {
                 r = area.getLineStartOffset(h.getEndLine() - 1);
             }
             r += h.getEndColumn();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         final int left = l - 1;
         final int right = r;
@@ -843,7 +903,7 @@ public class CodeEditor2 extends JComponent {
     public void setSaveAutomatically(boolean saveAutomatically) {
         this.saveAutomatically = saveAutomatically;
     }
-    
+
     /**
      * @param font Font to be set.
      */
