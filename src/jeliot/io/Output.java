@@ -3,11 +3,13 @@ package jeliot.io;
 import java.io.PrintStream;
 
 /**
- * Nearly empty class.
- * Unknown purpose.
- * Maybe for debugging or a superclass.
- *
+ * Only a class stub for output handling the actual output handling is
+ * done in koala.dynamicJava.intepreter.EvaluationVisitor and jeliot.mcode.Interpreter.
+ * 
  * @author Pekka Uronen
+ * @author Andrés Moreno
+ * @see koala.dynamicJava.intepreter.EvaluationVisitor
+ * @see jeliot.mcode.Interpreter
  */
 public class Output {
 
@@ -59,17 +61,29 @@ public class Output {
         out.println(b);    
     }
     
+    /**
+     * Prints out the given String value.
+     * 
+     * @param s The String to be printed.
+     */
     public static void println(String s) {
         out.println(s);    
     }
+    
+    /**
+     * Prints out the given character.
+     * 
+     * @param c The character to be printed.
+     */
     public static void println(char c) {
         out.println(c);    
     }
-	/**
+    
+	/*
 	 * Empty function.
-	 */
+     */
+    /*
     public static void clear() {
-            
     }
-
+    */
 }

@@ -5,21 +5,46 @@ import java.lang.reflect.Array;
 import jeliot.mcode.*;
 import jeliot.theater.*;
 
-/**
-  * @author         Pekka Uronen
-  * created         2.10.1999
-  * @modified       Niko Myller
-  *                 7.5.2003
+ /**
+  * The objects of this class represents an array of n-dimensions.
+  * TODO: Maybe this should be changed to be arrays of one dimension and the chain them properly.
+  * @author Pekka Uronen
+  * @author Niko Myller
   */
 public class ArrayInstance extends Instance {
 
+    /**
+     * The array object.
+     */
     private Object array;
+    
+    /**
+     * The string presentation of the type of the component.
+     */
     private String componentType;
+    
+    /**
+     * The length of each dimension in the array.
+     */
     private int[] dimensions;
+    
+    /**
+     * The corresponding array actor.
+     */
     private ArrayActor arrayActor;
 
+    /**
+     * Creates the array and sets inside the VariableInArray object
+     * which again contain the Value objects of the corresponding component type.
+     * 
+     * @param hashCode the hashCode of the array.
+     * @param componentType The component type of the array.
+     * @param dimensions The lengths of the dimensions of the array.
+     */
     public ArrayInstance(String hashCode, String componentType, int[] dimensions) {
         super(hashCode);
+        
+        // TODO: a support for reference types is needed here.
 
         String type = componentType;
         for (int i = 0; i < dimensions.length; i++) {
@@ -120,6 +145,11 @@ public class ArrayInstance extends Instance {
 
     }
 
+    /**
+     * Returns the array variable from the given index in the array.
+     * @param index an array containing the indeces for all dimensions of the array.
+     * @return The VariableInArray object from the given index of the array.
+     */
     public VariableInArray getVariableAt(int[] index) {
         Object tempArray = array;
         int n = index.length;
@@ -133,14 +163,28 @@ public class ArrayInstance extends Instance {
         return null;
     }
 
+    /**
+     * Gives the length of the dimensions in the array.
+     * @return The length of the dimensions in the array.
+     */
     public int[] getDimensions() {
         return dimensions;
     }
 
+    /**
+     * Gives the number of dimensions in the array
+     * @return The number of dimensions in the array
+     */
     public int getDimensionNumber() {
         return dimensions.length;
     }
 
+    /**
+     * Assigns the given value (second parameter) into the
+     * VariableInArray in the given index (first parameter) of the array.
+     * @param index The index of the array
+     * @param newValue The new value of the VariableInArray.
+     */
     public void setValueAt(int[] index, Value newValue) {
         Object tempArray = array;
         for (int i = 0; i < index.length; i++) {
@@ -153,19 +197,36 @@ public class ArrayInstance extends Instance {
         }
     }
 
+    /**
+     * The dimensions of the array.
+     * Is this needed because there is the other method doing the same?
+     * @return The dimensions of the array
+     */
     public int length() {
         return Array.getLength(array);
     }
 
+    /**
+     * Sets the corresponding ArrayActor.
+     * @param aa Array actor for this array.
+     */
     public void setArrayActor(ArrayActor aa) {
         this.arrayActor = aa;
         setActor(aa);
     }
 
+    /**
+     * Returns the corresponding array actor.
+     * @return the array actor of this array.
+     */
     public ArrayActor getArrayActor() {
         return arrayActor;
     }
 
+    /**
+     * Returns String presentation of the component type of the array
+     * @return String presentation of the component type.
+     */
     public String getComponentType() {
         return componentType;
     }
