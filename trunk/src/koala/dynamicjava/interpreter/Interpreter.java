@@ -28,13 +28,14 @@
 
 package koala.dynamicjava.interpreter;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.net.URL;
+import java.util.Set;
 
-import koala.dynamicjava.parser.wrapper.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.parser.wrapper.ParserFactory;
+import koala.dynamicjava.util.LibraryFinder;
 
 /**
  * The classes that implements this interface represent the

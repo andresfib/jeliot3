@@ -28,12 +28,10 @@
 
 package koala.dynamicjava.interpreter.modifier;
 
-import koala.dynamicjava.interpreter.*;
-import koala.dynamicjava.interpreter.error.*;
-import koala.dynamicjava.interpreter.context.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.tree.visitor.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.interpreter.context.Context;
+import koala.dynamicjava.interpreter.error.CatchedExceptionError;
+import koala.dynamicjava.tree.QualifiedName;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This interface represents objets that modify a variable

@@ -28,7 +28,7 @@
 
 package koala.dynamicjava.interpreter.error;
 
-import koala.dynamicjava.tree.*;
+import koala.dynamicjava.tree.Node;
 
 /**
  * This error is thrown when a runtime exception appends while

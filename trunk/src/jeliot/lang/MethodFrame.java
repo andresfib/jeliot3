@@ -1,8 +1,8 @@
 package jeliot.lang;
 
-import java.util.*;
-import jeliot.theatre.*;
-import jeliot.FeatureNotImplementedException;
+import java.util.Stack;
+
+import jeliot.theatre.MethodStage;
 
 /**
   * MethodFrame is an instance of a method under execution.

@@ -1,7 +1,5 @@
 package jeliot.theatre;
 
-import java.awt.Color;
-
 /**
   * <code>ActoContainer interface is implemented by classes that
   * are going to contain <code>Actor</code>s as their fields and take

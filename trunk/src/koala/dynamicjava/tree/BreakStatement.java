@@ -28,7 +28,7 @@
 
 package koala.dynamicjava.tree;
 
-import koala.dynamicjava.tree.visitor.*;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This class represents the break statement nodes of the syntax tree

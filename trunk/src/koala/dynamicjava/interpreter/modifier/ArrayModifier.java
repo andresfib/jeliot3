@@ -28,14 +28,14 @@
 
 package koala.dynamicjava.interpreter.modifier;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Array;
+import java.util.LinkedList;
+import java.util.List;
 
-import koala.dynamicjava.interpreter.context.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.tree.visitor.*;
-import koala.dynamicjava.util.*;
-import koala.dynamicjava.interpreter.*;
+import koala.dynamicjava.interpreter.EvaluationVisitor;
+import koala.dynamicjava.interpreter.context.Context;
+import koala.dynamicjava.tree.ArrayAccess;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This interface represents objets that modify an array

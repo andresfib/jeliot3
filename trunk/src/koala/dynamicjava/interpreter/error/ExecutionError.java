@@ -28,9 +28,9 @@
 
 package koala.dynamicjava.interpreter.error;
 
-import koala.dynamicjava.interpreter.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.interpreter.NodeProperties;
+import koala.dynamicjava.tree.Node;
+import koala.dynamicjava.util.LocalizedMessageReader;
 
 /**
  * This error is thrown when an unexpected error append while

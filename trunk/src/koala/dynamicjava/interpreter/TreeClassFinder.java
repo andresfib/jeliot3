@@ -28,10 +28,13 @@
 
 package koala.dynamicjava.interpreter;
 
-import koala.dynamicjava.classinfo.*;
-import koala.dynamicjava.interpreter.context.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.classinfo.ClassFinder;
+import koala.dynamicjava.classinfo.ClassInfo;
+import koala.dynamicjava.classinfo.JavaClassInfo;
+import koala.dynamicjava.classinfo.TreeClassInfo;
+import koala.dynamicjava.interpreter.context.Context;
+import koala.dynamicjava.tree.TypeDeclaration;
+import koala.dynamicjava.util.ImportationManager;
 
 /**
  * The instances of the classes that implements this interface

@@ -1,11 +1,10 @@
 package jeliot.gui;
 
 import java.io.File;
-import java.util.Hashtable;
-import java.util.Enumeration;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.filechooser.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import javax.swing.filechooser.FileFilter;
 
 public class JavaFileFilter extends FileFilter {
 

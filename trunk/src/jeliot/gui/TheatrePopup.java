@@ -1,9 +1,16 @@
 package jeliot.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import jeliot.theatre.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+
+import jeliot.theatre.Actor;
+import jeliot.theatre.MethodStage;
+import jeliot.theatre.Theatre;
+import jeliot.theatre.VariableActor;
 
 /**
  * <code>Theatre</code>'s popup menu class that gives information

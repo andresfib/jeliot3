@@ -28,7 +28,7 @@
 
 package koala.dynamicjava.tree;
 
-import koala.dynamicjava.tree.visitor.*;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * To store the informations about the catch statements

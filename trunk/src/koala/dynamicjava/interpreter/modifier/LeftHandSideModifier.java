@@ -28,9 +28,8 @@
 
 package koala.dynamicjava.interpreter.modifier;
 
-import koala.dynamicjava.interpreter.context.*;
-import koala.dynamicjava.tree.visitor.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.interpreter.context.Context;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This class represents the objets that modify the left hand

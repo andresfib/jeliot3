@@ -1,16 +1,28 @@
 package jeliot.theatre;
 
-import java.io.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.text.*;
+import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Stack;
 
-import jeliot.lang.*;
-import jeliot.gui.*;
-import jeliot.*;
-import jeliot.ecode.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import jeliot.Jeliot;
+import jeliot.ecode.ECodeUtilities;
+import jeliot.ecode.Interpreter;
+import jeliot.ecode.InterpreterError;
+import jeliot.gui.CodePane;
+import jeliot.lang.ArrayInstance;
+import jeliot.lang.MethodFrame;
+import jeliot.lang.ObjectFrame;
+import jeliot.lang.Reference;
+import jeliot.lang.Value;
+import jeliot.lang.Variable;
+import jeliot.lang.VariableInArray;
 
 //import jeliot.parser.*;
 

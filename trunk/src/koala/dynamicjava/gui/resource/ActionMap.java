@@ -28,7 +28,7 @@
 
 package koala.dynamicjava.gui.resource;
 
-import javax.swing.*;
+import javax.swing.Action;
 
 /**
  * This interface represents an object which maps

@@ -28,7 +28,7 @@
 
 package koala.dynamicjava.tree;
 
-import koala.dynamicjava.tree.visitor.*;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This class represents the pre decrement nodes of the syntax tree

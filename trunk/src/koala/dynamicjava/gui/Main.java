@@ -28,18 +28,56 @@
 
 package koala.dynamicjava.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
-import koala.dynamicjava.gui.resource.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.BoundedRangeModel;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JToolBar;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import koala.dynamicjava.gui.resource.ActionMap;
-import koala.dynamicjava.interpreter.*;
-import koala.dynamicjava.parser.wrapper.*;
+import koala.dynamicjava.gui.resource.JComponentModifier;
+import koala.dynamicjava.gui.resource.MenuFactory;
+import koala.dynamicjava.gui.resource.MissingListenerException;
+import koala.dynamicjava.gui.resource.ResourceManager;
+import koala.dynamicjava.gui.resource.ToolBarFactory;
+import koala.dynamicjava.interpreter.Interpreter;
+import koala.dynamicjava.interpreter.InterpreterException;
+import koala.dynamicjava.interpreter.TreeInterpreter;
+import koala.dynamicjava.parser.wrapper.JavaCCParserFactory;
 
 /**
  * A Graphical User Interface for DynamicJava

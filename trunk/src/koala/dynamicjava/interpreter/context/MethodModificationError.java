@@ -28,9 +28,9 @@
 
 package koala.dynamicjava.interpreter.context;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 
-import koala.dynamicjava.tree.*;
+import koala.dynamicjava.tree.Expression;
 
 /**
  * This error is thrown by a context when it modify the

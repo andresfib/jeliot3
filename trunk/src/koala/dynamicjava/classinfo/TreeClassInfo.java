@@ -28,14 +28,28 @@
 
 package koala.dynamicjava.classinfo;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import koala.dynamicjava.classfile.JVMUtilities;
-import koala.dynamicjava.classinfo.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.tree.visitor.*;
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.tree.ClassDeclaration;
+import koala.dynamicjava.tree.ConstructorDeclaration;
+import koala.dynamicjava.tree.ConstructorInvocation;
+import koala.dynamicjava.tree.FieldDeclaration;
+import koala.dynamicjava.tree.FormalParameter;
+import koala.dynamicjava.tree.Identifier;
+import koala.dynamicjava.tree.InterfaceDeclaration;
+import koala.dynamicjava.tree.MethodDeclaration;
+import koala.dynamicjava.tree.Node;
+import koala.dynamicjava.tree.QualifiedName;
+import koala.dynamicjava.tree.ReferenceType;
+import koala.dynamicjava.tree.SimpleAssignExpression;
+import koala.dynamicjava.tree.TypeDeclaration;
+import koala.dynamicjava.tree.visitor.VisitorObject;
 
 /**
  * The instances of this class provides informations about

@@ -28,10 +28,10 @@
 
 package koala.dynamicjava.classinfo;
 
-import java.lang.reflect.*;
-
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.tree.visitor.*;
+import koala.dynamicjava.tree.ArrayType;
+import koala.dynamicjava.tree.PrimitiveType;
+import koala.dynamicjava.tree.ReferenceType;
+import koala.dynamicjava.tree.visitor.VisitorObject;
 
 /**
  * The instances of this class are used to get the ClassInfo

@@ -1,7 +1,6 @@
 package jeliot.ecode;
-import java.io.*;
-import jeliot.launcher.*;
-import java.util.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Code {
 

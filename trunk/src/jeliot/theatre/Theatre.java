@@ -1,10 +1,11 @@
 package jeliot.theatre;
 
-import java.util.*;
-import java.awt.*;
-import jeliot.parser.*;
-import jeliot.lang.*;
-import jeliot.gui.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.util.Vector;
 
 /** This is the theatre component that is added in the left pane of the
   * user interface.

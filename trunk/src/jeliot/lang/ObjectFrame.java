@@ -1,8 +1,8 @@
 package jeliot.lang;
 
-import java.util.*;
-import jeliot.theatre.*;
-import jeliot.FeatureNotImplementedException;
+import java.util.Hashtable;
+
+import jeliot.theatre.ObjectStage;
 
 /**
   *

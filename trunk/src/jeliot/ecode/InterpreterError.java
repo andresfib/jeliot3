@@ -1,6 +1,6 @@
 package jeliot.ecode;
 
-import jeliot.theatre.*;
+import jeliot.theatre.Highlight;
 
 public class InterpreterError {
 

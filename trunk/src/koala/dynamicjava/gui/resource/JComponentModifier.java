@@ -28,7 +28,7 @@
 
 package koala.dynamicjava.gui.resource;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
 /**
  * This interface must be implemented by actions which need

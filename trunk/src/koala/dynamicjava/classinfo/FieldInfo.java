@@ -28,9 +28,6 @@
 
 package koala.dynamicjava.classinfo;
 
-import koala.dynamicjava.classfile.JVMUtilities;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.tree.visitor.*;
 
 /**
  * The instances of the classes that implement this interface provide

@@ -28,8 +28,12 @@
 
 package koala.dynamicjava.interpreter.context;
 
-import java.lang.ref.*;
-import java.util.*;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class encapsulates the behaviour of Java scopes.

@@ -28,7 +28,8 @@
 
 package koala.dynamicjava.tree;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * This class contains a collection of utility methods for trees.

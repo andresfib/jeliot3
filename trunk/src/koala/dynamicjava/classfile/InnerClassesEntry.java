@@ -28,8 +28,8 @@
 
 package koala.dynamicjava.classfile;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * This class represents an innerclasses entry in an innerclasses attribute

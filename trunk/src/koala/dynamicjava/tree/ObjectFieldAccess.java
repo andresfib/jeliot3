@@ -28,7 +28,7 @@
 
 package koala.dynamicjava.tree;
 
-import koala.dynamicjava.tree.visitor.*;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This class represents the field access nodes of the syntax tree

@@ -28,10 +28,7 @@
 
 package koala.dynamicjava.classinfo;
 
-import java.lang.reflect.*;
-
-import koala.dynamicjava.classinfo.*;
-import koala.dynamicjava.tree.*;
+import koala.dynamicjava.tree.FieldDeclaration;
 
 /**
  * The instances of this class provides informations about

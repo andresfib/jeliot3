@@ -1,7 +1,9 @@
 package jeliot.theatre;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
 
 /**
   * @author Pekka Uronen

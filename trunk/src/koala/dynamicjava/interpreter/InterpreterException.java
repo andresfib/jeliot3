@@ -28,13 +28,12 @@
 
 package koala.dynamicjava.interpreter;
 
-import koala.dynamicjava.interpreter.error.*;
-import koala.dynamicjava.interpreter.throwable.*;
-import koala.dynamicjava.tree.*;
-import koala.dynamicjava.parser.wrapper.*;
-import koala.dynamicjava.util.*;
-
-import jeliot.ecode.*;
+import jeliot.ecode.ECodeUtilities;
+import koala.dynamicjava.interpreter.error.CatchedExceptionError;
+import koala.dynamicjava.interpreter.error.ExecutionError;
+import koala.dynamicjava.interpreter.throwable.ThrownException;
+import koala.dynamicjava.parser.wrapper.ParseError;
+import koala.dynamicjava.tree.Node;
 
 /**
  * This exception is thrown when an error append while

@@ -28,8 +28,14 @@
 
 package koala.dynamicjava.classfile;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents JVM bytecode constant pools

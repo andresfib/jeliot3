@@ -1,8 +1,5 @@
 package jeliot.lang;
 
-import java.lang.reflect.*;
-import java.util.*;
-import jeliot.FeatureNotImplementedException;
 
 /**
   * @author Pekka Uronen

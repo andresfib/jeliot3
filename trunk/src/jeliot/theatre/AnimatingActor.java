@@ -1,7 +1,7 @@
 package jeliot.theatre;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Graphics;
+import java.awt.Image;
 
 /**
   * Animating actor is a actor that may be used to show frame based

@@ -28,7 +28,8 @@
 
 package koala.dynamicjava.util;
 
-import java.util.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * The instances of this class read localized messages in resource files.

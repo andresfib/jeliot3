@@ -28,10 +28,23 @@
 
 package koala.dynamicjava.interpreter;
 
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Modifier;
 
-import koala.dynamicjava.classfile.*;
+import koala.dynamicjava.classfile.ClassFile;
+import koala.dynamicjava.classfile.ClassIdentifier;
+import koala.dynamicjava.classfile.CodeAttribute;
+import koala.dynamicjava.classfile.ConstantPool;
+import koala.dynamicjava.classfile.ConstantString;
+import koala.dynamicjava.classfile.ExceptionsAttribute;
+import koala.dynamicjava.classfile.FieldInfo;
+import koala.dynamicjava.classfile.InnerClassesAttribute;
+import koala.dynamicjava.classfile.InnerClassesEntry;
+import koala.dynamicjava.classfile.JVMUtilities;
+import koala.dynamicjava.classfile.MethodIdentifier;
+import koala.dynamicjava.classfile.MethodInfo;
 
 /**
  * The instances of this class dynamically create java classes

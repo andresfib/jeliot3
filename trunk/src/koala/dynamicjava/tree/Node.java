@@ -28,10 +28,13 @@
 
 package koala.dynamicjava.tree;
 
-import java.beans.*;
-import java.util.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-import koala.dynamicjava.tree.visitor.*;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This class represents the nodes of the syntax tree

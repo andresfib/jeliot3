@@ -2,11 +2,12 @@ package jeliot.ecode;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
+import jeliot.theatre.Highlight;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
-
-import jeliot.theatre.*;
 
 public class ECodeUtilities {
 

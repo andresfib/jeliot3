@@ -1,8 +1,17 @@
 package jeliot.theatre;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.util.*;
+import java.awt.Component;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Panel;
+import java.awt.Toolkit;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
+import java.awt.image.RGBImageFilter;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 /**

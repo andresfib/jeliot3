@@ -28,10 +28,12 @@
 
 package koala.dynamicjava.classinfo;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Modifier;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-import koala.dynamicjava.util.*;
+import koala.dynamicjava.util.AmbiguousFieldException;
 
 /**
  * This class contains a collection of utility methods for reflection.

@@ -28,9 +28,10 @@
 
 package koala.dynamicjava.tree;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
-import koala.dynamicjava.tree.visitor.*;
+import koala.dynamicjava.tree.visitor.Visitor;
 
 /**
  * This class represents the do statement nodes of the syntax tree

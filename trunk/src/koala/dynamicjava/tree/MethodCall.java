@@ -28,7 +28,7 @@
 
 package koala.dynamicjava.tree;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * This class represents the method call nodes of the syntax tree

@@ -28,8 +28,9 @@
 
 package koala.dynamicjava.parser.wrapper;
 
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.List;
 
 /**
  * The classes that implements this interface represent
