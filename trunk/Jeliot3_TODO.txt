@@ -4,14 +4,19 @@
 * mnemonic for file menu (done)
 * configure Jeliot through properties file (done)
 * Replace '\t' characters with spaces when saving (done)
-  but fix the caret position after saving. (done)
+* fix the caret position after saving when previous point is done. (done)
 * dependencies between classes should not affect the compilation (done partially, circular dependencies are not handled correctly.)
+* Problem handling static variables when DynamicJava thinks it is an object field access and with ++ operation. (done and added a expression stack handling expressions separately in each scope -> testing needed)
+* Problems with memory when history view has a large images in store.
 
 ----- JELIOT 3 TODO-LIST for next version 4.X:------
 
 Documentation:
 * Documentation of the tool (user guide, tutorial, examples etc.)
 * The guide to install and use Jeliot in Finnish / Suomenkieliset asennus- ja käyttöohjeet.
+
+Testing:
+* We need some kind of test environment to test Jeliot properly.
 
 Jeliot features:
 * Interaction mode (like BlueJ's object bench)
