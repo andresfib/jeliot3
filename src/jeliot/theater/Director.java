@@ -1,20 +1,29 @@
 package jeliot.theater;
 
-import jeliot.Jeliot;
-import jeliot.gui.CodePane2;
-import jeliot.lang.*;
-import jeliot.mcode.Highlight;
-import jeliot.mcode.InterpreterError;
-import jeliot.mcode.MCodeInterpreter;
-import jeliot.mcode.MCodeUtilities;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Point;
 import java.text.MessageFormat;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Stack;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import jeliot.Jeliot;
+import jeliot.gui.CodePane2;
+import jeliot.lang.ArrayInstance;
+import jeliot.lang.MethodFrame;
+import jeliot.lang.ObjectFrame;
+import jeliot.lang.Reference;
+import jeliot.lang.Value;
+import jeliot.lang.Variable;
+import jeliot.lang.VariableInArray;
+import jeliot.mcode.Highlight;
+import jeliot.mcode.InterpreterError;
+import jeliot.mcode.MCodeInterpreter;
+import jeliot.mcode.MCodeUtilities;
+import jeliot.tracker.Tracker;
 
 /**
  * Directs the program animation. Contains the commands to visualize
@@ -192,6 +201,7 @@ public class Director {
             highlight(new Highlight(0, 0, 0, 0));
         }
         theatre.flush();
+        Tracker.writeToFile("AnimationEnded", System.currentTimeMillis());
     }
 
     /**
