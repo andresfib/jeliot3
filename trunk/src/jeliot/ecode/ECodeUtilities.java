@@ -209,32 +209,32 @@ public class ECodeUtilities {
 
             //Logical NOT expression (! sign)
             case Code.NO: {
-                return this.NOT;
+                return NOT;
             }
 
             //Aritmetic minus expression (- sign)
             case Code.MINUS: {
-                return this.MINUS;
+                return MINUS;
             }
 
             //Aritmetic plus expression (+ sign)
             case Code.PLUS: {
-                return this.PLUS;
+                return PLUS;
             }
 
             //PostIncrement expression (++ sign)
             case Code.PIE: {
-                return this.POSTPLUSPLUS;
+                return POSTPLUSPLUS;
             }
 
             //PreIncrement expression (sign ++)
             case Code.PRIE: {
-                return this.PLUSPLUS;
+                return PLUSPLUS;
             }
 
             //PostDecrement expression (-- sign)
             case Code.PDE: {
-                return this.POSTMINUSMINUS;
+                return POSTMINUSMINUS;
             }
 
             //PreDecrement expression (sign --)

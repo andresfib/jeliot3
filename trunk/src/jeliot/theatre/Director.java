@@ -760,9 +760,10 @@ public class Director {
         highlight(h);
 
         VariableActor varact = var.getActor();
-        Value value = var.getValue();
+        //Value value = var.getValue();
         ValueActor resact = factory.produceValueActor(result);
-        ValueActor valact = factory.produceValueActor(value);
+        ValueActor valact = var.getActor().getValue();
+        //ValueActor valact = factory.produceValueActor(value);
         Actor opact = factory.produceUnaOpActor(operator);
 
         Point resLoc = varact.reserve(valact);
@@ -775,8 +776,9 @@ public class Director {
         engine.showAnimation(resact.appear(resLoc));
         varact.bind();
 
-        value.setActor(valact);
+	//value.setActor(valact);
         result.setActor(resact);
+	var.assign(result);
 
         theatre.removeActor(opact);
         currentScratch.registerCrap(resact);
@@ -790,8 +792,9 @@ public class Director {
         highlight(h);
 
         VariableActor varact = var.getActor();
-        Value value = var.getValue();
-        ValueActor valact = factory.produceValueActor(value);
+        //Value value = var.getValue();
+        ValueActor valact = var.getActor().getValue();
+	//ValueActor valact = factory.produceValueActor(value);
         ValueActor resact = (resval == null) ?
                 null :
                 factory.produceValueActor(resval);
@@ -813,9 +816,10 @@ public class Director {
         engine.showAnimation(valact.appear(resLoc));
         varact.bind();
 
-        value.setActor(valact);
+        //value.setActor(valact);
         if (resval != null) {
             resval.setActor(resact);
+	    var.assign(resval); //jeliot 3
             currentScratch.registerCrap(resact);
         }
 
