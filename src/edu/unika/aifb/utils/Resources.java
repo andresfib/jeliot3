@@ -23,6 +23,9 @@ public class Resources {
         if (bundle == null) {
             this.bundle = ResourceBundle.getBundle(bundle, new Locale("en_EN"), Thread.currentThread().getContextClassLoader());
         }
+        if (bundle == null) {
+            this.bundle = ResourceBundle.getBundle(bundle, new Locale("en_EN"));
+        }
     }
 
     public String getResourceString (String name) {
