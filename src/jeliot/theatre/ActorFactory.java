@@ -177,7 +177,12 @@ public class ActorFactory {
                      iLoad.getImage("mystery.gif"));
             vact.calculateSize();
 
-            actor.setName(type + " " + v.getName());
+            int dotIndex = type.lastIndexOf(".");
+            String resolvedType = type;
+            if (dotIndex > -1) {
+                resolvedType = resolvedType.substring(dotIndex+1);
+            }
+            actor.setName(resolvedType + " " + v.getName());
             actor.setFont(variableFont);
             actor.setForeground(Color.black);
             actor.setInsets(variableInsets);
@@ -226,6 +231,8 @@ public class ActorFactory {
         String type = val.getType();
         int typeInfo = ECodeUtilities.resolveType(type);
 
+        System.out.println(type);
+
         if (typeInfo == ECodeUtilities.BOOLEAN) {
             boolean b = Boolean.getBoolean(val.getValue());
             Color tcol = b ? trueColor : falseColor;
@@ -237,8 +244,8 @@ public class ActorFactory {
             String label = val.getValue();
 
 //          String label = valObj instanceof Exception ?
-//          "ERROR" :
-//          valObj.toString();
+//                                    "ERROR"          :
+//                                    valObj.toString();
             if (typeInfo == ECodeUtilities.DOUBLE) {
 
                 if (label.indexOf('E') == -1) {
