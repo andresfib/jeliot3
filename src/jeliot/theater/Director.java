@@ -2292,6 +2292,8 @@ public class Director {
     }
 
     /**
+     * 
+     * 
      * @param prompt
      * @param validator
      * @return
@@ -2308,8 +2310,8 @@ public class Director {
         final Point p = ea.reserve(bga);
         ic.setBgactor(bga);
 
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
+        //try {
+            SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     theatre.add(ic);
                     ic.setSize(ic.getPreferredSize());
@@ -2321,12 +2323,14 @@ public class Director {
                     theatre.flush();
                 }
             });
+        /*    
         } catch (java.lang.reflect.InvocationTargetException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        */
+            
         do {
             controller.pause();
 

@@ -1071,12 +1071,8 @@ public class JeliotWindow {
     public void tryToEnterAnimate(String methodCall) {
 
         // Jeliot 3
-        if (editor.isChanged()) {
-            if (editor.getCurrentFile() != null) {
-                editor.writeProgram(editor.getCurrentFile());
-            } else {
-                editor.saveProgram();
-            }
+        if (editor.isChanged() && editor.IsSaveAutomatically()) {
+            editor.saveProgram();
         }
 
         try {

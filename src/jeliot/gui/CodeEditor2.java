@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -107,6 +108,11 @@ public class CodeEditor2 extends JComponent {
     private LineNumbers ln;
 
     /**
+     * 
+     */
+    private boolean saveAutomatically = false;
+    
+    /**
      * returns true if the document is changed and false if it is not changed.
      * This is the value of the changed field.
      * 
@@ -169,6 +175,18 @@ public class CodeEditor2 extends JComponent {
         }
     };
 
+    /**
+     * ActionListener that handles the saving of the program code from the code
+     * area.
+     */
+    private ActionListener saveAs = new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            saveAsProgram();
+        }
+    };
+  
+    
     /**
      * ActionListener that handles the loading of the program code to the code
      * area.
@@ -392,6 +410,19 @@ public class CodeEditor2 extends JComponent {
         menuItem.addActionListener(saver);
         menu.add(menuItem);
 
+        menuItem = new JMenuItem(bundle2.getString("menu.program.save_as"));
+        menuItem.addActionListener(saveAs);
+        menu.add(menuItem);
+        
+        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(bundle2
+                .getString("menu.program.save_automatically"), saveAutomatically);
+        cbmenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                saveAutomatically = cbmenuItem.getState();
+            }
+        });
+        menu.add(cbmenuItem);
+        
         return menu;
     }
 
@@ -485,44 +516,6 @@ public class CodeEditor2 extends JComponent {
     }
 
     /**
-     * Method highlights the specified Statement area by selecting it.
-     * 
-     * @param h
-     *            contains the area that should be highlighted.
-     */
-    public void highlightStatement(Highlight h) {
-        int l = 0, r = 0;
-        try {
-            if (h.getBeginLine() > 0) {
-                l = area.getLineStartOffset(h.getBeginLine() - 1);
-            }
-            l += h.getBeginColumn();
-
-            if (h.getEndLine() > 0) {
-                r = area.getLineStartOffset(h.getEndLine() - 1);
-            }
-            r += h.getEndColumn();
-        } catch (Exception e) {
-        }
-
-        final int left = l - 1;
-        final int right = r;
-
-        Runnable updateAComponent = new Runnable() {
-
-            public void run() {
-                //area.requestFocus();
-                if (left != 0 && left == right) {
-                    area.select(left, right + 1);
-                } else {
-                    area.select(left, right);
-                }
-            }
-        };
-        SwingUtilities.invokeLater(updateAComponent);
-    }
-
-    /**
      * Method highlights the specified code area by selecting it.
      * 
      * @param h
@@ -594,19 +587,30 @@ public class CodeEditor2 extends JComponent {
     }
     
     /**
+     * 
+     *
+     */
+    void saveProgram() {
+        if (currentFile != null) {
+            writeProgram(currentFile);
+        } else {
+            saveAsProgram();
+        }
+    }
+    
+    /**
      * Saves the program from the JTextArea area to the file. Uses
      * writeProgram(File file) method to write the code into a file.
      * 
      * @see #writeProgram(File)
      */
-    void saveProgram() {
+    void saveAsProgram() {
         fileChooser.rescanCurrentDirectory();
         int returnVal = fileChooser.showSaveDialog(masterFrame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             writeProgram(file);
         }
-
     }
 
     /**
@@ -739,4 +743,8 @@ public class CodeEditor2 extends JComponent {
 		ln.setHighlightedLine(line);
 	}
 
+    public boolean IsSaveAutomatically() {
+        return saveAutomatically;
+    }
+    
 }

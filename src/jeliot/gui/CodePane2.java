@@ -158,7 +158,7 @@ public class CodePane2 extends JComponent {
 		final int left = l - 1;
 		final int right = r;
 
-		Runnable updateAComponent = new Runnable() {
+ 		Runnable updateAComponent = new Runnable() {
 			public void run() {
 				//area.requestFocus();
 				area.setCaretPosition(left + 1);
@@ -171,7 +171,7 @@ public class CodePane2 extends JComponent {
 				}
 			}
 		};
-		SwingUtilities.invokeLater(updateAComponent);
+        SwingUtilities.invokeLater(updateAComponent);
 	}
 
 	/**
