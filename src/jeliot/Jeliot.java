@@ -481,7 +481,7 @@ public class Jeliot {
         String udir = prop.getProperty("user.dir");
         
         if (args.length >= 2) {
-            Jeliot.noSystemExit = Boolean.getBoolean(args[1]);
+            Jeliot.noSystemExit = Boolean.valueOf(args[1]).booleanValue();
         }
         
         //File f = new File(udir);
