@@ -1774,6 +1774,8 @@ public class EvaluationVisitor extends VisitorObject {
 		pushConstructorInfo(consName, paramTypes);
 		MCodeUtilities.previousClassStack.push(consName);
 		MCodeUtilities.previousClassParametersStack.push(types);
+		//Hack to avoid problems when jeliot is started with a constructor
+		returnExpressionCounterStack.push(new Long(0));
 		//}
 		try { // Jeliot 3
 			Object result = context.invokeConstructor(node, args);
@@ -1785,6 +1787,8 @@ public class EvaluationVisitor extends VisitorObject {
 			MCodeUtilities.popConstructorInfo();
 			MCodeUtilities.previousClassStack.pop();
 			MCodeUtilities.previousClassParametersStack.pop();
+			//MCodeUtilities.superClassesStack.pop();
+			returnExpressionCounterStack.pop();
 			return result;
 
 			/* Jeliot 3 addition begins */
@@ -1832,7 +1836,7 @@ public class EvaluationVisitor extends VisitorObject {
 
 		long arrayAllocationCounter = counter++;
 
-		// Evaluate the size expressions
+		// Evaluate the size 
 		int[] dims = new int[node.getSizes().size()];
 		// It will store here the references to the expressions used for every
 		// dimension
