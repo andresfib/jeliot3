@@ -186,7 +186,9 @@ class MenuBuilder extends MenuGenerator {
     	 */
     	public String printParameters(){
     		String param = new String("");
-    		if (parameters == null) return param;
+    		if (parameters == null) {
+    			return param;
+    		}
     		if (parameters.length==1){ 
     			return parameters[0];
     		}
@@ -370,53 +372,35 @@ class MenuBuilder extends MenuGenerator {
     		System.out.println("object name: " + event.getObjectName() + "\n");
     		System.out.println("method name: " + event.getMethodName() + "\n");
     		
+    		
+    		//we print the parameters in the debugfile
     		//if it´s a constructor with parameters
     		if (event.getClassName()!=null && event.getParameters() != null){
+    			System.out.println("new object with parameters:" +event.getParameters()[0]+"\n");
+    			
     			for(int i=0; i<event.getParameters().length;i++) {
     				System.out.println("constructor parameter[" + i + "]" + event.getParameters()[i] + "\n");
     			}
     		}
+    		if (event.getParameters() == null) System.out.println("new object without parameter\n");
     		
     		//if it´s a constructor, we add it in the hashtable 
-    		if (event.getClassName()!=null){
+    		if (event.getClassName()!=null && event.getMethodName()==null){
     			hash.put(event.getObjectName(), new Value(event.getClassName(), event.getParameters()));
-    			System.out.println("object" + event.getObjectName() + "inserted\n");
+    			System.out.println("object " + event.getObjectName() + " inserted\n");
     			
     		}
     		
     		//we call the main method of an object
     		if (event.getMethodName()=="main") {
     			String paramMethod = new String("");//string of the parameters
-    			//System.out.println("main method called\n");//print in the debug file
+    			System.out.println("main method called\n");//print in the debug file
     			
     			//we get the parameters of the main method
-    			//we check if there is at least one parameter, it returns null otherwise
-    			if (event.getParameters()!=null){
-    				
-    				
-    				//we write the parameters in a string, all parameters are separated by coma
-    				
-    				//1 parameter	
-    				if (event.getParameters().length==1){ 
-    					paramMethod = event.getParameters()[0];
-    				}
-    				//several parameters
-    				else {  	
-    					for(int i=0; i<=event.getParameters().length - 2; i++) {
-    						paramMethod += event.getParameters()[i] + ",";
-    					}
-    					paramMethod += event.getParameters()[event.getParameters().length - 1];
-    				}
-    				//System.out.println("main arguments: " + paramMethod + "\n");
-    				jeliot.recompile(generateJeliotString(), "Andres.main(new String[]" + paramMethod + ");" );
+    			//all paremeters are contained in one string: event.getParameters()
     			
-    			}
-    			else {//there are no parameters
-    				//System.out.println("no main arguments\n");
-    				jeliot.recompile(generateJeliotString(), null);
-    			}
-    			
-    			
+    			//we launch the animation
+    			jeliot.recompile(generateJeliotString(), event.getClassName()+".main(new String[]"+event.getParameters()[0]+");");		
     		}
     		
     		//it´s a method called on an object
@@ -427,8 +411,6 @@ class MenuBuilder extends MenuGenerator {
     			Object obj = hash.get((Object)event.getObjectName());
     			Value val = (Value)obj;
     			System.out.println("call of method\n");
-    			//we add
-    			//val.setParameters(event.getParameters());
    
     			//we get the parameters of the method called
     			//we check if there is at least one parameter, it returns null otherwise
@@ -454,7 +436,7 @@ class MenuBuilder extends MenuGenerator {
     			System.out.println("(new "+val.getClassName()+"(" +val.printParameters()+"))."+event.getMethodName()+"("+paramMethod+")");
     			
     			//we check if jeliot is already launched or not
-    			//if yes, we launch the animation, if not we do nothing
+    			//if yes, we launch the animation, otherwise we do nothing
     			if (launched) {
     			jeliot.compile("(new "+val.getClassName()+"(" +val.printParameters()+"))."+event.getMethodName()+"("+paramMethod+");");
     			System.out.println("jeliot opened\n");
