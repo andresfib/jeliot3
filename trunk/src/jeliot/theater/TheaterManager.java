@@ -175,7 +175,7 @@ public class TheaterManager implements ComponentListener {
 
         int x = objects.isEmpty() ?
                 getMinInstanceX() + 20 :
-                    ((Actor)objects.lastElement()).getX() +((Actor)objects.lastElement()).getWidth() + 40;
+                    ((Actor)objects.lastElement()).getX() +((Actor)objects.lastElement()).getWidth() + 47;
         int y = getMinInstanceY() + 30;
         
         /*

@@ -35,7 +35,7 @@ public class ReferenceActor extends ValueActor {
      * Reference width is the width of the rectangle
      * in the variable end of the reference.
      */
-    private static int refWidth = 6;
+    private static int refWidth = ActorFactory.typeValWidth[9];
 
     /**
      * Length of the null reference line and also the base for the

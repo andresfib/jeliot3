@@ -26,6 +26,10 @@ public class Reference extends Value {
 	public Reference() {
         super("null", "null");
     }
+	
+	public Reference(String type) {
+		super("null", type);
+	}
 
     /**
 	 * @param instance

@@ -65,7 +65,6 @@ public class VariableInArrayActor extends VariableActor {
                 Color.white :
                 array.darkColor);
         g.drawString(name, namex, namey);
-
     }
 
     /* (non-Javadoc)
@@ -98,4 +97,8 @@ public class VariableInArrayActor extends VariableActor {
 
         setValue(value);
     }
+	
+	public int getIndexWidth() {
+		return indexw;
+	}
 }
