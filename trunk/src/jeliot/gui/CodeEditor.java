@@ -26,6 +26,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
@@ -452,12 +453,13 @@ public class CodeEditor extends JComponent {
      */
     void saveProgram() {
         fileChooser.rescanCurrentDirectory();
-        int returnVal = fileChooser.showSaveDialog(masterFrame);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            writeProgram(file);
-            currentFile = file; // Jeliot 3
-        }
+    	int returnVal = fileChooser.showSaveDialog(masterFrame);
+    	if (returnVal == JFileChooser.APPROVE_OPTION) {
+    		File file = fileChooser.getSelectedFile();
+    		writeProgram(file);
+    		currentFile = file; // Jeliot 3
+    	}
+
     }
 
 	/**
@@ -475,7 +477,9 @@ public class CodeEditor extends JComponent {
             changed = false; //Jeliot 3
         }
         catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            JOptionPane.showMessageDialog(masterFrame, "File could not be saved because "
+            		+e.getMessage()+", please try to save it in a different location");
         }
     }
 
