@@ -14,18 +14,39 @@ import jeliot.util.DebugUtil;
  */
 public class TrackerClock {
 
+    /**
+     * @return
+     */
     public native long getTrackerTime();
 
+    /**
+     * @return
+     */
     public native String getTrackerTimeStamp();
 
+    /**
+     * Comment for <code>trackerClock</code>
+     */
     protected static TrackerClock trackerClock;
 
+    /**
+     * Comment for <code>nativeTracking</code>
+     */
     private static boolean nativeTracking;
 
+    /**
+     * Comment for <code>startTime</code>
+     */
     private Date startTime;
 
+    /**
+     * Comment for <code>DATE_FORMAT</code>
+     */
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd't'HH.mm.ss.SSSS");
 
+    /**
+     * @return
+     */
     public Date getCurrentTime() {
         if (TrackerClock.nativeTracking) {
             System.loadLibrary("JeliotJNI");
@@ -42,6 +63,9 @@ public class TrackerClock {
         return null;
     }
 
+    /**
+     * @return
+     */
     protected static TrackerClock getInstance() {
         if (trackerClock == null) {
             trackerClock = new TrackerClock();
@@ -50,17 +74,29 @@ public class TrackerClock {
         return trackerClock;
     }
 
+    /**
+     * 
+     */
     protected TrackerClock() {}
 
+    /**
+     * @return
+     */
     public static long currentTimeMillis() {
         TrackerClock clock = getInstance();
         return clock.getCurrentTime().getTime() - clock.startTime.getTime();
     }
 
+    /**
+     * @param b
+     */
     public static void setNativeTracking(boolean b) {
         nativeTracking = b;
     }
 
+    /**
+     * @return
+     */
     public Date getStartTime() {
         return this.startTime;
     }

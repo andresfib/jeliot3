@@ -1,7 +1,7 @@
 /*
  * Created on Jul 1, 2004
  */
-package jeliot.gui;
+package jeliot.historyview;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
@@ -23,8 +23,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import jeliot.gui.CodePane2;
 import jeliot.mcode.Highlight;
-import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
 import jeliot.util.Util;
 
@@ -121,7 +121,7 @@ public class HistoryView extends JComponent implements ActionListener {
         File userPath = Util.createUserPath();
 
         do {
-            String dirName = "images" + TrackerClock.currentTimeMillis();
+            String dirName = "images" + System.currentTimeMillis();
             imageTemp = new File(userPath, dirName);
         } while (imageTemp.exists());
         imageTemp.mkdir();

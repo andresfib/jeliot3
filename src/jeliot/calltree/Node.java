@@ -13,17 +13,17 @@ public class Node implements TreeNode {
     /**
      * Comment for <code>properties</code>
      */
-    Hashtable properties = null;
+    private Hashtable properties = null;
     
     /**
      * Comment for <code>parent</code>
      */
-    TreeNode parent = null;
+    private TreeNode parent = null;
 
     /**
      * Comment for <code>children</code>
      */
-    List children = null;
+    private List children = null;
 
     /**
      * 

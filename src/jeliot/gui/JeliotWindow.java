@@ -53,6 +53,7 @@ import javax.swing.event.ChangeListener;
 import jeliot.FeatureNotImplementedException;
 import jeliot.Jeliot;
 import jeliot.calltree.TreeDraw;
+import jeliot.historyview.HistoryView;
 import jeliot.mcode.InterpreterError;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.printing.PrintingUtil;

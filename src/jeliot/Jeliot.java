@@ -35,9 +35,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import jeliot.calltree.TreeDraw;
 import jeliot.gui.CodePane2;
-import jeliot.gui.HistoryView;
 import jeliot.gui.JeliotWindow;
 import jeliot.gui.LoadJeliot;
+import jeliot.historyview.HistoryView;
 import jeliot.launcher.Launcher;
 import jeliot.mcode.CallTreeMCodeInterpreter;
 import jeliot.mcode.Highlight;
@@ -82,7 +82,7 @@ public class Jeliot {
     /**
      * user home directory
      */
-    private String udir = ".";
+    private String userDirectory = ".";
 
     /**
      * Default I/O package 
@@ -185,7 +185,7 @@ public class Jeliot {
      * A director for animating the program.
      */
     private Director director;
-
+    
     /**
      * An image loader that takes care of loading the required
      * images.
@@ -206,7 +206,7 @@ public class Jeliot {
      * @param udir
      * 
      */
-    public Jeliot(String defaultIO) {
+    public Jeliot(String defaultIO) {        
         setIOPackageName(defaultIO);
 
         //Set LookAndFeel
@@ -221,14 +221,15 @@ public class Jeliot {
         }
 
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
-        hv = new HistoryView(codePane, udir);
+        hv = new HistoryView(codePane, userDirectory);
 
         //Just to track the animation happenings
         Tracker.setTheater(theatre);
         Tracker.setCodePane2(codePane);
 
-        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir,
+        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, userDirectory,
                 callTree, hv);
+        
     }
 
     /**
@@ -334,6 +335,9 @@ public class Jeliot {
         return false;
     }
 
+    /**
+     * 
+     */
     public void cleanUp() {
         //clear the remnants of previous animation
         theatre.cleanUp();
@@ -638,7 +642,7 @@ public class Jeliot {
      */
     public void handleArgs(String args[]) {
         Properties prop = System.getProperties();
-        udir = prop.getProperty("user.dir");
+        userDirectory = prop.getProperty("user.dir");
 
         if (args.length >= 4) {
             TrackerClock.setNativeTracking(Boolean.valueOf(args[3]).booleanValue());
@@ -648,14 +652,14 @@ public class Jeliot {
         if (args.length >= 2) {
             if (args[1] != null) {
                 Tracker.setTrack(Boolean.valueOf(args[1]).booleanValue());
-                File f = new File(udir);
+                File f = new File(userDirectory);
                 Tracker.openFile(f);
             }
         }
 
         if (args.length >= 1) {
             if (args[0] != null) {
-                File userDir = new File(udir);
+                File userDir = new File(userDirectory);
                 File file = new File(userDir, "examples");
                 if (file.exists()) {
                     final File programFile = new File(file, args[0]);

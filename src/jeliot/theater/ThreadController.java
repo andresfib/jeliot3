@@ -70,7 +70,7 @@ public class ThreadController {
      * Pause listeners that need to be notified when the thread is paused.
      */
     private Vector pauseListeners = new Vector();
-
+    
     /**
      * Constructs a new controller for given Runnable.
      * @param runner
@@ -95,7 +95,7 @@ public class ThreadController {
                 status = RUNNING;
                 break;
             default:
-                throw new RuntimeException();
+                throw new RuntimeException("Wrong State of the Controller for start.");
         }
     }
 
@@ -112,7 +112,7 @@ public class ThreadController {
             case (PAUSEREQ):
                 break;
             default:
-                throw new RuntimeException();
+                throw new RuntimeException("Wrong State of the Controller for pause.");
         }
     }
 
@@ -147,7 +147,7 @@ public class ThreadController {
                 status = RUNNING;
                 break;
             default:
-                throw new RuntimeException();
+                throw new RuntimeException("Wrong State of the Controller for check point.");
         }
     }
 

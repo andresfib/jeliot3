@@ -893,8 +893,14 @@ public class MCodeUtilities {
         reader = r;
     }
 
+    /**
+     * Comment for <code>accessingThread</code>
+     */
     private static Thread accessingThread = null;
 
+    /**
+     * @param thread
+     */
     public static void setAccessingThread(Thread thread) {
         accessingThread = thread;
     }
@@ -1158,7 +1164,9 @@ public class MCodeUtilities {
     public static void clearRegisteredSecondaryMCodeConnections() {
         Iterator i = registeredSecondaryMCodeConnections.iterator();
         while (i.hasNext()) {
-            ((PrintWriter) i.next()).println("" + Code.END);
+            PrintWriter pw = (PrintWriter) i.next();
+            pw.println("" + Code.END);
+            pw.flush();
         }
         registeredSecondaryMCodeConnections.clear();
     }
@@ -1318,7 +1326,7 @@ public class MCodeUtilities {
     }
 
 	/**
-	 * 
+	 * Called by Launcher.
 	 */
 	public static void initialize() {
 	    toStringOverLoadedStack = new Stack();
