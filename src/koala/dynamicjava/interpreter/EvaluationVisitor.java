@@ -14,7 +14,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL DYADE BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * IN NO EVENT SHALL DYADE  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
@@ -1272,18 +1272,28 @@ public class EvaluationVisitor extends VisitorObject {
 
                        //It should only get once in the while loop!!!
                        while (it.hasNext()) {
-                           auxcounter = counter;
+                           long outputCounter = counter;
+                           MCodeUtilities.write(
+                             ""
+                                 + Code.BEGIN
+                                 + Code.DELIM
+                                 + Code.OUTPUT
+                                 + Code.DELIM
+                                 + outputCounter
+                                 + Code.DELIM
+                                 + locationToString(node));
                            args[i] = ((Expression) it.next()).acceptVisitor(this);
                            MCodeUtilities.write(
                                ""
                                    + Code.OUTPUT
                                    + Code.DELIM
-                                   + auxcounter
+                                   + outputCounter
                                    + Code.DELIM
-                                   + args[i].toString()
-                                   + (m.getName().equals("println")?"\\n":"")
+                                   + args[i].toString()                                  
                                    + Code.DELIM
                                    + typs[i].getName()
+                                   + Code.DELIM
+                                   + (m.getName().equals("println")?"1":"0")
                                    + Code.DELIM
                                    + locationToString(node));
                            i++;
@@ -1733,18 +1743,28 @@ public class EvaluationVisitor extends VisitorObject {
 
                 //It should only get once in the while loop!!!
                 while (it.hasNext()) {
-                    auxcounter = counter;
+                    long outputCounter = counter;
+                    MCodeUtilities.write(
+                      ""
+                          + Code.BEGIN
+                          + Code.DELIM
+                          + Code.OUTPUT
+                          + Code.DELIM
+                          + outputCounter
+                          + Code.DELIM
+                          + locationToString(node));
                     args[i] = ((Expression) it.next()).acceptVisitor(this);
                     MCodeUtilities.write(
                         ""
                             + Code.OUTPUT
                             + Code.DELIM
-                            + auxcounter
+                            + outputCounter
                             + Code.DELIM
                             + args[i].toString()
-                            + "\\n"
                             + Code.DELIM
                             + typs[i].getName()
+                            + Code.DELIM
+                            + "1"             //BREAKLINE
                             + Code.DELIM
                             + locationToString(node));
                     i++;
