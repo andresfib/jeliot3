@@ -1,65 +1,93 @@
-\section{Managing Jeliot~3 System}
+\section{Managing \jel{} System}
 \label{sec:Managing_Jeliot_3_System}
 
-
-\subsection{Source Code Distribution}
-\label{sec:Source_Code_Distribution}
-
-\subsubsection{Directory hierarchy}
-
-Jeliot 3 is available as zip file containing all the sources and files needed to build it. After unzipping the file we will find the following directories:
-\begin{itemize}
-\item lib:  Contains the tools needed for the automated build process.
-\item resources: Contains information messages used by DynamicJava to alert from errors.
-\item src: Contains the source code for Jeliot 3. It is divided into the following subfolders:
-\begin{itemize}
-\item docs:  Contains the web pages that are used for the help page and the about page. It also contains the licenses under which Jeliot 3 is distributed.
-\item examples: Contains the examples that will be available for users of Jeliot, new examples can be added here.
-\item images: Those images used in the user interface of Jeliot.
-\item jeliot: All source files related to Jeliot visualization engine(theatre), m-code interpretation (ecode) and the graphical user interface(gui).
-\item koala: You will find here the modified source code of DynamicJava.
-\end{itemize}
-\end{itemize}
-
-\subsubsection{How to build Jeliot 3 from the source}
-
-Being used to the build tool used by DynamicJava (Ant), it was modified to build also Jeliot 3. Ant is a UNIX make-clone oriented to build Java programs based on an XML configuration file.
-When unzipping the source code, three files will appear on the destination directory:
-
-\begin{itemize}
-\item build.xml: This file defines the possible targets and its tasks that we want to perform with Ant. It includes some properties to customize the output. For example, you can rename the minor version of jeliot by modyfing the property named minor. For adding more targets you should refer to Ant manual page .
-\item build.bat and build.sh: These are the batch files that will invoke Ant with one of the arguments (targets) that you can provide to it:
-\begin{itemize}
-\item compile: Jeliot 3 source code will be compiled and classes obtained will be located at classes subfolder. To run Jeliot 3 from this point you should enter the command "java jeliot.Jeliot" inside the classes subfolder.
-\item dist: This argument will compile (if necessary), create the jar files and zip them. This way we will obtain a binary zip file of Jeliot 3 (Jeliot3\${minor}.zip)" and another zip file of Jeliot 3 source code (Jeliot3\${minor}-src.zip). These files are ready to be distributed without any modifications.
-\item clean: deletes every file created by the build tool.
-\end{itemize}
-\end{itemize}
-
-Notice that you must set JAVA\_HOME to point at your Java Development Kit installation. You can do this by modifying a line in the build.bat file:
-set JAVA\_HOME=e:$\backslash$j2sdk1.4.2
-
-A normal session could consist of the following commands:
-
-c:$\backslash$jeliot3>build compile\\
-c:$\backslash$jeliot3>cd classes\\
-c:$\backslash$jeliot3$\backslash$classes>java jeliot.Jeliot   // We get an instance of Jeliot running\\
-c:$\backslash$jeliot3$\backslash$classes>cd ..\\
-c:$\backslash$jeliot3>build dist       // Distribution files created\\
-c:$\backslash$jeliot3>cd Jeliot3
-c:$\backslash$jeliot3$\backslash$Jeliot3>jeliot   // We get an instance of Jeliot running\\
-
-\subsection{Non-Source Code Distribution}
-\label{sec:Non_Source_Code_Distribution}
-
+In this chapter we explain what are the system requirements of \jel{},
+what files and directories different distributions contain and
+how the source code distribution can be build. This will lead us to
+the next chapter containing information about how to extend \jel{} system.
 
 \subsection{System Requirements}
 \label{sec:System_Requirements}
 
+\subsection{End User Distribution}
+\label{sec:End_User_Distribution}
 
-\subsection{Installing and Running Jeliot~3 System}
-\label{sec:Installing_and_Running_Jeliot_3_System}
+\subsection{Source Code Distribution}
+\label{sec:Source_Code_Distribution}
 
+\subsubsection{Directory Hierarchy}
 
-\subsection{Extending Jeliot~3 System}
-\label{sec:Extending_Jeliot_3_System}
+\jel{} is available as zip file containing all the sources
+and files needed to build it. After unzipping the file we will
+find the following directories:
+\begin{description}
+\item[\p{lib}] Contains the tools needed for the automated build process.
+\item[\p{resources}] Contains information messages used by DynamicJava
+to alert from errors.
+\item[\p{src}] Contains the source code for \jel{}. It is divided into
+the following subfolders.
+\begin{description}
+\item[\p{docs}] Contains the web pages that are used for the help page
+and the about page. It also contains the licenses under which
+\jel{} is distributed.
+\item[\p{examples}] Contains the examples that will be available for users
+of \jel{}, new examples can be added here.
+\item[\p{images}] Those images used in the user interface of \jel{}.
+\item[\p{jeliot}] All source files related to \jel{} visualization engine (\p{theatre}),
+m-code interpretation (\p{ecode}) and the graphical user interface (\p{gui}).
+\item[\p{koala}] The modified source code of \djava{}.
+\end{description}
+\end{description}
+
+\subsubsection{How to Build Jeliot 3 From the Sources}
+
+Being used to the build tool used by DynamicJava (Ant), it was
+modified to build also \jel{}. Ant is a UNIX make-clone oriented
+to build Java programs based on an XML configuration file \url{http://ant.apache.org}.
+When unzipping the source code, three files will appear on the
+destination directory:
+\begin{description}
+\item[build.xml] This file defines the possible targets and its tasks
+that we want to perform with Ant. It includes some properties
+to customize the output. For example, you can rename the minor
+version of \jel{} by modyfing the property named minor. For adding
+more targets you should refer to Ant manual page
+(\url{http://ant.apache.com/manual/index.html}).
+\item[build.bat and build.sh] These are the batch files that
+will invoke Ant with one of the arguments (targets) that you
+can provide to it:
+\begin{description}
+\item[compile] \jel{} source code will be compiled and classes obtained
+will be located at classes subfolder. To run \jel{} from this
+point you should enter the command java jeliot.Jeliot inside
+the classes subfolder.
+\item[dist] This argument will compile (if necessary), create the
+jar files and zip them. This way we will obtain a binary zip
+file of \jel{} Jeliot3\$\{minor\}.zip and another
+zip file of \jel{} source code Jeliot3\$\{minor\}-src.zip.
+These files are ready to be distributed without any modifications.
+\item[clean] deletes every file created by the build tool.
+\end{description}
+\end{description}
+Notice that you must set JAVA\_HOME to point at your Java Development
+Kit installation.
+
+A normal session could consist of the following commands:
+\begin{verbatim}
+c:\jeliot3> build compile
+\end{verbatim}
+The compiled class files are now in the folder classes.
+\begin{verbatim}
+c:\jeliot3> cd classes
+c:\jeliot3\classes> java jeliot.Jeliot
+\end{verbatim}
+We can run Jeliot with the command above. But if we want to make a
+distribution we need to do as follows and we will get two separate
+distributions one with the compiled files and one with the source codes.
+\begin{verbatim}
+c:\jeliot3\classes> cd ..
+c:\jeliot3> build dist
+c:\jeliot3> cd Jeliot3
+c:\jeliot3\Jeliot3> jeliot
+\end{verbatim}
+
