@@ -6,7 +6,7 @@ Urgent:
 
 * Initialization of object when it inherits user made class (super() call) 
 (should be done)
-* Array initializers (but only for on3 dimensional arrays)
+* Array initializers (but only for one dimensional arrays)
 * Static field access (into the constant area)
 * Documentation
 
@@ -20,6 +20,8 @@ fixed, problem was in Launcher class)
 * ERROR Rectangle: method <init>()V not found
 * Fix the problem with RuntimeException: 'No Variable bigSquare' when
   bigSquare does not exist in the classes MethodStage and ObjectStage. 
+* When using a non-static method as a static method and proper error 
+message should be shown.
 
 Technical:
 
