@@ -4,7 +4,7 @@
 
 [Setup]
 AppName=Jeliot 3
-AppVerName=Jeliot 3.2P1
+AppVerName=Jeliot 3-2P2
 DefaultDirName={pf}\Jeliot3
 DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe
@@ -22,7 +22,12 @@ Source: "Jeliot3\examples\*"; DestDir: "{app}\examples\"
 Source: "Jeliot3\*"; DestDir: "{app}"
 ; Source: "Readme.txt"; DestDir: "{app}"; Flags: isreadme
 
-[Icons]
-Name: "{group}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"
-Name: "{app}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"
+[Tasks]
+Name: "desktopicon"; Description: "Create a &Desktop Icon shortcut"; GroupDescription: "Shortcuts"; Flags: unchecked
+Name: "starticon"; Description: "Create a shortcut in the &Start Menu"; GroupDescription: "Shortcuts"; Flags: unchecked
 
+
+[Icons]
+Name: "{group}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"; Tasks:starticon
+Name: "{userdesktop}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"; Tasks:desktopicon
+Name: "{app}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"
