@@ -39,7 +39,8 @@ public class Stage extends Actor implements ActorContainer {
     private int actorMargin = 3;
 
     /** Maximum number of variables on the stage at any time. */
-    private int varCount = 6;
+    private int varCount = 3;
+    private int totalVarCount = 0;
 
     private int actWidth;
     private int actHeight;
@@ -75,6 +76,18 @@ public class Stage extends Actor implements ActorContainer {
     }
 
     public Dimension calculateSizeDimensions() {
+
+        int w = borderWidth * 2 + insets.right + insets.left +
+            Math.max(actWidth, nwidth) + 2 * margin;
+
+        int h = borderWidth * 2 + insets.top + insets.bottom +
+            nheight + 2 * margin + actorMargin +
+            (actorMargin + actHeight) * this.varCount;
+
+        return new Dimension(w, h);
+    }
+
+    public Dimension calculateSizeDimensions(int varCount) {
 
         int w = borderWidth * 2 + insets.right + insets.left +
             Math.max(actWidth, nwidth) + 2 * margin;
@@ -152,7 +165,7 @@ public class Stage extends Actor implements ActorContainer {
         reserved.setParent(this);
 
         //Added for Jeliot 3
-        varCount++;
+        totalVarCount++;
         scopeVarCount++;
     }
 
@@ -167,7 +180,7 @@ public class Stage extends Actor implements ActorContainer {
         for (int i = 0; i < scopeVarCount; i++) {
             variables.pop();
         }
-        varCount -= scopeVarCount;
+        totalVarCount -= scopeVarCount;
         scopeVarCount = ((Integer) scopes.pop()).intValue();
     }
 
@@ -263,14 +276,13 @@ public class Stage extends Actor implements ActorContainer {
 
     public Animation extend()  {
 
-        final Dimension oldSize = getSize();
-        final Dimension newSize = calculateSizeDimensions();
+        if ((totalVarCount + 1) > varCount) {
 
-        if (newSize.height > oldSize.height) {
+            varCount = totalVarCount + 1;
 
             return new Animation() {
 
-                Dimension size;
+                Dimension size, newSize;
                 double h;
                 double plus;
                 int full;
@@ -278,9 +290,10 @@ public class Stage extends Actor implements ActorContainer {
                 public void init() {
                     size = getSize();
                     h = size.height;
+                    newSize = calculateSizeDimensions(totalVarCount + 1);
                     full = newSize.height;
                     plus = (full - h) / getDuration();
-                    setLight(HIGHLIGHT);
+                    //setLight(HIGHLIGHT);
                     this.repaint();
                 }
 
@@ -299,7 +312,7 @@ public class Stage extends Actor implements ActorContainer {
                 }
 
                 public void finalFinish() {
-                    this.passivate((Actor)Stage.this);
+                    //this.passivate((Actor)Stage.this);
                 }
             };
 
