@@ -1756,14 +1756,47 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(ArrayInitializer node) {
         Object result = Array.newInstance(NodeProperties.getType(node.getElementType()), node
                 .getCells().size());
+        
+        int size = node.getCells().size();
+        long arrayAllocationCounter= counter++;
+        //Fake literal with the array size
+        long sizeCounter= counter++;
+        MCodeUtilities.write("" + Code.L + Code.DELIM + sizeCounter + Code.DELIM
+                + size + Code.DELIM
+                + int.class.getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
+        Long[] dimExpressionReferences = {new Long(sizeCounter)};
+        int dimensions = 1;
+        String arrayHashCode = Integer.toHexString(result.hashCode());
+        String dimensionsReferences = MCodeUtilities.arrayToString(dimExpressionReferences);
+        String componentType = node.getElementType().getProperty("type").toString();
+        System.out.println("OK");
+        MCodeUtilities.write("" + Code.AA + Code.DELIM + arrayAllocationCounter + Code.DELIM
+                + arrayHashCode + Code.DELIM
+                + componentType + Code.DELIM + dimensions
+                + Code.DELIM + dimensionsReferences + Code.DELIM
+                + dimensions + Code.DELIM + MCodeUtilities.locationToString(node));
+        System.out.println("OK2");
+        MCodeUtilities.write("" + Code.AIBEGIN + Code.DELIM + size
+        		+ Code.DELIM + MCodeUtilities.locationToString(node));
 
         Iterator it = node.getCells().iterator();
         int i = 0;
         while (it.hasNext()) {
-            Object o = ((Expression) it.next()).acceptVisitor(this);
+        	long elementCounter = counter;
+        	Expression expression = (Expression) it.next();
+        	System.out.println("OK cell" + i);
+            Object o = expression.acceptVisitor(this);
+            int isLiteral = (Literal.class.isInstance(expression))? 1 : 0;
+            MCodeUtilities.write("" + Code.AIE + Code.DELIM + arrayHashCode 
+            		+ Code.DELIM + i + Code.DELIM + elementCounter 
+					+ Code.DELIM + o.toString() + Code.DELIM + o.getClass().getName()
+					+ Code.DELIM + isLiteral
+					+ Code.DELIM + MCodeUtilities.locationToString(expression));
             Array.set(result, i++, o);
         }
-
+        MCodeUtilities.write("" + Code.AI + Code.DELIM 
+        		+ MCodeUtilities.locationToString(node));
         return result;
     }
 
