@@ -2562,6 +2562,22 @@ public class Interpreter {
                         Value output = new Value(value, type);
                         
                         director.output(output, highlight);
+                        
+                        // To pop the OUTPUT statement on top of the expression Stack if it is there
+                        if (!exprs.empty()) {
+                            StringTokenizer expressionTokenizer = new StringTokenizer(
+                                    (String) exprs.peek(), Code.DELIM);
+                            if (Integer.parseInt(expressionTokenizer.nextToken()) == (Code.OUTPUT)) {
+                                exprs.pop();
+                            }
+                        }
+                        
+                        // To handle the post increments and decrements if there are any.
+                        Object[] postIncDec = (Object[]) postIncsDecs
+                        .remove(new Long(expressionReference));
+                        if (postIncDec != null) {
+                            doPostIncDec(postIncDec);
+                        }
 
                         break;
                     }
