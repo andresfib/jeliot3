@@ -7,7 +7,7 @@ import java.util.*;
   * @author Pekka Uronen
   * @author Niko Myller
   */
-public class Stage extends Actor implements ActorContainer {
+public class MethodStage extends Actor implements ActorContainer {
 
     /** Indicates how many variables is defined in this scope. */
     private int scopeVarCount = 0;
@@ -15,10 +15,10 @@ public class Stage extends Actor implements ActorContainer {
     /** Keeps track of scopes and the amount of variables in each scope. */
     private Stack scopes = new Stack();
 
-    /** Variable actors in this stage. */
+    /** Variable actors in this MethodStage. */
     private Stack variables = new Stack();
 
-    /** Name of the stage. */
+    /** Name of the method or MethodStage. */
     private String name;
 
     /** Height of the name. */
@@ -33,10 +33,10 @@ public class Stage extends Actor implements ActorContainer {
     /** Number of pixels between actors. */
     private int actorMargin = 3;
 
-    /** Maximum possible number of variables on the stage at the moment. */
+    /** Maximum possible number of variables on the MethodStage at the moment. */
     private int varCount = 1;
 
-    /** How many variables actually is on the stages at the moment. */
+    /** How many variables actually is on the Methodstage at the moment. */
     private int totalVarCount = 0;
 
     /** Actors Width */
@@ -51,8 +51,8 @@ public class Stage extends Actor implements ActorContainer {
       */
     private boolean paintVars = true;
 
-    /** Actor that is going to be added to the method stage but is not yet bind on it.
-      * For example an actor that is animated at the moment and then added to the stage
+    /** Actor that is going to be added to the MethodStage but is not yet bind on it.
+      * For example an actor that is animated at the moment and then added to the MethodStage
       * (e.g. variable appearing).
       */
     private Actor reserved;
@@ -60,7 +60,7 @@ public class Stage extends Actor implements ActorContainer {
     /** The location where reserved actor is reserved. */
     private Point resLoc;
 
-    public Stage(String name) {
+    public MethodStage(String name) {
         this.name = name;
         insets = new Insets(2, 6, 4, 6);
     }
@@ -220,7 +220,7 @@ public class Stage extends Actor implements ActorContainer {
                 h = size.height;
                 full = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor) Stage.this);
+                this.addActor((Actor) MethodStage.this);
                 setLocation(loc);
                 setSize(size);
                 setLight(HIGHLIGHT);
@@ -243,7 +243,7 @@ public class Stage extends Actor implements ActorContainer {
             }
 
             public void finalFinish() {
-                this.passivate((Actor)Stage.this);
+                this.passivate((Actor)MethodStage.this);
             }
         };
     }
@@ -260,7 +260,7 @@ public class Stage extends Actor implements ActorContainer {
                 full = nheight + margin * 3;
                 h = getHeight();
                 plus = (full - h) / getDuration();
-                this.addActor((Actor)Stage.this);
+                this.addActor((Actor)MethodStage.this);
                 setSize(size);
                 paintVars = false;
                 repaint();
@@ -274,7 +274,7 @@ public class Stage extends Actor implements ActorContainer {
             }
 
             public void finish() {
-                this.removeActor((Actor)Stage.this);
+                this.removeActor((Actor)MethodStage.this);
             }
         };
     }
@@ -317,7 +317,7 @@ public class Stage extends Actor implements ActorContainer {
                 }
 
                 public void finalFinish() {
-                    //this.passivate((Actor)Stage.this);
+                    //this.passivate((Actor)MethodStage.this);
                 }
             };
 

@@ -45,7 +45,8 @@ public abstract class Animation {
     private int duration = 1000;
 
     /** An actor associated with this animation -- the actor that gets
-      * animated.   */
+      * animated.
+      */
     private Actor actor;
 
     /** Initializes the animation. This method is called by the
@@ -58,10 +59,10 @@ public abstract class Animation {
     /** This method performs the animation. It is abstract, so it must
       * be implemented by the subclasses.
       *
-      *@param p Amount of work to do in this animation step. P of 1000
-      * Measured in milliseconds; the animation will get roughly
-      * 1000 units of work per second if the animation engine is in
-      * its default configuration.
+      * @param p Amount of work to do in this animation step. P of 1000
+      *        Measured in milliseconds; the animation will get roughly
+      *        1000 units of work per second if the animation engine is in
+      *        its default configuration.
       */
     public abstract void animate(double p);
 
@@ -86,6 +87,8 @@ public abstract class Animation {
     }
 
     /** Returns the starting time of this animation in milliseconds.
+      *
+      * @return the starting time of this animation in milliseconds.
       */
     public int getStartTime() {
         return startTime;
@@ -95,19 +98,24 @@ public abstract class Animation {
       * duration depends on the speed of the animation engine playing
       * the animation.
       *
-      *@param duration The desired duration in milliseconds.
+      * @param duration The desired duration in milliseconds.
       */
     public void setDuration(int duration) {
          this.duration = duration;
     }
 
     /** Returns the desired duration of this animation in milliseconds.
+      *
+      * @return the desired duration of this animation in milliseconds.
       */
     public int getDuration() {
         return duration;
     }
 
     /** Returns true if the animation has already finished. That is, it
+      * has set its finished-flag.
+      *
+      * @return true if the animation has already finished. That is, it
       * has set its finished-flag.
       */
     public boolean isFinished() {

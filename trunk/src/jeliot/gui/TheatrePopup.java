@@ -15,9 +15,9 @@ import jeliot.theatre.*;
  */
 public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
 
-	/**
-	 * Popup menu for the handling of the variables.
-	 */
+    /**
+     * Popup menu for the handling of the variables.
+     */
     JPopupMenu variableMenu = new JPopupMenu(); {
         JPopupMenu menu = variableMenu;
         JMenuItem menuItem;
@@ -26,10 +26,10 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
         menuItem = new JMenuItem("Show declaration");
         menu.add(menuItem);
     }
-    
-	/**
-	 * Popup menu for the handling of the methods.
-	 */
+
+    /**
+     * Popup menu for the handling of the methods.
+     */
     JPopupMenu methodMenu = new JPopupMenu(); {
         JPopupMenu menu = methodMenu;
         JMenuItem menuItem;
@@ -39,38 +39,38 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
         menu.add(menuItem);
     }
 
-	/**
-	 * Method to handle the mouse events when the actors should be highlighted.
-	 *
-	 * @param	evt	The mouse event when mouse entered the area.
-	 */
+    /**
+     * Method to handle the mouse events when the actors should be highlighted.
+     *
+     * @param   evt The mouse event when mouse entered the area.
+     */
     public void mouseEntered(MouseEvent evt) {
         handleMouseEvent(evt);
     }
 
-	/**
-	 * Method to handle the mouse events when the actors should be unhighlighted.
-	 *
-	 * @param	evt	The mouse event when mouse exited the area.
-	 */
+    /**
+     * Method to handle the mouse events when the actors should be unhighlighted.
+     *
+     * @param   evt The mouse event when mouse exited the area.
+     */
     public void mouseExited(MouseEvent evt) {
         handleMouseEvent(evt);
     }
 
-	/**
-	 * Method to handle the mouse events when the actors should be highlighted or unhighlighted.
-	 *
-	 * @param	evt	The mouse event when mouse is moved.
-	 */
+    /**
+     * Method to handle the mouse events when the actors should be highlighted or unhighlighted.
+     *
+     * @param   evt The mouse event when mouse is moved.
+     */
     public void mouseMoved(MouseEvent evt) {
         handleMouseEvent(evt);
     }
 
-	/**
-	 * Shows the popup menu when the button is pushed on some actor.
-	 *
-	 * @param	evt	The mouse event when mouse is pressed.
-	 */
+    /**
+     * Shows the popup menu when the button is pushed on some actor.
+     *
+     * @param   evt The mouse event when mouse is pressed.
+     */
     public void mousePressed(MouseEvent evt) {
        // System.err.println("mousePressed");
        // if (evt.isPopupTrigger()) {
@@ -81,11 +81,11 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
     /** Implemented to conform to MouseMotionListener interface.*/
     public void mouseDragged(MouseEvent evt) { }
 
-	/**
-	 * Method that handles the events when the actor should be highlighted.
-	 *
-	 * @param	evt	The mouse event that should be handled.
-	 */
+    /**
+     * Method that handles the events when the actor should be highlighted.
+     *
+     * @param   evt The mouse event that should be handled.
+     */
     private void handleMouseEvent(MouseEvent evt) {
         int x = evt.getX();
         int y = evt.getY();
@@ -95,11 +95,11 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
      //   theatre.setHighlightedActor(actor);
     }
 
-	/**
-	 * Method checks what kind of popup menu it should activate or should it activate any kind of popup menu.
-	 *
-	 * @param	evt	The mouse event when mouse button is pressed.
-	 */
+    /**
+     * Method checks what kind of popup menu it should activate or should it activate any kind of popup menu.
+     *
+     * @param   evt The mouse event when mouse button is pressed.
+     */
     private void showPopup(MouseEvent evt) {
         int x = evt.getX();
         int y = evt.getY();
@@ -112,16 +112,16 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
             if (actor instanceof VariableActor) {
                 menu = variableMenu;
             }
-            else if (actor instanceof Stage) {
+            else if (actor instanceof MethodStage) {
                 menu = methodMenu;
             }
             if (menu != null) {
-                
+
             //System.err.println("showMenu:"+menu);
            //     menu.setSize(menu.getPreferredSize());
                 menu.show(evt.getComponent(), evt.getX(), evt.getY());
             }
         }
     }
-    
+
 }

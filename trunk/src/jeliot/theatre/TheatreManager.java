@@ -11,7 +11,7 @@ import java.awt.event.*;
   */
 public class TheatreManager implements ComponentListener {
 
-    private Point[] stagep = {
+    private Point[] methodStagePoints = {
         new Point(10, 10),
         new Point(20, 20),
         new Point(30, 30),
@@ -20,15 +20,15 @@ public class TheatreManager implements ComponentListener {
 
     private Theatre theatre;
 
-    private Stack stages = new Stack();
+    private Stack methods = new Stack();
     private Vector objects = new Vector();
     private Vector scratches = new Vector();
 
-    private ConstantBox cbox;
+    private ConstantBox constantBox;
 
     //private ConstantBox input;
 
-    private int maxStagex;
+    private int maxMethodStageX;
 
     private Hashtable reservations = new Hashtable();
 
@@ -42,32 +42,32 @@ public class TheatreManager implements ComponentListener {
     }
 
     public void cleanUp() {
-        stages.removeAllElements();
+        methods.removeAllElements();
         objects.removeAllElements();
         scratches.removeAllElements();
-        cbox = null;
+        constantBox = null;
     }
 
-    public Point reserve(Stage stage) {
-        Point loc = stagep[stages.size() % stagep.length];
+    public Point reserve(MethodStage stage) {
+        Point loc = methodStagePoints[methods.size() % methodStagePoints.length];
         reservations.put(stage, loc);
 
         return loc;
     }
 
-    public void bind(Stage stage) {
+    public void bind(MethodStage stage) {
         Point loc = (Point)reservations.remove(stage);
-        stages.push(stage);
+        methods.push(stage);
         stage.setLocation(loc);
         theatre.passivate(stage);
 
-        maxStagex = 0;
-        int n = stages.size();
+        maxMethodStageX = 0;
+        int n = methods.size();
         for (int i = 0; i < n; ++i) {
-            Stage s = (Stage)stages.elementAt(i);
+            MethodStage s = (MethodStage) methods.elementAt(i);
             int wx = s.getX() + s.getWidth();
-            if (wx > maxStagex) {
-                maxStagex = wx;
+            if (wx > maxMethodStageX) {
+                maxMethodStageX = wx;
             }
         }
     }
@@ -96,16 +96,16 @@ public class TheatreManager implements ComponentListener {
     public void removeInstance(InstanceActor actor) {
         objects.removeElement(actor);
         theatre.removePassive(actor);
-        theatre.repaint();
+        theatre.flush();
     }
 
-    public void removeStage(Stage stage) {
-        stages.removeElement(stage);
+    public void removeMethodStage(MethodStage stage) {
+        methods.removeElement(stage);
         theatre.removePassive(stage);
     }
 
     public void setConstantBox(ConstantBox cbox) {
-        this.cbox = cbox;
+        this.constantBox = cbox;
         positionConstantBox();
     }
 
@@ -118,8 +118,8 @@ public class TheatreManager implements ComponentListener {
 
     public void addScratch(Scratch scratch) {
         scratches.addElement(scratch);
-        if (!stages.empty()) {
-            scratch.setLocation(maxStagex + 45, 10);
+        if (!methods.empty()) {
+            scratch.setLocation(maxMethodStageX + 45, 10);
         } else {
             scratch.setLocation((ActorFactory.getMaxMethodStageWidth()) + 45, 10);
         }
@@ -132,10 +132,10 @@ public class TheatreManager implements ComponentListener {
     }
 
     private void positionConstantBox() {
-        if (cbox != null) {
+        if (constantBox != null) {
             int x = 10; //theatre.getWidth() - 10 - cbox.getWidth();
-            int y = theatre.getHeight() - 10 - cbox.getHeight();
-            cbox.setLocation(x, y);
+            int y = theatre.getHeight() - 10 - constantBox.getHeight();
+            constantBox.setLocation(x, y);
         }
     }
 
