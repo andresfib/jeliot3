@@ -206,9 +206,12 @@ public class ActorFactory {
 
             actor = new VariableActor();
 
-            ImageValueActor vact = new ImageValueActor(
-                     iLoad.getImage("mystery.gif"));
-            vact.calculateSize();
+            ValueActor vact = null;
+
+            ImageValueActor valueActor = new ImageValueActor(
+                                         iLoad.getImage("mystery.gif"));
+            valueActor.calculateSize();
+            vact = valueActor;
 
             int dotIndex = type.lastIndexOf(".");
             String resolvedType = type;
@@ -287,6 +290,99 @@ public class ActorFactory {
 
         return actor;
     }
+
+
+    VariableActor produceObjectVariableActor(Variable v) {
+
+        String type = v.getType();
+        VariableActor actor = null;
+        int typeInfo = ECodeUtilities.resolveType(type);
+
+        if (typeInfo != ECodeUtilities.REFERENCE) {
+
+            actor = new VariableActor();
+
+            ValueActor vact = produceValueActor(new Value(ECodeUtilities.getDefaultValue(type),
+                                                type));
+
+            int dotIndex = type.lastIndexOf(".");
+            String resolvedType = type;
+            if (dotIndex > -1) {
+                resolvedType = resolvedType.substring(dotIndex+1);
+            }
+            actor.setName(resolvedType + " " + v.getName());
+            actor.setFont(variableFont);
+            actor.setForeground(Color.black);
+            actor.setInsets(variableInsets);
+            actor.setValueDimension(typeValWidth[typeInfo], valueHeight);
+            actor.setBackground(varColor[typeInfo]);
+            actor.setValueColor(valColor[typeInfo]);
+            actor.calculateSize();
+            actor.setShadowImage(shadowImage);
+            actor.reserve(vact);
+            actor.bind();
+
+            return actor;
+
+        } else if (typeInfo == ECodeUtilities.REFERENCE) {
+
+            ReferenceVariableActor refAct =
+                    new ReferenceVariableActor();
+
+            if (ECodeUtilities.isArray(type)) {
+                String ct =
+                       ECodeUtilities.resolveComponentType(type);
+
+                if (ECodeUtilities.isPrimitive(ct)) {
+                    int ti = ECodeUtilities.resolveType(ct);
+                    refAct.setBackground(varColor[ti]);
+                } else {
+                    //This is not implemented properly
+                    refAct.setBackground(varColor[typeInfo]);
+                }
+
+                String resolvedType = ECodeUtilities.changeComponentTypeToPrintableForm(ct);
+                int dotIndex = resolvedType.lastIndexOf(".");
+                if (dotIndex > -1) {
+                    resolvedType = resolvedType.substring(dotIndex+1);
+                }
+
+                int dims = ECodeUtilities.getNumberOfDimensions(type);
+                String arrayString = "";
+                for (int i = 0; i < dims; i++) {
+                    arrayString += "[ ]";
+                }
+
+                refAct.setName(resolvedType + arrayString + " " + v.getName());
+
+            } else {
+
+                String resolvedType = type;
+                int dotIndex = resolvedType.lastIndexOf(".");
+                if (dotIndex > -1) {
+                    resolvedType = resolvedType.substring(dotIndex+1);
+                }
+                refAct.setName(resolvedType + " " + v.getName());
+                refAct.setBackground(varColor[typeInfo]);
+            }
+
+            refAct.setForeground(Color.black);
+            refAct.setInsets(variableInsets);
+            refAct.setFont(variableFont);
+            refAct.setValueDimension(6 + 6, valueHeight);
+            refAct.calculateSize();
+            refAct.setShadowImage(shadowImage);
+            ReferenceActor ra = new ReferenceActor();
+            ra.setBackground(refAct.getBackground());
+            ra.setShadowImage(shadowImage);
+            ra.calculateSize();
+            refAct.setValue(ra);
+            actor = refAct;
+        }
+
+        return actor;
+    }
+
 
     public ValueActor produceValueActor(Value val) {
 
@@ -606,7 +702,7 @@ public class ActorFactory {
     }
 
     ObjectStage produceObjectStage(ObjectFrame m) {
-        ObjectStage stage = new ObjectStage("Object of the class" + m.getObjectName(), m.getVarCount());
+        ObjectStage stage = new ObjectStage("Object of the class " + m.getObjectName(), m.getVarCount());
         stage.setFont(stageFont);
         stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] + 20,
                             valueHeight + 8 +

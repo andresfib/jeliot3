@@ -21,11 +21,13 @@ import koala.dynamicjava.interpreter.*;
  */
 public class JeliotWindow {
 
-    boolean showMessagesInDialogs = false;
-    boolean errorOccured = false;
+    private String jeliotVersion = "Jeliot 3.1";
 
-    AboutWindow aw = null;
-    HelpWindow hw = null;
+    private boolean showMessagesInDialogs = false;
+    private boolean errorOccured = false;
+
+    private AboutWindow aw = null;
+    private HelpWindow hw = null;
 
     /** The frame in which all the action goes on. */
     private JFrame frame;
@@ -249,7 +251,7 @@ public class JeliotWindow {
      */
     public void setUp() {
 
-        frame = new JFrame("Jeliot 3.02");
+        frame = new JFrame(jeliotVersion);
         frame.setIconImage(iLoad.getLogicalImage("Jeliot-icon"));
 
         frame.setJMenuBar(makeMenuBar());

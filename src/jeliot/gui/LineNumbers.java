@@ -30,7 +30,7 @@ public class LineNumbers extends JComponent {
 
     public void setHeightByLines(int lines) {
         int height = insets.top + ascent + (lines * increment) + insets.bottom;
-        System.out.println("CodePane: " + height);
+        //System.out.println("CodePane: " + height);
         setPreferredSize(new Dimension(size, height));
         revalidate();
     }

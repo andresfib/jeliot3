@@ -1125,8 +1125,8 @@ public class Interpreter {
                             //This works for not primitive classes.
                             //There needs to be a check whether invoked
                             //class is primitive or not.
-                            ObjectFrame of = createNewInstance(ci, highlight);
-                            Reference ref = new Reference(of);
+                            //ObjectFrame of = createNewInstance(ci, highlight);
+                            //Reference ref = new Reference(of);
 
                             invokingMethod = true;
 
@@ -1160,9 +1160,12 @@ public class Interpreter {
                             currentMethodInvocation[4] = parameterNames;
                             currentMethodInvocation[5] = highlight;
                             currentMethodInvocation[7] = parameterExpressionReferences;
-                            currentMethodInvocation[8] = ref;
+                            //Here we put the ClassInfo of the class in the array
+                            //just to wait for the Method Declaration is read and the
+                            //object can be created from this method info.
+                            currentMethodInvocation[8] = ci/*ref*/;
 
-                            objectCreation.push(new Reference(of));
+                            /*objectCreation.push(new Reference(of));*/
 
                             break;
                         }
@@ -1179,10 +1182,6 @@ public class Interpreter {
                             Highlight h = ECodeUtilities.makeHighlight(
                                                  tokenizer.nextToken());
 
-                            director.finishMethod(null, 0);
-
-                            //Handle the object reference return
-
                             //This should handle the possible object
                             //assignment etc.
                             if (!objectCreation.empty()) {
@@ -1195,9 +1194,33 @@ public class Interpreter {
                                 instances.put(hashCode, inst);
                                 //Then we handle the possible expressions
                                 //concerning this reference.
-                                director.introduceReference(ref);
-                                handleExpression(ref, expressionCounter);
                             }
+
+                            Value ret = director.getCurrentMethodFrame().getVariable("this").getValue();
+                            Value casted = null;
+                            Instance inst = (Instance) instances.get(hashCode);
+
+                            if (inst != null) {
+                                casted = new Reference(inst);
+                            } else {
+                                casted = new Reference();
+                            }
+
+                            Actor returnActor = director.animateReturn(ret, casted, h);
+                            Value returnValue = (Value) casted.clone();
+                            Value rv;
+
+                            if (returnValue instanceof Reference) {
+                                rv = (Value) ((Reference)returnValue).clone();
+                            } else {
+                                rv = (Value) returnValue.clone();
+                            }
+
+                            ValueActor va = director.finishMethod(
+                                                            returnActor,
+                                                            expressionCounter);
+                            rv.setActor(va);
+                            handleExpression(rv, expressionCounter);
 
                             break;
                         }
@@ -1551,9 +1574,6 @@ public class Interpreter {
                             //Object method call or constructor
                             if (currentMethodInvocation.length == 9) {
 
-                                //Change this!
-                                //This is not ready yet!
-                                //if (current)
                                 Value[] args = null;
 
                                 if (((String) currentMethodInvocation[1]).equals("")) {
@@ -1561,6 +1581,16 @@ public class Interpreter {
                                             "new " + ((String) currentMethodInvocation[0]),
                                             (Value[]) currentMethodInvocation[2],
                                             (Highlight) currentMethodInvocation[5]);
+
+                                    //This works for not primitive classes.
+                                    //There needs to be a check whether invoked
+                                    //class is primitive or not.
+                                    ObjectFrame of = createNewInstance((ClassInfo) currentMethodInvocation[8],
+                                                                       (Highlight) currentMethodInvocation[5]);
+                                    Reference ref = new Reference(of);
+                                    currentMethodInvocation[8] = ref;
+                                    objectCreation.push(new Reference(of));
+
                                 } else {
                                     args = director.animateOMInvocation(
                                             "." + ((String) currentMethodInvocation[0]),
@@ -2652,6 +2682,10 @@ public class Interpreter {
                             String value = "";
                             if (tokenizer.hasMoreTokens()) {
                                 value = tokenizer.nextToken();
+                            }
+
+                            if (value.equals(Code.UNKNOWN)) {
+                                value = ECodeUtilities.getDefaultValue(type);
                             }
 
                             currentClass.declareField(name,
