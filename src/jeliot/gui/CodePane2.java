@@ -178,4 +178,8 @@ public class CodePane2 extends JComponent {
 	public JEditTextArea getTextArea() {
 	    return area;
 	}
+	
+	public void highlightLineNumber(int line) {
+		ln.setHighlightedLine(line);
+	}
 }

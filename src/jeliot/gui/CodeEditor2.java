@@ -717,4 +717,9 @@ public class CodeEditor2 extends JComponent {
             SwingUtilities.invokeLater(updateAComponent);
         }
     }
+
+	public void highlightLineNumber(int line) {
+		ln.setHighlightedLine(line);
+	}
+
 }

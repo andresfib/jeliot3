@@ -215,8 +215,14 @@ public class Director {
      * @param line
      */
     public void runUntil(int line) {
-        runUntilLine = line;
-        theatre.setRunUntilEnabled(true);
+    	if (line > 0) {
+            runUntilLine = line;
+    		theatre.setRunUntilEnabled(true);
+    	} else {
+    		theatre.flush();
+            runUntilLine = 0;
+    		theatre.setRunUntilEnabled(false);
+    	}
     }
 
     /**
