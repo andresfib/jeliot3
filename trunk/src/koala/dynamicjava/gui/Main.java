@@ -753,7 +753,7 @@ public class Main extends JFrame implements ActionMap {
         java.util.List components = new LinkedList();
 
 	public void actionPerformed(ActionEvent ev) {
-	    thread.stop();
+	    //thread.stop();
 	    isRunning = false;
 	    update();
 	    evalAction.update();
