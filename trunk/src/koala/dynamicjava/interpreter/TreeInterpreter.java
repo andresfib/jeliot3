@@ -770,7 +770,7 @@ public class TreeInterpreter implements Interpreter {
 
                 meth.getClass();
                 MCodeUtilities.write("" + Code.QN + Code.DELIM + counter + Code.DELIM + "this"
-                        + Code.DELIM + obj.toString() + Code.DELIM + obj.getClass().getName());
+                        + Code.DELIM + MCodeUtilities.getValue(obj) + Code.DELIM + obj.getClass().getName());
 
                 MCodeUtilities.write("" + Code.OMC + Code.DELIM + superName + Code.DELIM + "0"
                         + Code.DELIM + counter + Code.DELIM + "this" + Code.DELIM + "0,0,0,0"
@@ -779,7 +779,7 @@ public class TreeInterpreter implements Interpreter {
             } else {
 
                 MCodeUtilities.write("" + Code.QN + Code.DELIM + counter + Code.DELIM + "this"
-                        + Code.DELIM + obj.toString() + Code.DELIM + obj.getClass().getName()
+                        + Code.DELIM + MCodeUtilities.getValue(obj) + Code.DELIM + obj.getClass().getName()
                         + Code.DELIM + "0,0,0,0");
 
                 MCodeUtilities.write("" + Code.OMC + Code.DELIM + superName + Code.DELIM
@@ -1132,7 +1132,7 @@ public class TreeInterpreter implements Interpreter {
                         + Code.DELIM + auxCounter + Code.DELIM + "0,0,0,0");
                 result[i++] = ((Node) it.next()).acceptVisitor(v);
                 MCodeUtilities.addToRedirectBuffer("" + Code.P + Code.DELIM + auxCounter
-                        + Code.DELIM + result[i - 1].toString() + Code.DELIM
+                        + Code.DELIM + MCodeUtilities.getValue(result[i - 1]) + Code.DELIM
                         + result[i - 1].getClass().getName());
             }
             MCodeUtilities.setRedirectOutput(false);
