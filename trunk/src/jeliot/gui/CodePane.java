@@ -191,4 +191,7 @@ public class CodePane extends JComponent {
 		SwingUtilities.invokeLater(updateAComponent);
 	}
 
+	public JTextArea getTextArea() {
+	    return area;
+	}
 }

@@ -2613,4 +2613,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         this.superMethodCallNumber = superMethodCallNumber;
     }
 
+    /* (non-Javadoc)
+     * @see jeliot.mcode.MCodeInterpreter#handleCodeCAST(long, long, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
+     */
+    public void handleCodeCAST(long expressionCounter, long expressionReference, String value, String type, Highlight h) {
+        Value oldValue = (Value) values.remove(new Long(expressionReference));
+        Value newValue = new Value(value, type);
+        director.animateCastExpression(oldValue, newValue, h);
+        values.put(new Long(expressionCounter), newValue);
+    }
+
 }

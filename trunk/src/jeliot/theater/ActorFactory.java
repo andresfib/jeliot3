@@ -489,7 +489,11 @@ public class ActorFactory {
             if (dotIndex > -1) {
                 resolvedType = resolvedType.substring(dotIndex + 1);
             }
-            actor.setName(resolvedType + " " + v.getName());
+            if (v.getName().equals(v.getType())) {
+                actor.setName(resolvedType);
+            } else {
+                actor.setName(resolvedType + " " + v.getName());
+            }
             actor.setFont(variableFont);
             actor.setForeground(variableForegroundColor);
             actor.setInsets(variableInsets);

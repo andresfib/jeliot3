@@ -24,13 +24,13 @@ import jeliot.mcode.MCodeInterpreter;
 import jeliot.mcode.MCodeUtilities;
 
 /**
- * Directs the program animation. Contains the commands to handle
- * all the expressions and statements that are visualized.
+ * Directs the program animation. Contains the commands to visualize
+ * all the expressions and statements in the Theater.
  * 
  * @author Pekka Uronen
  * @author Niko Myller
  * 
- * @see jeliot.mcode.Intepreter
+ * @see jeliot.mcode.TheaterMCodeIntepreter
  */
 public class Director {
 
@@ -1005,6 +1005,17 @@ public class Director {
         return bubble;
     }
 
+    /**
+     * 
+     * @param fromValue
+     * @param toValue
+     * @param h
+     */
+    public void animateCastExpression(Value fromValue, Value toValue, Highlight h) {
+        highlight(h);
+        animateCastExpression(fromValue, toValue);
+    }
+    
     /**
      * @param fromValue
      * @param toValue
