@@ -201,6 +201,25 @@ public class TreeInterpreter implements Interpreter {
             ECodeUtilities.write(code);
             return null;
             //throw new InterpreterException(e);
+        } catch (Error e) {
+            String code = ""+Code.ERROR+Code.DELIM+"<H1>ERROR</H1><BR>";
+
+            if (e.getCause() != null) {
+                String cause = ECodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
+                cause = ECodeUtilities.replace(cause, ">", "&gt;");
+                code += cause+"<BR>";
+            }
+            if (e.getMessage() != null && !e.getMessage().equals("")) {
+                String message = ECodeUtilities.replace(e.getMessage(), "<", "&lt;");
+                message = ECodeUtilities.replace(message, ">", "&gt;");
+                code += message;
+
+            }
+            code += ""+Code.DELIM;
+            code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0;
+            ECodeUtilities.write(code);
+            return null;
+            //throw new InterpreterException(e);
         }
     }
 

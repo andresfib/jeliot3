@@ -101,8 +101,8 @@ public class Interpreter {
         //Change this to be something more meaningful!
         if (line == null) {
             line = "" + Code.ERROR + Code.DELIM +
-                   "<H1>Runtime Exception</H1>" +
-                   Code.DELIM + "0,0,0,0";
+                   "<H1>Runtime Exception</H1><P>The reason for runtime exception is not known.</P>" +
+                   Code.DELIM + "0"+Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0";
         }
 
         StringTokenizer tokenizer = new StringTokenizer(line, Code.DELIM);
@@ -144,8 +144,8 @@ public class Interpreter {
                 //Change this to be something more meaningful!
                 if (line == null) {
                     line = "" + Code.ERROR + Code.DELIM +
-                           "<H1>Runtime Exception</H1>" +
-                           Code.DELIM + "0,0,0,0";
+                           "<H1>Runtime Exception</H1><P>The reason for runtime exception is not known.</P>" +
+                           Code.DELIM + "0"+Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0"+Code.LOC_DELIM+"0";
                 }
             } else {
                 firstLineRead = false;

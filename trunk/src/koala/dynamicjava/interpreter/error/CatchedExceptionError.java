@@ -72,9 +72,21 @@ public class CatchedExceptionError extends ExecutionError {
     }
 
     /**
+     * Constructs an <code>CatchedExceptionError</code> with the specified
+     * detail message, filename, line, column and exception.
+     * @param messageString the message string that describes the exception
+     * @param t  the catched exception or error
+     * @param n  the node in the syntax tree where the error occurs
+     */
+    public CatchedExceptionError(String messageString, Throwable t, Node n) {
+        super(messageString, n);
+        thrown = t;
+    }
+
+    /**
      * Returns the exception that causes this error throwing
      */
     public Throwable getException() {
-    return thrown;
+        return thrown;
     }
 }
