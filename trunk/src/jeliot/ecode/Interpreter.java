@@ -223,11 +223,9 @@ public class Interpreter {
                             int expressionCounter = Integer.parseInt(tokenizer.nextToken());
                             int fromExpression = Integer.parseInt(tokenizer.nextToken());
                             int toExpression =  Integer.parseInt(tokenizer.nextToken());
-                            String value = null;
-                            if (tokenizer.countTokens() >= 2) {
+                            String value = "";
+                            if (tokenizer.countTokens() > 2) {
                                 value = tokenizer.nextToken();
-                            } else {
-                                value = "";
                             }
                             String type = tokenizer.nextToken();
                             Highlight h = ECodeUtilities.makeHighlight(
@@ -2716,7 +2714,7 @@ public class Interpreter {
             }
 
             Variable var = director.declareObjectVariable(of, name, type, null);
-
+/*
             if (!value.equals(Code.UNKNOWN)) {
 
                 Value casted = null;
@@ -2752,7 +2750,7 @@ public class Interpreter {
 
                 director.animateAssignment(var, val, casted, null, null);
             }
-
+*/
         }
 
         return of;
