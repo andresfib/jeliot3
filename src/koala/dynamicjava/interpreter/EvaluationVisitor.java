@@ -1125,9 +1125,34 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(AddAssignExpression node) {
+	//Simulate that a+=3-b -->> a= a+ (3-b)
+	//Added 2 evaluations to left hand side ...
+        long assigncounter=counter++;
+	long assignauxcounter=counter;
+	//Start assignment
+        Code.write("" + Code.BEGIN+Code.DELIM+Code.A+Code.DELIM+assigncounter+Code.DELIM+locationToString(node)); //
+	//Start ad expression
+	long addcounter=counter++;
+        long auxcounter=counter;
+
+	Code.write(""+Code.BEGIN+Code.DELIM+Code.AE+Code.DELIM+addcounter+
+                    Code.DELIM+locationToString(node));
+	// Get left hand side for the add expression
+        Code.write(""+Code.LEFT+Code.DELIM+counter);
+
         Node   left = node.getLeftExpression();
+        evaluating=false;
+        left.acceptVisitor(this);
+        evaluating=true;
+
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
         Object lhs = mod.prepare(this, context);
+	long auxcounter2=counter;
+
+	// Get right hand side for the add expression
+	Code.write(""+Code.RIGHT+Code.DELIM+counter);
+        Object val  = node.getRightExpression().acceptVisitor(this);
+	
 
         // Perform the operation
         Object result = InterpreterUtilities.add(
@@ -1138,8 +1163,25 @@ public class EvaluationVisitor extends VisitorObject {
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
 
+        Code.write(""+Code.AE+Code.DELIM+addcounter+Code.DELIM+auxcounter+
+            Code.DELIM+auxcounter2+Code.DELIM+result.toString()+
+            Code.DELIM+NodeProperties.getType(node).getName()+
+            Code.DELIM+locationToString(node));
+
+	long assignauxcounter2=counter;
+	Code.write("" + Code.TO+Code.DELIM+counter);
+        evaluating=false;
+        left.acceptVisitor(this);
+        evaluating=true;
+
+
         // Modify the variable and return
         mod.modify(context, result);
+        Code.write("" + Code.A+Code.DELIM+assigncounter+Code.DELIM+assignauxcounter+
+		   Code.DELIM+assignauxcounter2+Code.DELIM+result.toString()+
+		   Code.DELIM+NodeProperties.getType(node).getName()+
+		   Code.DELIM+locationToString(node));
+	
 
         return result;
     }
