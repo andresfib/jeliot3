@@ -544,47 +544,74 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(VariableDeclaration node) {
         Class c = NodeProperties.getType(node.getType());
         int type;
-        String value;
-        long auxcounter=counter;
+        String value=Code.UNKNOWN;;
+        long auxcounter=Code.NO_REFERENCE;
+        //        long auxcounter=counter;
+        Object o;
 
-        if (node.getInitializer() != null) {
-
-            Object o = performCast(c, node.getInitializer().acceptVisitor(this));
-
-            if (node.isFinal()) {
-
-                context.setConstant(node.getName(), o);
-                type=Code.FINAL;
-
-            } else {
-
-                type=Code.NOT_FINAL;
-                context.set(node.getName(), o);
-
-            }
-
-            value=o.toString();
-
-        } else {
-            if (node.isFinal()) {
-
-                context.setConstant(node.getName(), UninitializedObject.INSTANCE);
-                type=Code.FINAL;
-
-            } else {
-
-                context.set(node.getName(), UninitializedObject.INSTANCE);
-                type=Code.NOT_FINAL;
-
-
-            }
-            value=Code.UNKNOWN;
-            auxcounter=Code.NO_REFERENCE;
+        if (node.isFinal()) {            
+            type=Code.FINAL;            
+        } else {            
+            type=Code.NOT_FINAL;
         }
-
+        
         ECodeUtilities.write(""+Code.VD+Code.DELIM+node.getName()+Code.DELIM+auxcounter+
                    Code.DELIM+value+Code.DELIM+c.getName()+Code.DELIM+type+
                    Code.DELIM+locationToString(node));
+
+        if (node.getInitializer() != null) {
+            long assigncounter=counter++;
+            ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.A+Code.DELIM+assigncounter+Code.DELIM+locationToString(node)); //
+            
+            auxcounter=counter;
+            o = performCast(c, node.getInitializer().acceptVisitor(this));
+            //value=o.toString();
+
+            ECodeUtilities.write("" + Code.TO+Code.DELIM+counter);                   
+            long auxcounter2=counter;
+            ECodeUtilities.write("" + Code.QN+Code.DELIM+(counter++)+Code.DELIM+node.getName()+//node.getRepresentation()+
+                                 Code.DELIM+value+Code.DELIM+c.getName());
+
+            ECodeUtilities.write("" + Code.A+Code.DELIM+assigncounter+Code.DELIM+auxcounter+
+                                 Code.DELIM+auxcounter2+Code.DELIM+o.toString()+
+                                 Code.DELIM+c.getName()+
+                                 Code.DELIM+locationToString(node));
+
+            if (node.isFinal()) {
+                context.setConstant(node.getName(), o);            
+            } else {                      
+                context.set(node.getName(), o);                
+            }
+        } else {
+            if (node.isFinal()) {
+                
+                context.setConstant(node.getName(), UninitializedObject.INSTANCE);
+            } else {
+                context.set(node.getName(), UninitializedObject.INSTANCE);
+            }
+        }
+
+
+        // } else {
+//             if (node.isFinal()) {
+
+//                 context.setConstant(node.getName(), UninitializedObject.INSTANCE);
+//                 type=Code.FINAL;
+
+//             } else {
+
+//                 context.set(node.getName(), UninitializedObject.INSTANCE);
+//                 type=Code.NOT_FINAL;
+
+
+//             }
+//             value=Code.UNKNOWN;
+//             auxcounter=Code.NO_REFERENCE;
+//         }
+
+//         ECodeUtilities.write(""+Code.VD+Code.DELIM+node.getName()+Code.DELIM+auxcounter+
+//                    Code.DELIM+value+Code.DELIM+c.getName()+Code.DELIM+type+
+//                    Code.DELIM+locationToString(node));
         return null;
     }
 
@@ -1099,6 +1126,9 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(NotExpression node) {
+
+        ECodeUtilities.write(""+Code.RIGHT+Code.DELIM+counter);
+
         if (node.hasProperty(NodeProperties.VALUE)) {
             // The expression is constant
             ECodeUtilities.write(""+Code.NO+Code.DELIM+(counter++)+Code.DELIM+Code.NO_REFERENCE+Code.DELIM
@@ -1128,6 +1158,9 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ComplementExpression node) {
+
+        ECodeUtilities.write(""+Code.RIGHT+Code.DELIM+counter);
+
         if (node.hasProperty(NodeProperties.VALUE)) {
             // The expression is constant
             ECodeUtilities.write(""+Code.NO+Code.DELIM+(counter++)+Code.DELIM+Code.NO_REFERENCE+
@@ -1187,6 +1220,8 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(MinusExpression node) {
+
+        ECodeUtilities.write(""+Code.RIGHT+Code.DELIM+counter);
 
         if (node.hasProperty(NodeProperties.VALUE)) {
             // The expression is constant
