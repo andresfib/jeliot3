@@ -9,6 +9,8 @@ import java.awt.Point;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import jeliot.tracker.Tracker;
+
 
 /**
  * @author nmyller
@@ -251,6 +253,7 @@ public class ClassActor extends Actor implements ActorContainer {
             double h;
             double plus;
             int full;
+            
             public void init() {
                 size = new Dimension(getWidth(), nheight + margin * 3);
                 h = size.height;
@@ -265,6 +268,9 @@ public class ClassActor extends Actor implements ActorContainer {
             }
 
             public void animate(double pulse) {
+                Point p = getRootLocation();
+                Tracker.writeToFile("Appear", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), System.currentTimeMillis());
+                
                 h += plus * pulse;
                 size.height = (int) h;
                 setSize(size);
@@ -306,6 +312,9 @@ public class ClassActor extends Actor implements ActorContainer {
             }
 
             public void animate(double pulse) {
+                Point p = getRootLocation();
+                Tracker.writeToFile("Disappear", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), System.currentTimeMillis());
+                
                 h += plus * pulse;
                 size.height = (int) h;
                 setSize(size);
@@ -345,6 +354,9 @@ public class ClassActor extends Actor implements ActorContainer {
                 }
 
                 public void animate(double pulse) {
+                    Point p = getRootLocation();
+                    Tracker.writeToFile("Extend", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), System.currentTimeMillis());
+                    
                     h += plus * pulse;
                     size.height = (int)h;
                     setSize(size);

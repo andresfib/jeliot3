@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import jeliot.tracker.Tracker;
+
 /**
  * The base class for all the actors. The Actor class should not be
  * used directly but indirectly with it's subclasses.
@@ -534,6 +536,8 @@ public abstract class Actor implements Cloneable {
 			}
 
 			public void animate(double pulse) {
+                Tracker.writeToFile("Move", (int)x, (int)y, Actor.this.getWidth(), Actor.this.getHeight(), System.currentTimeMillis());
+                
 				setLocation((int) x, (int) y);
 				x += pulse * step * cos;
 				y += pulse * step * sin;
@@ -574,6 +578,9 @@ public abstract class Actor implements Cloneable {
 	 */
 	public Animation appear(final Point loc) {
 		return new Animation() {
+            int x = loc.x;
+            int y = loc.y;
+            
 			public void init() {
 				this.addActor(Actor.this);
 				setLocation(loc);
@@ -581,7 +588,9 @@ public abstract class Actor implements Cloneable {
 				this.repaint();
 			}
 
-			public void animate(double pulse) {}
+			public void animate(double pulse) {
+                Tracker.writeToFile("Appear", x, y, Actor.this.getWidth(), Actor.this.getHeight(), System.currentTimeMillis());
+            }
 
 			public void finish() {
 				setLight(NORMAL);

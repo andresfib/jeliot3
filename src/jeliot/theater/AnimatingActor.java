@@ -2,6 +2,9 @@ package jeliot.theater;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
+
+import jeliot.tracker.Tracker;
 
 /**
  * 
@@ -58,10 +61,12 @@ public class AnimatingActor extends Actor {
 	 */
     public Animation changeImage(final Image chim ) {
         return new Animation() {
-
+                        
             public void animate(double pulse) { }
 
             public void finish() {
+                Point p = getRootLocation();
+                Tracker.writeToFile("ChangeImage", p.x, p.y, chim.getWidth(null), chim.getHeight(null), System.currentTimeMillis());
                 setImage(chim);
             }
         };

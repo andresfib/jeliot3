@@ -9,6 +9,8 @@ import java.awt.Point;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import jeliot.tracker.Tracker;
+
 /**
  * ObjectStage is the graphical representation of the ObjectFrame.
  * It contains the field of the object as <code>VariableActor</code>s.
@@ -251,6 +253,7 @@ public class ObjectStage extends InstanceActor {
             double h;
             double plus;
             int full;
+            
             public void init() {
                 size = new Dimension(getWidth(), nheight + margin * 3);
                 h = size.height;
@@ -265,6 +268,9 @@ public class ObjectStage extends InstanceActor {
             }
 
             public void animate(double pulse) {
+                Point p = getRootLocation();
+                Tracker.writeToFile("Appear", p.x, p.y, ObjectStage.this.getWidth(), ObjectStage.this.getHeight(), System.currentTimeMillis());
+                
                 h += plus * pulse;
                 size.height = (int) h;
                 setSize(size);
@@ -294,6 +300,7 @@ public class ObjectStage extends InstanceActor {
             double h;
             double plus;
             int full;
+            
             public void init() {
                 size = getSize();
                 full = nheight + margin * 3;
@@ -306,6 +313,9 @@ public class ObjectStage extends InstanceActor {
             }
 
             public void animate(double pulse) {
+                Point p = getRootLocation();
+                Tracker.writeToFile("Disappear", p.x, p.y, ObjectStage.this.getWidth(), ObjectStage.this.getHeight(), System.currentTimeMillis());
+                
                 h += plus * pulse;
                 size.height = (int) h;
                 setSize(size);

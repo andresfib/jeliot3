@@ -57,6 +57,7 @@ import jeliot.theater.AnimationEngine;
 import jeliot.theater.ImageLoader;
 import jeliot.theater.PanelController;
 import jeliot.theater.Theater;
+import jeliot.tracker.Tracker;
 
 /**
  * The main window of the Jeliot 3.
@@ -265,6 +266,7 @@ public class JeliotWindow {
     private ActionListener stepAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.writeToFile("StepButton", System.currentTimeMillis());
             stepAnimation();
         }
     };
@@ -275,6 +277,7 @@ public class JeliotWindow {
     private ActionListener playAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.writeToFile("PlayButton", System.currentTimeMillis());
             playAnimation();
         }
     };
@@ -285,6 +288,7 @@ public class JeliotWindow {
     private ActionListener pauseAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.writeToFile("PauseButton", System.currentTimeMillis());
             pauseAnimation();
         }
     };
@@ -295,6 +299,7 @@ public class JeliotWindow {
     private ActionListener rewindAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.writeToFile("RewindButton", System.currentTimeMillis());
             rewindAnimation();
         }
     };
@@ -318,7 +323,8 @@ public class JeliotWindow {
             Properties prop = System.getProperties();
             File f = new File(udir);
             prop.put("user.dir", f.toString());
-
+            Jeliot.close();
+            
             if (Jeliot.isnoSystemExit()) {
                 frame.dispose();
             } else {
@@ -394,14 +400,16 @@ public class JeliotWindow {
         this.tabbedPane.addTab(bundle.getString("tab.title.theater"), theaterScrollPane);
         this.tabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
 
-        this.tabbedPane.addTab(bundle.getString("tab.title.call_tree"),
-                callTree.getComponent());
-        this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
+        if (!jeliot.isExperiment()) {
+            this.tabbedPane.addTab(bundle.getString("tab.title.call_tree"),
+                    callTree.getComponent());
+            this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
         
-        this.tabbedPane.addTab("History",
-                hv);
-        this.tabbedPane.setMnemonicAt(2, KeyEvent.VK_Y);        
-        
+            this.tabbedPane.addTab("History",
+                    hv);
+            this.tabbedPane.setMnemonicAt(2, KeyEvent.VK_Y);        
+        }
+            
         frame = new JFrame(jeliotVersion);
         frame.setIconImage(iLoad
                 .getImage(bundle.getString("image.jeliot_icon")));
@@ -465,6 +473,7 @@ public class JeliotWindow {
                 Properties prop = System.getProperties();
                 File f = new File(udir);
                 prop.put("user.dir", f.toString());
+                Jeliot.close();
 
                 if (Jeliot.isnoSystemExit()) {
                     frame.dispose();
@@ -804,6 +813,8 @@ public class JeliotWindow {
         editButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                Tracker.writeToFile("EditButton", System.currentTimeMillis());
+                
                 enterEdit();
             }
         });
@@ -811,6 +822,8 @@ public class JeliotWindow {
         compileButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                Tracker.writeToFile("AnimationButton", System.currentTimeMillis());
+                
                 tryToEnterAnimate();
             }
         });
@@ -1619,12 +1632,21 @@ public class JeliotWindow {
     /**
      * Sets program to the editor pane.
      * 
-     * @param program
+     * @param program The program in String
      */
     public void setProgram(String program) {
         editor.setProgram(program);
     }
 
+    /**
+     * Set the program in the file to the editor pane.
+     * 
+     * @param f The program file
+     */
+    public void setProgram(File f) {
+        editor.loadProgram(f);
+    }
+    
     /**
      * Returns the code from the CodePane.
      * 

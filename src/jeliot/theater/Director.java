@@ -242,7 +242,9 @@ public class Director {
     }
 
     public void requestHistoryImage() {
-    	jeliot.addImageToHistory(theatre.requestImage(), hPrev);
+        if (!jeliot.isExperiment()) {
+            jeliot.addImageToHistory(theatre.requestImage(), hPrev);
+        }
     }
     
     /**
