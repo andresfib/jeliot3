@@ -61,7 +61,7 @@ public class JeliotExtension extends Extension implements PackageListener{
      * version number of the extension
      */
     public String  getVersion () { 
-        	return ("1.0"); 
+        	return ("3.5.0"); 
     }
 
     /**
@@ -76,7 +76,7 @@ public class JeliotExtension extends Extension implements PackageListener{
     }
     
     public String getDescription () {
-        return ("A Jeliot extension inside your BlueJ program");
+        return ("Jeliot 3 is a Program Visualization application. You can load the active project into Jeliot and animate it!!");
     }
 
     /**
@@ -85,7 +85,7 @@ public class JeliotExtension extends Extension implements PackageListener{
      */
     public URL getURL () {
         try {
-            return new URL("http://cs.joensuu.fi/jeliot/");
+        return new URL("http://cs.joensuu.fi/jeliot/");
         } catch ( Exception eee ) {
             // There is no reason at all that this should trow exception...
             System.out.println ("Simple extension: getURL: Exception="+eee.getMessage());
