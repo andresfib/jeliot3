@@ -50,7 +50,7 @@ import jeliot.mcode.*;
 import jeliot.theater.*;
 
 /**
- * This is the main window of the Jeliot 3.
+ * The main window of the Jeliot 3.
  *
  * @author Pekka Uronen
  * @author Niko Myller

@@ -6,16 +6,27 @@ import java.util.ResourceBundle;
 
 import javax.swing.filechooser.FileFilter;
 
+/**
+ * Filter for the file chooser to only show the java source code files.
+ * 
+ * @author Niko Myller
+ */
 public class JavaFileFilter extends FileFilter {
 
-    /**
-     * The resource bundle
+	/**
+     * The resource bundle for gui package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.gui.resources.properties",
                                       Locale.getDefault());
 
-    public boolean accept(File f) {
+    /**
+     * Method accepts only the files whose extension
+     * which is defined in the resource bundle with name
+     * extension.java 
+	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
+	 */
+	public boolean accept(File f) {
     if(f != null) {
         if(f.isDirectory()) {
         return true;
@@ -32,8 +43,9 @@ public class JavaFileFilter extends FileFilter {
 
     /**
      * Return the extension portion of the file's name .
-     *
-     */
+	 * @param f The file whose extension is needed.
+	 * @return the string presentation of the files extension.
+	 */
      public String getExtension(File f) {
     if(f != null) {
         String filename = f.getName();
@@ -45,9 +57,10 @@ public class JavaFileFilter extends FileFilter {
     return null;
     }
 
-    /**
-     * Returns the human readable description of this filter. For
-     * example: "JPEG and GIF Image Files (*.jpg, *.gif)"
+	/**
+     * Returns the human readable description of this filter described in the
+     * resource bundle as extension.java.description.
+     * @see javax.swing.filechooser.FileFilter#getDescription()
      */
     public String getDescription() {
     return bundle.getString("extension.java.description");

@@ -15,8 +15,7 @@ import javax.swing.JPanel;
   * next version.
   *
   * @author Pekka Uronen
-  *
-  * created         11.8.1999
+  * @author Niko Myller
   */
 public class DraggableComponent extends JPanel implements MouseListener,
         MouseMotionListener {
