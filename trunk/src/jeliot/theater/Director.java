@@ -46,7 +46,8 @@ public class Director {
     //DOC: Document!
 
     /**
-     *
+     * Set true if the highlighting is requested just to pause the animation
+     * and show the message on the screen.
      */
     private boolean messagePause = false;
 
@@ -125,6 +126,9 @@ public class Director {
      */
     private int runUntilLine = -1;
 
+    /**
+     * 
+     */
     private Highlight hPrev;
     
     /**
@@ -196,7 +200,7 @@ public class Director {
         }
         theatre.flush();
     }
-
+    
     /**
      * @param step
      */
@@ -217,7 +221,7 @@ public class Director {
      */
     //Changed for Jeliot 3
     public void highlight(Highlight h) {
-    	jeliot.addImageToHistory(theatre.requestImage(), hPrev);
+    	//requestHistoryImage();
     	this.hPrev = h;
         if (!mCodeInterpreter.starting()) {
 
@@ -245,6 +249,10 @@ public class Director {
         }
     }
 
+    public void requestHistoryImage() {
+    	jeliot.addImageToHistory(theatre.requestImage(), hPrev);
+    }
+    
     /**
      * 
      */
@@ -277,6 +285,21 @@ public class Director {
      */
     public void closeExpression() {}
 
+    public void capture() {
+    	requestHistoryImage();
+    	theatre.capture();
+    }
+    
+    public void updateCapture() {
+    	requestHistoryImage();
+    	theatre.updateCapture();
+    }
+    
+    public void release() {
+    	requestHistoryImage();
+    	theatre.release();
+    }
+    
     /** This method animates the first half of a binary expression.
       * For example in expression  a + b  this will animate as
       * (supposing that the value of a is 1):   1 + ...
@@ -305,26 +328,26 @@ public class Director {
         Point dotsLoc = expr.reserve(dotsAct);
 
         // Prepare the theatre for animation.
-        theatre.capture();
+        capture();        
 
         // Move the first operand to its place.
         engine.showAnimation(operandAct.fly(operandLoc));
         expr.bind(operandAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         // Make the operator appear.
         engine.showAnimation(operatorAct.appear(operatorLoc));
         expr.bind(operatorAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         // Make the ellipsis appear.
         engine.showAnimation(dotsAct.appear(dotsLoc));
         expr.bind(dotsAct);
 
         // Re-activate the theatre after animation.
-        theatre.release();
+        release();
 
         return expr;
     }
@@ -354,14 +377,14 @@ public class Director {
             Point operandLoc = expr.reserve(operandAct);
 
             // Prepare the theatre for animation.
-            theatre.capture();
+            capture();
 
             // Move the operand to its place.
             engine.showAnimation(operandAct.fly(operandLoc));
             expr.bind(operandAct);
 
             // De-activate the theatre.
-            theatre.release();
+            release();
         }
     }
 
@@ -386,7 +409,7 @@ public class Director {
         OperatorActor operatorAct = factory.produceBinOpResActor(operator);
 
         // Prepare the theatre for animation.
-        theatre.capture();
+        capture();
 
         // Reserve places for the equals sign and the result.
         Point operatorLoc = expr.reserve(operatorAct);
@@ -396,13 +419,13 @@ public class Director {
         engine.showAnimation(operatorAct.appear(operatorLoc));
         expr.bind(operatorAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         // Make the result appear.
         engine.showAnimation(resultAct.appear(resultLoc));
         expr.bind(resultAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         // Make the expression dark.
         expr.setLight(Actor.SHADED);
@@ -416,7 +439,7 @@ public class Director {
         result.setActor(clone);
 
         // De-activate the theatre.
-        theatre.release();
+        release();
 
         Value val = (Value) result.clone();
         ValueActor rAct = factory.produceValueActor(val);
@@ -513,7 +536,7 @@ public class Director {
         actor.calculateSize();
 
         // Show the animation.
-        theatre.capture();
+        capture();
 
         // Introduce the invocation and the this Value fly.
         engine.showAnimation(
@@ -523,7 +546,7 @@ public class Director {
         //bind this value
         actor.bindThisActor();
 
-        theatre.updateCapture();
+        updateCapture();
 
         // Bring in arguments.
         engine.showAnimation(fly);
@@ -534,7 +557,7 @@ public class Director {
         }
 
         // De-activate the theatre.
-        theatre.release();
+        release();
 
         return args;
     }
@@ -560,7 +583,6 @@ public class Director {
      * @return
      */
     public Value[] animateSMInvocation(String methodName,
-    //DomesticMethodPointer dmp,
     Value[] args, Highlight h) {
 
         highlight(h);
@@ -595,7 +617,7 @@ public class Director {
         actor.calculateSize();
 
         // Show the animation.
-        theatre.capture();
+        capture();
 
         // Introduce the invocation.
         engine.showAnimation(actor.appear(invoLoc));
@@ -610,13 +632,13 @@ public class Director {
         }
 
         // De-activate the theatre.
-        theatre.release();
+        release();
 
         return args;
     }
 
     /**
-     * Called when the program enters a new user-defined method.
+     * Called when the program enters a method.
      * Sets up a frame for the method.
      * @param methodName
      * @param args
@@ -688,13 +710,13 @@ public class Director {
             }
         }
 
-        theatre.capture();
+        capture();
 
         Point sLoc = manager.reserve(stage);
         engine.showAnimation(stage.appear(sLoc));
         manager.bind(stage);
 
-        theatre.updateCapture();
+        updateCapture();
 
         thisVariable.assign(thisValue);
         Value thisCasted = thisVariable.getValue();
@@ -723,7 +745,7 @@ public class Director {
         thisVariableActor.bind();
         theatre.removeActor(thisValueActor);
 
-        theatre.updateCapture();
+        updateCapture();
 
         if (args != null && args.length > 0) {
 
@@ -743,7 +765,7 @@ public class Director {
             }
         }
 
-        theatre.updateCapture();
+        updateCapture();
 
         if (currentScratch != null) {
             Scratch scratch = currentScratch;
@@ -756,12 +778,12 @@ public class Director {
             }
             manager.removeScratch(scratch);
             Point p = new Point(scratch.getX(), -scratch.getHeight());
-            theatre.updateCapture();
+            updateCapture();
             engine.showAnimation(scratch.fly(p));
             theatre.removePassive(scratch);
         }
         openScratch();
-        theatre.release();
+        release();
     }
 
     /**
@@ -832,12 +854,12 @@ public class Director {
             }
         }
 
-        theatre.capture();
+        capture();
         Point sLoc = manager.reserve(stage);
         engine.showAnimation(stage.appear(sLoc));
         manager.bind(stage);
 
-        theatre.updateCapture();
+        updateCapture();
 
         if (args != null && args.length > 0) {
 
@@ -857,7 +879,7 @@ public class Director {
             }
         }
 
-        theatre.updateCapture();
+        updateCapture();
 
         if (currentScratch != null) {
             Scratch scratch = currentScratch;
@@ -870,12 +892,12 @@ public class Director {
             }
             manager.removeScratch(scratch);
             Point p = new Point(scratch.getX(), -scratch.getHeight());
-            theatre.updateCapture();
+            updateCapture();
             engine.showAnimation(scratch.fly(p));
             theatre.removePassive(scratch);
         }
         openScratch();
-        theatre.release();
+        release();
     }
 
     /**
@@ -910,7 +932,7 @@ public class Director {
         //manager.removeScratch(currentScratch);
         closeScratch();
 
-        theatre.capture();
+        capture();
 
         ExpressionActor expr = null;
         if (returnAct != null) {
@@ -954,7 +976,7 @@ public class Director {
         theatre.removeActor(currentScratch);
         manager.addScratch(currentScratch);
 
-        theatre.release();
+        release();
 
         if (returnAct != null) {
             return (ValueActor) ((BubbleActor) returnAct).getActor();
@@ -1001,13 +1023,13 @@ public class Director {
         Point valueLoc = bubble.reserve(castAct);
 
         bubble.removeTip();
-        theatre.capture();
+        capture();
         engine.showAnimation(bubble.appear(bubbleLoc));
         engine.showAnimation(valueAct.fly(valueLoc));
         bubble.bind();
         //stage.bind();
         theatre.removePassive(valueAct);
-        theatre.release();
+        release();
 
         return bubble;
     }
@@ -1091,7 +1113,7 @@ public class Director {
         Point resultLoc = expr.reserve(resultAct);
 
         // Prepare the theatre
-        theatre.capture();
+        capture();
 
         // Move the operands to positions.
         engine.showAnimation(
@@ -1099,27 +1121,27 @@ public class Director {
                 firstAct.fly(firstLoc),
                 secondAct.fly(secondLoc)});
 
-        theatre.updateCapture();
+        updateCapture();
 
         expr.bind(firstAct);
         expr.bind(secondAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         engine.showAnimation(operatorAct.appear(operatorLoc));
         expr.bind(operatorAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         engine.showAnimation(eqAct.appear(eqLoc));
         expr.bind(eqAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         engine.showAnimation(resultAct.appear(resultLoc));
         expr.bind(resultAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         // Darken the expression.
         expr.setLight(Actor.SHADED);
@@ -1132,7 +1154,7 @@ public class Director {
         currentScratch.registerCrap(clone);
         theatre.addPassive(clone);
 
-        theatre.release();
+        release();
 
         Value val = (Value) result.clone();
         ValueActor rAct = factory.produceValueActor(val);
@@ -1167,12 +1189,12 @@ public class Director {
             engine.showAnimation(a);
         }
 
-        theatre.capture();
+        capture();
 
         engine.showAnimation(actor.appear(loc));
         stage.bind();
 
-        theatre.release();
+        release();
 
         return v;
     }
@@ -1200,12 +1222,12 @@ public class Director {
         ObjectStage stage = of.getObjectStage();
 
         Point loc = stage.reserve(actor);
-        theatre.capture();
+        capture();
 
         engine.showAnimation(actor.appear(loc));
         stage.bind();
 
-        theatre.release();
+        release();
 
         return v;
     }
@@ -1257,11 +1279,11 @@ public class Director {
         ValueActor act = factory.produceValueActor(va);
         Point loc = va.getRootLocation();
 
-        theatre.capture();
+        capture();
         Animation appear = act.appear(loc);
         appear.setDuration(200);
         engine.showAnimation(appear);
-        theatre.release();
+        release();
 
         currentScratch.registerCrap(act);
         return act;
@@ -1295,11 +1317,11 @@ public class Director {
 
             Point valueLoc = variableAct.reserve(castAct);
 
-            theatre.capture();
+            capture();
             engine.showAnimation(valueAct.fly(valueLoc));
             variableAct.bind();
             theatre.removePassive(valueAct);
-            theatre.release();
+            release();
 
             if (returnValue != null) {
                 ValueActor returnAct = factory.produceValueActor(returnValue);
@@ -1323,11 +1345,11 @@ public class Director {
             	//instAct.addReference(refAct);
             	Point valueLoc = rva.reserve(ra);
 
-            	theatre.capture();
+            	capture();
             	engine.showAnimation(refAct.fly(valueLoc));
             	rva.bind();
             	theatre.removePassive(refAct);
-            	theatre.release();
+            	release();
             } else if (variableAct instanceof ReferenceVariableInArrayActor) {
             	ReferenceVariableInArrayActor rva = (ReferenceVariableInArrayActor) variableAct;
 
@@ -1337,11 +1359,11 @@ public class Director {
             	//instAct.addReference(refAct);
             	Point valueLoc = rva.reserve(ra);
 
-            	theatre.capture();
+            	capture();
             	engine.showAnimation(refAct.fly(valueLoc));
             	rva.bind();
             	theatre.removePassive(refAct);
-            	theatre.release();            	
+            	release();            	
             }
             if (returnValue != null) {
                 ValueActor returnAct =
@@ -1390,7 +1412,7 @@ public class Director {
             opLoc.translate(varAct.getWidth() + 2, 8);
         }
 
-        theatre.capture();
+        capture();
 
         engine.showAnimation(opAct.appear(opLoc));
         engine.showAnimation(resAct.appear(resLoc));
@@ -1412,7 +1434,7 @@ public class Director {
         theatre.removeActor(opAct);
         currentScratch.registerCrap(rAct);
 
-        theatre.release();
+        release();
     }
 
     /**
@@ -1447,7 +1469,7 @@ public class Director {
             opLoc.translate(varAct.getWidth() + 2, 8);
         }
 
-        theatre.capture();
+        capture();
 
         if (resAct != null) {
             Point movLoc = new Point(opLoc);
@@ -1470,7 +1492,7 @@ public class Director {
 
         theatre.removeActor(opAct);
 
-        theatre.release();
+        release();
     }
 
     /**
@@ -1490,7 +1512,7 @@ public class Director {
         ValueActor argAct = arg.getActor();
         OperatorActor opAct = factory.produceUnaOpActor(operator);
 
-        theatre.capture();
+        capture();
 
         ExpressionActor exp =
             currentScratch.getExpression(4, expressionCounter);
@@ -1499,13 +1521,13 @@ public class Director {
 
         engine.showAnimation(argAct.fly(aLoc));
         exp.bind(argAct);
-        theatre.updateCapture();
+        updateCapture();
 
         engine.showAnimation(opAct.appear(oLoc));
         exp.bind(opAct);
-        theatre.updateCapture();
+        updateCapture();
 
-        theatre.release();
+        release();
 
         return exp;
     }
@@ -1533,21 +1555,21 @@ public class Director {
         Point eLoc = exp.reserve(eqAct);
         Point rLoc = exp.reserve(resAct);
 
-        theatre.capture();
+        capture();
 
         engine.showAnimation(eqAct.appear(eLoc));
         exp.bind(eqAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         engine.showAnimation(resAct.appear(rLoc));
         exp.bind(resAct);
 
-        theatre.updateCapture();
+        updateCapture();
 
         exp.setLight(Actor.SHADED);
 
-        theatre.release();
+        release();
 
         ValueActor clone = (ValueActor) resAct.clone();
         clone.setLight(Actor.NORMAL);
@@ -1588,7 +1610,7 @@ public class Director {
         OperatorActor opAct = factory.produceUnaOpActor(operator);
         OperatorActor eqAct = factory.produceUnaOpResActor(operator);
 
-        theatre.capture();
+        capture();
 
         ExpressionActor exp =
             currentScratch.getExpression(4, expressionCounter);
@@ -1599,20 +1621,20 @@ public class Director {
 
         engine.showAnimation(argAct.fly(aLoc));
         exp.bind(argAct);
-        theatre.updateCapture();
+        updateCapture();
 
         engine.showAnimation(opAct.appear(oLoc));
         exp.bind(opAct);
-        theatre.updateCapture();
+        updateCapture();
 
         engine.showAnimation(eqAct.appear(eLoc));
         exp.bind(eqAct);
-        theatre.updateCapture();
+        updateCapture();
         engine.showAnimation(resAct.appear(rLoc));
         exp.bind(resAct);
         exp.setLight(Actor.SHADED);
 
-        theatre.release();
+        release();
 
         ValueActor clone = (ValueActor) resAct.clone();
         clone.setLight(Actor.NORMAL);
@@ -1715,12 +1737,12 @@ public class Director {
      * @param p
      */
     private void showMessage(MessageActor message, Point p) {
-        theatre.capture();
+        capture();
         engine.showAnimation(message.appear(p));
         highlight(null);
         messagePause = true;
         theatre.removeActor(message);
-        theatre.release();
+        release();
     }
     
 	/* All the message formats are here */
@@ -1978,7 +2000,7 @@ public class Director {
         Animation fist = hand.changeImage(factory.produceImage("image.hand2"));
         fist.setDuration(800);
 
-        theatre.capture();
+        capture();
 
         hand.setLocation(dest);
         engine.showAnimation(
@@ -1989,7 +2011,7 @@ public class Director {
         engine.showAnimation(hand.fly(dest, 0));
 
         theatre.removeActor(hand);
-        theatre.release();
+        release();
 
         this.output(val.getValue()); //+ "\n");
     }
@@ -2179,7 +2201,7 @@ public class Director {
                     ic.setLocation(p);
                     ic.revalidate();
                     theatre.showComponents(true);
-                    theatre.release();
+                    release();
                     ic.popup();
                     theatre.flush();
                 }
@@ -2227,9 +2249,9 @@ public class Director {
         //theatre.addActor(act);
         ea.cut();
 
-        theatre.capture();
+        capture();
         engine.showAnimation(act.appear(ea.reserve(act)));
-        theatre.release();
+        release();
 
         ea.bind(act);
 
@@ -2283,7 +2305,7 @@ public class Director {
         actor.calculateSize();
 
         // Show the animation.
-        theatre.capture();
+        capture();
 
         // Introduce the invocation.
         engine.showAnimation(actor.appear(invoLoc));
@@ -2303,9 +2325,9 @@ public class Director {
         array.setArrayActor(arrayAct);
 
         Point loc = manager.reserve(arrayAct);
-        theatre.capture();
+        capture();
         engine.showAnimation(arrayAct.appear(loc));
-        theatre.release();
+        release();
         manager.bind(arrayAct);
 
         ReferenceActor refAct = factory.produceReferenceActor(ref);
@@ -2317,7 +2339,7 @@ public class Director {
         //Remove ea from scratch!.
         currentScratch.removeActor(ea);
 
-        theatre.capture();
+        capture();
 
         ExpressionActor expr =
             currentScratch.getExpression(1, expressionCounter);
@@ -2325,7 +2347,7 @@ public class Director {
         engine.showAnimation(refAct.fly(firstLoc));
         expr.bind(refAct);
 
-        theatre.release();
+        release();
     }
 
     /**
@@ -2367,12 +2389,12 @@ public class Director {
             index[i] = indexAct[i].index(varAct);
         }
 
-        theatre.capture();
+        capture();
         engine.showAnimation(appear);
         engine.showAnimation(index);
         varAct.setLight(Actor.HIGHLIGHT);
         //engine.showAnimation(returnAct.appear(loc));
-        theatre.release();
+        release();
 
         for (int i = 0; i < n; i++) {
             currentScratch.registerCrap(indexValAct[i]);
@@ -2409,9 +2431,9 @@ public class Director {
         of.setObjectStage(os);
 
         Point loc = manager.reserve(os);
-        theatre.capture();
+        capture();
         engine.showAnimation(os.appear(loc));
-        theatre.release();
+        release();
         manager.bind(os);
 
     }
@@ -2440,11 +2462,11 @@ public class Director {
                     indexValAct.getRootLocation());
             appear.setDuration(600);
     
-            theatre.capture();
+            capture();
             engine.showAnimation(appear);
             engine.showAnimation(indexAct.index(varAct));
             varAct.setLight(Actor.HIGHLIGHT);
-            theatre.release();
+            release();
     
             currentScratch.registerCrap(indexValAct);
             currentScratch.registerCrap(indexAct);
@@ -2471,9 +2493,9 @@ public class Director {
         c.setClassActor(ca);
 
         Point loc = manager.reserve(ca);
-        theatre.capture();
+        capture();
         engine.showAnimation(ca.appear(loc));
-        theatre.release();
+        release();
         manager.bind(ca);
         
         ListIterator li = c.getVariables();
@@ -2499,12 +2521,12 @@ public class Director {
             engine.showAnimation(a);
         }        
         
-        theatre.capture();
+        capture();
 
         engine.showAnimation(actor.appear(loc2));
         ca.bind();
 
-        theatre.release();
+        release();
         /*
         if (val != null) {
             introduceLiteral(val);
