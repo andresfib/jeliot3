@@ -310,12 +310,13 @@ code is introduced in the section~\ref{sec:Intermediate_Code}. The code is read
 line by line and it is tokenized with the agreed token in the class \p{Code} that contains
 all the necessary constants for intermediate code generation. Then the first token tells what kind of statement is coming and how it should be processed. Then the rest of the statement is processed accordingly and a part of the animation is shown if necessary.
 
-There are several data structures in the \p{Code} class.
+There are several important data structures in the \p{Interpreter} class:
 \begin{description}
-\item[\p{commands}] variable is a reference to a hash table that contains information about each given command. Command in this context tells, for instance, whether a operand of a binary operation is the left or right side of the operation.
-\item[\p{exprs}] variable is a reference to a hash table containing the information about each expression. The information consist of each expressions type (e.g. addition or subtraction operation), expression reference and the location in the code.
-\item[\p{values}]
-\item[\p{variables}]
+\item[\p{commands}] variable is a reference to a stack (\p{Stack}) that contains information about each read command. Command in this context tells, for instance, whether a operand of a binary operation is the left or right side of the operation.
+\item[\p{exprs}] variable is a reference to a stack (\p{Stack}) containing the information about each read expression. The information consist of each expressions type (e.g. addition or subtraction operation), expression reference and the location in the code. It is used to
+identify which operands (i.e. values or variables) belong to which operation.
+\item[\p{values}] variable is a reference to a hash table (\p{Hashtable}) that contains the values of literals, variables and operations encountered during the execution. Each of the value is stored in a form of \p{Value} object (containing also the \p{Actor}) and the expression reference is used as a key for the hash table. These values are then used when an expression evaluation is animated.
+\item[\p{variables}] variable is a reference to a hash table (\p{Hashtable})that contains the visited variables as instances of the \p{Variable} class. 
 \item[\p{instances}]
 \item[\p{methodInvocation}]
 \item[\p{postIncsDecs}]
