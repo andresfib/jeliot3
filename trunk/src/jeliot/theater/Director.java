@@ -2437,6 +2437,10 @@ public class Director {
             
             if (!literal) {
                 engine.showAnimation(valueAct.fly(valueLoc));
+            } else {
+                Animation appear = valueAct.appear(valueLoc);
+                appear.setDuration(100);
+                engine.showAnimation(appear);
             }
             
             variableAct.bind();
@@ -2466,20 +2470,18 @@ public class Director {
                 
                 if (!literal) {
                     engine.showAnimation(refAct.fly(valueLoc));
+                } else {
+                    Animation appear = refAct.appear(valueLoc);
+                    appear.setDuration(200);
+                    engine.showAnimation(appear);
                 }
                 
                 rva.bind();
                 theatre.removePassive(refAct);
+                variableAct.setLight(Actor.NORMAL);
                 release();              
             }
         }
-        
-        currentScratch.registerCrapRemover(new Runnable() {
-            public void run() {
-                variableAct.setLight(Actor.NORMAL);
-            }
-        });
-        currentScratch.removeCrap();
     }
     
     
