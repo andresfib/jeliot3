@@ -15,14 +15,17 @@ import java.util.Vector;
  * @author Niko Myller
  */
 public class Theater extends javax.swing.JComponent implements ActorContainer {
+	
 	/**
 	 * Background image.
 	 */
 	private Image backImage;
+	
 	/**
 	 * Captured image of the screen, used on active mode for extra efficiency.
 	 */
 	private Image captScreen;
+	
 	/**
 	 * Graphics object for captured image when the animation is going on.
 	 */
@@ -390,15 +393,12 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 	public boolean isCaptured() {
 		return active;
 	}
-	
-	Image i;
-	Graphics gr;
-	
+		
 	public Image requestImage() {
 		int w = getWidth();
 		int h = getHeight();
-		i = createImage(w, h);
-		gr = i.getGraphics();
+		Image i = createImage(w, h);
+		Graphics gr = i.getGraphics();
 		paint(gr);
 		return i;
 	}

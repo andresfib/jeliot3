@@ -17,8 +17,8 @@ import javax.swing.JWindow;
 import jeliot.Jeliot;
 
 /**
- * This class is not used in the current version of Jeliot. LoadJeliot displays
- * a splash screen and starts the Jeliot application.
+ * LoadJeliot displays a splash screen and
+ * starts the Jeliot application.
  * 
  * @author Pekka Uronen
  * @author Niko Myller

@@ -14,7 +14,9 @@ import java.util.ResourceBundle;
  * 
  * @see koala.dynamicjava.interpreter.TreeInterpreter
  * @see koala.dynamicjava.interpreter.EvaluationVisitor
- * @see jeliot.mcode.Interpreter
+ * @see jeliot.mcode.MCodeInterpreter
+ * @see jeliot.mcode.TheaterMCodeInterpreter
+ * @see jeliot.mcode.CallTreeMCodeInterpreter
  */
 public class Code {
 
@@ -248,63 +250,3 @@ public class Code {
 	
 	//Last int used = 77
 }
-
-//package jeliot.ecode;
-/*
-import jeliot.launcher.*;
-
-import java.util.*;
-
-// For debugging pourposes :)
-public class Code{
-    //Auxiliary statements
-    public static final String LEFT="LEFT";
-    public static final String RIGHT="RIGHT";
-    public static final String BEGIN="BEGIN";
-    public static final String TO="TO";
-    //Useful constants
-    public static final String DELIM=" ";
-    public static final String LOC_DELIM=",";
-    public static final String UNKNOWN="?";
-    public static final long   NO_REFERENCE=0;
-    public static final String NOT_FINAL="NOT FINAL";
-    public static final String FINAL="FINAL";
-    public static final String TRUE="true";
-    public static final String FALSE="false";
-    public static final String REFERENCE="null";
-    //JAVA statements and expressions
-    public static final String A="A";//Assignment
-    public static final String AE="AE";//Add Expression
-    public static final String SE="SE";//Substract Expression
-    public static final String VD="VD";//Variable Declaration
-    public static final String QN="QN";//Qualified Name
-    public static final String L="L";//Literal
-    public static final String SMC="SMC";//Static Method Call
-    public static final String P="P";//Parameter
-    public static final String PARAMETERS="PARAMETERS";//Parameters list
-    public static final String R="R";// Return Statement
-    public static final String NO="NO";//Boolean Not
-    public static final String GT="GT";//Greater Than
-    public static final String AND="AND";//And Expression
-    public static final String IFT="IFT";//If Then Statement
-    public static final String IFTE="IFTE";//IF Then Else Statement
-    public static final String SCOPE="SCOPE";//Opening and closing a new Scope
-    public static final String END="END";//End of Program
-    public static final String MD="MD";//Method declaration
-
-    //////////
-    private static PrintWriter writer=Launcher.getWriter();
-    public static void write(String str){
-       writer.println(str);
-   }
-    public static String argToString(List argnames){
-    //Change to extract elements from list and add delims
-    if (!argnames.isEmpty()){
-        String result=argnames.toString();
-        int length=result.length();
-        return result.substring(1,length-1);
-    }
-    else return "";
-    }
-}
-*/

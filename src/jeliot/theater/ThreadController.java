@@ -69,7 +69,7 @@ public class ThreadController {
 	 */
 	public synchronized void start() {
 		switch (status) {
-			case (PAUSED) :
+			case (PAUSED):
 				if (thread == null) {
 					thread = new Thread(runner);
 					thread.start();
@@ -89,7 +89,7 @@ public class ThreadController {
 	 */
 	public synchronized void pause() {
 		switch (status) {
-			case (RUNNING) :
+			case (RUNNING):
 				status = PAUSEREQ;
 				break;
 			default :

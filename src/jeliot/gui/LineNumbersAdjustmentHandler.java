@@ -1,6 +1,3 @@
-/*
- * Created on Jun 22, 2004
- */
 package jeliot.gui;
 
 import java.awt.event.AdjustmentEvent;
@@ -11,19 +8,35 @@ import javax.swing.SwingUtilities;
 import org.syntax.jedit.JEditTextArea;
 
 /**
+ * Handles line number validations once the JEditTextArea is scrolled.
+ * 
  * @author nmyller
  */
-
 class LineNumbersAdjustmentHandler implements AdjustmentListener {
 
+	/**
+	 * 
+	 */
     private JEditTextArea jedit;
+    
+    /**
+     * 
+     */
     private LineNumbers ln;
     
+    /**
+     * 
+     * @param jedit
+     * @param ln
+     */
     public LineNumbersAdjustmentHandler(JEditTextArea jedit, LineNumbers ln) {
         this.jedit = jedit;
         this.ln = ln;
     }
     
+    /* (non-Javadoc)
+     * @see java.awt.event.AdjustmentListener#adjustmentValueChanged(java.awt.event.AdjustmentEvent)
+     */
     public void adjustmentValueChanged(final AdjustmentEvent evt) {
         if (!jedit.isScrollBarsInitialized()) return;
 

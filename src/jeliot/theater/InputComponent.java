@@ -70,8 +70,7 @@ public class InputComponent extends JPanel implements ActionListener {
 	public void paintComponent(Graphics g) {
         if (bgactor == null) {
             super.paintComponent(g);
-        }
-        else {
+        } else {
             bgactor.paintActor(g);
             bgactor.paintShadow(g);
         }

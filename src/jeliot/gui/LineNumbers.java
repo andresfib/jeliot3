@@ -53,16 +53,30 @@ public class LineNumbers extends JComponent {
      */
     private Insets insets;
 
+    /**
+     * 
+     */
     private int startLine = 0;
 
+    /**
+     * 
+     */
     private Color normalColor = new Color(
 			Integer
 			.decode(bundle.getString("color.line_numbers.normal"))
 			.intValue());
+    
+    /**
+     * 
+     */
     private Color highlightColor = new Color(
 			Integer
 			.decode(bundle.getString("color.line_numbers.highlight"))
 			.intValue());
+    
+    /**
+     * 
+     */
     private Color backGroundColor = new Color(
 			Integer
 			.decode(bundle.getString("color.line_numbers.background"))
@@ -159,6 +173,11 @@ public class LineNumbers extends JComponent {
         }
     }
 
+    /**
+     * 
+     * @param firstLine
+     * @param height
+     */
     public void setLineNumbersByFirstLine(int firstLine, int height) {
         startLine = firstLine;
         //System.out.println("CodePane: " + height);
@@ -166,6 +185,10 @@ public class LineNumbers extends JComponent {
         revalidate();
     }
     
+    /**
+     * 
+     * @param line
+     */
     public void setHighlightedLine(int line) {
     	highlightedLine = line;
     	repaint();

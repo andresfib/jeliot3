@@ -247,7 +247,6 @@ public class ClassActor extends Actor implements ActorContainer {
 	 * @see jeliot.theater.Actor#appear(java.awt.Point)
 	 */
 	public Animation appear(final Point loc) {
-
         return new Animation() {
             Dimension size;
             double h;
@@ -294,7 +293,6 @@ public class ClassActor extends Actor implements ActorContainer {
 	 * @return
 	 */
 	public Animation disappear() {
-
         return new Animation() {
             Dimension size;
             double h;
@@ -331,11 +329,8 @@ public class ClassActor extends Actor implements ActorContainer {
 	 * @return
 	 */
 	public Animation extend()  {
-
         if ((totalVarCount + 1) > varCount) {
-
             varCount = totalVarCount + 1;
-
             return new Animation() {
 
                 Dimension size, newSize;
@@ -376,10 +371,7 @@ public class ClassActor extends Actor implements ActorContainer {
             };
 
         } else {
-
             return null;
-
         }
     }
-
 }

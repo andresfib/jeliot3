@@ -10,7 +10,7 @@ import javax.swing.JPopupMenu;
 import jeliot.theater.*;
 
 /**
- * Currently this class is not used in the Jeliot.
+ * CURRENTLY THIS CLASS IS NOT USED IN JELIOT 3!
  * <code>Theatre</code>'s popup menu class that gives information
  * about the actors fo the theatre.
  *
@@ -43,6 +43,9 @@ public class TheaterPopup extends MouseAdapter implements MouseMotionListener {
         menu.add(menuItem);
     }
 
+    /**
+     * 
+     */
     JPopupMenu zoomingMenu = new JPopupMenu(); {
         JPopupMenu menu = methodMenu;
         JMenuItem menuItem;

@@ -16,8 +16,9 @@ import java.util.*;
  * 
  * @see koala.dynamicjava.interpreter.TreeInterpreter
  * @see koala.dynamicjava.interpreter.EvaluationVisitor
- * @see jeliot.mcode.Interpreter
- * 
+ * @see jeliot.mcode.MCodeInterpreter
+ * @see jeliot.mcode.TheaterMCodeInterpreter
+ * @see jeliot.mcode.CallTreeMCodeInterpreter
  */
 public class MCodeUtilities {
 

@@ -31,6 +31,7 @@ import jeliot.tracker.Tracker;
  *
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
  * @see jeliot.mcode.TheaterMCodeIntepreter
  */
 public class Director {
@@ -2129,7 +2130,6 @@ public class Director {
                 });
     }
 
-    //possibly we will need some other input readers e.g. readString(), readChar()
     /**
      * @author Pekka Uronen
      * @author Niko Myller
@@ -2184,7 +2184,6 @@ public class Director {
             animator = readBoolean(prompt);
         }
 
-
         if (animator != null) {
             highlight(h);
             animator.animate(this);
@@ -2195,6 +2194,10 @@ public class Director {
         }
     }
 
+    /**
+     * @param prompt
+     * @return
+     */
     private Animator readByte(String prompt) {
         if (prompt == null)
             prompt = bundle.getString("input.byte");
@@ -2210,6 +2213,10 @@ public class Director {
                 });
     }
 
+    /**
+     * @param prompt
+     * @return
+     */
     private Animator readShort(String prompt) {
         if (prompt == null)
             prompt = bundle.getString("input.short");
@@ -2226,6 +2233,10 @@ public class Director {
     }
 
 
+    /**
+     * @param prompt
+     * @return
+     */
     private Animator readBoolean(String prompt) {
         if (prompt == null)
             prompt = bundle.getString("input.boolean");
@@ -2242,6 +2253,10 @@ public class Director {
     }
 
 
+    /**
+     * @param prompt
+     * @return
+     */
     private Animator readFloat(String prompt) {
         if (prompt == null)
             prompt = bundle.getString("input.float");
@@ -2257,6 +2272,10 @@ public class Director {
                 });
     }
 
+    /**
+     * @param prompt
+     * @return
+     */
     private Animator readLong(String prompt) {
         if (prompt == null)
             prompt = bundle.getString("input.long");
@@ -2503,6 +2522,13 @@ public class Director {
         });
     }
 
+    /**
+     * @param variable
+     * @param value
+     * @param casted
+     * @param literal
+     * @param h
+     */
     public void initializeArrayVariable(VariableInArray variable, Value value, Value casted, boolean literal, Highlight h) {
 
         highlight(h);
@@ -2669,6 +2695,11 @@ public class Director {
         }
     }
 
+    /**
+     * @param c
+     * @param var
+     * @param val
+     */
     public void declareClassVariable(jeliot.lang.Class c, Variable var, Value val) {
 
         highlight(var.getLocationInCode());

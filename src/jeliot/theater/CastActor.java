@@ -61,15 +61,13 @@ public class CastActor extends Actor {
 	public void paintActor(Graphics g) {
         if (line <= 0) {
             fromActor.paintActor(g);
-        }
-        else if (line > toActor.getHeight()) {
+        } else if (line > toActor.getHeight()) {
             toActor.paintActor(g);
-        }
-        else {
+        } else {
             Shape clip = g.getClip();
             
             
-            // DOESN'T WORK! BUGBUG!
+            //TODO: DOESN'T WORK! BUGBUG!
             g.clipRect(-1000, -1000, 1000, line);
             fromActor.paintActor(g);
             

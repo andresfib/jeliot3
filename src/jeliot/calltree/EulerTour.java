@@ -8,10 +8,19 @@ import java.util.ListIterator;
  */
 public class EulerTour {
 
+    /**
+     * Comment for <code>tree</code>
+     */
     protected Tree tree;
 
+    /**
+     * 
+     */
     public EulerTour() {}
 
+    /**
+     * @param t
+     */
     public void execute(Tree t) {
         this.tree = t;
         init();
@@ -21,6 +30,9 @@ public class EulerTour {
         }
     }
 
+    /**
+     * @param tn
+     */
     private void eulerTour(TreeNode tn) {
         int n = tn.getChildCount();
         if (n > 0) {
@@ -38,17 +50,32 @@ public class EulerTour {
         }
     }
 
+    /**
+     * 
+     */
     protected void init() {}
 
+    /**
+     * @param tn
+     */
     protected void visitExternal(TreeNode tn) {
         visitFirstTime(tn);
         visitLastTime(tn);
     }
 
+    /**
+     * @param tn
+     */
     protected void visitFirstTime(TreeNode tn) {}
  
+    /**
+     * @param tn
+     */
     protected void visitBetweenChildren(TreeNode tn) {}
     
+    /**
+     * @param tn
+     */
     protected void visitLastTime(TreeNode tn) {}
 
 }

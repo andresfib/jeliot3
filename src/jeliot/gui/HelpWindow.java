@@ -43,6 +43,9 @@ public class HelpWindow extends JFrame implements HyperlinkListener {
 	 */
 	private JScrollPane jsp;
 
+	/**
+	 * 
+	 */
     private String udir;
 
 	/**
@@ -70,6 +73,9 @@ public class HelpWindow extends JFrame implements HyperlinkListener {
 		setSize(600, 600);
 	}
 
+	/**
+	 * 
+	 */
 	public void reload() {
 		try {
 			File f = new File(udir, bundle.getString("window.help.content"));
@@ -93,6 +99,9 @@ public class HelpWindow extends JFrame implements HyperlinkListener {
 		}
 	}
 
+    /* (non-Javadoc)
+     * @see javax.swing.event.HyperlinkListener#hyperlinkUpdate(javax.swing.event.HyperlinkEvent)
+     */
     public void hyperlinkUpdate(HyperlinkEvent e) {
         if (e.getEventType().toString().equals(HyperlinkEvent.EventType.ACTIVATED.toString())) {
             showURL(e.getURL());

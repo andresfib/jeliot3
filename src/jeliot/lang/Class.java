@@ -80,10 +80,16 @@ public class Class {
         this.classActor = classActor;
     }
     
+    /**
+     * @return
+     */
     public int getVariableCount() {
         return vars.size();
     }
 
+    /**
+     * @return
+     */
     public ListIterator getVariables() {
         return vars.listIterator();
     }

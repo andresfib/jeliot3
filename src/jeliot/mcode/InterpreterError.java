@@ -2,8 +2,8 @@ package jeliot.mcode;
 
 
 /**
- * This class encapsulates all the errors related to the interpretation
- * of the user program.
+ * This class encapsulates the errors related
+ * to the interpretation of the user program.
  * 
  * @author Niko Myller
  */

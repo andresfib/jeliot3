@@ -19,26 +19,50 @@ import jeliot.theater.Theater;
  */
 public class Tracker {
 
+	/**
+	 * Comment for <code>out</code>
+	 */
 	private static BufferedWriter out;
 
+	/**
+	 * Comment for <code>theater</code>
+	 */
 	private static Theater theater;
 
+	/**
+	 * Comment for <code>track</code>
+	 */
 	private static boolean track = false;
 
+	/**
+	 * Comment for <code>codePane</code>
+	 */
 	private static CodePane2 codePane;
 
+	/**
+	 * @param t
+	 */
 	public static void setTrack(boolean t) {
 		track = t;
 	}
 
+	/**
+	 * @param cp
+	 */
 	public static void setCodePane2(CodePane2 cp) {
 		codePane = cp;
 	}
 
+	/**
+	 * @param t
+	 */
 	public static void setTheater(Theater t) {
 		theater = t;
 	}
 
+	/**
+	 * @param f
+	 */
 	public static void openFile(File f) {
 		if (out == null && track) {
 			try {
@@ -52,6 +76,9 @@ public class Tracker {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static void closeFile() {
 		if (track) {
 			try {
@@ -64,6 +91,14 @@ public class Tracker {
 		}
 	}
 
+	/**
+	 * @param name
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 * @param millis
+	 */
 	public static void writeToFile(String name, int x, int y, int w, int h,
 			long millis) {
 		if (out != null && track && theater != null) {
@@ -82,6 +117,14 @@ public class Tracker {
 		}
 	}
 
+	/**
+	 * @param name
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 * @param millis
+	 */
 	public static void writeToFileFromCodeView(String name, int x, int y,
 			int w, int h, long millis) {
 		if (out != null && track && codePane != null
@@ -110,6 +153,10 @@ public class Tracker {
 		}
 	}
 
+	/**
+	 * @param name
+	 * @param millis
+	 */
 	public static void writeToFile(String name, long millis) {
 		if (out != null && track) {
 			try {
@@ -121,6 +168,11 @@ public class Tracker {
 		}
 	}
 
+	/**
+	 * @param name
+	 * @param fileName
+	 * @param millis
+	 */
 	public static void writeToFile(String name, String fileName, long millis) {
 		if (out != null && track) {
 			try {

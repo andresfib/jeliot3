@@ -25,27 +25,60 @@ import jeliot.mcode.Highlight;
  */
 public class HistoryView extends JComponent implements ActionListener {
 
+	/**
+	 * Comment for <code>HISTORY_SIZE</code>
+	 */
 	private static final int HISTORY_SIZE = 15;
 	
+	/**
+	 * Comment for <code>LIMIT_HISTORY_SIZE</code>
+	 */
 	private static final boolean LIMIT_HISTORY_SIZE = true;
 	
 	
+	/**
+	 * Comment for <code>images</code>
+	 */
 	private Vector images = new Vector();
 	
+	/**
+	 * Comment for <code>highlights</code>
+	 */
 	private Vector highlights = new Vector();
 	
+	/**
+	 * Comment for <code>buttonL</code>
+	 */
 	private final JButton buttonL = new JButton("<");
 	
+	/**
+	 * Comment for <code>buttonR</code>
+	 */
 	private final JButton buttonR = new JButton(">");
 	
+	/**
+	 * Comment for <code>slider</code>
+	 */
 	private JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 0, 0);
 
+	/**
+	 * Comment for <code>ic</code>
+	 */
 	private ImageCanvas ic = new ImageCanvas();
 	
+	/**
+	 * Comment for <code>codePane</code>
+	 */
 	private CodePane2 codePane;
 	
+	/**
+	 * Comment for <code>bottomComponent</code>
+	 */
 	private JPanel bottomComponent = new JPanel(new BorderLayout());
 	
+	/**
+	 * @param c
+	 */
 	public HistoryView(final CodePane2 c) {
 		this.codePane = c;
 		
@@ -97,12 +130,19 @@ public class HistoryView extends JComponent implements ActionListener {
         });
 	}
 	
+	/**
+	 * 
+	 */
 	public void initialize() {
 		images.removeAllElements();
 		highlights.removeAllElements();
 		ic.setImage(null);
 	}
 	
+	/**
+	 * @param i
+	 * @param h
+	 */
 	public void addImage(Image i, Highlight h) {
 		images.add(i);
 		highlights.add(h);

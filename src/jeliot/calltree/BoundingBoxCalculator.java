@@ -38,14 +38,26 @@ public class BoundingBoxCalculator extends EulerTour {
      */
     protected int pad = 15;
 
+    /**
+     * Comment for <code>maxWidth</code>
+     */
     protected int maxWidth = 0;
 
+    /**
+     * Comment for <code>maxHeight</code>
+     */
     protected int maxHeight = 0;
 
+    /**
+     * @return
+     */
     public int getMaxWidth() {
         return maxWidth;
     }
 
+    /**
+     * @return
+     */
     public int getMaxHeight() {
         return maxHeight;
     }
