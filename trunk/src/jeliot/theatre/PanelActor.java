@@ -5,8 +5,7 @@ import java.util.*;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         23.9.1999
+  * @author Niko Myller
   */
 public class PanelActor extends Actor {
 
@@ -24,7 +23,7 @@ public class PanelActor extends Actor {
             Image leftImage,
             Image rightImage,
             int gapplace        ) {
-                
+
         this.panelImage = panelImage;
         this.leftImage = leftImage;
         this.rightImage = rightImage;
@@ -53,12 +52,12 @@ public class PanelActor extends Actor {
             paintBackground(g, panelImage,
                     -lgap, 0,
                     leftn * biw, height);
-            
+
             paintBackground(g, leftImage,
                     leftn* biw - lgap, 0,
                     lbiw, height);
 
-            
+
             int dp = (leftn+1) * biw + rgap;
             paintBackground(g, rightImage,
                     dp - rbiw, 0,
@@ -76,11 +75,11 @@ public class PanelActor extends Actor {
         final int left = Math.max(0, leftn*biw + lbiw);
         final int right = Math.max(0, width - (leftn*biw) + rbiw);
 
-        return new Animation() {        
+        return new Animation() {
             double l = 0;
             double lstep, rstep;
             double dlgap, drgap;
-            
+
             public void animate(double pulse) {
                 if (l == 0) {
                     long dur = getDuration();
@@ -89,17 +88,17 @@ public class PanelActor extends Actor {
                 }
                 lgap = open ? (int)dlgap : left - (int)dlgap;
                 rgap = open ? (int)drgap : right - (int)drgap;
-                
+
                 dlgap += pulse * lstep;
                 drgap += pulse * rstep;
                 l = 1;
-                
+
                 if (drgap > right || dlgap > left) {
                     finish();
                 }
                 repaint();
-            }     
+            }
         };
     }
 
-}                   
+}

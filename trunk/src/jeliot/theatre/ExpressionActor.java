@@ -4,15 +4,13 @@ import java.awt.*;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         17.8.1999
-  * revised         21.9.1999
-  * modified        12.12.2002 by Niko Myller
+  * @author Niko Myller
   */
+
 public class ExpressionActor extends Actor implements ActorContainer{
 
     //Added for Jeliot 3 to identify the ExpressionActors
-    int id;
+    long id;
 
     Actor[] actors;
     Point[] locs;
@@ -27,7 +25,7 @@ public class ExpressionActor extends Actor implements ActorContainer{
         bound = new boolean[n];
     }
 
-    ExpressionActor(int n, int i) {
+    ExpressionActor(int n, long i) {
         id = i;
         actors = new Actor[n];
         locs = new Point[n];
@@ -35,11 +33,11 @@ public class ExpressionActor extends Actor implements ActorContainer{
     }
 
     //Jeliot 3 addition
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

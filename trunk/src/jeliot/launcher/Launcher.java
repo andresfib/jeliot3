@@ -32,6 +32,8 @@ public class Launcher extends Thread {
     private Reader r = null;
     private Interpreter interpreter=createInterpreter();
 
+    private boolean compiling = true;
+
     protected Interpreter createInterpreter() {
         Interpreter result = new TreeInterpreter(new JavaCCParserFactory());
         return result;
@@ -69,13 +71,28 @@ public class Launcher extends Thread {
         this.methodCall = methodCall;
     }
 
-    public void compile() throws InterpreterException {
+    public void compile() /* throws InterpreterException */ {
+        //System.out.println("Compiling");
         interpreter.interpret(r,"buffer");// (stream,"buffer");
     }
 
     public void run() {
 
-        while(running && this == Thread.currentThread()) {
+        if (compiling && this == Thread.currentThread()) {
+            compile();
+
+            synchronized(this) {
+                try {
+                    this.wait();
+                } catch(InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        //System.out.println("After Compilation");
+
+        while (running && this == Thread.currentThread()) {
 
             interpreter.interpret(new BufferedReader(
                                       new StringReader(methodCall)),
@@ -92,10 +109,17 @@ public class Launcher extends Thread {
                 }
             }
         }
+
+        //System.out.println("After execution");
+
     }
 
     public void stopThread() {
         running = false;
+    }
+
+    public void setCompiling(boolean value) {
+        compiling = value;
     }
 
     public PrintWriter getWriter() {

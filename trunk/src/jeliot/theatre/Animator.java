@@ -1,19 +1,16 @@
 package jeliot.theatre;
 
 import java.lang.reflect.*;
-import jeliot.parser.*;
 import jeliot.lang.*;
 import jeliot.gui.*;
 import jeliot.*;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         25.8.1999
+  * @author Niko Myller
   */
 public abstract class Animator {
 
-//    Instance instance;
     private Value[] args;
     private ValueActor[] argact;
     private Value returnValue;
@@ -29,7 +26,7 @@ public abstract class Animator {
     public Value getReturnValue() {
         return returnValue;
     }
-    
+
     public void setReturnValue(Value v) {
         this.returnValue = v;
     }
@@ -42,6 +39,6 @@ public abstract class Animator {
         return argact[i];
     }
 
-    public abstract void animate(Director director); 
+    public abstract void animate(Director director);
 
 }

@@ -15,11 +15,9 @@ import jeliot.ecode.*;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         12.8.1999
-  * revised         18.9.1999
-  * modified        12.12.2002 by Niko Myller
+  * @author Niko Myller
   */
+
 public class Director {
 
     private boolean messagePause = false;
@@ -59,6 +57,8 @@ public class Director {
     //private Stack exprStack = new Stack();
 
     private Interpreter eCodeInterpreter;
+
+    private int runUntilLine = -1;
 
     public Director(
             Theatre theatre,
@@ -106,6 +106,10 @@ public class Director {
         this.stepByStep = step;
     }
 
+    public void runUntil(int line) {
+        runUntilLine = line;
+    }
+
     //Changed for Jeliot 3
     public void highlight(Highlight h) {
         if (!eCodeInterpreter.starting()) {
@@ -118,6 +122,13 @@ public class Director {
             }
 
             if (h != null) {
+                if (runUntilLine >= h.getBeginLine() &&
+                    runUntilLine <= h.getEndLine()) {
+
+                    runUntilLine = -1;
+                    jeliot.runUntilDone();
+                }
+
                 codePane.highlightStatement(h);
             }
         }
@@ -154,7 +165,7 @@ public class Director {
       */
     public ExpressionActor beginBinaryExpression(
             Value operand,
-            int operator, int expressionReference, Highlight h) {
+            int operator, long expressionReference, Highlight h) {
 
         highlight(h);
 
@@ -317,6 +328,13 @@ public class Director {
         // scratchStack.push(currentScratch);
 
         ValueActor valAct = thisValue.getActor();
+        if (valAct == null) {
+            valAct = factory.produceValueActor(thisValue);
+            thisValue.setActor(valAct);
+            if (valAct instanceof jeliot.theatre.ReferenceActor) {
+                valAct.setLocation(((jeliot.theatre.ReferenceActor) valAct).getInstanceActor().getRootLocation());
+            }
+        }
 
         // Create the actor for the invocation.
         int n = 0;
@@ -331,8 +349,7 @@ public class Director {
         Point invoLoc = expr.getRootLocation();
         actor.setLocation(invoLoc);
 
-        ValueActor thisValueActor = thisValue.getActor();
-        Animation thisFly = thisValueActor.fly(actor.reserveThisActor(thisValueActor));
+        Animation thisFly = valAct.fly(actor.reserveThisActor(valAct));
 
         // Calculate the size of the invocation actor, taking into account
         // the this actor.
@@ -668,7 +685,7 @@ public class Director {
         theatre.release();
     }
 
-    public ValueActor finishMethod(Actor returnAct, int expressionCounter) {
+    public ValueActor finishMethod(Actor returnAct, long expressionCounter) {
 
 
         // Get the stage and remove it.
@@ -815,7 +832,7 @@ public class Director {
 
     public Value animateBinaryExpression(int operator, Value first,
                                          Value second, Value result,
-                                         int expressionCounter, Highlight h) {
+                                         long expressionCounter, Highlight h) {
 
         highlight(h);
 
@@ -1159,7 +1176,7 @@ public class Director {
     }
 
     public ExpressionActor beginUnaryExpression(int operator, Value arg,
-                                    int expressionCounter, Highlight h) {
+                                    long expressionCounter, Highlight h) {
         highlight(h);
 
         ValueActor argAct = arg.getActor();
@@ -1185,7 +1202,7 @@ public class Director {
     }
 
     public Value finishUnaryExpression(int operator, ExpressionActor exp,
-                            Value result, int expressionCounter, Highlight h) {
+                            Value result, long expressionCounter, Highlight h) {
 
         highlight(h);
 
@@ -1228,7 +1245,7 @@ public class Director {
     }
 
     public Value animateUnaryExpression(int operator, Value arg,
-            Value result, int expressionCounter, Highlight h) {
+            Value result, long expressionCounter, Highlight h) {
 
         highlight(h);
 
@@ -1712,7 +1729,7 @@ public class Director {
 
 
     public void showArrayCreation(ArrayInstance array, jeliot.lang.Reference ref,
-                                  Value[] lenVal, int expressionCounter,
+                                  Value[] lenVal, long expressionCounter,
                                   Highlight h) {
 
         highlight(h);

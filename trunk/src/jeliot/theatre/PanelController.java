@@ -2,6 +2,10 @@ package jeliot.theatre;
 
 import java.awt.*;
 
+/**
+  * @author Pekka Uronen
+  * @author Niko Myller
+  */
 public class PanelController {
 
     PanelActor panel;

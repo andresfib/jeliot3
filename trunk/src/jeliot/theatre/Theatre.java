@@ -6,7 +6,7 @@ import jeliot.parser.*;
 import jeliot.lang.*;
 import jeliot.gui.*;
 
-/** This is the theatre component that added in the left pane of the
+/** This is the theatre component that is added in the left pane of the
   * user interface.
   *
   * @author Pekka Uronen
@@ -137,7 +137,8 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
-    /** Paints the actors contained in given vector.
+    /**
+      * Paints the actors contained in given vector.
       */
     private void paintActors(Graphics g, Vector actors) {
         synchronized(actors) {
@@ -153,7 +154,7 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
                 g.translate(-x, -y);
             }
 
-            /* Old version.
+            /* Old version: Not valid code.
             for (int i = 0; i < n; ++i) {
                 Actor act = (Actor)actors.elementAt(i);
 

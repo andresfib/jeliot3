@@ -3,30 +3,33 @@ package jeliot.theatre;
 import java.awt.*;
 
 /**
-  * AnimationEngine schedules the animations represented by instances
-  * of Animation class. The engine is given an animation or an array of
-  * animations, and it plays those animations. the speed and quality of
-  * the animation can be controlled by setting its volume (speed) and
-  * FPS (Frames Per Second) values. An engine's volume is the amount of
-  * action it gives to the animation objects each second. The higher
-  * the volume, the faster the animations will play.
-  *     <P>
-  * An animation engine may be assigned a ThreadController instance.
-  * In this case, the engine checks with the controller after every
-  * step of animation calling its checkPoint() method.
+  * <p>
+  * <code>AnimationEngine</code> schedules the animations represented
+  * by instances of <code>Animation</code> class. The engine is given
+  * an animation or an array of animations, and it plays those
+  * animations. The speed and quality of the animation can be
+  * controlled by setting its volume (speed) and FPS (Frames Per Second)
+  * values. An engine's volume is the amount of action it gives to the
+  * animation objects each second. The higher the volume, the faster
+  * the animations will play.
+  * </p><p>
+  * An animation engine may be assigned a <code>ThreadController</code>
+  * instance. In this case, the engine checks with the controller after
+  * every step of animation calling its <code>checkPoint</code> method.
+  * </p>
   *
   * @author Pekka Uronen
-  *
-  * created         20.9.1999
-  * checked         26.9.1999
+  * @author Niko Myller
   */
 public class AnimationEngine implements Controlled {
 
     /** Amount of action for one second period */
-    private double volume   = 750.0;
+    private double volume = 500.0;
+    private double defaultVolume = 500.0;
 
     /** Number of times to act per second */
-    private double fps      = 20.0;
+    private double fps = 20.0;
+    private double defaultFPS = 20.0;
 
     /** True if the animation engine is running */
     private boolean running;
@@ -64,6 +67,11 @@ public class AnimationEngine implements Controlled {
         this.volume = volume;
     }
 
+    public void setDefaultValues() {
+        this.fps = this.defaultFPS;
+        this.volume = this.defaultVolume;
+    }
+
     /** Performs the given animation.
       */
     public void showAnimation(Animation animation) {
@@ -97,6 +105,7 @@ public class AnimationEngine implements Controlled {
         double amount = 0.0;
         long time = System.currentTimeMillis();
         while ( amount < duration ) {
+
             // Animate the animations.
             double work = volume/fps;
             amount += work;
@@ -113,6 +122,7 @@ public class AnimationEngine implements Controlled {
                     }
                 }
             }
+
             // Spend the excess time waiting.
             long waitTime = (long)(1000/fps) + time -
                     (time = System.currentTimeMillis());
@@ -122,11 +132,13 @@ public class AnimationEngine implements Controlled {
                 }
                 catch (InterruptedException e) {  }
             }
+
             // If the engine is controlled, inform the controller.
             if (controller != null) {
                 controller.checkPoint(this);
             }
         }
+
         for (int i = 0; i < n; ++i) {
             Animation anim = animations[i];
             anim.finalFinish();

@@ -18,7 +18,7 @@ public class Scratch extends Actor implements ActorContainer {
 
 
     //Added for Jeliot 3
-    public ExpressionActor findActor(int number) {
+    public ExpressionActor findActor(long number) {
         for (int i = 0; i < exprs.size(); i++) {
             ExpressionActor actor = (ExpressionActor) exprs.elementAt(i);
             if (actor.getId() == number) {
@@ -29,7 +29,7 @@ public class Scratch extends Actor implements ActorContainer {
     }
 
     //Second parameter added for Jeliot 3 to identify the expressions
-    public ExpressionActor getExpression(int n, int id)  {
+    public ExpressionActor getExpression(int n, long id)  {
         ExpressionActor ea = new ExpressionActor(n, id);
         accommodate(ea);
         return ea;

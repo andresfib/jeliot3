@@ -6,12 +6,12 @@ import javax.swing.*;
 import jeliot.theatre.*;
 
 /**
- * Theatre's popup menu class.
+ * <code>Theatre</code>'s popup menu class that gives information
+ * about the actors fo the theatre.
  * NOT CURRENLY USED IN JELIOT!
  *
  * @author Pekka Uronen
- *
- * created         24.9.1999
+ * @author Niko Myller
  */
 public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
 
@@ -40,7 +40,8 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
     }
 
     /**
-     * Method to handle the mouse events when the actors should be highlighted.
+     * Method to handle the mouse events when the actors should be
+     * highlighted.
      *
      * @param   evt The mouse event when mouse entered the area.
      */
@@ -49,7 +50,8 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
     }
 
     /**
-     * Method to handle the mouse events when the actors should be unhighlighted.
+     * Method to handle the mouse events when the actors should be
+     * unhighlighted.
      *
      * @param   evt The mouse event when mouse exited the area.
      */
@@ -58,7 +60,8 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
     }
 
     /**
-     * Method to handle the mouse events when the actors should be highlighted or unhighlighted.
+     * Method to handle the mouse events when the actors should be
+     * highlighted or unhighlighted.
      *
      * @param   evt The mouse event when mouse is moved.
      */
@@ -78,11 +81,12 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
        // }
     }
 
-    /** Implemented to conform to MouseMotionListener interface.*/
+    /** Implemented to conform to MouseMotionListener interface. */
     public void mouseDragged(MouseEvent evt) { }
 
     /**
-     * Method that handles the events when the actor should be highlighted.
+     * Method that handles the events when the actor should be
+     * highlighted.
      *
      * @param   evt The mouse event that should be handled.
      */
@@ -92,11 +96,12 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
         Theatre theatre = (Theatre)evt.getComponent();
 
         Actor actor = theatre.getActorAt(x, y);
-     //   theatre.setHighlightedActor(actor);
+        //theatre.setHighlightedActor(actor);
     }
 
     /**
-     * Method checks what kind of popup menu it should activate or should it activate any kind of popup menu.
+     * Method checks what kind of popup menu it should activate or
+     * should it activate any kind of popup menu.
      *
      * @param   evt The mouse event when mouse button is pressed.
      */
@@ -106,19 +111,19 @@ public class TheatrePopup extends MouseAdapter implements MouseMotionListener {
         Theatre theatre = (Theatre)evt.getComponent();
 
         Actor actor = theatre.getActorAt(x, y);
-       // System.err.println("showPop:" +actor);
+        //System.err.println("showPop:" +actor);
         if (actor != null) {
             JPopupMenu menu = null;
+
             if (actor instanceof VariableActor) {
                 menu = variableMenu;
-            }
-            else if (actor instanceof MethodStage) {
+            } else if (actor instanceof MethodStage) {
                 menu = methodMenu;
             }
-            if (menu != null) {
 
-            //System.err.println("showMenu:"+menu);
-           //     menu.setSize(menu.getPreferredSize());
+            if (menu != null) {
+                //System.err.println("showMenu:"+menu);
+                //menu.setSize(menu.getPreferredSize());
                 menu.show(evt.getComponent(), evt.getX(), evt.getY());
             }
         }

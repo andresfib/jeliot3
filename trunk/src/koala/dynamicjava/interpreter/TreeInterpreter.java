@@ -154,8 +154,9 @@ public class TreeInterpreter implements Interpreter {
                 evalVisitorContext.defineVariables
                     (checkVisitorContext.getCurrentScopeVariables());
 
-                v = new EvaluationVisitor(evalVisitorContext);
-                result = n.acceptVisitor(v);
+                EvaluationVisitor ev = new EvaluationVisitor(evalVisitorContext);
+                ev.initialize();
+                result = n.acceptVisitor(ev);
             }
 
             return result;
@@ -198,6 +199,7 @@ public class TreeInterpreter implements Interpreter {
                 code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+
                         0+Code.LOC_DELIM+0;
             }
+            System.out.print(code);
             ECodeUtilities.write(code);
             return null;
             //throw new InterpreterException(e);
@@ -218,6 +220,7 @@ public class TreeInterpreter implements Interpreter {
             code += ""+Code.DELIM;
             code += ""+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0+Code.LOC_DELIM+0;
             ECodeUtilities.write(code);
+            //System.out.print(code);
             return null;
             //throw new InterpreterException(e);
         }
@@ -332,7 +335,7 @@ public class TreeInterpreter implements Interpreter {
      * @exception IllegalStateException if name is already defined
      */
     public void defineVariable(String name, boolean value) {
-    Class c = boolean.class;
+        Class c = boolean.class;
     nameVisitorContext.define(name, c);
     checkVisitorContext.define(name, c);
     evalVisitorContext.define(name, new Boolean(value));
@@ -613,14 +616,47 @@ public class TreeInterpreter implements Interpreter {
                    MethodDescriptor md,
                    Object obj,
                    Object[] params) {
-    MethodDeclaration meth    = md.method;
-    List              mparams = meth.getParameters();
-    List              stmts   = meth.getBody().getStatements();
-    String            name    = meth.getName();
+        MethodDeclaration meth    = md.method;
+        List              mparams = meth.getParameters();
+        List              stmts   = meth.getBody().getStatements();
+        String            name    = meth.getName();
+        Context           context = null;
 
-    Context           context = null;
+        System.out.println(c.getName());
+        System.out.println(name);
+        if (EvaluationVisitor.isSetConstructorCall() &&
+            c.getName().equals(EvaluationVisitor.getConstructorCallName()) &&
+            name.equals("<init>")) {
 
-    if (Modifier.isStatic(md.method.getAccessFlags())) {
+            ECodeUtilities.write(""+Code.CONSCN+Code.DELIM+
+                          EvaluationVisitor.getConstructorCallNumber());
+            EvaluationVisitor.constructorCallFinished();
+
+        } else if (EvaluationVisitor.isSetConstructorCall() &&
+                   !c.getName().equals(EvaluationVisitor.getConstructorCallName()) &&
+                   name.equals("<init>") &&
+                   EvaluationVisitor.getSuperClasses().contains(c.getName())) {
+
+                // Fake OMC with super() when
+                // !c.getName().equals(EvaluationVisitor.getConstructorCallName())
+                // so to describe a super call,
+                long counter = EvaluationVisitor.getCounter();
+                EvaluationVisitor.incrementCounter();
+
+                ECodeUtilities.write("" + Code.QN+Code.DELIM+
+                        counter+Code.DELIM+"this"+
+                        Code.DELIM+obj.toString()+
+                        Code.DELIM+obj.getClass().getName());
+
+                ECodeUtilities.write("" + Code.OMC+Code.DELIM+
+                                     //m.getName()+Code.DELIM+
+                                     "super()"+Code.DELIM+
+                                     "0"+Code.DELIM+
+                                     counter+Code.DELIM+
+                                     "0,0,0,0");
+        }
+
+     if (Modifier.isStatic(md.method.getAccessFlags())) {
         if (md.variables == null) {
         md.importationManager.setClassLoader(classLoader);
 
@@ -779,9 +815,10 @@ public class TreeInterpreter implements Interpreter {
     FormalParameter current;             //Jeliot3
 
     while (it.hasNext()) {
-        // JELIOT 3
         current=(FormalParameter)it.next();
         context.set(current.getName(), params[i++]);
+
+        // JELIOT 3
         argnames.add(current.getName());
     }
 
@@ -812,20 +849,40 @@ public class TreeInterpreter implements Interpreter {
     Visitor v = new EvaluationVisitor(context);
     it = stmts.iterator();
 
-    try {
-        while (it.hasNext()) {
-        ((Node)it.next()).acceptVisitor(v);
+        try {
+            while (it.hasNext()) {
+                ((Node)it.next()).acceptVisitor(v);
+            }
+        } catch (ReturnException e) {
+
+            //This is for super method call in the constructors first line
+            if (EvaluationVisitor.isSetConstructorCall() &&
+                !c.getName().equals(EvaluationVisitor.getConstructorCallName()) &&
+                name.equals("<init>") &&
+                EvaluationVisitor.getSuperClasses().contains(c.getName())) {
+
+                ECodeUtilities.write("" + Code.OMCC + Code.DELIM +"vittu"); //the method call is closed
+            }
+
+            return e.getValue();
         }
-    } catch (ReturnException e) {
-        return e.getValue();
-    }
-    return null;
+
+        //This is for super method call in the constructors first line
+        if (EvaluationVisitor.isSetConstructorCall() &&
+            !c.getName().equals(EvaluationVisitor.getConstructorCallName()) &&
+            name.equals("<init>") &&
+            EvaluationVisitor.getSuperClasses().contains(c.getName())) {
+
+            ECodeUtilities.write("" + Code.OMCC); //the method call is closed
+        }
+
+        return null;
     }
 
     /**
      * Registers a constructor arguments
      */
-    public void registerConstructorArguments(String             sig,
+    public void registerConstructorArguments(String sig,
                          List               params,
                          List               exprs,
                          ImportationManager im) {

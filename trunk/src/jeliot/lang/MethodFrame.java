@@ -1,23 +1,20 @@
 package jeliot.lang;
 
 import java.util.*;
-//import jeliot.parser.*;
 import jeliot.theatre.*;
 import jeliot.FeatureNotImplementedException;
 
 /**
-  * MethodFrame is an instance of a method under execution. A method
-  * frame is created runtime each time a method is called.
+  * MethodFrame is an instance of a method under execution.
+  * A method frame is created runtime each time a method is called.
   *
   * @author Pekka Uronen
-  *
-  * created         9.8.1999
-  * modified        12.12.2002 by Niko Myller
+  * @author Niko Myller
   */
 public class MethodFrame {
 
     private MethodStage stage;
-//  private int depth;
+    //private int depth;
 
     private Stack vars;
     private int vcount = 0;
@@ -29,9 +26,9 @@ public class MethodFrame {
         vars = new Stack();
     }
 
-//     public PMethod getMethod() {
-//         return method;
-//     }
+    //public PMethod getMethod() {
+        //return method;
+    //}
 
     public Variable declareVariable(Variable var) {
         vcount++;
@@ -48,12 +45,8 @@ public class MethodFrame {
                 }
             }
         }
-
-        //here find the variable "this" and go through the
-        //variables inside that object if that is found.
-
-        //throw new RuntimeException("No Variable " + name);
-        return null;
+        throw new RuntimeException("No Variable " + name);
+        //return null;
     }
 
     public void openScope() {
@@ -82,5 +75,4 @@ public class MethodFrame {
     public void setMethodStage(MethodStage stage) {
         this.stage = stage;
     }
-
 }

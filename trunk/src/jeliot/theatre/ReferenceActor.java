@@ -202,6 +202,7 @@ public class ReferenceActor extends ValueActor {
     }
 
     public int getReferenceWidth() {
+        calculateBends();
         if (instance != null) {
             return bend[1].x - bend[0].x + 4;
         } else {

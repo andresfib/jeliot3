@@ -4,10 +4,8 @@ import java.awt.*;
 import java.util.*;
 
 /**
+  *
   * @author Niko Myller
-  *
-  * created         26.6.2003
-  *
   */
 public class ObjectStage extends InstanceActor {
 
@@ -33,14 +31,38 @@ public class ObjectStage extends InstanceActor {
     /** Maximum possible number of variables on the stage at the moment. */
     private int varCount = 0;
 
+    /** Maximum width of the actors contained in this ObjectStage.
+      */
     private int actWidth;
+
+    /** Maximum height of the actors contained in this ObjectStage.
+      */
     private int actHeight;
 
+    /** If the variables should be drawn on top of this actor */
     private boolean paintVars = true;
 
+    /**
+      * Actor that is going to be bind to this ObjectStage but is not
+      * yet bind. For example during appearing variables need their location
+      * but their are bind after they have appeared.
+      *
+      * @see #reserve(Actor)
+      */
     private Actor reserved;
+
+    /**
+      * RootLocation of the latest reserved actor.
+      */
     private Point resLoc;
 
+    /**
+      * Constructor that sets the name and variable number to
+      * the instance variables and set the insets.
+      *
+      * @param name     Name of the class that the instance represents.
+      * @param varCount Number of variables that this instance has.
+      */
     public ObjectStage(String name, int varCount) {
         this.name = name;
         this.varCount = varCount;
@@ -55,7 +77,8 @@ public class ObjectStage extends InstanceActor {
                 return va;
             }
         }
-        return null;
+        throw new RuntimeException("No Variable " + name);
+        //return null;
     }
 
     public void calculateSize(int maxActWidth, int actHeight) {
