@@ -5,7 +5,6 @@ JELIOT 3 TODO-LIST
 Urgent:
 
 * Initialization of object when it inherits user made class (super() call)
-* Super method call with parameters in object creation with inheritance
 * Array initializers (but only for on3 dimensional arrays)
 * Static field access (into the constant area)
 * Documentation
@@ -36,6 +35,7 @@ Graphical:
 
 Otherwise low priority:
 * Array variables could be references
+* Super method call with parameters in object creation with inheritance
 
 Speculative or not needed at all:
 * Command line parameters
