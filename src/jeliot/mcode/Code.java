@@ -233,7 +233,8 @@ public class Code {
 	/** Indicates a field in the class information */
 	public static final int FIELD = 62;
 
-	//Last int used = 72
+	public static final int CAST = 73;
+	//Last int used = 73
 }
 
 //package jeliot.ecode;

@@ -130,19 +130,20 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Painting the component and other components if it contains any
+	 * to the given Graphics object.
+	 * 
 	 * @see java.awt.Component#paint(java.awt.Graphics)
 	 */
 	public void paint(Graphics g) {
+	    //If the component contains other components paint them first.
 		if (showComponents) {
 			super.paint(g);
+		//Otherwise just paint the current component.
 		} else {
 			paintComponent(g);
 		}
-	}
-
-	public void setRunUntilEnabled(boolean b) {
-		runUntil = b;
 	}
 
 	/**
@@ -227,6 +228,15 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 	}
 
 	//  DOC: Document!
+	
+	/**
+	 * 
+	 * @param b
+	 */
+	public void setRunUntilEnabled(boolean b) {
+		runUntil = b;
+	}
+	
 	/**
 	 * @param actor
 	 */

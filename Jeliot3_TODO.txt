@@ -11,11 +11,10 @@ Urgent:
 * Documentation
 * Initialization of object when it inherits user made class (super() call) (should be done)
 * casting of primitive types doesn't work. (done)
-* Automatic addition of "import jeliot.io.*" if it does not exist / Automaattinen jeliot.io.* importointi
-* Casting a reference type should have no animation / Luokkacasteja ei tarvii tarkastaa...
+* Automatic addition of "import jeliot.io.*" if it does not exist / Automaattinen jeliot.io.* importointi (done)
+* Casting a reference type should have no animation / Luokkacasteja ei tarvii tarkastaa... (done)
 * Emulate the class Lue that is used in ViSCoS with Input class / Lue-luokan "emulointi" jeliotissa
 * The guide to install and use Jeliot in Finnish / Suomenkieliset asennus- ja käyttöohjeet.
-
 
 Bugs regarding inheritance:
 

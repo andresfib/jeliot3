@@ -2861,7 +2861,15 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(CastExpression node) {
-        return performCast(NodeProperties.getType(node), node.getExpression().acceptVisitor(this));
+        long expCounter = counter++;
+        long auxCounter = counter;
+        Object o = performCast(NodeProperties.getType(node), node.getExpression().acceptVisitor(this));
+        if (MCodeUtilities.isPrimitive(o.getClass().getName())) {
+            MCodeUtilities.write("" + Code.CAST + Code.DELIM + expCounter + Code.DELIM + auxCounter
+                    + Code.DELIM + o.toString() + Code.DELIM + NodeProperties.getType(node).getName()
+                    + Code.DELIM + locationToString(node));
+        }
+        return o;
     }
 
     /**
@@ -3603,7 +3611,7 @@ public class EvaluationVisitor extends VisitorObject {
         }
         return null;
     }
-
+    
     /**
      * Performs a dynamic cast. This method acts on primitive wrappers.
      * @param tc the target class

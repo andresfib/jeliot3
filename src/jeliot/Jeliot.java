@@ -23,6 +23,7 @@ import java.io.PipedWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import jeliot.calltree.TreeDraw;
 import jeliot.gui.CodePane;
@@ -52,10 +53,11 @@ public class Jeliot {
 
     //  DOC: Document!
 
+    private Pattern p = Pattern.compile("import\\s+jeliot.io.*\\s*;");
     /**
      * 
      */
-    static boolean noSystemExit = false;
+    private static boolean noSystemExit = false;
 
     /**
      *
@@ -193,7 +195,13 @@ public class Jeliot {
         //TypeChecker check = new TypeChecker(space);
         //program.acceptVisitor(check);
 
-        this.sourceCode = sourceCode;
+        if (p.matcher(sourceCode).find()) {
+            this.sourceCode = sourceCode;
+        } else {
+            this.sourceCode = "import jeliot.io.*;\n\n" + sourceCode;
+            gui.getCodePane().getTextArea().setText(this.sourceCode);
+        }                
+                
         this.methodCall = methodCall;
 
         compiled = false;
