@@ -520,7 +520,7 @@ public class CodeEditor extends JComponent {
      *
      * @param program The string that will be set in JTextArea area as the program code.
      */
-    void setProgram(String program) {
+    public void setProgram(String program) {
         area.setText(program);
         changed = false; //Jeliot 3
     }
