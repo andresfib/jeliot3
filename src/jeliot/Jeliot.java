@@ -384,6 +384,9 @@ public class Jeliot {
         gui.runUntilDone();
     }
 
+    public void setProgram(String program) {
+        gui.setProgram(program);
+    }
 
     /**
 	 * @param args
@@ -405,6 +408,9 @@ public class Jeliot {
                jeliot.run();
             }
         });
+        
+        if (args.length == 1) {
+             jeliot.setProgram(args[0]);
+        }
     }
-
 }

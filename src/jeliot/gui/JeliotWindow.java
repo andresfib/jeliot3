@@ -1538,4 +1538,8 @@ public class JeliotWindow {
 			}
 		});
 	}
+    
+    public void setProgram(String program) {
+        editor.setProgram(program);   
+    }
 }
