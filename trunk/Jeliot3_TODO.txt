@@ -1,13 +1,61 @@
-JELIOT 3 TODO-LIST
+----- JELIOT 3.4.X bugs: ------
+* null values caused crashing in constructors and methods (done)
+* maximize window when starting (done)
+* mnemonic for file menu (done)
 
--------These should be done before freezing the "final" version:-----
+----- JELIOT 3 TODO-LIST for next version 4.X:------
+
+Documentation:
+* Documentation of the tool (user guide, tutorial, examples etc.)
+* The guide to install and use Jeliot in Finnish / Suomenkieliset asennus- ja käyttöohjeet.
+
+Jeliot features:
+* Replace '\t' characters with spaces when saving 
+* Interaction mode (like BlueJ's object bench)
+
+Language support:
+* Support for Java 1.5.0 with the DrJava/DynamicJava.
+* 2 -dimensional arrays
+* Super field access
+* Instance garbage collection
+* Wrapper classes
+* super method calls go in the correct order
+* Constructor calls highlighted correctly
+
+Graphical:
+* Returned value should not stay in the return "bubble" after it has been used or should it? 
+* Zoomable canvas for Theater (see JAZZ project)
+* Customize the visualization (change visual attributes or change the granularity of visualization)
+
+Web:
+* Applet Jeliot (with predefined m-code or program).
+* Web Start Jeliot
+
+Connections to other softwares:
+* Control Jeliot outside Jeliot or from other Jeliot
+* Connection framework (extension API) for different kinds of connections
+	* New visualization (e.g. connecting Call tree viewer with this)
+	* New m-code inputs (e.g. read m-code from file or a stream or from other program (i.e. proxy object)
+* Using Vivaldi-kernel as a tool to visualize object oriented programming on more abstract level.
+* Combining Jeliot and JHave supporting self-assesment and explanations
+* Generating explanations from the intermediate code
+* Integrating Jeliot into Eclipse
+* Integrating Jeliot into BlueJ (partially done)
+
+JeCo:
+* Combining Jeliot and Woven Stories supporting collaborative working (partially done)
+* Concurrent editing
+
+
+*************************************************************************
+-------These should be done before freezing the "final" version 3.X:-----
 
 Urgent:
 
 * Problem with main method finding in the JeliotWindow class. (done)
 * Array initializers (but only for one dimensional arrays)(done)
 * Static field access (into the constant area)(done)
-* super(...) method should be made working in the beginning of the classes.
+* super(...) method should be made working in the beginning of the constructors. (done)
 * Documentation
 * Initialization of object when it inherits user made class (super() call) (should be done)
 * casting of primitive types doesn't work. (done)
@@ -39,23 +87,23 @@ Bugs:
 Graphical:
 
 * Arrow heads or something to indicate that the reference ends to that specific object. (done)
-* Reference actors visualization needs to be fixed in instances and in short distances
+* Reference actors visualization needs to be fixed in instances and in short distances (done)
 * Explicit mentioning of different areas in the theater (e.g. constant area, expression evaluation area, instance and array area and method frame area). (done)
 * Some randomness to the placement of references to prevent overlapping (done)
-* Returned value should not stay in the return "bubble" after it has been used or should it?
+* Returned value should not stay in the return "bubble" after it has been used or should it? 
 
 -------These can be done later: ------------------------------------
 
 Otherwise low priority:
-* Array variables could be references
+* Array variables could be references (done)
 
 Speculative or not needed at all:
-* Command line parameters
+* Command line parameters (done in "ask for method" menu item)
 
 Conceptually/Technically challenging:
 * Execute until feature (done partially)
-* Going backwards
-* New editor (e.g. from BlueJ or JEdit)
+* Going backwards (done with history view)
+* New editor (e.g. from BlueJ or JEdit) (done taken from JEdit)
 * Instance garbage collection
 
 Ideas for next versions:
@@ -66,9 +114,9 @@ Ideas for next versions:
 * Call Tree (done)
 * Using Vivaldi-kernel as a tool to visualize object oriented programming 
   on more abstract level.
-* Combining Jeliot and Woven Stories supporting collaborative working (done)
+* Combining Jeliot and Woven Stories supporting collaborative working (partially done)
 * Combining Jeliot and JHave supporting self-assesment and explanations
 * Generating explanations from the intermediate code
-* Integrating Jeliot into BlueJ
+* Integrating Jeliot into BlueJ (partially done)
 * Integrating Jeliot into Eclipse
 * Extensible Canvas for Theater (zooming possible)
