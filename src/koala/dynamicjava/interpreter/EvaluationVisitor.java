@@ -148,7 +148,7 @@ public class EvaluationVisitor extends VisitorObject {
      * by Code.LOC_DELIM
      * @param node the node to visit
      */
-    private String locationToString(Node node) {
+    static public String locationToString(Node node) {
         return ""
             + node.getBeginLine()
             + Code.LOC_DELIM

@@ -1940,14 +1940,16 @@ public class ClassInfoCompiler {
                                  +node.getName()+Code.DELIM
                                  +fi.getType().getName()+Code.DELIM
                                  +af+Code.DELIM
-                                 +((Literal)init).getValue());
+                                 +((Literal)init).getValue()
+                                 +EvaluationVisitor.locationToString(node));
             } else {
                 classFactory.addField(af, rt, fn);
             MCodeUtilities.write(""+Code.FIELD+Code.DELIM+
                                  node.getName()+Code.DELIM
                                  +fi.getType().getName()+Code.DELIM
                                  +af+Code.DELIM
-                                 +Code.UNKNOWN);
+                                 +Code.UNKNOWN
+                                 +EvaluationVisitor.locationToString(node));
             }
             return null;
         }
