@@ -644,7 +644,16 @@ public class ECodeUtilities {
             return "";
         }
     }
-
+    public static String parameterArrayToString(Object[] array){
+        String result="";
+        for (int i=0;i<array.length;i++) {
+             result+=((Class)array[i]).getName();
+             if (i<array.length-1)
+                result+=Code.LOC_DELIM;
+             }
+             
+      return result;
+    }
     public static String arrayToString(Object[] array){
         //Displays the array as an string
         String result="";
