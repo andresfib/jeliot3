@@ -1554,6 +1554,7 @@ public class JeliotWindow implements PauseListener {
                 messageBundle.getString("menu.animation.play"),
                 messageBundle.getString("menu.animation.run_until"),
                 messageBundle.getString("menu.animation.rewind"),
+                messageBundle.getString("menu.control.edit"),
                 messageBundle.getString("menu.animation.pause")};
         setEnabledMenuItems(false, s1);
 
@@ -1591,6 +1592,7 @@ public class JeliotWindow implements PauseListener {
                 jeliot.rewind();
                 theatre.repaint();
 
+                editButton.setEnabled(true);
                 stepButton.setEnabled(true);
                 playButton.setEnabled(true);
                 pauseButton.setEnabled(false);
@@ -1598,6 +1600,7 @@ public class JeliotWindow implements PauseListener {
 
                 String[] s2 = { messageBundle.getString("menu.animation.step"),
                         messageBundle.getString("menu.animation.play"),
+                        messageBundle.getString("menu.control.edit"),
                         messageBundle.getString("menu.animation.run_until")};
                 setEnabledMenuItems(true, s2);
                 String[] s3 = { messageBundle.getString("menu.animation.rewind"),
