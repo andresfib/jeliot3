@@ -5,6 +5,8 @@ JELIOT 3 TODO-LIST
 * Bad user code crashes Jeliot "}", error not being read by Interpreter
 * Documentation
 * Reference actors needs to be fixed in instances and in short distances
+* Arrow heads or something to indicate that the reference ends to that 
+  specific object.
 * Execute until feature
 * Instance garbage collection
 * Array initializers
@@ -22,6 +24,8 @@ JELIOT 3 TODO-LIST
   Stories etc.) also for different visualizers like Call Tree.
 * Call Tree
 * (Scratch visualization)?
+* Using Vivaldi-kernel as a tool to visualize object oriented programming 
+  on more abstract level.
 * Not implemented feature -message (Done, but needs to be added from comments to releases)
 * Error message when super class, does not include constructor without 
   parameters or default constructor (Done)
