@@ -1,6 +1,8 @@
 
 \documentclass[a4paper, 12pt]{report}
 
+\usepackage{bnf}
+
 \usepackage[T1]{fontenc}
 \usepackage[dvips]{epsfig}
 
@@ -29,11 +31,18 @@
  \hline
 	\end{tabular}\par
 }
+
 %  Alternative minstr
 %\newcommand{\minstr}[1]{
 %	\framebox[32em]{\parbox[t]{31em}{\p{#1}}}
 %}
-%\framebox[\textwidth][c]{%
+%\newenvironment{mcodegrammar}%
+%{\begin{grammar}%
+%  [(colon){\par \begin{tabbing}$\Rightarrow$\=}]%
+%  [(semicolon){ \\ \>$|$}]%
+%  [(period){ .\\\end{tabbing}}]%
+%  [(quote){`}{'}]%
+%{\end{grammar}}
 %}
 %\newenvironment{minstr}%
 %    {\nopagebreak\par\small\addvspace{3.2ex plus 0.8ex minus 0.2ex}%
