@@ -103,7 +103,9 @@ To display the available targets type:
   <!-- Applications ================================================= -->
 
   <!-- Distribution ================================================= -->
+
   <target name="dist" depends="clean, prepare-dist,  jars, blueJExt">
+
   <!-- After targets prepare-dist and jars we create the 2 diferent zip files
     that will contain the 2 distribuition files (source and binary)-->
     <zip zipfile="${release}/${dist}${minor}.zip" basedir="${dist}" includes="**/*"/>
@@ -117,6 +119,24 @@ To display the available targets type:
        <include name="**/build.*"/>
      </fileset>
     </zip>
+  	<zip zipfile="${release}/${dist}${minor}-JRE.zip">
+     <zipfileset dir="${dist}" prefix=""/>
+     <zipfileset dir="jre" prefix="jre"/>
+    </zip>
+  </target>
+  <!-- Installers for Windows ===================================-->
+  <!-- Time consuming, moved out of dist -->
+  <target name="createInstallers" depends="clean, prepare-dist, jars"> 	
+  	<exec dir="." executable="C:\temp\program files\Inno Setup 4\iscc.exe" output="output.txt">
+  		<arg line="jeliot.iss"/>
+	</exec>
+    <move file="${release}/setup.exe" tofile="${release}/${dist}${minor}.exe"/>
+  	<exec dir="." executable="C:\temp\program files\Inno Setup 4\iscc.exe" output="outputJRE.txt">
+  		<arg line="jeliotJRE-Bundled.iss"/>
+	</exec>
+    <move file="${release}/setup.exe" tofile="${release}/${dist}${minor}-JRE.exe"/>
+  	
+  	
   </target>
   <target name="jars" depends="compile, prepare-dist">
   <!-- We create the jar file in the distribution (Jeliot3) directory -->
@@ -168,10 +188,7 @@ To display the available targets type:
              <!-- <param name="-output" value="doc\JavaDoc.tex"/> -->
 	     </doclet>
   	</javadoc>
-  	<exec dir="${src}" executable="C:\temp\program files\Inno Setup 4\iscc.exe" output="output.txt">
-  		<arg line="jeliot.iss"/>
-	</exec>
-  
+
   </target>
   <!-- Global clean ================================================= -->
   <target name="clean" depends="clean-compile">
