@@ -2,3 +2,4 @@ TAG         Explanation
 --------------------------------------------------------
 
 Jeliot330   Release version of Jeliot 3.3.0
+Jeliot341   Release version of Jeliot 3.4.1
