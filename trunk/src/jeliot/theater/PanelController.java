@@ -5,28 +5,59 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class PanelController {
 
-   /**
+    /**
      * The resource bundle
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
 
-    private PanelActor panel;
-    private Theater theatre;
-    private AnimationEngine engine;
-    private Image bgImage;
-    private Image panelImage;
+    /**
+	 *
+	 */
+	private PanelActor panel;
+    
+    /**
+	 *
+	 */
+	private Theater theatre;
+    
+    /**
+	 *
+	 */
+	private AnimationEngine engine;
+    
+    /**
+	 *
+	 */
+	private Image bgImage;
+    
+    /**
+	 *
+	 */
+	private Image panelImage;
 
-    private int openDur = Integer.parseInt(bundle.getString("curtain.open_duration"));
-    private int closeDur = Integer.parseInt(bundle.getString("curtain.close_duration"));
+    /**
+	 *
+	 */
+	private int openDur = Integer.parseInt(bundle.getString("curtain.open_duration"));
+    
+    /**
+	 *
+	 */
+	private int closeDur = Integer.parseInt(bundle.getString("curtain.close_duration"));
 
-    public PanelController(Theater theatre, ImageLoader iLoad) {
+    /**
+	 * @param theatre
+	 * @param iLoad
+	 */
+	public PanelController(Theater theatre, ImageLoader iLoad) {
         this.theatre = theatre;
         this.engine = new AnimationEngine(theatre);
         this.bgImage = iLoad.getImage(bundle.getString("image.background"));
@@ -37,7 +68,12 @@ public class PanelController {
                 iLoad.getImage(bundle.getString("image.panel.right")), 62);
     }
 
-    public Thread slide(final boolean open, final Runnable next) {
+    /**
+	 * @param open
+	 * @param next
+	 * @return
+	 */
+	public Thread slide(final boolean open, final Runnable next) {
         return new Thread() {
             public void run() {
                 int dur;

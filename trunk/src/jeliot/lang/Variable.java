@@ -16,55 +16,104 @@ import jeliot.theater.*;
   */
 public class Variable {
 
+/**
+ *
+ */
 //    PVariableDeclarator declarator;
     Value value;
-    VariableActor actor;
-    String type;
-    String name;
-    String modifier;
+    /**
+	 *
+	 */
+	VariableActor actor;
+    /**
+	 *
+	 */
+	String type;
+    /**
+	 *
+	 */
+	String name;
+    /**
+	 *
+	 */
+	String modifier;
 
-    protected Variable() { };
+    /**
+	 * 
+	 */
+	protected Variable() { };
 
-    public Variable(String name, String type) {
+    /**
+	 * @param name
+	 * @param type
+	 */
+	public Variable(String name, String type) {
         this.type = type;
         this.name = name;
 //         value = new Value(Code.UNKNOWN, type);
     }
 
-    public void assign(Value value) {
+    /**
+	 * @param value
+	 */
+	public void assign(Value value) {
         this.value = value;
     }
 
-    public Value getValue() {
+    /**
+	 * @return
+	 */
+	public Value getValue() {
          return value;
     }
 
-    public String getName() {
+    /**
+	 * @return
+	 */
+	public String getName() {
         return name;
     }
 
-    public void setActor(VariableActor actor) {
+    /**
+	 * @param actor
+	 */
+	public void setActor(VariableActor actor) {
         this.actor = actor;
 //         value.setActor(actor.getValue());
     }
 
-    public VariableActor getActor() {
+    /**
+	 * @return
+	 */
+	public VariableActor getActor() {
         return actor;
     }
 
-    public String getType() {
+    /**
+	 * @return
+	 */
+	public String getType() {
         return type;
     }
 
-    protected void setType(String type) {
+    /**
+	 * @param type
+	 */
+	protected void setType(String type) {
         this.type = type;
     }
 
-    public String getModifier() {
+    /**
+	 * @return
+	 */
+	public String getModifier() {
         return modifier;
     }
 
-    protected void setModifier(String modifier) {
+    /**
+	 * @param modifier
+	 */
+	protected void setModifier(String modifier) {
         this.modifier = modifier;
     }
 

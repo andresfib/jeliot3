@@ -21,13 +21,15 @@ import jeliot.lang.Variable;
 import jeliot.lang.VariableInArray;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * Directs the animation of the program.
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class Director {
 
     /**
-     * The resource bundle
+     * The resource bundle for theater package.
      */
     static private ResourceBundle bundle =
         ResourceBundle.getBundle(

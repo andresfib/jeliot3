@@ -24,8 +24,6 @@ import jeliot.theater.*;
 /**
  * 
  * 
- * Created by Niko Myller 10.12.2002
- * 
  * @author Niko Myller
  */
 public class Interpreter {
@@ -193,7 +191,7 @@ public class Interpreter {
 	private long superMethodCallNumber = 0;
 
 	/**
-	 * The resource bundle
+	 * The resource bundle for mcode messages
 	 */
 	static private ResourceBundle bundle =
 		ResourceBundle.getBundle(
@@ -201,7 +199,7 @@ public class Interpreter {
 			Locale.getDefault());
 
 	/**
-	 *
+	 * The resource bundle for mcode properties
 	 */
 	static private ResourceBundle propertiesBundle =
 		ResourceBundle.getBundle(

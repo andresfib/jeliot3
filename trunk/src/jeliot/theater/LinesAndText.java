@@ -18,19 +18,60 @@ public class LinesAndText extends Actor {
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
 
-    private Theater theatre;
-    private TheaterManager manager;
+    /**
+	 *
+	 */
+	private Theater theatre;
+    
+    /**
+	 *
+	 */
+	private TheaterManager manager;
 
-    private String constantArea = bundle.getString("string.constant_area");
-    private String methodArea = bundle.getString("string.method_area");
-    private String instanceArea = bundle.getString("string.instance_area");
-    private String evaluationArea = bundle.getString("string.Evaluation_area");
-    private int constantAreaWidth;
-    private int methodAreaWidth;
-    private int instanceAreaWidth;
-    private int evaluationAreaWidth;
+    /**
+	 *
+	 */
+	private String constantArea = bundle.getString("string.constant_area");
+    
+    /**
+	 *
+	 */
+	private String methodArea = bundle.getString("string.method_area");
+    
+    /**
+	 *
+	 */
+	private String instanceArea = bundle.getString("string.instance_area");
+    
+    /**
+	 *
+	 */
+	private String evaluationArea = bundle.getString("string.Evaluation_area");
+    
+    /**
+	 *
+	 */
+	private int constantAreaWidth;
+    
+    /**
+	 *
+	 */
+	private int methodAreaWidth;
+    
+    /**
+	 *
+	 */
+	private int instanceAreaWidth;
+    
+    /**
+	 *
+	 */
+	private int evaluationAreaWidth;
 
-    public LinesAndText() {
+    /**
+	 * 
+	 */
+	public LinesAndText() {
         FontMetrics fm = dummy.getFontMetrics(font);
         constantAreaWidth = fm.stringWidth(constantArea);
         methodAreaWidth = fm.stringWidth(methodArea);
@@ -38,22 +79,34 @@ public class LinesAndText extends Actor {
         evaluationAreaWidth = fm.stringWidth(evaluationArea);
     }
 
-    public LinesAndText(Theater t, TheaterManager tm) {
+    /**
+	 * @param t
+	 * @param tm
+	 */
+	public LinesAndText(Theater t, TheaterManager tm) {
         super();
         this.theatre = t;
         this.manager = tm;
     }
 
-    public void setTheatre(Theater t) {
+    /**
+	 * @param t
+	 */
+	public void setTheatre(Theater t) {
         this.theatre = t;
     }
 
-    public void setManager(TheaterManager tm) {
+    /**
+	 * @param tm
+	 */
+	public void setManager(TheaterManager tm) {
         this.manager = tm;
     }
 
-    /** Draws the lines separating different areas
-     *  and writes texts on them.
+	/**
+     * Draws the lines separating different areas
+     * and writes texts on them.
+     * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
      */
     public void paintActor(Graphics g) {
         Dimension d = theatre.getSize();

@@ -8,36 +8,69 @@ import java.awt.Point;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         8.8.1999
-  * revised         18.9.1999
-  * modified        12.12.2002 by Niko Myller
+  * @author Niko Myller
   */
 public class VariableActor extends Actor implements ActorContainer {
 
-    /** Location of the variable's name. */
+    /**
+     * Location of the variable's name.
+     */
     protected int namex;
+    
+    /**
+     * Location of the variable's name.
+     */
     protected int namey;
 
-    /** Location and size of the value slot. */
-    protected int valuex, valuey;
-    protected int valuew, valueh;
+    /**
+     * x-coordinate of the location of the value slot.
+     */
+    protected int valuex;
+    
+    /**
+     * y-coordinate of the location of the value slot.
+     */
+    protected int valuey;
+    
+    /**
+     * the width of the value slot.
+     */
+    protected int valuew;
+    
+    /**
+     * the height of the value slot.
+     */
+    protected int valueh;
 
-    /** Value box's width. */
-    private int vborderw = 2;
+    /**
+     * Value border width.
+     */
+    protected int vborderw = 2;
 
-    /** Variable's name. */
+    /**
+     * Variable's name.
+     */
     protected String name;
 
-    /** Value actor assigned to this variable actor. */
+    /**
+     * Value actor assigned to this variable actor.
+     */
     protected ValueActor value;
 
-    /** Background color of the values of this type. */
+    /**
+     * Background color of the values of this type.
+     */
     protected Color valueColor;
 
-    protected ValueActor reserved;
+    /**
+	 *
+	 */
+	protected ValueActor reserved;
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
 
         int w = width;
         int h = height;
@@ -96,14 +129,21 @@ public class VariableActor extends Actor implements ActorContainer {
 
     }
 
-    public void setFont(Font font) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setFont(java.awt.Font)
+	 */
+	public void setFont(Font font) {
         super.setFont(font);
         if (name != null) {
             calcLabelPosition();
         }
     }
 
-    public Point reserve(ValueActor actor) {
+    /**
+	 * @param actor
+	 * @return
+	 */
+	public Point reserve(ValueActor actor) {
         this.reserved = actor;
         Point rp = getRootLocation();
         int w = actor.width;
@@ -112,9 +152,15 @@ public class VariableActor extends Actor implements ActorContainer {
         return rp;
     }
 
-    public void removeActor(Actor actor) { }
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+	 */
+	public void removeActor(Actor actor) { }
 
-    public void bind() {
+    /**
+	 * 
+	 */
+	public void bind() {
         this.value = this.reserved;
         value.setParent(this);
 
@@ -123,42 +169,67 @@ public class VariableActor extends Actor implements ActorContainer {
                 valuey + (valueh - value.height)/ 2);
     }
 
-    public void setValue(ValueActor actor) {
+    /**
+	 * @param actor
+	 */
+	public void setValue(ValueActor actor) {
         this.reserved = actor;
         bind();
     }
 
-    public ValueActor getValue() {
+    /**
+	 * @return
+	 */
+	public ValueActor getValue() {
         ValueActor act = (ValueActor)this.value.clone();
         return act;
     }
 
-    public void setValueColor(Color valuec) {
+    /**
+	 * @param valuec
+	 */
+	public void setValueColor(Color valuec) {
         this.valueColor = valuec;
     }
 
-    public void setName(String name) {
+    /**
+	 * @param name
+	 */
+	public void setName(String name) {
         this.name = name;
         calcLabelPosition();
     }
 
-    //Added for Jeliot 3 to find the variables.
+    /**
+	 * @return
+	 */
+	//Added for Jeliot 3 to find the variables.
     public String getName() {
         return this.name;
     }
 
-    public void setValueDimension(int w, int h) {
+    /**
+	 * @param w
+	 * @param h
+	 */
+	public void setValueDimension(int w, int h) {
         this.valuew = w;
         this.valueh = h;
         calcLabelPosition();
     }
 
-    public void setSize(int w, int h) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setSize(int, int)
+	 */
+	public void setSize(int w, int h) {
         super.setSize(w, h);
         calcLabelPosition();
     }
 
-    protected void calcLabelPosition() {
+    /**
+	 * 
+	 */
+	protected void calcLabelPosition() {
         int w = getWidth();
         int h = getHeight();
 
@@ -176,7 +247,10 @@ public class VariableActor extends Actor implements ActorContainer {
         namey = (h+sh)/2;
     }
 
-    public void calculateSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#calculateSize()
+	 */
+	public void calculateSize() {
         FontMetrics fm = getFontMetrics();
         int sw = fm.stringWidth(name);
         int sh = fm.getHeight();

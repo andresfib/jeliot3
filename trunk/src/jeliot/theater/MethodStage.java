@@ -9,68 +9,104 @@ import java.awt.Point;
 import java.util.Stack;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class MethodStage extends Actor implements ActorContainer {
 
-    /** Indicates how many variables is defined in this scope. */
+    /**
+     * Indicates how many variables is defined in this scope.
+     */
     private int scopeVarCount = 0;
 
-    /** Keeps track of scopes and the amount of variables in each scope. */
+    /**
+     * Keeps track of scopes and the amount of variables in each scope.
+     */
     private Stack scopes = new Stack();
 
-    /** Variable actors in this MethodStage. */
+    /**
+     * Variable actors in this MethodStage.
+     */
     private Stack variables = new Stack();
 
-    /** Name of the method or MethodStage. */
+    /**
+     * Name of the method or MethodStage.
+     */
     private String name;
 
-    /** Height of the name. */
+    /**
+     * Height of the name.
+     */
     private int nheight;
 
-    /** Width of the name. */
+    /**
+     * Width of the name.
+     */
     private int nwidth;
 
-    /** Number of pixels around the divider line. */
+    /**
+     * Number of pixels around the divider line.
+     */
     private int margin = 2;
 
-    /** Number of pixels between actors. */
+    /**
+     * Number of pixels between actors.
+     */
     private int actorMargin = 3;
 
-    /** Maximum possible number of variables on the MethodStage at the moment. */
+    /**
+     * Maximum possible number of variables on the MethodStage at the moment.
+     */
     private int varCount = 1;
 
-    /** How many variables actually is on the Methodstage at the moment. */
+    /**
+     * How many variables actually is on the Methodstage at the moment.
+     */
     private int totalVarCount = 0;
 
-    /** Actors Width */
+    /**
+     * Actors Width
+     */
     private int actWidth;
 
-    /** Actors Height */
+    /**
+     * Actors Height
+     */
     private int actHeight;
 
-    /** Value is true if the variables of the method are supposed to be shown.
-      * Normally, the value is true only on some animations variables are not shown.
-      * For example during appearing and disappearing this variable is set to false.
-      */
+    /**
+     * Value is true if the variables of the method are supposed to be shown.
+     * Normally, the value is true only on some animations variables are not shown.
+     * For example during appearing and disappearing this variable is set to false.
+     */
     private boolean paintVars = true;
 
-    /** Actor that is going to be added to the MethodStage but is not yet bind on it.
-      * For example an actor that is animated at the moment and then added to the MethodStage
-      * (e.g. variable appearing).
-      */
+    /**
+     * Actor that is going to be added to the MethodStage but is not yet bind on it.
+     * For example an actor that is animated at the moment and then added to the MethodStage
+     * (e.g. variable appearing).
+     */
     private Actor reserved;
 
-    /** The location where reserved actor is reserved. */
+    /**
+     * The location where reserved actor is reserved.
+     */
     private Point resLoc;
 
-    public MethodStage(String name) {
+    /**
+	 * @param name
+	 */
+	public MethodStage(String name) {
         this.name = name;
         insets = new Insets(2, 6, 4, 6);
     }
 
-    public VariableActor findVariableActor(String name) {
+    /**
+	 * @param name
+	 * @return
+	 */
+	public VariableActor findVariableActor(String name) {
 
         //Find the variable with the given name.
         for (int i = 0; i < variables.size(); i++) {
@@ -83,7 +119,11 @@ public class MethodStage extends Actor implements ActorContainer {
         return null;
     }
 
-    public void calculateSize(int maxActWidth, int actHeight) {
+    /**
+	 * @param maxActWidth
+	 * @param actHeight
+	 */
+	public void calculateSize(int maxActWidth, int actHeight) {
 
         this.actWidth = maxActWidth;
         this.actHeight = actHeight;
@@ -93,11 +133,18 @@ public class MethodStage extends Actor implements ActorContainer {
         setSize(d.width, d.height);
     }
 
-    public Dimension calculateSizeDimensions() {
+    /**
+	 * @return
+	 */
+	public Dimension calculateSizeDimensions() {
         return calculateSizeDimensions(this.varCount);
     }
 
-    public Dimension calculateSizeDimensions(int varCount) {
+    /**
+	 * @param varCount
+	 * @return
+	 */
+	public Dimension calculateSizeDimensions(int varCount) {
 
         int w = borderWidth * 2 + insets.right + insets.left +
             Math.max(actWidth, nwidth) + 2 * margin;
@@ -109,7 +156,10 @@ public class MethodStage extends Actor implements ActorContainer {
         return new Dimension(w, h);
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         int w = width;
         int h = height;
         int bw = borderWidth;
@@ -144,14 +194,21 @@ public class MethodStage extends Actor implements ActorContainer {
         }
     }
 
-    public void setFont(Font font) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setFont(java.awt.Font)
+	 */
+	public void setFont(Font font) {
         super.setFont(font);
         FontMetrics fm = getFontMetrics();
         nheight = fm.getHeight();
         nwidth = fm.stringWidth(name);
     }
 
-    public Point reserve(Actor actor) {
+    /**
+	 * @param actor
+	 * @return
+	 */
+	public Point reserve(Actor actor) {
         Actor prev = (variables.isEmpty()) ?
                       null :
                       (Actor)variables.lastElement();
@@ -169,7 +226,10 @@ public class MethodStage extends Actor implements ActorContainer {
         return rp;
     }
 
-    public void bind() {
+    /**
+	 * 
+	 */
+	public void bind() {
         reserved.setLocation(resLoc);
         variables.push(reserved);
         reserved.setParent(this);
@@ -179,13 +239,19 @@ public class MethodStage extends Actor implements ActorContainer {
         scopeVarCount++;
     }
 
-    //Added for Jeliot 3
+    /**
+	 * 
+	 */
+	//Added for Jeliot 3
     public void openScope() {
         scopes.push(new Integer(scopeVarCount));
         scopeVarCount = 0;
     }
 
-    //Added for Jeliot 3
+    /**
+	 * 
+	 */
+	//Added for Jeliot 3
     public void closeScope() {
         for (int i = 0; i < scopeVarCount; i++) {
             variables.pop();
@@ -194,11 +260,17 @@ public class MethodStage extends Actor implements ActorContainer {
         scopeVarCount = ((Integer) scopes.pop()).intValue();
     }
 
-    public void removeActor(Actor actor) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+	 */
+	public void removeActor(Actor actor) {
         variables.removeElement(actor);
     }
 
-    public Actor getActorAt(int xc, int yc) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#getActorAt(int, int)
+	 */
+	public Actor getActorAt(int xc, int yc) {
 
         int n = variables.size();
 
@@ -213,7 +285,10 @@ public class MethodStage extends Actor implements ActorContainer {
         return super.getActorAt(xc, yc);
     }
 
-    public Animation appear(final Point loc) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#appear(java.awt.Point)
+	 */
+	public Animation appear(final Point loc) {
 
         return new Animation() {
             Dimension size;
@@ -253,7 +328,10 @@ public class MethodStage extends Actor implements ActorContainer {
         };
     }
 
-    public Animation disappear() {
+    /**
+	 * @return
+	 */
+	public Animation disappear() {
 
         return new Animation() {
             Dimension size;
@@ -284,7 +362,10 @@ public class MethodStage extends Actor implements ActorContainer {
         };
     }
 
-    public Animation extend()  {
+    /**
+	 * @return
+	 */
+	public Animation extend()  {
 
         if ((totalVarCount + 1) > varCount) {
 

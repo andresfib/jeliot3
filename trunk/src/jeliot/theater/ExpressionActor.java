@@ -4,46 +4,80 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
-
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class ExpressionActor extends Actor implements ActorContainer{
 
-    //Added for Jeliot 3 to identify the ExpressionActors
+    /**
+     * identifis the ExpressionActors
+     */
     long id;
 
-    Actor[] actors;
-    Point[] locs;
-    boolean[] bound;
-    int next;
+    /**
+	 *
+	 */
+	Actor[] actors;
+    /**
+	 *
+	 */
+	Point[] locs;
+    /**
+	 *
+	 */
+	boolean[] bound;
+    /**
+	 *
+	 */
+	int next;
 
-    int margin = 2;
+    /**
+	 *
+	 */
+	int margin = 2;
 
-    ExpressionActor(int n) {
+    /**
+	 * @param n
+	 */
+	ExpressionActor(int n) {
         actors = new Actor[n];
         locs = new Point[n];
         bound = new boolean[n];
     }
 
-    ExpressionActor(int n, long i) {
+    /**
+	 * @param n
+	 * @param i
+	 */
+	ExpressionActor(int n, long i) {
         id = i;
         actors = new Actor[n];
         locs = new Point[n];
         bound = new boolean[n];
     }
 
-    //Jeliot 3 addition
+    /**
+	 * @return
+	 */
+	//Jeliot 3 addition
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    /**
+	 * @param id
+	 */
+	public void setId(long id) {
         this.id = id;
     }
 
 
-    public Point reserve(Actor actor) {
+    /**
+	 * @param actor
+	 * @return
+	 */
+	public Point reserve(Actor actor) {
         actors[next] = actor;
         int y = 0;
         int x = (next == 0) ?
@@ -56,7 +90,10 @@ public class ExpressionActor extends Actor implements ActorContainer{
     }
 
 
-    public void bind(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void bind(Actor actor) {
         for (int i = 0; i < next; ++i) {
             if (actors[i] == actor) {
                 bound[i] = true;
@@ -68,12 +105,18 @@ public class ExpressionActor extends Actor implements ActorContainer{
         throw new RuntimeException();
     }
 
-    public void cut() {
+    /**
+	 * 
+	 */
+	public void cut() {
         actors[--next] = null;
         bound[next] = false;
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         int n = next;
         for (int i = 0; i < n; ++i) {
             if (bound[i]) {
@@ -85,7 +128,10 @@ public class ExpressionActor extends Actor implements ActorContainer{
         }
     }
 
-    public int getHeight() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#getHeight()
+	 */
+	public int getHeight() {
         int n = next;
         int max = 0;
         for (int i = 0; i < n; ++i) {
@@ -95,7 +141,10 @@ public class ExpressionActor extends Actor implements ActorContainer{
         return max;
     }
 
-    public void removeActor(Actor actor) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+	 */
+	public void removeActor(Actor actor) {
         int n = next;
         for (int i = 0; i < n; ++i) {
             if (actors[i] == actor) {
@@ -104,7 +153,10 @@ public class ExpressionActor extends Actor implements ActorContainer{
         }
     }
 
-    public void setLight(int light) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setLight(int)
+	 */
+	public void setLight(int light) {
         super.setLight(light);
         int n = next;
         for (int i = 0; i < n; ++i) {

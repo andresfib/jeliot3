@@ -11,5 +11,10 @@ package jeliot.theater;
   * @author Niko Myller
   */
 public interface ActorContainer {
+    
+    /**
+     * 
+     * @param actor
+     */
     public abstract void removeActor(Actor actor);
 }

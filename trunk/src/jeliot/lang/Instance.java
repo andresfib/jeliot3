@@ -3,62 +3,109 @@ package jeliot.lang;
 import jeliot.theater.*;
 
 /**
-  * @author Pekka Uronen
-  * @modified Niko Myller
-  * created         2.10.1999
-  * modified        7.5.2003
-  */
+ * The base class for all the instances.
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class Instance {
 
-    private String type;
-    private InstanceActor actor;
+    /**
+	 *
+	 */
+	private String type;
+    
+    /**
+	 *
+	 */
+	private InstanceActor actor;
 
-    private String hashCode;
+    /**
+	 *
+	 */
+	private String hashCode;
 
-    private int references = 0;
+    /**
+	 *
+	 */
+	private int references = 0;
 
-    protected Instance(String hashCode) {
+    /**
+	 * @param hashCode
+	 */
+	protected Instance(String hashCode) {
         this.hashCode = hashCode;
     }
 
-    protected Instance(String hashCode, String type) {
+    /**
+	 * @param hashCode
+	 * @param type
+	 */
+	protected Instance(String hashCode, String type) {
         this.hashCode = hashCode;
         this.type = type;
     }
 
-    public void setType(String type) {
+    /**
+	 * @param type
+	 */
+	public void setType(String type) {
         this.type = type;
     }
 
-    public String getType() {
+    /**
+	 * @return
+	 */
+	public String getType() {
         return type;
     }
 
-    public void setActor(InstanceActor actor) {
+    /**
+	 * @param actor
+	 */
+	public void setActor(InstanceActor actor) {
         this.actor = actor;
     }
 
-    public InstanceActor getActor() {
+    /**
+	 * @return
+	 */
+	public InstanceActor getActor() {
         return actor;
     }
 
-    public void setHashCode(String hashCode) {
+    /**
+	 * @param hashCode
+	 */
+	public void setHashCode(String hashCode) {
         this.hashCode = hashCode;
     }
 
-    public String getHashCode() {
+    /**
+	 * @return
+	 */
+	public String getHashCode() {
         return hashCode;
     }
 
-    public void reference() {
+    /**
+	 * 
+	 */
+	public void reference() {
         references++;
     }
 
-    public void dereference() {
+    /**
+	 * 
+	 */
+	public void dereference() {
         references--;
     }
 
-    public int getNumberOfReferences() {
+    /**
+	 * @return
+	 */
+	public int getNumberOfReferences() {
         return references;
     }
 }

@@ -8,34 +8,66 @@ import jeliot.lang.Value;
   */
 public abstract class Animator {
 
-    private Value[] args;
-    private ValueActor[] argact;
-    private Value returnValue;
+    /**
+	 *
+	 */
+	private Value[] args;
+    /**
+	 *
+	 */
+	private ValueActor[] argact;
+    /**
+	 *
+	 */
+	private Value returnValue;
 
-    public void setArguments(Value[] args) {
+    /**
+	 * @param args
+	 */
+	public void setArguments(Value[] args) {
         this.args = args;
     }
 
-    public void setArgumentActors(ValueActor[] argact) {
+    /**
+	 * @param argact
+	 */
+	public void setArgumentActors(ValueActor[] argact) {
         this.argact = argact;
     }
 
-    public Value getReturnValue() {
+    /**
+	 * @return
+	 */
+	public Value getReturnValue() {
         return returnValue;
     }
 
-    public void setReturnValue(Value v) {
+    /**
+	 * @param v
+	 */
+	public void setReturnValue(Value v) {
         this.returnValue = v;
     }
 
-    public Value getArgument(int i) {
+    /**
+	 * @param i
+	 * @return
+	 */
+	public Value getArgument(int i) {
         return args[i];
     }
 
-    protected Actor getArgumentActor(int i) {
+    /**
+	 * @param i
+	 * @return
+	 */
+	protected Actor getArgumentActor(int i) {
         return argact[i];
     }
 
-    public abstract void animate(Director director);
+    /**
+	 * @param director
+	 */
+	public abstract void animate(Director director);
 
 }

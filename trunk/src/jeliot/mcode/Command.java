@@ -1,32 +1,62 @@
 package jeliot.mcode;
 
-//Not used in Jeliot 3 right now.
 
+
+/**
+ * Currently this class is not used in Jeliot 3.
+ * 
+ * @author Niko Myller
+ */
 public class Command {
 
-    private int expressionReference = 0;
-    private int type = 0;
+    /**
+	 *
+	 */
+	private int expressionReference = 0;
+    /**
+	 *
+	 */
+	private int type = 0;
 
-    protected Command() { }
+    /**
+	 * 
+	 */
+	protected Command() { }
 
-    public Command(int t, int er) {
+    /**
+	 * @param t
+	 * @param er
+	 */
+	public Command(int t, int er) {
         this.type = t;
         this.expressionReference = er;
     }
 
-    public void setExpressionReference(int er) {
+    /**
+	 * @param er
+	 */
+	public void setExpressionReference(int er) {
         this.expressionReference = er;
     }
 
-    public void setType(int t) {
+    /**
+	 * @param t
+	 */
+	public void setType(int t) {
         this.type = t;
     }
 
-    public int getExpressionReference() {
+    /**
+	 * @return
+	 */
+	public int getExpressionReference() {
         return this.expressionReference;
     }
 
-    public int getType() {
+    /**
+	 * @return
+	 */
+	public int getType() {
         return this.type;
     }
 

@@ -1,32 +1,74 @@
 package jeliot.theater;
 
+/**
+ * 
+ * @author Niko Myller
+ */
 public class Highlight {
 
-    private int beginLine, beginColumn, endLine, endColumn;
+    /**
+	 *
+	 */
+    private int beginLine;
+    
+	/**
+	 *
+	 */
+	private int beginColumn;
+    
+    /**
+     *
+     */
+    private int endLine;
+    
+    /**
+     *
+     */
+    private int endColumn;
 
-    protected Highlight() { }
+    /**
+	 * 
+	 */
+	protected Highlight() { }
 
-    public Highlight(int bl, int bc, int el, int ec) {
+    /**
+	 * @param bl
+	 * @param bc
+	 * @param el
+	 * @param ec
+	 */
+	public Highlight(int bl, int bc, int el, int ec) {
         this.beginLine = bl;
         this.beginColumn = bc;
         this.endLine = el;
         this.endColumn = ec;
     }
 
-    public int getBeginLine() {
+    /**
+	 * @return
+	 */
+	public int getBeginLine() {
         return this.beginLine;
     }
 
-    public int getBeginColumn() {
+    /**
+	 * @return
+	 */
+	public int getBeginColumn() {
         return this.beginColumn;
     }
 
-    public int getEndLine() {
+    /**
+	 * @return
+	 */
+	public int getEndLine() {
         return this.endLine;
     }
 
-    public int getEndColumn() {
+    /**
+	 * @return
+	 */
+	public int getEndColumn() {
         return this.endColumn;
     }
-
 }

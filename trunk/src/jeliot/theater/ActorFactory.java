@@ -30,65 +30,161 @@ import jeliot.lang.Variable;
 public class ActorFactory {
 
     /**
-     * The resource bundle
+     * The resource bundle for theater package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
 
-    private Component dummy = new Panel();
-    private ImageLoader iLoad;
+    /**
+	 *
+	 */
+	private Component dummy = new Panel();
+    /**
+	 *
+	 */
+	private ImageLoader iLoad;
 
-    private Image shadowImage;
-    private Image messageImage;
+    /**
+	 *
+	 */
+	private Image shadowImage;
+    /**
+	 *
+	 */
+	private Image messageImage;
 
-    private Font valueFont;
-    private Font variableFont;
-    private Font stageFont;
-    private Font messageFont = new Font(bundle.getString("font.message.family"),
+    /**
+	 *
+	 */
+	private Font valueFont;
+    /**
+	 *
+	 */
+	private Font variableFont;
+    /**
+	 *
+	 */
+	private Font stageFont;
+    /**
+	 *
+	 */
+	private Font messageFont = new Font(bundle.getString("font.message.family"),
                                         Font.BOLD,
                                         Integer.parseInt(bundle.getString("font.message.size")));
-    private Font indexFont = new Font(bundle.getString("font.index.family"),
+    /**
+	 *
+	 */
+	private Font indexFont = new Font(bundle.getString("font.index.family"),
                                       Font.BOLD,
                                       Integer.parseInt(bundle.getString("font.index.size")));
-    private Font SMIFont = new Font(bundle.getString("font.SMI.family"),
+    /**
+	 *
+	 */
+	private Font SMIFont = new Font(bundle.getString("font.SMI.family"),
                                         Font.BOLD,
                                         Integer.parseInt(bundle.getString("font.SMI.size")));
-    private Font OMIFont = new Font(bundle.getString("font.OMI.family"),
+    /**
+	 *
+	 */
+	private Font OMIFont = new Font(bundle.getString("font.OMI.family"),
                                         Font.BOLD,
                                         Integer.parseInt(bundle.getString("font.OMI.size")));
-    private Font ACFont = new Font(bundle.getString("font.AC.family"),
+    /**
+	 *
+	 */
+	private Font ACFont = new Font(bundle.getString("font.AC.family"),
                                         Font.BOLD,
                                         Integer.parseInt(bundle.getString("font.AC.size")));
-    private Font LATFont = new Font(bundle.getString("font.LAT.family"),
+    /**
+	 *
+	 */
+	private Font LATFont = new Font(bundle.getString("font.LAT.family"),
                                         Font.BOLD,
                                         Integer.parseInt(bundle.getString("font.LAT.size")));
 
-    private int valueHeight;
+    /**
+	 *
+	 */
+	private int valueHeight;
 
-    private Insets variableInsets = new Insets(2, 3, 2, 2);
+    /**
+	 *
+	 */
+	private Insets variableInsets = new Insets(2, 3, 2, 2);
 
-    private int margin = Integer.parseInt(bundle.getString("actor_factory.margin"));
+    /**
+	 *
+	 */
+	private int margin = Integer.parseInt(bundle.getString("actor_factory.margin"));
 
-    private Color messagebc = new Color(Integer.decode(bundle.getString("color.message.background")).intValue());
-    private Color messagefc = new Color(Integer.decode(bundle.getString("color.message.foreground")).intValue());
+    /**
+	 *
+	 */
+	private Color messagebc = new Color(Integer.decode(bundle.getString("color.message.background")).intValue());
+    /**
+	 *
+	 */
+	private Color messagefc = new Color(Integer.decode(bundle.getString("color.message.foreground")).intValue());
 
-    private Color trueColor =   new Color(Integer.decode(bundle.getString("color.true")).intValue());
-    private Color falseColor =  new Color(Integer.decode(bundle.getString("color.false")).intValue());
+    /**
+	 *
+	 */
+	private Color trueColor =   new Color(Integer.decode(bundle.getString("color.true")).intValue());
+    /**
+	 *
+	 */
+	private Color falseColor =  new Color(Integer.decode(bundle.getString("color.false")).intValue());
 
-    private Color opColor                 = new Color(Integer.decode(bundle.getString("color.operator")).intValue());
-    private Color methodStageColor        = new Color(Integer.decode(bundle.getString("color.method_stage.background")).intValue());
-    private Color objectStageColor        = new Color(Integer.decode(bundle.getString("color.object_stage.background")).intValue());
-    private Color SMIColor                = new Color(Integer.decode(bundle.getString("color.SMI.background")).intValue());
-    private Color variableForegroundColor = new Color(Integer.decode(bundle.getString("color.variable.foreground")).intValue());
-    private Color valueForegroundColor    = new Color(Integer.decode(bundle.getString("color.value.foreground")).intValue());
-    private Color OMIColor                = new Color(Integer.decode(bundle.getString("color.OMI.background")).intValue());
-    private Color ACColor                 = new Color(Integer.decode(bundle.getString("color.AC.background")).intValue());
-    private Color bubbleColor             = new Color(Integer.decode(bundle.getString("color.bubble.background")).intValue());
-    private Color LATForegroundColor      = new Color(Integer.decode(bundle.getString("color.LAT.foreground")).intValue());
-    private Color LATBackgroundColor      = new Color(Integer.decode(bundle.getString("color.LAT.background")).intValue());
+    /**
+	 *
+	 */
+	private Color opColor                 = new Color(Integer.decode(bundle.getString("color.operator")).intValue());
+    /**
+	 *
+	 */
+	private Color methodStageColor        = new Color(Integer.decode(bundle.getString("color.method_stage.background")).intValue());
+    /**
+	 *
+	 */
+	private Color objectStageColor        = new Color(Integer.decode(bundle.getString("color.object_stage.background")).intValue());
+    /**
+	 *
+	 */
+	private Color SMIColor                = new Color(Integer.decode(bundle.getString("color.SMI.background")).intValue());
+    /**
+	 *
+	 */
+	private Color variableForegroundColor = new Color(Integer.decode(bundle.getString("color.variable.foreground")).intValue());
+    /**
+	 *
+	 */
+	private Color valueForegroundColor    = new Color(Integer.decode(bundle.getString("color.value.foreground")).intValue());
+    /**
+	 *
+	 */
+	private Color OMIColor                = new Color(Integer.decode(bundle.getString("color.OMI.background")).intValue());
+    /**
+	 *
+	 */
+	private Color ACColor                 = new Color(Integer.decode(bundle.getString("color.AC.background")).intValue());
+    /**
+	 *
+	 */
+	private Color bubbleColor             = new Color(Integer.decode(bundle.getString("color.bubble.background")).intValue());
+    /**
+	 *
+	 */
+	private Color LATForegroundColor      = new Color(Integer.decode(bundle.getString("color.LAT.foreground")).intValue());
+    /**
+	 *
+	 */
+	private Color LATBackgroundColor      = new Color(Integer.decode(bundle.getString("color.LAT.background")).intValue());
 
-    private Color[] valColor = {
+    /**
+	 *
+	 */
+	private Color[] valColor = {
             new Color(Integer.decode(bundle.getString("color.value.background.boolean")).intValue()),
             new Color(Integer.decode(bundle.getString("color.value.background.byte")).intValue()),
             new Color(Integer.decode(bundle.getString("color.value.background.short")).intValue()),
@@ -101,7 +197,10 @@ public class ActorFactory {
             new Color(Integer.decode(bundle.getString("color.value.background.reference")).intValue())
         };
 
-    private Color[] varColor = {
+    /**
+	 *
+	 */
+	private Color[] varColor = {
             new Color(Integer.decode(bundle.getString("color.variable.background.boolean")).intValue()),
             new Color(Integer.decode(bundle.getString("color.variable.background.byte")).intValue()),
             new Color(Integer.decode(bundle.getString("color.variable.background.short")).intValue()),
@@ -114,7 +213,10 @@ public class ActorFactory {
             new Color(Integer.decode(bundle.getString("color.variable.background.reference")).intValue())
         };
 
-    private String[][] binOpImageName = {
+    /**
+	 *
+	 */
+	private String[][] binOpImageName = {
         {bundle.getString("image.binary_operator.multiplication"),         bundle.getString("image.binary_operator.result.multiplication")},         //multiplication
         {bundle.getString("image.binary_operator.division"),               bundle.getString("image.binary_operator.result.division")},               //division
         {bundle.getString("image.binary_operator.remaider"),               bundle.getString("image.binary_operator.result.remaider")},               //remaider
@@ -138,7 +240,10 @@ public class ActorFactory {
         {bundle.getString("image.binary_operator.logical_xor"),            bundle.getString("image.binary_operator.result.logical_xor")}             //logical xor
     };
 
-    private String[][] unaOpImageName = {
+    /**
+	 *
+	 */
+	private String[][] unaOpImageName = {
         {bundle.getString("image.unary_operator.plus"),       bundle.getString("image.unary_operator.result.plus")},       //plus
         {bundle.getString("image.unary_operator.minus"),      bundle.getString("image.unary_operator.result.minus")},      //minus
         {bundle.getString("image.unary_operator.postdec"),    bundle.getString("image.unary_operator.result.postdec")},    //postdec
@@ -149,11 +254,20 @@ public class ActorFactory {
         {bundle.getString("image.unary_operator.postdec"),    bundle.getString("image.unary_operator.result.postdec")}     //postdec
     };
 
-    private static int[] typeValWidth;
+    /**
+	 *
+	 */
+	private static int[] typeValWidth;
 
-    private static int[] typeWidth;
+    /**
+	 *
+	 */
+	private static int[] typeWidth;
 
-    public ActorFactory(ImageLoader iLoad) {
+    /**
+	 * @param iLoad
+	 */
+	public ActorFactory(ImageLoader iLoad) {
         this.iLoad = iLoad;
         this.shadowImage = iLoad.getImage(bundle.getString("image.shadow"));
         Actor.setShadowImage(this.shadowImage);
@@ -170,7 +284,10 @@ public class ActorFactory {
                               Integer.parseInt(bundle.getString("font.stage.size"))));
     }
 
-    public void setValueFont(Font font) {
+    /**
+	 * @param font
+	 */
+	public void setValueFont(Font font) {
         FontMetrics fm = dummy.getFontMetrics(font);
 
         valueHeight = fm.getHeight() + margin;
@@ -188,7 +305,10 @@ public class ActorFactory {
         };
     }
 
-    public void setVariableFont(Font font) {
+    /**
+	 * @param font
+	 */
+	public void setVariableFont(Font font) {
         this.variableFont = font;
 
         FontMetrics fm = dummy.getFontMetrics(font);
@@ -206,25 +326,39 @@ public class ActorFactory {
         };
     }
 
-    public void setStageFont(Font font) {
+    /**
+	 * @param font
+	 */
+	public void setStageFont(Font font) {
         this.stageFont = font;
     }
 
-    public static int getTypeValueWidth(int n) {
+    /**
+	 * @param n
+	 * @return
+	 */
+	public static int getTypeValueWidth(int n) {
         if (n >= 0 && n < typeValWidth.length) {
             return typeValWidth[n];
         }
         return 0;
     }
 
-    public static int getTypeWidth(int n) {
+    /**
+	 * @param n
+	 * @return
+	 */
+	public static int getTypeWidth(int n) {
         if (n >= 0 && n < typeWidth.length) {
             return typeWidth[n];
         }
         return 0;
     }
 
-    public static int getMaxTypeWidth() {
+    /**
+	 * @return
+	 */
+	public static int getMaxTypeWidth() {
         int max = 0;
         if (typeWidth != null) {
             int n = typeWidth.length;
@@ -238,18 +372,28 @@ public class ActorFactory {
         return 0;
     }
 
-    public static int getMaxMethodStageWidth() {
+    /**
+	 * @return
+	 */
+	public static int getMaxMethodStageWidth() {
         if (typeValWidth != null) {
             return getMaxTypeWidth() + typeValWidth[8] + 20;
         }
         return 0;
     }
 
-    public static int getMaxObjectStageWidth() {
+    /**
+	 * @return
+	 */
+	public static int getMaxObjectStageWidth() {
         return getMaxTypeWidth() + typeValWidth[8] + 20;
     }
 
-    public MethodStage produceMethodStage(MethodFrame m) {
+    /**
+	 * @param m
+	 * @return
+	 */
+	public MethodStage produceMethodStage(MethodFrame m) {
         MethodStage stage = new MethodStage(m.getMethodName());
         stage.setFont(stageFont);
         stage.calculateSize(getMaxMethodStageWidth(),
@@ -261,7 +405,11 @@ public class ActorFactory {
         return stage;
     }
 
-    public VariableActor produceVariableActor(Variable v) {
+    /**
+	 * @param v
+	 * @return
+	 */
+	public VariableActor produceVariableActor(Variable v) {
 
         String type = v.getType();
         VariableActor actor = null;
@@ -355,7 +503,11 @@ public class ActorFactory {
     }
 
 
-    public VariableActor produceObjectVariableActor(Variable v) {
+    /**
+	 * @param v
+	 * @return
+	 */
+	public VariableActor produceObjectVariableActor(Variable v) {
 
         String type = v.getType();
         VariableActor actor = null;
@@ -444,7 +596,11 @@ public class ActorFactory {
     }
 
 
-    public ValueActor produceValueActor(Value val) {
+    /**
+	 * @param val
+	 * @return
+	 */
+	public ValueActor produceValueActor(Value val) {
 
         String type = val.getType();
         int typeInfo = MCodeUtilities.resolveType(type);
@@ -504,7 +660,11 @@ public class ActorFactory {
 
     }
 
-    public ReferenceActor produceReferenceActor(jeliot.lang.Reference rf) {
+    /**
+	 * @param rf
+	 * @return
+	 */
+	public ReferenceActor produceReferenceActor(jeliot.lang.Reference rf) {
         Instance inst = rf.getInstance();
         ReferenceActor actor = null;
         int typeInfo = MCodeUtilities.resolveType("null");
@@ -527,7 +687,11 @@ public class ActorFactory {
         return actor;
     }
 
-    public ReferenceActor produceReferenceActor(ReferenceActor cloneActor) {
+    /**
+	 * @param cloneActor
+	 * @return
+	 */
+	public ReferenceActor produceReferenceActor(ReferenceActor cloneActor) {
 
         ReferenceActor actor = new ReferenceActor(cloneActor.getInstanceActor());
         actor.setBackground(cloneActor.getBackground());
@@ -540,7 +704,11 @@ public class ActorFactory {
         return actor;
     }
 
-    public ValueActor produceValueActor(ValueActor cloneActor) {
+    /**
+	 * @param cloneActor
+	 * @return
+	 */
+	public ValueActor produceValueActor(ValueActor cloneActor) {
 
         ValueActor actor = new ValueActor();
         actor.setForeground(cloneActor.getForeground());
@@ -553,33 +721,56 @@ public class ActorFactory {
         return actor;
     }
 
-    public OperatorActor produceBinOpActor(int op) {
+    /**
+	 * @param op
+	 * @return
+	 */
+	public OperatorActor produceBinOpActor(int op) {
         Image image = iLoad.getImage(binOpImageName[op][0]);
         return produceOperatorActor(image);
     }
 
-    public OperatorActor produceBinOpResActor(int op) {
+    /**
+	 * @param op
+	 * @return
+	 */
+	public OperatorActor produceBinOpResActor(int op) {
         Image image = iLoad.getImage(binOpImageName[op][1]);
         return produceOperatorActor(image);
     }
 
-    public OperatorActor produceEllipsis() {
+    /**
+	 * @return
+	 */
+	public OperatorActor produceEllipsis() {
         Image image = iLoad.getImage(bundle.getString("image.dots"));
         OperatorActor actor = produceOperatorActor(image);
         return actor;
     }
 
-    public OperatorActor produceUnaOpActor(int op) {
+    /**
+	 * @param op
+	 * @return
+	 */
+	public OperatorActor produceUnaOpActor(int op) {
         Image image = iLoad.getImage(unaOpImageName[op][0]);
         return produceOperatorActor(image);
     }
 
-    public OperatorActor produceUnaOpResActor(int op) {
+    /**
+	 * @param op
+	 * @return
+	 */
+	public OperatorActor produceUnaOpResActor(int op) {
         Image image = iLoad.getImage(unaOpImageName[op][1]);
         return produceOperatorActor(image);
     }
 
-    public OperatorActor produceOperatorActor(Image image) {
+    /**
+	 * @param image
+	 * @return
+	 */
+	public OperatorActor produceOperatorActor(Image image) {
         OperatorActor actor = new OperatorActor(image, iLoad.darken(image));
         actor.calculateSize();
         int hh = valueHeight - actor.getHeight();
@@ -591,8 +782,12 @@ public class ActorFactory {
         return actor;
     }
 
-    //Added for Jeliot 3
-    /** Static Method Invocation Actor */
+    /**
+     * Static Method Invocation Actor.
+	 * @param name
+	 * @param paramCount
+	 * @return
+	 */
     public SMIActor produceSMIActor(String name, int paramCount) {
         SMIActor actor = new SMIActor(name, paramCount);
         actor.setFont(SMIFont);
@@ -602,8 +797,12 @@ public class ActorFactory {
         return actor;
     }
 
-    //Added for Jeliot 3
-    /** Object Method Invocation Actor */
+    /**
+     * Object Method Invocation Actor
+	 * @param name
+	 * @param paramCount
+	 * @return
+	 */
     public OMIActor produceOMIActor(String name, int paramCount) {
         OMIActor actor = new OMIActor(name, paramCount);
         actor.setFont(OMIFont);
@@ -613,8 +812,12 @@ public class ActorFactory {
         return actor;
     }
 
-    //Added for Jeliot 3
-    /** Array Creator Actor */
+    /**
+     * Array Creator Actor
+	 * @param name
+	 * @param paramCount
+	 * @return
+	 */
     public ACActor produceACActor(String name, int paramCount) {
         ACActor actor = new ACActor(name, paramCount);
         actor.setFont(ACFont);
@@ -646,6 +849,10 @@ public class ActorFactory {
 //         return actor;
 //     }
 
+    /**
+     * @param actor
+     * @return
+     */
     public BubbleActor produceBubble(Actor actor) {
         BubbleActor ba = new BubbleActor(actor);
         ba.setBackground(bubbleColor);
@@ -654,7 +861,11 @@ public class ActorFactory {
     }
 
 
-    MessageActor produceMessageActor(String[] text) {
+    /**
+	 * @param text
+	 * @return
+	 */
+	MessageActor produceMessageActor(String[] text) {
         MessageActor ma = new MessageActor();
         ma.setBackground(messageImage);
         ma.setText(text);
@@ -668,24 +879,38 @@ public class ActorFactory {
         return ma;
     }
 
-    public ConstantBox produceConstantBox() {
+    /**
+	 * @return
+	 */
+	public ConstantBox produceConstantBox() {
         ConstantBox cbox = new ConstantBox(
                 iLoad.getImage(bundle.getString("image.constant_box")));
         cbox.calculateSize();
         return cbox;
     }
 
-    public AnimatingActor produceHand() {
+    /**
+	 * @return
+	 */
+	public AnimatingActor produceHand() {
         AnimatingActor hand = new AnimatingActor(produceImage("image.hand1"));
         hand.calculateSize();
         return hand;
     }
 
-    public Image produceImage(String iname) {
+    /**
+	 * @param iname
+	 * @return
+	 */
+	public Image produceImage(String iname) {
         return iLoad.getImage(bundle.getString(iname));
     }
 
-    public ArrayActor produceArrayActor(ArrayInstance array) {
+    /**
+	 * @param array
+	 * @return
+	 */
+	public ArrayActor produceArrayActor(ArrayInstance array) {
 
         int[] dims = array.getDimensions();
 
@@ -748,9 +973,16 @@ public class ActorFactory {
         return aactor;
     }
 
-    private MessageFormat objectStageTitle = new MessageFormat(bundle.getString("title.object_stage"));
+    /**
+	 *
+	 */
+	private MessageFormat objectStageTitle = new MessageFormat(bundle.getString("title.object_stage"));
 
-    public ObjectStage produceObjectStage(ObjectFrame m) {
+    /**
+	 * @param m
+	 * @return
+	 */
+	public ObjectStage produceObjectStage(ObjectFrame m) {
         ObjectStage stage = new ObjectStage(objectStageTitle.format(new String[] { m.getObjectName() }), m.getVarCount());
         stage.setFont(stageFont);
 
@@ -764,7 +996,10 @@ public class ActorFactory {
         return stage;
     }
 
-    public LinesAndText produceLinesAndText() {
+    /**
+	 * @return
+	 */
+	public LinesAndText produceLinesAndText() {
         LinesAndText lat = new LinesAndText();
         lat.setBackground(LATBackgroundColor);
         lat.setForeground(LATForegroundColor);

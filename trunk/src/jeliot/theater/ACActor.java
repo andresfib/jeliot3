@@ -11,22 +11,62 @@ import java.awt.Point;
   */
 public class ACActor extends Actor implements ActorContainer{
 
-    String name;
+    /**
+	 *
+	 */
+	String name;
 
-    Actor[] actors;
-    Point[] locs;
-    boolean[] bound;
-    int next = 0;
+    /**
+	 *
+	 */
+	Actor[] actors;
+    /**
+	 *
+	 */
+	Point[] locs;
+    /**
+	 *
+	 */
+	boolean[] bound;
+    /**
+	 *
+	 */
+	int next = 0;
 
-    int margin = 2;
-    int titlemargin = 4;
-    int namey;
-    int namex;
+    /**
+	 *
+	 */
+	int margin = 2;
+    /**
+	 *
+	 */
+	int titlemargin = 4;
+    /**
+	 *
+	 */
+	int namey;
+    /**
+	 *
+	 */
+	int namex;
+	/**
+	 *
+	 */
 	int namew;
+	/**
+	 *
+	 */
 	int nameh;
-    int bracketMargin;
+    /**
+	 *
+	 */
+	int bracketMargin;
 
-    public ACActor(String name, int n) {
+    /**
+	 * @param name
+	 * @param n
+	 */
+	public ACActor(String name, int n) {
         this.name = name;
         actors = new Actor[n];
         locs = new Point[n];
@@ -35,7 +75,11 @@ public class ACActor extends Actor implements ActorContainer{
         bracketMargin = fm.stringWidth("][");        
     }
 
-    public Point reserve(Actor actor) {
+    /**
+	 * @param actor
+	 * @return
+	 */
+	public Point reserve(Actor actor) {
         actors[next] = actor;
         //int y = insets.top + namey + titlemargin;
         //int x = insets.left;
@@ -62,7 +106,10 @@ public class ACActor extends Actor implements ActorContainer{
     }
 
 
-    public void bind(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void bind(Actor actor) {
         for (int i = 0; i < next; ++i) {
             if (actors[i] == actor) {
                 bound[i] = true;
@@ -74,7 +121,10 @@ public class ACActor extends Actor implements ActorContainer{
         throw new RuntimeException();
     }
 
-    public void paintActors(Graphics g) {
+    /**
+	 * @param g
+	 */
+	public void paintActors(Graphics g) {
         int n = next;
         for (int i = 0; i < n; ++i) {
             if (bound[i]) {
@@ -85,7 +135,10 @@ public class ACActor extends Actor implements ActorContainer{
         }
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         int w = getWidth();
         int h = getHeight();
 
@@ -147,7 +200,10 @@ public class ACActor extends Actor implements ActorContainer{
         paintActors(g);
     }
 
-    public void calculateSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#calculateSize()
+	 */
+	public void calculateSize() {
         // Get the size of the name.
         FontMetrics fm = getFontMetrics();
         nameh = fm.getHeight();
@@ -167,7 +223,10 @@ public class ACActor extends Actor implements ActorContainer{
         setSize(maxw + insets.right, maxh + insets.bottom);
     }
 
-    public void removeActor(Actor actor) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+	 */
+	public void removeActor(Actor actor) {
         int n = next;
         for (int i = 0; i < n; ++i) {
             if (actors[i] == actor) {
@@ -176,7 +235,10 @@ public class ACActor extends Actor implements ActorContainer{
         }
     }
 
-    public void setLight(int light) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setLight(int)
+	 */
+	public void setLight(int light) {
         super.setLight(light);
         int n = next;
         for (int i = 0; i < n; ++i) {

@@ -10,9 +10,7 @@ import java.util.ResourceBundle;
 
 /**
   * @author Pekka Uronen
-  *
-  * created         18.9.1999
-  * modified        12.12.2002 by Niko Myller
+  * @author Niko Myller
   */
 public class ValueActor extends Actor {
 
@@ -23,29 +21,58 @@ public class ValueActor extends Actor {
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
 
-    String valstr;
+    /**
+	 *
+	 */
+	String valstr;
 
-    private int namex;
-    private int namey;
-    private int swidth;
+    /**
+	 *
+	 */
+	private int namex;
+    
+    /**
+	 *
+	 */
+	private int namey;
+    
+    /**
+	 *
+	 */
+	private int swidth;
 
-    private int margin = 2;
+    /**
+	 *
+	 */
+	private int margin = 2;
 
-    public ValueActor() {
+    /**
+	 * 
+	 */
+	public ValueActor() {
         setFont(new Font(bundle.getString("font.value_actor.family"),
         Font.BOLD,
         Integer.parseInt(bundle.getString("font.value_actor.size"))));
     }
 
-    public void setLabel(String valstr) {
+    /**
+	 * @param valstr
+	 */
+	public void setLabel(String valstr) {
         this.valstr = valstr;
     }
 
-    public String getLabel() {
+    /**
+	 * @return
+	 */
+	public String getLabel() {
         return this.valstr;
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         int w = width;
         int h = height;
         int bw = borderWidth;
@@ -84,13 +111,19 @@ public class ValueActor extends Actor {
         paintValue(g);
     }
 
-    public void paintValue(Graphics g) {
+    /**
+	 * @param g
+	 */
+	public void paintValue(Graphics g) {
         g.setFont(getFont());
         g.setColor(fgcolor);
         g.drawString(valstr, namex, namey-1);
     }
 
-    public void setBounds(int x, int y, int w, int h) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setBounds(int, int, int, int)
+	 */
+	public void setBounds(int x, int y, int w, int h) {
         int oldw = getWidth();
         int oldh = getHeight();
         super.setBounds(x, y, w, h);
@@ -100,7 +133,10 @@ public class ValueActor extends Actor {
         }
     }
 
-    protected void calcLabelPosition() {
+    /**
+	 * 
+	 */
+	protected void calcLabelPosition() {
         FontMetrics fm = getFontMetrics();
         int sw = fm.stringWidth(valstr);
         int sh = fm.getHeight();
@@ -110,12 +146,18 @@ public class ValueActor extends Actor {
 
     }
 
-    public void calculateSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#calculateSize()
+	 */
+	public void calculateSize() {
         setSize(getPreferredSize());
         calcLabelPosition();
     }
 
-    public Dimension getPreferredSize() {
+    /**
+	 * @return
+	 */
+	public Dimension getPreferredSize() {
         FontMetrics fm = getFontMetrics();
         int sw = fm.stringWidth(valstr);
         int sh = fm.getHeight();

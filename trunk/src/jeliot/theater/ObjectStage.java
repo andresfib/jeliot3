@@ -75,7 +75,11 @@ public class ObjectStage extends InstanceActor {
         insets = new Insets(2, 6, 4, 6);
     }
 
-    public VariableActor findVariableActor(String name) {
+    /**
+	 * @param name
+	 * @return
+	 */
+	public VariableActor findVariableActor(String name) {
         Enumeration enum = variables.elements();
         while (enum.hasMoreElements()) {
             VariableActor va = (VariableActor) enum.nextElement();
@@ -87,7 +91,11 @@ public class ObjectStage extends InstanceActor {
         return null;
     }
 
-    public void calculateSize(int maxActWidth, int actHeight) {
+    /**
+	 * @param maxActWidth
+	 * @param actHeight
+	 */
+	public void calculateSize(int maxActWidth, int actHeight) {
 
         this.actWidth = maxActWidth;
         this.actHeight = actHeight;
@@ -97,11 +105,18 @@ public class ObjectStage extends InstanceActor {
         setSize(d.width, d.height);
     }
 
-    public Dimension calculateSizeDimensions() {
+    /**
+	 * @return
+	 */
+	public Dimension calculateSizeDimensions() {
         return calculateSizeDimensions(this.varCount);
     }
 
-    public Dimension calculateSizeDimensions(int varCount) {
+    /**
+	 * @param varCount
+	 * @return
+	 */
+	public Dimension calculateSizeDimensions(int varCount) {
 
         int w = borderWidth * 2 + insets.right + insets.left +
             Math.max(actWidth, nwidth) + 2 * margin;
@@ -113,7 +128,10 @@ public class ObjectStage extends InstanceActor {
         return new Dimension(w, h);
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         int w = width;
         int h = height;
         int bw = borderWidth;
@@ -148,14 +166,21 @@ public class ObjectStage extends InstanceActor {
         }
     }
 
-    public void setFont(Font font) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#setFont(java.awt.Font)
+	 */
+	public void setFont(Font font) {
         super.setFont(font);
         FontMetrics fm = getFontMetrics();
         nheight = fm.getHeight();
         nwidth = fm.stringWidth(name);
     }
 
-    public Point reserve(Actor actor) {
+    /**
+	 * @param actor
+	 * @return
+	 */
+	public Point reserve(Actor actor) {
         Actor prev = (variables.isEmpty()) ?
                       null :
                       (Actor)variables.lastElement();
@@ -173,17 +198,26 @@ public class ObjectStage extends InstanceActor {
         return rp;
     }
 
-    public void bind() {
+    /**
+	 * 
+	 */
+	public void bind() {
         reserved.setLocation(resLoc);
         variables.addElement(reserved);
         reserved.setParent(this);
     }
 
-    public void removeActor(Actor actor) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+	 */
+	public void removeActor(Actor actor) {
         variables.removeElement(actor);
     }
 
-    public Actor getActorAt(int xc, int yc) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#getActorAt(int, int)
+	 */
+	public Actor getActorAt(int xc, int yc) {
 
         int n = variables.size();
 
@@ -198,7 +232,10 @@ public class ObjectStage extends InstanceActor {
         return super.getActorAt(xc, yc);
     }
 
-    public Animation appear(final Point loc) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#appear(java.awt.Point)
+	 */
+	public Animation appear(final Point loc) {
 
         return new Animation() {
             Dimension size;
@@ -238,7 +275,10 @@ public class ObjectStage extends InstanceActor {
         };
     }
 
-    public Animation disappear() {
+    /**
+	 * @return
+	 */
+	public Animation disappear() {
 
         return new Animation() {
             Dimension size;

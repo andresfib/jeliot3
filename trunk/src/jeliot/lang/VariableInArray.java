@@ -12,11 +12,21 @@ package jeliot.lang;
   */
 public class VariableInArray extends Variable {
 
-    ArrayInstance array;
+    /**
+	 *
+	 */
+	ArrayInstance array;
 
-    public VariableInArray() {}
+    /**
+	 * 
+	 */
+	public VariableInArray() {}
 
-    public VariableInArray(ArrayInstance array, String componentType) {
+    /**
+	 * @param array
+	 * @param componentType
+	 */
+	public VariableInArray(ArrayInstance array, String componentType) {
         this.array = array;
         setType(componentType);
     }

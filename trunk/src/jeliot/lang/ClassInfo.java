@@ -8,22 +8,53 @@ import java.util.Hashtable;
 
 import jeliot.mcode.*;
 
+/**
+ * Object of this class contains information about a single Java class.
+ * It contains all the fields, methods and constructors of the class. 
+ * 
+ * @author Niko Myller
+ */
 public class ClassInfo {
 
-    private Hashtable methods;
-    private Hashtable fields;
-    private Hashtable constructors;
-    private String extendedClass;
-    private String name;
+    /**
+	 *
+	 */
+	private Hashtable methods;
+    
+    /**
+	 *
+	 */
+	private Hashtable fields;
+    
+    /**
+	 *
+	 */
+	private Hashtable constructors;
+    
+    /**
+	 *
+	 */
+	private String extendedClass;
+    
+    /**
+	 *
+	 */
+	private String name;
 
-    public ClassInfo(String name) {
+    /**
+	 * @param name
+	 */
+	public ClassInfo(String name) {
         this.name = name;
         this.methods = new Hashtable();
         this.fields = new Hashtable();
         this.constructors = new Hashtable();
     }
 
-    public ClassInfo(Class declaredClass) {
+    /**
+	 * @param declaredClass
+	 */
+	public ClassInfo(Class declaredClass) {
         this(declaredClass.getName());
         try {
             setDeclaredConstructors(declaredClass.getDeclaredConstructors());
@@ -47,7 +78,10 @@ public class ClassInfo {
         }
     }
 
-    public void setDeclaredConstructors(Constructor[] constructors) {
+    /**
+	 * @param constructors
+	 */
+	public void setDeclaredConstructors(Constructor[] constructors) {
         int n = constructors.length;
         for (int i = 0; i < n; i++) {
 
@@ -65,7 +99,10 @@ public class ClassInfo {
         }
     }
 
-    public void setDeclaredFields(Field[] fields) {
+    /**
+	 * @param fields
+	 */
+	public void setDeclaredFields(Field[] fields) {
         int n = fields.length;
         for (int i = 0; i < n; i++) {
 
@@ -79,7 +116,10 @@ public class ClassInfo {
         }
     }
 
-    public void setDeclaredMethods(Method[] methods) {
+    /**
+	 * @param methods
+	 */
+	public void setDeclaredMethods(Method[] methods) {
 
         int n = methods.length;
         for (int i = 0; i < n; i++) {
@@ -104,51 +144,93 @@ public class ClassInfo {
     }
 
 
-    public String getName() {
+    /**
+	 * @return
+	 */
+	public String getName() {
         return name;
     }
 
-    public void declareMethod(String key, String info) {
+    /**
+	 * @param key
+	 * @param info
+	 */
+	public void declareMethod(String key, String info) {
         methods.put(key, info);
     }
 
-    public void declareField(String key, String info) {
+    /**
+	 * @param key
+	 * @param info
+	 */
+	public void declareField(String key, String info) {
         fields.put(key, info);
     }
 
-    public void declareConstructor(String key, String info) {
+    /**
+	 * @param key
+	 * @param info
+	 */
+	public void declareConstructor(String key, String info) {
         constructors.put(key, info);
     }
 
-    public String getMethodInfo(String key) {
+    /**
+	 * @param key
+	 * @return
+	 */
+	public String getMethodInfo(String key) {
         return (String) methods.get(key);
     }
 
-    public String getFieldInfo(String key) {
+    /**
+	 * @param key
+	 * @return
+	 */
+	public String getFieldInfo(String key) {
         return (String) fields.get(key);
     }
 
-    public String getConstructorInfo(String key) {
+    /**
+	 * @param key
+	 * @return
+	 */
+	public String getConstructorInfo(String key) {
         return (String) constructors.get(key);
     }
 
-    public Hashtable getMethods() {
+    /**
+	 * @return
+	 */
+	public Hashtable getMethods() {
         return methods;
     }
 
-    public Hashtable getFields() {
+    /**
+	 * @return
+	 */
+	public Hashtable getFields() {
         return fields;
     }
 
-    public Hashtable getConstructors() {
+    /**
+	 * @return
+	 */
+	public Hashtable getConstructors() {
         return constructors;
     }
 
-    public int getFieldNumber() {
+    /**
+	 * @return
+	 */
+	public int getFieldNumber() {
         return fields.size();
     }
 
-    public void extendClass(ClassInfo ci) {
+    /**
+	 * @param ci
+	 */
+	public void extendClass(ClassInfo ci) {
 
         extendedClass = ci.getName();
 

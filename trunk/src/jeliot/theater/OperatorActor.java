@@ -5,21 +5,35 @@ import java.awt.Image;
 import java.awt.Point;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         30.8.1999
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller 
+ */
 public class OperatorActor extends Actor {
 
-    private Image image;
-    private Image darkImage;
+    /**
+	 *
+	 */
+	private Image image;
+    
+    /**
+	 *
+	 */
+	private Image darkImage;
 
-    public OperatorActor(Image image, Image dark) {
+    /**
+	 * @param image
+	 * @param dark
+	 */
+	public OperatorActor(Image image, Image dark) {
         this.image = image;
         this.darkImage = dark;
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         g.drawImage(
                 ( (light == SHADED) ?
                     darkImage:
@@ -27,15 +41,21 @@ public class OperatorActor extends Actor {
                 insets.left, insets.top, null);
     }
 
-    public void calculateSize() {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#calculateSize()
+	 */
+	public void calculateSize() {
         setSize(image.getWidth(null) + insets.left + insets.right,
                  image.getHeight(null) + insets.top + insets.bottom);
     }
 
-    /** Returns an animation that makes the actor appear. Default
-      * implementation shows the actor highlighted for given number of
-      * milliseconds.
-      */
+    /**
+     * Returns an animation that makes the actor appear. Default
+     * implementation shows the actor highlighted for given number of
+     * milliseconds.
+     * 
+	 * @see jeliot.theater.Actor#appear(java.awt.Point)
+	 */
     public Animation appear(final Point loc) {
         return new Animation() {
             public void init() {
@@ -56,5 +76,4 @@ public class OperatorActor extends Actor {
             }
         };
     }
-
 }

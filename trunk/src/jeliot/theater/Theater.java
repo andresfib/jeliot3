@@ -15,16 +15,22 @@ import java.util.Vector;
   */
 public class Theater extends javax.swing.JComponent implements ActorContainer {
 
-    /** Background image. */
+	/**
+     * Background image.
+     */
     private Image backImage;
 
-    /** Captured image of the screen, used on active mode for extra efficiency. */
+	/**
+     * Captured image of the screen, used on active mode for extra efficiency.
+     */
     private Image captScreen;
 
-    /** Graphics object for captured image when the animation is going on. */
+	/**
+     * Graphics object for captured image when the animation is going on.
+     */
     private Graphics csg;
 
-    /** True, if the theatre is in active mode or captured. Active mode
+	/** True, if the theatre is in active mode or captured. Active mode
       * means that something is or is going to be animated. This means
       * that the extra efficiency is needed and needless painting of all
       * the actors is not done.
@@ -32,20 +38,28 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
       */
     private boolean active;
 
-    /** Vector of passive actors which are drawn in passive mode. */
+	/**
+     * Vector of passive actors which are drawn in passive mode.
+     */
     private Vector pasAct = new Vector();
 
-    /** Vector of active, moving actors which are drawn in active
-      * mode (during animation).
-      */
+	/**
+     * Vector of active, moving actors which are drawn in active
+     * mode (during animation).
+     */
     private Vector actAct = new Vector();
 
-    /** Highlighted actor if any.*/
+	/**
+     * Highlighted actor if any.
+     */
     private Actor highActor;
 
-    private TheaterManager manager = new TheaterManager(this);
+    /**
+	 *
+	 */
+	private TheaterManager manager = new TheaterManager(this);
 
-    /** Variable is set true if there are other <code>JComponents</code>
+	/** Variable is set true if there are other <code>JComponents</code>
       * on the Theatre component. At the moment this happens only when
       * input is requested. The state of the variable changes the
       * operation of the <code>paint</code> method.
@@ -55,36 +69,40 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     private boolean showComponents;
 
 
-    /** Sets the opaque of the component to be true.
-      *
-      * @see #setOpaque(boolean)
-      */
+	/**
+     * Sets the opaque of the component to be true.
+     *
+     * @see #setOpaque(boolean)
+     */
     public Theater() {
         setOpaque(true);
     }
 
-    /** Returns the TheatreManager
-      * @return TheatreManager object
-      */
+	/**
+     * Returns the TheatreManager
+     * @return TheatreManager object
+     */
     public TheaterManager getManager() {
         return manager;
     }
 
-    /** Sets the background image (<code>backImage</code>) of this theatre.
-      *
-      * @param backImage Image for background.
-      */
+	/**
+     * Sets the background image (<code>backImage</code>) of this theatre.
+     *
+     * @param backImage Image for background.
+     */
     public void setBackground(Image backImage) {
         this.backImage = backImage;
     }
 
-    /** Paints the theatre.
-      * If theatre is in active mode then a captured picture and only active
-      * actors are painted otherwise background, the passive, highlighted
-      * and active actors are painted.
-      *
-      * @param g Everything is painted on this Graphics object.
-      */
+	/**
+     * Paints the theatre.
+     * If theatre is in active mode then a captured picture and only active
+     * actors are painted otherwise background, the passive, highlighted
+     * and active actors are painted.
+     *
+     * @param g Everything is painted on the given Graphics object.
+     */
     public void paintComponent(Graphics g) {
         //Whether or not we are in the middle of animation.
         if (active) {
@@ -105,7 +123,10 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         paintActors(g, actAct);
     }
 
-    public void paint(Graphics g) {
+    /* (non-Javadoc)
+	 * @see java.awt.Component#paint(java.awt.Graphics)
+	 */
+	public void paint(Graphics g) {
         if (showComponents) {
             super.paint(g);
         }
@@ -114,14 +135,18 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
-    /** Paints the image of captured screen.
-      */
+    /**
+     * Paints the image of captured screen.
+	 * @param g
+	 */
     private void paintCapturedScreen(Graphics g) {
         g.drawImage(captScreen, 0, 0, null);
     }
 
-    /** Fills the background with background image.
-      */
+    /**
+     * Fills the background with background image.
+	 * @param g
+	 */
     private void paintBackground(Graphics g) {
         Dimension d = getSize();
         int w = d.width;
@@ -141,8 +166,10 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 
 
     /**
-      * Paints the actors contained in given vector.
-      */
+     * Paints the actors contained in given vector.
+	 * @param g
+	 * @param actors
+	 */
     private void paintActors(Graphics g, Vector actors) {
         synchronized(actors) {
             int n = actors.size();
@@ -171,8 +198,10 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
-    /** Paints the highlight marker around highlighted actor.
-      */
+    /**
+     * Paints the highlight marker around highlighted actor.
+	 * @param g
+	 */
     private void paintHighlight(Graphics g) {
         if (highActor != null) {
             Point loc = highActor.getRootLocation();
@@ -189,24 +218,36 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
-    public void addPassive(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void addPassive(Actor actor) {
         pasAct.addElement(actor);
         actor.setParent(this);
     }
 
-    public void removePassive(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void removePassive(Actor actor) {
         pasAct.removeElement(actor);
         if (actor == highActor) {
             highActor = null;
         }
     }
 
-    public void addActor(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void addActor(Actor actor) {
         actAct.addElement(actor);
         actor.setParent(this);
     }
 
-    public void promote(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void promote(Actor actor) {
         if (pasAct.contains(actor)) {
             pasAct.removeElement(actor);
             actAct.addElement(actor);
@@ -216,14 +257,20 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
-    public void passivate(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void passivate(Actor actor) {
         if (actAct.contains(actor)) {
             actAct.removeElement(actor);
         }
         pasAct.addElement(actor);
     }
 
-    public void removeActor(Actor actor) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+	 */
+	public void removeActor(Actor actor) {
         if (actAct.contains(actor)) {
             actAct.removeElement(actor);
         }
@@ -232,15 +279,24 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
-    public int getWidth() {
+    /* (non-Javadoc)
+	 * @see java.awt.Component#getWidth()
+	 */
+	public int getWidth() {
         return getSize().width;
     }
 
-    public int getHeight() {
+    /* (non-Javadoc)
+	 * @see java.awt.Component#getHeight()
+	 */
+	public int getHeight() {
         return getSize().height;
     }
 
-    public void updateCapture() {
+    /**
+	 * 
+	 */
+	public void updateCapture() {
         int w = getWidth();
         int h = getHeight();
         if (captScreen == null || captScreen.getWidth(null) != w ||
@@ -255,25 +311,37 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
-    public void capture() {
+    /**
+	 * 
+	 */
+	public void capture() {
         updateCapture();
         active = true;
         flush();
     }
 
-    public void release() {
+    /**
+	 * 
+	 */
+	public void release() {
         active = false;
         flush();
     }
 
-    public void cleanUp() {
+    /**
+	 * 
+	 */
+	public void cleanUp() {
         removeAll();
         actAct.removeAllElements();
         pasAct.removeAllElements();
         manager.cleanUp();
     }
 
-    public void flush() {
+    /**
+	 * 
+	 */
+	public void flush() {
         repaint();
         try {
             Thread.sleep(50);
@@ -281,7 +349,12 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         catch (InterruptedException e) { }
     }
 
-    public Actor getActorAt(int x, int y) {
+    /**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public Actor getActorAt(int x, int y) {
         synchronized(pasAct) {
             int n = pasAct.size();
             for (int i = n-1; i >= 0; --i) {
@@ -296,18 +369,27 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         return null;
     }
 
-    public void setHighlightedActor(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void setHighlightedActor(Actor actor) {
         if (actor != highActor) {
             this.highActor = actor;
             repaint();
         }
     }
 
-    public void showComponents(boolean show) {
+    /**
+	 * @param show
+	 */
+	public void showComponents(boolean show) {
         this.showComponents = show;
     }
 
-    public boolean isCaptured() {
+    /**
+	 * @return
+	 */
+	public boolean isCaptured() {
         return active;
     }
 

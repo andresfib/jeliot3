@@ -5,19 +5,31 @@ import java.awt.Point;
 import java.util.Vector;
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class Scratch extends Actor implements ActorContainer {
 
-    Vector exprs = new Vector();
+    /**
+	 *
+	 */
+	Vector exprs = new Vector();
 
-    Vector crap = new Vector();
-    Vector crapRemovers = new Vector();
+    /**
+	 *
+	 */
+	Vector crap = new Vector();
+    /**
+	 *
+	 */
+	Vector crapRemovers = new Vector();
 
-
-    //Added for Jeliot 3
-    public ExpressionActor findActor(long number) {
+    /**
+	 * @param number
+	 * @return
+	 */
+	public ExpressionActor findActor(long number) {
         for (int i = 0; i < exprs.size(); i++) {
             ExpressionActor actor = (ExpressionActor) exprs.elementAt(i);
             if (actor.getId() == number) {
@@ -27,18 +39,31 @@ public class Scratch extends Actor implements ActorContainer {
         return null;
     }
 
-    //Second parameter added for Jeliot 3 to identify the expressions
-    public ExpressionActor getExpression(int n, long id)  {
+    
+    /**
+     * Second parameter added for Jeliot 3 to identify the expressions.
+	 * @param n
+	 * @param id
+	 * @return
+	 */
+	public ExpressionActor getExpression(int n, long id)  {
         ExpressionActor ea = new ExpressionActor(n, id);
         accommodate(ea);
         return ea;
     }
 
-    public Animation fly(Point p) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#fly(java.awt.Point)
+	 */
+	public Animation fly(Point p) {
         return this.fly(p, 0);
     }
 
-    public Point accommodate(Actor actor) {
+    /**
+	 * @param actor
+	 * @return
+	 */
+	public Point accommodate(Actor actor) {
         actor.setParent(this);
         int size = exprs.size();
         int y = 0;
@@ -53,7 +78,10 @@ public class Scratch extends Actor implements ActorContainer {
         return actor.getRootLocation();
     }
 
-    public Point getSpot() {
+    /**
+	 * @return
+	 */
+	public Point getSpot() {
         int y = 0;
         int size = exprs.size();
         if (size > 0) {
@@ -64,29 +92,50 @@ public class Scratch extends Actor implements ActorContainer {
 
     }
 
-    Point memloc;
+    /**
+	 *
+	 */
+	Point memloc;
 
-    public void memorizeLocation() {
+    /**
+	 * 
+	 */
+	public void memorizeLocation() {
         memloc = getLocation();
     }
 
-    public Point recallLocation() {
+    /**
+	 * @return
+	 */
+	public Point recallLocation() {
         return memloc;
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
         paintActors(g, exprs);
     }
 
-    public void registerCrap(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void registerCrap(Actor actor) {
         crap.addElement(actor);
     }
 
-    public void registerCrapRemover(Runnable remover) {
+    /**
+	 * @param remover
+	 */
+	public void registerCrapRemover(Runnable remover) {
         crapRemovers.addElement(remover);
     }
 
-    public void removeCrap(Actor actor) {
+    /**
+	 * @param actor
+	 */
+	public void removeCrap(Actor actor) {
         crap.removeElement(actor);
         ActorContainer cont = actor.getParent();
         if (cont instanceof Theater) {
@@ -95,7 +144,10 @@ public class Scratch extends Actor implements ActorContainer {
         }
     }
 
-    public void removeCrap() {
+    /**
+	 * 
+	 */
+	public void removeCrap() {
         int n = crap.size();
         for (int i = 0; i < n; ++i) {
             Actor a = (Actor)crap.elementAt(i);
@@ -115,11 +167,17 @@ public class Scratch extends Actor implements ActorContainer {
         crapRemovers.removeAllElements();
     }
 
-    public void removeActor(Actor actor) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+	 */
+	public void removeActor(Actor actor) {
         exprs.removeElement(actor);
     }
 
-    public void clean() {
+    /**
+	 * 
+	 */
+	public void clean() {
         exprs.removeAllElements();
         removeCrap();
     }

@@ -24,12 +24,24 @@ public class ArrayActor extends InstanceActor {
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
 
-    private String emptyArray1 = bundle.getString("string.empty_array1");
-    private String emptyArray2 = bundle.getString("string.empty_array2");
+    /**
+	 *
+	 */
+	private String emptyArray1 = bundle.getString("string.empty_array1");
+    /**
+	 *
+	 */
+	private String emptyArray2 = bundle.getString("string.empty_array2");
 
-    private Object variableActors;
+    /**
+	 *
+	 */
+	private Object variableActors;
 
-    private Color valueColor;
+    /**
+	 *
+	 */
+	private Color valueColor;
 
     /** The x-coordinate of the vertical line separating indices from
       * values. */
@@ -44,9 +56,16 @@ public class ArrayActor extends InstanceActor {
     /** The width of an index label. */
     private int indexw;
 
-    private int[] dimensions;
+    /**
+	 *
+	 */
+	private int[] dimensions;
 
-    public ArrayActor(Object valueActors, int[] dimensions) {
+    /**
+	 * @param valueActors
+	 * @param dimensions
+	 */
+	public ArrayActor(Object valueActors, int[] dimensions) {
 
         this.dimensions = dimensions;
         this.variableActors = Array.newInstance(
@@ -87,7 +106,10 @@ public class ArrayActor extends InstanceActor {
 
     }
 
-    public void setValueColor(Color valueColor) {
+    /**
+	 * @param valueColor
+	 */
+	public void setValueColor(Color valueColor) {
 
         int n = dimensions.length;
 
@@ -112,12 +134,20 @@ public class ArrayActor extends InstanceActor {
 
     }
 
-    public VariableActor getVariableActor(int[] index) {
+    /**
+	 * @param index
+	 * @return
+	 */
+	public VariableActor getVariableActor(int[] index) {
         return (VariableActor) ArrayUtilities.getObjectAt(variableActors,
                                                           index);
     }
 
-    public void calculateSize(int valuew, int valueh) {
+    /**
+	 * @param valuew
+	 * @param valueh
+	 */
+	public void calculateSize(int valuew, int valueh) {
 
         FontMetrics fm = getFontMetrics();
         this.valuew = valuew;
@@ -160,7 +190,10 @@ public class ArrayActor extends InstanceActor {
         }
     }
 
-    public void paintActor(Graphics g) {
+    /* (non-Javadoc)
+	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+	 */
+	public void paintActor(Graphics g) {
 
         int w = this.width;
         int h = this.height;
@@ -233,11 +266,11 @@ public class ArrayActor extends InstanceActor {
             }
 
         } else if (dimensions.length == 2) {
-            //Two dimensional array
+            //TODO: Two-dimensional array
             //Do this!
             //Not done yet.
         } else {
-            //n dimensional arrays are not implemented (n > 2)
+            //TODO: n-dimensional arrays are not implemented (n > 2)
             //Needs to be catched earlier.
         }
 

@@ -3,31 +3,52 @@ package jeliot.theater;
 import jeliot.lang.Value;
 
 /**
-  * @author Pekka Uronen
-  *
-  * created         4.10.1999
-  */
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public abstract class InputValidator {
 
-    private ThreadController controller;
-    private Value value;
+    /**
+	 *
+	 */
+	private ThreadController controller;
+    /**
+	 *
+	 */
+	private Value value;
     
-    public void setController(ThreadController controller) {
+    /**
+	 * @param controller
+	 */
+	public void setController(ThreadController controller) {
         this.controller = controller;
     }
     
-    public void accept(Value value) {
+    /**
+	 * @param value
+	 */
+	public void accept(Value value) {
         this.value = value;
         controller.start();
     }
     
-    public Value getValue() {
+    /**
+	 * @return
+	 */
+	public Value getValue() {
         return value;
     }
     
-    public boolean isOk() {
+    /**
+	 * @return
+	 */
+	public boolean isOk() {
         return value != null;
     }
     
-    public abstract void validate(String text);
+    /**
+	 * @param text
+	 */
+	public abstract void validate(String text);
 }
