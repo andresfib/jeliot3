@@ -1,4 +1,4 @@
-//Class:Rectange
+//Class:Rectangle
 //Call-Method:main(new String[0])
 
 import java.io.*;
