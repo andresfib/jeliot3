@@ -125,6 +125,8 @@ public class Director {
      */
     private int runUntilLine = -1;
 
+    private Highlight hPrev;
+    
     /**
      * @param theatre
      * @param codePane
@@ -215,6 +217,8 @@ public class Director {
      */
     //Changed for Jeliot 3
     public void highlight(Highlight h) {
+    	jeliot.addImageToHistory(theatre.requestImage(), hPrev);
+    	this.hPrev = h;
         if (!mCodeInterpreter.starting()) {
 
             if (stepByStep && !messagePause) {

@@ -320,6 +320,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 
 			captScreen = createImage(w, h);
 			csg = captScreen.getGraphics();
+			
 		}
 		synchronized (csg) {
 			paintBackground(csg);
@@ -407,4 +408,16 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		return active;
 	}
 
+	Image i;
+	Graphics gr;
+
+	public Image requestImage() {
+		int w = getWidth();
+		int h = getHeight();
+
+		i = createImage(w, h);
+		gr = i.getGraphics();
+		paint(gr);
+		return i;
+	}
 }
