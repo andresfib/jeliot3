@@ -104,6 +104,8 @@ public class Launcher extends Thread {
         this.r = input;
 
         makePipedStreams();
+        
+        MCodeUtilities.initialize();
     }
 
     /**
