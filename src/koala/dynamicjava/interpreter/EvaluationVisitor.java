@@ -703,9 +703,12 @@ public class EvaluationVisitor extends VisitorObject {
             ECodeUtilities.write("" + Code.QN+Code.DELIM+(counter++)+Code.DELIM+node.getName()+//node.getRepresentation()+
                                  Code.DELIM+value+Code.DELIM+c.getName());
 
-            if (o != null )
+            if (o != null ) {
                 value = o.toString();
-            else value = "null";
+            } else {
+                value = "null";
+            }
+
             ECodeUtilities.write("" + Code.A+Code.DELIM+assigncounter+Code.DELIM+auxcounter+
                                  Code.DELIM+auxcounter2+Code.DELIM+value+//o.toString()+
                                  Code.DELIM+c.getName()+
@@ -775,10 +778,17 @@ public class EvaluationVisitor extends VisitorObject {
                 throw new CatchedExceptionError(e, node);
             }
 
-            ECodeUtilities.write(""+Code.OFA+Code.DELIM+fieldCounter+Code.DELIM+
-                                 objectCounter+Code.DELIM+f.getName()+Code.DELIM+
-                                 value.toString()+Code.DELIM+f.getType().getName()+Code.DELIM+
-                                 locationToString(node));
+            if (value != null) {
+                ECodeUtilities.write(""+Code.OFA+Code.DELIM+fieldCounter+Code.DELIM+
+                                     objectCounter+Code.DELIM+f.getName()+Code.DELIM+
+                                     value.toString()+Code.DELIM+f.getType().getName()+Code.DELIM+
+                                     locationToString(node));
+            } else {
+                ECodeUtilities.write(""+Code.OFA+Code.DELIM+fieldCounter+Code.DELIM+
+                                     objectCounter+Code.DELIM+f.getName()+Code.DELIM+
+                                     Code.UNKNOWN+Code.DELIM+f.getType().getName()+Code.DELIM+
+                                     locationToString(node));
+            }
 
             return value;
         } else {
@@ -3212,9 +3222,9 @@ public class EvaluationVisitor extends VisitorObject {
 
         long assignauxcounter2=counter;
         ECodeUtilities.write("" + Code.TO+Code.DELIM+counter);
-        evaluating=false;
+        evaluating = false;
         left.acceptVisitor(this);
-        evaluating=true;
+        evaluating = true;
 
 
         // Modify the variable and return
@@ -3232,16 +3242,20 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(AndExpression node) {
-        long andcounter=counter++;
-        long auxcounter=counter;
+        long andcounter = counter++;
+        long auxcounter = counter;
+
         ECodeUtilities.write(""+Code.BEGIN+Code.DELIM+Code.AND+Code.DELIM+andcounter+
                    Code.DELIM+locationToString(node));
+
         ECodeUtilities.write(""+Code.LEFT+Code.DELIM+counter);
+
         boolean left =((Boolean)node.getLeftExpression().acceptVisitor(this)).booleanValue();
         long auxcounter2=counter;
         ECodeUtilities.write(""+Code.RIGHT+Code.DELIM+counter);
         boolean right = ((Boolean)node.getRightExpression().acceptVisitor(this)).booleanValue();
-        if (left &&  right) {
+
+        if (left && right) {
 
             ECodeUtilities.write(""+Code.AND+Code.DELIM+andcounter+Code.DELIM+auxcounter+
                        Code.DELIM+auxcounter2+Code.DELIM+Code.TRUE+
@@ -3268,6 +3282,7 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(OrExpression node) {
+
         long orcounter=counter++;
         long auxcounter=counter;
         ECodeUtilities.write(""+Code.BEGIN+Code.DELIM+Code.OR+Code.DELIM+orcounter+
@@ -3277,6 +3292,7 @@ public class EvaluationVisitor extends VisitorObject {
         long auxcounter2=counter;
         ECodeUtilities.write(""+Code.RIGHT+Code.DELIM+counter);
         boolean right = ((Boolean)node.getRightExpression().acceptVisitor(this)).booleanValue();
+
         if (left || right) {
 
             ECodeUtilities.write(""+Code.OR+Code.DELIM+orcounter+Code.DELIM+auxcounter+

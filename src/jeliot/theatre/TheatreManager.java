@@ -77,8 +77,8 @@ public class TheatreManager implements ComponentListener {
         int h = actor.getHeight();
 
         int x = objects.isEmpty() ?
-                theatre.getWidth() - w - 10 :
-                ((Actor)objects.lastElement()).getX() - w - 10;
+                theatre.getWidth() - w - 45 :
+                ((Actor)objects.lastElement()).getX() - w - 45;
         int y = theatre.getHeight() - h - 10;
         Point loc = new Point(x, y);
         reservations.put(actor, loc);

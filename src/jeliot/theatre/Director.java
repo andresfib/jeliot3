@@ -45,13 +45,10 @@ public class Director {
     /** */
     private AnimationEngine engine;
 
-    /** Taken of for Jeliot 3 */
-//  private PMethod mainMethod;
     private MethodFrame currentMethodFrame;
 
     private Scratch currentScratch;
     private ConstantBox cbox;
-//  private ConstantBox input;
 
     private ThreadController controller;
 
@@ -89,25 +86,14 @@ public class Director {
         this.factory = factory;
     }
 
-//  public void setMainMethod(PMethod main) {
-//      this.mainMethod = main;
-//  }
-
     public MethodFrame getCurrentMethodFrame() {
         return currentMethodFrame;
     }
 
     public void direct() throws Exception {
         cbox = factory.produceConstantBox();
-        //input = factory.produceInputBox();
         theatre.addPassive(cbox);
         theatre.getManager().setConstantBox(cbox);
-
-        //theatre.addPassive(input);
-        //theatre.getManager().setInputBox(input);
-
-        //Commented for Jeliot 3
-        //mainMethod.execute(this);
 
         //Excecution of the program code takes place here.
         eCodeInterpreter.execute();
@@ -116,30 +102,10 @@ public class Director {
         theatre.repaint();
     }
 
-    //Parameter Values need to be changed
-/*  public void atStatement(PStatement sta) {
-        if (stepByStep) {
-            jeliot.directorPaused();
-            controller.checkPoint();
-        }
-
-        highlight(sta.getLeftPos(), sta.getRightPos());
-    }
-*/
     public void setStep(boolean step) {
         this.stepByStep = step;
     }
 
-    //Parameter Values need to be changed
-/*  public void atExpression(PExpression ex) {
-        highlight(ex.getLeftPos(), ex.getRightPos());
-    }
-
-    //Parameter Values need to be changed
-    public void atDeclarator(PVariableDeclarator decl) {
-        highlight(decl.getLeftPos(), decl.getRightPos());
-    }
-*/
     //Changed for Jeliot 3
     public void highlight(Highlight h) {
         if (!eCodeInterpreter.starting()) {
@@ -177,10 +143,7 @@ public class Director {
         }
     }
 
-    public void closeExpression() {
-
-    }
-
+    public void closeExpression() { }
 
     /** This method animates the first half of a binary expression.
       * For example in expression  a + b  this will animate as
@@ -1831,7 +1794,6 @@ public class Director {
 
         //Make the array creation disappear.
         ea.cut();
-
 
     }
 

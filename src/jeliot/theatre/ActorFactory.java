@@ -186,7 +186,7 @@ public class ActorFactory {
     Stage produceStage(MethodFrame m) {
         Stage stage = new Stage(m.getMethodName());
         stage.setFont(stageFont);
-        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] + 30,
+        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] + 20,
                             valueHeight + 8 +
                             variableInsets.top +
                             variableInsets.bottom);
@@ -608,7 +608,7 @@ public class ActorFactory {
     ObjectStage produceObjectStage(ObjectFrame m) {
         ObjectStage stage = new ObjectStage("Object of the class" + m.getObjectName(), m.getVarCount());
         stage.setFont(stageFont);
-        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] + 30,
+        stage.calculateSize(getMaxTypeWidth() + typeValWidth[8] + 20,
                             valueHeight + 8 +
                             variableInsets.top +
                             variableInsets.bottom);
