@@ -183,11 +183,15 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeOMC(java.lang.String, int, long, jeliot.mcode.Highlight)
      */
-    protected void handleCodeOMC(String methodName, int parameterCount, long objectCounter, String objectValue, Highlight highlight) {
+    protected void handleCodeOMC(String methodName, int parameterCount, long objectCounter, String className, Highlight highlight) {
         if (currentMethodCall != null) {
             methodCalls.push(currentMethodCall);
         }
-        currentMethodCall = objectValue + "." + methodName + "(";
+        if (methodName.equals("this") || methodName.equals("super")) {
+            currentMethodCall = "(" + methodName +  " call) " + className + "(";
+        } else {
+            currentMethodCall = className + "." + methodName + "(";
+        }
     }
 
     /* (non-Javadoc)

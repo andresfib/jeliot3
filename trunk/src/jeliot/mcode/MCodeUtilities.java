@@ -288,10 +288,18 @@ public class MCodeUtilities {
      */
     public static Stack constructorParametersStack = new Stack();
 
+    /**
+     * 
+     * @return
+     */
     public static String getConstructorName() {
         return (String) constructorNameStack.peek();
     }
 
+    /**
+     * 
+     * @return
+     */
     public static Class[] getConstructorParamTypes() {
         return (Class[]) constructorParametersStack.peek();
     }
@@ -317,46 +325,46 @@ public class MCodeUtilities {
      */
     public static int resolveType(String type) {
         if (type.equals(boolean.class.getName())
-                || type.equals((new Boolean(true)).getClass().getName()) || type.equals("Z")) {
-
+                || type.equals(Boolean.class.getName()) || type.equals("Z")) {
+            
             return MCodeUtilities.BOOLEAN;
 
         } else if (type.equals(byte.class.getName())
-                || type.equals((new Byte((byte) 0)).getClass().getName()) || type.equals("B")) {
+                || type.equals(Byte.class.getName()) || type.equals("B")) {
 
             return MCodeUtilities.BYTE;
 
         } else if (type.equals(short.class.getName())
-                || type.equals((new Short((short) 0)).getClass().getName()) || type.equals("S")) {
+                || type.equals(Short.class.getName()) || type.equals("S")) {
 
             return MCodeUtilities.SHORT;
 
         } else if (type.equals(int.class.getName())
-                || type.equals((new Integer(0)).getClass().getName()) || type.equals("I")) {
+                || type.equals(Integer.class.getName()) || type.equals("I")) {
 
             return MCodeUtilities.INT;
 
         } else if (type.equals(long.class.getName())
-                || type.equals((new Long(0)).getClass().getName()) || type.equals("J")) {
+                || type.equals(Long.class.getName()) || type.equals("J")) {
 
             return MCodeUtilities.LONG;
 
         } else if (type.equals(char.class.getName())
-                || type.equals((new Character('\0')).getClass().getName()) || type.equals("C")) {
+                || type.equals(Character.class.getClass().getName()) || type.equals("C")) {
 
             return MCodeUtilities.CHAR;
 
         } else if (type.equals(float.class.getName())
-                || type.equals((new Float(0.0f)).getClass().getName()) || type.equals("F")) {
+                || type.equals(Float.class.getName()) || type.equals("F")) {
 
             return MCodeUtilities.FLOAT;
 
         } else if (type.equals(double.class.getName())
-                || type.equals((new Double(0.0)).getClass().getName()) || type.equals("D")) {
+                || type.equals(Double.class.getName()) || type.equals("D")) {
 
             return MCodeUtilities.DOUBLE;
 
-        } else if (type.equals("".getClass().getName()) || type.equals("L".getClass().getName())) {
+        } else if (type.equals(String.class.getName()) || type.equals("L".getClass().getName())) {
 
             return MCodeUtilities.STRING;
 
@@ -903,7 +911,7 @@ public class MCodeUtilities {
         if (!EvaluationVisitor.isSetPreparing() || token == Code.ERROR) {
             str = MCodeUtilities.replace(str, "\n", "\\n");
             str = MCodeUtilities.replace(str, "\r", "");
-            if (!redirectOutput) {
+            if (!redirectOutput  || token == Code.ERROR) {
                 if (writer.checkError()) {
                     throw new StoppingRequestedError();
                 }
@@ -912,7 +920,7 @@ public class MCodeUtilities {
                 addToRedirectBuffer(str);
             }
 
-            //This prints all the commands that were generated to a file
+            //This prints all the commands that were generated into a file
 
             /*
              str += "\n";
@@ -1065,16 +1073,28 @@ public class MCodeUtilities {
         redirectOutput = value;
     }
 
+    /**
+     * 
+     * @param redirectBuffer
+     */
     public static void writeRedirectBuffer(Vector redirectBuffer) {
         for (int i = 0; i < redirectBuffer.size(); i++) {
             write((String) redirectBuffer.get(i));
         }
     }
 
+    /**
+     * 
+     *
+     */
     public static void clearRedirectBuffer() {
         redirectBuffer.clear();
     }
 
+    /**
+     * 
+     * @param string
+     */
     public static void addToRedirectBuffer(String string) {
         redirectBuffer.add(string);
         
@@ -1108,6 +1128,10 @@ public class MCodeUtilities {
         return redirectBuffer;
     }
 
+    /**
+     * 
+     * @param str
+     */
     public static void printToRegisteredSecondaryMCodeConnections(String str) {
         Iterator i = registeredSecondaryMCodeConnections.iterator();
         while (i.hasNext()) {
@@ -1115,12 +1139,20 @@ public class MCodeUtilities {
         }
     }
 
+    /**
+     * 
+     * @param pw
+     */
     public static void addRegisteredSecondaryMCodeConnections(PrintWriter pw) {
         if (!registeredSecondaryMCodeConnections.contains(pw)) {
             registeredSecondaryMCodeConnections.add(pw);
         }
     }
 
+    /**
+     * 
+     *
+     */
     public static void clearRegisteredSecondaryMCodeConnections() {
         Iterator i = registeredSecondaryMCodeConnections.iterator();
         while (i.hasNext()) {
@@ -1161,6 +1193,10 @@ public class MCodeUtilities {
                 + node.getEndLine() + Code.LOC_DELIM + node.getEndColumn();
     }
 
+    /**
+     * 
+     * @return
+     */
     public static Object readLong() {
         long result;
         try {
@@ -1172,6 +1208,10 @@ public class MCodeUtilities {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public static Object readByte() {
         byte result;
         try {
@@ -1184,6 +1224,10 @@ public class MCodeUtilities {
 
     }
 
+    /**
+     * 
+     * @return
+     */
     public static Object readFloat() {
         float result;
         try {
@@ -1195,25 +1239,41 @@ public class MCodeUtilities {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public static Object readBoolean() {
-        boolean result;
+        Boolean result;
         try {
-            result = Boolean.getBoolean(reader.readLine());
-            return new Boolean(result);
+            result = Boolean.valueOf(reader.readLine());
+            return result;
         } catch (Exception e) {
             //return null;
             throw new StoppingRequestedError();
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public static BufferedReader getReader() {
         return reader;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static PrintWriter getWriter() {
         return writer;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static Object readShort() {
         short result;
         try {
@@ -1224,17 +1284,33 @@ public class MCodeUtilities {
         }
     }
 
+    /**
+     * 
+     */
     static String filename = "untitled";
 
-    //Initialized in evalution visitor
+    /**
+     * Initialized in evalution visitor
+     */
     public static Stack superClassesStack;
 
+    /**
+     * 
+     */
     public static Stack previousClassParametersStack = new Stack();
 
+    /**
+     * 
+     * @param name
+     */
     public static void setFilename(String name) {
         filename = name;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static String getFilename() {
         return filename;
     }
