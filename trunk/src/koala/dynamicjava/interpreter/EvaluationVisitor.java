@@ -1345,15 +1345,27 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object display(QualifiedName node) {
 
-        Object result = context.get(node.getRepresentation());
+        Object result = null;
+
+        try {
+            result = context.get(node.getRepresentation());
+        } catch (IllegalStateException e) {
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { node.getRepresentation() });
+            throw new ExecutionError("j3.variable.not.declared", node);
+        }
+
         Class c = NodeProperties.getType(node);
         String value=Code.UNKNOWN;
 
         if ( (result != UninitializedObject.INSTANCE)
              && (result != null) ) {
             value=result.toString();
-        }
-        else if (result  == null ) {
+        } else if (result == null && c.isPrimitive()) {
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                             new String[] { node.getRepresentation() });
+            throw new ExecutionError("j3.variable.not.declared", node);
+        } else if (result == null) {
             value = "null";
         }
 
@@ -1903,8 +1915,7 @@ public class EvaluationVisitor extends VisitorObject {
 
 
         // Perform the operation
-        Object result = InterpreterUtilities.add(
-                                                 NodeProperties.getType(node),
+        Object result = InterpreterUtilities.add(NodeProperties.getType(node),
                                                  lhs,
                                                  val);
 
