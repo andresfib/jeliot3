@@ -35,6 +35,7 @@ import koala.dynamicjava.interpreter.context.*;
 import koala.dynamicjava.tree.*;
 import koala.dynamicjava.tree.visitor.*;
 import koala.dynamicjava.util.*;
+import koala.dynamicjava.interpreter.*;
 
 /**
  * This interface represents objets that modify an array
@@ -83,9 +84,11 @@ public class ArrayModifier extends LeftHandSideModifier {
     public Object prepare(Visitor v, Context ctx) {
 	arrays.add(0, array);
 	cells.add(0, cell);
-
+        EvaluationVisitor.setPreparing(); // Indicates to evaluation visitor 
+                                          // not to return E-Code
 	array = node.getExpression().acceptVisitor(v);
 	Object o   = node.getCellNumber().acceptVisitor(v);
+        EvaluationVisitor.unsetPreparing();
 	if (o instanceof Character) {
 	    o = new Integer(((Character)o).charValue());
 	}

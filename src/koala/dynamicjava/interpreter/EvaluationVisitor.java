@@ -50,6 +50,11 @@ import jeliot.ecode.ECodeUtilities;
 
 public class EvaluationVisitor extends VisitorObject {
 
+    /**
+     * Converts the node location into a string list. Each element is delimited
+     * by Code.LOC_DELIM
+     * @param node the node to visit
+     */
     private String locationToString(Node node) {
         return ""+node.getBeginLine()+Code.LOC_DELIM+node.getBeginColumn()+
             Code.LOC_DELIM+node.getEndLine()+Code.LOC_DELIM+ node.getEndColumn();
@@ -60,8 +65,41 @@ public class EvaluationVisitor extends VisitorObject {
      */
     private static long counter=1;
     private boolean evaluating=true;
+    private static boolean preparing=false; // Indicates when ArrayModifier
+                                            // is preparing the array, and 
+                                            // and thus we don't want info
+    /**
+     * Set preparing value to true. So ArrayModifier is preparing the array 
+     * to visit
+     */
+    public static void setPreparing() {
+        preparing=true;
+    }
 
+    /**
+     * Unset preparing value to false. So ArrayModifier has finished preparing the array 
+     * to visit
+     */
+    public static void unsetPreparing() {
+        preparing=false;
+    }
+
+    /**
+     * Returns preparing value
+     * 
+     */
+    public static boolean isSetPreparing() {
+        return preparing;
+    }
     private static Stack returnExpressionCounterStack = new Stack();
+
+    // Stack to keep cell numbers of arrays. Each element stores the cell number of one array in one list
+
+    private  List arrayCellNumbersList;
+    private  List arrayCellReferencesList;
+
+    private  Stack arrayCellNumbersStack = new Stack();
+    private  Stack arrayCellReferencesStack = new Stack();
 
     /**
      * The current context
@@ -1013,21 +1051,34 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Evaluate the size expressions
         int[]    dims = new int[node.getSizes().size()];
+        // It will store here the references to the expressions used for every dimension
+        Long[]    dimExpressionReferences = new Long[node.getSizes().size()]; 
         Iterator it = node.getSizes().iterator();
         int      i  = 0;
+        
         while (it.hasNext()) {
+            dimExpressionReferences[i]=new Long(counter);
             Number n = (Number)((Expression)it.next()).acceptVisitor(this);
-            dims[i++] = n.intValue();
+            dims[i] = n.intValue();
+            i++;
         }
-
+        System.out.println("Array allocation of "+dims.length+"dimensions, and type "+NodeProperties.getComponentType(node));
         // Create the array
+        Object newArray;              //Array to be returned
         if (node.getDimension() != dims.length) {
             Class c = NodeProperties.getComponentType(node);
             c = Array.newInstance(c, 0).getClass();
-            return Array.newInstance(c, dims);
+            newArray = Array.newInstance(c, dims);
         } else {
-            return Array.newInstance(NodeProperties.getComponentType(node), dims);
+            newArray = Array.newInstance(NodeProperties.getComponentType(node), dims);
         }
+        ECodeUtilities.write(""+Code.AA+Code.DELIM+(counter++)+Code.DELIM
+                             +Integer.toHexString(newArray.hashCode())+Code.DELIM
+                             +NodeProperties.getComponentType(node)+Code.DELIM
+                             +dims.length+Code.DELIM
+                             +ECodeUtilities.arrayToString(dimExpressionReferences)+Code.DELIM
+                             +locationToString(node));
+        return newArray;
     }
 
     /**
@@ -1052,15 +1103,69 @@ public class EvaluationVisitor extends VisitorObject {
      * Visits an ArrayAccess
      * @param node the node to visit
      */
+    private boolean first=true;
+
     public Object visit(ArrayAccess node) {
+        List arrayCellNumbersList;
+        List arrayCellReferencesList;
+
+        
+        boolean iAmFirst=first;
+        first=false;
+        long nameCounter=0;// Not used if not first
+        if ( iAmFirst ) {
+            arrayCellNumbersList = new ArrayList();
+            arrayCellReferencesList = new ArrayList();
+            ECodeUtilities.write(""+Code.BEGIN+Code.DELIM+Code.AAC);
+            nameCounter=counter;
+            arrayCellNumbersStack.push(arrayCellNumbersList);
+            arrayCellReferencesStack.push(arrayCellReferencesList);
+        }
+        else {
+            arrayCellNumbersList = (List)arrayCellNumbersStack.pop();
+            arrayCellReferencesList =(List) arrayCellReferencesStack.pop();
+        }        
         Object t = node.getExpression().acceptVisitor(this);
+        
+        long cellCounter=counter;
+        // This way we allow array accesses inside cell numbers
+
+        first=true;
         Object o = node.getCellNumber().acceptVisitor(this);
+        first=false;
+
         if (o instanceof Character) {
             o = new Integer(((Character)o).charValue());
         }
-        return Array.get(t, ((Number)o).intValue());
-    }
+        
+        arrayCellNumbersList.add(o);
+        arrayCellReferencesList.add(new Long(cellCounter));
 
+        if ( ! iAmFirst ) {
+            arrayCellNumbersStack.push(arrayCellNumbersList);
+            arrayCellReferencesStack.push(arrayCellReferencesList);
+        }
+       
+        Object result = Array.get(t, ((Number)o).intValue());
+
+        if ( iAmFirst ) {
+            ECodeUtilities.write(""+Code.AAC+Code.DELIM+( counter++ ) + Code.DELIM + arrayCellNumbersList.size()
+                                 +Code.DELIM+ECodeUtilities.arrayToString(arrayCellNumbersList.toArray())
+                                 +Code.DELIM+ECodeUtilities.arrayToString(arrayCellReferencesList.toArray())
+                                 +Code.DELIM+result.toString()
+                                 +Code.DELIM+result.getClass().getName()
+                                 +Code.DELIM+locationToString(node));
+
+            /* ECodeUtilities.write("Array access of name "+ nameCounter +" with hashcode "+ Integer.toHexString(t.hashCode())
+                                 + "element " +arrayCellNumbersList.toString()
+                                 +" references "+ arrayCellReferencesList.toString());
+            */
+            first = true;
+            
+        }
+        return result;
+    }
+    
     /**
      * Visits a InnerAllocation
      * @param node the node to visit
@@ -1068,14 +1173,14 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(InnerAllocation node) {
         Constructor cons = (Constructor)node.getProperty(NodeProperties.CONSTRUCTOR);
         Class       c    = NodeProperties.getType(node);
-
+        
         List        larg = node.getArguments();
         Object[]    args = null;
-
+        System.out.println("Inner allocation of type"+NodeProperties.getType(node));
         if (larg != null) {
             args = new Object[larg.size() + 1];
             args[0] = node.getExpression().acceptVisitor(this);
-
+            
             Iterator it = larg.iterator();
             int      i  = 1;
             while (it.hasNext()) {
