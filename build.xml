@@ -52,7 +52,7 @@ To display the available targets type:
     <!-- This properties modify the output of the 
     	build process-->
     <property name="version"         value="3"/>
-    <property name="minor"         value=".4.2"/>
+    <property name="minor"         value=".4.3"/>
     <property name="dist"            value="Jeliot${version}"/>
     <!-- dist: Used to create the folder where to place the binary distribuition, jar files and images-->
     <property name="package-prefix"  value=""/>
@@ -105,7 +105,7 @@ To display the available targets type:
 
   <!-- Distribution ================================================= -->
 
-  <target name="dist" depends="clean, prepare-dist,  jars, blueJExt">
+  <target name="dist" depends="clean, prepare-dist,  jars, blueJExt, createInstallers">
 
   <!-- After targets prepare-dist and jars we create the 2 diferent zip files
     that will contain the 2 distribuition files (source and binary)-->
