@@ -930,6 +930,7 @@ public class Interpreter {
                                     oper == Code.PRDE) {
 
                                         variables.put(new Integer(expressionCounter), var);
+                                        values.put(new Integer(expressionCounter), val);
 
                                 } else if (oper == Code.PIE  ||
                                            oper == Code.PDE) {
@@ -1366,12 +1367,14 @@ public class Interpreter {
                                     oper == Code.PRDE) {
 
                                         variables.put(new Integer(expressionCounter), var);
+                                        values.put(new Integer(expressionCounter), val);
 
                                 } else if (oper == Code.PIE  ||
                                            oper == Code.PDE) {
 
                                         variables.put(new Integer(expressionCounter), var);
                                         values.put(new Integer(expressionReference), val);
+                                        values.put(new Integer(expressionCounter), val);
 
 
                                 } else {
@@ -2556,13 +2559,14 @@ public class Interpreter {
                                     oper == Code.PRDE) {
 
                                         variables.put(new Integer(expressionCounter), var);
+                                        values.put(new Integer(expressionCounter), val);
 
                                 } else if (oper == Code.PIE  ||
                                            oper == Code.PDE) {
 
                                         variables.put(new Integer(expressionCounter), var);
                                         values.put(new Integer(expressionReference), val);
-
+                                        values.put(new Integer(expressionCounter), val);
 
                                 } else {
 
