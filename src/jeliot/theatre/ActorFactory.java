@@ -156,6 +156,7 @@ public class ActorFactory {
     public ActorFactory(ImageLoader iLoad) {
         this.iLoad = iLoad;
         this.shadowImage = iLoad.getImage(bundle.getString("image.shadow"));
+        Actor.setShadowImage(this.shadowImage);
         this.messageImage = iLoad.getImage(bundle.getString("image.message.background"));
 
         setValueFont(new Font(bundle.getString("font.value.family"),
@@ -257,7 +258,6 @@ public class ActorFactory {
                             variableInsets.bottom);
         stage.setBackground(methodStageColor);
         stage.setShadow(6);
-        stage.setShadowImage(shadowImage);
         return stage;
     }
 
@@ -291,7 +291,6 @@ public class ActorFactory {
             actor.setBackground(varColor[typeInfo]);
             actor.setValueColor(valColor[typeInfo]);
             actor.calculateSize();
-            actor.setShadowImage(shadowImage);
             actor.reserve(vact);
             actor.bind();
 
@@ -344,10 +343,9 @@ public class ActorFactory {
             refAct.setFont(variableFont);
             refAct.setValueDimension(6 + 6, valueHeight);
             refAct.calculateSize();
-            refAct.setShadowImage(shadowImage);
+            
             ReferenceActor ra = new ReferenceActor();
             ra.setBackground(refAct.getBackground());
-            ra.setShadowImage(shadowImage);
             ra.calculateSize();
             refAct.setValue(ra);
             actor = refAct;
@@ -383,7 +381,6 @@ public class ActorFactory {
             actor.setBackground(varColor[typeInfo]);
             actor.setValueColor(valColor[typeInfo]);
             actor.calculateSize();
-            actor.setShadowImage(shadowImage);
             actor.reserve(vact);
             actor.bind();
 
@@ -436,10 +433,8 @@ public class ActorFactory {
             refAct.setFont(variableFont);
             refAct.setValueDimension(6 + 6, valueHeight);
             refAct.calculateSize();
-            refAct.setShadowImage(shadowImage);
             ReferenceActor ra = new ReferenceActor();
             ra.setBackground(refAct.getBackground());
-            ra.setShadowImage(shadowImage);
             ra.calculateSize();
             refAct.setValue(ra);
             actor = refAct;
@@ -486,7 +481,6 @@ public class ActorFactory {
             }
 
             actor.setLabel(label);
-            actor.setShadowImage(shadowImage);
             //actor.setActor(val.getActor());
             actor.calculateSize();
 
@@ -501,7 +495,6 @@ public class ActorFactory {
             } else {
                 actor = new ReferenceActor();
                 actor.setBackground(valColor[typeInfo]);
-                actor.setShadowImage(shadowImage);
                 actor.calculateSize();
             }
             actor.setForeground(valueForegroundColor);
@@ -528,7 +521,6 @@ public class ActorFactory {
         }
 
         actor.setBackground(valColor[typeInfo]);
-        actor.setShadowImage(shadowImage);
         actor.calculateSize();
         actor.setForeground(valueForegroundColor);
 
@@ -539,7 +531,6 @@ public class ActorFactory {
 
         ReferenceActor actor = new ReferenceActor(cloneActor.getInstanceActor());
         actor.setBackground(cloneActor.getBackground());
-        actor.setShadowImage(shadowImage);
         Point p = cloneActor.getLocation();
         actor.setLocation(new Point(p.x, p.y));
         actor.setParent(cloneActor.getParent());
@@ -555,7 +546,6 @@ public class ActorFactory {
         actor.setForeground(cloneActor.getForeground());
         actor.setBackground(cloneActor.getBackground());
         actor.setLabel(cloneActor.getLabel());
-        actor.setShadowImage(shadowImage);
         actor.calculateSize();
         Point p = cloneActor.getLocation();
         actor.setLocation(new Point(p.x, p.y));
@@ -598,8 +588,6 @@ public class ActorFactory {
             actor.setInsets(new Insets(hh/2, 0, (hh+1)/2, 0));
             actor.setSize(actor.getWidth(), valueHeight);
         }
-
-        actor.setShadowImage(shadowImage);
         return actor;
     }
 
@@ -611,7 +599,6 @@ public class ActorFactory {
         actor.setBackground(SMIColor);
         actor.setInsets(new Insets(6, 6, 6, 6));
         actor.calculateSize();
-        actor.setShadowImage(shadowImage);
         return actor;
     }
 
@@ -623,7 +610,6 @@ public class ActorFactory {
         actor.setBackground(OMIColor);
         actor.setInsets(new Insets(6, 6, 6, 6));
         actor.calculateSize();
-        actor.setShadowImage(shadowImage);
         return actor;
     }
 
@@ -635,7 +621,6 @@ public class ActorFactory {
         actor.setBackground(ACColor);
         actor.setInsets(new Insets(6, 6, 6, 6));
         actor.calculateSize();
-        actor.setShadowImage(shadowImage);
         return actor;
     }
 
@@ -680,7 +665,6 @@ public class ActorFactory {
         if (text != null) {
             ma.calculateSize();
         }
-        ma.setShadowImage(shadowImage);
         return ma;
     }
 
@@ -777,7 +761,6 @@ public class ActorFactory {
                             variableInsets.bottom);
         stage.setBackground(objectStageColor);
         stage.setShadow(6);
-        stage.setShadowImage(shadowImage);
         return stage;
     }
 
