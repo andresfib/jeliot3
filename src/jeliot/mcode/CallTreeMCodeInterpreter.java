@@ -605,8 +605,6 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#beforeExecution()
      */
     public void beforeExecution() {
-        // TODO Auto-generated method stub
-        
     }
 
 
@@ -614,8 +612,6 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeAIBEGIN(long, jeliot.mcode.Highlight)
      */
     protected void handleCodeAIBEGIN(long cells, Highlight highlight) {
-        // TODO Auto-generated method stub
-        
     }
 
 
@@ -623,8 +619,6 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeAIE(long, long, java.lang.String, java.lang.String, long, jeliot.mcode.Highlight)
      */
     protected void handleCodeAIE(String arrayReference, long cellNumber, long expressionReference, String value, String type, long literal, Highlight highlight) {
-        // TODO Auto-generated method stub
-        
     }
 
 
@@ -632,8 +626,6 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeAI(jeliot.mcode.Highlight)
      */
     protected void handleCodeAI(Highlight highlight) {
-        // TODO Auto-generated method stub
-        
     }
 
     
