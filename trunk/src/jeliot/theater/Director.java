@@ -22,6 +22,7 @@ import jeliot.mcode.InterpreterError;
 import jeliot.mcode.MCodeInterpreter;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 
@@ -194,7 +195,7 @@ public class Director {
         if (!interrupted) {
             theatre.repaint();
         }
-        Tracker.writeToFile("AnimationEnded", System.currentTimeMillis());
+        Tracker.writeToFile("AnimationEnded", TrackerClock.currentTimeMillis(), -1);
         return interrupted;
     }
 
@@ -243,10 +244,8 @@ public class Director {
                     jeliot.runUntilDone();
                     theatre.repaint();
                 }
-
-                if (!jeliot.isHistoryViewVisible()) {
-                    jeliot.highlightStatement(h);
-                }
+                if (jeliot.getSelectedTabIndex() != 2)
+                jeliot.highlightStatement(h);
             }
         }
     }
@@ -2270,6 +2269,7 @@ public class Director {
                 release();
                 ic.popup();
                 theatre.flush();
+                Tracker.writeToFile("InputDialogOn", TrackerClock.currentTimeMillis(), -1);
             }
         });
         /*    
@@ -2305,6 +2305,7 @@ public class Director {
                     theatre.remove(ic);
                     theatre.showComponents(false);
                     theatre.flush();
+                    Tracker.writeToFile("InputDialogOff", TrackerClock.currentTimeMillis(), -1);
                 }
             });
         } catch (java.lang.reflect.InvocationTargetException e) {

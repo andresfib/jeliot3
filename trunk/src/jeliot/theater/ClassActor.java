@@ -10,6 +10,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 
 
 /**
@@ -252,6 +253,7 @@ public class ClassActor extends Actor implements ActorContainer {
             double h;
             double plus;
             int full;
+            int id = -1;
             
             public void init() {
                 size = new Dimension(getWidth(), nheight + margin * 3);
@@ -268,7 +270,7 @@ public class ClassActor extends Actor implements ActorContainer {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                Tracker.writeToFile("Appear", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Appear", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                 
                 h += plus * pulse;
                 size.height = (int) h;
@@ -298,6 +300,7 @@ public class ClassActor extends Actor implements ActorContainer {
             double h;
             double plus;
             int full;
+            int id = -1;
             public void init() {
                 size = getSize();
                 full = nheight + margin * 3;
@@ -311,7 +314,7 @@ public class ClassActor extends Actor implements ActorContainer {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                Tracker.writeToFile("Disappear", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Disappear", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                 
                 h += plus * pulse;
                 size.height = (int) h;
@@ -337,6 +340,7 @@ public class ClassActor extends Actor implements ActorContainer {
                 double h;
                 double plus;
                 int full;
+                int id = -1;
 
                 public void init() {
                     size = getSize();
@@ -350,7 +354,7 @@ public class ClassActor extends Actor implements ActorContainer {
 
                 public void animate(double pulse) {
                     Point p = getRootLocation();
-                    Tracker.writeToFile("Extend", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), System.currentTimeMillis());
+                    id = Tracker.writeToFile("Extend", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                     
                     h += plus * pulse;
                     size.height = (int)h;

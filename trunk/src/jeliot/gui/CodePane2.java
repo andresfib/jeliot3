@@ -11,6 +11,7 @@ import javax.swing.text.PlainDocument;
 
 import jeliot.mcode.Highlight;
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
 
@@ -146,7 +147,7 @@ public class CodePane2 extends JComponent {
         final int left = l - 1;
         final int right = r;
 
-        Tracker.writeToFileFromCodeView("Highlight", left, right, System.currentTimeMillis());
+        Tracker.writeToFileFromCodeView("Highlight", left, right, TrackerClock.currentTimeMillis(), -1);
 
         Runnable updateAComponent = new Runnable() {
 
@@ -185,5 +186,12 @@ public class CodePane2 extends JComponent {
         this.font = font;
         getTextArea().getPainter().setFont(font);
         propertiesBundle.setFontProperty("font.code_pane", font);
+    }
+
+    /**
+     * 
+     */
+    public void clearHighlights() {
+        highlightStatement(new Highlight(0,0,0,0));
     }
 }

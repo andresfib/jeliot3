@@ -10,6 +10,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 
 /**
  * ObjectStage is the graphical representation of the ObjectFrame.
@@ -253,7 +254,7 @@ public class ObjectStage extends InstanceActor {
             double h;
             double plus;
             int full;
-            
+            int id = -1;
             public void init() {
                 size = new Dimension(getWidth(), nheight + margin * 3);
                 h = size.height;
@@ -269,7 +270,7 @@ public class ObjectStage extends InstanceActor {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                Tracker.writeToFile("Appear", p.x, p.y, ObjectStage.this.getWidth(), ObjectStage.this.getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Appear", p.x, p.y, ObjectStage.this.getWidth(), ObjectStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                 
                 h += plus * pulse;
                 size.height = (int) h;
@@ -300,6 +301,7 @@ public class ObjectStage extends InstanceActor {
             double h;
             double plus;
             int full;
+            int id = -1;
             
             public void init() {
                 size = getSize();
@@ -314,7 +316,7 @@ public class ObjectStage extends InstanceActor {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                Tracker.writeToFile("Disappear", p.x, p.y, ObjectStage.this.getWidth(), ObjectStage.this.getHeight(), System.currentTimeMillis());
+                id = Tracker.writeToFile("Disappear", p.x, p.y, ObjectStage.this.getWidth(), ObjectStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                 
                 h += plus * pulse;
                 size.height = (int) h;

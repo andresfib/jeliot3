@@ -52,6 +52,7 @@ import jeliot.theater.ImageLoader;
 import jeliot.theater.Theater;
 import jeliot.theater.ThreadController;
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
 
 /**
@@ -194,7 +195,7 @@ public class Jeliot {
     /**
      * 
      */
-    private boolean experiment = false;
+    private static boolean experiment = false;
 
     /**
      * The only constructor of the Jeliot 3.
@@ -466,7 +467,7 @@ public class Jeliot {
      * @param str String that is outputted.
      */
     public void output(String str) {
-        Tracker.writeToFile("Output", str, System.currentTimeMillis());
+        Tracker.writeToFile("Output", str, TrackerClock.currentTimeMillis(), -1);
         gui.output(str);
     }
 
@@ -475,8 +476,8 @@ public class Jeliot {
      */
     public void showErrorMessage(InterpreterError e) {
         Tracker
-                .writeToFile("Error", e.getMessage(), System
-                        .currentTimeMillis());
+                .writeToFile("Error", e.getMessage(), TrackerClock
+                        .currentTimeMillis(), -1);
         gui.showErrorMessage(e);
     }
 
@@ -639,18 +640,16 @@ public class Jeliot {
         Properties prop = System.getProperties();
         udir = prop.getProperty("user.dir");
 
-        if (args.length >= 2) {
-            if (args[1] != null) {
-                File f = new File(udir);
-                Tracker.openFile(f);
-                Tracker.setTrack(Boolean.valueOf(args[1]).booleanValue());
-            }
+        if (args.length >= 4) {
+            TrackerClock.setNativeTracking(Boolean.valueOf(args[3]).booleanValue());
         }
 
-        experiment = false;
-        if (args.length >= 3) {
-            if (args[2] != null) {
-                experiment = Boolean.valueOf(args[2]).booleanValue();
+        
+        if (args.length >= 2) {
+            if (args[1] != null) {
+                Tracker.setTrack(Boolean.valueOf(args[1]).booleanValue());
+                File f = new File(udir);
+                Tracker.openFile(f);
             }
         }
 
@@ -679,6 +678,7 @@ public class Jeliot {
                 }
             }
         }
+        
     }
 
     /**
@@ -688,6 +688,13 @@ public class Jeliot {
      * Third cell contains a String representation of a boolean value ("true" or "false") that tells that experimental settings should be loaded.
      */
     public static void main(String args[]) {
+        experiment = false;
+        if (args.length >= 3) {
+            if (args[2] != null) {
+                experiment = Boolean.valueOf(args[2]).booleanValue();
+            }
+        }
+
         Jeliot jeliot = new Jeliot("jeliot.io.*");
         jeliot.handleArgs(args);
         LoadJeliot.start(jeliot);
@@ -707,6 +714,11 @@ public class Jeliot {
      */
     public static Jeliot start(String args[]) {
 
+        //Should experimental settings be used
+        if (args.length >= 4) {
+            experiment = Boolean.valueOf(args[3]).booleanValue();
+        }        
+        
         final Jeliot jeliot = new Jeliot("jeliot.io.*");
 
         //Do the mapping to other resources.
@@ -720,11 +732,6 @@ public class Jeliot {
         //File name is set
         if (args.length >= 3) {
             arguments[0] = args[2];
-        }
-
-        //Should experimental settings be used
-        if (args.length >= 4) {
-            arguments[2] = args[3];
         }
 
         //If tracker should be used or not
@@ -806,10 +813,16 @@ public class Jeliot {
         return hv.isVisible();
     }
 
+    /**
+     * @return
+     */
     public HistoryView getHistoryView() {
         return this.hv;
     }
 
+    /**
+     * @param h
+     */
     public void highlightStatement(Highlight h) {
         codePane.highlightStatement(h);
     }
@@ -824,7 +837,14 @@ public class Jeliot {
         director = null;
         gui = null;
         theatre = null;
-        Tracker.writeToFile("JeliotClose", System.currentTimeMillis());
+        Tracker.writeToFile("JeliotClose", TrackerClock.currentTimeMillis(), -1);
         Tracker.closeFile();
+    }
+
+    /**
+     * @return
+     */
+    public int getSelectedTabIndex() {
+        return gui.getSelectedIndexInTabbedPane();
     }
 }

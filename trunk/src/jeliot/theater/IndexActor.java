@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 
 /**
  * IndexActor shows the line between the array access' indexing
@@ -78,7 +79,7 @@ public class IndexActor extends Actor {
             double yp = startPoint.y;
             double l = 0;
             double step;
-
+            int id = -1;
             public void init() {
                 this.addActor(IndexActor.this);
                 step = len / getDuration();
@@ -86,7 +87,7 @@ public class IndexActor extends Actor {
             }
 
             public void animate(double pulse) {
-                Tracker.writeIndexToFile("Indexing", IndexActor.this.startPoint.x, IndexActor.this.startPoint.y, IndexActor.this.endPoint.x, IndexActor.this.endPoint.y, System.currentTimeMillis());
+                id = Tracker.writeIndexToFile("Indexing", IndexActor.this.startPoint.x, IndexActor.this.startPoint.y, IndexActor.this.endPoint.x, IndexActor.this.endPoint.y, TrackerClock.currentTimeMillis(), id);
                 xp += pulse * step * cos;
                 yp += pulse * step * sin;
                 l += pulse * step;

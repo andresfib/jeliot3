@@ -37,6 +37,7 @@ import javax.swing.text.PlainDocument;
 import jeliot.mcode.Highlight;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
@@ -476,12 +477,12 @@ public class CodeEditor2 extends JComponent {
                 masterFrame.setTitle(title);
 
                 MCodeUtilities.setFilename("untitled");
-                Tracker.writeToFile("File", "untitled", System.currentTimeMillis());
+                Tracker.writeToFile("File", "untitled", TrackerClock.currentTimeMillis(), -1);
             } else {
                 masterFrame.setTitle(title + " - " + filename);
 
                 MCodeUtilities.setFilename(filename);
-                Tracker.writeToFile("File", filename, System.currentTimeMillis());
+                Tracker.writeToFile("File", filename, TrackerClock.currentTimeMillis(), -1);
             }
         }
     }
