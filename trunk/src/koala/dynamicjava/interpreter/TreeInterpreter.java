@@ -650,7 +650,7 @@ public class TreeInterpreter implements Interpreter {
 
                 ECodeUtilities.write("" + Code.OMC+Code.DELIM+
                                      //m.getName()+Code.DELIM+
-                                     "super()"+Code.DELIM+
+                                     "super"+Code.DELIM+
                                      "0"+Code.DELIM+
                                      counter+Code.DELIM+
                                      "0,0,0,0");
