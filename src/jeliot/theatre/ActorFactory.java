@@ -71,9 +71,9 @@ public class ActorFactory {
         {"modop.gif",    "assignop.gif"},
         {"plusop.gif",   "assignop.gif"},
         {"minusop.gif",  "assignop.gif"},
-        {"lshift.gif",   "assignop.gif"}, // lshift
-        {"rshift.gif",   "assignop.gif"}, // rshift
-        {"urshift.gif",  "assignop.gif"}, // urshift
+        {"lshiftop.gif",   "assignop.gif"}, // lshift
+        {"rshiftop.gif",   "assignop.gif"}, // rshift
+        {"urshiftop.gif",  "assignop.gif"}, // urshift
         {"lessop.gif",   "assignop.gif"},
         {"greatop.gif",  "assignop.gif"},
         {"lequop.gif",   "assignop.gif"},
