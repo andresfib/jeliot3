@@ -1036,11 +1036,15 @@ public class JeliotWindow {
         return editor.getProgram();
     }
 
+    void tryToEnterAnimate() {
+        tryToEnterAnimate(null);
+    }
+    
     /**
      * Called when the user pushes the "Compile" button. Gets the code from the
      * CodeEditor -object. Sends it to "compilation".
      */
-    void tryToEnterAnimate() {
+    public void tryToEnterAnimate(String methodCall) {
 
         // Jeliot 3
         if (editor.isChanged()) {
@@ -1058,18 +1062,18 @@ public class JeliotWindow {
 
                 String programCode = editor.getProgram();
 
-                String methodCall = null;
+                if (methodCall != null) {
+                    methodCall = findMainMethodCall(programCode);
+                    if (askForMethod) {
+                        methodCall = ((methodCall != null) ? methodCall : null);
+                        String inputValue = JOptionPane.showInputDialog(bundle
+                                .getString("dialog.ask_for_method"), methodCall);
+                        if (inputValue != null && !inputValue.trim().equals("")) {
+                            methodCall = inputValue + ";";
+                        }
+                    } 
+                }
                 
-                methodCall = findMainMethodCall(programCode);
-                if (askForMethod) {
-                    methodCall = ((methodCall != null) ? methodCall : "");
-                    String inputValue = JOptionPane.showInputDialog(bundle
-                            .getString("dialog.ask_for_method"), methodCall);
-                    if (inputValue != null && !inputValue.trim().equals("")) {
-                        methodCall = inputValue + ";";
-                    }
-                } 
-
                 if (methodCall != null) {
 
                     //Reader r = new BufferedReader(new

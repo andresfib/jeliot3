@@ -193,7 +193,6 @@ public class Jeliot {
     }
 
     /**
-     * 
      *
      * @param sourceCode The program source code as a String.
      * @param methodCall The main method call as a String.
@@ -250,7 +249,7 @@ public class Jeliot {
     }
 
     /**
-     * 
+     * Should not be called directly!
      */
     public void compile() {
 
@@ -289,6 +288,17 @@ public class Jeliot {
 
     }
 
+    /**
+     * Can be called outside Jeliot to make Jeliot compile the given source code
+     * and call the method that is given. If null is provided standard main method
+     * is tried to be found and called.
+     * 
+     * @param methodCall
+     */
+    public void compile(String methodCall) {
+        gui.tryToEnterAnimate(methodCall);
+    }
+    
     /**
      * Initializes the compiled program to be animated.
      */
