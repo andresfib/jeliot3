@@ -16,19 +16,23 @@ import java.util.MissingResourceException;
  * To change this template use File | Settings | File Templates.
  */
 public class Resources {
+
     private ResourceBundle bundle;
 
     public Resources(String bundle) {
-        this.bundle = ResourceBundle.getBundle(bundle, Locale.getDefault(), Thread.currentThread().getContextClassLoader());
-        if (bundle == null) {
-            this.bundle = ResourceBundle.getBundle(bundle, new Locale("en_EN"), Thread.currentThread().getContextClassLoader());
-        }
-        if (bundle == null) {
-            this.bundle = ResourceBundle.getBundle(bundle, new Locale("en_EN"));
+        try {
+            this.bundle = ResourceBundle.getBundle(bundle, Locale.getDefault(), Thread
+                    .currentThread().getContextClassLoader());
+            if (bundle == null) {
+                this.bundle = ResourceBundle.getBundle(bundle, new Locale("en_EN"), Thread
+                        .currentThread().getContextClassLoader());
+            }
+        } catch (Exception e) {
+            this.bundle = ResourceBundle.getBundle(bundle, Locale.getDefault());
         }
     }
 
-    public String getResourceString (String name) {
+    public String getResourceString(String name) {
         try {
             return bundle.getString(name);
         } catch (MissingResourceException e) {

@@ -4,7 +4,6 @@ package edu.unika.aifb.components;
  * Copyright (c) 2004 Roland Küstermann. All Rights Reserved.
  */
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -37,12 +36,14 @@ import javax.swing.event.ListSelectionListener;
 import edu.unika.aifb.utils.Resources;
 
 public class JFontChooser extends JComponent {
-    private Resources resources = new Resources(getClass().getName().replace('.','/')+"_messages");
 
+    private Resources resources = new Resources(getClass().getName().replace('.', '/')
+            + "_messages");
 
     public static void main(String[] args) {
         JFontChooser.showDialog(null, Font.getFont("Arial"));
     }
+
     /**
      * Shows the dialog, with specified parent and title.
      */
@@ -52,9 +53,10 @@ public class JFontChooser extends JComponent {
 
         FontTracker ok = new FontTracker(pane);
 
-        JDialog dialog = pane.createDialog(parent, pane.resources.getResourceString("fontchooser_Dialog_Title"), true, // modal
+        JDialog dialog = pane.createDialog(parent, pane.resources
+                .getResourceString("fontchooser_Dialog_Title"), true, // modal
                 pane, ok, null // No cancel listener
-        );
+                );
         dialog.addWindowListener(new JFontChooserDialog.Closer());
         dialog.addComponentListener(new JFontChooserDialog.DisposeOnClose());
 
@@ -72,7 +74,7 @@ public class JFontChooser extends JComponent {
 
         JDialog dialog = pane.createDialog(parent, title, true, // modal
                 pane, ok, null // No cancel listener
-        );
+                );
         dialog.addWindowListener(new JFontChooserDialog.Closer());
         dialog.addComponentListener(new JFontChooserDialog.DisposeOnClose());
 
@@ -88,11 +90,9 @@ public class JFontChooser extends JComponent {
      * hidden (but not disposed).
      */
     public JDialog createDialog(Component parent, String title, boolean modal,
-                                       JFontChooser chooserPane,
-                                       ActionListener okListener,
-                                       ActionListener cancelListener) {
-        return new JFontChooserDialog(parent, title, modal, chooserPane,
-                okListener, cancelListener, resources);
+            JFontChooser chooserPane, ActionListener okListener, ActionListener cancelListener) {
+        return new JFontChooserDialog(parent, title, modal, chooserPane, okListener,
+                cancelListener, resources);
     }
 
     /**
@@ -131,6 +131,7 @@ public class JFontChooser extends JComponent {
      * for font name, style and size.
      */
     class InputPanel extends JPanel {
+
         /**
          * Constructor: Creates an instance of InputPanel.
          *
@@ -143,7 +144,8 @@ public class JFontChooser extends JComponent {
             // Font name
             Box nameBox = Box.createVerticalBox();
             nameBox.add(Box.createVerticalStrut(10));
-            JLabel fontNameLabel = new JLabel(resources.getResourceString("fontchooser_Font_Name")+":");
+            JLabel fontNameLabel = new JLabel(resources.getResourceString("fontchooser_Font_Name")
+                    + ":");
             nameBox.add(fontNameLabel);
             if (listener != null)
                 m_fontNameList.addListSelectionListener(listener);
@@ -154,7 +156,9 @@ public class JFontChooser extends JComponent {
             // Font style
             Box styleBox = Box.createVerticalBox();
             styleBox.add(Box.createVerticalStrut(10));
-            JLabel fontStyleLabel = new JLabel(resources.getResourceString("fontchooser_Font_Style")+":");
+            JLabel fontStyleLabel = new JLabel(resources
+                    .getResourceString("fontchooser_Font_Style")
+                    + ":");
             styleBox.add(fontStyleLabel);
             if (listener != null)
                 m_fontStyleList.addListSelectionListener(listener);
@@ -165,7 +169,7 @@ public class JFontChooser extends JComponent {
             // Font size
             Box sizeBox = Box.createVerticalBox();
             sizeBox.add(Box.createVerticalStrut(10));
-            JLabel fontSizeLabel = new JLabel(resources.getResourceString("fontchooser_Size")+":");
+            JLabel fontSizeLabel = new JLabel(resources.getResourceString("fontchooser_Size") + ":");
             sizeBox.add(fontSizeLabel);
             if (listener != null)
                 m_fontSizeList.addListSelectionListener(listener);
@@ -188,14 +192,13 @@ public class JFontChooser extends JComponent {
          * Returns the selected font, derived from the user's list choices.
          */
         public Font getSelectedFont() {
-            return new Font(m_fontNameList.getFontName(),
-                    m_fontStyleList.getFontStyle(),
+            return new Font(m_fontNameList.getFontName(), m_fontStyleList.getFontStyle(),
                     m_fontSizeList.getFontSize());
         }
 
         public void setSelectedFont(Font f) {
             if (f == null)
-                f = getFont ();
+                f = getFont();
             m_fontNameList.setSelectedFont(f.getName());
             m_fontStyleList.setSelectedStyle(f.getStyle());
             m_fontSizeList.setSelectedSize(f.getSize());
@@ -204,7 +207,9 @@ public class JFontChooser extends JComponent {
 
         //////////// Private data ///////////////
         private FontNameList m_fontNameList = new FontNameList();;
+
         private FontStyleList m_fontStyleList = new FontStyleList();
+
         private FontSizeList m_fontSizeList = new FontSizeList();
     }
 
@@ -212,8 +217,8 @@ public class JFontChooser extends JComponent {
      * Class to present a preview panel containing text which shows the
      * selected font as the user chooses font attributes.
      */
-    class PreviewPanel extends JPanel
-            implements ListSelectionListener {
+    class PreviewPanel extends JPanel implements ListSelectionListener {
+
         /**
          * Constructor: Creates an instance of PreviewPanel.
          */
@@ -221,7 +226,8 @@ public class JFontChooser extends JComponent {
             setLayout(new FlowLayout());
 
             Box box = Box.createVerticalBox();
-            JLabel previewLabel = new JLabel(resources.getResourceString("fontchooser_Preview")+":");
+            JLabel previewLabel = new JLabel(resources.getResourceString("fontchooser_Preview")
+                    + ":");
             box.add(previewLabel);
             m_text.setEditable(false);
             m_text.setBackground(Color.white);
@@ -241,14 +247,18 @@ public class JFontChooser extends JComponent {
         }
 
         /////// Private data ///////
-        private JTextField m_text = new JTextField(resources.getResourceString("fontchooser_The_quick_brown_fox_jumps_over_the_lazy_dog")+":");
+        private JTextField m_text = new JTextField(resources
+                .getResourceString("fontchooser_The_quick_brown_fox_jumps_over_the_lazy_dog")
+                + ":");
     }
 }
 
 /**
  * Class to present the list of available font names.
  */
+
 class FontNameList extends JList {
+
     /**
      * Constructor
      */
@@ -276,14 +286,16 @@ class FontNameList extends JList {
     }
 
     ////////// Private data /////////
-    private static final String[] m_fontNames =
-            GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+    private static final String[] m_fontNames = GraphicsEnvironment.getLocalGraphicsEnvironment()
+            .getAvailableFontFamilyNames();
 }
 
 /**
  * Class to present the available font styles.
  */
+
 class FontStyleList extends JList {
+
     /**
      * Constructor
      */
@@ -324,27 +336,26 @@ class FontStyleList extends JList {
                 setSelectedValue(getModel().getElementAt(2), true);
                 break;
             default:
-                setSelectedIndices(new int[]{3});
+                setSelectedIndices(new int[] { 3});
         }
     }
 
     /////// Private data //////////
-    private static final String[] m_fontStyles =
-            {
-                "Regular", "Italic", "Bold", "Bold Italic"
-            };
+    private static final String[] m_fontStyles = { "Regular", "Italic", "Bold", "Bold Italic"};
 }
 
 /**
  * Class to present the available Font sizes.
  */
+
 class FontSizeList extends JList {
+
     /**
      * Constructor.
      */
     FontSizeList() {
         super(m_fontSizes);
-        setSelectedIndex(4);  // Default to 14 point
+        setSelectedIndex(4); // Default to 14 point
         setVisibleRowCount(5);
     }
 
@@ -366,17 +377,17 @@ class FontSizeList extends JList {
     }
 
     ////////// Private data /////////
-    private static final String[] m_fontSizes =
-            {
-                "6", "8", "10", "12", "14", "16", "18", "20", "22", "24", "36", "72"
-            };
+    private static final String[] m_fontSizes = { "6", "8", "10", "12", "14", "16", "18", "20",
+            "22", "24", "36", "72"};
 }
 
 /**
  * Class to present a font chooser dialog, consisting of a edu.unika.aifb.components.JFontChooser panel
  * with "BTN_OK" and "Cancel" buttons.
  */
+
 class JFontChooserDialog extends JDialog {
+
     /**
      * Constructor: Creates an instance of a edu.unika.aifb.components.JFontChooserDialog.
      *
@@ -388,10 +399,8 @@ class JFontChooserDialog extends JDialog {
      * @param cancelListener an ActionListener which listens to the cancel button
      */
     public JFontChooserDialog(Component component, String title, boolean modal,
-                              JFontChooser chooserPane,
-                              ActionListener okListener,
-                              ActionListener cancelListener,
-                              Resources resources) {
+            JFontChooser chooserPane, ActionListener okListener, ActionListener cancelListener,
+            Resources resources) {
         // Invoke LanguageDialog's constructor, passing in the parent component's frame.
         super(JOptionPane.getFrameForComponent(component), title, modal);
 
@@ -413,8 +422,9 @@ class JFontChooserDialog extends JDialog {
         if (okListener != null)
             okButton.addActionListener(okListener);
         okButton.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);  // just hide the dialog
+                setVisible(false); // just hide the dialog
             }
         });
         buttonPane.add(okButton);
@@ -425,8 +435,9 @@ class JFontChooserDialog extends JDialog {
         if (cancelListener != null)
             cancelButton.addActionListener(cancelListener);
         cancelButton.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);  // just hide the dialog\
+                setVisible(false); // just hide the dialog\
             }
         });
         buttonPane.add(cancelButton);
@@ -443,6 +454,7 @@ class JFontChooserDialog extends JDialog {
      * Class to hide the dialog window on window closing event.
      */
     static class Closer extends WindowAdapter {
+
         public void windowClosing(WindowEvent e) {
             Window w = e.getWindow();
             w.setVisible(false);
@@ -453,6 +465,7 @@ class JFontChooserDialog extends JDialog {
      * Class to dispose of the dialog window when the dialog is hidden.
      */
     static class DisposeOnClose extends ComponentAdapter {
+
         public void componentHidden(ComponentEvent e) {
             Window w = (Window) e.getComponent();
             w.dispose();
@@ -466,7 +479,9 @@ class JFontChooserDialog extends JDialog {
 /**
  * Class to track changes in the selected font in the edu.unika.aifb.components.JFontChooser.
  */
+
 class FontTracker implements ActionListener {
+
     public FontTracker(JFontChooser chooser) {
         m_chooser = chooser;
     }
@@ -482,5 +497,6 @@ class FontTracker implements ActionListener {
     ///////// private data /////////
 
     private JFontChooser m_chooser;
+
     private Font m_font;
 }

@@ -564,13 +564,23 @@ public class JeliotWindow implements PauseListener {
         editMenu.addSeparator();
 
         menuItem = new JMenuItem(messageBundle.getString("menu.edit.font_select"));
-        menuItem.setMnemonic(KeyEvent.VK_F);
+        menuItem.setMnemonic(KeyEvent.VK_L);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Font f = JFontChooser
-                        .showDialog(frame, editor.getTextArea().getPainter().getFont());
+                Font f = null;
+                try {
+                    f = JFontChooser.showDialog(frame, editor.getTextArea().getPainter().getFont());
+                } catch (Exception e1) {
+                    if (DebugUtil.DEBUGGING) {
+                        jeliot.output(e1.toString());
+                        StackTraceElement[] s = e1.getStackTrace();
+                        for (int i = 0; i < s.length; i++) {
+                            jeliot.output(s[i].toString() + "\n");
+                        }
+                    }
+                }
                 if (f != null) {
                     editor.getTextArea().getPainter().setFont(f);
                     getCodePane().getTextArea().getPainter().setFont(f);
@@ -1183,7 +1193,7 @@ public class JeliotWindow implements PauseListener {
                                     enableWidgets(animWidgets.elements(), true);
                                     pauseButton.setEnabled(false);
                                     rewindButton.setEnabled(false);
-                                    
+
                                     int index = tabbedPane.indexOfTab(messageBundle
                                             .getString("tab.title.call_tree"));
                                     if (index > 0) {
@@ -1484,20 +1494,18 @@ public class JeliotWindow implements PauseListener {
      * @see jeliot.Jeliot#pause()
      */
     public void pauseAnimation() {
-        
+
         pauseButton.setEnabled(false);
 
         String[] s1 = { messageBundle.getString("menu.animation.pause")};
-        setEnabledMenuItems(false, s1);        
-        
+        setEnabledMenuItems(false, s1);
+
         try {
             jeliot.pause();
         } catch (Exception e) {}
 
     }
 
-    
-    
     /**
      * Changes the user interface when animation is resumed, for example,
      * after input request.
@@ -1563,14 +1571,14 @@ public class JeliotWindow implements PauseListener {
         playButton.setEnabled(false);
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(false);
-        
+
         unhighlightTabTitles();
 
         errorOccured = false;
 
         jeliot.cleanUp();
         theatre.repaint();
-        
+
         if (runningUntil) {
             //TODO: Here ask if the user wants to continue with run until.
             jeliot.runUntil(0);
@@ -1586,7 +1594,7 @@ public class JeliotWindow implements PauseListener {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                
+
                 jeliot.compile();
 
                 jeliot.rewind();
@@ -1811,7 +1819,7 @@ public class JeliotWindow implements PauseListener {
     public JSlider getSpeedSlider() {
         return speedSlider;
     }
-    
+
     public void paused() {
         stepButton.setEnabled(true);
         playButton.setEnabled(true);
