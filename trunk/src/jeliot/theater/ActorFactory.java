@@ -24,9 +24,12 @@ import jeliot.lang.Variable;
 
 
 /**
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * This class handles the centralized creation of the actors. This
+ * enables the centralized appearance handling. 
+ *  
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public class ActorFactory {
 
     /**
@@ -35,6 +38,8 @@ public class ActorFactory {
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
+                                      
+//  DOC: document!
 
     /**
 	 *
@@ -951,6 +956,7 @@ public class ActorFactory {
             aactor.setValueColor(valColor[typeInfo]);
             aactor.calculateSize(typeValWidth[typeInfo], valueHeight);
         } else {
+            //TODO: handle the reference type as a component type. 
             //If array's component type is reference type
             //is not implemented.
             return null;

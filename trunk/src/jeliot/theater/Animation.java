@@ -3,35 +3,36 @@ package jeliot.theater;
 import java.awt.Point;
 
 /**
-  * <p>
-  * <code>Animation</code> class represents one atomic animation in
-  * <code>Jeliot</code>. Animation means here any event that includes
-  * movement of actors or that is otherwise dependent of time. Examples
-  * of animation include moving an actor from one place to another or
-  * flashing the colors of an actor as it is introduced to the theatre.
-  * </p>
-  * <p>
-  * The animation is played by an instance of
-  * <code>AnimationEngine</code> class. The animation engine takes care
-  * of scheduling the animation. Animation class is the abstract
-  * superclass of various specialized animation classes. These
-  * subclasses must implement the <code>animate</code> method in which
-  * they make their changes to actors. The animation engine calls this
-  * method at even time intervals. If the animation has to do something
-  * in prior to starting the animation, especially if it has to set any
-  * parameters that depend on the duration of the animation or it has
-  * to add any actors to the theatre, it may do this in its
-  * <code>init()</code> method. When the animation finishes, the engine
-  * calls its <code>finish</code> method.
-  * </p>
-  *
-  * @author Pekka Uronen
-  * @author Niko Myller
-  */
+ * <p>
+ * <code>Animation</code> class represents one atomic animation in
+ * <code>Jeliot</code>. Animation means here any event that includes
+ * movement of actors or that is otherwise dependent of time. Examples
+ * of animation include moving an actor from one place to another or
+ * flashing the colors of an actor as it is introduced to the theatre.
+ * </p>
+ * 
+ * <p>
+ * The animation is played by an instance of
+ * <code>AnimationEngine</code> class. The animation engine takes care
+ * of scheduling the animation. Animation class is the abstract
+ * superclass of various specialized animation classes. These
+ * subclasses must implement the <code>animate</code> method in which
+ * they make their changes to actors. The animation engine calls this
+ * method at even time intervals. If the animation has to do something
+ * in prior to starting the animation, especially if it has to set any
+ * parameters that depend on the duration of the animation or it has
+ * to add any actors to the theatre, it may do this in its
+ * <code>init()</code> method. When the animation finishes, the engine
+ * calls its <code>finish</code> method.
+ * </p>
+ *
+ * @author Pekka Uronen
+ * @author Niko Myller
+ */
 public abstract class Animation {
 
 	/**
-     * This flag is set by the finish() method when the animation
+     * This flag is set by the doFinish() method when the animation
      * is at end.
      */
     private boolean finished;
@@ -51,9 +52,10 @@ public abstract class Animation {
      */
     private int duration = 1000;
 
-	/** An actor associated with this animation -- the actor that gets
-      * animated.
-      */
+	/**
+     * An actor associated with this animation -- the actor that gets
+     * animated.
+     */
     private Actor actor;
 
 	/** Initializes the animation. This method is called by the
@@ -178,7 +180,8 @@ public abstract class Animation {
     }
 
     /**
-	 * 
+	 * This method is called when the animation is finished.
+     * Should be overridden.
 	 */
 	public void finalFinish() { }
 

@@ -8,11 +8,11 @@ import java.awt.Image;
   * animation.
   *
   * @author Pekka Uronen
-  *
-  * created         3.10.1999
+  * @author Niko Myller
   */
 public class AnimatingActor extends Actor {
 
+//  DOC: document!
     /**
 	 *
 	 */
@@ -30,7 +30,9 @@ public class AnimatingActor extends Actor {
 	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
 	 */
 	public void paintActor(Graphics g) {
-        g.drawImage(image, insets.left, insets.top, null);
+        //g.drawImage(image, insets.left, insets.top, null);
+        //HACK: I am not sure if this works if it causes problems use the previous line.
+        g.drawImage(image, insets.left, insets.top, dummy);
     }
 
     /* (non-Javadoc)

@@ -13,8 +13,9 @@ package jeliot.theater;
 public interface ActorContainer {
     
     /**
+     * Remove the the given actor from the ActorContainer. 
      * 
-     * @param actor
+     * @param actor The actor to be removed.
      */
     public abstract void removeActor(Actor actor);
 }

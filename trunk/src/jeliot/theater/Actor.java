@@ -16,17 +16,19 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 /**
- * The base class for all the actors. 
+ * The base class for all the actors. The Actor class should not be
+ * used directly but indirectly with it's subclasses.
  * 
  * @author Pekka Uronen
  * @author Niko Myller
  */
 public class Actor implements Cloneable {
 
+// DOC: Document!
 	/**
 	 * The resource bundle for theater package.
 	 */
-	static private ResourceBundle bundle =
+	private static ResourceBundle bundle =
 		ResourceBundle.getBundle(
 			"jeliot.theater.resources.properties",
 			Locale.getDefault());
@@ -34,12 +36,12 @@ public class Actor implements Cloneable {
 	/**
 	 *
 	 */
-	static Component dummy = new Panel();
+	public static Component dummy = new Panel();
     
 	/**
 	 *
 	 */
-	static Image shadowImage;
+	public static Image shadowImage;
 
 	/**
 	 *
@@ -94,7 +96,7 @@ public class Actor implements Cloneable {
 	/**
 	 *
 	 */
-	private int shadoww = 0;
+	protected int shadoww = 0;
 
 	/**
 	 * Margin, not including border.
@@ -202,7 +204,8 @@ public class Actor implements Cloneable {
 	}
 
 	/**
-	 * Paints the shadow of the actor. Override this in the subclasses.
+	 * Paints the shadow of the actor. Override this in the subclasses
+     * if needed.
 	 * @param g
 	 */
 	public void paintShadow(Graphics g) {
@@ -223,13 +226,15 @@ public class Actor implements Cloneable {
 	}
 
 	/**
-	 * Paints the actor. Override this in subclasses.
-	 * @param g
+	 * Paints the actor on the given Graphics instance.
+     * Override this in subclasses.
+	 * @param g The Graphics object 
 	 */
 	public void paintActor(Graphics g) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0, width, height);
 	}
+  
 
 	/**
 	 * Paints the actors contained in the vector on this actor.
