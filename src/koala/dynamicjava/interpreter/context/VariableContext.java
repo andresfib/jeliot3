@@ -62,7 +62,7 @@ public class VariableContext implements SimpleContext {
      * Creates a new context initialized with an empty initial scope
      */
     public VariableContext() {
-	enterScope();
+        enterScope();
     }
 
     /**
@@ -71,20 +71,20 @@ public class VariableContext implements SimpleContext {
      * @param entries a set of string
      */
     public VariableContext(Set entries) {
-	this();
-	Iterator it = entries.iterator();
-	while (it.hasNext()) {
-	    ((AbstractVariable)it.next()).set(this, null);
-	}
+        this();
+        Iterator it = entries.iterator();
+        while (it.hasNext()) {
+            ((AbstractVariable) it.next()).set(this, null);
+        }
     }
 
     /**
      * Enters a scope
      */
     public void enterScope() {
-	scopes = LinkFactory.createLink(scopes);
-	scope  = scopes.scope;
-	cscope = scopes.cscope;
+        scopes = LinkFactory.createLink(scopes);
+        scope = scopes.scope;
+        cscope = scopes.cscope;
     }
 
     /**
@@ -92,25 +92,25 @@ public class VariableContext implements SimpleContext {
      * @param entries a set of string
      */
     public void enterScope(Set entries) {
-	enterScope();
-	Iterator it = entries.iterator();
-	while (it.hasNext()) {
-	    ((AbstractVariable)it.next()).set(this, null);
-	}
+        enterScope();
+        Iterator it = entries.iterator();
+        while (it.hasNext()) {
+            ((AbstractVariable) it.next()).set(this, null);
+        }
     }
 
     /**
      * Defines the given variables
      */
     public void defineVariables(Set vars) {
-	Iterator it = vars.iterator();
-	while (it.hasNext()) {
-	    AbstractVariable v = (AbstractVariable)it.next();
-	    
-	    if (v.get(this) == Scope.NO_SUCH_KEY) {
-		v.set(this, null);
-	    }
-	}
+        Iterator it = vars.iterator();
+        while (it.hasNext()) {
+            AbstractVariable v = (AbstractVariable) it.next();
+
+            if (v.get(this) == Scope.NO_SUCH_KEY) {
+                v.set(this, null);
+            }
+        }
     }
 
     /**
@@ -118,51 +118,51 @@ public class VariableContext implements SimpleContext {
      * @return the set of variable defined in this scope
      */
     public Set leaveScope() {
-	Set result = new HashSet(11);
-	Iterator it = scope.keySet().iterator();
-	while (it.hasNext()) {
-	    result.add(new Variable((String)it.next()));
-	}
-	it = cscope.keySet().iterator();
-	while (it.hasNext()) {
-	    result.add(new Constant((String)it.next()));
-	}
-	scopes = scopes.next;
-	scope  = scopes.scope;
-	cscope = scopes.cscope;
-	return result;
+        Set result = new HashSet(11);
+        Iterator it = scope.keySet().iterator();
+        while (it.hasNext()) {
+            result.add(new Variable((String) it.next()));
+        }
+        it = cscope.keySet().iterator();
+        while (it.hasNext()) {
+            result.add(new Constant((String) it.next()));
+        }
+        scopes = scopes.next;
+        scope = scopes.scope;
+        cscope = scopes.cscope;
+        return result;
     }
 
     /**
      * Returns the current scope variables in a set
      */
     public Set getCurrentScopeVariables() {
-	Set result = new HashSet(11);
-	Iterator it = scope.keySet().iterator();
-	while (it.hasNext()) {
-	    result.add(new Variable((String)it.next()));
-	}
-	it = cscope.keySet().iterator();
-	while (it.hasNext()) {
-	    result.add(new Constant((String)it.next()));
-	}
-	return result;
+        Set result = new HashSet(11);
+        Iterator it = scope.keySet().iterator();
+        while (it.hasNext()) {
+            result.add(new Variable((String) it.next()));
+        }
+        it = cscope.keySet().iterator();
+        while (it.hasNext()) {
+            result.add(new Constant((String) it.next()));
+        }
+        return result;
     }
 
     /**
      * Returns the current scope variables (strings) in a set
      */
     public Set getCurrentScopeVariableNames() {
-	Set result = new HashSet(11);
-	Iterator it = scope.keySet().iterator();
-	while (it.hasNext()) {
-	    result.add(it.next());
-	}
-	it = cscope.keySet().iterator();
-	while (it.hasNext()) {
-	    result.add(it.next());
-	}
-	return result;
+        Set result = new HashSet(11);
+        Iterator it = scope.keySet().iterator();
+        while (it.hasNext()) {
+            result.add(it.next());
+        }
+        it = cscope.keySet().iterator();
+        while (it.hasNext()) {
+            result.add(it.next());
+        }
+        return result;
     }
 
     /**
@@ -170,14 +170,14 @@ public class VariableContext implements SimpleContext {
      * @param name the name of the entry
      */
     public boolean isDefinedVariable(String name) {
-	for (Link l = scopes; l != null; l = l.next) {
-	    if (l.scope.get(name) != Scope.NO_SUCH_KEY) {
-		return true;
-	    } else if (l.cscope.get(name) != Scope.NO_SUCH_KEY) {
-		return true;
-	    }
-	}
-	return false;
+        for (Link l = scopes; l != null; l = l.next) {
+            if (l.scope.get(name) != Scope.NO_SUCH_KEY) {
+                return true;
+            } else if (l.cscope.get(name) != Scope.NO_SUCH_KEY) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -187,12 +187,12 @@ public class VariableContext implements SimpleContext {
      * @exception IllegalStateException if the variable is not defined
      */
     public boolean isFinal(String name) {
-	for (Link l = scopes; l != null; l = l.next) {
-	    if (l.cscope.get(name) != Scope.NO_SUCH_KEY) {
-		return true;
-	    }
-	}
-	return false;
+        for (Link l = scopes; l != null; l = l.next) {
+            if (l.cscope.get(name) != Scope.NO_SUCH_KEY) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -202,9 +202,9 @@ public class VariableContext implements SimpleContext {
      * @exception IllegalStateException if the variable is already defined
      */
     public void define(String name, Object value) {
-	if (scope.put(name, value) != Scope.NO_SUCH_KEY) {
-	    throw new IllegalStateException(name);
-	}
+        if (scope.put(name, value) != Scope.NO_SUCH_KEY) {
+            throw new IllegalStateException(name);
+        }
     }
 
     /**
@@ -214,10 +214,10 @@ public class VariableContext implements SimpleContext {
      * @exception IllegalStateException if the variable is already defined
      */
     public void defineConstant(String name, Object value) {
-	if (cscope.put(name, value) != Scope.NO_SUCH_KEY ||
-	    scope.get(name) != Scope.NO_SUCH_KEY) {
-	    throw new IllegalStateException(name);
-	}
+        if (cscope.put(name, value) != Scope.NO_SUCH_KEY
+                || scope.get(name) != Scope.NO_SUCH_KEY) {
+            throw new IllegalStateException(name);
+        }
     }
 
     /**
@@ -226,14 +226,14 @@ public class VariableContext implements SimpleContext {
      * @exception IllegalStateException if the variable is not defined
      */
     public Object get(String name) {
-	for (Link l = scopes; l != null; l = l.next) {
-	    Object result = l.scope.get(name);
-	    if (result != Scope.NO_SUCH_KEY ||
-		(result = l.cscope.get(name)) != Scope.NO_SUCH_KEY) {
-		return result;
-	    }
-	}
-	throw new IllegalStateException(name);
+        for (Link l = scopes; l != null; l = l.next) {
+            Object result = l.scope.get(name);
+            if (result != Scope.NO_SUCH_KEY
+                    || (result = l.cscope.get(name)) != Scope.NO_SUCH_KEY) {
+                return result;
+            }
+        }
+        throw new IllegalStateException(name);
     }
 
     /**
@@ -243,14 +243,14 @@ public class VariableContext implements SimpleContext {
      * @exception IllegalStateException if the variable is not defined or is final
      */
     public void set(String name, Object value) {
-	for (Link l = scopes; l != null; l = l.next) {
-	    Object val = l.scope.get(name);
-	    if (val != Scope.NO_SUCH_KEY) {
-		l.scope.put(name, value);
-		return;
-	    }
-	}
-	throw new IllegalStateException(name);
+        for (Link l = scopes; l != null; l = l.next) {
+            Object val = l.scope.get(name);
+            if (val != Scope.NO_SUCH_KEY) {
+                l.scope.put(name, value);
+                return;
+            }
+        }
+        throw new IllegalStateException(name);
     }
 
     /**
@@ -259,7 +259,7 @@ public class VariableContext implements SimpleContext {
      * @param value the value of the entry
      */
     public void setConstant(String name, Object value) {
-	cscope.put(name, value);
+        cscope.put(name, value);
     }
 
     /**
@@ -268,357 +268,358 @@ public class VariableContext implements SimpleContext {
      * @param value the value of the entry
      */
     public void setVariable(String name, Object value) {
-	scope.put(name, value);
+        scope.put(name, value);
     }
 
     /**
      * Creates a map that contains the constants in this context
      */
     public Map getConstants() {
-	Map result = new HashMap(11);
-	for (Link l = scopes; l != null; l = l.next) {
-	    Iterator it = l.cscope.keySet().iterator();
-	    while (it.hasNext()) {
-		String s = (String)it.next();
-		result.put(s, l.cscope.get(s));
-	    }
-	}
-	return result;
+        Map result = new HashMap(11);
+        for (Link l = scopes; l != null; l = l.next) {
+            Iterator it = l.cscope.keySet().iterator();
+            while (it.hasNext()) {
+                String s = (String) it.next();
+                result.put(s, l.cscope.get(s));
+            }
+        }
+        return result;
     }
 
     /**
      * To store the variables
      */
     protected static abstract class AbstractVariable {
-	/**
-	 * The constant name
-	 */
-	public String name;
+        /**
+         * The constant name
+         */
+        public String name;
 
-	/**
-	 * Sets the variable in the current scope
-	 */
-	public abstract void set(VariableContext ctx, Object value);
+        /**
+         * Sets the variable in the current scope
+         */
+        public abstract void set(VariableContext ctx, Object value);
 
-	/**
-	 * Sets the variable in the current scope
-	 */
-	public abstract Object get(VariableContext ctx);
+        /**
+         * Sets the variable in the current scope
+         */
+        public abstract Object get(VariableContext ctx);
 
-	/**
-	 * Returns the hashCode
-	 */
-	public int hashCode() {
-	    return name.hashCode();
-	}
+        /**
+         * Returns the hashCode
+         */
+        public int hashCode() {
+            return name.hashCode();
+        }
     }
 
     /**
      * To store the variables
      */
     protected static class Variable extends AbstractVariable {
-	/**
-	 * Creates a new variable
-	 */
-	public Variable(String s) {
-	    name = s;
-	}
-	
-	/**
-	 * Sets the variable in the current scope
-	 */
-	public void set(VariableContext ctx, Object value) {
-	    ctx.scope.put(name, value);
-	}
+        /**
+         * Creates a new variable
+         */
+        public Variable(String s) {
+            name = s;
+        }
 
-	/**
-	 * Sets the variable in the current scope
-	 */
-	public Object get(VariableContext ctx) {
-	    return ctx.scope.get(name);
-	}
+        /**
+         * Sets the variable in the current scope
+         */
+        public void set(VariableContext ctx, Object value) {
+            ctx.scope.put(name, value);
+        }
+
+        /**
+         * Sets the variable in the current scope
+         */
+        public Object get(VariableContext ctx) {
+            return ctx.scope.get(name);
+        }
     }
 
     /**
      * To store the constants
      */
     protected class Constant extends AbstractVariable {
-	/**
-	 * Creates a new variable
-	 */
-	public Constant(String s) {
-	    name = s;
-	}
-	
-	/**
-	 * Sets the variable in the current scope
-	 */
-	public void set(VariableContext ctx, Object value) {
-	    ctx.cscope.put(name, value);
-	}
+        /**
+         * Creates a new variable
+         */
+        public Constant(String s) {
+            name = s;
+        }
 
-	/**
-	 * Sets the variable in the current scope
-	 */
-	public Object get(VariableContext ctx) {
-	    return ctx.cscope.get(name);
-	}
+        /**
+         * Sets the variable in the current scope
+         */
+        public void set(VariableContext ctx, Object value) {
+            ctx.cscope.put(name, value);
+        }
+
+        /**
+         * Sets the variable in the current scope
+         */
+        public Object get(VariableContext ctx) {
+            return ctx.cscope.get(name);
+        }
     }
 
     /**
      * To store one scope
      */
     protected static class Link {
-	/**
-	 * The current scope
-	 */
-	public Scope scope = new Scope();
+        /**
+         * The current scope
+         */
+        public Scope scope = new Scope();
 
-	/**
-	 * The current scope for constants
-	 */
-	public Scope cscope = new Scope();
+        /**
+         * The current scope for constants
+         */
+        public Scope cscope = new Scope();
 
-	/**
-	 * The next scope
-	 */
-	public Link next;
+        /**
+         * The next scope
+         */
+        public Link next;
 
-	/**
-	 * Creates a new link
-	 */
-	public Link(Link next) {
-	    this.next = next;
-	}
+        /**
+         * Creates a new link
+         */
+        public Link(Link next) {
+            this.next = next;
+        }
     }
 
     /**
      * To manage the creation of scopes and links
      */
     protected static class LinkFactory {
-	/**
-	 * The table size
-	 */
-	protected final static int SIZE = 10;
+        /**
+         * The table size
+         */
+        protected final static int SIZE = 10;
 
-	/**
-	 * The table used to recycle the links
-	 */
-	protected final static WeakReference[] links = new WeakReference[SIZE];
+        /**
+         * The table used to recycle the links
+         */
+        protected final static WeakReference[] links = new WeakReference[SIZE];
 
-	/**
-	 * Creates a new link
-	 */
-	public static Link createLink(Link next) {
-	    /**
-	    for (int i = 0; i < SIZE; i++) {
-		WeakReference r = links[i];
-		Link l = null;
-		if (r != null) {
-		    l = (Link)r.get();
-		    if (l != null) {
-			links[i] = null;
-			l.next = next;
-			return l;
-		    } else {
-			links[i] = null;
-		    }
-		}
-	    }
-	    */
-	    return new Link(next);
-	}
+        /**
+         * Creates a new link
+         */
+        public static Link createLink(Link next) {
+            /**
+             for (int i = 0; i < SIZE; i++) {
+             WeakReference r = links[i];
+             Link l = null;
+             if (r != null) {
+             l = (Link)r.get();
+             if (l != null) {
+             links[i] = null;
+             l.next = next;
+             return l;
+             } else {
+             links[i] = null;
+             }
+             }
+             }
+             */
+            return new Link(next);
+        }
 
-	/**
-	 * Notifies the factory to recycle the given link
-	 */
-	public static void recycle(Link l) {
-	    /*
-	    l.scope.clear();
-	    for (int i = 0; i < SIZE; i++) {
-		if (links[i] == null) {
-		    links[i] = new WeakReference(l);
-		    return;
-		}
-	    }
-	    */
-	}
+        /**
+         * Notifies the factory to recycle the given link
+         */
+        public static void recycle(Link l) {
+            /*
+             l.scope.clear();
+             for (int i = 0; i < SIZE; i++) {
+             if (links[i] == null) {
+             links[i] = new WeakReference(l);
+             return;
+             }
+             }
+             */
+        }
     }
 
     /**
      * A table which maps a string with an object
      */
     protected static class Scope {
-	/**
-	 * The load factor
-	 */
-	protected final static float LOAD_FACTOR = 0.75f;
+        /**
+         * The load factor
+         */
+        protected final static float LOAD_FACTOR = 0.75f;
 
-	/**
-	 * The initial capacity
-	 */
-	protected final static int INITIAL_CAPACITY = 11;
+        /**
+         * The initial capacity
+         */
+        protected final static int INITIAL_CAPACITY = 11;
 
-	/**
-	 * The object used to notify that a key do not exists
-	 */
-	protected final static Object NO_SUCH_KEY = new Object();
+        /**
+         * The object used to notify that a key do not exists
+         */
+        protected final static Object NO_SUCH_KEY = new Object();
 
-	/**
-	 * The underlying array
-	 */
-	protected Entry[] table;
+        /**
+         * The underlying array
+         */
+        protected Entry[] table;
 
-	/**
-	 * The number of entries
-	 */
-	protected int count;
+        /**
+         * The number of entries
+         */
+        protected int count;
 
-	/**
-	 * The resizing threshold
-	 */
-	protected int threshold;
+        /**
+         * The resizing threshold
+         */
+        protected int threshold;
 
-	/**
-	 * Creates a new scope
-	 */
-	public Scope() {
-	    table     = new Entry[INITIAL_CAPACITY];
-	    threshold = (int)(INITIAL_CAPACITY * LOAD_FACTOR);
-	}
+        /**
+         * Creates a new scope
+         */
+        public Scope() {
+            table = new Entry[INITIAL_CAPACITY];
+            threshold = (int) (INITIAL_CAPACITY * LOAD_FACTOR);
+        }
 
-	/**
-	 * Gets the value of a variable
-	 * @return the value or NO_SUCH_KEY
-	 */
-	public Object get(String key) {
-	    int hash  = key.hashCode() & 0x7FFFFFFF;
-	    int index = hash % table.length;
+        /**
+         * Gets the value of a variable
+         * @return the value or NO_SUCH_KEY
+         */
+        public Object get(String key) {
+            int hash = key.hashCode() & 0x7FFFFFFF;
+            int index = hash % table.length;
 
-	    for (Entry e = table[index]; e != null; e = e.next) {
-		if ((e.hash == hash) && e.key.equals(key)) {
-		    return e.value;
-		}
-	    }
-	    return NO_SUCH_KEY;
-	}
+            for (Entry e = table[index]; e != null; e = e.next) {
+                if ((e.hash == hash) && e.key.equals(key)) {
+                    return e.value;
+                }
+            }
+            return NO_SUCH_KEY;
+        }
 
-	/**
-	 * Sets a new value for the given variable
-	 * @return the old value or NO_SUCH_KEY
-	 */
-	public Object put(String key, Object value) {
-	    int hash  = key.hashCode() & 0x7FFFFFFF;
-	    int index = hash % table.length;
+        /**
+         * Sets a new value for the given variable
+         * @return the old value or NO_SUCH_KEY
+         */
+        public Object put(String key, Object value) {
+            int hash = key.hashCode() & 0x7FFFFFFF;
+            int index = hash % table.length;
 
-	    for (Entry e = table[index]; e != null; e = e.next) {
-		if ((e.hash == hash) && e.key.equals(key)) {
-		    Object old = e.value;
-		    e.value = value;
-		    return old;
-		}
-	    }
+            for (Entry e = table[index]; e != null; e = e.next) {
+                if ((e.hash == hash) && e.key.equals(key)) {
+                    Object old = e.value;
+                    e.value = value;
+                    return old;
+                }
+            }
 
-	    // The key is not in the hash table
-	    if (count++ >= threshold) {
-		rehash();
-		index = hash % table.length;
-	    }
-	    
-	    Entry e = EntryFactory.createEntry(hash, key, value, table[index]);
-	    table[index] = e;
-	    return NO_SUCH_KEY;
-	}
+            // The key is not in the hash table
+            if (count++ >= threshold) {
+                rehash();
+                index = hash % table.length;
+            }
 
-	/**
-	 * Returns a set that contains the keys
-	 */
-	public Set keySet() {
-	    Set result = new HashSet(11);
-	    for (int i = table.length-1; i >= 0; i--) {
-		for (Entry e = table[i]; e != null; e = e.next) {
-		    result.add(e.key);
-		}
-	    }
-	    return result;
-	}
+            Entry e = EntryFactory.createEntry(hash, key, value, table[index]);
+            table[index] = e;
+            return NO_SUCH_KEY;
+        }
 
-	/**
-	 * Clears this scope
-	 */
-	public void clear() {
-	    count = 0;
-	    for (int i = table.length-1; i >= 0; i--) {
-		table[i] = null;
-	    }
-	}
+        /**
+         * Returns a set that contains the keys
+         */
+        public Set keySet() {
+            Set result = new HashSet(11);
+            for (int i = table.length - 1; i >= 0; i--) {
+                for (Entry e = table[i]; e != null; e = e.next) {
+                    result.add(e.key);
+                }
+            }
+            return result;
+        }
 
-	/**
-	 * Rehash the table
-	 */
-	protected void rehash () {
-	    Entry[] oldTable = table;
+        /**
+         * Clears this scope
+         */
+        public void clear() {
+            count = 0;
+            for (int i = table.length - 1; i >= 0; i--) {
+                table[i] = null;
+            }
+        }
 
-	    table     = new Entry[oldTable.length * 2 + 1];
-	    threshold = (int)(table.length * LOAD_FACTOR);
+        /**
+         * Rehash the table
+         */
+        protected void rehash() {
+            Entry[] oldTable = table;
 
-	    for (int i = oldTable.length-1; i >= 0; i--) {
-		for (Entry old = oldTable[i]; old != null;) {
-		    Entry e = old;
-		    old = old.next;
+            table = new Entry[oldTable.length * 2 + 1];
+            threshold = (int) (table.length * LOAD_FACTOR);
 
-		    int index = e.hash % table.length;
-		    e.next = table[index];
-		    table[index] = e;
-		}
-	    }
-	}
+            for (int i = oldTable.length - 1; i >= 0; i--) {
+                for (Entry old = oldTable[i]; old != null;) {
+                    Entry e = old;
+                    old = old.next;
 
-	/**
-	 * To manage collisions
-	 */
-	protected static class Entry {
-	    /**
-	     * The hash code
-	     */
-	    public int hash;
+                    int index = e.hash % table.length;
+                    e.next = table[index];
+                    table[index] = e;
+                }
+            }
+        }
 
-	    /**
-	     * The variable
-	     */
-	    public String key;
+        /**
+         * To manage collisions
+         */
+        protected static class Entry {
+            /**
+             * The hash code
+             */
+            public int hash;
 
-	    /**
-	     * The value
-	     */
-	    public Object value;
+            /**
+             * The variable
+             */
+            public String key;
 
-	    /**
-	     * The next entry
-	     */
-	    public Entry next;
+            /**
+             * The value
+             */
+            public Object value;
 
-	    /**
-	     * Creates a new entry
-	     */
-	    public Entry(int hash, String key, Object value, Entry next) {
-		this.hash  = hash;
-		this.key   = key;
-		this.value = value;
-		this.next  = next;
-	    }
-	}
+            /**
+             * The next entry
+             */
+            public Entry next;
 
-	/**
-	 * To create an entry
-	 */
-	protected static class EntryFactory {
-	    /**
-	     * Creates a new entry
-	     */
-	    public static Entry createEntry(int hash, String key, Object value, Entry next) {
-		return new Entry(hash, key, value, next);
-	    }
-	}
+            /**
+             * Creates a new entry
+             */
+            public Entry(int hash, String key, Object value, Entry next) {
+                this.hash = hash;
+                this.key = key;
+                this.value = value;
+                this.next = next;
+            }
+        }
+
+        /**
+         * To create an entry
+         */
+        protected static class EntryFactory {
+            /**
+             * Creates a new entry
+             */
+            public static Entry createEntry(int hash, String key, Object value,
+                    Entry next) {
+                return new Entry(hash, key, value, next);
+            }
+        }
     }
 }
