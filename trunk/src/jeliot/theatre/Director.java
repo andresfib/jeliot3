@@ -334,6 +334,10 @@ public class Director {
         ValueActor thisValueActor = thisValue.getActor();
         Animation thisFly = thisValueActor.fly(actor.reserveThisActor(thisValueActor));
 
+        // Calculate the size of the invocation actor, taking into account
+        // the this actor.
+        actor.calculateSize();
+
         // Create actors and reserve places for all argument values,
         // and create animations to bring them in their right places.
         ValueActor[] argact = new ValueActor[n];

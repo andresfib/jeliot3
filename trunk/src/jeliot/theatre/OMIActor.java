@@ -65,16 +65,14 @@ public class OMIActor extends Actor implements ActorContainer{
         int x = insets.left + thisActorw + margin + namew + margin;
 
         if (next > 0) {
+                x = locs[next - 1].x +
+                    margin + commaMargin + margin +
+                    actors[next - 1].getWidth();
+
             if (actors[next-1] instanceof ReferenceActor) {
-                x = locs[next - 1].x +
-                    margin + commaMargin + margin +
-                    actors[next - 1].getWidth() +
-                    ((ReferenceActor) actors[next - 1]).getReferenceWidth();
-            } else {
-                x = locs[next - 1].x +
-                    margin + commaMargin + margin +
-                    actors[next -1].getWidth();
+                x += ((ReferenceActor) actors[next - 1]).getReferenceWidth();
             }
+
         }
 
         locs[next++] = new Point(x, y);
@@ -182,8 +180,8 @@ public class OMIActor extends Actor implements ActorContainer{
         namew = fm.stringWidth(this.name + "(");
         int parenthesisw = fm.stringWidth("(");
 
-        int thisActorw = 0;
-        int thisActorh = 0;
+//        int thisActorw = 0;
+//        int thisActorh = 0;
 
         if (thisActor != null) {
                 thisActorh = thisActor.getHeight();

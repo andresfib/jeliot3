@@ -129,7 +129,7 @@ public class Interpreter {
 
     public void execute() {
 
-        try {
+        //try { //This is for realease versions
 
         director.openScratch();
 
@@ -936,7 +936,7 @@ public class Interpreter {
 
                                         variables.put(new Integer(expressionCounter), var);
                                         values.put(new Integer(expressionReference), val);
-
+                                        values.put(new Integer(expressionCounter), val);
 
                                 } else {
 
@@ -1234,7 +1234,7 @@ public class Interpreter {
                             int objectCounter = Integer.parseInt(tokenizer.nextToken());
                             String variableName = tokenizer.nextToken();
                             String value = "";
-                            if (tokenizer.countTokens() >= 2) {
+                            if (tokenizer.countTokens() >= 3) {
                                 value = tokenizer.nextToken();
                             }
 
@@ -2363,6 +2363,16 @@ public class Interpreter {
 
                             values.put(new Integer(expressionReference), ref);
 
+
+                            for (int i = 0; i < dims; i++) {
+                                Object[] postIncDec = (Object[])
+                                    postIncsDecs.remove(new Integer(dimensionReference[i]));
+
+                                if (postIncDec != null) {
+                                    doPostIncDec(postIncDec);
+                                }
+                            }
+
                             break;
                         }
 
@@ -2572,6 +2582,14 @@ public class Interpreter {
 
                             }
 
+                            for (int i = 0; i < dims; i++) {
+                                Object[] postIncDec = (Object[])
+                                    postIncsDecs.remove(new Integer(cellNumberReference[i]));
+
+                                if (postIncDec != null) {
+                                    doPostIncDec(postIncDec);
+                                }
+                            }
 
                             break;
                         }
@@ -2726,10 +2744,13 @@ public class Interpreter {
         }
         director.closeScratch();
 
+        //This is for realease versions
+        /*
         } catch (Exception e) {
             director.showErrorMessage(new InterpreterError("<H1>Runtime Error</H1>"+
                                  "<P>The feature is not yet implemented.</P>", null));
         }
+        */
 
     }
 
