@@ -1,1 +1,1 @@
-java -jar jeliot.jar jeliot.Jeliot
+java -jar jeliot.jar

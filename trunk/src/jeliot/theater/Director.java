@@ -203,6 +203,7 @@ public class Director {
      */
     public void runUntil(int line) {
         runUntilLine = line;
+        theatre.setRunUntilEnabled(true);
     }
 
     /**
@@ -224,7 +225,9 @@ public class Director {
                     && runUntilLine <= h.getEndLine()) {
 
                     runUntilLine = -1;
+                    theatre.setRunUntilEnabled(false);                    
                     jeliot.runUntilDone();
+                    theatre.repaint();
                 }
 
                 codePane.highlightStatement(h);
@@ -702,6 +705,7 @@ public class Director {
                 thisValueActor = (ValueActor) thisValue.getActor();
             }
         }
+        
         thisValue.setActor(thisValueActor);
 
         Animation thisAnim =

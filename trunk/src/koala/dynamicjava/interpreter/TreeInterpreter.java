@@ -761,7 +761,7 @@ public class TreeInterpreter implements Interpreter {
 			int depth = MCodeUtilities.numParametersStack.size();
 			String superName = "";
 			for (int k = 0; k < depth - 1; k++) {
-				superName += "super().";
+				superName += "super.";
 			}
 			superName += "super";
 
