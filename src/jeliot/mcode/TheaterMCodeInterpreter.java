@@ -767,7 +767,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected void handleCodeINPUT(long expressionCounter, String type,
+    protected void handleCodeINPUT(long expressionCounter, String className, String methodName, String type,
             Highlight h) {
         Value in = director.animateInputHandling(type, h);
 
@@ -782,7 +782,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param breakLine
      * @param highlight
      */
-    protected void handleCodeOUTPUT(long expressionReference, String value,
+    protected void handleCodeOUTPUT(long expressionReference, String className, String methodName, String value,
             String type, String breakLine, Highlight highlight) {
         Value output = (Value) values.remove(new Long(expressionReference));
 

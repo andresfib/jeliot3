@@ -104,20 +104,20 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeINPUT(long, java.lang.String, jeliot.mcode.Highlight)
      */
-    protected void handleCodeINPUT(long expressionCounter, String type, Highlight h) {
+    protected void handleCodeINPUT(long expressionCounter, String className, String methodName, String type, Highlight h) {
         int n = type.lastIndexOf(".");
         if (n != -1) {
             type = type.substring(n, type.length());
         }
-        callTree.insertMethodCall("Input.read" + type.substring(0,1).toUpperCase() + type.substring(1, type.length()).toLowerCase() + "()");
+        callTree.insertMethodCall(className + "." + methodName + "()");
         jeliot.highlightTabTitle(true, tabNumber);
     }
 
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeOUTPUT(long, java.lang.String, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
-    protected void handleCodeOUTPUT(long expressionReference, String value, String type, String breakLine, Highlight highlight) {
-        callTree.insertMethodCall("Output.println(" + value + ")");
+    protected void handleCodeOUTPUT(long expressionReference, String className, String methodName, String value, String type, String breakLine, Highlight highlight) {
+        callTree.insertMethodCall(className + "." + methodName + "(" + value + ")");
         callTree.returnMethodCall(null);
         jeliot.highlightTabTitle(true, tabNumber);
     }

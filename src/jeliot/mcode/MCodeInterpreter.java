@@ -1312,18 +1312,23 @@ public abstract class MCodeInterpreter {
                         break;
                     }
 
-                //Opening and closing scopes
+                //Outputting an expression
                 case Code.OUTPUT:
                     {
                         long expressionReference = Long.parseLong(tokenizer
                                 .nextToken());
-                        String value = tokenizer.nextToken();
+                        String className = tokenizer.nextToken();
+                        String methodName = tokenizer.nextToken();
+                        String value = "";
+                        if (tokenizer.countTokens() >= 4) {
+                            value = tokenizer.nextToken();
+                        }
                         String type = tokenizer.nextToken();
                         String breakLine = tokenizer.nextToken();
                         Highlight highlight = MCodeUtilities
                                 .makeHighlight(tokenizer.nextToken());
 
-                        handleCodeOUTPUT(expressionReference, value, type,
+                        handleCodeOUTPUT(expressionReference, className, methodName, value, type,
                                 breakLine, highlight);
                         break;
                     }
@@ -1333,11 +1338,13 @@ public abstract class MCodeInterpreter {
                     {
                         long expressionCounter = Long.parseLong(tokenizer
                                 .nextToken());
+                        String className = tokenizer.nextToken();
+                        String methodName = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
                         Highlight h = MCodeUtilities.makeHighlight(tokenizer
                                 .nextToken());
 
-                        handleCodeINPUT(expressionCounter, type, h);
+                        handleCodeINPUT(expressionCounter, className, methodName, type, h);
 
                         break;
                     }
@@ -1710,7 +1717,7 @@ public abstract class MCodeInterpreter {
      * @param h
      */
     protected abstract void handleCodeINPUT(long expressionCounter,
-            String type, Highlight h);
+            String className, String methodName, String type, Highlight h);
 
     /**
      * @param expressionReference
@@ -1720,7 +1727,7 @@ public abstract class MCodeInterpreter {
      * @param highlight
      */
     protected abstract void handleCodeOUTPUT(long expressionReference,
-            String value, String type, String breakLine, Highlight highlight);
+            String className, String methodName, String value, String type, String breakLine, Highlight highlight);
 
     /**
      * @param statementName
