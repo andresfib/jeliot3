@@ -152,6 +152,7 @@ public class Interpreter {
 
                             if (!casted.getType().equals(fromValue.getType())) {
                                 director.animateCastExpression(fromValue, casted);
+                                fromValue.setActor(casted.getActor());
                             }
 
                             director.animateAssignment(toVariable, fromValue, casted, expressionValue, h);
@@ -734,6 +735,7 @@ public class Interpreter {
                             currentMethodInvocation[5] =
                             ECodeUtilities.makeHighlight(
                                                 tokenizer.nextToken());
+                            currentMethodInvocation[7] = parameterExpressionReferences;
 
                             break;
                         }

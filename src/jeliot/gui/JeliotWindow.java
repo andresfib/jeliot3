@@ -62,6 +62,9 @@ public class JeliotWindow {
     /** The compile button.*/
     private JButton compileButton;
 
+    /** Slider tha controls the animation speed. */
+    private JSlider speedSlider;
+
     /** In this text area will come the output of the user-made programs. */
     private JTextArea outputConsole;
 
@@ -408,8 +411,7 @@ public class JeliotWindow {
         rewindButton.addActionListener(rewindAction);
 
         // create animation speed control slider
-        final JSlider speedSlider = new JSlider(JSlider.HORIZONTAL,
-                                                1, 60, 15);
+        speedSlider = new JSlider(JSlider.HORIZONTAL, 1, 60, 15);
         speedSlider.setMajorTickSpacing(15);
         speedSlider.setMinorTickSpacing(5);
         speedSlider.setPaintTicks(true);
@@ -423,6 +425,7 @@ public class JeliotWindow {
                 }
             }
         );
+
         animWidgets.addElement(speedSlider);
 
         JPanel bp = new JPanel();
@@ -481,8 +484,8 @@ public class JeliotWindow {
         p.add(speedSlider);
 
         p.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(5, 2, 2, 10),
-                BorderFactory.createEtchedBorder()));
+                    BorderFactory.createEmptyBorder(5, 2, 2, 10),
+                    BorderFactory.createEtchedBorder()));
 
         return p;
     }
@@ -615,7 +618,12 @@ public class JeliotWindow {
                 } else {
                     showErrorMessage("<H2>No main method found</H2>"+
                     "<P>There was no method main found from any of the classes"+
-                    "and thus the program cannot be started. Add a method main to the main class.</P>");
+                    "and thus the program cannot be run. Add a method main to one of the classes.</P>" +
+                    "<P>For example like this:</P>" +
+                    "<CODE>public class MyClass {<BR>&nbsp;&nbsp;&nbsp;public static void main() {" +
+                    "<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//Your Algorithm" +
+                    "<BR>&nbsp;&nbsp;&nbsp;}<BR>}</CODE>");
+                    editButton.setEnabled(false);
                 }
             }
 
@@ -671,7 +679,7 @@ public class JeliotWindow {
         int methodIndex = commentsRemoved.indexOf(mainMethod);
         //System.out.println(methodIndex);
         if (methodIndex > -1) {
-            String partProgramCode = commentsRemoved.substring(0,methodIndex);
+            String partProgramCode = commentsRemoved.substring(0, methodIndex);
             int classIndex = partProgramCode.lastIndexOf(classString);
             //System.out.println(classIndex);
             if (classIndex > -1) {
@@ -679,7 +687,8 @@ public class JeliotWindow {
                 int classNameIndex = partProgramCode.indexOf(" ");
                 //System.out.println(classNameIndex);
                 if (classNameIndex > -1) {
-                    String mainMethodCall = partProgramCode.substring(0, classNameIndex) + ".main();";
+                    String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main();";
+                    replaceChar(mainMethodCall, '{', "");
                     System.out.println(mainMethodCall);
                     return mainMethodCall;
                 }
@@ -884,17 +893,21 @@ public class JeliotWindow {
      */
     public void animationFinished() {
         if (!errorOccured) {
+
             stepButton.setEnabled(false);
             playButton.setEnabled(false);
             pauseButton.setEnabled(false);
             rewindButton.setEnabled(true);
             editButton.setEnabled(true);
+
         } else {
+
             editButton.setEnabled(false);
             stepButton.setEnabled(false);
             playButton.setEnabled(false);
             pauseButton.setEnabled(false);
             rewindButton.setEnabled(false);
+            speedSlider.setEnabled(false);
 
         }
     }
