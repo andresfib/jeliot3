@@ -2069,8 +2069,13 @@ public class EvaluationVisitor extends VisitorObject {
         //Start bit and expression
         long bitAndcounter=counter++;
         long auxcounter=counter;
+        int expression;
+        if(NodeProperties.getType(node).getName()=="boolean"){
+            expression=Code.AND;
+        }
+        else expression=Code.BITAND;
 
-        Code.write(""+Code.BEGIN+Code.DELIM+Code.BITAND+Code.DELIM+bitAndcounter+
+        Code.write(""+Code.BEGIN+Code.DELIM+expression+Code.DELIM+bitAndcounter+
                     Code.DELIM+locationToString(node));
         // Get left hand side for the bitand expression
         Code.write(""+Code.LEFT+Code.DELIM+counter);
@@ -2098,7 +2103,7 @@ public class EvaluationVisitor extends VisitorObject {
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
 
-        Code.write(""+Code.BITAND+Code.DELIM+bitAndcounter+Code.DELIM+auxcounter+
+        Code.write(""+expression+Code.DELIM+bitAndcounter+Code.DELIM+auxcounter+
             Code.DELIM+auxcounter2+Code.DELIM+result.toString()+
             Code.DELIM+NodeProperties.getType(node).getName()+
             Code.DELIM+locationToString(node));
@@ -2119,24 +2124,6 @@ public class EvaluationVisitor extends VisitorObject {
 
 
         return result;
-        /*
-        Node   left = node.getLeftExpression();
-        LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
-
-        // Perform the operation
-        Object result = InterpreterUtilities.bitAnd(
-                NodeProperties.getType(node),
-                lhs,
-                node.getRightExpression().acceptVisitor(this));
-
-        // Cast the result
-        result = performCast(NodeProperties.getType(left), result);
-
-        // Modify the variable and return
-        NodeProperties.getModifier(left).modify(context, result);
-
-        return result;*/
     }
 
     /**
@@ -2187,8 +2174,13 @@ public class EvaluationVisitor extends VisitorObject {
         //Start bit and expression
         long xOrcounter=counter++;
         long auxcounter=counter;
+	int expression;
+        if(NodeProperties.getType(node).getName()=="boolean"){
+            expression=Code.XOR;
+        }
+        else expression=Code.BITXOR;
 
-        Code.write(""+Code.BEGIN+Code.DELIM+Code.BITXOR+Code.DELIM+xOrcounter+
+        Code.write(""+Code.BEGIN+Code.DELIM+expression+Code.DELIM+xOrcounter+
                     Code.DELIM+locationToString(node));
         // Get left hand side for the bitand expression
         Code.write(""+Code.LEFT+Code.DELIM+counter);
@@ -2216,7 +2208,7 @@ public class EvaluationVisitor extends VisitorObject {
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
 
-        Code.write(""+Code.BITXOR+Code.DELIM+xOrcounter+Code.DELIM+auxcounter+
+        Code.write(""+expression+Code.DELIM+xOrcounter+Code.DELIM+auxcounter+
             Code.DELIM+auxcounter2+Code.DELIM+result.toString()+
             Code.DELIM+NodeProperties.getType(node).getName()+
             Code.DELIM+locationToString(node));
@@ -2289,8 +2281,17 @@ public class EvaluationVisitor extends VisitorObject {
         //Start bitor expression
         long bitOrcounter=counter++;
         long auxcounter=counter;
+        int expression;
 
-        Code.write(""+Code.BEGIN+Code.DELIM+Code.BITOR+Code.DELIM+bitOrcounter+
+        if(NodeProperties.getType(node).getName()=="boolean"){
+            expression=Code.OR;
+
+        }
+        else {
+            expression=Code.BITOR;
+        }
+
+        Code.write(""+Code.BEGIN+Code.DELIM+expression+Code.DELIM+bitOrcounter+
                     Code.DELIM+locationToString(node));
         // Get left hand side for the bitor expression
         Code.write(""+Code.LEFT+Code.DELIM+counter);
@@ -2318,7 +2319,7 @@ public class EvaluationVisitor extends VisitorObject {
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
 
-        Code.write(""+Code.BITOR+Code.DELIM+bitOrcounter+Code.DELIM+auxcounter+
+        Code.write(""+expression+Code.DELIM+bitOrcounter+Code.DELIM+auxcounter+
             Code.DELIM+auxcounter2+Code.DELIM+result.toString()+
             Code.DELIM+NodeProperties.getType(node).getName()+
             Code.DELIM+locationToString(node));
