@@ -266,6 +266,10 @@ public class Jeliot implements Runnable {
         gui.showErrorMessage(e);
     }
 
+    public boolean showMessagesInDialogs() {
+        return gui.showMessagesInDialogs();
+    }
+
     /** Called by gui to get a tree view of the program.
     *
     * @return   The treeview of the program. Used for the debugging.

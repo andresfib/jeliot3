@@ -21,6 +21,7 @@ import koala.dynamicjava.interpreter.*;
  */
 public class JeliotWindow {
 
+    boolean showMessagesInDialogs = false;
     boolean errorOccured = false;
 
     /** The frame in which all the action goes on. */
@@ -190,8 +191,8 @@ public class JeliotWindow {
                             JOptionPane.YES_NO_OPTION);
                 if (n == JOptionPane.YES_OPTION) {
                     editor.saveProgram();
-        		}
-    		}
+                }
+            }
             System.exit(0);
         }
     };
@@ -410,6 +411,20 @@ public class JeliotWindow {
         );
         menu.add(menuItem);
 
+        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem("Use dialogs",
+                                         showMessagesInDialogs);
+        cbmenuItem.setMnemonic(KeyEvent.VK_D);
+        cbmenuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_D, ActionEvent.CTRL_MASK));
+        cbmenuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    showMessagesInDialogs = cbmenuItem.getState();
+                }
+            }
+        );
+        menu.add(cbmenuItem);
+
         menuItem = new JMenuItem("Faster");
         menuItem.setMnemonic(KeyEvent.VK_PLUS);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
@@ -435,7 +450,6 @@ public class JeliotWindow {
             }
         );
         menu.add(menuItem);
-
 
         return menu;
     }
@@ -1141,6 +1155,10 @@ public class JeliotWindow {
             String[] s2 = { "Step","Play","Pause" };
             setEnabledMenuItems(false, s2);
         }
+    }
+
+    public boolean showMessagesInDialogs() {
+        return showMessagesInDialogs;
     }
 
     /**
