@@ -5,6 +5,7 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.text.*;
 
 import jeliot.lang.*;
 import jeliot.gui.*;
@@ -19,6 +20,13 @@ import jeliot.ecode.*;
   */
 
 public class Director {
+
+    /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.theatre.resources.properties",
+                                      Locale.getDefault());
 
     private boolean messagePause = false;
 
@@ -58,6 +66,8 @@ public class Director {
 
     private Interpreter eCodeInterpreter;
 
+    private LinesAndText lat;
+
     private int runUntilLine = -1;
 
     public Director(
@@ -93,7 +103,11 @@ public class Director {
     public void direct() throws Exception {
         cbox = factory.produceConstantBox();
         theatre.addPassive(cbox);
-        theatre.getManager().setConstantBox(cbox);
+        manager.setConstantBox(cbox);
+
+        LinesAndText lat = factory.produceLinesAndText();
+        manager.setLinesAndText(lat);
+        theatre.addPassive(lat);
 
         //Excecution of the program code takes place here.
         eCodeInterpreter.execute();
@@ -1305,7 +1319,8 @@ public class Director {
                 msg += message[i] + "\n";
             }
 
-            JOptionPane.showMessageDialog(null, msg, "Message",
+            JOptionPane.showMessageDialog(null, msg,
+                                          bundle.getString("dialog.message.title"),
                                           JOptionPane.PLAIN_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
@@ -1373,91 +1388,110 @@ public class Director {
         theatre.release();
     }
 
+    /* All the message formats are here */
+    private MessageFormat enterLoop = new MessageFormat(bundle.getString("message.enter_loop"));
+    //message.open_scope = Opening new scope for variables.
+    //message.close_scope = Closing a scope and erasing the scope variables.
+    private MessageFormat continueLoop = new MessageFormat(bundle.getString("message.continue_loop"));
+    private MessageFormat exitLoop = new MessageFormat(bundle.getString("message.exit_loop"));
+    private MessageFormat breakLoop = new MessageFormat(bundle.getString("message.break_loop"));
+    //message.break_switch = Exiting the switch statement because of break.
+    private MessageFormat skipLoop = new MessageFormat(bundle.getString("message.skip_loop"));
+    //message.if_then = Choosing then-branch.
+    //message.if_else = Choosing else-branch.
+    //message.skip_if = Continuing without branching.
+    //message.enter_switch = Entering a switch statement.
+    //message.exit_switch = Exiting a switch statement.
+    //message.select_switch = This case selected.
+    //message.default_switch = Default case selected.
+    private MessageFormat arrayCreation = new MessageFormat(bundle.getString("message.array_creation"));
+    private MessageFormat arrayCreationDimensions = new MessageFormat(bundle.getString("message.array_creation.dimensions"));
+
     public void openScope() {
         //highlight(null);
-        //showMessage("Opening new scope for variables.");
+        //showMessage(bundle.getString("message.open_scope"));
         getCurrentMethodFrame().openScope();
     }
 
     public void closeScope() {
         //highlight(null);
-        //showMessage("Closing a scope and erasing the scope variables.");
+        //showMessage(bundle.getString("message.close_scope"));
         getCurrentMethodFrame().closeScope();
     }
 
     public void enterLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage("Entering the " + statementName + " loop.");
+        showMessage(enterLoop.format(new String[] {statementName}));
     }
 
     public void enterLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage("Entering the " + statementName + " loop.");//, check);
+        showMessage(enterLoop.format(new String[] {statementName}));//, check);
     }
 
     public void continueLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage("Continuing the " + statementName + " loop."); //, check);
+        showMessage(continueLoop.format(new String[] {statementName})); //, check);
     }
 
     public void exitLoop(String statementName, Value check) {
         highlight(null);
-        showMessage("Exiting the " + statementName + " loop.");//, check);
+        showMessage(exitLoop.format(new String[] {statementName}));//, check);
     }
 
     public void breakLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage("Exiting the " + statementName + " loop because of break.");
+        showMessage(breakLoop.format(new String[] {statementName}));
     }
 
     public void breakSwitch(Highlight h) {
         highlight(h);
-        showMessage("Exiting the switch statement because of break.");
+        showMessage(bundle.getString("message.break_switch"));
     }
 
     public void skipLoop(String statementName, Value check) {
         highlight(null);
-        showMessage("Not entering the " + statementName + " loop.");//, check);
+        showMessage(skipLoop.format(new String[] {statementName}));//, check);
     }
 
     public void continueLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage("Continuing the " + statementName + " loop.");
+        showMessage(continueLoop.format(new String[] {statementName}));
     }
 
     public void branchThen(Value check, Highlight h) {
         highlight(h);
-        showMessage("Choosing then-branch.");//, check);
+        showMessage(bundle.getString("message.if_then"));//, check);
     }
 
     public void branchElse(Value check, Highlight h) {
         highlight(h);
-        showMessage("Choosing else-branch.");//, check);
+        showMessage(bundle.getString("message.if_else"));//, check);
     }
 
     public void skipIf(Value check, Highlight h) {
         highlight(h);
-        showMessage("Continuing without branching.");//, check);
+        showMessage(bundle.getString("message.skip_if"));//, check);
     }
 
     public void openSwitch(Highlight h) {
         highlight(h);
-        showMessage("Entering a switch statement.");//, check);
+        showMessage(bundle.getString("message.enter_switch"));//, check);
     }
 
     public void closeSwitch(Highlight h) {
         highlight(h);
-        showMessage("Exiting a switch statement.");//, check);
+        showMessage(bundle.getString("message.exit_switch"));//, check);
     }
 
     public void switchSelected(Highlight h) {
         highlight(h);
-        showMessage("This case selected.");//, check);
+        showMessage(bundle.getString("message.select_switch"));//, check);
     }
 
     public void switchDefault(Highlight h) {
         highlight(h);
-        showMessage("Default case selected.");//, check);
+        showMessage(bundle.getString("message.default_switch"));//, check);
     }
 
     public void arrayCreation(int[] dims, Highlight h) {
@@ -1471,11 +1505,14 @@ public class Director {
                 dimensions += dims[i] + ", ";
             }
         }
+        String[] dimensionNumber = new String[1];
+        dimensionNumber[0] = String.valueOf(dims.length);
 
         highlight(h);
-        showMessage(new String[] {"A " + n +
-        "-dimensional array is created.",
-        "The dimensions of the array are: " + dimensions + "."});
+        String[] message = new String[2];
+        message[0] = arrayCreation.format(dimensionNumber);
+        message[1] = arrayCreationDimensions.format(new String[] {dimensions});
+        showMessage(message);
     }
 
 
@@ -1495,7 +1532,7 @@ public class Director {
         Point vdp = new Point(dest.x + hand.getWidth()/3,
                               dest.y - hand.getHeight()*2/3);
 
-        Animation fist = hand.changeImage(factory.produceImage("Fist-1"));
+        Animation fist = hand.changeImage(factory.produceImage("image.hand2"));
         fist.setDuration(800);
 
         theatre.capture();
@@ -1507,7 +1544,7 @@ public class Director {
                             fist
                             });
 
-        hand.setImage(factory.produceImage("Fist-2"));
+        hand.setImage(factory.produceImage("image.hand3"));
         theatre.removeActor(actor);
         engine.showAnimation(hand.fly(dest,0));
 
@@ -1543,7 +1580,7 @@ public class Director {
 
     public static Animator readInt() {
         return new InputAnimator(
-            "Please input an integer.",
+            bundle.getString("input.int"),
             new InputValidator() {
                 public void validate(String s) {
                     try {
@@ -1558,7 +1595,7 @@ public class Director {
 
     public static Animator readDouble() {
         return new InputAnimator(
-            "Please input a double.",
+            bundle.getString("input.double"),
             new InputValidator() {
                 public void validate(String s) {
                     try {
@@ -1573,7 +1610,7 @@ public class Director {
 
     public static Animator readString() {
         return new InputAnimator(
-            "Please input a string.",
+            bundle.getString("input.string"),
             new InputValidator() {
                 public void validate(String s) {
                     try {
@@ -1587,7 +1624,7 @@ public class Director {
 
     public static Animator readChar() {
         return new InputAnimator(
-            "Please input a character.",
+            bundle.getString("input.char"),
             new InputValidator() {
                 public void validate(String s) {
                     if (s.length() == 1) {

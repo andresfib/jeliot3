@@ -2,8 +2,10 @@ package jeliot.theatre;
 
 import java.awt.*;
 import java.lang.reflect.*;
-import jeliot.lang.*;
+import java.util.*;
+import java.text.*;
 
+import jeliot.lang.*;
 import jeliot.ecode.*;
 
 
@@ -12,6 +14,13 @@ import jeliot.ecode.*;
   * @author Niko Myller
   */
 public class ActorFactory {
+
+    /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.theatre.resources.properties",
+                                      Locale.getDefault());
 
     private Component dummy = new Panel();
     private ImageLoader iLoad;
@@ -22,96 +31,128 @@ public class ActorFactory {
     private Font valueFont;
     private Font variableFont;
     private Font stageFont;
-    private Font messageFont = new Font("SansSerif", Font.BOLD, 14);
-    private Font indexFont = new Font("SansSerif", Font.BOLD, 12);
-
-    private Color messagebc = new Color(0xFFFF66);
-    private Color messagefc = Color.black;
-
-    private Color trueColor =   new Color(0x006600);
-    private Color falseColor =  new Color(0x990000);
+    private Font messageFont = new Font(bundle.getString("font.message.family"),
+                                        Font.BOLD,
+                                        Integer.parseInt(bundle.getString("font.message.size")));
+    private Font indexFont = new Font(bundle.getString("font.index.family"),
+                                      Font.BOLD,
+                                      Integer.parseInt(bundle.getString("font.index.size")));
+    private Font SMIFont = new Font(bundle.getString("font.SMI.family"),
+                                        Font.BOLD,
+                                        Integer.parseInt(bundle.getString("font.SMI.size")));
+    private Font OMIFont = new Font(bundle.getString("font.OMI.family"),
+                                        Font.BOLD,
+                                        Integer.parseInt(bundle.getString("font.OMI.size")));
+    private Font ACFont = new Font(bundle.getString("font.AC.family"),
+                                        Font.BOLD,
+                                        Integer.parseInt(bundle.getString("font.AC.size")));
+    private Font LATFont = new Font(bundle.getString("font.LAT.family"),
+                                        Font.BOLD,
+                                        Integer.parseInt(bundle.getString("font.LAT.size")));
 
     private int valueHeight;
 
     private Insets variableInsets = new Insets(2, 3, 2, 2);
 
-    private int margin = 4;
+    private int margin = Integer.parseInt(bundle.getString("actor_factory.margin"));
+
+    private Color messagebc = new Color(Integer.decode(bundle.getString("color.message.background")).intValue());
+    private Color messagefc = new Color(Integer.decode(bundle.getString("color.message.foreground")).intValue());
+
+    private Color trueColor =   new Color(Integer.decode(bundle.getString("color.true")).intValue());
+    private Color falseColor =  new Color(Integer.decode(bundle.getString("color.false")).intValue());
+
+    private Color opColor                 = new Color(Integer.decode(bundle.getString("color.operator")).intValue());
+    private Color methodStageColor        = new Color(Integer.decode(bundle.getString("color.method_stage.background")).intValue());
+    private Color objectStageColor        = new Color(Integer.decode(bundle.getString("color.object_stage.background")).intValue());
+    private Color SMIColor                = new Color(Integer.decode(bundle.getString("color.SMI.background")).intValue());
+    private Color variableForegroundColor = new Color(Integer.decode(bundle.getString("color.variable.foreground")).intValue());
+    private Color valueForegroundColor    = new Color(Integer.decode(bundle.getString("color.value.foreground")).intValue());
+    private Color OMIColor                = new Color(Integer.decode(bundle.getString("color.OMI.background")).intValue());
+    private Color ACColor                 = new Color(Integer.decode(bundle.getString("color.AC.background")).intValue());
+    private Color bubbleColor             = new Color(Integer.decode(bundle.getString("color.bubble.background")).intValue());
+    private Color LATForegroundColor      = new Color(Integer.decode(bundle.getString("color.LAT.foreground")).intValue());
+    private Color LATBackgroundColor      = new Color(Integer.decode(bundle.getString("color.LAT.background")).intValue());
 
     private Color[] valColor = {
-            new Color(0x99CCCC),    // boolean
-            new Color(0xFFCC99),    // byte
-            new Color(0xFFFF99),    // short
-            new Color(0xFFFFCC),    // int
-            new Color(0xFFFF99),    // long
-            new Color(0x99CC99),    // char
-            new Color(0xFFCCFF),    // float
-            new Color(0xFFCCCC),    // double
-            new Color(0xFFCC99),    // String
-            new Color(0xFFCC99)     // Reference
+            new Color(Integer.decode(bundle.getString("color.value.background.boolean")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.value.background.byte")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.value.background.short")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.value.background.int")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.value.background.long")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.value.background.char")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.value.background.float")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.value.background.double")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.value.background.string")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.value.background.reference")).intValue())
         };
 
     private Color[] varColor = {
-            new Color(0x66CC99),    // boolean
-            new Color(0xCC9999),    // byte
-            new Color(0xCCCC99),    // short
-            new Color(0xFFCC99),    // int
-            new Color(0xCCFF66),    // long
-            new Color(0x66CC66),    // char
-            new Color(0xFF99CC),    // float
-            new Color(0xFF9999),    // double
-            new Color(0xFF6666),    // String
-            new Color(0xFFFFAA)     // Reference
+            new Color(Integer.decode(bundle.getString("color.variable.background.boolean")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.variable.background.byte")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.variable.background.short")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.variable.background.int")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.variable.background.long")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.variable.background.char")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.variable.background.float")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.variable.background.double")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.variable.background.string")).intValue()),
+            new Color(Integer.decode(bundle.getString("color.variable.background.reference")).intValue())
         };
 
     private String[][] binOpImageName = {
-        {"mulop.gif",      "assignop.gif"}, //multiplication
-        {"divop.gif",      "assignop.gif"}, //division
-        {"modop.gif",      "assignop.gif"}, //remaider
-        {"plusop.gif",     "assignop.gif"}, //addition
-        {"minusop.gif",    "assignop.gif"}, //subtraction
-        {"lshiftop.gif",   "assignop.gif"}, //left shift
-        {"rshiftop.gif",   "assignop.gif"}, //right shift
-        {"urshiftop.gif",  "assignop.gif"}, //unsigned right shift
-        {"lessop.gif",     "assignop.gif"}, //lesser than
-        {"greatop.gif",    "assignop.gif"}, //greater than
-        {"lequop.gif",     "assignop.gif"}, //lesser than or equals
-        {"gequop.gif",     "assignop.gif"}, //greater than or equals
-        {null,             null},           //instanceof not yet implemented
-        {"equop.gif",      "assignop.gif"}, //equals
-        {"nequop.gif",     "assignop.gif"}, //not equals
-        {"bitandop.gif",   "assignop.gif"}, //bitwise and
-        {"bitxorop.gif",   "assignop.gif"}, //bitwise xor
-        {"bitorop.gif",    "assignop.gif"}, //bitwise or
-        {"candop.gif",     "assignop.gif"}, //logical and
-        {"corop.gif",      "assignop.gif"}, //logical or
-        {"cxorop.gif",     "assignop.gif"}  //logical xor
+        {bundle.getString("image.binary_operator.multiplication"),         bundle.getString("image.binary_operator.result.multiplication")},         //multiplication
+        {bundle.getString("image.binary_operator.division"),               bundle.getString("image.binary_operator.result.division")},               //division
+        {bundle.getString("image.binary_operator.remaider"),               bundle.getString("image.binary_operator.result.remaider")},               //remaider
+        {bundle.getString("image.binary_operator.addition"),               bundle.getString("image.binary_operator.result.addition")},               //addition
+        {bundle.getString("image.binary_operator.subtraction"),            bundle.getString("image.binary_operator.result.subtraction")},            //subtraction
+        {bundle.getString("image.binary_operator.left_shift"),             bundle.getString("image.binary_operator.result.left_shift")},             //left shift
+        {bundle.getString("image.binary_operator.right_shift"),            bundle.getString("image.binary_operator.result.right_shift")},            //right shift
+        {bundle.getString("image.binary_operator.unsigned_right_shift"),   bundle.getString("image.binary_operator.result.unsigned_right_shift")},   //unsigned right shift
+        {bundle.getString("image.binary_operator.lesser_than"),            bundle.getString("image.binary_operator.result.lesser_than")},            //lesser than
+        {bundle.getString("image.binary_operator.greater_than"),           bundle.getString("image.binary_operator.result.greater_than")},           //greater than
+        {bundle.getString("image.binary_operator.lesser_than_or_equals"), bundle.getString("image.binary_operator.result.lesser_than_or_equals")},  //lesser than or equals
+        {bundle.getString("image.binary_operator.greater_than_or_equals"), bundle.getString("image.binary_operator.result.greater_than_or_equals")}, //greater than or equals
+        {bundle.getString("image.binary_operator.instanceof"),             bundle.getString("image.binary_operator.result.instanceof")},             //instanceof not yet implemented
+        {bundle.getString("image.binary_operator.equals"),                 bundle.getString("image.binary_operator.result.equals")},                 //equals
+        {bundle.getString("image.binary_operator.not_equals"),             bundle.getString("image.binary_operator.result.not_equals")},             //not equals
+        {bundle.getString("image.binary_operator.bitwise_and"),            bundle.getString("image.binary_operator.result.bitwise_and")},            //bitwise and
+        {bundle.getString("image.binary_operator.bitwise_xor"),            bundle.getString("image.binary_operator.result.bitwise_xor")},            //bitwise xor
+        {bundle.getString("image.binary_operator.bitwise_or"),             bundle.getString("image.binary_operator.result.bitwise_or")},             //bitwise or
+        {bundle.getString("image.binary_operator.logical_and"),            bundle.getString("image.binary_operator.result.logical_and")},            //logical and
+        {bundle.getString("image.binary_operator.logical_or"),             bundle.getString("image.binary_operator.result.logical_or")},             //logical or
+        {bundle.getString("image.binary_operator.logical_xor"),            bundle.getString("image.binary_operator.result.logical_xor")}             //logical xor
     };
 
     private String[][] unaOpImageName = {
-        {"plusop.gif",       "assignop.gif"}, //plus
-        {"minusop.gif",      "assignop.gif"}, //minus
-        {"plusplusop.gif",   null},           //postdec
-        {"minusminusop.gif", null},           //predec
-        {"compop.gif",       "assignop.gif"}, //complement
-        {"notop.gif",        "assignop.gif"}, //not
-        {"plusplusop.gif",   null},           //postinc
-        {"minusminusop.gif", null}            //postdec
+        {bundle.getString("image.unary_operator.plus"),       bundle.getString("image.unary_operator.result.plus")},       //plus
+        {bundle.getString("image.unary_operator.minus"),      bundle.getString("image.unary_operator.result.minus")},      //minus
+        {bundle.getString("image.unary_operator.postdec"),    bundle.getString("image.unary_operator.result.postdec")},    //postdec
+        {bundle.getString("image.unary_operator.predec"),     bundle.getString("image.unary_operator.result.predec")},     //predec
+        {bundle.getString("image.unary_operator.complement"), bundle.getString("image.unary_operator.result.complement")}, //complement
+        {bundle.getString("image.unary_operator.not"),        bundle.getString("image.unary_operator.result.not")},        //not
+        {bundle.getString("image.unary_operator.postinc"),    bundle.getString("image.unary_operator.result.postinc")},    //postinc
+        {bundle.getString("image.unary_operator.postdec"),    bundle.getString("image.unary_operator.result.postdec")}     //postdec
     };
 
     private static int[] typeValWidth;
 
     private static int[] typeWidth;
 
-    private Color opColor = new Color(0xE0E0E0);
-
     public ActorFactory(ImageLoader iLoad) {
         this.iLoad = iLoad;
-        this.shadowImage = iLoad.getImage("shadow.gif");
-        this.messageImage = iLoad.getImage("paper.jpg");
+        this.shadowImage = iLoad.getImage(bundle.getString("image.shadow"));
+        this.messageImage = iLoad.getImage(bundle.getString("image.message.background"));
 
-        setValueFont(new Font("SansSerif", Font.BOLD, 14));
-        setVariableFont(new Font("SansSerif", Font.BOLD, 14));
-        setStageFont(new Font("SansSerif", Font.PLAIN, 14));
+        setValueFont(new Font(bundle.getString("font.value.family"),
+                              Font.BOLD,
+                              Integer.parseInt(bundle.getString("font.value.size"))));
+        setVariableFont(new Font(bundle.getString("font.variable.family"),
+                                 Font.BOLD,
+                                 Integer.parseInt(bundle.getString("font.variable.size"))));
+        setStageFont(new Font(bundle.getString("font.stage.family"),
+                              Font.PLAIN,
+                              Integer.parseInt(bundle.getString("font.stage.size"))));
     }
 
     public void setValueFont(Font font) {
@@ -170,17 +211,23 @@ public class ActorFactory {
 
     public static int getMaxTypeWidth() {
         int max = 0;
-        int n = typeWidth.length;
-        for (int i = 0; i < n; i++) {
-            if (typeWidth[i] > max) {
-                max = typeWidth[i];
+        if (typeWidth != null) {
+            int n = typeWidth.length;
+            for (int i = 0; i < n; i++) {
+                if (typeWidth[i] > max) {
+                    max = typeWidth[i];
+                }
             }
+            return max;
         }
-        return max;
+        return 0;
     }
 
     public static int getMaxMethodStageWidth() {
-        return getMaxTypeWidth() + typeValWidth[8] + 20;
+        if (typeValWidth != null) {
+            return getMaxTypeWidth() + typeValWidth[8] + 20;
+        }
+        return 0;
     }
 
     public static int getMaxObjectStageWidth() {
@@ -194,7 +241,7 @@ public class ActorFactory {
                             valueHeight + 8 +
                             variableInsets.top +
                             variableInsets.bottom);
-        stage.setBackground(new Color(0xFFCCCC));
+        stage.setBackground(methodStageColor);
         stage.setShadow(6);
         stage.setShadowImage(shadowImage);
         return stage;
@@ -213,7 +260,7 @@ public class ActorFactory {
             ValueActor vact = null;
 
             ImageValueActor valueActor = new ImageValueActor(
-                                         iLoad.getImage("mystery.gif"));
+                                         iLoad.getImage(bundle.getString("image.mystery")));
             valueActor.calculateSize();
             vact = valueActor;
 
@@ -224,7 +271,7 @@ public class ActorFactory {
             }
             actor.setName(resolvedType + " " + v.getName());
             actor.setFont(variableFont);
-            actor.setForeground(Color.black);
+            actor.setForeground(variableForegroundColor);
             actor.setInsets(variableInsets);
             actor.setValueDimension(typeValWidth[typeInfo], valueHeight);
             actor.setBackground(varColor[typeInfo]);
@@ -278,7 +325,7 @@ public class ActorFactory {
                 refAct.setBackground(varColor[typeInfo]);
             }
 
-            refAct.setForeground(Color.black);
+            refAct.setForeground(variableForegroundColor);
             refAct.setInsets(variableInsets);
             refAct.setFont(variableFont);
             refAct.setValueDimension(6 + 6, valueHeight);
@@ -316,7 +363,7 @@ public class ActorFactory {
             }
             actor.setName(resolvedType + " " + v.getName());
             actor.setFont(variableFont);
-            actor.setForeground(Color.black);
+            actor.setForeground(variableForegroundColor);
             actor.setInsets(variableInsets);
             actor.setValueDimension(typeValWidth[typeInfo], valueHeight);
             actor.setBackground(varColor[typeInfo]);
@@ -370,7 +417,7 @@ public class ActorFactory {
                 refAct.setBackground(varColor[typeInfo]);
             }
 
-            refAct.setForeground(Color.black);
+            refAct.setForeground(variableForegroundColor);
             refAct.setInsets(variableInsets);
             refAct.setFont(variableFont);
             refAct.setValueDimension(6 + 6, valueHeight);
@@ -397,6 +444,8 @@ public class ActorFactory {
         if (ECodeUtilities.isPrimitive(type)) {
 
             ValueActor actor = new ValueActor();
+
+            actor.setForeground(valueForegroundColor);
 
             if (typeInfo == ECodeUtilities.BOOLEAN) {
                 boolean b = Boolean.getBoolean(val.getValue());
@@ -441,7 +490,7 @@ public class ActorFactory {
                 actor.setShadowImage(shadowImage);
                 actor.calculateSize();
             }
-            actor.setForeground(Color.black);
+            actor.setForeground(valueForegroundColor);
 
             return actor;
         }
@@ -467,7 +516,7 @@ public class ActorFactory {
         actor.setBackground(valColor[typeInfo]);
         actor.setShadowImage(shadowImage);
         actor.calculateSize();
-        actor.setForeground(Color.black);
+        actor.setForeground(valueForegroundColor);
 
         return actor;
     }
@@ -481,7 +530,7 @@ public class ActorFactory {
         actor.setLocation(new Point(p.x, p.y));
         actor.setParent(cloneActor.getParent());
         actor.calculateSize();
-        actor.setForeground(Color.black);
+        actor.setForeground(valueForegroundColor);
 
         return actor;
     }
@@ -511,7 +560,7 @@ public class ActorFactory {
     }
 
     public OperatorActor produceEllipsis() {
-        Image image = iLoad.getImage("dots.gif");
+        Image image = iLoad.getImage(bundle.getString("image.dots"));
         OperatorActor actor = produceOperatorActor(image);
         return actor;
     }
@@ -541,20 +590,11 @@ public class ActorFactory {
     }
 
     //Added for Jeliot 3
+    /** Static Method Invocation Actor */
     public SMIActor produceSMIActor(String name, int paramCount) {
         SMIActor actor = new SMIActor(name, paramCount);
-        actor.setFont(messageFont);
-        actor.setBackground(new Color(0xFFEAEA));
-        actor.setInsets(new Insets(6, 6, 6, 6));
-        actor.calculateSize();
-        actor.setShadowImage(shadowImage);
-        return actor;
-    }
-
-    public OMIActor produceOMIActor(String name, int paramCount) {
-        OMIActor actor = new OMIActor(name, paramCount);
-        actor.setFont(messageFont);
-        actor.setBackground(new Color(0xFFEAEA));
+        actor.setFont(SMIFont);
+        actor.setBackground(SMIColor);
         actor.setInsets(new Insets(6, 6, 6, 6));
         actor.calculateSize();
         actor.setShadowImage(shadowImage);
@@ -562,10 +602,23 @@ public class ActorFactory {
     }
 
     //Added for Jeliot 3
+    /** Object Method Invocation Actor */
+    public OMIActor produceOMIActor(String name, int paramCount) {
+        OMIActor actor = new OMIActor(name, paramCount);
+        actor.setFont(OMIFont);
+        actor.setBackground(OMIColor);
+        actor.setInsets(new Insets(6, 6, 6, 6));
+        actor.calculateSize();
+        actor.setShadowImage(shadowImage);
+        return actor;
+    }
+
+    //Added for Jeliot 3
+    /** Array Creator Actor */
     public ACActor produceACActor(String name, int paramCount) {
         ACActor actor = new ACActor(name, paramCount);
-        actor.setFont(messageFont);
-        actor.setBackground(new Color(0xFFEAEA));
+        actor.setFont(ACFont);
+        actor.setBackground(ACColor);
         actor.setInsets(new Insets(6, 6, 6, 6));
         actor.calculateSize();
         actor.setShadowImage(shadowImage);
@@ -596,7 +649,7 @@ public class ActorFactory {
 
     public BubbleActor produceBubble(Actor actor) {
         BubbleActor ba = new BubbleActor(actor);
-        ba.setBackground(new Color(0xFFFFCC));
+        ba.setBackground(bubbleColor);
         ba.setInsets(new Insets(8, 8, 8, 8));
         return ba;
     }
@@ -619,27 +672,19 @@ public class ActorFactory {
 
     public ConstantBox produceConstantBox() {
         ConstantBox cbox = new ConstantBox(
-                iLoad.getImage("constants.gif"));
+                iLoad.getImage(bundle.getString("image.constant_box")));
         cbox.calculateSize();
         return cbox;
     }
 
-/*    //Added for Jeliot 3
-    public ConstantBox produceInputBox() {
-        ConstantBox cbox = new ConstantBox(
-                iLoad.getImage("input.gif"));
-        cbox.calculateSize();
-        return cbox;
-    }
-*/
     public AnimatingActor produceHand() {
-        AnimatingActor hand = new AnimatingActor(produceImage("Hand"));
+        AnimatingActor hand = new AnimatingActor(produceImage("image.hand1"));
         hand.calculateSize();
         return hand;
     }
 
     public Image produceImage(String iname) {
-        return iLoad.getLogicalImage(iname);
+        return iLoad.getImage(bundle.getString(iname));
     }
 
     public ArrayActor produceArrayActor(ArrayInstance array) {
@@ -705,8 +750,10 @@ public class ActorFactory {
         return aactor;
     }
 
-    ObjectStage produceObjectStage(ObjectFrame m) {
-        ObjectStage stage = new ObjectStage("Object of the class " + m.getObjectName(), m.getVarCount());
+    private MessageFormat objectStageTitle = new MessageFormat(bundle.getString("title.object_stage"));
+
+    public ObjectStage produceObjectStage(ObjectFrame m) {
+        ObjectStage stage = new ObjectStage(objectStageTitle.format(new String[] { m.getObjectName() }), m.getVarCount());
         stage.setFont(stageFont);
 
         //The width of the object stage is not correct but we have not found any better.
@@ -714,9 +761,17 @@ public class ActorFactory {
                             valueHeight + 8 +
                             variableInsets.top +
                             variableInsets.bottom);
-        stage.setBackground(new Color(0xFFFFAA));
+        stage.setBackground(objectStageColor);
         stage.setShadow(6);
         stage.setShadowImage(shadowImage);
         return stage;
+    }
+
+    public LinesAndText produceLinesAndText() {
+        LinesAndText lat = new LinesAndText();
+        lat.setBackground(LATBackgroundColor);
+        lat.setForeground(LATForegroundColor);
+        lat.setFont(LATFont);
+        return lat;
     }
 }

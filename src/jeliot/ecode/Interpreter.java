@@ -73,11 +73,16 @@ public class Interpreter {
     private Vector superMethodsReading = null;
     private long superMethodCallNumber = 0;
 
-   /**
+    /**
      * The resource bundle
      */
-    private ResourceBundle bundle;
+    static private ResourceBundle bundle =
+        ResourceBundle.getBundle("jeliot.ecode.resources.messages",
+                                 Locale.getDefault());;
 
+    static private ResourceBundle propertiesBundle =
+        ResourceBundle.getBundle("jeliot.ecode.resources.properties",
+                                 Locale.getDefault());;
 
     protected Interpreter() { }
 
@@ -89,8 +94,8 @@ public class Interpreter {
         this.director = d;
         this.programCode = programCode;
         this.input = pr;
-        this.bundle = ResourceBundle.getBundle("jeliot.ecode.resources.messages", Locale.getDefault());
     }
+
     public void initialize() {
         running = true;
         start = true;
@@ -2011,17 +2016,17 @@ public class Interpreter {
                             if (round == 0) {
 
                                 if (value.equals(Boolean.TRUE.toString())) {
-                                    director.enterLoop("while", result, h);
+                                    director.enterLoop(propertiesBundle.getString("statement_name.while"), result, h);
                                 } else {
-                                    director.skipLoop("while", result);
+                                    director.skipLoop(propertiesBundle.getString("statement_name.while"), result);
                                 }
 
                             } else {
 
                                 if (value.equals(Boolean.TRUE.toString())) {
-                                    director.continueLoop("while", result, h);
+                                    director.continueLoop(propertiesBundle.getString("statement_name.while"), result, h);
                                 } else {
-                                    director.exitLoop("while", result);
+                                    director.exitLoop(propertiesBundle.getString("statement_name.while"), result);
                                 }
 
                             }
@@ -2044,15 +2049,15 @@ public class Interpreter {
 
                             if (round == 0) {
                                 if (value.equals(Boolean.TRUE.toString())) {
-                                    director.enterLoop("for", result, h);
+                                    director.enterLoop(propertiesBundle.getString("statement_name.for"), result, h);
                                 } else {
-                                    director.skipLoop("for", result);
+                                    director.skipLoop(propertiesBundle.getString("statement_name.for"), result);
                                 }
                             } else {
                                 if (value.equals(Boolean.TRUE.toString())) {
-                                    director.continueLoop("for", result, h);
+                                    director.continueLoop(propertiesBundle.getString("statement_name.for"), result, h);
                                 } else {
-                                    director.exitLoop("for", result);
+                                    director.exitLoop(propertiesBundle.getString("statement_name.for"), result);
                                 }
                             }
                             director.closeScratch();
@@ -2074,12 +2079,12 @@ public class Interpreter {
                                       new Long(expressionReference));
 
                             if (round == 0) {
-                                director.enterLoop("do - while", h);
+                                director.enterLoop(propertiesBundle.getString("statement_name.do_while"), h);
                             } else {
                                 if (value.equals(Boolean.TRUE.toString())) {
-                                    director.continueLoop("do - while", result, h);
+                                    director.continueLoop(propertiesBundle.getString("statement_name.do_while"), result, h);
                                 } else {
-                                    director.exitLoop("do - while", result);
+                                    director.exitLoop(propertiesBundle.getString("statement_name.do_while"), result);
                                 }
                             }
                             director.closeScratch();
@@ -2151,13 +2156,13 @@ public class Interpreter {
                             String stmt = "";
 
                             if (statementName == Code.WHI) {
-                                stmt = "while";
+                                stmt = propertiesBundle.getString("statement_name.while");
                                 director.breakLoop(stmt, h);
                             } else if (statementName == Code.FOR) {
-                                stmt = "for";
+                                stmt = propertiesBundle.getString("statement_name.for");
                                 director.breakLoop(stmt, h);
                             } else if (statementName == Code.DO) {
-                                stmt = "do - while";
+                                stmt = propertiesBundle.getString("statement_name.do_while");
                                 director.breakLoop(stmt, h);
                             } else if (statementName == Code.SWITCH) {
                                 director.breakSwitch(h);
@@ -2177,11 +2182,11 @@ public class Interpreter {
                             String stmt = "";
 
                             if (statementName == Code.WHI) {
-                                stmt = "while";
+                                stmt = propertiesBundle.getString("statement_name.while");
                             } else if (statementName == Code.FOR) {
-                                stmt = "for";
+                                stmt = propertiesBundle.getString("statement_name.for");
                             } else if (statementName == Code.DO) {
-                                stmt = "do - while";
+                                stmt = propertiesBundle.getString("statement_name.do_while");
                             }
 
                             director.continueLoop(stmt, h);

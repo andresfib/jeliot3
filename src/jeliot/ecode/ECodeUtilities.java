@@ -1,11 +1,12 @@
 package jeliot.ecode;
 
-import jeliot.theatre.*;
-
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.*;
+
 import koala.dynamicjava.interpreter.EvaluationVisitor;
+
+import jeliot.theatre.*;
 
 public class ECodeUtilities {
 
@@ -535,16 +536,16 @@ public class ECodeUtilities {
         }
     }
 
-    public static void setWriter(PrintWriter w){
+    public static void setWriter(PrintWriter w) {
         writer=w;
     }
 
     //For input handling!!!!
-    public static void setReader(BufferedReader r){
+    public static void setReader(BufferedReader r) {
         reader=r;
     }
 
-    public static void write(String str){
+    public static void write(String str) {
         if ( !EvaluationVisitor.isSetPreparing() ) {
 
             str = ECodeUtilities.replace(str, "\n", "\\n");
@@ -557,75 +558,72 @@ public class ECodeUtilities {
         }
     }
 
-    public static Object readInt(){
-    int result;
-    try {
+    public static Object readInt() {
+        int result;
+        try {
 
-        result=Integer.parseInt(reader.readLine());
-        return new Integer(result);
-    } catch (Exception e) {
-        return null;
-        //ThrowException!!!!!!!!!!!!!!!
+            result=Integer.parseInt(reader.readLine());
+            return new Integer(result);
+        } catch (Exception e) {
+            return null;
+            //ThrowException!!!!!!!!!!!!!!!
+        }
     }
 
+    public static Object readDouble() {
+        double result;
+        try {
+            result=Double.parseDouble(reader.readLine());
+            return new Double(result);
+        } catch (Exception e) {
+            return null;
+            //ThrowException!!!!!!!!!!!!!!!
+        }
     }
 
-    public static Object readDouble(){
-    double result;
-    try {
-
-        result=Double.parseDouble(reader.readLine());
-        return new Double(result);
-    } catch (Exception e) {
-        return null;
-        //ThrowException!!!!!!!!!!!!!!!
-    }
-
-    }
-
-    public static Object readChar(){
-	char result;
-	try {
-	    //Get the first character of the readed string
-	    result=(reader.readLine()).charAt(0);
-	    return new Character (result);
-	} catch (Exception e) {
-	    return null;
-	    //ThrowException!!!!!!!!!!!!!!!
-	}
+    public static Object readChar() {
+        char result;
+        try {
+            //Get the first character of the readed string
+            result=(reader.readLine()).charAt(0);
+            return new Character (result);
+        } catch (Exception e) {
+            return null;
+            //ThrowException!!!!!!!!!!!!!!!
+        }
 
     }
 
-    public static Object readString(){
-	String result;
-	try {
-	    
-        result=(reader.readLine());
-        return new String(result);
-	} catch (Exception e) {
-	
-    return null;
-	    //ThrowException!!!!!!!!!!!!!!!
-	}
-	
+    public static Object readString() {
+        String result;
+        try {
+
+            result=(reader.readLine());
+            return new String(result);
+        } catch (Exception e) {
+            return null;
+            //ThrowException!!!!!!!!!!!!!!!
+        }
+
     }
 
-    public static String argToString(List argnames){
-    //Change to extract elements from list and add delims
+    public static String argToString(List argnames) {
+        //Change to extract elements from list and add delims
 
         if (!argnames.isEmpty()) {
             String result="";
             Iterator it= argnames.listIterator();
-            while(it.hasNext()){
-            result+=(String)it.next()+Code.LOC_DELIM;
-        }
+            while (it.hasNext()) {
+                result+=(String)it.next()+Code.LOC_DELIM;
+            }
             return result.substring(0,result.length()-1);
         } else {
             return "";
         }
     }
+
     public static String arrayToString(Object[] array){
-    //Displays the array as an string
+        //Displays the array as an string
         String result="";
         for (int i=0;i<array.length;i++) {
             result+=array[i];
@@ -634,5 +632,4 @@ public class ECodeUtilities {
         }
         return result;
     }
-
 }

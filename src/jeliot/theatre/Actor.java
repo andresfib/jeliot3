@@ -9,12 +9,20 @@ import java.util.*;
   */
 public class Actor implements Cloneable {
 
+    /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.theatre.resources.properties",
+                                      Locale.getDefault());
 
     static Component dummy = new Panel();
     static Image shadowImage;
 
     private static Font defaultFont =
-            new Font("SansSerif", Font.PLAIN, 12);
+            new Font(bundle.getString("font.actor.default.family"),
+                     Font.PLAIN,
+                     Integer.parseInt(bundle.getString("font.actor.default.size")));
 
     public static final int HIGHLIGHT   =  -1;
     public static final int NORMAL      =   0;
@@ -33,7 +41,7 @@ public class Actor implements Cloneable {
     protected int height;
 
     /** Width of actor's border */
-    protected int borderWidth = 2;
+    protected int borderWidth = Integer.parseInt(bundle.getString("actor.border_width"));
 
     private int shadoww = 0;
 
@@ -53,7 +61,7 @@ public class Actor implements Cloneable {
     protected Color bgcolor;
 
     /** Actor's foreground color. Used to draw text, for example. */
-    protected Color fgcolor = Color.black;
+    protected Color fgcolor = new Color(Integer.decode(bundle.getString("color.actor.default.foreground")).intValue());
 
     /** Darker shade of background color. */
     protected Color darkColor;
@@ -62,10 +70,10 @@ public class Actor implements Cloneable {
     protected Color lightColor;
 
     /** Color used for highlighting. */
-    protected Color highColor = Color.white;
+    protected Color highColor = new Color(Integer.decode(bundle.getString("color.actor.default.highlight")).intValue());
 
     /** Color used for painting borders. */
-    protected Color borderColor = Color.black;
+    protected Color borderColor = new Color(Integer.decode(bundle.getString("color.actor.default.border")).intValue());
 
     /** Parent actor. */
     private ActorContainer parent;

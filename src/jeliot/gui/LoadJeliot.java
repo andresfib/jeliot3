@@ -16,6 +16,13 @@ import jeliot.Jeliot;
 public class LoadJeliot {
 
     /**
+    * The resource bundle
+    */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.gui.resources.properties",
+                                      Locale.getDefault());
+
+    /**
      * ImageLoader -object that loads all the images.
      */
     ImageLoader iLoad = new ImageLoader();
@@ -31,7 +38,7 @@ public class LoadJeliot {
      */
     public void start() {
         // Get the splash screen image
-        final Image image = iLoad.getLogicalImage("Splash screen");
+        final Image image = iLoad.getImage(bundle.getString("image.splash_screen"));
 
         // create the splash screen window
         Component splash = new Component() {

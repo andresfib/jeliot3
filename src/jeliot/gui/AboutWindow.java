@@ -19,6 +19,14 @@ import javax.swing.event.*;
  */
 public class AboutWindow extends JFrame {
 
+
+    /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.gui.resources.properties",
+                                      Locale.getDefault());
+
     /**
      * The tabbed pane where about info and GPL  will be shown.
      */
@@ -32,7 +40,8 @@ public class AboutWindow extends JFrame {
      * Sets the size of the JFrame as 400 x 600
      */
     public AboutWindow(Image icon, String udir) {
-        super("About");
+        super();
+        setTitle(bundle.getString("window.about.title"));
         setIconImage(icon);
 
         aboutPane.setEditable(false);
@@ -41,7 +50,7 @@ public class AboutWindow extends JFrame {
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         try {
-            File f = new File(udir, "docs/about.html");
+            File f = new File(udir, bundle.getString("window.about.content"));
             showURL(f.toURI().toURL());
         } catch (Exception e) { e.printStackTrace(); }
 
@@ -59,7 +68,7 @@ public class AboutWindow extends JFrame {
             aboutPane.setPage(url);
             //show();
         } catch (IOException e) {
-            System.err.println("Attempted to read a bad URL: " + url);
+            System.err.println(bundle.getString("bad.URL") + " " + url);
         }
     }
 }

@@ -57,7 +57,7 @@ public class Launcher extends Thread {
 
             getInput = new PipedReader(putInput);
         } catch (IOException e) {
-            System.err.println("When creating Pipe reader:" + e);
+            //System.err.println("When creating Pipe reader:" + e);
         }
 
         reader = new BufferedReader(pipedReader);

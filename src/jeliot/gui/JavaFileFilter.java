@@ -3,24 +3,32 @@ package jeliot.gui;
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
 public class JavaFileFilter extends FileFilter {
 
+    /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.gui.resources.properties",
+                                      Locale.getDefault());
+
     public boolean accept(File f) {
-	if(f != null) {
-	    if(f.isDirectory()) {
-		return true;
-	    }
-	    String extension = getExtension(f);
-	    if(extension != null) {
-                if (extension.toLowerCase().equals("java")) {
+    if(f != null) {
+        if(f.isDirectory()) {
+        return true;
+        }
+        String extension = getExtension(f);
+        if(extension != null) {
+                if (extension.toLowerCase().equals(bundle.getString("extension.java"))) {
                     return true;
                 }
-	    };
-	}
-	return false;
+        };
+    }
+    return false;
     }
 
     /**
@@ -28,14 +36,14 @@ public class JavaFileFilter extends FileFilter {
      *
      */
      public String getExtension(File f) {
-	if(f != null) {
-	    String filename = f.getName();
-	    int i = filename.lastIndexOf('.');
-	    if(i>0 && i<filename.length()-1) {
-		return filename.substring(i+1).toLowerCase();
-	    };
-	}
-	return null;
+    if(f != null) {
+        String filename = f.getName();
+        int i = filename.lastIndexOf('.');
+        if(i>0 && i<filename.length()-1) {
+        return filename.substring(i+1).toLowerCase();
+        };
+    }
+    return null;
     }
 
     /**
@@ -43,6 +51,6 @@ public class JavaFileFilter extends FileFilter {
      * example: "JPEG and GIF Image Files (*.jpg, *.gif)"
      */
     public String getDescription() {
-	return "Java files";
+    return bundle.getString("extension.java.description");
     }
 }

@@ -137,6 +137,8 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
+
+
     /**
       * Paints the actors contained in given vector.
       */
@@ -273,7 +275,7 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
     public void flush() {
         repaint();
         try {
-            Thread.sleep(100);
+            Thread.sleep(50);
         }
         catch (InterruptedException e) { }
     }

@@ -1,6 +1,8 @@
 package jeliot.theatre;
 
 import java.awt.*;
+import java.util.*;
+
 import jeliot.lang.*;
 
 /**
@@ -11,6 +13,13 @@ import jeliot.lang.*;
   */
 public class ValueActor extends Actor {
 
+   /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.theatre.resources.properties",
+                                      Locale.getDefault());
+
     String valstr;
 
     private int namex;
@@ -20,7 +29,9 @@ public class ValueActor extends Actor {
     private int margin = 2;
 
     public ValueActor() {
-        setFont(new Font("SansSerif", Font.BOLD, 16));
+        setFont(new Font(bundle.getString("font.value_actor.family"),
+        Font.BOLD,
+        Integer.parseInt(bundle.getString("font.value_actor.size"))));
     }
 
     public void setLabel(String valstr) {

@@ -13,6 +13,16 @@ import java.lang.reflect.*;
   */
 public class ArrayActor extends InstanceActor {
 
+    /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.theatre.resources.properties",
+                                      Locale.getDefault());
+
+    private String emptyArray1 = bundle.getString("string.empty_array1");
+    private String emptyArray2 = bundle.getString("string.empty_array2");
+
     private Object variableActors;
 
     private Color valueColor;
@@ -63,8 +73,6 @@ public class ArrayActor extends InstanceActor {
                                  VariableInArrayActor(this,
                                  indexString + "[" + Integer.toString(i) + "]");
 
-
-
                 ValueActor va = (ValueActor) Array.get(tempArray, i);
                 viaa.setValue(va);
                 viaa.setParent(this);
@@ -110,13 +118,13 @@ public class ArrayActor extends InstanceActor {
         FontMetrics fm = getFontMetrics();
         this.valuew = valuew;
         this.valueh = valueh;
-        this.indexw = fm.stringWidth("[00]");
+        this.indexw = fm.stringWidth(bundle.getString("string.array_index"));
 
         if (dimensions.length == 1) {
 
             if (dimensions[0] == 0) {
-                int w = indexw + Math.max(fm.stringWidth("EMPTY"),
-                                     fm.stringWidth("ARRAY"));
+                int w = indexw + Math.max(fm.stringWidth(emptyArray1),
+                                     fm.stringWidth(emptyArray2));
                 int h = 10 + 2 * (fm.getHeight());
                 setSize(w, h);
 
@@ -155,8 +163,8 @@ public class ArrayActor extends InstanceActor {
         int bw = 2;
         FontMetrics fm = getFontMetrics();
         int fonth = fm.getHeight();
-        int word1w = fm.stringWidth("EMPTY");
-        int word2w = fm.stringWidth("ARRAY");
+        int word1w = fm.stringWidth(emptyArray1);
+        int word2w = fm.stringWidth(emptyArray2);
 
         if (dimensions.length == 1) {
 
@@ -182,8 +190,8 @@ public class ArrayActor extends InstanceActor {
 
                 g.setColor(fgcolor);
                 g.setFont(font);
-                g.drawString("EMPTY", word1x, word1y);
-                g.drawString("ARRAY", word2x, word2y);
+                g.drawString(emptyArray1, word1x, word1y);
+                g.drawString(emptyArray2, word2x, word2y);
 
             } else {
 

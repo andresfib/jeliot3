@@ -1,6 +1,7 @@
 package jeliot.theatre;
 
 import java.awt.*;
+import java.util.*;
 
 /**
   * @author Pekka Uronen
@@ -8,24 +9,31 @@ import java.awt.*;
   */
 public class PanelController {
 
-    PanelActor panel;
-    Theatre theatre;
-    AnimationEngine engine;
-    Image bgImage;
-    Image panelImage;
+   /**
+     * The resource bundle
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+                                      "jeliot.theatre.resources.properties",
+                                      Locale.getDefault());
 
-    int openDur = 1100;
-    int closeDur = 900;
+    private PanelActor panel;
+    private Theatre theatre;
+    private AnimationEngine engine;
+    private Image bgImage;
+    private Image panelImage;
+
+    private int openDur = Integer.parseInt(bundle.getString("curtain.open_duration"));
+    private int closeDur = Integer.parseInt(bundle.getString("curtain.close_duration"));
 
     public PanelController(Theatre theatre, ImageLoader iLoad) {
         this.theatre = theatre;
         this.engine = new AnimationEngine(theatre);
-        this.bgImage = iLoad.getLogicalImage("Background");
-        this.panelImage = iLoad.getLogicalImage("Panel");
+        this.bgImage = iLoad.getImage(bundle.getString("image.background"));
+        this.panelImage = iLoad.getImage(bundle.getString("image.panel"));
         this.panel = new PanelActor(
                 panelImage,
-                iLoad.getLogicalImage("Panel-left"),
-                iLoad.getLogicalImage("Panel-right"), 62);
+                iLoad.getImage(bundle.getString("image.panel.left")),
+                iLoad.getImage(bundle.getString("image.panel.right")), 62);
     }
 
     public Thread slide(final boolean open, final Runnable next) {
