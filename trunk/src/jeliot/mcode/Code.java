@@ -220,7 +220,14 @@ public class Code {
 	public static final int AAC = 57;
 	/** Array length */
 	public static final int AL = 71;
-
+	
+	/** Array Initialization Begin */
+	public static final int AIBEGIN = 75;
+	/** Array Initializer Element */
+	public static final int AIE = 76;
+	/** Array Initializer */
+	public static final int AI = 77;
+	
 	// Class information
 	/**	Starting the information for a class. */
 	public static final int CLASS = 58;
@@ -238,7 +245,7 @@ public class Code {
 	/** Static field access */
 	public static final int SFA = 74;
 	
-	//Last int used = 74
+	//Last int used = 77
 }
 
 //package jeliot.ecode;
