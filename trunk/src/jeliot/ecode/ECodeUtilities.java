@@ -9,62 +9,194 @@ import java.util.StringTokenizer;
 import jeliot.theatre.Highlight;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 
+/**
+ * 
+ * @author Niko Myller
+ */
 public class ECodeUtilities {
 
-    //Unary expressions in Jeliot 3 visualization engine
-    public static final int COMP = 4;           // Complement
-    public static final int MINUS = 1;          // Minus
-    public static final int MINUSMINUS = 3;     // PreDecrement
-    public static final int NOT = 5;            // Logical Not
-    public static final int PLUS = 0;           // Plus
-    public static final int PLUSPLUS = 2;       // PreIncrement
-    public static final int POSTMINUSMINUS = 7; // PostDecrement
-    public static final int POSTPLUSPLUS = 6;   // PostIncrement
+	//Unary expressions in Jeliot 3 visualization engine
+    /**
+	 * Complement
+	 */
+    public static final int COMP = 4;
+    /**
+	 * Minus
+	 */
+	public static final int MINUS = 1;
+    /**
+	 * PreDecrement
+	 */
+	public static final int MINUSMINUS = 3;
+    /**
+	 * Logical Not
+	 */
+	public static final int NOT = 5;
+    /**
+	 * Plus
+	 */
+	public static final int PLUS = 0;
+    /**
+	 * PreIncrement
+	 */
+	public static final int PLUSPLUS = 2;
+    /**
+	 * PostDecrement
+	 */
+	public static final int POSTMINUSMINUS = 7;
+    /**
+	 * PostIncrement
+	 */
+	public static final int POSTPLUSPLUS = 6;
 
-    //Binary expressions in Jeliot 3 visualization engine
-    public static final int AND = 15;           // Bitwise And
-    public static final int ANDAND = 18;        // Logical And
-    public static final int DIV = 1;            // Division
-    public static final int EQEQ = 13;          // Equality
-    public static final int GT = 9;             // Greater Than
-    public static final int GTEQ = 11;          // Greater Than Or Equal
-    public static final int INSTANCEOF = 12;    // Instance Of
-    public static final int LSHIFT = 5;         // Bitwise Left Shift
-    public static final int LT = 8;             // Lesser Than
-    public static final int LTEQ = 10;          // Lesser Than or Equal
-    public static final int SUBSTRACT = 4;      // Substraction
-    public static final int MOD = 2;            // Remainder
-    public static final int MULT = 0;           // Multiplication
-    public static final int NOTEQ = 14;         // Not Equality
-    public static final int OR = 17;            // Bitwise Or
-    public static final int OROR = 19;          // Logical Or
-    public static final int ADD = 3;            // Addition
-    public static final int RSHIFT = 6;         // Bitwise Right Shift
-    public static final int URSHIFT = 7;        // Bitwise Unsigned Right Shift
-    public static final int XOR = 16;           // Bitwise Xor
-    public static final int LXOR = 20;          // Logical Xor
+	//Binary expressions in Jeliot 3 visualization engine
+    /**
+	 * Bitwise And
+	 */
+    public static final int AND = 15;
+    /**
+	 * Logical And
+	 */
+	public static final int ANDAND = 18;
+    /**
+	 * Division
+	 */
+	public static final int DIV = 1;
+    /**
+	 * Equality
+	 */
+	public static final int EQEQ = 13;
+    /**
+	 * Greater Than
+	 */
+	public static final int GT = 9;
+    /**
+	 * Greater Than Or Equal
+	 */
+	public static final int GTEQ = 11; 
+    /**
+	 * Instance Of
+	 */
+	public static final int INSTANCEOF = 12;
+    /**
+	 * Bitwise Left Shift
+	 */
+	public static final int LSHIFT = 5;
+    /**
+	 * Lesser Than
+	 */
+	public static final int LT = 8;
+    /**
+	 * Lesser Than or Equal
+	 */
+	public static final int LTEQ = 10;
+    /**
+	 * Substraction
+	 */
+	public static final int SUBSTRACT = 4;
+    /**
+	 * Remainder
+	 */
+	public static final int MOD = 2; 
+    /**
+	 * Multiplication
+	 */
+	public static final int MULT = 0; 
+    /**
+	 *Not Equality
+	 */
+	public static final int NOTEQ = 14; 
+    /**
+	 * Bitwise Or
+	 */
+	public static final int OR = 17;
+    /**
+	 * Logical Or
+	 */
+	public static final int OROR = 19;
+    /**
+	 * Addition
+	 */
+	public static final int ADD = 3;
+    /**
+	 * Bitwise Right Shift
+	 */
+	public static final int RSHIFT = 6;
+    /**
+	 * Bitwise Unsigned Right Shift
+	 */
+	public static final int URSHIFT = 7;
+    /**
+	 * Bitwise Xor
+	 */
+	public static final int XOR = 16;
+    /**
+	 * Logical Xor
+	 */
+	public static final int LXOR = 20;
 
-    //Types
+	//Types
+    /**
+	 * Void type
+	 */
     public static final int VOID = -1;
-    public static final int BOOLEAN = 0;
-    public static final int BYTE = 1;
-    public static final int SHORT = 2;
-    public static final int INT = 3;
-    public static final int LONG = 4;
-    public static final int CHAR = 5;
-    public static final int FLOAT = 6;
-    public static final int DOUBLE = 7;
-    public static final int STRING = 8;
-    public static final int REFERENCE = 9;
+    /**
+	 * Boolean type
+	 */
+	public static final int BOOLEAN = 0;
+    /**
+	 * Byte type
+	 */
+	public static final int BYTE = 1;
+    /**
+	 * Short type
+	 */
+	public static final int SHORT = 2;
+    /**
+	 * Int type
+	 */
+	public static final int INT = 3;
+    /**
+	 * Long type
+	 */
+	public static final int LONG = 4;
+    /**
+	 * Char type
+	 */
+	public static final int CHAR = 5;
+    /**
+	 * Float type
+	 */
+	public static final int FLOAT = 6;
+    /**
+	 * Double type
+	 */
+	public static final int DOUBLE = 7;
+    /**
+	 * String type
+	 */
+	public static final int STRING = 8;
+    /**
+	 * Referent type
+	 */
+	public static final int REFERENCE = 9;
 
-    //Highest code is now 54
-
-    // private static PrintWriter writer=Launcher.getWriter();
+	/**
+	 *
+	 */
     private static PrintWriter writer=null;
+	// private static PrintWriter writer=Launcher.getWriter();
 
-    private static BufferedReader reader=null;
+    /**
+	 *
+	 */
+	private static BufferedReader reader=null;
 
-    public static int resolveType(String type) {
+    /**
+	 * @param type
+	 * @return
+	 */
+	public static int resolveType(String type) {
         if (type.equals(boolean.class.getName()) ||
             type.equals((new Boolean(true)).getClass().getName()) ||
             type.equals("Z")) {
@@ -129,6 +261,7 @@ public class ECodeUtilities {
 
         }
     }
+    
 /*
     public static int resolveType(Class type) {
         if (type.isPrimitive()) {
@@ -159,6 +292,10 @@ public class ECodeUtilities {
     }
 */
 
+	/**
+ 	* @param type
+ 	* @return
+ 	*/
     public static boolean isPrimitive(String type) {
         if (resolveType(type) != ECodeUtilities.REFERENCE) {
             return true;
@@ -167,14 +304,22 @@ public class ECodeUtilities {
         }
     }
 
-    public static boolean isArray(String type) {
+    /**
+	 * @param type
+	 * @return
+	 */
+	public static boolean isArray(String type) {
         if (type.indexOf("[") == -1) {
             return false;
         }
         return true;
     }
 
-    public static int getNumberOfDimensions(String type) {
+    /**
+	 * @param type
+	 * @return
+	 */
+	public static int getNumberOfDimensions(String type) {
         int n = type.length();
         boolean stillArray = true;
         int dims = 0;
@@ -188,7 +333,11 @@ public class ECodeUtilities {
         return dims;
     }
 
-    public static String resolveComponentType(String type) {
+    /**
+	 * @param type
+	 * @return
+	 */
+	public static String resolveComponentType(String type) {
         if (isArray(type)) {
             String cType = replace(replace(type, "[", ""), ";", "");
             if (cType.substring(0, 1).equals("L")) {
@@ -201,7 +350,11 @@ public class ECodeUtilities {
         }
     }
 
-    public static String changeComponentTypeToPrintableForm(String type) {
+    /**
+	 * @param type
+	 * @return
+	 */
+	public static String changeComponentTypeToPrintableForm(String type) {
         if (type.equals(boolean.class.getName()) || type.equals("Z")) {
             return boolean.class.getName();
         } else if (type.equals(byte.class.getName()) || type.equals("B")) {
@@ -227,7 +380,13 @@ public class ECodeUtilities {
         }
     }
 
-    public static String replace(String from, String c, String with) {
+    /**
+	 * @param from
+	 * @param c
+	 * @param with
+	 * @return
+	 */
+	public static String replace(String from, String c, String with) {
         int index = from.indexOf(c);
         int l = c.length();
         while(index != -1) {
@@ -239,7 +398,12 @@ public class ECodeUtilities {
         return from;
     }
 
-    public static int findNumber(String from, String identifier) {
+    /**
+	 * @param from
+	 * @param identifier
+	 * @return
+	 */
+	public static int findNumber(String from, String identifier) {
         int number = 0;
         int index = from.toLowerCase().indexOf(identifier);
         if (index > -1) {
@@ -259,7 +423,11 @@ public class ECodeUtilities {
     }
 
 
-    public static int resolveBinOperator(int operator) {
+    /**
+	 * @param operator
+	 * @return
+	 */
+	public static int resolveBinOperator(int operator) {
         switch (operator) {
             //Add expression (+ sign)
             case Code.AE: {
@@ -368,7 +536,11 @@ public class ECodeUtilities {
         }
     }
 
-    public static int resolveUnOperator(int operator) {
+    /**
+	 * @param operator
+	 * @return
+	 */
+	public static int resolveUnOperator(int operator) {
         switch (operator) {
 
             //Logical NOT expression (! sign)
@@ -418,7 +590,11 @@ public class ECodeUtilities {
         }
     }
 
-    public static boolean isUnary(int operator) {
+    /**
+	 * @param operator
+	 * @return
+	 */
+	public static boolean isUnary(int operator) {
         switch (operator) {
             case Code.COMP:     //Complement expression
             case Code.MINUS:    //Unary minus expression
@@ -437,7 +613,11 @@ public class ECodeUtilities {
         }
     }
 
-    public static boolean isBinary(int operator) {
+    /**
+	 * @param operator
+	 * @return
+	 */
+	public static boolean isBinary(int operator) {
         switch (operator) {
 
             case Code.BITOR:    // Bitwise Or Expression
@@ -474,7 +654,11 @@ public class ECodeUtilities {
         }
     }
 
-    public static Highlight makeHighlight(String h) {
+    /**
+	 * @param h
+	 * @return
+	 */
+	public static Highlight makeHighlight(String h) {
         StringTokenizer st = new StringTokenizer(h, Code.LOC_DELIM);
         int bl = Integer.parseInt(st.nextToken());
         int bc = Integer.parseInt(st.nextToken());
@@ -483,7 +667,11 @@ public class ECodeUtilities {
         return new Highlight(bl, bc, el, ec);
     }
 
-    public static String getHashCode(String str) {
+    /**
+	 * @param str
+	 * @return
+	 */
+	public static String getHashCode(String str) {
         int index = str.indexOf('@');
         if (index > 0) {
             str = str.substring(index+1);
@@ -491,7 +679,11 @@ public class ECodeUtilities {
         return str;
     }
 
-    public static String getDefaultValue(String type) {
+    /**
+	 * @param type
+	 * @return
+	 */
+	public static String getDefaultValue(String type) {
         if (type.equals(boolean.class.getName()) ||
             type.equals((new Boolean(true)).getClass().getName()) ||
             type.equals("Z")) {
@@ -557,16 +749,25 @@ public class ECodeUtilities {
         }
     }
 
-    public static void setWriter(PrintWriter w) {
+    /**
+	 * @param w
+	 */
+	public static void setWriter(PrintWriter w) {
         writer=w;
     }
 
-    //For input handling!!!!
+    /**
+     * For input handling.
+	 * @param r
+	 */
     public static void setReader(BufferedReader r) {
         reader=r;
     }
 
-    public static void write(String str) {
+    /**
+	 * @param str
+	 */
+	public static void write(String str) {
         StringTokenizer tokenizer = new StringTokenizer(str, Code.DELIM);
         int token = Integer.parseInt(tokenizer.nextToken());
         if (!EvaluationVisitor.isSetPreparing() || token == Code.ERROR) {
@@ -581,7 +782,10 @@ public class ECodeUtilities {
         }
     }
 
-    public static Object readInt() {
+    /**
+	 * @return
+	 */
+	public static Object readInt() {
         int result;
         try {
 
@@ -593,7 +797,10 @@ public class ECodeUtilities {
         }
     }
 
-    public static Object readDouble() {
+    /**
+	 * @return
+	 */
+	public static Object readDouble() {
         double result;
         try {
             result=Double.parseDouble(reader.readLine());
@@ -604,7 +811,10 @@ public class ECodeUtilities {
         }
     }
 
-    public static Object readChar() {
+    /**
+	 * @return
+	 */
+	public static Object readChar() {
         char result;
         try {
             //Get the first character of the readed string
@@ -617,7 +827,10 @@ public class ECodeUtilities {
 
     }
 
-    public static Object readString() {
+    /**
+	 * @return
+	 */
+	public static Object readString() {
         String result;
         try {
 
@@ -630,7 +843,11 @@ public class ECodeUtilities {
 
     }
 
-    public static String argToString(List argnames) {
+    /**
+	 * @param argnames
+	 * @return
+	 */
+	public static String argToString(List argnames) {
         //Change to extract elements from list and add delims
 
         if (!argnames.isEmpty()) {
@@ -644,7 +861,11 @@ public class ECodeUtilities {
             return "";
         }
     }
-    public static String parameterArrayToString(Object[] array){
+    /**
+	 * @param array
+	 * @return
+	 */
+	public static String parameterArrayToString(Object[] array){
         String result="";
         for (int i=0;i<array.length;i++) {
              result+=((Class)array[i]).getName();
@@ -654,7 +875,11 @@ public class ECodeUtilities {
              
       return result;
     }
-    public static String arrayToString(Object[] array){
+    /**
+	 * @param array
+	 * @return
+	 */
+	public static String arrayToString(Object[] array){
         //Displays the array as an string
         String result="";
         for (int i=0;i<array.length;i++) {
