@@ -24,22 +24,23 @@ import jeliot.lang.Value;
 import jeliot.lang.Variable;
 import jeliot.lang.VariableInArray;
 
-//import jeliot.parser.*;
-
 /**
   * @author Pekka Uronen
   * @author Niko Myller
   */
-
 public class Director {
 
     /**
      * The resource bundle
      */
-    static private ResourceBundle bundle = ResourceBundle.getBundle(
-                                      "jeliot.theatre.resources.properties",
-                                      Locale.getDefault());
+    static private ResourceBundle bundle =
+        ResourceBundle.getBundle(
+            "jeliot.theatre.resources.properties",
+            Locale.getDefault());
 
+    /**
+     *
+     */
     private boolean messagePause = false;
 
     /** True, if the director should stop after executing one statement. */
@@ -57,38 +58,77 @@ public class Director {
     /** Factory that produces the actors. */
     private ActorFactory factory;
 
-    /** */
+    /**
+     *
+     */
     private TheatreManager manager;
 
-    /** */
+    /**
+     *
+     */
     private AnimationEngine engine;
 
+    /**
+     *
+     */
     private MethodFrame currentMethodFrame;
 
+    /**
+     *
+     */
     private Scratch currentScratch;
+    
+    /**
+     *
+     */
     private ConstantBox cbox;
 
+    /**
+     *
+     */
     private ThreadController controller;
 
+    /**
+     *
+     */
     private Stack scratchStack = new Stack();
+    
+    /**
+     *
+     */
     private Stack frameStack = new Stack();
 
+    /**
+     *
+     */
     private boolean errorOccured = false;
 
-    /** Not needed in Jeliot 3 */
-    //private Stack exprStack = new Stack();
-
+    /**
+     *
+     */
     private Interpreter eCodeInterpreter;
 
+    /**
+     *
+     */
     private LinesAndText lat;
 
+    /**
+     *
+     */
     private int runUntilLine = -1;
 
+    /**
+     * @param theatre
+     * @param codePane
+     * @param jeliot
+     * @param engine
+     */
     public Director(
-            Theatre theatre,
-            CodePane codePane,
-            Jeliot jeliot,
-            AnimationEngine engine) {
+        Theatre theatre,
+        CodePane codePane,
+        Jeliot jeliot,
+        AnimationEngine engine) {
 
         this.theatre = theatre;
         this.codePane = codePane;
@@ -98,25 +138,40 @@ public class Director {
         this.manager = theatre.getManager();
     }
 
+    /**
+     * @param controller
+     */
     public void setController(ThreadController controller) {
         this.controller = controller;
     }
 
+    /**
+     * @return
+     */
     public Scratch getCurrentScratch() {
         return currentScratch;
     }
 
+    /**
+     * @param factory
+     */
     public void setActorFactory(ActorFactory factory) {
         this.factory = factory;
     }
 
+    /**
+     * @return
+     */
     public MethodFrame getCurrentMethodFrame() {
         return currentMethodFrame;
     }
 
+    /**
+     * @throws Exception
+     */
     public void direct() throws Exception {
         errorOccured = false;
-        highlight(new Highlight(0,0,0,0));
+        highlight(new Highlight(0, 0, 0, 0));
         cbox = factory.produceConstantBox();
         theatre.addPassive(cbox);
         manager.setConstantBox(cbox);
@@ -128,19 +183,28 @@ public class Director {
         //Excecution of the program code takes place here.
         eCodeInterpreter.execute();
         if (!errorOccured) {
-            highlight(new Highlight(0,0,0,0));
+            highlight(new Highlight(0, 0, 0, 0));
         }
         theatre.flush();
     }
 
+    /**
+     * @param step
+     */
     public void setStep(boolean step) {
         this.stepByStep = step;
     }
 
+    /**
+     * @param line
+     */
     public void runUntil(int line) {
         runUntilLine = line;
     }
 
+    /**
+     * @param h
+     */
     //Changed for Jeliot 3
     public void highlight(Highlight h) {
         if (!eCodeInterpreter.starting()) {
@@ -153,8 +217,8 @@ public class Director {
             }
 
             if (h != null) {
-                if (runUntilLine >= h.getBeginLine() &&
-                    runUntilLine <= h.getEndLine()) {
+                if (runUntilLine >= h.getBeginLine()
+                    && runUntilLine <= h.getEndLine()) {
 
                     runUntilLine = -1;
                     jeliot.runUntilDone();
@@ -165,6 +229,9 @@ public class Director {
         }
     }
 
+    /**
+     * 
+     */
     public void openScratch() {
         if (currentScratch != null) {
             scratchStack.push(currentScratch);
@@ -175,6 +242,9 @@ public class Director {
         //return currentScratch;
     }
 
+    /**
+     * 
+     */
     public void closeScratch() {
         if (currentScratch != null) {
             currentScratch.removeCrap();
@@ -186,7 +256,13 @@ public class Director {
         }
     }
 
-    public void closeExpression() { }
+    /**
+     * 
+     */
+    /**
+     * 
+     */
+    public void closeExpression() {}
 
     /** This method animates the first half of a binary expression.
       * For example in expression  a + b  this will animate as
@@ -195,8 +271,10 @@ public class Director {
       *@returns The expression actor which the expression is put on.
       */
     public ExpressionActor beginBinaryExpression(
-            Value operand,
-            int operator, long expressionReference, Highlight h) {
+        Value operand,
+        int operator,
+        long expressionReference,
+        Highlight h) {
 
         highlight(h);
 
@@ -207,10 +285,11 @@ public class Director {
 
         // Create the expression actor for 5 elements and reserve
         // places for the three first actors.
-        ExpressionActor expr = currentScratch.getExpression(5, expressionReference);
-            Point operandLoc    = expr.reserve(operandAct);
-            Point operatorLoc   = expr.reserve(operatorAct);
-            Point dotsLoc       = expr.reserve(dotsAct);
+        ExpressionActor expr =
+            currentScratch.getExpression(5, expressionReference);
+        Point operandLoc = expr.reserve(operandAct);
+        Point operatorLoc = expr.reserve(operatorAct);
+        Point dotsLoc = expr.reserve(dotsAct);
 
         // Prepare the theatre for animation.
         theatre.capture();
@@ -237,9 +316,16 @@ public class Director {
         return expr;
     }
 
-
+    /**
+     * @param operand
+     * @param expr
+     * @param h
+     */
     //Added for Jeliot 3
-    public void rightBinaryExpression(Value operand, ExpressionActor expr, Highlight h) {
+    public void rightBinaryExpression(
+        Value operand,
+        ExpressionActor expr,
+        Highlight h) {
 
         highlight(h);
 
@@ -266,25 +352,25 @@ public class Director {
         }
     }
 
-    /** Animates the second part of a binary expression.
-      *
-      *@param operand The second operand for the binary expression. If
-      *     this is null, it means that the second operand was not
-      *     evaluated, as in case false and ...
-      */
+    /**
+     * Animates the second part of a binary expression.
+     * @param result
+     * @param operator
+     * @param expr
+     * @param h
+     * @return
+     */
     public Value finishBinaryExpression(
-            Value result,
-            int operator,
-            ExpressionActor expr,
-            Highlight h) {
+        Value result,
+        int operator,
+        ExpressionActor expr,
+        Highlight h) {
 
         highlight(h);
 
         // Prepare the actors.
         ValueActor resultAct = factory.produceValueActor(result);
-        OperatorActor operatorAct =
-                factory.produceBinOpResActor(operator);
-
+        OperatorActor operatorAct = factory.produceBinOpResActor(operator);
 
         // Prepare the theatre for animation.
         theatre.capture();
@@ -309,7 +395,7 @@ public class Director {
         expr.setLight(Actor.SHADED);
 
         // Create and set a new actor for the result.
-        ValueActor clone = (ValueActor)resultAct.clone();
+        ValueActor clone = (ValueActor) resultAct.clone();
         clone.setLight(Actor.NORMAL);
         clone.setLocation(resultAct.getRootLocation());
         currentScratch.registerCrap(clone);
@@ -328,31 +414,41 @@ public class Director {
         return val;
     }
 
-    /** Shows an animation of the invocation of a static foreign
-      * method.
-      */
-/*  public Return animateSFMInvocation(ForeignMethodPointer method,
-                                       Value[] args) {
-        // Get animator for the invocation.
-        Animator animator = method.getAnimator(args);
-
-        // Get actors for the arguments.
-        int n = args.length;
-        ValueActor[] actors = new ValueActor[n];
-        for (int i = 0; i < n; ++i) {
-            actors[i] = args[i].getActor();
+    /* Shows an animation of the invocation of a static foreign
+     * method.
+     */
+    /*  public Return animateSFMInvocation(ForeignMethodPointer method,
+                                           Value[] args) {
+            // Get animator for the invocation.
+            Animator animator = method.getAnimator(args);
+    
+            // Get actors for the arguments.
+            int n = args.length;
+            ValueActor[] actors = new ValueActor[n];
+            for (int i = 0; i < n; ++i) {
+                actors[i] = args[i].getActor();
+            }
+            // Animate the invocation
+            animator.setArguments(args);
+            animator.setArgumentActors(actors);
+            animator.animate(this);
+    
+            return new Return(animator.getReturnValue());
         }
-        // Animate the invocation
-        animator.setArguments(args);
-        animator.setArgumentActors(actors);
-        animator.animate(this);
+    */
 
-        return new Return(animator.getReturnValue());
-    }
-*/
-
-    public Value[] animateOMInvocation(String methodCall, Value[] args,
-                                      Highlight h, Value thisValue) {
+    /**
+    * @param methodCall
+    * @param args
+    * @param h
+    * @param thisValue
+    * @return
+    */
+    public Value[] animateOMInvocation(
+        String methodCall,
+        Value[] args,
+        Highlight h,
+        Value thisValue) {
         highlight(h);
 
         // Remember the scratch of current expression.
@@ -363,14 +459,17 @@ public class Director {
             valAct = factory.produceValueActor(thisValue);
             thisValue.setActor(valAct);
             if (valAct instanceof jeliot.theatre.ReferenceActor) {
-                valAct.setLocation(((jeliot.theatre.ReferenceActor) valAct).getInstanceActor().getRootLocation());
+                valAct.setLocation(
+                    ((jeliot.theatre.ReferenceActor) valAct)
+                        .getInstanceActor()
+                        .getRootLocation());
             }
         }
 
         // Create the actor for the invocation.
         int n = 0;
         if (args != null) {
-             n = args.length;
+            n = args.length;
         }
 
         OMIActor actor = factory.produceOMIActor(methodCall, n);
@@ -404,7 +503,8 @@ public class Director {
         theatre.capture();
 
         // Introduce the invocation and the this Value fly.
-        engine.showAnimation(new Animation[] {actor.appear(invoLoc), thisFly});
+        engine.showAnimation(
+            new Animation[] { actor.appear(invoLoc), thisFly });
         theatre.passivate(actor);
 
         //bind this value
@@ -424,21 +524,31 @@ public class Director {
         theatre.release();
 
         return args;
-
     }
 
-    public Value[] animateOMInvocation(String methodCall,
-                                       Value[] args,
-                                       Highlight h) {
+    /**
+     * @param methodCall
+     * @param args
+     * @param h
+     * @return
+     */
+    public Value[] animateOMInvocation(
+        String methodCall,
+        Value[] args,
+        Highlight h) {
         return animateSMInvocation(methodCall, args, h);
     }
 
-
-    /** Animates the invocation of a domestic (user-defined) method.
-      */
+    /**
+     * Animates the invocation of a domestic (user-defined) method.
+     * @param methodName
+     * @param args
+     * @param h
+     * @return
+     */
     public Value[] animateSMInvocation(String methodName,
-            //DomesticMethodPointer dmp,
-            Value[] args, Highlight h) {
+    //DomesticMethodPointer dmp,
+    Value[] args, Highlight h) {
 
         highlight(h);
 
@@ -448,7 +558,7 @@ public class Director {
         // Create the actor for the invocation.
         int n = 0;
         if (args != null) {
-             n = args.length;
+            n = args.length;
         }
         SMIActor actor = factory.produceSMIActor(methodName, n);
         ExpressionActor expr = currentScratch.getExpression(1, -1);
@@ -492,11 +602,23 @@ public class Director {
         return args;
     }
 
-    /** Called when the program enters a new user-defined method.
-      * Sets up a frame for the method.
-      */
-    public void setUpMethod(String methodName, Value[] args, String[] formalParameters,
-                            String[] formalParameterTypes, Highlight h, Value thisValue) {
+    /**
+     * Called when the program enters a new user-defined method.
+     * Sets up a frame for the method.
+     * @param methodName
+     * @param args
+     * @param formalParameters
+     * @param formalParameterTypes
+     * @param h
+     * @param thisValue
+     */
+    public void setUpMethod(
+        String methodName,
+        Value[] args,
+        String[] formalParameters,
+        String[] formalParameterTypes,
+        Highlight h,
+        Value thisValue) {
 
         // highlight the method header.
         highlight(h);
@@ -515,12 +637,13 @@ public class Director {
         ValueActor thisValueActor = null;
 
         int n = 0;
-        Variable[] vars         = null;
-        VariableActor[] varact  = null;
-        Animation[] anim        = null;
-        ValueActor[] valact     = null;
+        Variable[] vars = null;
+        VariableActor[] varact = null;
+        Animation[] anim = null;
+        ValueActor[] valact = null;
 
-        thisVariable = frame.declareVariable(new Variable("this", thisValue.getType()));
+        thisVariable =
+            frame.declareVariable(new Variable("this", thisValue.getType()));
         thisVariableActor = factory.produceVariableActor(thisVariable);
         thisVariable.setActor(thisVariableActor);
         stage.reserve(thisVariableActor);
@@ -534,7 +657,11 @@ public class Director {
             valact = new ValueActor[n];
 
             for (int i = 0; i < args.length; ++i) {
-                vars[i] = frame.declareVariable(new Variable(formalParameters[i], formalParameterTypes[i]));
+                vars[i] =
+                    frame.declareVariable(
+                        new Variable(
+                            formalParameters[i],
+                            formalParameterTypes[i]));
                 varact[i] = factory.produceVariableActor(vars[i]);
                 vars[i].setActor(varact[i]);
                 stage.reserve(varact[i]);
@@ -564,7 +691,8 @@ public class Director {
         if (thisValueActor == null) {
             thisValueActor = factory.produceValueActor(thisValue);
             if (thisValueActor instanceof ReferenceActor) {
-                InstanceActor ai = ((ReferenceActor)thisValueActor).getInstanceActor();
+                InstanceActor ai =
+                    ((ReferenceActor) thisValueActor).getInstanceActor();
                 thisValueActor.setLocation(ai.getRootLocation());
             } else {
                 introduceLiteral(thisValue);
@@ -573,7 +701,8 @@ public class Director {
         }
         thisValue.setActor(thisValueActor);
 
-        Animation thisAnim = thisValueActor.fly(thisVariableActor.reserve(thisCastAct));
+        Animation thisAnim =
+            thisValueActor.fly(thisVariableActor.reserve(thisCastAct));
         engine.showAnimation(thisAnim);
 
         thisVariableActor.bind();
@@ -584,11 +713,11 @@ public class Director {
         if (args != null && args.length > 0) {
 
             for (int i = 0; i < n; ++i) {
-                    vars[i].assign(args[i]);
-                    Value casted = vars[i].getValue();
-                    ValueActor castact = factory.produceValueActor(casted);
-                    valact[i] = args[i].getActor();
-                    anim[i] = valact[i].fly(varact[i].reserve(castact));
+                vars[i].assign(args[i]);
+                Value casted = vars[i].getValue();
+                ValueActor castact = factory.produceValueActor(casted);
+                valact[i] = args[i].getActor();
+                anim[i] = valact[i].fly(varact[i].reserve(castact));
             }
 
             engine.showAnimation(anim);
@@ -620,15 +749,29 @@ public class Director {
         theatre.release();
     }
 
+    /**
+     * @param methodName
+     * @param h
+     */
     public void setUpMethod(String methodName, Highlight h) {
         setUpMethod(methodName, null, null, null, h);
     }
 
-    /** Called when the program enters a new user-defined method.
-      * Sets up a frame for the method.
-      */
-    public void setUpMethod(String methodName, Value[] args, String[] formalParameters,
-                            String[] formalParameterTypes, Highlight h) {
+    /**
+     * Called when the program enters a new user-defined method.
+     * Sets up a frame for the method.
+     * @param methodName
+     * @param args
+     * @param formalParameters
+     * @param formalParameterTypes
+     * @param h
+     */
+    public void setUpMethod(
+        String methodName,
+        Value[] args,
+        String[] formalParameters,
+        String[] formalParameterTypes,
+        Highlight h) {
 
         // highlight the method header.
         highlight(h);
@@ -643,10 +786,10 @@ public class Director {
         frameStack.push(frame);
 
         int n = 0;
-        Variable[] vars         = null;
-        VariableActor[] varact  = null;
-        Animation[] anim        = null;
-        ValueActor[] valact     = null;
+        Variable[] vars = null;
+        VariableActor[] varact = null;
+        Animation[] anim = null;
+        ValueActor[] valact = null;
 
         if (args != null && args.length > 0) {
             n = args.length;
@@ -656,7 +799,11 @@ public class Director {
             valact = new ValueActor[n];
 
             for (int i = 0; i < args.length; ++i) {
-                vars[i] = frame.declareVariable(new Variable(formalParameters[i], formalParameterTypes[i]));
+                vars[i] =
+                    frame.declareVariable(
+                        new Variable(
+                            formalParameters[i],
+                            formalParameterTypes[i]));
                 varact[i] = factory.produceVariableActor(vars[i]);
                 vars[i].setActor(varact[i]);
                 stage.reserve(varact[i]);
@@ -680,11 +827,11 @@ public class Director {
         if (args != null && args.length > 0) {
 
             for (int i = 0; i < n; ++i) {
-                    vars[i].assign(args[i]);
-                    Value casted = vars[i].getValue();
-                    ValueActor castact = factory.produceValueActor(casted);
-                    valact[i] = args[i].getActor();
-                    anim[i] = valact[i].fly(varact[i].reserve(castact));
+                vars[i].assign(args[i]);
+                Value casted = vars[i].getValue();
+                ValueActor castact = factory.produceValueActor(casted);
+                valact[i] = args[i].getActor();
+                anim[i] = valact[i].fly(varact[i].reserve(castact));
             }
 
             engine.showAnimation(anim);
@@ -716,25 +863,31 @@ public class Director {
         theatre.release();
     }
 
+    /**
+     * @param returnAct
+     * @param expressionCounter
+     * @return
+     */
     public ValueActor finishMethod(Actor returnAct, long expressionCounter) {
 
-
         // Get the stage and remove it.
-        MethodStage stage = ((MethodFrame)frameStack.pop()).getMethodStage();
+        MethodStage stage = ((MethodFrame) frameStack.pop()).getMethodStage();
         manager.removeMethodStage(stage);
         Animation stageDisappear = stage.disappear();
 
         if (returnAct != null) {
             currentScratch.removeCrap();
             returnAct.setShadow(4);
-            engine.showAnimation(new Animation[] {stageDisappear,
-                        returnAct.fly(returnAct.getRootLocation())});
+            engine.showAnimation(
+                new Animation[] {
+                    stageDisappear,
+                    returnAct.fly(returnAct.getRootLocation())});
         } else {
             engine.showAnimation(stageDisappear);
         }
 
         if (!frameStack.empty()) {
-            currentMethodFrame = (MethodFrame)frameStack.peek();
+            currentMethodFrame = (MethodFrame) frameStack.peek();
         }
 
         // Remove the current scratch -- the scratch used by the
@@ -764,7 +917,7 @@ public class Director {
         Animation[] anim;
         if (returnAct == null) {
 
-            anim = new Animation[] {flyScratch};
+            anim = new Animation[] { flyScratch };
             engine.showAnimation(anim);
 
         } else {
@@ -772,11 +925,11 @@ public class Director {
             theatre.addPassive(currentScratch);
             Point returnLoc = expr.reserve(returnAct);
             returnLoc.translate(
-                    scratchLoc.x - currentScratch.getX(),
-                    scratchLoc.y - currentScratch.getY());
+                scratchLoc.x - currentScratch.getX(),
+                scratchLoc.y - currentScratch.getY());
 
             Animation flyReturn = returnAct.fly(returnLoc);
-            anim = new Animation[] {flyScratch , flyReturn};
+            anim = new Animation[] { flyScratch, flyReturn };
 
             engine.showAnimation(anim);
             expr.bind(returnAct);
@@ -789,14 +942,19 @@ public class Director {
         theatre.release();
 
         if (returnAct != null) {
-            return (ValueActor) ((BubbleActor)returnAct).getActor();
+            return (ValueActor) ((BubbleActor) returnAct).getActor();
         } else {
             return null;
         }
     }
 
-    /** Animates a return statement
-      */
+    /**
+     * Animates a return statement
+     * @param returnValue
+     * @param casted
+     * @param h
+     * @return
+     */
     public Actor animateReturn(Value returnValue, Value casted, Highlight h) {
 
         highlight(h);
@@ -820,11 +978,11 @@ public class Director {
         }
         bubble.setLocation(bubbleLoc);
 
-/*      Point bubbleLoc = new Point(
-                stage.getX() + stage.getWidth() / 2,
-                stage.getY() + stage.getHeight() + 25);
-        bubble.setLocation(bubbleLoc);
-*/
+        /*      Point bubbleLoc = new Point(
+                        stage.getX() + stage.getWidth() / 2,
+                        stage.getY() + stage.getHeight() + 25);
+                bubble.setLocation(bubbleLoc);
+        */
         Point valueLoc = bubble.reserve(castAct);
 
         bubble.removeTip();
@@ -839,6 +997,10 @@ public class Director {
         return bubble;
     }
 
+    /**
+     * @param fromValue
+     * @param toValue
+     */
     public void animateCastExpression(Value fromValue, Value toValue) {
 
         ValueActor fromActor = fromValue.getActor();
@@ -861,32 +1023,46 @@ public class Director {
         currentScratch.registerCrap(toActor);
     }
 
-    public Value animateBinaryExpression(int operator, Value first,
-                                         Value second, Value result,
-                                         long expressionCounter, Highlight h) {
+    /**
+     * @param operator
+     * @param first
+     * @param second
+     * @param result
+     * @param expressionCounter
+     * @param h
+     * @return
+     */
+    public Value animateBinaryExpression(
+        int operator,
+        Value first,
+        Value second,
+        Value result,
+        long expressionCounter,
+        Highlight h) {
 
         highlight(h);
 
         // prepare the actors
         Actor firstAct = first.getActor();
 
-        Actor secondAct = (second == null) ?
-                (Actor) factory.produceEllipsis() :
-                second.getActor();
+        Actor secondAct =
+            (second == null)
+                ? (Actor) factory.produceEllipsis()
+                : second.getActor();
 
         Actor resultAct = factory.produceValueActor(result);
 
-        OperatorActor operatorAct =
-                factory.produceBinOpActor(operator);
+        OperatorActor operatorAct = factory.produceBinOpActor(operator);
 
         OperatorActor eqAct = factory.produceBinOpResActor(operator);
 
-        ExpressionActor expr = currentScratch.getExpression(5, expressionCounter);
-            Point firstLoc      = expr.reserve(firstAct);
-            Point operatorLoc   = expr.reserve(operatorAct);
-            Point secondLoc     = expr.reserve(secondAct);
-            Point eqLoc         = expr.reserve(eqAct);
-            Point resultLoc     = expr.reserve(resultAct);
+        ExpressionActor expr =
+            currentScratch.getExpression(5, expressionCounter);
+        Point firstLoc = expr.reserve(firstAct);
+        Point operatorLoc = expr.reserve(operatorAct);
+        Point secondLoc = expr.reserve(secondAct);
+        Point eqLoc = expr.reserve(eqAct);
+        Point resultLoc = expr.reserve(resultAct);
 
         // Prepare the theatre
         theatre.capture();
@@ -895,8 +1071,7 @@ public class Director {
         engine.showAnimation(
             new Animation[] {
                 firstAct.fly(firstLoc),
-                secondAct.fly(secondLoc)
-            });
+                secondAct.fly(secondLoc)});
 
         theatre.updateCapture();
 
@@ -924,7 +1099,7 @@ public class Director {
         expr.setLight(Actor.SHADED);
 
         // Create and set a new actor for the result.
-        ValueActor clone = (ValueActor)resultAct.clone();
+        ValueActor clone = (ValueActor) resultAct.clone();
         result.setActor(clone);
         clone.setLight(Actor.NORMAL);
         clone.setLocation(resultAct.getRootLocation());
@@ -942,18 +1117,23 @@ public class Director {
         return val;
     }
 
-
+    /**
+     * @param name
+     * @param type
+     * @param h
+     * @return
+     */
     public Variable declareVariable(String name, String type, Highlight h) {
 
         highlight(h);
 
         // Create a new variable and its actor.
-        Variable v = currentMethodFrame.declareVariable(new Variable(name, type));
+        Variable v =
+            currentMethodFrame.declareVariable(new Variable(name, type));
         VariableActor actor = factory.produceVariableActor(v);
         v.setActor(actor);
 
         MethodStage stage = currentMethodFrame.getMethodStage();
-
 
         Point loc = stage.reserve(actor);
         Animation a = stage.extend();
@@ -971,7 +1151,18 @@ public class Director {
         return v;
     }
 
-    public Variable declareObjectVariable(ObjectFrame of, String name, String type, Highlight h) {
+    /**
+     * @param of
+     * @param name
+     * @param type
+     * @param h
+     * @return
+     */
+    public Variable declareObjectVariable(
+        ObjectFrame of,
+        String name,
+        String type,
+        Highlight h) {
 
         highlight(h);
 
@@ -993,25 +1184,37 @@ public class Director {
         return v;
     }
 
+    /**
+     * @param literal
+     */
     public void introduceLiteral(Value literal) {
         ValueActor valact = factory.produceValueActor(literal);
         valact.setLocation(cbox.getRootLocation());
         literal.setActor(valact);
     }
 
+    /**
+     * @param ref
+     */
     public void introduceReference(Reference ref) {
         ReferenceActor refAct = factory.produceReferenceActor(ref);
         refAct.setLocation(refAct.getInstanceActor().getRootLocation());
         ref.setActor(refAct);
     }
 
-/*
-    public void introduceInput(Value input) {
-        ValueActor valact = factory.produceValueActor(input);
-        valact.setLocation(cbox.getRootLocation());
-        input.setActor(valact);
-    }
-*/
+    /*
+        public void introduceInput(Value input) {
+            ValueActor valact = factory.produceValueActor(input);
+            valact.setLocation(cbox.getRootLocation());
+            input.setActor(valact);
+        }
+    */
+    
+    
+	/**
+	 * @param var
+	 * @return
+	 */
     public ValueActor initiateVariableAccess(Variable var) {
 
         //Problem with instances.
@@ -1019,10 +1222,10 @@ public class Director {
             return var.getValue().getActor();
         }
 
-//      Value value = var.getValue();
-//      Value clone = (Value)value.clone();
-//      ValueActor act = factory.produceValueActor(clone);
-//      clone.setActor(act);
+        //      Value value = var.getValue();
+        //      Value clone = (Value)value.clone();
+        //      ValueActor act = factory.produceValueActor(clone);
+        //      clone.setActor(act);
 
         ValueActor va = var.getActor().getValue();
         ValueActor act = factory.produceValueActor(va);
@@ -1038,11 +1241,19 @@ public class Director {
         return act;
     }
 
+    /**
+     * @param variable
+     * @param value
+     * @param casted
+     * @param returnValue
+     * @param h
+     */
     public void animateAssignment(
-            Variable variable,
-            Value value,
-            Value casted,
-            Value returnValue, Highlight h) {
+        Variable variable,
+        Value value,
+        Value casted,
+        Value returnValue,
+        Highlight h) {
 
         highlight(h);
 
@@ -1065,19 +1276,16 @@ public class Director {
             theatre.release();
 
             if (returnValue != null) {
-                ValueActor returnAct =
-                        factory.produceValueActor(returnValue);
+                ValueActor returnAct = factory.produceValueActor(returnValue);
 
                 returnAct.setLocation(castAct.getRootLocation());
                 returnValue.setActor(returnAct);
             }
-        }
-        else {
+        } else {
             // Get/create actors.
             ReferenceActor refAct = (ReferenceActor) value.getActor();
             //refAct.calculateBends();
-            ReferenceVariableActor rva =
-                                   (ReferenceVariableActor) variableAct;
+            ReferenceVariableActor rva = (ReferenceVariableActor) variableAct;
 
             //refAct.setBackground(rva.getBackground());
 
@@ -1095,23 +1303,32 @@ public class Director {
 
             if (returnValue != null) {
                 ValueActor returnAct =
-                  factory.produceReferenceActor((Reference)returnValue);
+                    factory.produceReferenceActor((Reference) returnValue);
                 returnAct.setLocation(ra.getRootLocation());
                 returnValue.setActor(returnAct);
             }
 
-/*
-            try {
-                Thread.sleep(200);
-            }
-            catch (InterruptedException e) { }
-*/
+            /*
+                        try {
+                            Thread.sleep(200);
+                        }
+                        catch (InterruptedException e) { }
+            */
         }
 
     }
 
-    public void animatePreIncDec(int operator, Variable var,
-            Value result, Highlight h) {
+    /**
+     * @param operator
+     * @param var
+     * @param result
+     * @param h
+     */
+    public void animatePreIncDec(
+        int operator,
+        Variable var,
+        Value result,
+        Highlight h) {
 
         highlight(h);
 
@@ -1156,8 +1373,17 @@ public class Director {
         theatre.release();
     }
 
-    public void animatePostIncDec(int operator, Variable var,
-            Value resVal, Highlight h) {
+    /**
+     * @param operator
+     * @param var
+     * @param resVal
+     * @param h
+     */
+    public void animatePostIncDec(
+        int operator,
+        Variable var,
+        Value resVal,
+        Highlight h) {
 
         highlight(h);
 
@@ -1165,9 +1391,8 @@ public class Director {
         //Value value = var.getValue();
         ValueActor valAct = var.getActor().getValue();
         //ValueActor valact = factory.produceValueActor(value);
-        ValueActor resAct = (resVal == null) ?
-                null :
-                factory.produceValueActor(resVal);
+        ValueActor resAct =
+            (resVal == null) ? null : factory.produceValueActor(resVal);
 
         Actor opAct = factory.produceUnaOpActor(operator);
 
@@ -1206,8 +1431,18 @@ public class Director {
         theatre.release();
     }
 
-    public ExpressionActor beginUnaryExpression(int operator, Value arg,
-                                    long expressionCounter, Highlight h) {
+    /**
+     * @param operator
+     * @param arg
+     * @param expressionCounter
+     * @param h
+     * @return
+     */
+    public ExpressionActor beginUnaryExpression(
+        int operator,
+        Value arg,
+        long expressionCounter,
+        Highlight h) {
         highlight(h);
 
         ValueActor argAct = arg.getActor();
@@ -1215,7 +1450,8 @@ public class Director {
 
         theatre.capture();
 
-        ExpressionActor exp = currentScratch.getExpression(4, expressionCounter);
+        ExpressionActor exp =
+            currentScratch.getExpression(4, expressionCounter);
         Point oLoc = exp.reserve(opAct);
         Point aLoc = exp.reserve(argAct);
 
@@ -1232,8 +1468,20 @@ public class Director {
         return exp;
     }
 
-    public Value finishUnaryExpression(int operator, ExpressionActor exp,
-                            Value result, long expressionCounter, Highlight h) {
+    /**
+     * @param operator
+     * @param exp
+     * @param result
+     * @param expressionCounter
+     * @param h
+     * @return
+     */
+    public Value finishUnaryExpression(
+        int operator,
+        ExpressionActor exp,
+        Value result,
+        long expressionCounter,
+        Highlight h) {
 
         highlight(h);
 
@@ -1259,7 +1507,7 @@ public class Director {
 
         theatre.release();
 
-        ValueActor clone = (ValueActor)resAct.clone();
+        ValueActor clone = (ValueActor) resAct.clone();
         clone.setLight(Actor.NORMAL);
         clone.setLocation(resAct.getRootLocation());
         theatre.addActor(clone);
@@ -1275,8 +1523,20 @@ public class Director {
         return val;
     }
 
-    public Value animateUnaryExpression(int operator, Value arg,
-            Value result, long expressionCounter, Highlight h) {
+    /**
+     * @param operator
+     * @param arg
+     * @param result
+     * @param expressionCounter
+     * @param h
+     * @return
+     */
+    public Value animateUnaryExpression(
+        int operator,
+        Value arg,
+        Value result,
+        long expressionCounter,
+        Highlight h) {
 
         highlight(h);
 
@@ -1288,7 +1548,8 @@ public class Director {
 
         theatre.capture();
 
-        ExpressionActor exp = currentScratch.getExpression(4, expressionCounter);
+        ExpressionActor exp =
+            currentScratch.getExpression(4, expressionCounter);
         Point oLoc = exp.reserve(opAct);
         Point aLoc = exp.reserve(argAct);
         Point eLoc = exp.reserve(eqAct);
@@ -1311,7 +1572,7 @@ public class Director {
 
         theatre.release();
 
-        ValueActor clone = (ValueActor)resAct.clone();
+        ValueActor clone = (ValueActor) resAct.clone();
         clone.setLight(Actor.NORMAL);
         clone.setLocation(resAct.getRootLocation());
         theatre.addActor(clone);
@@ -1324,8 +1585,11 @@ public class Director {
         return val;
     }
 
-    //TODO: Change showMessage so that the message is shown in the next
-    //empty expressionActor from Scratch and nothing else is possible.
+    /**
+     * TODO: Change showMessage so that the message is shown in the next
+     * empty expressionActor from Scratch and nothing else is possible.
+     * @param message
+     */
     private void showMessage(String[] message) {
 
         if (jeliot.showMessagesInDialogs()) {
@@ -1336,56 +1600,66 @@ public class Director {
                 msg += message[i] + "\n";
             }
 
-            JOptionPane.showMessageDialog(null, msg,
-                                          bundle.getString("dialog.message.title"),
-                                          JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(
+                null,
+                msg,
+                bundle.getString("dialog.message.title"),
+                JOptionPane.PLAIN_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
             showMessage(actor);
         }
     }
 
+    /**
+     * @param message
+     */
     private void showMessage(String message) {
-        String[] ms = {message};
+        String[] ms = { message };
         showMessage(ms);
     }
 
-/*  Not Valid Code Any More
-    private void showMessage(String message, Value val) {
-
-        if (jeliot.showMessagesInDialogs()) {
-            JOptionPane.showMessageDialog(null, message, "Message",
-                                          JOptionPane.PLAIN_MESSAGE);
-        } else {
-            String[] ms = {message};
-            MessageActor actor = factory.produceMessageActor(ms);
-            ValueActor valact = val.getActor();
-            showMessage(actor, valact);
+    /*  Not Valid Code Any More
+        private void showMessage(String message, Value val) {
+    
+            if (jeliot.showMessagesInDialogs()) {
+                JOptionPane.showMessageDialog(null, message, "Message",
+                                              JOptionPane.PLAIN_MESSAGE);
+            } else {
+                String[] ms = {message};
+                MessageActor actor = factory.produceMessageActor(ms);
+                ValueActor valact = val.getActor();
+                showMessage(actor, valact);
+            }
         }
-    }
-
-    private void showMessage(MessageActor message, Actor anchor) {
-
-        Point aloc = anchor.getRootLocation();
-        Dimension asize = anchor.getSize();
-        aloc.translate(asize.width/2, 0);
-        Dimension msize = message.getSize();
-        Dimension tsize = theatre.getSize();
-
-        if (aloc.x - msize.width/2 < 10) {
-            aloc.x = 10;
-        } else if (aloc.x + msize.width/2 > tsize.width-10) {
-            aloc.x = tsize.width-10-msize.width;
-        } else {
-            aloc.x -= msize.width/2;
+    
+        private void showMessage(MessageActor message, Actor anchor) {
+    
+            Point aloc = anchor.getRootLocation();
+            Dimension asize = anchor.getSize();
+            aloc.translate(asize.width/2, 0);
+            Dimension msize = message.getSize();
+            Dimension tsize = theatre.getSize();
+    
+            if (aloc.x - msize.width/2 < 10) {
+                aloc.x = 10;
+            } else if (aloc.x + msize.width/2 > tsize.width-10) {
+                aloc.x = tsize.width-10-msize.width;
+            } else {
+                aloc.x -= msize.width/2;
+            }
+    
+            aloc.y += asize.height + 10;
+            showMessage(message, new Point(aloc.x, aloc.y));
+            currentScratch.registerCrap(anchor);
         }
+    */
 
-        aloc.y += asize.height + 10;
-        showMessage(message, new Point(aloc.x, aloc.y));
-        currentScratch.registerCrap(anchor);
-    }
-*/
 
+
+	/**
+	 * @param message
+	 */
     private void showMessage(MessageActor message) {
         //Dimension msize = message.getSize();
         //Dimension tsize = theatre.getSize();
@@ -1396,6 +1670,10 @@ public class Director {
         showMessage(message, loc);
     }
 
+    /**
+     * @param message
+     * @param p
+     */
     private void showMessage(MessageActor message, Point p) {
         theatre.capture();
         engine.showAnimation(message.appear(p));
@@ -1404,113 +1682,215 @@ public class Director {
         theatre.removeActor(message);
         theatre.release();
     }
+    
+	/* All the message formats are here */
 
-    /* All the message formats are here */
-    private MessageFormat enterLoop = new MessageFormat(bundle.getString("message.enter_loop"));
-    //message.open_scope = Opening new scope for variables.
-    //message.close_scope = Closing a scope and erasing the scope variables.
-    private MessageFormat continueLoop = new MessageFormat(bundle.getString("message.continue_loop"));
-    private MessageFormat exitLoop = new MessageFormat(bundle.getString("message.exit_loop"));
-    private MessageFormat breakLoop = new MessageFormat(bundle.getString("message.break_loop"));
-    //message.break_switch = Exiting the switch statement because of break.
-    private MessageFormat skipLoop = new MessageFormat(bundle.getString("message.skip_loop"));
-    //message.if_then = Choosing then-branch.
-    //message.if_else = Choosing else-branch.
-    //message.skip_if = Continuing without branching.
-    //message.enter_switch = Entering a switch statement.
-    //message.exit_switch = Exiting a switch statement.
-    //message.select_switch = This case selected.
-    //message.default_switch = Default case selected.
-    private MessageFormat arrayCreation = new MessageFormat(bundle.getString("message.array_creation"));
-    private MessageFormat arrayCreationDimensions = new MessageFormat(bundle.getString("message.array_creation.dimensions"));
-
+    /**
+     *
+     */
+    private MessageFormat enterLoop =
+        new MessageFormat(bundle.getString("message.enter_loop"));
+	/**
+	 *
+	 */
+    private MessageFormat continueLoop =
+        new MessageFormat(bundle.getString("message.continue_loop"));
+    /**
+     *
+     */
+    private MessageFormat exitLoop =
+        new MessageFormat(bundle.getString("message.exit_loop"));
+    /**
+     *
+     */
+    private MessageFormat breakLoop =
+        new MessageFormat(bundle.getString("message.break_loop"));
+    /**
+     *
+     */
+    private MessageFormat skipLoop =
+        new MessageFormat(bundle.getString("message.skip_loop"));
+	/**
+	 *
+	 */
+    private MessageFormat arrayCreation =
+        new MessageFormat(bundle.getString("message.array_creation"));
+    /**
+     *
+     */
+    private MessageFormat arrayCreationDimensions =
+        new MessageFormat(
+            bundle.getString("message.array_creation.dimensions"));
+            
+	//message.open_scope = Opening new scope for variables.
+	//message.close_scope = Closing a scope and erasing the scope variables.
+	//message.break_switch = Exiting the switch statement because of break.
+	//message.if_then = Choosing then-branch.
+	//message.if_else = Choosing else-branch.
+	//message.skip_if = Continuing without branching.
+	//message.enter_switch = Entering a switch statement.
+	//message.exit_switch = Exiting a switch statement.
+	//message.select_switch = This case selected.
+	//message.default_switch = Default case selected.
+            
+    /**
+     * 
+     */
     public void openScope() {
         //highlight(null);
         //showMessage(bundle.getString("message.open_scope"));
         getCurrentMethodFrame().openScope();
     }
 
+    /**
+     * 
+     */
     public void closeScope() {
         //highlight(null);
         //showMessage(bundle.getString("message.close_scope"));
         getCurrentMethodFrame().closeScope();
     }
 
+    /**
+     * @param statementName
+     * @param h
+     */
     public void enterLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage(enterLoop.format(new String[] {statementName}));
+        showMessage(enterLoop.format(new String[] { statementName }));
     }
 
+    /**
+     * @param statementName
+     * @param check
+     * @param h
+     */
     public void enterLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage(enterLoop.format(new String[] {statementName}));//, check);
+        showMessage(enterLoop.format(new String[] { statementName }));
+        //, check);
     }
 
+    /**
+     * @param statementName
+     * @param check
+     * @param h
+     */
     public void continueLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage(continueLoop.format(new String[] {statementName})); //, check);
+        showMessage(continueLoop.format(new String[] { statementName }));
+        //, check);
     }
 
+    /**
+     * @param statementName
+     * @param check
+     */
     public void exitLoop(String statementName, Value check) {
         highlight(null);
-        showMessage(exitLoop.format(new String[] {statementName}));//, check);
+        showMessage(exitLoop.format(new String[] { statementName }));
+        //, check);
     }
 
+    /**
+     * @param statementName
+     * @param h
+     */
     public void breakLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage(breakLoop.format(new String[] {statementName}));
+        showMessage(breakLoop.format(new String[] { statementName }));
     }
 
+    /**
+     * @param h
+     */
     public void breakSwitch(Highlight h) {
         highlight(h);
         showMessage(bundle.getString("message.break_switch"));
     }
 
+    /**
+     * @param statementName
+     * @param check
+     */
     public void skipLoop(String statementName, Value check) {
         highlight(null);
-        showMessage(skipLoop.format(new String[] {statementName}));//, check);
+        showMessage(skipLoop.format(new String[] { statementName }));
+        //, check);
     }
 
+    /**
+     * @param statementName
+     * @param h
+     */
     public void continueLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage(continueLoop.format(new String[] {statementName}));
+        showMessage(continueLoop.format(new String[] { statementName }));
     }
 
+    /**
+     * @param check
+     * @param h
+     */
     public void branchThen(Value check, Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.if_then"));//, check);
+        showMessage(bundle.getString("message.if_then")); //, check);
     }
 
+    /**
+     * @param check
+     * @param h
+     */
     public void branchElse(Value check, Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.if_else"));//, check);
+        showMessage(bundle.getString("message.if_else")); //, check);
     }
 
+    /**
+     * @param check
+     * @param h
+     */
     public void skipIf(Value check, Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.skip_if"));//, check);
+        showMessage(bundle.getString("message.skip_if")); //, check);
     }
 
+    /**
+     * @param h
+     */
     public void openSwitch(Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.enter_switch"));//, check);
+        showMessage(bundle.getString("message.enter_switch")); //, check);
     }
 
+    /**
+     * @param h
+     */
     public void closeSwitch(Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.exit_switch"));//, check);
+        showMessage(bundle.getString("message.exit_switch")); //, check);
     }
 
+    /**
+     * @param h
+     */
     public void switchSelected(Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.select_switch"));//, check);
+        showMessage(bundle.getString("message.select_switch")); //, check);
     }
 
+    /**
+     * @param h
+     */
     public void switchDefault(Highlight h) {
         highlight(h);
-        showMessage(bundle.getString("message.default_switch"));//, check);
+        showMessage(bundle.getString("message.default_switch")); //, check);
     }
 
+    /**
+     * @param dims
+     * @param h
+     */
     public void arrayCreation(int[] dims, Highlight h) {
 
         String dimensions = "";
@@ -1528,12 +1908,16 @@ public class Director {
         highlight(h);
         String[] message = new String[2];
         message[0] = arrayCreation.format(dimensionNumber);
-        message[1] = arrayCreationDimensions.format(new String[] {dimensions});
+        message[1] =
+            arrayCreationDimensions.format(new String[] { dimensions });
         showMessage(message);
     }
 
-
-    public void output(Value val, Highlight h)  {
+    /**
+     * @param val
+     * @param h
+     */
+    public void output(Value val, Highlight h) {
 
         highlight(h);
 
@@ -1546,8 +1930,10 @@ public class Director {
 
         Point dest = manager.getOutputPoint();
         Point handp = new Point(dest.x, dest.y - hand.getHeight());
-        Point vdp = new Point(dest.x + hand.getWidth()/3,
-                              dest.y - hand.getHeight()*2/3);
+        Point vdp =
+            new Point(
+                dest.x + hand.getWidth() / 3,
+                dest.y - hand.getHeight() * 2 / 3);
 
         Animation fist = hand.changeImage(factory.produceImage("image.hand2"));
         fist.setDuration(800);
@@ -1555,15 +1941,12 @@ public class Director {
         theatre.capture();
 
         hand.setLocation(dest);
-        engine.showAnimation(new Animation[] {
-                            actor.fly(vdp),
-                            hand.fly(handp, 0),
-                            fist
-                            });
+        engine.showAnimation(
+            new Animation[] { actor.fly(vdp), hand.fly(handp, 0), fist });
 
         hand.setImage(factory.produceImage("image.hand3"));
         theatre.removeActor(actor);
-        engine.showAnimation(hand.fly(dest,0));
+        engine.showAnimation(hand.fly(dest, 0));
 
         theatre.removeActor(hand);
         theatre.release();
@@ -1571,86 +1954,109 @@ public class Director {
         this.output(val.getValue() + "\n");
     }
 
+    /**
+     * @param e
+     */
     public void showErrorMessage(InterpreterError e) {
         errorOccured = true;
         jeliot.showErrorMessage(e);
     }
 
+    /**
+     * @param str
+     */
     public void output(String str) {
         str = ECodeUtilities.replace(str, "\\n", "\n");
         jeliot.output(str);
     }
 
+    /**
+     * @return
+     */
     public AnimationEngine getEngine() {
         return engine;
     }
 
+    /**
+     * @return
+     */
     public TheatreManager getManager() {
         return manager;
     }
 
+    /**
+     * @return
+     */
     public ActorFactory getFactory() {
         return factory;
     }
+    /**
+     * @return
+     */
     public Theatre getTheatre() {
         return theatre;
     }
 
+    /**
+     * @return
+     */
     public static Animator readInt() {
         return new InputAnimator(
             bundle.getString("input.int"),
             new InputValidator() {
-                public void validate(String s) {
-                    try {
-                        Integer i = new Integer(s);
-                        accept(new Value(i.toString(), int.class.getName()));
-                    }
-                    catch (NumberFormatException e) { }
-                }
+            public void validate(String s) {
+                try {
+                    Integer i = new Integer(s);
+                    accept(new Value(i.toString(), int.class.getName()));
+                } catch (NumberFormatException e) {}
             }
-        );
+        });
     }
 
+    /**
+     * @return
+     */
     public static Animator readDouble() {
         return new InputAnimator(
             bundle.getString("input.double"),
             new InputValidator() {
-                public void validate(String s) {
-                    try {
-                        Double d = new Double(s);
-                        accept(new Value(d.toString(), double.class.getName()));
-                    }
-                    catch (NumberFormatException e) { }
-                }
+            public void validate(String s) {
+                try {
+                    Double d = new Double(s);
+                    accept(new Value(d.toString(), double.class.getName()));
+                } catch (NumberFormatException e) {}
             }
-        );
+        });
     }
 
+    /**
+     * @return
+     */
     public static Animator readString() {
         return new InputAnimator(
             bundle.getString("input.string"),
             new InputValidator() {
-                public void validate(String s) {
-                    try {
-                        accept(new Value(s, "".getClass().getName()));
-                    }
-                    catch (NumberFormatException e) { }
-                }
+            public void validate(String s) {
+                try {
+                    accept(new Value(s, "".getClass().getName()));
+                } catch (NumberFormatException e) {}
             }
-        );
+        });
     }
 
+    /**
+     * @return
+     */
     public static Animator readChar() {
         return new InputAnimator(
             bundle.getString("input.char"),
             new InputValidator() {
-                public void validate(String s) {
-                    if (s.length() == 1) {
-                        accept(new Value(s, char.class.getName()));
-                    }
+            public void validate(String s) {
+                if (s.length() == 1) {
+                    accept(new Value(s, char.class.getName()));
                 }
             }
-        );
+        });
     }
 
     //possibly we will need some other input readers e.g. readString(), readChar()
@@ -1671,6 +2077,11 @@ public class Director {
         }
     }
 
+    /**
+     * @param type
+     * @param h
+     * @return
+     */
     /**
      * Shows an animation of the invocation of a static foreign
      * method for handling input.
@@ -1698,70 +2109,65 @@ public class Director {
         }
     }
 
+    /**
+     * @param prompt
+     * @param validator
+     * @return
+     */
     public Value getInput(String prompt, InputValidator validator) {
 
         validator.setController(controller);
         final InputComponent ic = new InputComponent(prompt, validator);
-        final ExpressionActor ea = currentScratch.getExpression(1,-2);
+        final ExpressionActor ea = currentScratch.getExpression(1, -2);
         Actor bga = factory.produceMessageActor(null);
         final Point p = ea.reserve(bga);
         ic.setBgactor(bga);
 
         try {
-            SwingUtilities.invokeAndWait(
-                new Runnable() {
-                    public void run() {
-                        theatre.add(ic);
-                        ic.setSize(ic.getPreferredSize());
-                        ic.setLocation(p);
-                        ic.revalidate();
-                        theatre.showComponents(true);
-                        theatre.release();
-                        ic.popup();
-                        theatre.flush();
-                    }
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    theatre.add(ic);
+                    ic.setSize(ic.getPreferredSize());
+                    ic.setLocation(p);
+                    ic.revalidate();
+                    theatre.showComponents(true);
+                    theatre.release();
+                    ic.popup();
+                    theatre.flush();
                 }
-            );
-        }
-        catch (java.lang.reflect.InvocationTargetException e) {
+            });
+        } catch (java.lang.reflect.InvocationTargetException e) {
             e.printStackTrace();
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         do {
             controller.pause();
 
-            controller.checkPoint(
-                new Controlled() {
+            controller.checkPoint(new Controlled() {
 
-                    public void suspend() {
-                        jeliot.directorFreezed();
-                    }
-
-                    public void resume() {
-                        jeliot.directorResumed();
-                    }
+                public void suspend() {
+                    jeliot.directorFreezed();
                 }
-            );
+
+                public void resume() {
+                    jeliot.directorResumed();
+                }
+            });
         } while (!validator.isOk());
 
         try {
-            SwingUtilities.invokeAndWait(
-                new Runnable() {
-                    public void run() {
-                        theatre.remove(ic);
-                        theatre.showComponents(false);
-                        theatre.flush();
-                    }
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    theatre.remove(ic);
+                    theatre.showComponents(false);
+                    theatre.flush();
                 }
-            );
-        }
-        catch (java.lang.reflect.InvocationTargetException e) {
+            });
+        } catch (java.lang.reflect.InvocationTargetException e) {
             e.printStackTrace();
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -1782,10 +2188,19 @@ public class Director {
         return val;
     }
 
-
-    public void showArrayCreation(ArrayInstance array, jeliot.lang.Reference ref,
-                                  Value[] lenVal, long expressionCounter,
-                                  Highlight h) {
+    /**
+     * @param array
+     * @param ref
+     * @param lenVal
+     * @param expressionCounter
+     * @param h
+     */
+    public void showArrayCreation(
+        ArrayInstance array,
+        jeliot.lang.Reference ref,
+        Value[] lenVal,
+        long expressionCounter,
+        Highlight h) {
 
         highlight(h);
 
@@ -1793,10 +2208,11 @@ public class Director {
         //Use SMIActor as base.
         int n = 0;
         if (lenVal != null) {
-             n = lenVal.length;
+            n = lenVal.length;
         }
 
-        ACActor actor = factory.produceACActor("new " + array.getComponentType(), n);
+        ACActor actor =
+            factory.produceACActor("new " + array.getComponentType(), n);
         ExpressionActor ea = currentScratch.getExpression(1, -1);
         currentScratch.registerCrap(actor);
 
@@ -1855,7 +2271,8 @@ public class Director {
 
         theatre.capture();
 
-        ExpressionActor expr = currentScratch.getExpression(1, expressionCounter);
+        ExpressionActor expr =
+            currentScratch.getExpression(1, expressionCounter);
         Point firstLoc = expr.reserve(refAct);
         engine.showAnimation(refAct.fly(firstLoc));
         expr.bind(refAct);
@@ -1863,14 +2280,24 @@ public class Director {
         theatre.release();
     }
 
-    public void showArrayAccess(VariableInArray var, Value[] indexVal,
-                                Value returnVal, Highlight h) {
+    /**
+     * @param var
+     * @param indexVal
+     * @param returnVal
+     * @param h
+     */
+    public void showArrayAccess(
+        VariableInArray var,
+        Value[] indexVal,
+        Value returnVal,
+        Highlight h) {
 
         highlight(h);
 
         Value value = var.getValue();
 
-        final VariableInArrayActor varAct = (VariableInArrayActor)var.getActor();
+        final VariableInArrayActor varAct =
+            (VariableInArrayActor) var.getActor();
 
         ValueActor returnAct = factory.produceValueActor(returnVal);
         returnVal.setActor(returnAct);
@@ -1905,21 +2332,27 @@ public class Director {
         }
         //currentScratch.registerCrap(returnAct);
 
-        currentScratch.registerCrapRemover(
-            new Runnable() {
-                public void run() {
-                    varAct.setLight(Actor.NORMAL);
-                }
+        currentScratch.registerCrapRemover(new Runnable() {
+            public void run() {
+                varAct.setLight(Actor.NORMAL);
             }
-        );
+        });
     }
 
+    /**
+     * @param length
+     * @param ai
+     */
     public void introduceArrayLength(Value length, ArrayInstance ai) {
         ValueActor lengthAct = factory.produceValueActor(length);
         lengthAct.setLocation(ai.getActor().getRootLocation());
         length.setActor(lengthAct);
     }
 
+    /**
+     * @param of
+     * @param h
+     */
     public void showObjectCreation(ObjectFrame of, Highlight h) {
 
         highlight(h);
@@ -1935,49 +2368,62 @@ public class Director {
 
     }
 
+    /**
+     * @param actor
+     */
     public void removeInstance(InstanceActor actor) {
         manager.removeInstance(actor);
     }
 
-/*
-    public void showArrayVariableAccess(VariableInArray var,
-                                        Value indexVal) {
 
-        //System.err.println("Wopee! " + var + " " + indexVal);
-
-        final VariableInArrayActor varAct =
-                (VariableInArrayActor)var.getActor();
-
-        ValueActor indexValAct = indexVal.getActor();
-
-        IndexActor indexAct = new IndexActor(indexValAct);
-        Animation appear = indexValAct.appear(
-                indexValAct.getRootLocation());
-        appear.setDuration(600);
-
-        theatre.capture();
-        engine.showAnimation(appear);
-        engine.showAnimation(indexAct.index(varAct));
-        varAct.setLight(Actor.HIGHLIGHT);
-        theatre.release();
-
-        currentScratch.registerCrap(indexValAct);
-        currentScratch.registerCrap(indexAct);
-        currentScratch.registerCrapRemover(
-            new Runnable() {
-                public void run() {
-                    varAct.setLight(Actor.NORMAL);
+    /*
+        public void showArrayVariableAccess(VariableInArray var,
+                                            Value indexVal) {
+    
+            //System.err.println("Wopee! " + var + " " + indexVal);
+    
+            final VariableInArrayActor varAct =
+                    (VariableInArrayActor)var.getActor();
+    
+            ValueActor indexValAct = indexVal.getActor();
+    
+            IndexActor indexAct = new IndexActor(indexValAct);
+            Animation appear = indexValAct.appear(
+                    indexValAct.getRootLocation());
+            appear.setDuration(600);
+    
+            theatre.capture();
+            engine.showAnimation(appear);
+            engine.showAnimation(indexAct.index(varAct));
+            varAct.setLight(Actor.HIGHLIGHT);
+            theatre.release();
+    
+            currentScratch.registerCrap(indexValAct);
+            currentScratch.registerCrap(indexAct);
+            currentScratch.registerCrapRemover(
+                new Runnable() {
+                    public void run() {
+                        varAct.setLight(Actor.NORMAL);
+                    }
                 }
-            }
-        );
-
-    }
-*/
+            );
+    
+        }
+    */
+    
+    
     //Jeliot 3
-    //Used for setting the reader for ecode interpreter
-    public void initializeInterpreter(BufferedReader br,
-                                      String programCode,
-                                      PrintWriter pr) {
+ 	/**
+	 * Used for setting the reader for ecode interpreter
+	 * @param br
+	 * @param programCode
+	 * @param pr
+	 */
+    public void initializeInterpreter(
+        BufferedReader br,
+        String programCode,
+        PrintWriter pr) {
+
         this.eCodeInterpreter = new Interpreter(br, this, programCode, pr);
         eCodeInterpreter.initialize();
     }
