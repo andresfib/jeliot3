@@ -194,7 +194,7 @@ public class Director {
          * interrupted flag is set true.
          */
         boolean interrupted = mCodeInterpreter.execute();
-        
+
         if (!errorOccured) {
             codePane.highlightStatement(new Highlight(0, 0, 0, 0));
         }
@@ -958,9 +958,7 @@ public class Director {
 
         release();
 
-        if (returnAct != null) {
-            return (ValueActor) ((BubbleActor) returnAct).getActor();
-        }
+        if (returnAct != null) { return (ValueActor) ((BubbleActor) returnAct).getActor(); }
         return null;
     }
 
@@ -1263,7 +1261,7 @@ public class Director {
         String type = variable.getType();
         VariableActor variableAct = variable.getActor();
         ValueActor valueAct = value.getActor();
-        
+
         if (MCodeUtilities.isPrimitive(type)) {
 
             // Get/create actors.
@@ -1272,7 +1270,7 @@ public class Director {
 
             ValueActor copiedValueAct = factory.produceValueActor(valueAct);
             copiedValueAct.setLocation(valueAct.getRootLocation());
-            
+
             Point valueLoc = variableAct.reserve(castAct);
 
             theatre.addActor(copiedValueAct);
@@ -1598,8 +1596,8 @@ public class Director {
                 msg += message[i] + "\n";
             }
 
-            JOptionPane.showMessageDialog(null, msg, messageBundle.getString("dialog.message.title"),
-                    JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, msg, messageBundle
+                    .getString("dialog.message.title"), JOptionPane.PLAIN_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
             showMessage(actor, h);
@@ -1684,7 +1682,8 @@ public class Director {
     /**
      *
      */
-    private MessageFormat enterLoop = new MessageFormat(messageBundle.getString("message.enter_loop"));
+    private MessageFormat enterLoop = new MessageFormat(messageBundle
+            .getString("message.enter_loop"));
 
     /**
      *
@@ -1700,7 +1699,8 @@ public class Director {
     /**
      *
      */
-    private MessageFormat breakLoop = new MessageFormat(messageBundle.getString("message.break_loop"));
+    private MessageFormat breakLoop = new MessageFormat(messageBundle
+            .getString("message.break_loop"));
 
     /**
      *
@@ -2231,7 +2231,7 @@ public class Director {
     public Value getInput(String prompt, InputValidator validator) {
 
         jeliot.directorFreezed();
-        
+
         validator.setController(controller);
         final InputComponent ic = new InputComponent(prompt, validator);
 
@@ -2265,20 +2265,21 @@ public class Director {
          */
 
         Controlled c = new Controlled() {
+
             public void suspend() {
                 jeliot.directorFreezed();
             }
+
             public void resume() {
                 jeliot.directorResumed();
             }
         };
-        
+
         do {
             controller.pause();
             try {
                 controller.checkPoint(c, true);
-            } catch (Exception e) {
-            }
+            } catch (Exception e) {}
         } while (!validator.isOk());
 
         try {
@@ -2326,7 +2327,8 @@ public class Director {
      * @param expressionCounter
      * @param h
      */
-    public void showArrayCreation(ArrayInstance array, jeliot.lang.Reference ref, Value[] lenVal,
+    public void showArrayCreation(ArrayInstance array, jeliot.lang.Reference ref,
+            ArrayInstance[] level1, ArrayInstance[][] level2, Value[] lenVal,
             long expressionCounter, Highlight h) {
 
         highlight(h);
@@ -2338,13 +2340,15 @@ public class Director {
             n = lenVal.length;
         }
 
-        ACActor actor = factory.produceACActor("new " + array.getComponentType(), n);
+        ACActor actor = factory.produceACActor("new "
+                + MCodeUtilities.resolveComponentType(array.getComponentType()), n);
         ExpressionActor ea = currentScratch.getExpression(1, -1);
         currentScratch.registerCrap(actor);
 
         //Point invoLoc = ea.getRootLocation();
         Point invoLoc = ea.reserve(actor);
         actor.setLocation(invoLoc);
+        actor.calculateSize();
 
         // Create actors and reserve places for all argument values,
         // and create animations to bring them in their right places.
@@ -2374,6 +2378,7 @@ public class Director {
         for (int i = 0; i < n; ++i) {
             actor.bind(argact[i]);
         }
+        release();
 
         highlight(h);
 
@@ -2385,6 +2390,74 @@ public class Director {
         engine.showAnimation(arrayAct.appear(loc));
         release();
         manager.bind(arrayAct);
+
+        if (level1 != null) {
+            for (int i = 0; i < level1.length; i++) {
+                //Create array actor
+                ArrayActor level1ArrayActor = factory.produceArrayActor(level1[i]);
+                level1[i].setArrayActor(level1ArrayActor);
+
+                //Show array actor
+                Point level1Location = manager.reserve(level1ArrayActor);
+                capture();
+                engine.showAnimation(level1ArrayActor.appear(level1Location));
+                release();
+                manager.bind(level1ArrayActor);
+
+                //Create reference
+                Reference level1Ref = new Reference(level1[i]);
+                ReferenceActor level1RefAct = factory.produceReferenceActor(level1Ref);
+                level1Ref.setActor(level1RefAct);
+                level1RefAct.setLocation(level1ArrayActor.getRootLocation());
+                
+                //Show and bind reference to correct value
+                ReferenceVariableInArrayActor rva = (ReferenceVariableInArrayActor) arrayAct
+                        .getVariableActor(i);
+                Point valueLoc = rva.reserve(level1RefAct);
+
+                capture();
+                engine.showAnimation(level1RefAct.fly(valueLoc));
+                rva.bind();
+                theatre.removePassive(level1RefAct);
+                release();
+                
+                array.getVariableAt(i).assign(level1Ref);
+            }
+        }
+
+        if (level2 != null) {
+            for (int i = 0; i < level2.length; i++) {
+                for (int j = 0; j < level2[i].length; j++) {
+                    //Create array actor
+                    ArrayActor level2ArrayActor = factory.produceArrayActor(level2[i][j]);
+                    level2[i][j].setArrayActor(level2ArrayActor);
+
+                    //Show array actor
+                    Point level2Location = manager.reserve(level2ArrayActor);
+                    capture();
+                    engine.showAnimation(level2ArrayActor.appear(level2Location));
+                    release();
+                    manager.bind(level2ArrayActor);
+
+                    //Create reference
+                    Reference level2Ref = new Reference(level2[i][j]);
+                    ReferenceActor level2RefAct = factory.produceReferenceActor(level2Ref);
+                    level2Ref.setActor(level2RefAct);
+                    level2RefAct.setLocation(level2ArrayActor.getRootLocation());
+
+                    //Show and bind reference to correct value
+                    ReferenceVariableInArrayActor rva = (ReferenceVariableInArrayActor) level1[i].getArrayActor().getVariableActor(j);
+                    Point valueLoc = rva.reserve(level2RefAct);
+
+                    capture();
+                    engine.showAnimation(level2RefAct.fly(valueLoc));
+                    rva.bind();
+                    theatre.removePassive(level2RefAct);
+                    release();
+                    level1[i].getVariableAt(j).assign(level2Ref);
+                }
+            }
+        }
 
         ReferenceActor refAct = factory.produceReferenceActor(ref);
         ref.setActor(refAct);
@@ -2411,42 +2484,57 @@ public class Director {
      * @param returnVal
      * @param h
      */
-    public void showArrayAccess(VariableInArray var, Value[] indexVal, Value returnVal, Highlight h) {
+    public void showArrayAccess(VariableInArray[] vars, Value[] indexVal, Value returnVal,
+            Highlight h) {
 
         highlight(h);
+        int n = vars.length;
 
-        Value value = var.getValue();
+        Value value = vars[n - 1].getValue();
 
-        final VariableInArrayActor varAct = (VariableInArrayActor) var.getActor();
+        final VariableInArrayActor[] varActs = new VariableInArrayActor[n];
+        for (int i = 0; i < n; i++) {
+            varActs[i] = (VariableInArrayActor) vars[i].getActor();
+        }
 
         ValueActor returnAct = factory.produceValueActor(returnVal);
         returnVal.setActor(returnAct);
         Point loc = value.getActor().getRootLocation();
         returnAct.setLocation(loc);
 
-        int n = indexVal.length;
+        int m = indexVal.length;
 
         Animation[] appear = new Animation[n];
         Animation[] index = new Animation[n];
         IndexActor[] indexAct = new IndexActor[n];
         ValueActor[] indexValAct = new ValueActor[n];
-
-        for (int i = 0; i < n; i++) {
+        Point literalLocation = cbox.getRootLocation();
+        
+        for (int i = 0; i < m; i++) {
             indexValAct[i] = indexVal[i].getActor();
+            //TODO: change indexActor to use ActorFactory when creating new instances.
             indexAct[i] = new IndexActor(indexValAct[i]);
+            if (indexValAct[i].getRootLocation().equals(cbox.getRootLocation())) {
+                indexValAct[i].setLocation(new Point(literalLocation));
+                literalLocation.x += indexValAct[i].getWidth() + 5;
+            }
             appear[i] = indexValAct[i].appear(indexValAct[i].getRootLocation());
+          
             appear[i].setDuration(600);
-            index[i] = indexAct[i].index(varAct);
+            index[i] = indexAct[i].index(varActs[i]);
         }
 
         capture();
-        engine.showAnimation(appear);
-        engine.showAnimation(index);
-        varAct.setLight(Actor.HIGHLIGHT);
+
+        for (int i = 0; i < m; i++) {
+            engine.showAnimation(appear[i]);
+            engine.showAnimation(index[i]);
+            varActs[i].setLight(Actor.HIGHLIGHT);
+        }
         //engine.showAnimation(returnAct.appear(loc));
         release();
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < m; i++) {
             currentScratch.registerCrap(indexValAct[i]);
             currentScratch.registerCrap(indexAct[i]);
         }
@@ -2455,7 +2543,10 @@ public class Director {
         currentScratch.registerCrapRemover(new Runnable() {
 
             public void run() {
-                varAct.setLight(Actor.NORMAL);
+                int n = varActs.length;
+                for (int i = 0; i < n; i++) {
+                    varActs[i].setLight(Actor.NORMAL);
+                }
             }
         });
     }

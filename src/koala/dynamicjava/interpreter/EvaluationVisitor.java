@@ -1803,8 +1803,10 @@ public class EvaluationVisitor extends VisitorObject {
 			newArray = Array.newInstance(NodeProperties.getComponentType(node),
 					dims);
 		}
+        //TODO: get all the hashcodes of the different dimensions from the array
+        
 		MCodeUtilities.write("" + Code.AA + Code.DELIM + arrayAllocationCounter
-				+ Code.DELIM + Integer.toHexString(newArray.hashCode())
+				+ Code.DELIM + MCodeUtilities.getValue(newArray) /*Integer.toHexString(newArray.hashCode())*/
 				+ Code.DELIM + NodeProperties.getComponentType(node).getName()
 				+ Code.DELIM + dims.length + Code.DELIM
 				+ MCodeUtilities.arrayToString(dimExpressionReferences)
@@ -1880,12 +1882,13 @@ public class EvaluationVisitor extends VisitorObject {
 		List arrayCellNumbersList;
 		List arrayCellReferencesList;
 
-		long arrayAccessCounter = counter++;
-
+        long arrayAccessCounter = counter;
+        
 		boolean iAmFirst = first;
 		first = false;
 		long nameCounter = 0; // Not used if not first
 		if (iAmFirst) {
+		    counter++;
 			arrayCellNumbersList = new ArrayList();
 			arrayCellReferencesList = new ArrayList();
 			MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AAC
@@ -1895,8 +1898,8 @@ public class EvaluationVisitor extends VisitorObject {
 			arrayCellNumbersStack.push(arrayCellNumbersList);
 			arrayCellReferencesStack.push(arrayCellReferencesList);
 		} else {
-			arrayCellNumbersList = (List) arrayCellNumbersStack.pop();
-			arrayCellReferencesList = (List) arrayCellReferencesStack.pop();
+			arrayCellNumbersList = (List) arrayCellNumbersStack.peek();
+			arrayCellReferencesList = (List) arrayCellReferencesStack.peek();
 		}
 
 		//This is for array reference when the qualified name is visited
@@ -1917,10 +1920,12 @@ public class EvaluationVisitor extends VisitorObject {
 		arrayCellNumbersList.add(o);
 		arrayCellReferencesList.add(new Long(cellCounter));
 
+        /*
 		if (!iAmFirst) {
 			arrayCellNumbersStack.push(arrayCellNumbersList);
 			arrayCellReferencesStack.push(arrayCellReferencesList);
 		}
+        */
 
 		Object result = Array.get(t, ((Number) o).intValue());
 		String resultString;
@@ -1944,7 +1949,8 @@ public class EvaluationVisitor extends VisitorObject {
 							.toArray())
 					+ Code.DELIM
 					+ MCodeUtilities.arrayToString(arrayCellNumbersList
-							.toArray()) + Code.DELIM + resultString
+							.toArray())
+                    + Code.DELIM + resultString
 					+ Code.DELIM + NodeProperties.getType(node).getName()
 					+ Code.DELIM + MCodeUtilities.locationToString(node));
 

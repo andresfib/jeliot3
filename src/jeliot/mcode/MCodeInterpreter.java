@@ -2,11 +2,13 @@ package jeliot.mcode;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import jeliot.FeatureNotImplementedException;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
@@ -203,11 +205,14 @@ public abstract class MCodeInterpreter {
 
         } catch (StoppingRequestedError e) {
             return false;
+        } catch (FeatureNotImplementedException e) {
+            MessageFormat notImplemented = new MessageFormat(messageBundle.getString("notImplemented.exception"));
+            handleCodeERROR(notImplemented.format(new String[] {e.getMessage()}), null);
         } catch (Exception e) {
             if (DebugUtil.DEBUGGING) {
                 e.printStackTrace();
             }
-        	handleCodeERROR("<H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null);
+        	handleCodeERROR("<H1> Runtime Exception </H1> "+ " <P>The feature is not yet implemented. </P> ", null);
         	return true;
         }
         return true;

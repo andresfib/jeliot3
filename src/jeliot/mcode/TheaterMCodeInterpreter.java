@@ -11,6 +11,7 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import jeliot.FeatureNotImplementedException;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.ClassInfo;
 import jeliot.lang.Instance;
@@ -526,7 +527,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 expressionReference));
         Reference varRef = (Reference) variable.getValue();
         ArrayInstance ainst = (ArrayInstance) varRef.getInstance();
-        VariableInArray var = ainst.getVariableAt(cellNumber);
+        int n = cellNumber.length;
+        VariableInArray[] vars = new VariableInArray[n];
+        for (int i = 0; i < n; i++) {
+            vars[i] = ainst.getVariableAt(cellNumber[i]);
+            if (i != n - 1) {
+                ainst = (ArrayInstance) ((Reference) vars[i].getValue()).getInstance();
+            }
+        }
 
         //Getting the right Values that point to the cell in
         // the array
@@ -554,7 +562,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             }
         }
 
-        director.showArrayAccess(var, cellNumberValues, val, h);
+        director.showArrayAccess(vars, cellNumberValues, val, h);
 
         exprs.pop();
 
@@ -577,7 +585,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             }
         }
 
-        /**
+        /*
          * Look from the expression stack what expression should be shown next
          */
         expressionReference = 0;
@@ -607,7 +615,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             if (command == Code.TO) {
 
-                variables.put(new Long(expressionCounter), var);
+                variables.put(new Long(expressionCounter), vars[n-1]);
 
             } else {
 
@@ -646,12 +654,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             if (oper == Code.PRIE || oper == Code.PRDE) {
 
-                variables.put(new Long(expressionCounter), var);
+                variables.put(new Long(expressionCounter), vars[n-1]);
                 values.put(new Long(expressionCounter), val);
 
             } else if (oper == Code.PIE || oper == Code.PDE) {
 
-                variables.put(new Long(expressionCounter), var);
+                variables.put(new Long(expressionCounter), vars[n-1]);
                 values.put(new Long(expressionReference), val);
                 values.put(new Long(expressionCounter), val);
 
@@ -670,7 +678,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         } else {
 
             values.put(new Long(expressionCounter), val);
-            variables.put(new Long(expressionCounter), var);
+            variables.put(new Long(expressionCounter), vars[n-1]);
 
         }
 
@@ -697,6 +705,81 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeAA(long expressionReference, String hashCode,
             String compType, int dims, String dimensionReferences,
             String dimensionSizes, Highlight h) {
+        
+
+        StringTokenizer st = new StringTokenizer(
+                dimensionReferences, Code.LOC_DELIM);
+
+        long[] dimensionReference = new long[dims];
+
+        for (int i = 0; st.hasMoreTokens(); i++) {
+            dimensionReference[i] = Long.parseLong(st
+                    .nextToken());
+        }
+
+        st = new StringTokenizer(dimensionSizes, Code.LOC_DELIM);
+        int[] dimensionSize = new int[dims];
+
+        for (int i = 0; st.hasMoreTokens(); i++) {
+            dimensionSize[i] = Integer.parseInt(st.nextToken());
+        }
+
+        Value[] dimensionValues = new Value[dims];
+
+        for (int i = 0; i < dims; i++) {
+            dimensionValues[i] = (Value) values
+                    .remove(new Long(dimensionReference[i]));
+
+        }
+       
+        if (dimensionSize.length > 3) {
+            throw new FeatureNotImplementedException("More than 3-dimensional arrays are not supported.");
+        }
+        
+        ArrayInstance ai = new ArrayInstance(hashCode,
+                compType, dimensionSize.length, dimensionSize[0]);
+
+        Reference ref = new Reference(ai);
+
+        ArrayInstance[] level1 = null;
+        if (dimensionSize.length > 1) {
+            level1 = new ArrayInstance[dimensionSize[0]];
+            for (int i = 0; i < dimensionSize[0]; i++) {
+                level1[i] = new ArrayInstance("", compType, dimensionSize.length - 1, dimensionSize[1]);
+            }
+        }
+        
+        ArrayInstance[][] level2 = null;
+        if (dimensionSize.length > 2) {
+            level2 = new ArrayInstance[dimensionSize[0]][dimensionSize[1]];
+            for (int i = 0; i < dimensionSize[0]; i++) {
+                for (int j = 0; j < dimensionSize[1]; j++) {
+                    level2[i][j] = new ArrayInstance("", compType, dimensionSize.length - 2, dimensionSize[2]);
+                }
+            }
+        }
+
+        director.showArrayCreation(ai, ref, level1, level2, dimensionValues,
+                expressionReference, h);
+
+        //director.arrayCreation(dimensionSize, h);
+
+        instances.put(hashCode, ai);
+
+        ref.makeReference();
+
+        values.put(new Long(expressionReference), ref);
+
+        for (int i = 0; i < dims; i++) {
+            Object[] postIncDec = (Object[]) postIncsDecs
+                    .remove(new Long(dimensionReference[i]));
+
+            if (postIncDec != null) {
+                doPostIncDec(postIncDec);
+            }
+        }
+        
+        /*
         StringTokenizer st = new StringTokenizer(dimensionReferences, ",");
 
         long[] dimensionReference = new long[dims];
@@ -744,7 +827,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 doPostIncDec(postIncDec);
             }
         }
-
+        */
     }
 
     /**
@@ -2646,7 +2729,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeAIE(String arrayReference, long cellNumber, long expressionReference, String value, String type, long l, Highlight highlight) {
         
         ArrayInstance ai = (ArrayInstance) instances.get(arrayReference);
-        VariableInArray v = ai.getVariableAt(new int[] {(int) cellNumber});
+        VariableInArray v = ai.getVariableAt((int) cellNumber);
         
         boolean literal = ((l == 1) ? true : false);
         Value fromValue = (Value) values.remove(new Long(expressionReference));

@@ -2735,7 +2735,7 @@ public class Interpreter {
                         //References of the dimension values
                         String dimensionReferences = tokenizer.nextToken();
                         StringTokenizer st = new StringTokenizer(
-                                dimensionReferences, ",");
+                                dimensionReferences, Code.LOC_DELIM);
 
                         long[] dimensionReference = new long[dims];
 
@@ -2768,11 +2768,11 @@ public class Interpreter {
                         }
 
                         ArrayInstance ai = new ArrayInstance(hashCode,
-                                compType, dimensionSize);
+                                compType, dimensionSize.length, dimensionSize[0]);
 
                         Reference ref = new Reference(ai);
 
-                        director.showArrayCreation(ai, ref, dimensionValues,
+                        director.showArrayCreation(ai, ref, null, null, dimensionValues,
                                 expressionReference, h);
 
                         //director.arrayCreation(dimensionSize, h);
@@ -2850,8 +2850,15 @@ public class Interpreter {
                         Reference varRef = (Reference) variable.getValue();
                         ArrayInstance ainst = (ArrayInstance) varRef
                                 .getInstance();
-                        VariableInArray var = ainst.getVariableAt(cellNumber);
-
+                        int n = cellNumber.length;
+                        
+                        VariableInArray[] vars = new VariableInArray[n];
+                        for (int i = 0; i < n; i++) {
+                            vars[i] = ainst.getVariableAt(cellNumber[i]);
+                            if (i != n - 1) {
+                                ainst = (ArrayInstance) ((Reference) vars[i].getValue()).getInstance();
+                            }
+                        }
                         //Getting the right Values that point to the cell in
                         // the array
                         Value[] cellNumberValues = new Value[dims];
@@ -2879,7 +2886,7 @@ public class Interpreter {
                             }
                         }
 
-                        director.showArrayAccess(var, cellNumberValues, val, h);
+                        director.showArrayAccess(vars, cellNumberValues, val, h);
 
                         exprs.pop();
 
@@ -2937,7 +2944,7 @@ public class Interpreter {
 
                             if (command == Code.TO) {
 
-                                variables.put(new Long(expressionCounter), var);
+                                variables.put(new Long(expressionCounter), vars[n-1]);
 
                             } else {
 
@@ -2981,12 +2988,12 @@ public class Interpreter {
 
                             if (oper == Code.PRIE || oper == Code.PRDE) {
 
-                                variables.put(new Long(expressionCounter), var);
+                                variables.put(new Long(expressionCounter), vars[n-1]);
                                 values.put(new Long(expressionCounter), val);
 
                             } else if (oper == Code.PIE || oper == Code.PDE) {
 
-                                variables.put(new Long(expressionCounter), var);
+                                variables.put(new Long(expressionCounter), vars[n-1]);
                                 values.put(new Long(expressionReference), val);
                                 values.put(new Long(expressionCounter), val);
 
@@ -3008,7 +3015,7 @@ public class Interpreter {
                         } else {
 
                             values.put(new Long(expressionCounter), val);
-                            variables.put(new Long(expressionCounter), var);
+                            variables.put(new Long(expressionCounter), vars[n-1]);
 
                         }
 

@@ -224,9 +224,7 @@ public class TreeInterpreter implements Interpreter {
         } catch (StoppingRequestedError e) {
             return e;
         } catch (ExecutionError e) {
-            if (DebugUtil.DEBUGGING) {
-                e.printStackTrace();
-            }
+            DebugUtil.handleThrowable(e);
 
             InterpreterException ie = new InterpreterException(e);
 
@@ -246,9 +244,7 @@ public class TreeInterpreter implements Interpreter {
             //throw new InterpreterException(e);
             return e;
         } catch (ParseError e) {
-            if (DebugUtil.DEBUGGING) {
-                e.printStackTrace();
-            }
+            DebugUtil.handleThrowable(e);
 
             InterpreterException ie = new InterpreterException(e);
 
@@ -270,9 +266,7 @@ public class TreeInterpreter implements Interpreter {
             //throw new InterpreterException(e);
             return e;
         } catch (Error e) {
-            if (DebugUtil.DEBUGGING) {
-                e.printStackTrace();
-            }
+            DebugUtil.handleThrowable(e);
 
             String code = "" + Code.ERROR + Code.DELIM + "<H1>Error</H1><BR>";
 
@@ -307,9 +301,8 @@ public class TreeInterpreter implements Interpreter {
             //e.printStackTrace();
             return e;
         } catch (Exception e) {
-            if (DebugUtil.DEBUGGING) {
-                e.printStackTrace();
-            }
+            DebugUtil.handleThrowable(e);
+            
             String code = "" + Code.ERROR + Code.DELIM + "<H1>Exception</H1><BR>";
 
             if (e instanceof ClassNotFoundException) {

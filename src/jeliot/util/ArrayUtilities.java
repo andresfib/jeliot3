@@ -1,4 +1,4 @@
-package jeliot.lang;
+package jeliot.util;
 
 import java.lang.reflect.Array;
 
