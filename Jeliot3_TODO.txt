@@ -12,7 +12,9 @@
 * Starting the animation with only a constructor (and not a method call) now works. setInside was peeking an empty stack. (done)
 * It is possible to choose a font of editor and code pane from Jeliot. (done)
 * Change properties to use property files and save some of the values to user default values in their home directory. (done, although this could be for other properties as well.)
-* 2 and 3 -dimensional arrays (done partially, no support for array initializer)
+* 2 and 3 -dimensional arrays (done partially, no support for array initializers)
+* super and this method calls are handled similarily to JLS. (done)
+* 
 
 ----- JELIOT 3 TODO-LIST for next version 4.X:------
 
