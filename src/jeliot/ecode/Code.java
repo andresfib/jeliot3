@@ -90,6 +90,7 @@ public class Code {
     public static final int DO=43;          // DO-While statement
     public static final int OUTPUT=44;      // Output statement
     public static final int INPUT=54;       // Input statement
+    public static final int INPUTTED=55;       // Input statement
     public static final int ERROR=53;       // Error statement
 
 }
