@@ -60,7 +60,7 @@ public class JFontChooser extends JComponent {
 
         pane.setSelectedFont(defaultFont);
 
-        dialog.show(); // Blocks until user dismisses dialog
+        dialog.setVisible(true); // Blocks until user dismisses dialog
 
         return ok.getSelectedFont();
     }
@@ -76,7 +76,7 @@ public class JFontChooser extends JComponent {
         dialog.addWindowListener(new JFontChooserDialog.Closer());
         dialog.addComponentListener(new JFontChooserDialog.DisposeOnClose());
 
-        dialog.show(); // Blocks until user dismisses dialog
+        dialog.setVisible(true); // Blocks until user dismisses dialog
 
         return ok.getSelectedFont();
     }
@@ -414,7 +414,7 @@ class JFontChooserDialog extends JDialog {
             okButton.addActionListener(okListener);
         okButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                hide();  // just hide the dialog
+                setVisible(false);  // just hide the dialog
             }
         });
         buttonPane.add(okButton);
@@ -426,7 +426,7 @@ class JFontChooserDialog extends JDialog {
             cancelButton.addActionListener(cancelListener);
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                hide();  // just hide the dialog\
+                setVisible(false);  // just hide the dialog\
             }
         });
         buttonPane.add(cancelButton);
@@ -445,7 +445,7 @@ class JFontChooserDialog extends JDialog {
     static class Closer extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
             Window w = e.getWindow();
-            w.hide();
+            w.setVisible(false);
         }
     }
 
