@@ -2,6 +2,8 @@ package jeliot.ecode;
 
 import jeliot.theatre.*;
 
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.util.*;
 
 
@@ -52,6 +54,13 @@ public class ECodeUtilities {
     public static final int DOUBLE = 7;
     public static final int STRING = 8;
     public static final int REFERENCE = 9;
+
+	//Highest code is now 54
+	
+	// private static PrintWriter writer=Launcher.getWriter();
+	private static PrintWriter writer=null;
+
+	private static BufferedReader reader=null;
 
     public static int resolveType(String type) {
         if (type.equals(boolean.class.getName())) {
@@ -354,5 +363,60 @@ public class ECodeUtilities {
         int ec = Integer.parseInt(st.nextToken());
         return new Highlight(bl, bc, el, ec);
     }
+
+	public static void setWriter(PrintWriter w){
+	    writer=w;
+	}
+
+	//For output handling!!!!
+	public static void setReader(BufferedReader r){
+	    reader=r;
+	}
+
+	public static void write(String str){
+	    writer.println(str); // connected to jeliot
+	    // System.out.println(str);// Output to stdout
+	}
+
+	public static Object readInt(){
+	int result;
+	try {
+	    
+	    result=Integer.parseInt(reader.readLine());
+	    return new Integer(result);  	    
+	} catch (Exception e) {
+	    return null;
+	    //ThrowException!!!!!!!!!!!!!!!
+	}
+	
+	}
+
+	public static Object readDouble(){
+	double result;
+	try {
+	    
+	    result=Double.parseDouble(reader.readLine());
+	    return new Double(result);  	    
+	} catch (Exception e) {
+	    return null;
+	    //ThrowException!!!!!!!!!!!!!!!
+	}
+	
+	}
+
+	public static String argToString(List argnames){
+	//Change to extract elements from list and add delims
+	
+	    if (!argnames.isEmpty()) {
+	        String result="";
+	        Iterator it= argnames.listIterator();
+	        while(it.hasNext()){
+	        result+=(String)it.next()+Code.LOC_DELIM;
+	    }
+	        return result.substring(0,result.length()-1);
+	    } else {
+	        return "";
+	    }
+	}
 
 }

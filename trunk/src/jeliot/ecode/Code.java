@@ -2,8 +2,8 @@ package jeliot.ecode;
 import java.io.*;
 import jeliot.launcher.*;
 import java.util.*;
-//VERSION 0.0.6
-// Last MOdified : 10 Febraury
+
+
 
 public class Code {
 
@@ -89,36 +89,8 @@ public class Code {
     public static final int CONT=42;        // Continue statement
     public static final int DO=43;          // DO-While statement
     public static final int OUTPUT=44;      // Output statement
-
+    public static final int INPUT=54;       // Input statement
     public static final int ERROR=53;       // Error statement
-
-    //Highest code is now 53
-
-    // private static PrintWriter writer=Launcher.getWriter();
-    private static PrintWriter writer=null;
-
-    public static void setWriter(PrintWriter w){
-        writer=w;
-    }
-    public static void write(String str){
-        writer.println(str); // connected to jeliot
-        // System.out.println(str);// Output to stdout
-    }
-
-    public static String argToString(List argnames){
-    //Change to extract elements from list and add delims
-
-        if (!argnames.isEmpty()) {
-            String result="";
-            Iterator it= argnames.listIterator();
-            while(it.hasNext()){
-            result+=(String)it.next()+LOC_DELIM;
-        }
-            return result.substring(0,result.length()-1);
-        } else {
-            return "";
-        }
-    }
 
 }
 

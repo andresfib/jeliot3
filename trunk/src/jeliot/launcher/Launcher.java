@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.*;
 
 import jeliot.ecode.Code;
+import jeliot.ecode.ECodeUtilities;
 
 //import jeliot.gui.JeliotWindow;
 
@@ -20,9 +21,12 @@ public class Launcher extends Thread {
     private BufferedReader reader = null;
     private boolean running=true; //indicates if interpreterThread is running
 
-    //private String s="Testing.java"; // = get filename //
-    //private Reader s = null;
-    //private Reader stream = null;
+    // Pipe communicating Director ->DynamicJava  
+    // For Input Requests!!!!!!
+    private PipedWriter putInput = new PipedWriter();
+    private PipedReader getInput = null;
+    private PrintWriter inputWriter = new PrintWriter(putInput);
+    private BufferedReader inputReader = null;
 
     private String methodCall=null;
     private Reader r = null;
@@ -35,10 +39,11 @@ public class Launcher extends Thread {
 
     public Launcher(Reader input) {
         this.r = input;
-        Code.setWriter(writer);
+        ECodeUtilities.setWriter(writer);
 
         try {
             pipedReader = new PipedReader(pipedWriter);
+            getInput = new PipedReader(putInput);
         }
         catch (IOException e) {
             System.err.println("When creating Pipe reader:" + e);
@@ -53,6 +58,10 @@ public class Launcher extends Thread {
         //  throw e;
         //}
         reader = new BufferedReader(pipedReader);
+        //For Input!!
+	inputReader = new BufferedReader(getInput);
+	ECodeUtilities.setReader(inputReader);
+
 //        interpreter.interpret(r,"buffer");// (stream,"buffer");
     }
 
@@ -73,7 +82,7 @@ public class Launcher extends Thread {
                                       "buffer");
                                       // (stream,"buffer");
 
-            jeliot.ecode.Code.write(""+jeliot.ecode.Code.END);
+            ECodeUtilities.write(""+jeliot.ecode.Code.END);
 
             synchronized(this) {
                 try {
