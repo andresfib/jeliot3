@@ -1058,6 +1058,7 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(ArrayAllocation node) {
         // Visits the initializer if one
+        long arrayAllocationCounter = counter++;
         if (node.getInitialization() != null) {
             return node.getInitialization().acceptVisitor(this);
         }
@@ -1085,7 +1086,7 @@ public class EvaluationVisitor extends VisitorObject {
         } else {
             newArray = Array.newInstance(NodeProperties.getComponentType(node), dims);
         }
-        ECodeUtilities.write(""+Code.AA+Code.DELIM+(counter++)+Code.DELIM
+        ECodeUtilities.write(""+Code.AA+Code.DELIM+arrayAllocationCounter+Code.DELIM
                              +Integer.toHexString(newArray.hashCode())+Code.DELIM
                              +NodeProperties.getComponentType(node)+Code.DELIM
                              +dims.length+Code.DELIM
@@ -1122,6 +1123,7 @@ public class EvaluationVisitor extends VisitorObject {
         List arrayCellNumbersList;
         List arrayCellReferencesList;
 
+        long arrayAccessCounter = counter++;
         
         boolean iAmFirst=first;
         first=false;
@@ -1162,7 +1164,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = Array.get(t, ((Number)o).intValue());
 
         if ( iAmFirst ) {
-            ECodeUtilities.write(""+Code.AAC+Code.DELIM+( counter++ ) + Code.DELIM + arrayCellNumbersList.size()
+            ECodeUtilities.write(""+Code.AAC+Code.DELIM+arrayAccessCounter+ Code.DELIM + arrayCellNumbersList.size()
                                  +Code.DELIM+ECodeUtilities.arrayToString(arrayCellNumbersList.toArray())
                                  +Code.DELIM+ECodeUtilities.arrayToString(arrayCellReferencesList.toArray())
                                  +Code.DELIM+result.toString()
