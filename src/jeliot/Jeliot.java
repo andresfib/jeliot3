@@ -494,7 +494,6 @@ public class Jeliot {
             if (!args[0].equals("")) {
                 final String program = args[0];
                 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
                     public void run() {
                         jeliot.setProgram(program);
                     }
@@ -503,7 +502,6 @@ public class Jeliot {
         }
         
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
             public void run() {
                 jeliot.run();
             }
