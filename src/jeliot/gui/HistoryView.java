@@ -28,7 +28,7 @@ public class HistoryView extends JComponent implements ActionListener {
 	/**
 	 * Comment for <code>HISTORY_SIZE</code>
 	 */
-	private static final int HISTORY_SIZE = 15;
+	private static final int HISTORY_SIZE = 10;
 	
 	/**
 	 * Comment for <code>LIMIT_HISTORY_SIZE</code>

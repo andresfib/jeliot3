@@ -10,7 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -455,14 +454,13 @@ public class JeliotWindow {
             rootPane.add("South", bottomPane);
 
             frame.setContentPane(rootPane);
-
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            
+            //Maximize the window.
+            
             /*
-             * frame.setSize(screenSize.width, screenSize.height - 30); // To
-             * maximize the window
-             */
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            //frame.setSize(screenSize.width, screenSize.height - 30);
             frame.setSize(800, 600);
-
             Dimension frameSize = frame.getSize();
             if (frameSize.height > screenSize.height)
                 frameSize.height = screenSize.height;
@@ -471,7 +469,8 @@ public class JeliotWindow {
 
             frame.setLocation((screenSize.width - frameSize.width) / 2,
                     (screenSize.height - frameSize.height) / 2);
-
+            */
+            
             frame.addWindowListener(new WindowAdapter() {
 
                 public void windowClosing(WindowEvent e) {
@@ -509,6 +508,7 @@ public class JeliotWindow {
             aw = new AboutWindow(iLoad.getImage(bundle.getString("image.jeliot_icon")), udir);
 
             frame.pack();
+            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.show();
             //editor.requestFocus();
             //System.out.println(theatre.getSize());
@@ -1155,11 +1155,15 @@ public class JeliotWindow {
      * index = from.indexOf(c); } return from; }
      */
 
-    Pattern method1 = Pattern.compile("\\s+static\\s+void\\s+main\\s*\\(\\s*String[^,]*\\[\\s*\\][^,]*\\)");
+    Pattern method1 = Pattern
+            .compile("\\s+static\\s+void\\s+main\\s*\\(\\s*String[^,]*\\[\\s*\\][^,]*\\)");
+
     Pattern method2 = Pattern.compile("\\s+static\\s+void\\s+main\\s*\\(\\s*\\)");
+
     Pattern class1 = Pattern.compile("\\s+class\\s+");
+
     Pattern class2 = Pattern.compile("\\s");
-    
+
     /**
      * Tries to find the main method declaration
      * from one of the classes.
@@ -1174,7 +1178,7 @@ public class JeliotWindow {
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\r", " ");
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\t", " ");
         commentsRemoved = " " + commentsRemoved;
-        
+
         //System.out.println(p.pattern());
         String[] method = method1.split(commentsRemoved, 2);
         //String[] method = programCode.split("\\s+static\\s+void\\s+main\\s*\\(\\s*String[^,]*\\[\\s*\\]\\s[^,]*\\)", 2);
@@ -1192,7 +1196,7 @@ public class JeliotWindow {
         }
 
         method = method2.split(commentsRemoved, 2);
-        
+
         if (method.length > 1 && method[1].length() > 0) {
             //System.out.println(method[0]);
             //System.out.println(method[1]);
