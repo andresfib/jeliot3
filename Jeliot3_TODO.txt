@@ -2,7 +2,7 @@
 * null values caused crashing in constructors and methods (done)
 * maximize window when starting (done)
 * mnemonic for file menu (done)
-* configure Jeliot through properties file (done)
+* configure Jeliot through properties file in Jeliot's main directory (done)
 * Replace '\t' characters with spaces when saving (done)
 * fix the caret position after saving when previous point is done. (done)
 * dependencies between classes should not affect the compilation (done partially, circular dependencies are not handled correctly.)
@@ -10,6 +10,7 @@
 * Problems with threads. The previous threads are left running when new threads are created. They should be cleaned before creating new ones. (done, testing needed)
 * Problems with memory when history view has a large images in store. (done, pictures saved on disk and users have a option to use history view or not)
 * Starting the animation with only a constructor (and not a method call) now works. setInside was peeking an empty stack. (done)
+* It is possible to choose a font of editor and code pane from Jeliot. (done)
 
 ----- JELIOT 3 TODO-LIST for next version 4.X:------
 
