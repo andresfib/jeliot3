@@ -121,8 +121,7 @@ public class TheatreManager implements ComponentListener {
         if (!stages.empty()) {
             scratch.setLocation(maxStagex + 45, 10);
         } else {
-            scratch.setLocation((ActorFactory.getTypeValueWidth(8) +
-            ActorFactory.getMaxTypeWidth() + 50) + 45, 10);
+            scratch.setLocation((ActorFactory.getMaxMethodStageWidth()) + 45, 10);
         }
         theatre.addPassive(scratch);
     }
@@ -140,7 +139,8 @@ public class TheatreManager implements ComponentListener {
         }
     }
 
-/*    private void positionInputBox() {
+/*
+    private void positionInputBox() {
         if (input != null) {
             //There is now 50 pixels between constant box and input box
             int x = 60 + cbox.getWidth();
