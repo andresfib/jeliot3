@@ -399,9 +399,9 @@ public class JeliotWindow {
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Step");
-        menuItem.setMnemonic(KeyEvent.VK_T);
+        menuItem.setMnemonic(KeyEvent.VK_S);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_T, ActionEvent.CTRL_MASK));
+                KeyEvent.VK_SPACE,0));
         menuItem.addActionListener(
             new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -566,7 +566,7 @@ public class JeliotWindow {
         rewindButton = makeControlButton("Rewind", "rewindicon.gif");
 
         stepButton = makeControlButton("Step", "stepicon.gif");
-        stepButton.setMnemonic(KeyEvent.VK_T);
+        stepButton.setMnemonic(KeyEvent.VK_S);
         playButton = makeControlButton("Play", "playicon.gif");
         playButton.setMnemonic(KeyEvent.VK_P);
         pauseButton = makeControlButton("Pause", "pauseicon.gif");
@@ -1047,9 +1047,9 @@ public class JeliotWindow {
         editButton.setEnabled(true);
 
         String[] s1 = {"Pause"};
-        setEnabledMenuItems(true, s1);
+        setEnabledMenuItems(false, s1);
         String[] s2 = { "Step","Play","Rewind","Edit" };
-        setEnabledMenuItems(false, s2);
+        setEnabledMenuItems(true, s2);
 
         jeliot.pause();
     }
