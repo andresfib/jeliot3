@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
  * This class contains the MCode language constructs as a 
  * final static variables that can be used in DynamicJava during
  * extraction of information in MCode and interpretation of the
- * MCode in MCode interpreter.
+ * MCode in MCodeinterpreter.
  * 
  * @author Niko Myller
  * @author Andrés Moreno
