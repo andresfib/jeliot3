@@ -77,11 +77,11 @@ public class IOTools {
             erg=in.readLine();
         } catch(IOException e){
             System.err.println(""+e+"\n Programm abgebrochen...\n");
-            System.exit(1);
+            //System.exit(1);
         }
         if (erg==null) {
           System.err.println("Dateiende erreicht.\nProgramm abgebrochen...\n");
-          System.exit(1);
+          //System.exit(1);
         }
         return erg;
     }
