@@ -351,14 +351,13 @@ public class Jeliot {
         controller = new ThreadController(new Runnable() {
             public void run() {
                 try {
-                    /* 
                     //This should be used when the thread killing works.
                     if (director.direct()) {
                         gui.animationFinished();
                     }
-                    */
-                    director.direct();
-                    gui.animationFinished();
+                   
+                    //director.direct();
+                    //gui.animationFinished();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -518,7 +517,6 @@ public class Jeliot {
         return gui;
     }
 
-    /*
     public void stopThreads() {
         //This kills the Animation and Call Tree threads.
         if (mCodeInterpreterForTheater != null) {
@@ -530,30 +528,14 @@ public class Jeliot {
         if (controller != null) {
             controller.quit();
         }
-    */    
+        
         //This should kill the Launcher thread but it doesn't work!
-        /*if (launcher != null) {
+        if (launcher != null) {
             launcher.stopThread();
         }
+        
         BufferedReader r = MCodeUtilities.getReader();
-        BufferedWriter w = MCodeUtilities.getWriter();
         MCodeUtilities.setReader(null);
-        MCodeUtilities.setWriter(null);
-        if (w != null) {
-            synchronized (w) {
-                w.notifyAll();
-            }
-            
-            try {
-                w.flush();
-            } catch (IOException e) {
-            }
-            try {
-                w.close();
-            } catch (IOException e) {
-            }            
-        }
-        w = null;
         if (r != null) {
             synchronized (r) {
                 r.notifyAll();
@@ -564,12 +546,12 @@ public class Jeliot {
             }
         }
         r = null;
-        if (ecode != null) {
-            synchronized (ecode) {
-                ecode.notifyAll();
+        if (ecodeReader != null) {
+            synchronized (ecodeReader) {
+                ecodeReader.notifyAll();
             }
             try {
-                ecode.close();
+                ecodeReader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -581,20 +563,33 @@ public class Jeliot {
             inputWriter.flush();
             inputWriter.close();
         }
-                
+        
+        PrintWriter w = MCodeUtilities.getWriter();
+        MCodeUtilities.setWriter(null);
+        if (w != null) {
+            synchronized (w) {
+                w.notifyAll();
+            }
+            w.flush();
+            w.close();
+        }
+        w = null;
+
+        
         if (launcher != null) {
             synchronized (launcher) {
                 launcher.notify();
             }
         }
+        
+        
         launcher = null;
         controller = null;
         callTreeThread = null;
         MCodeUtilities.clearRegisteredSecondaryMCodeConnections();
         inputWriter = null;
         ecodeReader = null;
-        */
-    //}
+    }
 
     /**
      * @param args is a String array that contains parameter values for Jeliot.

@@ -1,5 +1,7 @@
 package jeliot.theater;
 
+import jeliot.mcode.StoppingRequestedError;
+
 /**
   * <p>
   * <code>ThreadController</code> allows the execution of the
@@ -56,6 +58,11 @@ public class ThreadController {
 	 */
 	private Thread thread;
 
+    /**
+     * Indicates when this thread should be stopped.
+     */
+    private boolean stoppingRequested = false;
+    
 	/**
 	 * Constructs a new controller for given Runnable.
 	 * @param runner
@@ -68,6 +75,9 @@ public class ThreadController {
 	 * Starts or resumes the Runnable immediately in its own thread.
 	 */
 	public synchronized void start() {
+        if (stoppingRequested == true) {
+            throw new StoppingRequestedError();
+        }
 		switch (status) {
 			case (PAUSED):
 				if (thread == null) {
@@ -88,6 +98,9 @@ public class ThreadController {
 	 * point.
 	 */
 	public synchronized void pause() {
+        if (stoppingRequested == true) {
+            throw new StoppingRequestedError();
+        }
 		switch (status) {
 			case (RUNNING):
 				status = PAUSEREQ;
@@ -103,6 +116,9 @@ public class ThreadController {
 	 * @param cont
 	 */
 	public synchronized void checkPoint(Controlled cont) {
+        if (stoppingRequested == true) {
+            throw new StoppingRequestedError();
+        }
 		switch (status) {
 			case (RUNNING) :
 				break;
@@ -114,6 +130,9 @@ public class ThreadController {
 				try {
 					wait();
 				} catch (InterruptedException e) {}
+                if (stoppingRequested == true) {
+                    throw new StoppingRequestedError();
+                }
 				if (cont != null) {
 					cont.resume();
 				}
@@ -124,6 +143,12 @@ public class ThreadController {
 		}
 	}
 
+    public synchronized void quit() {
+        stoppingRequested = true;
+        notify();
+    }
+    
+    
 	/**
 	 * Calling the checkpoint(Controlled) method with null actual
      * parameter value.

@@ -79,7 +79,8 @@ public abstract class MCodeInterpreter {
     /**
      * The resource bundle for mcode properties
      */
-    static protected UserPropertyResourceBundle propertiesBundle = ResourceBundles.getMCodeUserPropertyResourceBundle();
+    static protected UserPropertyResourceBundle propertiesBundle = ResourceBundles
+            .getMCodeUserPropertyResourceBundle();
 
     /**
      * Related to Super method calls in constructor's first line in
@@ -126,6 +127,10 @@ public abstract class MCodeInterpreter {
         return constructorCalls.empty();
     }
 
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+    
     /**
      * @return
      */
@@ -136,74 +141,77 @@ public abstract class MCodeInterpreter {
     public abstract void closeScratch();
 
     public abstract void beforeExecution();
-    
+
     /**
      *  
      */
-    public void execute() {
+    public boolean execute() {
 
         //TODO: Take the next line out of the comments for the versions to be realeased
         try {
-         
-        beforeExecution();
-        
-        openScratch();
 
-        while (running) {
+            beforeExecution();
 
-            if (!constructorCall) {
-                if (!firstLineRead) {
-                    line = readLine();
-                    interpret(line);
-                } else {
-                    firstLineRead = false;
-                    interpret(line);
-                }
-                //Constructor call is going in super method calls.
-            } else {
-                String storedLine = readLine();
+            openScratch();
 
-                StringTokenizer tokenizer = new StringTokenizer(storedLine, Code.DELIM);
-                int token = Integer.parseInt(tokenizer.nextToken());
-                if (token == Code.INPUT) {
-                    interpret("" + Code.ERROR + Code.DELIM
-                            + messageBundle.getString("inputInConstructor.exception")
-                            // + "<H1>Feature not implemented</H1> " + "<P>Super classes' constructors cannot "
-                            + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
-                            + Code.LOC_DELIM + "0");
-                }
-                if (token == Code.ERROR) {
-                    interpret(storedLine);
-                }
-                if (token == Code.CONSCN) {
-                    long number = Long.parseLong(tokenizer.nextToken());
-                    if (number == superMethodCallNumber) {
-                        //Interpret the rest of the constructor call
-                        interpret(readLine());
-                        interpret(readLine());
+            while (running) {
 
-                        //Then start using the collected statements
-                        constructorCalls.push(superMethodsReading);
-                        superMethods = superMethodsReading;
-                        superMethodsReading = null;
-                        constructorCall = false;
-                        continue;
+                if (!constructorCall) {
+                    if (!firstLineRead) {
+                        line = readLine();
+                        interpret(line);
+                    } else {
+                        firstLineRead = false;
+                        interpret(line);
                     }
+                    //Constructor call is going in super method calls.
+                } else {
+                    String storedLine = readLine();
+
+                    StringTokenizer tokenizer = new StringTokenizer(storedLine, Code.DELIM);
+                    int token = Integer.parseInt(tokenizer.nextToken());
+                    if (token == Code.INPUT) {
+                        interpret("" + Code.ERROR + Code.DELIM
+                                + messageBundle.getString("inputInConstructor.exception")
+                                // + "<H1>Feature not implemented</H1> " + "<P>Super classes' constructors cannot "
+                                + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
+                                + Code.LOC_DELIM + "0");
+                    }
+                    if (token == Code.ERROR) {
+                        interpret(storedLine);
+                    }
+                    if (token == Code.CONSCN) {
+                        long number = Long.parseLong(tokenizer.nextToken());
+                        if (number == superMethodCallNumber) {
+                            //Interpret the rest of the constructor call
+                            interpret(readLine());
+                            interpret(readLine());
+
+                            //Then start using the collected statements
+                            constructorCalls.push(superMethodsReading);
+                            superMethods = superMethodsReading;
+                            superMethodsReading = null;
+                            constructorCall = false;
+                            continue;
+                        }
+                    }
+                    superMethodsReading.add(storedLine);
                 }
-                superMethodsReading.add(storedLine);
+
             }
+            closeScratch();
 
+        } catch (StoppingRequestedError e) {
+            return false;
         }
-        closeScratch();
-
         /* TODO: Take this out of the comments for the versions to be
          * realeased.
          */
-         } catch (Exception e) {
-         	 handleCodeERROR("<H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null);
-         }
-         
-         
+        // catch (Exception e) {
+        //	 handleCodeERROR("<H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null);
+        //  return true;
+        //}
+        return true;
     }
 
     public void cleanEvaluationArea(int token) {}
@@ -234,682 +242,520 @@ public abstract class MCodeInterpreter {
                 switch (token) {
 
                     //Gives a reference to the left hand side of the expression
-                    case Code.LEFT:
-                        {
-                            long token1 = Long.parseLong(tokenizer.nextToken());
-                            handleCodeLEFT(token1);
-                            break;
-                        }
+                    case Code.LEFT: {
+                        long token1 = Long.parseLong(tokenizer.nextToken());
+                        handleCodeLEFT(token1);
+                        break;
+                    }
 
                     //Gives a reference to the right hand side of the expression
-                    case Code.RIGHT:
-                        {
-                            long token1 = Long.parseLong(tokenizer.nextToken());
-                            handleCodeRIGHT(token1);
-                            break;
-                        }
+                    case Code.RIGHT: {
+                        long token1 = Long.parseLong(tokenizer.nextToken());
+                        handleCodeRIGHT(token1);
+                        break;
+                    }
 
                     //Begins an expression
-                    case Code.BEGIN:
-                        {
-                            //first token
-                            long expressionType = Long.parseLong(tokenizer.nextToken());
-                            long expressionReference = Long.parseLong(tokenizer.nextToken());
-                            String location = tokenizer.nextToken();
-                            handleCodeBEGIN(expressionType, expressionReference, location);
-                            break;
-                        }
+                    case Code.BEGIN: {
+                        //first token
+                        long expressionType = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
+                        String location = tokenizer.nextToken();
+                        handleCodeBEGIN(expressionType, expressionReference, location);
+                        break;
+                    }
 
                     //Indicates where the value is assigned
-                    case Code.TO:
-                        {
-                            long expressionReference = Long.parseLong(tokenizer.nextToken());
-                            handleCodeTO(expressionReference);
-                            break;
-                        }
+                    case Code.TO: {
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
+                        handleCodeTO(expressionReference);
+                        break;
+                    }
 
                     //Assignment
-                    case Code.A:
-                        {
-                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
-                            long fromExpression = Long.parseLong(tokenizer.nextToken());
-                            long toExpression = Long.parseLong(tokenizer.nextToken());
-                            String value = "";
-                            if (tokenizer.countTokens() > 2) {
-                                value = tokenizer.nextToken();
-                            }
-                            String type = tokenizer.nextToken();
-                            Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-
-                            handleCodeA(expressionCounter, fromExpression, toExpression, value,
-                                    type, h);
-
-                            break;
+                    case Code.A: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long fromExpression = Long.parseLong(tokenizer.nextToken());
+                        long toExpression = Long.parseLong(tokenizer.nextToken());
+                        String value = "";
+                        if (tokenizer.countTokens() > 2) {
+                            value = tokenizer.nextToken();
                         }
+                        String type = tokenizer.nextToken();
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+
+                        handleCodeA(expressionCounter, fromExpression, toExpression, value, type, h);
+
+                        break;
+                    }
 
                     /*
                      * Unary Expressions
                      */
                     // Complement
-                    case Code.COMP:
-                        {
-                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
-                            long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
-                            String value = tokenizer.nextToken();
-                            String type = tokenizer.nextToken();
+                    case Code.COMP: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        String value = tokenizer.nextToken();
+                        String type = tokenizer.nextToken();
 
-                            Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-                            handleCodeCOMP(expressionCounter, unaryExpressionReference, value,
-                                    type, h);
-                            break;
-                        }
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeCOMP(expressionCounter, unaryExpressionReference, value, type, h);
+                        break;
+                    }
 
                     // Plus operator
-                    case Code.PLUS:
-                        {
-                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
-                            long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
-                            String value = tokenizer.nextToken();
-                            String type = tokenizer.nextToken();
+                    case Code.PLUS: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        String value = tokenizer.nextToken();
+                        String type = tokenizer.nextToken();
 
-                            Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-                            handleCodePLUS(expressionCounter, unaryExpressionReference, value,
-                                    type, h);
-                            break;
-                        }
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodePLUS(expressionCounter, unaryExpressionReference, value, type, h);
+                        break;
+                    }
 
                     // Minus operator
-                    case Code.MINUS:
-                        {
-                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
-                            long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
-                            String value = tokenizer.nextToken();
-                            String type = tokenizer.nextToken();
+                    case Code.MINUS: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        String value = tokenizer.nextToken();
+                        String type = tokenizer.nextToken();
 
-                            Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-                            handleCodeMINUS(expressionCounter, unaryExpressionReference, value,
-                                    type, h);
-                            break;
-                        }
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeMINUS(expressionCounter, unaryExpressionReference, value, type, h);
+                        break;
+                    }
 
                     // Boolean Not
-                    case Code.NO:
-                        {
-                            long expressionCounter = Long.parseLong(tokenizer.nextToken());
-                            long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
-                            String value = tokenizer.nextToken();
-                            String type = tokenizer.nextToken();
+                    case Code.NO: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long unaryExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        String value = tokenizer.nextToken();
+                        String type = tokenizer.nextToken();
 
-                            Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-                            handleCodeNO(expressionCounter, unaryExpressionReference, value, type,
-                                    h);
-                            break;
-                        }
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeNO(expressionCounter, unaryExpressionReference, value, type, h);
+                        break;
+                    }
 
                     // Unary Expression
                     // PostIncrement
-                    case Code.PIE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    case Code.PIE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
 
                         String value = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodePIE(expressionCounter, expressionReference,
-                                value, type, h);
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodePIE(expressionCounter, expressionReference, value, type, h);
                         break;
                     }
 
-                // PostDecrement
-                case Code.PDE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    // PostDecrement
+                    case Code.PDE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
 
                         String value = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodePDE(expressionCounter, expressionReference,
-                                value, type, h);
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodePDE(expressionCounter, expressionReference, value, type, h);
                         break;
                     }
 
-                // Unary Expression
-                // PreIncrement
-                case Code.PRIE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    // Unary Expression
+                    // PreIncrement
+                    case Code.PRIE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodePRIE(expressionCounter, expressionReference,
-                                value, type, h);
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodePRIE(expressionCounter, expressionReference, value, type, h);
                         break;
                     }
 
-                // PreDecrement
-                case Code.PRDE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    // PreDecrement
+                    case Code.PRDE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodePRDE(expressionCounter, expressionReference,
-                                value, type, h);
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodePRDE(expressionCounter, expressionReference, value, type, h);
                         break;
                     }
 
-                /*
-                 * Binary Expressions
-                 */
+                    /*
+                     * Binary Expressions
+                     */
 
-                // Bitwise Or
-                case Code.BITOR:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Bitwise Or
+                    case Code.BITOR: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeBITOR(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeBITOR(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Bitwise Xor
-                case Code.BITXOR:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Bitwise Xor
+                    case Code.BITXOR: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeBITXOR(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeBITXOR(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Bitwise And
-                case Code.BITAND:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Bitwise And
+                    case Code.BITAND: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeBITAND(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeBITAND(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Bitwise Left Shift
-                case Code.LSHIFT:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Bitwise Left Shift
+                    case Code.LSHIFT: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeLSHIFT(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeLSHIFT(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Bitwise Right Shift
-                case Code.RSHIFT:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Bitwise Right Shift
+                    case Code.RSHIFT: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeRSHIFT(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeRSHIFT(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Unsigned Right Shift
-                case Code.URSHIFT:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Unsigned Right Shift
+                    case Code.URSHIFT: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeURSHIFT(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeURSHIFT(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Xor Expression
-                case Code.XOR:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Xor Expression
+                    case Code.XOR: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeXOR(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeXOR(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // And Expression
-                case Code.AND:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // And Expression
+                    case Code.AND: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                        handleCodeAND(expressionCounter,
-                                leftExpressionReference,
+                        handleCodeAND(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Or Expression
-                case Code.OR:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Or Expression
+                    case Code.OR: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeOR(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeOR(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Equal Expression
-                case Code.EE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Equal Expression
+                    case Code.EE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeEE(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeEE(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Not Equal Expression
-                case Code.NE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Not Equal Expression
+                    case Code.NE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                        handleCodeNE(expressionCounter,
-                                leftExpressionReference,
+                        handleCodeNE(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                case Code.CAST:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    case Code.CAST: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeCAST(expressionCounter,
-                                expressionReference,
-                                value, type, h);
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeCAST(expressionCounter, expressionReference, value, type, h);
                         break;
                     }
 
-                // Less Expression
-                case Code.LE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Less Expression
+                    case Code.LE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeLE(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeLE(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Less or Equal Expression
-                case Code.LQE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Less or Equal Expression
+                    case Code.LQE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeLQE(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeLQE(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Greater Than
-                case Code.GT:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Greater Than
+                    case Code.GT: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeGT(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeGT(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Greater or Equal Expression
-                case Code.GQT:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Greater or Equal Expression
+                    case Code.GQT: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeGQT(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeGQT(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Multiplication Expression
-                case Code.ME:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Multiplication Expression
+                    case Code.ME: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeME(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeME(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Remainder (mod) Expression
-                case Code.RE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Remainder (mod) Expression
+                    case Code.RE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeRE(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeRE(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Division Expression
-                case Code.DE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Division Expression
+                    case Code.DE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeDE(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeDE(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Substract Expression
-                case Code.SE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Substract Expression
+                    case Code.SE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeSE(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeSE(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                // Add Expression
-                case Code.AE:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
+                    // Add Expression
+                    case Code.AE: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long leftExpressionReference = Long.parseLong(tokenizer.nextToken());
+                        long rightExpressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        handleCodeAE(expressionCounter,
-                                leftExpressionReference,
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeAE(expressionCounter, leftExpressionReference,
                                 rightExpressionReference, value, type, h);
                         break;
                     }
 
-                //Variable Declaration
-                case Code.VD:
-                    {
+                    //Variable Declaration
+                    case Code.VD: {
                         String variableName = tokenizer.nextToken();
-                        long initializerExpression = Long.parseLong(tokenizer
-                                .nextToken());
+                        long initializerExpression = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 4) {
                             value = tokenizer.nextToken();
@@ -918,18 +764,15 @@ public abstract class MCodeInterpreter {
                         String modifier = tokenizer.nextToken();
 
                         //Make the location information for the location token
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
-                        handleCodeVD(variableName, initializerExpression,
-                                value, type, modifier, highlight);
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeVD(variableName, initializerExpression, value, type, modifier,
+                                highlight);
                         break;
                     }
 
-                //Qualified Name (variable)
-                case Code.QN:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                    //Qualified Name (variable)
+                    case Code.QN: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
                         String variableName = tokenizer.nextToken();
                         String value = null;
                         if (tokenizer.countTokens() >= 2) {
@@ -940,57 +783,22 @@ public abstract class MCodeInterpreter {
                         String type = tokenizer.nextToken();
                         Highlight highlight = null;
                         if (tokenizer.hasMoreElements()) {
-                            highlight = MCodeUtilities.makeHighlight(tokenizer
-                                    .nextToken());
+                            highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                         }
 
-                        handleCodeQN(expressionCounter, variableName, value,
-                                type, highlight);
+                        handleCodeQN(expressionCounter, variableName, value, type, highlight);
                         break;
                     }
 
-                //Static field access
-                case Code.SFA:
-                	{
-                    
-                   //Second token is the expression counter
-                    long expressionCounter = Long.parseLong(tokenizer
-                            .nextToken());
-                    
-                    String declaringClass = tokenizer.nextToken();  
-                    
-                    String variableName = tokenizer.nextToken();
-                    
-                    String value = null;
-                    if (tokenizer.countTokens() >= 3) {
-                        //Third token is the value of the literal
-                        value = tokenizer.nextToken();
-                    } else {
-                        /*
-                         * There is no third token because the
-                         * literal is an empty string.
-                         */
-                        value = "";
-                    }
+                    //Static field access
+                    case Code.SFA: {
 
-                    //Fourth token is the type of the literal
-                    String type = tokenizer.nextToken();
-
-                    //Fifth token is the highlight information.
-                    //Not normally used because the whole expression is highlighted.
-                    Highlight highlight = MCodeUtilities
-                            .makeHighlight(tokenizer.nextToken());
-
-                    handleCodeSFA(expressionCounter, declaringClass, variableName, value, type, highlight);
-                    	break;
-                	}
-                
-                //Literal
-                case Code.L:
-                    {
                         //Second token is the expression counter
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+
+                        String declaringClass = tokenizer.nextToken();
+
+                        String variableName = tokenizer.nextToken();
 
                         String value = null;
                         if (tokenizer.countTokens() >= 3) {
@@ -1009,60 +817,77 @@ public abstract class MCodeInterpreter {
 
                         //Fifth token is the highlight information.
                         //Not normally used because the whole expression is highlighted.
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+
+                        handleCodeSFA(expressionCounter, declaringClass, variableName, value, type,
+                                highlight);
+                        break;
+                    }
+
+                    //Literal
+                    case Code.L: {
+                        //Second token is the expression counter
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+
+                        String value = null;
+                        if (tokenizer.countTokens() >= 3) {
+                            //Third token is the value of the literal
+                            value = tokenizer.nextToken();
+                        } else {
+                            /*
+                             * There is no third token because the
+                             * literal is an empty string.
+                             */
+                            value = "";
+                        }
+
+                        //Fourth token is the type of the literal
+                        String type = tokenizer.nextToken();
+
+                        //Fifth token is the highlight information.
+                        //Not normally used because the whole expression is highlighted.
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeL(expressionCounter, value, type, highlight);
                         break;
                     }
 
-                //Simple Allocation (Object Allocation)
-                case Code.SA:
-                    {
+                    //Simple Allocation (Object Allocation)
+                    case Code.SA: {
                         //simpleAllocationCounter
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
 
                         String declaringClass = tokenizer.nextToken();
                         String constructorName = tokenizer.nextToken();
 
-                        int parameterCount = Integer.parseInt(tokenizer
-                                .nextToken());
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
-                        handleCodeSA(expressionCounter, declaringClass,
-                                constructorName, parameterCount, highlight);
+                        int parameterCount = Integer.parseInt(tokenizer.nextToken());
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeSA(expressionCounter, declaringClass, constructorName,
+                                parameterCount, highlight);
                         break;
                     }
 
-                case Code.CONSCN:
-                    {
+                    case Code.CONSCN: {
                         //Normally nothing needs to be done for this!
                         handleCodeCONSCN(Long.parseLong(tokenizer.nextToken()));
                         break;
                     }
 
-                // Simple class allocation close
-                case Code.SAC:
-                    {
+                    // Simple class allocation close
+                    case Code.SAC: {
                         //simpleAllocationCounter
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
                         String hashCode = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeSAC(expressionCounter, hashCode, h);
                         break;
                     }
 
-                // Object field access
-                case Code.OFA:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long objectCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                    // Object field access
+                    case Code.OFA: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long objectCounter = Long.parseLong(tokenizer.nextToken());
                         String variableName = tokenizer.nextToken();
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
@@ -1070,60 +895,49 @@ public abstract class MCodeInterpreter {
                         }
 
                         String type = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                        handleCodeOFA(expressionCounter, objectCounter,
-                                variableName, value, type, h);
+                        handleCodeOFA(expressionCounter, objectCounter, variableName, value, type,
+                                h);
                         break;
                     }
 
-                // Object method call
-                case Code.OMC:
-                    {
+                    // Object method call
+                    case Code.OMC: {
 
                         String methodName = tokenizer.nextToken();
-                        int parameterCount = Integer.parseInt(tokenizer
-                                .nextToken());
-                        long objectCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                        int parameterCount = Integer.parseInt(tokenizer.nextToken());
+                        long objectCounter = Long.parseLong(tokenizer.nextToken());
                         String objectValue = "";
                         if (tokenizer.countTokens() > 1) {
                             objectValue = tokenizer.nextToken();
                         }
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
-                        handleCodeOMC(methodName, parameterCount,
-                                objectCounter, objectValue, highlight);
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        handleCodeOMC(methodName, parameterCount, objectCounter, objectValue,
+                                highlight);
                         break;
                     }
 
-                // Object method call close
-                case Code.OMCC:
-                    {
+                    // Object method call close
+                    case Code.OMCC: {
                         handleCodeOMCC();
                         break;
                     }
 
-                //Static Method Call
-                case Code.SMC:
-                    {
+                    //Static Method Call
+                    case Code.SMC: {
                         String methodName = tokenizer.nextToken();
                         String className = tokenizer.nextToken();
-                        int parameterCount = Integer.parseInt(tokenizer
-                                .nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        int parameterCount = Integer.parseInt(tokenizer.nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeSMC(methodName, className, parameterCount, h);
                         break;
                     }
 
-                //Parameter
-                case Code.P:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    //Parameter
+                    case Code.P: {
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
                         String argType = tokenizer.nextToken();
 
@@ -1131,19 +945,16 @@ public abstract class MCodeInterpreter {
                         break;
                     }
 
-                //Method declaration
-                case Code.MD:
-                    {
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    //Method declaration
+                    case Code.MD: {
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeMD(h);
                         break;
                     }
 
-                //Parameters list
-                case Code.PARAMETERS:
-                    {
+                    //Parameters list
+                    case Code.PARAMETERS: {
                         String parameters = "";
                         if (tokenizer.hasMoreTokens()) {
                             parameters = tokenizer.nextToken();
@@ -1153,44 +964,35 @@ public abstract class MCodeInterpreter {
                         break;
                     }
 
-                // Return Statement
-                case Code.R:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    // Return Statement
+                    case Code.R: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = "";
                         if (tokenizer.countTokens() >= 3) {
                             value = tokenizer.nextToken();
                         }
                         String type = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                        handleCodeR(expressionCounter, expressionReference,
-                                value, type, h);
+                        handleCodeR(expressionCounter, expressionReference, value, type, h);
                         break;
                     }
 
-                // Static method call closed
-                case Code.SMCC:
-                    {
+                    // Static method call closed
+                    case Code.SMCC: {
                         handleCodeSMCC();
                         break;
                     }
 
-                //If Then Statement
-                case Code.IFT:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    //If Then Statement
+                    case Code.IFT: {
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
 
                         Highlight h = null;
                         if (tokenizer.hasMoreElements()) {
-                            h = MCodeUtilities.makeHighlight(tokenizer
-                                    .nextToken());
+                            h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                         }
 
                         handleCodeIFT(expressionReference, value, h);
@@ -1198,125 +1000,97 @@ public abstract class MCodeInterpreter {
                         break;
                     }
 
-                //IF Then Else Statement
-                case Code.IFTE:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    //IF Then Else Statement
+                    case Code.IFTE: {
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeIFTE(expressionReference, value, h);
 
                         break;
                     }
 
-                //While Statement
-                case Code.WHI:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    //While Statement
+                    case Code.WHI: {
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
                         int round = Integer.parseInt(tokenizer.nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeWHI(expressionReference, value, round, h);
                         break;
                     }
 
-                //For Statement
-                case Code.FOR:
-                    {
+                    //For Statement
+                    case Code.FOR: {
                         long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
                         long round = Long.parseLong(tokenizer.nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeFOR(expressionReference, value, round, h);
                         break;
                     }
 
-                //Do-While Statement
-                case Code.DO:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    //Do-While Statement
+                    case Code.DO: {
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
                         long round = Long.parseLong(tokenizer.nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeDO(expressionReference, value, round, h);
                         break;
                     }
 
-                case Code.SWITCHB:
-                    {
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    case Code.SWITCHB: {
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeSWITCHB(h);
                         break;
                     }
 
-                case Code.SWIBF:
-                    {
-                        long selectorReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long switchBlockReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    case Code.SWIBF: {
+                        long selectorReference = Long.parseLong(tokenizer.nextToken());
+                        long switchBlockReference = Long.parseLong(tokenizer.nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                        handleCodeSWIBF(selectorReference,
-                                switchBlockReference, h);
+                        handleCodeSWIBF(selectorReference, switchBlockReference, h);
 
                         break;
                     }
 
-                case Code.SWITCH:
-                    {
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    case Code.SWITCH: {
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeSWITCH(h);
                         break;
                     }
 
-                //Break Statement
-                case Code.BR:
-                    {
-                        int statementName = Integer.parseInt(tokenizer
-                                .nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    //Break Statement
+                    case Code.BR: {
+                        int statementName = Integer.parseInt(tokenizer.nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeBR(statementName, h);
 
                         break;
                     }
 
-                //Continue Statement
-                case Code.CONT:
-                    {
-                        int statementName = Integer.parseInt(tokenizer
-                                .nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    //Continue Statement
+                    case Code.CONT: {
+                        int statementName = Integer.parseInt(tokenizer.nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeCONT(statementName, h);
 
                         break;
                     }
 
-                //Outputting an expression
-                case Code.OUTPUT:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    //Outputting an expression
+                    case Code.OUTPUT: {
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         String className = tokenizer.nextToken();
                         String methodName = tokenizer.nextToken();
                         String value = "";
@@ -1325,65 +1099,56 @@ public abstract class MCodeInterpreter {
                         }
                         String type = "";
                         if (tokenizer.countTokens() >= 3) {
-                        	type = tokenizer.nextToken();
+                            type = tokenizer.nextToken();
                         }
                         boolean breakLine = tokenizer.nextToken().equals("1") ? true : false;
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeOUTPUT(expressionReference, className, methodName, value, type,
                                 breakLine, highlight);
                         break;
                     }
 
-                //Input needs to be read
-                case Code.INPUT:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                    //Input needs to be read
+                    case Code.INPUT: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
                         String className = tokenizer.nextToken();
                         String methodName = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
-                        
+
                         String prompt = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                        handleCodeINPUT(expressionCounter, className, methodName, type, ((prompt.equals("null")) ? null : prompt), h);
+                        handleCodeINPUT(expressionCounter, className, methodName, type, ((prompt
+                                .equals("null")) ? null : prompt), h);
 
                         break;
                     }
 
-                //Inputted value is returned
-                case Code.INPUTTED:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                    //Inputted value is returned
+                    case Code.INPUTTED: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
                         String value = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeINPUTTED(expressionCounter, value, type, h);
 
                         break;
                     }
 
-                //Opening and closing scopes
-                case Code.SCOPE:
-                    {
+                    //Opening and closing scopes
+                    case Code.SCOPE: {
                         int scope = Integer.parseInt(tokenizer.nextToken());
 
                         handleCodeSCOPE(scope);
                         break;
                     }
 
-                //Array Allocation
-                case Code.AA:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    //Array Allocation
+                    case Code.AA: {
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
 
                         String hashCode = tokenizer.nextToken();
                         String compType = tokenizer.nextToken();
@@ -1397,22 +1162,18 @@ public abstract class MCodeInterpreter {
 
                         Highlight h = null;
                         if (tokenizer.hasMoreElements()) {
-                            h = MCodeUtilities.makeHighlight(tokenizer
-                                    .nextToken());
+                            h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                         }
 
-                        handleCodeAA(expressionReference, hashCode, compType,
-                                dims, dimensionReferences, dimensionSizes, h);
+                        handleCodeAA(expressionReference, hashCode, compType, dims,
+                                dimensionReferences, dimensionSizes, h);
                         break;
                     }
 
-                //Array Access
-                case Code.AAC:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    //Array Access
+                    case Code.AAC: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
                         int dims = Integer.parseInt(tokenizer.nextToken());
                         String cellNumberReferences = tokenizer.nextToken();
 
@@ -1425,24 +1186,19 @@ public abstract class MCodeInterpreter {
                         String type = tokenizer.nextToken();
                         Highlight h = null;
                         if (tokenizer.hasMoreElements()) {
-                            h = MCodeUtilities.makeHighlight(tokenizer
-                                    .nextToken());
+                            h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                         }
 
-                        handleCodeAAC(expressionCounter, expressionReference,
-                                dims, cellNumberReferences, cellNumbers, value,
-                                type, h);
+                        handleCodeAAC(expressionCounter, expressionReference, dims,
+                                cellNumberReferences, cellNumbers, value, type, h);
                         break;
                     }
 
-                //Array Length
-                case Code.AL:
-                    {
+                    //Array Length
+                    case Code.AL: {
                         //Second token is the expression counter
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long arrayCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long arrayCounter = Long.parseLong(tokenizer.nextToken());
 
                         String name = tokenizer.nextToken();
                         String value = "";
@@ -1456,28 +1212,24 @@ public abstract class MCodeInterpreter {
                         //Fifth token is the highlight information.
                         //Not used because the whole expression is
                         // highlighted.
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
-                        handleCodeAL(expressionCounter, arrayCounter, name,
-                                value, type, highlight);
+                        handleCodeAL(expressionCounter, arrayCounter, name, value, type, highlight);
                         break;
                     }
-                
-                //Beginning of the Array Initializer
-                case Code.AIBEGIN:
-                    {
+
+                    //Beginning of the Array Initializer
+                    case Code.AIBEGIN: {
                         long cells = Long.parseLong(tokenizer.nextToken());
                         Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-                        
+
                         handleCodeAIBEGIN(cells, highlight);
-                        
+
                         break;
                     }
-                
-                //Array Initializer's element
-                case Code.AIE:
-                    {
+
+                    //Array Initializer's element
+                    case Code.AIE: {
                         String arrayReference = tokenizer.nextToken();
                         long cellNumber = Long.parseLong(tokenizer.nextToken());
                         long expressionReference = Long.parseLong(tokenizer.nextToken());
@@ -1485,24 +1237,23 @@ public abstract class MCodeInterpreter {
                         String type = tokenizer.nextToken();
                         long literal = Long.parseLong(tokenizer.nextToken());
                         Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-                        
-                        handleCodeAIE(arrayReference, cellNumber, expressionReference, value, type, literal, highlight);
-                        
+
+                        handleCodeAIE(arrayReference, cellNumber, expressionReference, value, type,
+                                literal, highlight);
+
                         break;
                     }
-                
-                case Code.AI:
-                    {
+
+                    case Code.AI: {
                         Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-                        
+
                         handleCodeAI(highlight);
-                        
+
                         break;
                     }
-                
-                //Class information starts for a class
-                case Code.CLASS:
-                    {
+
+                    //Class information starts for a class
+                    case Code.CLASS: {
                         String name = tokenizer.nextToken();
                         String extendedClass = "";
                         if (tokenizer.hasMoreTokens()) {
@@ -1513,16 +1264,14 @@ public abstract class MCodeInterpreter {
                         break;
                     }
 
-                //Class information ends for a class
-                case Code.END_CLASS:
-                    {
+                    //Class information ends for a class
+                    case Code.END_CLASS: {
                         handleCodeEND_CLASS();
                         break;
                     }
 
-                //Class information for constructor
-                case Code.CONSTRUCTOR:
-                    {
+                    //Class information for constructor
+                    case Code.CONSTRUCTOR: {
                         String listOfParameters = "";
                         if (tokenizer.hasMoreTokens()) {
                             listOfParameters = tokenizer.nextToken();
@@ -1532,9 +1281,8 @@ public abstract class MCodeInterpreter {
                         break;
                     }
 
-                //Class information for method
-                case Code.METHOD:
-                    {
+                    //Class information for method
+                    case Code.METHOD: {
                         String name = tokenizer.nextToken();
                         String returnType = tokenizer.nextToken();
                         int modifiers = -1;
@@ -1546,14 +1294,12 @@ public abstract class MCodeInterpreter {
                             listOfParameters = tokenizer.nextToken();
                         }
 
-                        handleCodeMETHOD(name, returnType, modifiers,
-                                listOfParameters);
+                        handleCodeMETHOD(name, returnType, modifiers, listOfParameters);
                         break;
                     }
 
-                //Class information for field
-                case Code.FIELD:
-                    {
+                    //Class information for field
+                    case Code.FIELD: {
                         String name = tokenizer.nextToken();
                         String type = tokenizer.nextToken();
                         int modifiers = Integer.parseInt(tokenizer.nextToken());
@@ -1567,21 +1313,18 @@ public abstract class MCodeInterpreter {
                         break;
                     }
 
-                //Error has occured during the execution
-                case Code.ERROR:
-                    {
+                    //Error has occured during the execution
+                    case Code.ERROR: {
                         String message = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                        Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeERROR(message, h);
 
                         break;
                     }
 
-                //There is an error if the execution comes here.
-                default:
-                    {
+                    //There is an error if the execution comes here.
+                    default: {
                         //director.showErrorMessage(new InterpreterError(bundle
                         //        .getString("notImplemented.exception"), null));
                         /*
@@ -1613,7 +1356,8 @@ public abstract class MCodeInterpreter {
      * @param literal
      * @param highlight
      */
-    protected abstract void handleCodeAIE(String arrayReference, long cellNumber, long expressionReference, String value, String type, long literal, Highlight highlight);
+    protected abstract void handleCodeAIE(String arrayReference, long cellNumber,
+            long expressionReference, String value, String type, long literal, Highlight highlight);
 
     /**
      * @param highlight
@@ -1626,7 +1370,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param highlight
      */
-    protected abstract void handleCodeSFA(long expressionCounter, String declaringClass, String variableName, String value, String type, Highlight highlight);
+    protected abstract void handleCodeSFA(long expressionCounter, String declaringClass,
+            String variableName, String value, String type, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1635,7 +1380,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodeCAST(long expressionCounter, long expressionReference, String value, String type, Highlight h);
+    protected abstract void handleCodeCAST(long expressionCounter, long expressionReference,
+            String value, String type, Highlight h);
 
     /**
      * @param line2
@@ -1651,9 +1397,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeLQE(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeLQE(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1664,9 +1409,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeLE(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeLE(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -1677,9 +1421,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeNE(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeNE(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param message
@@ -1694,8 +1437,8 @@ public abstract class MCodeInterpreter {
      * @param value
      * @param h
      */
-    protected abstract void handleCodeFIELD(String name, String type,
-            int modifiers, String value, String h);
+    protected abstract void handleCodeFIELD(String name, String type, int modifiers, String value,
+            String h);
 
     /**
      * @param name
@@ -1703,8 +1446,8 @@ public abstract class MCodeInterpreter {
      * @param modifiers
      * @param listOfParameters
      */
-    protected abstract void handleCodeMETHOD(String name, String returnType,
-            int modifiers, String listOfParameters);
+    protected abstract void handleCodeMETHOD(String name, String returnType, int modifiers,
+            String listOfParameters);
 
     /**
      * @param listOfParameters
@@ -1730,9 +1473,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param highlight
      */
-    protected abstract void handleCodeAL(long expressionCounter,
-            long arrayCounter, String name, String value, String type,
-            Highlight highlight);
+    protected abstract void handleCodeAL(long expressionCounter, long arrayCounter, String name,
+            String value, String type, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1744,9 +1486,9 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodeAAC(long expressionCounter,
-            long expressionReference, int dims, String cellNumberReferences,
-            String cellNumbers, String value, String type, Highlight h);
+    protected abstract void handleCodeAAC(long expressionCounter, long expressionReference,
+            int dims, String cellNumberReferences, String cellNumbers, String value, String type,
+            Highlight h);
 
     /**
      * @param expressionReference
@@ -1757,9 +1499,9 @@ public abstract class MCodeInterpreter {
      * @param dimensionSizes
      * @param h
      */
-    protected abstract void handleCodeAA(long expressionReference,
-            String hashCode, String compType, int dims,
-            String dimensionReferences, String dimensionSizes, Highlight h);
+    protected abstract void handleCodeAA(long expressionReference, String hashCode,
+            String compType, int dims, String dimensionReferences, String dimensionSizes,
+            Highlight h);
 
     /**
      * @param scope
@@ -1772,16 +1514,16 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodeINPUTTED(long expressionCounter,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeINPUTTED(long expressionCounter, String value, String type,
+            Highlight h);
 
     /**
      * @param expressionCounter
      * @param type
      * @param h
      */
-    protected abstract void handleCodeINPUT(long expressionCounter,
-            String className, String methodName, String type, String prompt, Highlight h);
+    protected abstract void handleCodeINPUT(long expressionCounter, String className,
+            String methodName, String type, String prompt, Highlight h);
 
     /**
      * @param expressionReference
@@ -1790,8 +1532,8 @@ public abstract class MCodeInterpreter {
      * @param breakLine
      * @param highlight
      */
-    protected abstract void handleCodeOUTPUT(long expressionReference,
-            String className, String methodName, String value, String type, boolean breakLine, Highlight highlight);
+    protected abstract void handleCodeOUTPUT(long expressionReference, String className,
+            String methodName, String value, String type, boolean breakLine, Highlight highlight);
 
     /**
      * @param statementName
@@ -1815,8 +1557,8 @@ public abstract class MCodeInterpreter {
      * @param switchBlockReference
      * @param h
      */
-    protected abstract void handleCodeSWIBF(long selectorReference,
-            long switchBlockReference, Highlight h);
+    protected abstract void handleCodeSWIBF(long selectorReference, long switchBlockReference,
+            Highlight h);
 
     /**
      * @param h
@@ -1829,8 +1571,8 @@ public abstract class MCodeInterpreter {
      * @param round
      * @param h
      */
-    protected abstract void handleCodeDO(long expressionReference,
-            String value, long round, Highlight h);
+    protected abstract void handleCodeDO(long expressionReference, String value, long round,
+            Highlight h);
 
     /**
      * @param expressionReference
@@ -1838,8 +1580,8 @@ public abstract class MCodeInterpreter {
      * @param round
      * @param h
      */
-    protected abstract void handleCodeFOR(long expressionReference,
-            String value, long round, Highlight h);
+    protected abstract void handleCodeFOR(long expressionReference, String value, long round,
+            Highlight h);
 
     /**
      * @param expressionReference
@@ -1847,24 +1589,22 @@ public abstract class MCodeInterpreter {
      * @param round
      * @param h
      */
-    protected abstract void handleCodeWHI(long expressionReference,
-            String value, int round, Highlight h);
+    protected abstract void handleCodeWHI(long expressionReference, String value, int round,
+            Highlight h);
 
     /**
      * @param expressionReference
      * @param value
      * @param h
      */
-    protected abstract void handleCodeIFTE(long expressionReference,
-            String value, Highlight h);
+    protected abstract void handleCodeIFTE(long expressionReference, String value, Highlight h);
 
     /**
      * @param expressionReference
      * @param value
      * @param h
      */
-    protected abstract void handleCodeIFT(long expressionReference,
-            String value, Highlight h);
+    protected abstract void handleCodeIFT(long expressionReference, String value, Highlight h);
 
     /**
      * 
@@ -1878,8 +1618,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodeR(long expressionCounter,
-            long expressionReference, String value, String type, Highlight h);
+    protected abstract void handleCodeR(long expressionCounter, long expressionReference,
+            String value, String type, Highlight h);
 
     /**
      * @param parameters
@@ -1895,8 +1635,7 @@ public abstract class MCodeInterpreter {
      * @param expressionReference
      * @param argType
      */
-    protected abstract void handleCodeP(long expressionReference, String value,
-            String argType);
+    protected abstract void handleCodeP(long expressionReference, String value, String argType);
 
     /**
      * @param methodName
@@ -1904,8 +1643,8 @@ public abstract class MCodeInterpreter {
      * @param parameterCount
      * @param h
      */
-    protected abstract void handleCodeSMC(String methodName, String className,
-            int parameterCount, Highlight h);
+    protected abstract void handleCodeSMC(String methodName, String className, int parameterCount,
+            Highlight h);
 
     /**
      * 
@@ -1918,9 +1657,8 @@ public abstract class MCodeInterpreter {
      * @param objectCounter
      * @param highlight
      */
-    protected abstract void handleCodeOMC(String methodName,
-            int parameterCount, long objectCounter, String objectValue,
-            Highlight highlight);
+    protected abstract void handleCodeOMC(String methodName, int parameterCount,
+            long objectCounter, String objectValue, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1930,17 +1668,15 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodeOFA(long expressionCounter,
-            long objectCounter, String variableName, String value, String type,
-            Highlight h);
+    protected abstract void handleCodeOFA(long expressionCounter, long objectCounter,
+            String variableName, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
      * @param hashCode
      * @param h
      */
-    protected abstract void handleCodeSAC(long expressionCounter,
-            String hashCode, Highlight h);
+    protected abstract void handleCodeSAC(long expressionCounter, String hashCode, Highlight h);
 
     /**
      * @param superMethodCallNumber2
@@ -1954,9 +1690,8 @@ public abstract class MCodeInterpreter {
      * @param parameterCount
      * @param highlight
      */
-    protected abstract void handleCodeSA(long expressionCounter,
-            String declaringClass, String constructorName, int parameterCount,
-            Highlight highlight);
+    protected abstract void handleCodeSA(long expressionCounter, String declaringClass,
+            String constructorName, int parameterCount, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1964,8 +1699,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param highlight
      */
-    protected abstract void handleCodeL(long expressionCounter, String value,
-            String type, Highlight highlight);
+    protected abstract void handleCodeL(long expressionCounter, String value, String type,
+            Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1974,8 +1709,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param highlight
      */
-    protected abstract void handleCodeQN(long expressionCounter,
-            String variableName, String value, String type, Highlight highlight);
+    protected abstract void handleCodeQN(long expressionCounter, String variableName, String value,
+            String type, Highlight highlight);
 
     /**
      * @param variableName
@@ -1985,9 +1720,8 @@ public abstract class MCodeInterpreter {
      * @param modifier
      * @param highlight
      */
-    protected abstract void handleCodeVD(String variableName,
-            long initializerExpression, String value, String type,
-            String modifier, Highlight highlight);
+    protected abstract void handleCodeVD(String variableName, long initializerExpression,
+            String value, String type, String modifier, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1998,9 +1732,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeAE(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeAE(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2011,9 +1744,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeSE(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeSE(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2024,9 +1756,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeDE(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeDE(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2037,9 +1768,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeRE(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeRE(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2050,9 +1780,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeME(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeME(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2063,9 +1792,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeGQT(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeGQT(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2076,9 +1804,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeGT(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeGT(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2089,9 +1816,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeEE(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeEE(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2102,9 +1828,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeOR(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeOR(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2115,9 +1840,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeAND(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeAND(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2128,9 +1852,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeXOR(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeXOR(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2141,9 +1864,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeURSHIFT(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeURSHIFT(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2154,9 +1876,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeRSHIFT(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeRSHIFT(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2167,9 +1888,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeLSHIFT(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeLSHIFT(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2180,9 +1900,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeBITAND(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeBITAND(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2193,9 +1912,8 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeBITXOR(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
-            String value, String type, Highlight h);
+    protected abstract void handleCodeBITXOR(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2206,8 +1924,17 @@ public abstract class MCodeInterpreter {
      * @param h
      * @param operator
      */
-    protected abstract void handleCodeBITOR(long expressionCounter,
-            long leftExpressionReference, long rightExpressionReference,
+    protected abstract void handleCodeBITOR(long expressionCounter, long leftExpressionReference,
+            long rightExpressionReference, String value, String type, Highlight h);
+
+    /**
+     * @param expressionCounter
+     * @param expressionReference
+     * @param value
+     * @param type
+     * @param h
+     */
+    protected abstract void handleCodePRDE(long expressionCounter, long expressionReference,
             String value, String type, Highlight h);
 
     /**
@@ -2217,8 +1944,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodePRDE(long expressionCounter,
-            long expressionReference, String value, String type, Highlight h);
+    protected abstract void handleCodePRIE(long expressionCounter, long expressionReference,
+            String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2227,8 +1954,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodePRIE(long expressionCounter,
-            long expressionReference, String value, String type, Highlight h);
+    protected abstract void handleCodePDE(long expressionCounter, long expressionReference,
+            String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2237,18 +1964,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodePDE(long expressionCounter,
-            long expressionReference, String value, String type, Highlight h);
-
-    /**
-     * @param expressionCounter
-     * @param expressionReference
-     * @param value
-     * @param type
-     * @param h
-     */
-    protected abstract void handleCodePIE(long expressionCounter,
-            long expressionReference, String value, String type, Highlight h);
+    protected abstract void handleCodePIE(long expressionCounter, long expressionReference,
+            String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2257,9 +1974,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodeNO(long expressionCounter,
-            long unaryExpressionReference, String value, String type,
-            Highlight h);
+    protected abstract void handleCodeNO(long expressionCounter, long unaryExpressionReference,
+            String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2268,9 +1984,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodeMINUS(long expressionCounter,
-            long unaryExpressionReference, String value, String type,
-            Highlight h);
+    protected abstract void handleCodeMINUS(long expressionCounter, long unaryExpressionReference,
+            String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2279,9 +1994,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodePLUS(long expressionCounter,
-            long unaryExpressionReference, String value, String type,
-            Highlight h);
+    protected abstract void handleCodePLUS(long expressionCounter, long unaryExpressionReference,
+            String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2290,9 +2004,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodeCOMP(long expressionCounter,
-            long unaryExpressionReference, String value, String type,
-            Highlight h);
+    protected abstract void handleCodeCOMP(long expressionCounter, long unaryExpressionReference,
+            String value, String type, Highlight h);
 
     /**
      * @param expressionCounter
@@ -2302,9 +2015,8 @@ public abstract class MCodeInterpreter {
      * @param type
      * @param h
      */
-    protected abstract void handleCodeA(long expressionCounter,
-            long fromExpression, long toExpression, String value, String type,
-            Highlight h);
+    protected abstract void handleCodeA(long expressionCounter, long fromExpression,
+            long toExpression, String value, String type, Highlight h);
 
     /**
      * @param expressionReference
@@ -2316,8 +2028,8 @@ public abstract class MCodeInterpreter {
      * @param expressionReference
      * @param location
      */
-    protected abstract void handleCodeBEGIN(long expressionType,
-            long expressionReference, String location);
+    protected abstract void handleCodeBEGIN(long expressionType, long expressionReference,
+            String location);
 
     /**
      * @param token1
@@ -2339,4 +2051,5 @@ public abstract class MCodeInterpreter {
      */
     public abstract boolean emptyScratch();
 
+    
 }
