@@ -1015,8 +1015,9 @@ public class EvaluationVisitor extends VisitorObject {
                                 + Code.DELIM + outputCounter + Code.DELIM + MCodeUtilities.locationToString(node));
                         args[i] = ((Expression) it.next()).acceptVisitor(this);
                         MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM + outputCounter
+                        		+ m.getDeclaringClass()	+ Code.DELIM + m.getName() + Code.DELIM
                                 + Code.DELIM + args[i].toString() + Code.DELIM + typs[i].getName()
-                                + Code.DELIM + (m.getName().equals("println") ? "1" : "0")
+                                + Code.DELIM + (m.getName().equals("println") ? "1" : "0") //To indicate newline or not
                                 + Code.DELIM + MCodeUtilities.locationToString(node));
                         i++;
                     }
@@ -1220,7 +1221,6 @@ public class EvaluationVisitor extends VisitorObject {
         Object[] args = Constants.EMPTY_OBJECT_ARRAY;
         Class[] typs = m.getParameterTypes();
 
-        //System.out.println("Are u visiting me?");
         if (larg != null) {
 
             //TODO: This is not up-to-date. FIX!
@@ -1299,21 +1299,25 @@ public class EvaluationVisitor extends VisitorObject {
             if (inputClass && methodName.equals("readInt") || 
             		(!inputClass && methodName.equals("kluku"))) {
                 MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter++) + Code.DELIM
-                        + int.class.getName() + Code.DELIM + MCodeUtilities.locationToString(node));
+                		+ m.getDeclaringClass()	+ Code.DELIM + methodName + Code.DELIM 
+						+ int.class.getName() + Code.DELIM +  MCodeUtilities.locationToString(node));
                 result = MCodeUtilities.readInt();
             } else if (inputClass && methodName.equals("readDouble") || 
             		(!inputClass && methodName.equals("dluku"))) {
                 MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter++) + Code.DELIM
+                		+ m.getDeclaringClass()	+ Code.DELIM + methodName + Code.DELIM
                         + double.class.getName() + Code.DELIM + MCodeUtilities.locationToString(node));
                 result = MCodeUtilities.readDouble();
             } else if (inputClass && methodName.equals("readChar") || 
             		(!inputClass && methodName.equals("merkki"))) {
                 MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter++) + Code.DELIM
+                		+ m.getDeclaringClass()	+ Code.DELIM + methodName + Code.DELIM
                         + char.class.getName() + Code.DELIM + MCodeUtilities.locationToString(node));
                 result = MCodeUtilities.readChar();
             } else if (inputClass && methodName.equals("readString") || 
             		(!inputClass && methodName.equals("rivi"))) {
                 MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter++) + Code.DELIM
+                		+ m.getDeclaringClass()	+ Code.DELIM + methodName + Code.DELIM
                         + String.class.getName() + Code.DELIM + MCodeUtilities.locationToString(node));
                 result = MCodeUtilities.readString();
             }
@@ -1339,6 +1343,7 @@ public class EvaluationVisitor extends VisitorObject {
                             + outputCounter + Code.DELIM + MCodeUtilities.locationToString(node));
                     args[i] = ((Expression) it.next()).acceptVisitor(this);
                     MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM + outputCounter + Code.DELIM
+                    		+ m.getDeclaringClass()	+ Code.DELIM + m.getName() + Code.DELIM
                             + args[i].toString() + Code.DELIM + typs[i].getName() + Code.DELIM
                             + "1" //BREAKLINE
                             + Code.DELIM + MCodeUtilities.locationToString(node));
@@ -1622,12 +1627,9 @@ public class EvaluationVisitor extends VisitorObject {
                         + args[i].toString() + Code.DELIM + args[i].getClass().getName());
                 i++;
 
-                //args[i++] = ((Expression)it.next()).acceptVisitor(this);
             }
         }
-        //if(!isSetConstructorCall()){
-        //    System.out.println(consName);
-        //    setConstructorCall(true);
+
         newConstructorCall(consName, extractSuperClasses(cons.getDeclaringClass()),
                 simpleAllocationCounter);
         MCodeUtilities.write("" + Code.CONSCN + Code.DELIM
@@ -1636,7 +1638,6 @@ public class EvaluationVisitor extends VisitorObject {
         //}
         try { // Jeliot 3
             Object result = context.invokeConstructor(node, args);
-            //System.out.println(consName+" wtf");
             MCodeUtilities.write("" + Code.SAC + Code.DELIM + simpleAllocationCounter + Code.DELIM
                     + Integer.toHexString(result.hashCode()) + Code.DELIM + MCodeUtilities.locationToString(node));
             //0 arguments
