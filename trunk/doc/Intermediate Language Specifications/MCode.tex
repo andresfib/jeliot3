@@ -76,7 +76,7 @@ END is produced at the end of the m-code program and indicates the visualization
 \minstr{SCOPE 1/0}
 New blocks of Java code are delimited in m-code through SCOPE. This instruction second token indicates whether it is opening a new one (1) or closing one (0).
 \subsection {CONSCN (Constructor Call Number)}
-
+NIKO
 \section{Statements}
 \subsection{A (Assignment)}
 \minstr{A ir rir lir value type loc}
@@ -86,7 +86,7 @@ It is worth to mention that compound assignments are decomposed into the operati
 \subsection{VD (Variable Declaration)}
 \minstr{VD name NO\_REFERENCE value type FINAL/NOT\_FINAL loc}
 When declaring a variable the corresponding the m-code instruction needs to be complemented with its name, value, type and the modifier (FINAL or NOT\_FINAL). NO\_REFENRENCE
-\subsection{Binary Operations}
+\section{Binary Operations}
 \minstr{binaryCode ir rir lir value type loc}
 Binary instructions are composed by its bynaryCode,its own reference (ir) and the references to the left and right sides of the expression(lir, rir). Furthermore it contains the assigned value and its type.
 Binary codes can take any of the following values:
@@ -146,23 +146,63 @@ These statements produce a similar to the previous one. They only differ in the 
 \subsection{Switch}
 Three m-code instructions are related to the switch statement\par
 \minstr{SWIBF selector ir loc}
+NIKO
 \minstr{SWITCH loc}
+NIKO
 \minstr{SWITCHB loc}
+NIKO
 \subsection{Break and Continue}
 \minstr{BR/CONT statement loc}
 Break and continue asserts instructions only specify which statement they are  in. Allowed values for statement are WHI FOR IFT IFTE SWITCH, those were you can find these statements.
-\section{i.Input and Output}
-Missing !!!!!
-\section{Arrays Handling}
+\section{Input and Output}
+\subsection{Input}
+\minstr{INPUT ir type loc}
+The INPUT instruction indicates the visualization engine to produce some data of the type specified and return it to Java interpreter. This data will be written in a dedicated pipe that connects both sides. The next instruccion indicates the obtained value from the pipe.
+
+\minstr{INPUTTED counter value type loc}
+
+\subsection{Output}
+\minstr{OUTPUT ir value type loc}
+OUTPUT instruction is the resulting one of a call to any of the Output methods provided by jeliot. They only accept one argument, and it is reflected in the instruction by its value and its type.
+\section{Array Handling}
 \subsection{Array Allocation}
-\minstr{AA ir arrayHashCode type dimension dimensionsReferences dimensionsSizes loc}
-Array allocation instruction is a complicated one, as it carries a lot of information about the array. As usual a ir is provided. Following the arrayHashCode of the object created to allocate it. It can be any other number that identify one-to-one the allocated object on the interpretation. type contains the type of the array components. dimensionReferences is a comma separated list with the references to the instructions that evaluated the sizes' expressions of the array. Finally dimensionsSize is another comma separated list where each element is the size of a dimension. new Integer[4][5] will produce AA ir 456744 Integer 2 ir1,ir2 4,5 loc. Where ir1 and ir5 must be references to the literal instructions of "`4"' and "`5"'.
+\minstr{e dimension dimensionsReferences dimensionsSizes loc}
+Array allocation instruction is a complicated one, as it carries a lot of information about the array. As usual a ir is provided. Following the arrayHashCode of the object created to allocate it. It can be any other number that identify one-to-one the allocated object on the interpretation. type contains the type of the array components. dimensionReferences is a comma separated list with the references to the instructions that evaluated the sizes' expressions of the array. Finally dimensionsSize is another comma separated list where each element is the size of a dimension. new Integer[4][5] will produce AA ir 456744 Integer 2 ir1,ir2 4,5 loc. Where ir1 and ir5 must be references to the literal instructions of "4" and "5".
 \subsection{Array Access}
-%\begin{minstr}
-%\p{AAC ir arrayNameReference deep cellReferences cellNumbers value type loc}
-%\end{minstr}
 \minstr{AAC ir arrayNameReference deep cellReferences cellNumbers value type loc}
 Array accesses instructions consist on different tokens. The common ones (ir, value, type and loc) are also present. But we can find very specific ones. arrayReference points to the instruction produced when visiting an array name, normally a qualified name. deep refers to the level of deepness of the array access. This is useful for multidimensional arrays when they are not accessed till the last level, the one holding the data value. cellReferences and cellNumber meet the same purpose than dimensionReferences and dimensionsSizes in array allocation (AA) instruction. cellReferences points to the instructions that evaluated the value of each cell pointer. cellNumbers are the actual values of the cell access. Both of them are presented as a comma separated list. For example in array[3][5], cellReferences will point to the literal instruction of "`3"' and "`5"' and cellNumbers will contain "`3, 5"'.
 \subsection{Array Length}
 \minstr{AL objectCounter "length" value type loc}
 \section{Object Oriented}
+This section contains the instruction related to object oriented. Here we will just summarize its properties and main arguments. However following chapters will explain you how to glue the different instructions together to form meaningful \mcode{} programs.
+\subsection{Parameters}
+\minstr{PARAMETERS parameterArray}
+The PARAMETERS instruction will provide the visualization engine a list of the types of the parameters used in the method declaration.
+
+\minstr{P ir loc}
+This instruction declares a new parameters in a method call.
+\subsection{Method Declaration}
+\minstr{MD ir loc}	
+A method declaration instruction will indicate the location of the called method code and the beginning of its evaluation.
+\subsection{Static Method Call}
+\minstr{SMC name declaringClassName numArgs loc}
+The SMC instruction consists of the actual name of the method, its declaring class name and the number of arguments this method call consists of.
+
+\minstr{SMCC}
+This instruction indicates the end of a call to a static method.
+\subsection{Object Method Call}
+\minstr{OMC name numArgs objectReference loc}
+The OMC instruction is similar to the static method one. However it contains a reference to an object, this reference points to the instruction that holds the variable access to the object that is making the method call.
+
+\minstr{OMCC}
+As before it just closes the object method call.
+\subsection{Class Allocation}
+\minstr{SA ir declaringClass constructorName numArgs loc}
+The class allocation instruction happens everytime a \p{new} appears on the source code. It will provide the information needed for the constructor: declaring class, constructor name and the number of arguments it is being called with.
+\minstr{SAC ir ObjectId loc}
+\subsection{Object Field Access}
+\minstr{OFA ir name value type loc}
+\subsection{Return}
+\minstr{R callIr loc}
+
+\minstr{R callIr valueIr value type loc}
