@@ -4,9 +4,9 @@
 
 [Setup]
 AppName=Jeliot 3
-AppVerName=Jeliot 3.3.0
-DefaultDirName={pf}\Jeliot3withTabs
-DefaultGroupName=Jeliot3NEW
+AppVerName=Jeliot 3.4.0
+DefaultDirName={pf}\Jeliot3
+DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe
 OutputDir=Release
 [Dirs]
@@ -29,5 +29,7 @@ Name: "starticon"; Description: "Create a shortcut in the &Start Menu"; GroupDes
 
 [Icons]
 Name: "{group}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"; Tasks:starticon
+Name: "{group}\User Guide"; Filename: "{app}\userguide.pdf"; Tasks:starticon
+Name: "{group}\Quick Tutorial"; Filename: "{app}\quicktutorial.pdf"; Tasks:starticon
 Name: "{userdesktop}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"; Tasks:desktopicon
 Name: "{app}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"
