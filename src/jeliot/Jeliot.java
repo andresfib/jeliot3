@@ -27,6 +27,7 @@ public class Jeliot implements Runnable {
 
     Launcher launcher = null;
     BufferedReader ecode = null;
+    PrintWriter pr = null;
 
     String sourceCode = "";
     String methodCall = "";
@@ -132,6 +133,7 @@ public class Jeliot implements Runnable {
         launcher.start();
 
         ecode = launcher.getReader();
+        pr = launcher.getInputWriter();
 
         codePane.installProgram(this.sourceCode);
 
@@ -161,7 +163,7 @@ public class Jeliot implements Runnable {
             launcher.start();
 
             ecode = launcher.getReader();
-
+            pr = launcher.getInputWriter();
         }
 
     }
@@ -187,7 +189,7 @@ public class Jeliot implements Runnable {
         director = new Director(theatre, codePane, this, engine);
         director.setActorFactory(af);
 
-        director.initializeInterpreter(ecode, gui.getProgram());
+        director.initializeInterpreter(ecode, gui.getProgram(), pr);
 
         //find the main method
         //Enumeration enum = program.getClasses();

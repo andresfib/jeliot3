@@ -14,6 +14,7 @@ public class Interpreter {
 
     private Director director = null;
     private BufferedReader ecode = null;
+    private PrintWriter input = null;
 
     private String programCode = "";
 
@@ -51,10 +52,14 @@ public class Interpreter {
 
     protected Interpreter() { }
 
-    public Interpreter(BufferedReader r, Director d, String programCode) {
+    public Interpreter(BufferedReader r,
+                       Director d,
+                       String programCode,
+                       PrintWriter pr) {
         this.ecode = r;
         this.director = d;
         this.programCode = programCode;
+        this.input = pr;
     }
 
     public void initialize() {
@@ -112,8 +117,8 @@ public class Interpreter {
                         token != Code.IFTE &&
                         token != Code.VD &&
                         token != Code.OUTPUT &&
-                        token != Code.INPUT &&
-                        token != Code.INPUTTED) {
+                        token != Code.INPUT) {
+                        //&& token != Code.INPUTTED) {
                             director.closeScratch();
                             director.openScratch();
                     }
@@ -1416,18 +1421,130 @@ public class Interpreter {
                         //Opening and closing scopes
                         case Code.OUTPUT: {
 
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            int expressionReference = Integer.parseInt(
+                                                         tokenizer.nextToken());
+
                             String value = tokenizer.nextToken();
                             String type = tokenizer.nextToken();
+
                             Highlight highlight = ECodeUtilities.makeHighlight(
                                                 tokenizer.nextToken());
 
-                            Value output = (Value) values.remove(new Integer(expressionReference));
+                            Value output = (Value) values.remove(
+                                              new Integer(expressionReference));
+
                             if (output == null) {
                                 output = new Value(value, type);
                             }
 
                             director.output(output, highlight);
+
+                            break;
+                        }
+
+                        case Code.INPUT: {
+
+                            int expressionCounter = Integer.parseInt(
+                                                         tokenizer.nextToken());
+
+                            String type = tokenizer.nextToken();
+
+                            Highlight h = ECodeUtilities.makeHighlight(
+                                                tokenizer.nextToken());
+
+                            Value in = director.animateInputHandling(type, h);
+
+                            input.println(in.getValue());
+
+                            //command that wait for this expression (left, right)
+                            int command = -1;
+                            int oper = -1;
+                            int size = commands.size();
+
+                            //We find the command
+                            for (int i = size - 1; i >= 0; i--) {
+                                StringTokenizer commandTokenizer = new StringTokenizer(
+                                                (String) commands.elementAt(i),
+                                                Code.DELIM);
+                                int comm = Integer.parseInt(commandTokenizer.nextToken());
+                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+                                if (expressionCounter == cid) {
+                                    command = comm;
+                                    commands.removeElementAt(i);
+                                    break;
+                                }
+                            }
+
+                            /**
+                            * Look from the expression stack
+                            * what expression should be shown next
+                            */
+                            int expressionReference = 0;
+                            Highlight highlight = null;
+
+                            if (!exprs.empty()) {
+                                StringTokenizer expressionTokenizer =
+                                                    new StringTokenizer(
+                                                          (String) exprs.peek(),
+                                                          Code.DELIM);
+
+                                oper = Integer.parseInt(
+                                               expressionTokenizer.nextToken());
+
+                                expressionReference = Integer.parseInt(
+                                               expressionTokenizer.nextToken());
+
+                                //Make the location information for the location token
+                                highlight = ECodeUtilities.makeHighlight(
+                                               expressionTokenizer.nextToken());
+                            }
+
+                            //Do different things depending on in what expression
+                            //the literal is used.
+
+                            //If operator is assignment we just store the value
+                            if (oper == Code.A){
+                                values.put(new Integer(expressionCounter), in);
+
+                            //If oper is other binary operator we will show it
+                            //on the screen with operator
+                            } else if (ECodeUtilities.isBinary(oper)) {
+
+                                int operator = ECodeUtilities.resolveBinOperator(oper);
+
+                                if (command == Code.LEFT) {
+
+                                    director.beginBinaryExpression(in, operator,
+                                                expressionReference, highlight);
+
+                                } else if (command == Code.RIGHT) {
+
+                                    ExpressionActor ea = (ExpressionActor)
+                                        director.getCurrentScratch().findActor(expressionReference);
+                                    if (ea != null) {
+                                        director.rightBinaryExpression(in, ea, highlight);
+                                    } else {
+                                        values.put(new Integer(expressionCounter), in);
+                                    }
+
+                                } else {
+                                    values.put(new Integer(expressionCounter), in);
+                                }
+
+                            //If oper is a unary operator we will show it
+                            //on the screen with operator
+                            } else if (ECodeUtilities.isUnary(oper)) {
+
+                                int operator = ECodeUtilities.resolveUnOperator(oper);
+                                //if (command == Code.RIGHT) {
+                                    director.beginUnaryExpression(operator, in,
+                                                        expressionReference, highlight);
+                                //}
+
+                            //If it is something else we will store it for later use.
+                            } else {
+                                values.put(new Integer(expressionCounter), in);
+                            }
 
                             break;
                         }

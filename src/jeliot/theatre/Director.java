@@ -865,11 +865,9 @@ public class Director {
 
     public ExpressionActor beginUnaryExpression(int operator, Value arg,
                                     int expressionCounter, Highlight h) {
-
         highlight(h);
 
         ValueActor argAct = arg.getActor();
-
         OperatorActor opAct = factory.produceUnaOpActor(operator);
 
         theatre.capture();
@@ -888,7 +886,6 @@ public class Director {
         theatre.release();
 
         return exp;
-
     }
 
     public Value finishUnaryExpression(int operator, ExpressionActor exp,
@@ -937,12 +934,11 @@ public class Director {
         ValueActor argAct = arg.getActor();
         ValueActor resAct = factory.produceValueActor(result);
 
-        OperatorActor opAct =
-                factory.produceUnaOpActor(operator);
-        OperatorActor eqAct =
-                factory.produceUnaOpResActor(operator);
+        OperatorActor opAct = factory.produceUnaOpActor(operator);
+        OperatorActor eqAct = factory.produceUnaOpResActor(operator);
 
         theatre.capture();
+
         ExpressionActor exp = currentScratch.getExpression(4, expressionCounter);
         Point oLoc = exp.reserve(opAct);
         Point aLoc = exp.reserve(argAct);
@@ -983,7 +979,6 @@ public class Director {
         String[] ms = {message};
         MessageActor actor = factory.produceMessageActor(ms);
         showMessage(actor);
-
     }
 
     private void showMessage(String message, Value val) {
@@ -992,7 +987,6 @@ public class Director {
         MessageActor actor = factory.produceMessageActor(ms);
         ValueActor valact = val.getActor();
         showMessage(actor, valact);
-
     }
 
     private void showMessage(MessageActor message, Actor anchor) {
@@ -1152,73 +1146,154 @@ public class Director {
         return theatre;
     }
 
-//     public Value getInput(String prompt, InputValidator validator) {
-//         validator.setController(controller);
-//         final InputComponent ic = new InputComponent(prompt, validator);
-//         final ExpressionActor ea = currentScratch.getExpression(1);
-//         Actor bga = factory.produceMessageActor(null);
-//         final Point p = ea.reserve(bga);
-//         ic.setBgactor(bga);
-//         try {
-//             SwingUtilities.invokeAndWait(
-//                 new Runnable() {
-//                     public void run() {
-//                         theatre.add(ic);
-//                         ic.setSize(ic.getPreferredSize());
-//                         ic.setLocation(p);
-//                         ic.revalidate();
-//                         theatre.showComponents(true);
-//                         theatre.release();
-//                         ic.popup();
-//                         theatre.repaint();
-//                     }
-//                 });
-//         }
-//         catch (java.lang.reflect.InvocationTargetException e) {
-//             e.printStackTrace();
-//         }
-//         catch (InterruptedException e) {
-//             e.printStackTrace();
-//         }
-//         do {
-//             controller.pause();
-//             controller.checkPoint(
-//                 new Controlled() {
-//                     public void suspend() {
-//                         jeliot.directorFreezed();
-//                     }
-//                     public void resume() {
-//                         jeliot.directorResumed();
-//                     }
-//                 }
-//             );
-//         }
-//         while (!validator.isOk());
-//         try {
-//             SwingUtilities.invokeAndWait(
-//                 new Runnable() {
-//                     public void run() {
-//                         theatre.remove(ic);
-//                         theatre.showComponents(false);
-//                         theatre.repaint();
-//                     }
-//                 });
-//         }
-//         catch (java.lang.reflect.InvocationTargetException e) {
-//             e.printStackTrace();
-//         }
-//         catch (InterruptedException e) {
-//             e.printStackTrace();
-//         }
-//         Value val = validator.getValue();
-//         ValueActor act = factory.produceValueActor(val);
-//         act.setLocation(p);
-//         val.setActor(act);
-//         currentScratch.registerCrap(act);
-//         theatre.addActor(act);
+    public static Animator readInt() {
+        return new InputAnimator(
+            "Please input an integer.",
+            new InputValidator() {
+                public void validate(String s) {
+                    try {
+                        Integer i = new Integer(s);
+                        accept(new Value(i.toString(), int.class.getName()));
+                    }
+                    catch (NumberFormatException e) { }
+                }
+            }
+        );
+    }
 
-//         return val;
-//     }
+    public static Animator readDouble() {
+        return new InputAnimator(
+            "Please input a double.",
+            new InputValidator() {
+                public void validate(String s) {
+                    try {
+                        Double d = new Double(s);
+                        accept(new Value(d.toString(), double.class.getName()));
+                    }
+                    catch (NumberFormatException e) { }
+                }
+            }
+        );
+    }
+
+    //possible we will need some other input readers e.g. readString(), readChar()
+
+    private static class InputAnimator extends Animator {
+
+        private String prompt;
+        private InputValidator validator;
+
+        private InputAnimator(String prompt, InputValidator valid) {
+
+            this.prompt = prompt;
+            this.validator = valid;
+        }
+
+        public void animate(Director director) {
+            Value val = director.getInput(prompt, validator);
+            setReturnValue(val);
+        }
+    }
+
+    /**
+     * Shows an animation of the invocation of a static foreign
+     * method.
+     */
+    public Value animateInputHandling(String type, Highlight h) {
+
+        Animator animator = null;
+
+        if (ECodeUtilities.resolveType(type) == ECodeUtilities.DOUBLE) {
+            animator = readDouble();
+        } else if (ECodeUtilities.resolveType(type) == ECodeUtilities.INT) {
+            animator = readInt();
+        }
+
+        if (animator != null) {
+            highlight(h);
+            animator.animate(this);
+            return animator.getReturnValue();
+        } else {
+            return null;
+        }
+    }
+
+    public Value getInput(String prompt, InputValidator validator) {
+
+        validator.setController(controller);
+        final InputComponent ic = new InputComponent(prompt, validator);
+        final ExpressionActor ea = currentScratch.getExpression(1,-2);
+        Actor bga = factory.produceMessageActor(null);
+        final Point p = ea.reserve(bga);
+        ic.setBgactor(bga);
+
+        try {
+            SwingUtilities.invokeAndWait(
+                new Runnable() {
+                    public void run() {
+                        theatre.add(ic);
+                        ic.setSize(ic.getPreferredSize());
+                        ic.setLocation(p);
+                        ic.revalidate();
+                        theatre.showComponents(true);
+                        theatre.release();
+                        ic.popup();
+                        theatre.repaint();
+                    }
+                }
+            );
+        }
+        catch (java.lang.reflect.InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        do {
+            controller.pause();
+
+            controller.checkPoint(
+                new Controlled() {
+
+                    public void suspend() {
+                        jeliot.directorFreezed();
+                    }
+
+                    public void resume() {
+                        jeliot.directorResumed();
+                    }
+                }
+            );
+        } while (!validator.isOk());
+
+        try {
+            SwingUtilities.invokeAndWait(
+                new Runnable() {
+                    public void run() {
+                        theatre.remove(ic);
+                        theatre.showComponents(false);
+                        theatre.repaint();
+                    }
+                }
+            );
+        }
+        catch (java.lang.reflect.InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Value val = validator.getValue();
+        ValueActor act = factory.produceValueActor(val);
+        act.setLocation(p);
+        val.setActor(act);
+        currentScratch.registerCrap(act);
+        theatre.addActor(act);
+
+        return val;
+    }
 
 /*    public void showArrayCreation(ArrayInstance array, Value lenVal) {
         ArrayActor arrayAct = factory.produceArrayActor(array);
@@ -1309,8 +1384,10 @@ public class Director {
 */
     //Jeliot 3
     //Used for setting the reader for ecode interpreter
-    public void initializeInterpreter(BufferedReader br, String programCode) {
-        this.eCodeInterpreter = new Interpreter(br, this, programCode);
+    public void initializeInterpreter(BufferedReader br,
+                                      String programCode,
+                                      PrintWriter pr) {
+        this.eCodeInterpreter = new Interpreter(br, this, programCode, pr);
         eCodeInterpreter.initialize();
     }
 }

@@ -750,37 +750,41 @@ public class EvaluationVisitor extends VisitorObject {
         List     larg = node.getArguments();
         Object[] args = Constants.EMPTY_OBJECT_ARRAY;
 
-	//INPUT AND OUTPUT FIRST!!!!!!!!!!!!!
+        //INPUT AND OUTPUT FIRST!!!!!!!!!!!!!
 
-	// Check if the static method call is one of our Input methods
-	// Hardcoded!!! TO BE CHANGED
-        Object result=null;
+        // Check if the static method call is one of our Input methods
+        // Hardcoded!!! TO BE CHANGED
+        Object result = null;
         if( m.getDeclaringClass().getName().equals("jeliot.io.Input")){
-	    if (m.getName().equals("readInt")){
-		ECodeUtilities.write(""+Code.INPUT+Code.DELIM+Integer.TYPE.getName()
+            if (m.getName().equals("readInt")){
+                ECodeUtilities.write(""+Code.INPUT+Code.DELIM+(counter++)
+                                     +Code.DELIM+int.class.getName()
                                      +Code.DELIM+locationToString(node));
-		result = ECodeUtilities.readInt();
-	    }	
-	    else if( m.getName().equals("readDouble")){
-		ECodeUtilities.write(""+Code.INPUT+Code.DELIM+Double.TYPE.getName()
+                result = ECodeUtilities.readInt();
+            }
+            else if( m.getName().equals("readDouble")){
+                ECodeUtilities.write(""+Code.INPUT+Code.DELIM+(counter++)
+                                     +Code.DELIM+double.class.getName()
                                      +Code.DELIM+locationToString(node));
-		result = ECodeUtilities.readDouble();
-	    }	
+                result = ECodeUtilities.readDouble();
+            }
+            /*
             ECodeUtilities.write(""+Code.INPUTTED+Code.DELIM+(counter++)
                                  +Code.DELIM+result.toString()
                                  +Code.DELIM+result.getClass()
                                  +Code.DELIM+locationToString(node));
+            */
             return result;
         }
         else if( m.getDeclaringClass().getName().equals("jeliot.io.Output")){
-	    if (m.getName().equals("println")){
+            if (m.getName().equals("println")){
                 args = new Object[larg.size()];
                 Iterator it = larg.iterator();
                 int      i  = 0;
                 long     auxcounter; //Records the previous counter value
                 Object   auxarg; //Stores the current argument
                 Class[]  typs = m.getParameterTypes();
-                
+
                 //It should only get once in the while loop!!!
                 while (it.hasNext()) {
                     auxcounter=counter;
@@ -794,16 +798,16 @@ public class EvaluationVisitor extends VisitorObject {
                 //Exit output function!!!
                 return null;
             }
-            
-            
-        }	
-    
+
+
+        }
+
         /* JELIOT 3 */
         if (larg != null) {
 
             ECodeUtilities.write("" + Code.SMC+Code.DELIM+m.getName()+
-            		   Code.DELIM+m.getDeclaringClass().getName()+
-            		   Code.DELIM+larg.size()+Code.DELIM+locationToString(node));
+                           Code.DELIM+m.getDeclaringClass().getName()+
+                           Code.DELIM+larg.size()+Code.DELIM+locationToString(node));
 
         } else {
 
@@ -1773,7 +1777,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         return result;
 
-        
+
     }
 
     /**
@@ -2269,7 +2273,7 @@ public class EvaluationVisitor extends VisitorObject {
         //Start bit and expression
         long xOrcounter=counter++;
         long auxcounter=counter;
-	int expression;
+        int expression;
         if(NodeProperties.getType(node).getName()=="boolean"){
             expression=Code.XOR;
         }
@@ -2618,7 +2622,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = InterpreterUtilities.shiftRight(
                                                         NodeProperties.getType(node),
                                                         lhs,
-                                                        val);                                                
+                                                        val);
 
         // Cast the result
         result = performCast(NodeProperties.getType(left), result);
@@ -2767,9 +2771,9 @@ public class EvaluationVisitor extends VisitorObject {
         if (left &&  right) {
 
             ECodeUtilities.write(""+Code.AND+Code.DELIM+andcounter+Code.DELIM+auxcounter+
-		       Code.DELIM+auxcounter2+Code.DELIM+Code.TRUE+
+                       Code.DELIM+auxcounter2+Code.DELIM+Code.TRUE+
                        Code.DELIM+NodeProperties.getType(node).getName()+
-		       Code.DELIM+locationToString(node));
+                       Code.DELIM+locationToString(node));
 
             return Boolean.TRUE;
 
@@ -2803,9 +2807,9 @@ public class EvaluationVisitor extends VisitorObject {
         if (left || right) {
 
             ECodeUtilities.write(""+Code.OR+Code.DELIM+orcounter+Code.DELIM+auxcounter+
-		       Code.DELIM+auxcounter2+Code.DELIM+Code.TRUE+
-		       Code.DELIM+NodeProperties.getType(node).getName()+
-		       Code.DELIM+locationToString(node));
+                       Code.DELIM+auxcounter2+Code.DELIM+Code.TRUE+
+                       Code.DELIM+NodeProperties.getType(node).getName()+
+                       Code.DELIM+locationToString(node));
 
             return Boolean.TRUE;
 
