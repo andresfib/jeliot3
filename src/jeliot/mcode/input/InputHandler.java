@@ -29,9 +29,11 @@ public abstract class InputHandler  {
      */
 
     public Object handleInput(Class aClass, long counter, Method m, StaticMethodCall node, String prompt) {
+        
         MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter) + Code.DELIM
                 + m.getDeclaringClass().getName() + Code.DELIM + m.getName() + Code.DELIM
                 + aClass.getName() + Code.DELIM + prompt + Code.DELIM + MCodeUtilities.locationToString(node));
+        
         return handleInput(aClass);
     }
 
