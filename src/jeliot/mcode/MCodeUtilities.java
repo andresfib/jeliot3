@@ -1403,7 +1403,7 @@ public class MCodeUtilities {
 	public static String stringConversion (Node exp, EvaluationVisitor visitor) {
 		if (MCodeUtilities.isString(exp)){ //ask for type implements tree.Literal
 			
-			return (String) exp.acceptVisitor(visitor);
+			return exp.acceptVisitor(visitor).toString();
 			
 		} else {
 			
