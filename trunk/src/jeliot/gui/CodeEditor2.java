@@ -501,7 +501,9 @@ public class CodeEditor2 extends JComponent {
     public void setProgram(String program) {
         area.setText(program);
         setChanged(false); //Jeliot 3
-        area.recalculateVisibleLines();
+        //area.recalculateVisibleLines();
+        area.setFirstLine(0);
+        area.setCaretPosition(0);
     }
 
     /**

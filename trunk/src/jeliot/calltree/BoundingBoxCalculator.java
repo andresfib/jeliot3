@@ -2,16 +2,21 @@ package jeliot.calltree;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * @author Niko Myller
  */
 public class BoundingBoxCalculator extends EulerTour {
 
+	protected static final ResourceBundle bundle = ResourceBundle.getBundle(
+            "jeliot.calltree.resources.properties", Locale.getDefault());
+	
     /**
-     * size of the grid squares
+     * size of the grid squares (default 50)
      */
-    protected int offset = 50; 
+    protected int offset = Integer.parseInt(bundle.getString("offset")); 
 
     /**
      * a running total width of the explored tree drawing
@@ -34,9 +39,9 @@ public class BoundingBoxCalculator extends EulerTour {
     protected FontMetrics fm;
 
     /**
-     * the distance to separate bounding boxes;
+     * the distance to separate bounding boxes (default 15)
      */
-    protected int pad = 15;
+    protected int pad = Integer.parseInt(bundle.getString("pad"));
 
     /**
      * Comment for <code>maxWidth</code>

@@ -2,21 +2,26 @@ package jeliot.calltree;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * @author Niko Myller
  */
 public class TreeDrawer extends EulerTour {
 
+	protected static final ResourceBundle bundle = ResourceBundle.getBundle(
+            "jeliot.calltree.resources.properties", Locale.getDefault());
+	
     /**
-     * Y offset from (0,0)
+     * Y offset from (0,0) (default 40)
      */
-    protected int Yoffset = 40;
+    protected int Yoffset = Integer.parseInt(bundle.getString("y_offset"));
 
     /**
-     * X offset from (0,0)
+     * X offset from (0,0) (default 20)
      */
-    protected int Xoffset = 20;
+    protected int Xoffset = Integer.parseInt(bundle.getString("x_offset"));
 
     /**
      * where to draw the tree
@@ -26,8 +31,28 @@ public class TreeDrawer extends EulerTour {
     /**
      * fill color
      */
-    protected Color background;
+    private static final Color background = new Color(Integer.decode(bundle.getString("color.background")).intValue());
 
+    /**
+     * Edge color
+     */
+    private static final Color edgeColor = new Color(Integer.decode(bundle.getString("color.edge")).intValue());
+
+    /**
+     * Returned node's color
+     */
+	private static final Color returnedNodeColor = new Color(Integer.decode(bundle.getString("color.node_returned")).intValue());
+
+	/**
+	 * Current node's color
+	 */
+	private static final Color currentNodeColor = new Color(Integer.decode(bundle.getString("color.node_current")).intValue());
+	
+	/**
+	 * Active node's color if not current
+	 */
+	private static final Color activeNodeColor = new Color(Integer.decode(bundle.getString("color.node_active")).intValue());
+    
     /**
      * a running total to shift bounding boxes.  The shift
      * distance is the sum of the shifts stored at ancestors.
@@ -41,7 +66,6 @@ public class TreeDrawer extends EulerTour {
      */
     public TreeDrawer(Graphics gg) {
         g = gg;
-        background = g.getColor();
     }
 
     /**
@@ -81,18 +105,18 @@ public class TreeDrawer extends EulerTour {
         int shift = ((Integer) pos.getProperty("shift")).intValue();
         if (!pos.isRoot()) {
             //Draw the edge to the parent
-            g.setColor(Color.black);
+            g.setColor(edgeColor);
             g.drawLine(xPos(pos), yPos(pos), xPos(pos.getParent()), yPos(pos.getParent()));
         }
 
         Color strColor;
 
         if (pos.getProperty("return") != null) {
-            strColor = Color.black;
+            strColor = returnedNodeColor;
         } else if (pos.getProperty("current") != null) {
-            strColor = Color.red;
+            strColor = currentNodeColor;
         } else {
-            strColor = Color.yellow;
+            strColor = activeNodeColor;
         }
 
         drawString(pos, strColor);
