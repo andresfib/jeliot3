@@ -109,5 +109,11 @@ public class Scratch extends Actor implements ActorContainer {
         exprs.removeElement(actor);
     }
 
+    public void clean() {
+        exprs.removeAllElements();
+        crap.removeAllElements();
+        crapRemovers.removeAllElements();
+    }
+
 }
 

@@ -197,12 +197,18 @@ public class CodeEditor extends JComponent {
      */
     private JToolBar makeToolBar() {
         JButton loadButton = makeToolButton("Open", "openicon.gif", loader);
+        loadButton.setMnemonic(KeyEvent.VK_O);
         JButton saveButton = makeToolButton("Save", "saveicon.gif", saver);
+        saveButton.setMnemonic(KeyEvent.VK_S);
         JButton clearButton = makeToolButton("New", "newicon.gif", clearer);
+        clearButton.setMnemonic(KeyEvent.VK_N);
 
         JButton cutButton = makeToolButton("Cut", "cuticon.gif", cutter);
+        cutButton.setMnemonic(KeyEvent.VK_X);
         JButton copyButton = makeToolButton("Copy", "copyicon.gif", copyist);
+        copyButton.setMnemonic(KeyEvent.VK_C);
         JButton pasteButton = makeToolButton("Paste", "pasteicon.gif", pasteur);
+        pasteButton.setMnemonic(KeyEvent.VK_P);
 
         JToolBar p = new JToolBar();
         p.add(clearButton);
