@@ -17,7 +17,7 @@ Name: "{app}\docs\images"
 Source: "Jeliot3\docs\*"; DestDir: "{app}\docs\"
 Source: "Jeliot3\docs\images\*"; DestDir: "{app}\docs\images\"
 Source: "Jeliot3\examples\*"; DestDir: "{app}\examples\"
-Source: "Jeliot3\*"; DestDir: "{app}"
+Conflict!!!!Source: "Jeliot3\*"; DestDir: "{app}"
 ; Source: "Readme.txt"; DestDir: "{app}"; Flags: isreadme
 
 [Tasks]
