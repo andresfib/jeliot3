@@ -5,11 +5,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 /**
+ * MessageActor shows all the textual messages to the user. 
  * 
  * @author Pekka Uronen
  * @author Niko Myller
  */
 public class MessageActor extends Actor {
+
+//  DOC: Document!    
 
     /**
 	 *

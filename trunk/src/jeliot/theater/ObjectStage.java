@@ -10,9 +10,16 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 /**
-  *
-  * @author Niko Myller
-  */
+ * MethodStage is the graphical representation of the ObjectFrame.
+ * It contains the field of the object as <code>VariableActor</code>s.
+ * 
+ * @author Pekka Uronen
+ * @author Niko Myller
+ *
+ * @see jeliot.lang.ObjectFrame 
+ * @see jeliot.theater.VariableActor
+ * @see jeliot.lang.Variable
+ */
 public class ObjectStage extends InstanceActor {
 
 
@@ -74,6 +81,8 @@ public class ObjectStage extends InstanceActor {
         this.varCount = varCount;
         insets = new Insets(2, 6, 4, 6);
     }
+
+//  DOC: Document!
 
     /**
 	 * @param name

@@ -5,18 +5,25 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
+ * PanelController handles the curtains of the theater (PanelActor) by
+ * controlling the opening and closing of the curtains and showing the
+ * 
  * 
  * @author Pekka Uronen
  * @author Niko Myller
+ * 
+ * @see jeliot.theater.PanelActor
  */
 public class PanelController {
 
     /**
-     * The resource bundle
+     * The resource bundle for theater package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.theater.resources.properties",
                                       Locale.getDefault());
+
+//  DOC: Document!
 
     /**
 	 *
