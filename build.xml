@@ -151,7 +151,7 @@ To display the available targets type:
     <copy file="${src}/jeliot.ico" todir="${dist}"/>
   </target>
   <target name="javadoc" depends="init">
-  	<javadoc packagenames="*" sourcepath="${src}" destdir="${dist}/docs/javadoc" private="true" author="false" version="false" use="true" windowtitle="Jeliot 3 Javadoc" doctitle="Jeliot 3 and DynamicJava API Specification" bottom="Copyright 2004 Stephane Hillion, Niko Myller, Andres Moreno, Erkki Sutinen, Mordechai Ben-Ari and Pekka Uronen. All Rights Reserved." /> 
+  	<javadoc packagenames="*" sourcepath="${src}" destdir="${dist}/docs/javadoc" private="true" author="false" version="false" use="true" additionalparam="-breakiterator" windowtitle="Jeliot 3 Javadoc" doctitle="Jeliot 3 and DynamicJava API Specification" bottom="Copyright 2004 Stephane Hillion, Niko Myller, Andres Moreno, Erkki Sutinen, Mordechai Ben-Ari and Pekka Uronen. All Rights Reserved." /> 
   </target>
   <!-- Global clean ================================================= -->
   <target name="clean" depends="clean-compile">
