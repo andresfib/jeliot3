@@ -756,6 +756,9 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(ObjectFieldAccess node) {
         Class c = NodeProperties.getType(node.getExpression());
 
+        long fieldCounter = counter;
+        counter++;
+
         long objectCounter=counter;
         // Evaluate the object
         Object obj  = node.getExpression().acceptVisitor(this);
@@ -772,7 +775,7 @@ public class EvaluationVisitor extends VisitorObject {
                 throw new CatchedExceptionError(e, node);
             }
 
-            ECodeUtilities.write(""+Code.OFA+Code.DELIM+(counter++)+Code.DELIM+
+            ECodeUtilities.write(""+Code.OFA+Code.DELIM+fieldCounter+Code.DELIM+
                                  objectCounter+Code.DELIM+f.getName()+Code.DELIM+
                                  value.toString()+Code.DELIM+f.getType().getName()+Code.DELIM+
                                  locationToString(node));
@@ -782,7 +785,12 @@ public class EvaluationVisitor extends VisitorObject {
             // If the object is an array, the field must be 'length'.
             // This field is not a normal field and it is the only
             // way to get it
-            return new Integer(Array.getLength(obj));
+            Integer integer = new Integer(Array.getLength(obj));
+            ECodeUtilities.write(""+Code.AL+Code.DELIM+fieldCounter+Code.DELIM+
+                                 objectCounter+Code.DELIM+"length"+Code.DELIM+
+                                 integer.toString()+Code.DELIM+int.class.getName()+Code.DELIM+
+                                 locationToString(node));
+            return integer;
         }
     }
 
@@ -791,6 +799,11 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(ObjectMethodCall node) {
+
+        Long l = new Long(counter);
+        returnExpressionCounterStack.push(l);
+        counter++;
+
         Expression exp = node.getExpression();
 
         long objectCounter=counter;
@@ -811,7 +824,7 @@ public class EvaluationVisitor extends VisitorObject {
             if (larg != null) {
 
                 ECodeUtilities.write("" + Code.OMC+Code.DELIM+
-                                     m.getDeclaringClass().getName()+Code.DELIM+
+                                     m.getName()+Code.DELIM+
                                      larg.size()+Code.DELIM+
                                      objectCounter+Code.DELIM+
                                      locationToString(node));
@@ -819,15 +832,13 @@ public class EvaluationVisitor extends VisitorObject {
             } else {
 
                 ECodeUtilities.write("" + Code.OMC+Code.DELIM+
-                                     m.getDeclaringClass().getName()+Code.DELIM+
+                                     m.getName()+Code.DELIM+
                                      "0"+Code.DELIM+
                                      objectCounter+Code.DELIM+
                                      locationToString(node));
             }
 
-            Long l = new Long(counter);
-            returnExpressionCounterStack.push(l);
-            counter++;
+
 
             // Fill the arguments
             if (larg != null) {
@@ -847,7 +858,7 @@ public class EvaluationVisitor extends VisitorObject {
                     ECodeUtilities.write("" + Code.P+Code.DELIM+auxcounter);
                     i++;
 
-                    //                args[i++] = ((Expression)it.next()).acceptVisitor(this);
+                    //args[i++] = ((Expression)it.next()).acceptVisitor(this);
                 }
             }
 
@@ -1162,6 +1173,8 @@ public class EvaluationVisitor extends VisitorObject {
                 throw (RuntimeException)e.getTargetException();
             }
             throw new ThrownException(e.getTargetException());
+        } catch (NullPointerException e) {
+            throw new CatchedExceptionError("not.static.method", e, node);
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }

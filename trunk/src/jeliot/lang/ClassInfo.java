@@ -1,13 +1,15 @@
 package jeliot.lang;
 
 import java.util.*;
+import jeliot.ecode.*;
+import java.lang.reflect.*;
 
 public class ClassInfo {
 
     private Hashtable methods;
     private Hashtable fields;
     private Hashtable constructors;
-
+    private String extendedClass;
     private String name;
 
     public ClassInfo(String name) {
@@ -16,6 +18,87 @@ public class ClassInfo {
         this.fields = new Hashtable();
         this.constructors = new Hashtable();
     }
+
+    public ClassInfo(Class declaredClass) {
+        this(declaredClass.getName());
+        try {
+            setDeclaredConstructors(declaredClass.getDeclaredConstructors());
+        } catch (Exception e) {
+            this.constructors = new Hashtable();
+            setDeclaredConstructors(declaredClass.getConstructors());
+        }
+
+        try {
+            setDeclaredFields(declaredClass.getDeclaredFields());
+        } catch (Exception e) {
+            this.fields = new Hashtable();
+            setDeclaredFields(declaredClass.getFields());
+        }
+
+        try {
+            setDeclaredMethods(declaredClass.getDeclaredMethods());
+        } catch (Exception e) {
+            this.methods = new Hashtable();
+            setDeclaredMethods(declaredClass.getMethods());
+        }
+    }
+
+    public void setDeclaredConstructors(Constructor[] constructors) {
+        int n = constructors.length;
+        for (int i = 0; i < n; i++) {
+
+            Class[] classes = constructors[i].getParameterTypes();
+            String typeList = "";
+            int m = classes.length;
+            for (int j = 0; j < m; j++) {
+                typeList += classes[j].getName();
+                if (j != (m - 1)) {
+                    typeList += ",";
+                }
+            }
+
+            declareConstructor(constructors[i].getName() + Code.DELIM + typeList, "");
+        }
+    }
+
+    public void setDeclaredFields(Field[] fields) {
+        int n = fields.length;
+        for (int i = 0; i < n; i++) {
+
+            String name = fields[i].getName();
+            String type = fields[i].getType().getName();
+            int modifiers = fields[i].getModifiers();
+            String value = Code.UNKNOWN;
+
+            declareField(name,
+               "" + modifiers + Code.DELIM + type + Code.DELIM + value);
+        }
+    }
+
+    public void setDeclaredMethods(Method[] methods) {
+
+        int n = methods.length;
+        for (int i = 0; i < n; i++) {
+
+            String name = methods[i].getName();
+            String returnType = methods[i].getReturnType().getName();
+            int modifiers = methods[i].getModifiers();
+            String listOfParameters = "";
+            Class[] classes = methods[i].getParameterTypes();
+            String typeList = "";
+            int m = classes.length;
+            for (int j = 0; j < m; j++) {
+                typeList += classes[j].getName();
+                if (j != (m - 1)) {
+                    typeList += ",";
+                }
+            }
+
+            declareMethod(name + Code.DELIM + typeList,
+                          "" + modifiers + Code.DELIM + returnType);
+        }
+    }
+
 
     public String getName() {
         return name;
@@ -57,7 +140,14 @@ public class ClassInfo {
         return constructors;
     }
 
+    public int getFieldNumber() {
+        return fields.size();
+    }
+
     public void extendClass(ClassInfo ci) {
+
+        extendedClass = ci.getName();
+
         //Firstly the fields
         Hashtable hf = ci.getFields();
         Enumeration enum = hf.keys();
@@ -66,7 +156,7 @@ public class ClassInfo {
             String name = (String) enum.nextElement();
             String info = (String) hf.get(name);
             if (name != null && info != null) {
-                declareField(name, info);
+                declareField(name, info + Code.DELIM + "<E>");
             }
         }
 
@@ -77,7 +167,7 @@ public class ClassInfo {
             String name = (String) enum.nextElement();
             String info = (String) hm.get(name);
             if (name != null && info != null) {
-                declareMethod(name, info);
+                declareMethod(name, info + Code.DELIM + "<E>");
             }
         }
     }

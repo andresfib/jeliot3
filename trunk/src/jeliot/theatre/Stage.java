@@ -60,6 +60,10 @@ public class Stage extends Actor implements ActorContainer {
                 return va;
             }
         }
+
+        //here find the variable "this" and go through the
+        //variables inside that object if that is found.
+
         return null;
     }
 

@@ -160,6 +160,7 @@ public class ArrayInstance extends Instance {
 
     public void setArrayActor(ArrayActor aa) {
         this.arrayActor = aa;
+        setActor(aa);
     }
 
     public ArrayActor getArrayActor() {

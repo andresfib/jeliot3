@@ -55,8 +55,12 @@ public class Interpreter {
     * 4: Parameter names
     * 5: Highlight info for invocation
     * 6: Highlight info for declaration
+    * 7: Parameter expression references
+    * 8: Object reference if method is constructor or object method
     */
-    Object[] currentMethodInvocation = null;
+    private Object[] currentMethodInvocation = null;
+
+    private Stack objectCreation = new Stack();
 
     protected Interpreter() { }
 
@@ -87,6 +91,7 @@ public class Interpreter {
         postIncsDecs = new Hashtable();
         instances = new Hashtable();
         classes = new Hashtable();
+        objectCreation = new Stack();
 
         try {
             line = ecode.readLine();
@@ -155,16 +160,19 @@ public class Interpreter {
                     int token = Integer.parseInt(tokenizer.nextToken());
 
 
-                    if (exprs.empty()        &&
-                        !invokingMethod      &&
-                        token != Code.WHI    &&
-                        token != Code.FOR    &&
-                        token != Code.DO     &&
-                        token != Code.IFT    &&
-                        token != Code.IFTE   &&
-                        token != Code.VD     &&
-                        token != Code.OUTPUT &&
-                        token != Code.INPUT  &&
+                    if (exprs.empty()         &&
+                        !invokingMethod       &&
+                        token != Code.WHI     &&
+                        token != Code.FOR     &&
+                        token != Code.DO      &&
+                        token != Code.IFT     &&
+                        token != Code.IFTE    &&
+                        token != Code.SWIBF   &&
+                        token != Code.SWITCHB &&
+                        token != Code.SWITCH  &&
+                        token != Code.VD      &&
+                        token != Code.OUTPUT  &&
+                        token != Code.INPUT   &&
                         token != Code.INPUTTED) {
                             director.closeScratch();
                             director.openScratch();
@@ -1084,11 +1092,114 @@ public class Interpreter {
                         //Simple Allocation (Object Allocation)
                         case Code.SA: {
 
+                            //simpleAllocationCounter
+                            int expressionCounter =
+                                Integer.parseInt(tokenizer.nextToken());
+
+                            String declaringClass = tokenizer.nextToken();
+                            String constructorName = tokenizer.nextToken();
+
+                            int parameterCount = Integer.parseInt(tokenizer.nextToken());
+                            Highlight highlight = ECodeUtilities.makeHighlight(
+                                                          tokenizer.nextToken());
+
+                            //Create here Object Stage with initial variables and values
+                            ClassInfo ci = (ClassInfo) classes.get(declaringClass);
+
+                            //If ci is not null it means that we are dealing with
+                            //user defined class and can find the class information
+                            //extracted during the compilation with DynamicJava.
+                            //If ci is null there is no user defined class and we
+                            //need to use the Class.for(String name) method to
+                            //find out as much as possible from the class.
+                            if (ci == null) {
+                                Class declaredClass = null;
+                                try {
+                                    declaredClass = Class.forName(declaringClass);
+                                } catch (Exception e) {
+                                    String message = "<H1>Runtime Error</H1> <P>The class that was supposed to be initiated could not be found.</P>";
+                                    director.showErrorMessage(new InterpreterError(message, null));
+                                }
+                                ci = new ClassInfo(declaredClass);
+                                classes.put(ci.getName(), ci);
+                            }
+
+                            //This works for not primitive classes.
+                            //There needs to be a check whether invoked
+                            //class is primitive or not.
+                            ObjectFrame of = createNewInstance(ci, highlight);
+                            Reference ref = new Reference(of);
+
+                            invokingMethod = true;
+
+                            if (currentMethodInvocation != null) {
+                                   methodInvocation.push(currentMethodInvocation);
+                            }
+                            currentMethodInvocation = new Object[9];
+
+                            int n = currentMethodInvocation.length;
+                            for (int i = 0; i < n; i++) {
+                                currentMethodInvocation[i] = null;
+                            }
+
+                            currentMethodInvocation[0] = constructorName;
+                            currentMethodInvocation[1] = "";
+
+                            Value[] parameterValues = new Value[parameterCount];
+                            String[] parameterTypes = new String[parameterCount];
+                            String[] parameterNames = new String[parameterCount];
+                            Integer[] parameterExpressionReferences = new Integer[parameterCount];
+
+                            for (int i = 0; i < parameterCount; i++) {
+                                parameterValues[i] = null;
+                                parameterTypes[i] = null;
+                                parameterNames[i] = null;
+                                parameterExpressionReferences[i] = null;
+                            }
+
+                            currentMethodInvocation[2] = parameterValues;
+                            currentMethodInvocation[3] = parameterTypes;
+                            currentMethodInvocation[4] = parameterNames;
+                            currentMethodInvocation[5] = highlight;
+                            currentMethodInvocation[7] = parameterExpressionReferences;
+                            currentMethodInvocation[8] = ref;
+
+                            objectCreation.push(new Reference(of));
+
                             break;
                         }
 
                         // Simple class allocation close
                         case Code.SAC: {
+
+                            //simpleAllocationCounter
+                            int expressionCounter =
+                                Integer.parseInt(tokenizer.nextToken());
+
+                            String hashCode = tokenizer.nextToken();
+
+                            Highlight h = ECodeUtilities.makeHighlight(
+                                                 tokenizer.nextToken());
+
+                            director.finishMethod(null, 0);
+
+                            //Handle the object reference return
+
+                            //This should handle the possible object
+                            //assignment etc.
+                            if (!objectCreation.empty()) {
+                                //First reference to the created object is taken
+                                Reference ref = (Reference) objectCreation.pop();
+                                Instance inst = ref.getInstance();
+                                inst.setHashCode(hashCode);
+                                //The instance is putted in the hashtable that
+                                //keeps the instances
+                                instances.put(hashCode, inst);
+                                //Then we handle the possible expressions
+                                //concerning this reference.
+                                director.introduceReference(ref);
+                                handleExpression(ref, expressionCounter);
+                            }
 
                             break;
                         }
@@ -1096,17 +1207,269 @@ public class Interpreter {
                         // Object field access
                         case Code.OFA: {
 
+                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
+                            int objectCounter = Integer.parseInt(tokenizer.nextToken());
+                            String variableName = tokenizer.nextToken();
+                            String value = "";
+                            if (tokenizer.countTokens() >= 2) {
+                                value = tokenizer.nextToken();
+                            }
+
+                            String type = tokenizer.nextToken();
+
+                            Reference objVal = (Reference) values.remove(new Integer(objectCounter));
+                            if (objVal == null && !objectCreation.empty()) {
+                                objVal = (Reference) objectCreation.peek();
+                            }
+
+                            ObjectFrame obj = (ObjectFrame) objVal.getInstance();
+
+                            if (obj == null && !objectCreation.empty()) {
+                                objVal = (Reference) objectCreation.peek();
+                                obj = (ObjectFrame) objVal.getInstance();
+                            }
+
+                            Variable var = obj.getVariable(variableName);
+
+                            //command that waits for this expression
+                            int command = -1;
+                            int oper = -1;
+                            int size = commands.size();
+
+                            //We find the command
+                            for (int i = size - 1; i >= 0; i--) {
+                                StringTokenizer commandTokenizer = new StringTokenizer(
+                                                (String) commands.elementAt(i),
+                                                Code.DELIM);
+                                int comm = Integer.parseInt(commandTokenizer.nextToken());
+                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+
+                                if (expressionCounter == cid) {
+                                    command = comm;
+                                    commands.removeElementAt(i);
+                                    break;
+                                }
+                            }
+
+                            /**
+                            * Look from the expression stack
+                            * what expression should be shown next
+                            */
+                            int expressionReference = 0;
+                            Highlight highlight = null;
+                            if (!exprs.empty()) {
+                                StringTokenizer expressionTokenizer = new StringTokenizer(
+                                                                     (String) exprs.peek(),
+                                                                      Code.DELIM);
+
+                                oper = Integer.parseInt(expressionTokenizer.nextToken());
+
+                                expressionReference = Integer.parseInt(
+                                                        expressionTokenizer.nextToken());
+
+                                //Make the location information for the location token
+                                highlight = ECodeUtilities.makeHighlight(
+                                expressionTokenizer.nextToken());
+                            }
+
+                            Value val = null;
+                            if (ECodeUtilities.isPrimitive(type)) {
+                                val = new Value(value, type);
+                                ValueActor va = var.getActor().getValue();
+                                val.setActor(va);
+                            } else {
+                                if (value.equals("null")) {
+                                    val = new Reference();
+                                } else {
+                                    Instance inst = (Instance) instances.get(
+                                                ECodeUtilities.getHashCode(value));
+                                    if (inst != null) {
+                                        val = new Reference(inst);
+                                    } else {
+                                        val = new Reference();
+                                    }
+                                }
+                                val.setActor(var.getActor().getValue());
+                            }
+
+                            /**
+                            * Do different kind of things depending on
+                            * in what expression the variable is used.
+                            */
+
+                            //If operator is assignment we just store the value
+                            if (oper == Code.A) {
+
+                                if (command == Code.TO) {
+
+                                    variables.put(new Integer(expressionCounter), var);
+
+                                } else {
+
+                                    values.put(new Integer(expressionCounter), val);
+                                }
+
+                            //If oper is other binary operator we will show it
+                            //on the screen with operator
+                            } else if (ECodeUtilities.isBinary(oper)) {
+
+                                int operator = ECodeUtilities.resolveBinOperator(oper);
+
+                                if (command == Code.LEFT) {
+
+                                    director.beginBinaryExpression(val, operator,
+                                                expressionReference, highlight);
+
+                                } else if (command == Code.RIGHT) {
+
+                                    ExpressionActor ea = (ExpressionActor)
+                                        director.getCurrentScratch().findActor(expressionReference);
+                                    if (ea != null) {
+
+                                        director.rightBinaryExpression(val, ea, highlight);
+
+                                    } else {
+                                        values.put(new Integer(expressionCounter), val);
+                                    }
+                                } else {
+                                    values.put(new Integer(expressionCounter), val);
+                                }
+
+                            //If oper is a unary operator we will show it
+                            //on the screen with operator
+                            } else if (ECodeUtilities.isUnary(oper)) {
+
+                                if (oper == Code.PRIE ||
+                                    oper == Code.PRDE) {
+
+                                        variables.put(new Integer(expressionCounter), var);
+
+                                } else if (oper == Code.PIE  ||
+                                           oper == Code.PDE) {
+
+                                        variables.put(new Integer(expressionCounter), var);
+                                        values.put(new Integer(expressionReference), val);
+
+
+                                } else {
+
+                                    values.put(new Integer(expressionCounter), val);
+                                    int operator = ECodeUtilities.resolveUnOperator(oper);
+                                    if (command == Code.RIGHT) {
+                                        director.beginUnaryExpression(operator, val,
+                                                        expressionReference, highlight);
+                                    }
+                                }
+
+                            //If it is something else we will store it for later use.
+                            } else {
+
+                                values.put(new Integer(expressionCounter), val);
+                                variables.put(new Integer(expressionCounter), var);
+
+                            }
+
                             break;
                         }
 
                         // Object method call
                         case Code.OMC: {
 
-                            break;
+                            String methodName = tokenizer.nextToken();
+                            int parameterCount = Integer.parseInt(tokenizer.nextToken());
+                            int objectCounter =  Integer.parseInt(tokenizer.nextToken());
+                            Highlight highlight = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+
+                            Value val = (Value) values.remove(new Integer(objectCounter));
+                            Variable var = (Variable) variables.remove(new Integer(objectCounter));
+
+                            if (val == null && !objectCreation.empty()) {
+                                val = (Reference) objectCreation.peek();
+                            }
+
+                            if (val instanceof Reference) {
+                                ObjectFrame obj = (ObjectFrame) ((Reference)val).getInstance();
+
+                                if (obj == null && !objectCreation.empty()) {
+                                    val = (Reference) objectCreation.peek();
+                                    obj = (ObjectFrame) ((Reference)val).getInstance();
+                                }
+                            }
+
+                            invokingMethod = true;
+
+                            if (currentMethodInvocation != null) {
+                                   methodInvocation.push(currentMethodInvocation);
+                            }
+                            currentMethodInvocation = new Object[9];
+
+                            int n = currentMethodInvocation.length;
+                            for (int i = 0; i < n; i++) {
+                                currentMethodInvocation[i] = null;
+                            }
+
+                            currentMethodInvocation[0] = methodName;
+
+                            if (var != null) {
+                                currentMethodInvocation[1] = var.getName();
+                            } else {
+                                if (val instanceof Reference) {
+                                    currentMethodInvocation[1] = "new " +
+                                      ((Reference) val).getInstance().getType();
+                                } else {
+                                    currentMethodInvocation[1] = val.getValue();
+                                }
+                            }
+
+                            Value[] parameterValues = new Value[parameterCount];
+                            String[] parameterTypes = new String[parameterCount];
+                            String[] parameterNames = new String[parameterCount];
+                            Integer[] parameterExpressionReferences = new Integer[parameterCount];
+
+                            for (int i = 0; i < parameterCount; i++) {
+                                parameterValues[i] = null;
+                                parameterTypes[i] = null;
+                                parameterNames[i] = null;
+                                parameterExpressionReferences[i] = null;
+                            }
+
+                            currentMethodInvocation[2] = parameterValues;
+                            currentMethodInvocation[3] = parameterTypes;
+                            currentMethodInvocation[4] = parameterNames;
+                            currentMethodInvocation[5] = highlight;
+                            currentMethodInvocation[7] = parameterExpressionReferences;
+                            currentMethodInvocation[8] = val;
+
+                           break;
                         }
 
                         // Object method call close
                         case Code.OMCC: {
+
+                            if (!returned) {
+
+                                director.finishMethod(null, 0);
+
+                            } else {
+
+                                Value rv = null;
+
+                                if (returnValue instanceof Reference) {
+                                    rv = (Value) ((Reference)returnValue).clone();
+                                } else {
+
+                                    rv = (Value) returnValue.clone();
+                                }
+
+                                ValueActor va = director.finishMethod(
+                                                    returnActor,
+                                                    returnExpressionCounter);
+                                rv.setActor(va);
+
+                                handleExpression(rv, returnExpressionCounter);
+                            }
+
+                            returned = false;
 
                             break;
                         }
@@ -1186,30 +1549,71 @@ public class Interpreter {
                             //Make the location information for the location token
                             currentMethodInvocation[6] =
                                 ECodeUtilities.makeHighlight(tokenizer.nextToken());
-                            Value[] args = null;
-                            if (start) {
-                                args = director.animateSMInvocation(
-                                        ((String) currentMethodInvocation[1]) + "." +
-                                        ((String) currentMethodInvocation[0]),
-                                        (Value[]) currentMethodInvocation[2],
-                                        null);
-                                start = false;
+
+                            //Object method call or constructor
+                            if (currentMethodInvocation.length == 9) {
+
+                                //Change this!
+                                //This is not ready yet!
+                                //if (current)
+                                Value[] args = null;
+
+                                if (((String) currentMethodInvocation[1]).equals("")) {
+                                    args = director.animateOMInvocation(
+                                            "new " + ((String) currentMethodInvocation[0]),
+                                            (Value[]) currentMethodInvocation[2],
+                                            (Highlight) currentMethodInvocation[5]);
+                                } else {
+                                    args = director.animateOMInvocation(
+                                            "." + ((String) currentMethodInvocation[0]),
+                                            (Value[]) currentMethodInvocation[2],
+                                            (Highlight) currentMethodInvocation[5],
+                                            (Value) currentMethodInvocation[8]);
+                                }
+
+                                String call;
+
+                                if (((String) currentMethodInvocation[1]).equals("")) {
+                                    call = ((String) currentMethodInvocation[0]);
+                                } else {
+                                    call = ((String) currentMethodInvocation[1]) +
+                                           "." +((String) currentMethodInvocation[0]);
+                                }
+
+                                director.setUpMethod(
+                                 call,
+                                 args,
+                                 (String[]) currentMethodInvocation[4],
+                                 (String[]) currentMethodInvocation[3],
+                                 (Highlight) currentMethodInvocation[6],
+                                 (Value) currentMethodInvocation[8]);
+
+                            //Static method invocation
                             } else {
-                                args = director.animateSMInvocation(
+                                Value[] args = null;
+                                if (start) {
+                                    args = director.animateSMInvocation(
+                                            ((String) currentMethodInvocation[1]) + "." +
+                                            ((String) currentMethodInvocation[0]),
+                                            (Value[]) currentMethodInvocation[2],
+                                            null);
+                                    start = false;
+                                } else {
+                                    args = director.animateSMInvocation(
+                                           ((String) currentMethodInvocation[1]) + "." +
+                                           ((String) currentMethodInvocation[0]),
+                                           (Value[]) currentMethodInvocation[2],
+                                           (Highlight) currentMethodInvocation[5]);
+                                }
+
+                                director.setUpMethod(
                                         ((String) currentMethodInvocation[1]) + "." +
                                         ((String) currentMethodInvocation[0]),
-                                        (Value[]) currentMethodInvocation[2],
-                                        (Highlight) currentMethodInvocation[5]);
+                                        args,
+                                        (String[]) currentMethodInvocation[4],
+                                        (String[]) currentMethodInvocation[3],
+                                        (Highlight) currentMethodInvocation[6]);
                             }
-
-                            director.setUpMethod(
-                                    ((String) currentMethodInvocation[1]) + "." +
-                                    ((String) currentMethodInvocation[0]),
-                                    args,
-                                    (String[]) currentMethodInvocation[4],
-                                    (String[]) currentMethodInvocation[3],
-                                    (Highlight) currentMethodInvocation[6]);
-
 
                             Integer[] parameterExpressionReferences = (Integer[]) currentMethodInvocation[7];
 
@@ -2142,6 +2546,37 @@ public class Interpreter {
                             break;
                         }
 
+                        //Array Length
+                        case Code.AL: {
+
+                            //Second token is the expression counter
+                            int expressionCounter = Integer.parseInt(tokenizer.nextToken());
+                            int arrayCounter = Integer.parseInt(tokenizer.nextToken());
+
+                            String name = tokenizer.nextToken();
+                            String value = "";
+                            if (tokenizer.countTokens() >= 3) {
+                                //Third token is the value of the literal
+                                value = tokenizer.nextToken();
+                            }
+
+                            //Fourth token is the type of the literal
+                            String type = tokenizer.nextToken();
+
+                            //Fifth token is the highlight information.
+                            //Not used because the whole expression is highlighted.
+                            Highlight highlight = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+
+                            Reference ref = (Reference) values.remove(new Integer(arrayCounter));
+                            ArrayInstance array = (ArrayInstance) ref.getInstance();
+
+                            Value length = new Value(value, type);
+                            director.introduceArrayLength(length, array);
+
+                            handleExpression(length, expressionCounter);
+
+                            break;
+                        }
                         //Class information starts for a class
                         case Code.CLASS: {
 
@@ -2155,6 +2590,7 @@ public class Interpreter {
                             currentClass = new ClassInfo(name);
                             ClassInfo ci = (ClassInfo) classes.get(extendedClass);
 
+                            //if extended class is user defined class
                             if (ci != null) {
                                 currentClass.extendClass(ci);
                             }
@@ -2182,7 +2618,8 @@ public class Interpreter {
                                 listOfParameters = tokenizer.nextToken();
                             }
 
-                            currentClass.declareConstructor(currentClass.getName()+","+listOfParameters, "");
+                            currentClass.declareConstructor(currentClass.getName() +
+                                                    Code.DELIM + listOfParameters, "");
 
                             break;
                         }
@@ -2192,14 +2629,17 @@ public class Interpreter {
 
                             String name = tokenizer.nextToken();
                             String returnType = tokenizer.nextToken();
-                            int modifiers = Integer.parseInt(tokenizer.nextToken());
+                            int modifiers = -1;
+                            if (tokenizer.hasMoreTokens()) {
+                                modifiers = Integer.parseInt(tokenizer.nextToken());
+                            }
 
                             String listOfParameters = "";
                             if (tokenizer.hasMoreTokens()) {
                                 listOfParameters = tokenizer.nextToken();
                             }
 
-                            currentClass.declareMethod(name+","+listOfParameters,
+                            currentClass.declareMethod(name + Code.DELIM + listOfParameters,
                                                        "" + modifiers + Code.DELIM + returnType);
 
                             break;
@@ -2211,10 +2651,14 @@ public class Interpreter {
                             String name = tokenizer.nextToken();
                             String type = tokenizer.nextToken();
                             int modifiers = Integer.parseInt(tokenizer.nextToken());
-                            String value = tokenizer.nextToken();
+                            String value = "";
+                            if (tokenizer.hasMoreTokens()) {
+                                value = tokenizer.nextToken();
+                            }
 
                             currentClass.declareField(name,
-                                                       "" + modifiers + Code.DELIM + type + Code.DELIM + value);
+                                   "" + modifiers + Code.DELIM + type +
+                                   Code.DELIM + value);
 
                             break;
                         }
@@ -2233,8 +2677,8 @@ public class Interpreter {
 
                         //There is an error if the execution comes here.
                         default: {
-                            System.out.println("Error! The feature is not yet implemented or " +
-                                               "there is an error on the other side of the ecode interface.");
+                            director.showErrorMessage(new InterpreterError("<H1>Runtime Error</H1> <P>The feature is not yet implemented or " +
+                                                                           "there is an error on the other side of the ecode interface.</P>", null));
                             break;
                         }
                     }
@@ -2250,6 +2694,71 @@ public class Interpreter {
     }
 
 
+    public ObjectFrame createNewInstance(ClassInfo ci, Highlight h) {
+        ObjectFrame of = new ObjectFrame("-1", ci.getName(), ci.getFieldNumber());
+
+        //director: create object
+        director.showObjectCreation(of, h);
+
+        //director: create variables and initialize them
+        Hashtable fields = ci.getFields();
+
+        for (Enumeration keyEnum = fields.keys(); keyEnum.hasMoreElements() ;) {
+
+            String name = (String) keyEnum.nextElement();
+            String info = (String) fields.get(name);
+            StringTokenizer st = new StringTokenizer(info, Code.DELIM);
+            String mods = st.nextToken();
+            String type = st.nextToken();
+            String value = "";
+            if (st.hasMoreTokens()) {
+                value = st.nextToken();
+            }
+
+            Variable var = director.declareObjectVariable(of, name, type, null);
+
+            if (!value.equals(Code.UNKNOWN)) {
+
+                Value casted = null;
+                Value val = null;
+                if (ECodeUtilities.isPrimitive(type)) {
+                    casted = new Value(value, type);
+                    val = new Value(value, type);
+                    director.introduceLiteral(val);
+                } else {
+                    if (value.equals("null")) {
+                        casted = new Reference();
+                        val = new Reference();
+                        director.introduceLiteral(val);
+                    } else {
+                        //This should be done differently!
+                        //This does not work here if some things
+                        //are not changed when the initial values of
+                        //each field in the class are collected in DJ.
+                        Instance inst = (Instance) instances.get(
+                                        ECodeUtilities.getHashCode(value));
+
+                        if (inst != null) {
+                            casted = new Reference(inst);
+                            val = new Reference(inst);
+                        } else {
+                            casted = new Reference();
+                            val = new Reference();
+                            director.introduceLiteral(val);
+                        }
+                    }
+                    casted.setActor(var.getActor().getValue());
+                }
+
+                director.animateAssignment(var, val, casted, null, null);
+            }
+
+        }
+
+        return of;
+    }
+
+    //Not in use at the moment.
     public void checkInstancesForRemoval() {
         Enumeration enum = instances.keys();
         while (enum.hasMoreElements()) {
@@ -2271,6 +2780,7 @@ public class Interpreter {
         }
     }
 
+    //Not in use at the moment
     public void removeInstances() {
         Enumeration enum = instances.keys();
         while (enum.hasMoreElements()) {

@@ -48,6 +48,10 @@ public class MethodFrame {
                 }
             }
         }
+
+        //here find the variable "this" and go through the
+        //variables inside that object if that is found.
+
         //throw new RuntimeException("No Variable " + name);
         return null;
     }

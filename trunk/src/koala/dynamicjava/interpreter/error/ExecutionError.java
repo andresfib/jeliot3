@@ -41,14 +41,14 @@ import koala.dynamicjava.util.*;
  */
 
 public class ExecutionError extends Error {
- 
+
     protected Throwable thrown;
-    
+
     /**
      * The resource bundle name
      */
     private final static String BUNDLE
-	= "koala.dynamicjava.interpreter.resources.messages";
+        = "koala.dynamicjava.interpreter.resources.messages";
 
     public final static String SHOW_CAUSE_PROPERTY
         = "koala.dynamicjava.interpreter.showCause";
@@ -60,7 +60,7 @@ public class ExecutionError extends Error {
      * The message reader
      */
     private final static LocalizedMessageReader reader
-	= new LocalizedMessageReader(BUNDLE);
+        = new LocalizedMessageReader(BUNDLE);
 
     /**
      * The syntax tree node where the error occurs
@@ -74,32 +74,32 @@ public class ExecutionError extends Error {
     private String rawMessage;
 
     /**
-     * Constructs an <code>ExecutionError</code> with no detail message. 
+     * Constructs an <code>ExecutionError</code> with no detail message.
      */
     public ExecutionError() {
         this("");
     }
 
     /**
-     * Constructs an <code>ExecutionError</code> with the specified 
-     * detail message. 
+     * Constructs an <code>ExecutionError</code> with the specified
+     * detail message.
      * @param s the detail message (a key in a resource file).
      */
     public ExecutionError(String s) {
         this(s, null);
     }
-    
+
     /**
-     * Constructs an <code>ExecutionError</code> with the specified 
-     * detail message, filename, line and column. 
+     * Constructs an <code>ExecutionError</code> with the specified
+     * detail message, filename, line and column.
      * @param s  the detail message (a key in a resource file).
      * @param n  the syntax tree node where the error occurs
      */
     public ExecutionError(String s, Node n) {
-	rawMessage = s;
-	node       = n;
+        rawMessage = s;
+        node       = n;
     }
-    
+
     public ExecutionError(Throwable thrown) {
         this.thrown = thrown;
     }
@@ -108,7 +108,7 @@ public class ExecutionError extends Error {
      * Returns the syntax tree node where the error occurs
      */
     public Node getNode() {
-	return node;
+        return node;
     }
 
     /**
@@ -119,7 +119,7 @@ public class ExecutionError extends Error {
     public void printStackTrace() {
         this.printStackTrace(System.err);
     }
- 
+
     /**
      * Overridden to delegate to printStackTrace(PrintWriter) to print nested
      * exception information.
@@ -135,7 +135,7 @@ public class ExecutionError extends Error {
      */
     public void printStackTrace(java.io.PrintWriter w) {
         String trace = System.getProperty(SHOW_TRACE_PROPERTY);
-        if (trace != null && !new Boolean(trace).booleanValue()) {
+        if (trace != null && !(new Boolean(trace)).booleanValue()) {
             w.println(this);
         } else {
             super.printStackTrace(w);
@@ -148,15 +148,15 @@ public class ExecutionError extends Error {
             }
         }
     }
-    
+
     /**
      * Returns the errort message string of this exception
      */
     public String getMessage() {
-	return reader.getMessage(rawMessage,
-				 node != null &&
-				 node.hasProperty(NodeProperties.ERROR_STRINGS)
-				 ? (String[])node.getProperty(NodeProperties.ERROR_STRINGS)
-				 : null);
+        return reader.getMessage(rawMessage,
+                 node != null &&
+                 node.hasProperty(NodeProperties.ERROR_STRINGS)
+                 ? (String[])node.getProperty(NodeProperties.ERROR_STRINGS)
+                 : null);
     }
 }

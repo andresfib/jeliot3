@@ -37,7 +37,7 @@ public class Actor implements Cloneable {
     /** Width of actor's border */
     protected int borderWidth = 2;
 
-    private int shadoww;
+    private int shadoww = 0;
 
     /** Margin, not including border */
     protected Insets insets = new Insets(0, 0, 0, 0);
@@ -89,6 +89,10 @@ public class Actor implements Cloneable {
 
     public void setShadow(int s) {
         this.shadoww = s;
+    }
+
+    public int getShadow() {
+        return this.shadoww;
     }
 
     /** Paints the shadow of the actor. Override this. */
@@ -198,7 +202,7 @@ public class Actor implements Cloneable {
     }
 
     protected FontMetrics getFontMetrics() {
-        return Toolkit.getDefaultToolkit().getFontMetrics(this.font);
+        return dummy.getFontMetrics(this.font);
     }
 
     public void setFont(Font font) {
@@ -291,6 +295,8 @@ public class Actor implements Cloneable {
         final double cos = Math.cos(angle);
         final double sin = Math.sin(angle);
 
+        final int originalShadow = getShadow();
+
         return new Animation() {
             double x = startx;
             double y = starty;
@@ -329,7 +335,7 @@ public class Actor implements Cloneable {
             }
 
             public void finish() {
-                setShadow(0);
+                setShadow(originalShadow);
                 setLocation( (int)destx, (int)desty);
                 this.repaint();
             }

@@ -343,6 +343,80 @@ public class Director {
 
         return new Return(animator.getReturnValue());
     }
+*/
+
+    public Value[] animateOMInvocation(String methodCall,
+                                      Value[] args,
+                                      Highlight h,
+                                      Value thisValue){
+        highlight(h);
+
+        // Remember the scratch of current expression.
+        // scratchStack.push(currentScratch);
+
+        ValueActor valAct = thisValue.getActor();
+
+        // Create the actor for the invocation.
+        int n = 0;
+        if (args != null) {
+             n = args.length;
+        }
+        OMIActor actor = factory.produceOMIActor(methodCall, n);
+        ExpressionActor expr = currentScratch.getExpression(1, -1);
+        currentScratch.registerCrap(actor);
+
+        Point invoLoc = expr.getRootLocation();
+        actor.setLocation(invoLoc);
+
+        ValueActor thisValueActor = thisValue.getActor();
+        Animation thisFly = thisValueActor.fly(actor.reserveThisActor(thisValueActor));
+
+        // Create actors and reserve places for all argument values,
+        // and create animations to bring them in their right places.
+        ValueActor[] argact = new ValueActor[n];
+        Animation[] fly = new Animation[n];
+        for (int i = 0; i < n; ++i) {
+            argact[i] = args[i].getActor();
+            args[i].setActor(argact[i]);
+            fly[i] = argact[i].fly(actor.reserve(argact[i]));
+        }
+
+        // Calculate the size of the invocation actor, taking into account
+        // the argument actors.
+        actor.calculateSize();
+
+        // Show the animation.
+        theatre.capture();
+
+        // Introduce the invocation and the this Value fly.
+        engine.showAnimation(new Animation[] {actor.appear(invoLoc), thisFly});
+        theatre.passivate(actor);
+
+        //bind this value
+        actor.bindThisActor();
+
+        theatre.updateCapture();
+
+        // Bring in arguments.
+        engine.showAnimation(fly);
+
+        // Bind argument actors to the invocation actor.
+        for (int i = 0; i < n; ++i) {
+            actor.bind(argact[i]);
+        }
+
+        // De-activate the theatre.
+        theatre.release();
+
+        return args;
+
+    }
+
+    public Value[] animateOMInvocation(String methodCall,
+                                       Value[] args,
+                                       Highlight h) {
+        return animateSMInvocation(methodCall, args, h);
+    }
 
 
     /** Animates the invocation of a domestic (user-defined) method.
@@ -401,6 +475,133 @@ public class Director {
         theatre.release();
 
         return args;
+    }
+
+    /** Called when the program enters a new user-defined method.
+      * Sets up a frame for the method.
+      */
+    public void setUpMethod(String methodName, Value[] args, String[] formalParameters,
+                            String[] formalParameterTypes, Highlight h, Value thisValue) {
+
+        // highlight the method header.
+        highlight(h);
+
+        // create new method frame
+        MethodFrame frame = new MethodFrame(methodName);
+
+        // create a stage for the method
+        Stage stage = factory.produceStage(frame);
+        frame.setStage(stage);
+        currentMethodFrame = frame;
+        frameStack.push(frame);
+
+        Variable thisVariable = null;
+        VariableActor thisVariableActor = null;
+        ValueActor thisValueActor = null;
+
+        int n = 0;
+        Variable[] vars         = null;
+        VariableActor[] varact  = null;
+        Animation[] anim        = null;
+        ValueActor[] valact     = null;
+
+        thisVariable = frame.declareVariable(new Variable("this", thisValue.getType()));
+        thisVariableActor = factory.produceVariableActor(thisVariable);
+        thisVariable.setActor(thisVariableActor);
+        stage.reserve(thisVariableActor);
+        stage.bind();
+
+        if (args != null && args.length > 0) {
+            n = args.length;
+            vars = new Variable[n];
+            varact = new VariableActor[n];
+            anim = new Animation[n];
+            valact = new ValueActor[n];
+
+            for (int i = 0; i < args.length; ++i) {
+                vars[i] = frame.declareVariable(new Variable(formalParameters[i], formalParameterTypes[i]));
+                varact[i] = factory.produceVariableActor(vars[i]);
+                vars[i].setActor(varact[i]);
+                stage.reserve(varact[i]);
+                //stage.extend();
+                stage.bind();
+            }
+
+            Animation a = stage.extend();
+            if (a != null) {
+                engine.showAnimation(a);
+            }
+        }
+
+        theatre.capture();
+
+        Point sLoc = manager.reserve(stage);
+        engine.showAnimation(stage.appear(sLoc));
+        manager.bind(stage);
+
+        theatre.updateCapture();
+
+        thisVariable.assign(thisValue);
+        Value thisCasted = thisVariable.getValue();
+        ValueActor thisCastAct = factory.produceValueActor(thisCasted);
+        thisValueActor = thisValue.getActor();
+
+        if (thisValueActor == null) {
+            thisValueActor = factory.produceValueActor(thisValue);
+            if (thisValueActor instanceof ReferenceActor) {
+                InstanceActor ai = ((ReferenceActor)thisValueActor).getInstanceActor();
+                thisValueActor.setLocation(ai.getRootLocation());
+            } else {
+                introduceLiteral(thisValue);
+                thisValueActor = (ValueActor) thisValue.getActor();
+            }
+        }
+
+        Animation thisAnim = thisValueActor.fly(thisVariableActor.reserve(thisCastAct));
+        engine.showAnimation(thisAnim);
+
+        thisVariableActor.bind();
+        theatre.removeActor(thisValueActor);
+
+        theatre.updateCapture();
+
+        if (args != null && args.length > 0) {
+
+            for (int i = 0; i < n; ++i) {
+                    vars[i].assign(args[i]);
+                    Value casted = vars[i].getValue();
+                    ValueActor castact = factory.produceValueActor(casted);
+                    valact[i] = args[i].getActor();
+                    anim[i] = valact[i].fly(varact[i].reserve(castact));
+            }
+
+            engine.showAnimation(anim);
+
+            for (int i = 0; i < n; ++i) {
+                varact[i].bind();
+                theatre.removeActor(valact[i]);
+            }
+        }
+
+        theatre.updateCapture();
+
+        if (currentScratch != null) {
+            Scratch scratch = currentScratch;
+            //scratchStack.push(scratch);
+            scratch.memorizeLocation();
+
+            scratch.removeCrap();
+            if (eCodeInterpreter.emptyScratch()) {
+                scratch.clean();
+            }
+            manager.removeScratch(scratch);
+            Point p = new Point(scratch.getX(), -scratch.getHeight());
+            theatre.updateCapture();
+            engine.showAnimation(scratch.fly(p));
+            theatre.removePassive(scratch);
+        }
+        openScratch();
+        theatre.release();
     }
 
     public void setUpMethod(String methodName, Highlight h) {
@@ -509,9 +710,9 @@ public class Director {
 
         if (returnAct != null) {
             currentScratch.removeCrap();
+            returnAct.setShadow(4);
             engine.showAnimation(new Animation[] {stageDisappear,
                         returnAct.fly(returnAct.getRootLocation())});
-            returnAct.setShadow(4);
         } else {
             engine.showAnimation(stageDisappear);
         }
@@ -756,10 +957,38 @@ public class Director {
         return v;
     }
 
+    public Variable declareObjectVariable(ObjectFrame of, String name, String type, Highlight h) {
+
+        highlight(h);
+
+        // Create a new variable and its actor.
+        Variable v = of.declareVariable(new Variable(name, type));
+        VariableActor actor = factory.produceVariableActor(v);
+        v.setActor(actor);
+
+        ObjectStage stage = of.getObjectStage();
+
+        Point loc = stage.reserve(actor);
+        theatre.capture();
+
+        engine.showAnimation(actor.appear(loc));
+        stage.bind();
+
+        theatre.release();
+
+        return v;
+    }
+
     public void introduceLiteral(Value literal) {
         ValueActor valact = factory.produceValueActor(literal);
         valact.setLocation(cbox.getRootLocation());
         literal.setActor(valact);
+    }
+
+    public void introduceReference(Reference ref) {
+        ReferenceActor refAct = factory.produceReferenceActor(ref);
+        refAct.setLocation(refAct.getInstanceActor().getRootLocation());
+        ref.setActor(refAct);
     }
 
 /*
@@ -1543,7 +1772,7 @@ public class Director {
         ExpressionActor ea = currentScratch.getExpression(1, -1);
         currentScratch.registerCrap(actor);
 
-//      Point invoLoc = ea.getRootLocation();
+        //Point invoLoc = ea.getRootLocation();
         Point invoLoc = ea.reserve(actor);
         actor.setLocation(invoLoc);
 
@@ -1579,7 +1808,7 @@ public class Director {
         highlight(h);
 
         ArrayActor arrayAct = factory.produceArrayActor(array);
-        array.setActor(arrayAct);
+        array.setArrayActor(arrayAct);
 
         Point loc = manager.reserve(arrayAct);
         theatre.capture();
@@ -1657,6 +1886,27 @@ public class Director {
                 }
             }
         );
+    }
+
+    public void introduceArrayLength(Value length, ArrayInstance ai) {
+        ValueActor lengthAct = factory.produceValueActor(length);
+        lengthAct.setLocation(ai.getActor().getRootLocation());
+        length.setActor(lengthAct);
+    }
+
+    public void showObjectCreation(ObjectFrame of, Highlight h) {
+
+        highlight(h);
+
+        ObjectStage os = factory.produceObjectStage(of);
+        of.setObjectStage(os);
+
+        Point loc = manager.reserve(os);
+        theatre.capture();
+        engine.showAnimation(os.appear(loc));
+        theatre.release();
+        manager.bind(os);
+
     }
 
     public void removeInstance(InstanceActor actor) {
