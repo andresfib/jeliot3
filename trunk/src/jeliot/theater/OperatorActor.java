@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 
+import jeliot.tracker.Tracker;
+
 /**
  * An instance of the OperatorActor class represents a operator in 
  * the expressions. It can be a binary or unary operator and it is shown
@@ -72,7 +74,9 @@ public class OperatorActor extends Actor {
                 this.repaint();
             }
 
-            public void animate(double pulse) { }
+            public void animate(double pulse) {
+                Tracker.writeToFile("Appear", loc.x, loc.y, OperatorActor.this.getWidth(), OperatorActor.this.getHeight(), System.currentTimeMillis());
+            }
 
             public void finish() {
                 setLight(NORMAL);

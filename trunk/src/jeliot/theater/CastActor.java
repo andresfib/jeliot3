@@ -1,7 +1,10 @@
 package jeliot.theater;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Shape;
+
+import jeliot.tracker.Tracker;
 
 /**
  * CastActor handles the animation of the casting of the
@@ -87,11 +90,14 @@ public class CastActor extends Actor {
         return new Animation() {
             double plus;
             double h;
+            
             public void init() {
                 plus = (double)getHeight() / getDuration();
             }
             
             public void animate(double pulse) { 
+                Point p = getRootLocation();
+                Tracker.writeToFile("Cast", p.x, p.y, CastActor.this.getWidth(), CastActor.this.getHeight(), System.currentTimeMillis());
                 h += plus * pulse;
                 line = (int)h;
                 this.repaint();

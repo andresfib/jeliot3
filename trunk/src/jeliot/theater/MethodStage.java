@@ -8,6 +8,8 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.util.Stack;
 
+import jeliot.tracker.Tracker;
+
 /**
  * MethodStage is the graphical representation of the MethodFrame.
  * It contains the local <code>VariableActor</code>s and handles the 
@@ -302,6 +304,7 @@ public class MethodStage extends Actor implements ActorContainer {
             double h;
             double plus;
             int full;
+            
             public void init() {
                 size = new Dimension(getWidth(), nheight + margin * 3);
                 h = size.height;
@@ -316,6 +319,9 @@ public class MethodStage extends Actor implements ActorContainer {
             }
 
             public void animate(double pulse) {
+                Point p = getRootLocation();
+                Tracker.writeToFile("Appear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), System.currentTimeMillis());
+                
                 h += plus * pulse;
                 size.height = (int)h;
                 setSize(size);
@@ -345,6 +351,7 @@ public class MethodStage extends Actor implements ActorContainer {
             double h;
             double plus;
             int full;
+            
             public void init() {
                 size = getSize();
                 full = nheight + margin * 3;
@@ -357,6 +364,9 @@ public class MethodStage extends Actor implements ActorContainer {
             }
 
             public void animate(double pulse) {
+                Point p = getRootLocation();
+                Tracker.writeToFile("Disappear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), System.currentTimeMillis());
+                
                 h += plus * pulse;
                 size.height = (int)h;
                 setSize(size);
@@ -396,6 +406,9 @@ public class MethodStage extends Actor implements ActorContainer {
                 }
 
                 public void animate(double pulse) {
+                    Point p = getRootLocation();
+                    Tracker.writeToFile("Extend", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), System.currentTimeMillis());
+                    
                     h += plus * pulse;
                     size.height = (int)h;
                     setSize(size);

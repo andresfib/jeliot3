@@ -536,11 +536,11 @@ public class CodeEditor2 extends JComponent {
     }
 
     /**
-     * Loads the program from a file to the JTextArea area. Uses
-     * readProgram(File file) method to read the file. Uses setProgram(String
-     * str) method to set the content of the file into the JTextArea area.
      * 
-     * @see #readProgram(File)
+     * Loads the program from the file selected by the user
+     * to the text area. 
+     * 
+     * @see #loadProgram(File)
      * @see #setProgram(String)
      */
     void loadProgram() {
@@ -548,15 +548,30 @@ public class CodeEditor2 extends JComponent {
         int returnVal = fileChooser.showOpenDialog(masterFrame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            String program = readProgram(file);
-            setProgram(program);
-
-            currentFile = file; // Jeliot 3
-            setChanged(false); //Jeliot 3
-            setTitle(file.getName());
+            loadProgram(file);
         }
     }
 
+    /**
+     * Read the given file and sets the text in the given file to the
+     * text area and the name of the file to the title of the frame.
+     * Uses readProgram(File file) method to read the file.
+     * Uses setProgram(String str) method to set the content
+     * of the file into the JTextArea area.
+     * 
+     * @param f The file that should be loaded to the text area
+     * 
+     * @see #readProgram(File)
+     */
+    void loadProgram(File file) {
+        String program = readProgram(file);
+        setProgram(program);
+
+        currentFile = file; // Jeliot 3
+        setChanged(false); //Jeliot 3
+        setTitle(file.getName());
+    }
+    
     /**
      * Saves the program from the JTextArea area to the file. Uses
      * writeProgram(File file) method to write the code into a file.

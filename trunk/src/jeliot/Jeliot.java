@@ -18,6 +18,9 @@ package jeliot;
 
 import java.awt.Image;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PipedReader;
 import java.io.PipedWriter;
@@ -46,6 +49,7 @@ import jeliot.theater.Director;
 import jeliot.theater.ImageLoader;
 import jeliot.theater.Theater;
 import jeliot.theater.ThreadController;
+import jeliot.tracker.Tracker;
 
 /**
  * This is the application class of Jeliot 3 that binds
@@ -152,6 +156,8 @@ public class Jeliot {
      */
     private ImageLoader iLoad = new ImageLoader();
 
+    private boolean experiment = false;
+    
     /**
      * The only constructor of the Jeliot 3.
      * Loads Theatre theatre -object's background.
@@ -161,8 +167,13 @@ public class Jeliot {
      * @param udir
      * 
      */
-    public Jeliot(String udir) {
+    public Jeliot(String udir, boolean experiment) {
+        this.experiment = experiment;
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
+        
+        //Just to track the animation happenings
+        Tracker.setTheater(theatre);
+        
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, udir, callTree, hv);
     }
 
@@ -436,6 +447,18 @@ public class Jeliot {
 
     /**
      * 
+     * @param f
+     */
+    public void setProgram(File f) {
+        gui.setProgram(f);
+    }
+    
+    public boolean isExperiment() {
+        return experiment;
+    }
+    
+    /**
+     * 
      * @param highlight
      * @param tabNumber
      */
@@ -456,17 +479,43 @@ public class Jeliot {
         Properties prop = System.getProperties();
         String udir = prop.getProperty("user.dir");
 
-        //File f = new File(udir);
+        if (args.length >= 1) {
+            Tracker.setTrack(Boolean.valueOf(args[0]).booleanValue());
+        }
+       
+        boolean experiment = false;
+        if (args.length >= 3) {
+            experiment = Boolean.valueOf(args[2]).booleanValue();
+        }
+        
+        //Just for tracking what is showed during visualization
+        File f = new File(udir);
+        Tracker.openFile(f);
+        
         //f = new File(f, "examples");
         //prop.put("user.dir", f.toString());
 
-        final Jeliot jeliot = new Jeliot(udir);
+        final Jeliot jeliot = new Jeliot(udir, experiment);
 
         (new LoadJeliot()).start(new Runnable() {
             public void run() {
                 jeliot.run();
             }
         });
+        
+        if (args.length >=2) {
+            File file = new File(udir);
+            file = new File(file, "examples");
+            final File file1 = new File(file, args[1]);
+            if (file.exists()) {
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        jeliot.setProgram(file1);
+                    }
+                });
+            }
+        }
+        
     }
 
     /**
@@ -488,9 +537,33 @@ public class Jeliot {
         //f = new File(f, "examples");
         //prop.put("user.dir", f.toString());
 
-        final Jeliot jeliot = new Jeliot(udir);
+        boolean experiment = false;
+        if (args.length >= 4) {
+            experiment = Boolean.valueOf(args[3]).booleanValue();
+        }
+        
+        final Jeliot jeliot = new Jeliot(udir, experiment);
 
-        if (args.length >= 1) {
+        Runnable r = null;
+
+        
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                jeliot.run();
+            }
+        });
+        if (args.length >= 3) {
+            File file = new File(udir);
+            file = new File(file, "examples");
+            final File file1 = new File(file, args[2]);
+            if (file.exists()) {
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        jeliot.setProgram(file1);
+                    }
+                });
+            }
+        } else if (args.length >= 1) {
             if (!args[0].equals("")) {
                 final String program = args[0];
                 javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -501,14 +574,31 @@ public class Jeliot {
             }
         }
         
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                jeliot.run();
-            }
-        });
-
-        
         return jeliot;
     }
 
+    public static void close() {
+        Tracker.writeToFile("JeliotClose", System.currentTimeMillis());
+        Tracker.closeFile();
+    }
+    
+    public static String readFile(File f) {
+        String str = "";
+        
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(f));
+            String line;
+                while ((line = br.readLine()) != null) {
+                    str += line + "\n";
+                }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            return null;
+        }
+        return str;
+    }
+    
 }
