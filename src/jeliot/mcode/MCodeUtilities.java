@@ -1107,10 +1107,11 @@ public class MCodeUtilities {
         if (o == null) { 
             return "null"; 
         } 
-        if (o.getClass().isPrimitive() || String.class.isInstance ( o )
-        		||	Integer.class.isInstance( o ) || Double.class.isInstance( o )
-				||	Byte.class.isInstance( o ) || Long.class.isInstance( o )
-				|| Short.class.isInstance ( o )) {	 
+        if (o.getClass().isPrimitive() || String.class.isInstance(o)
+        		||	Integer.class.isInstance(o) || Double.class.isInstance(o)
+				||	Byte.class.isInstance(o) || Long.class.isInstance(o)
+				|| Short.class.isInstance(o) || Boolean.class.isInstance(o)
+				|| Character.class.isInstance(o)) {	 
             return o.toString();   
         } else { 
             return Integer.toHexString(o.hashCode());            

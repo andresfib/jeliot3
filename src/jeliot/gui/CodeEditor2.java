@@ -61,7 +61,7 @@ public class CodeEditor2 extends JComponent {
      */
     private String template = bundle.getString("code_editor.template");
 
-    private String title = bundle.getString("name")
+    private String title = bundle.getString("name") + " "
             + bundle.getString("version");
 
     /**
