@@ -1,11 +1,12 @@
 \documentclass[a4paper, 12pt]{article}
+
 \usepackage[T1]{fontenc}
 \usepackage[dvips]{epsfig}
 
 \usepackage[latin1]{inputenc}
 
 \usepackage[english]{babel}
-\usepackage{times}
+%\usepackage{times}
 \usepackage[dvips]{graphics}
 
 \usepackage[]{vmargin}
@@ -14,6 +15,12 @@
 
 \usepackage{natbib}
 \bibpunct{(}{)}{;}{a}{,}{,}
+
+\newcommand{\jel}{Jeliot}
+\newcommand{\djava}{DynamicJava}
+\newcommand{\p}[1]{\texttt{#1}}
+\newcommand{\bu}[1]{\textsf{#1}}
+\newcommand{\f}[1]{\textsf{#1}}
 
 
 \setlength{\parindent}{0pt}
@@ -24,39 +31,73 @@
 \setpapersize{A4}
 \setmarginsrb{35mm}{30mm}{30mm}{20mm}{0pt}{0mm}{12pt}{13mm}
 
-\begin{document}
 
-\vspace*{4cm}
+\title{\jel{} Program Animation System\\Internal Documentation\\\mbox{}\\\large{Version 3.2}}
+\author{Niko Myller and Andr\'{e} Moreno-Garc\'{\i}a}
+%\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
 
 % ----------------- Coverpage -------------------------------
+%
+%\vspace*{4cm}
 
-\vspace{2cm}
+%\vspace{2cm}
 
-{\LARGE Software Documentation of Jeliot~3}
+%{\LARGE \jel{}Program Animation System\\Internal Documentation}
 
-%{\Large }
+%{\Large Version 3.2}
 
-\vspace{2cm}
+%\vspace{2cm}
 
-{\large Andres Moreno and Niko Myller}
+%{\large Andr\'{e} Moreno-Garc\'{\i}a and Niko Myller}
 
-\vspace{\stretch{1}}
+%\vspace{\stretch{1}}
 
-{\large
-X.X.2003 \\ \\
-University of Joensuu \\
-Department of Computer Science\\
-Special Project in Computer Science\\
-Software Documentation
-}
+%{\large
+%X.X.2003 \\ \\
+%University of Joensuu \\
+%Department of Computer Science\\
+%Special Project in Computer Science\\
+%Software Documentation
+%}
 
-\vspace{1cm}
+%\vspace{1cm}
 
-\thispagestyle{empty} % ei sivunumeroa
+%\thispagestyle{empty} % no page numbering
 
-\newpage % sivunvaihto
+\newpage
+
+\thispagestyle{empty} % no page numbering
+\vfil
+Copyright 2003 by Niko Myller and Andr\'{e} Moreno-Garc\'{\i}a.
+\bigskip
+
+This document is to be considered as part of the program
+\emph{\jel} and can be used under the same terms.
+\bigskip
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+02111-1307, USA.
+
+\vfil
+\newpage
 
 % ----------------- Generation of Table of Contents -------------
+
+\thispagestyle{empty} % no page numbering
 
 \setlength{\parskip}{0ex}
 
@@ -74,23 +115,31 @@ Software Documentation
 \include{Introduction}
 \newpage
 
-%Literature Review
+
 \include{Design}
 \newpage
 
-%History of Jeliot Family
+
 \include{Components}
 \newpage
 
-%Models for Modularity
+
+\include{Communication}
+\newpage
+
+
 \include{Intermediate}
 \newpage
 
-%Reuse of existing systems
+
 \include{Managing}
 \newpage
 
-%Intermediate languages
+
+\include{Extending}
+\newpage
+
+
 \include{Testing}
 \newpage
 

@@ -1,5 +1,66 @@
 \section{Introduction}
 \label{sec:Introduction}
 
+\jel{} is a program animation system intended for teaching introductory
+programming. Programs are animated fully or semi-automatically, requiring
+no modifications or annotations on the part of the instructor or student.
+While this limits the flexibility of the animation, \jel{} is extremely
+simple to use so that it is easily accepted by true novices, as well as
+by their teachers who do not have to invest in learning how to prepare
+animations.
 
+\jel{} is written in Java for portability and animates program that are
+written in Java. \jel{} uses modified version of \djava{}
+(section~\ref{sec:DynamicJava}) as a front-end and
+modified version of \jel{}~2000's animation engine
+(section~\ref{sec:Visualization_Engine}) as its back-end. The user interface
+was also adopted from \jel{}~2000 (section~\ref{sec:User_Interface}).
+For an overview of the design see section~\ref{sec:Concept_Design}.
 
+\djava{} is a Java source code interpreter written in Java. This
+application is open source and can be freely obtained from
+\url{http://www.koala.ilog.fr/djava/}. At the moment, DynamicJava is
+almost fully compliant with Java language specifications and supports
+multi-threading.
+
+To make these two separate systems communicate (section~\ref{sec:Communications_Model})
+with each other a new intermediate language was designed (section~\ref {sec:Intermediate_Code}
+and Intermediate Language Specification). In this way the system should be
+more flexible to new extensions (section~\ref{sec:Extending_Jeliot_System}).
+
+\subsection{History}
+
+The first member of the \jel{} family of program animation systems was
+called Eliot; it was developed by Erkki Sutinen and Jorma Tarhio and
+their students at the University of Helsinki. Eliot was written in C
+and used the Polka animation library. Later a version was written in
+Java and the name was changed to \jel{}. (This version is now called
+\jel{}~I to distinguish it from later versions.)
+
+\jel{}~I was a flexible system: the user could choose the variables to
+be animated, the graphical form of the animated elements and multiple
+views of the same program. It proved too difficult for teaching novices,
+so a new version called \jel{}~2000 was developed at the Weizmann Institute
+of Science by Pekka Uronen under the supervision of Moti Ben-Ari.
+A pedagogical experiment carried out by Ronit Ben-Bassat Levy proved
+the effectiveness of \jel{} in teaching introductory programming.
+
+\jel{}~2000 only implemented a very small subset of the Java language.
+The current version \jel{}~3 is a re-implementation designed to
+significantly extend the range of Java features that are animated,
+in particular, to cover object-oriented programming. The design and
+implementation was carried out at the University of Joensuu by
+Niko Myller and Andr{\'{e}} Moreno-Garc{\'{\i}}a, under the supervision
+of Moti Ben-Ari and Erkki Sutinen. For an extensive discussion of the
+history of \jel{}, see \citep{Benari2002a}.
+
+\subsection{Release Notes}
+\label{sec:Release_Notes}
+
+{\bf version 3.0}
+
+{\bf version 3.01}
+
+{\bf version 3.1}
+
+{\bf version 3.2}
