@@ -1,4 +1,4 @@
-/*
+\\/*
  * DynamicJava - Copyright (C) 1999-2001
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -1256,9 +1256,10 @@ public class EvaluationVisitor extends VisitorObject {
 
         //Check for System System output
         if ((node.hasProperty(NodeProperties.METHOD)) && 
-        ((Method) node.getProperty(NodeProperties.METHOD)).getDeclaringClass().getName().equals("java.io.PrintStream")) {
+        ((Method) node.getProperty(NodeProperties.METHOD)).getDeclaringClass().getName().equals("java.io.PrintStream")){
+ 
             Method m = (Method) node.getProperty(NodeProperties.METHOD);{
-                if (m.getName().equals("println")) {
+                if (m.getName().equals("println")||m.getName().equals("print")) {
                        List larg = node.getArguments();
                        Object[] args = new Object[larg.size()];
                        Class[] typs;
@@ -1280,6 +1281,7 @@ public class EvaluationVisitor extends VisitorObject {
                                    + auxcounter
                                    + Code.DELIM
                                    + args[i].toString()
+                                   + (m.getName().equals("println")?"\n":"")
                                    + Code.DELIM
                                    + typs[i].getName()
                                    + Code.DELIM
@@ -1740,6 +1742,7 @@ public class EvaluationVisitor extends VisitorObject {
                             + auxcounter
                             + Code.DELIM
                             + args[i].toString()
+                            + "\n"
                             + Code.DELIM
                             + typs[i].getName()
                             + Code.DELIM
