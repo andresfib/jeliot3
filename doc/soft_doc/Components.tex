@@ -295,23 +295,7 @@ interfaces, even more than one. Interfaces are used by \djava{} to
 know when certain conditions hold. Those that implement
 \p{LeftHandSide} interface (\p{ArrayAccess}, \p{QualifiedName},
 \p{FieldAccess}) are available to be the left hand side of an
-assignment. Those that implement Figure 5 shows the primary
-expressions classes. Its super class, Expression, is also super
-class for binary and unary expressions. All properties are defined
-by Primary Expression subclasses. Some of those also implement
-interfaces, even more than one. Interfaces are used by \djava{} to
-know when certain conditions hold. Those that implement
-\p{LeftHandSide} interface (\p{ArrayAccess}, \p{QualifiedName},
-\p{FieldAccess}) are available to be the left hand side of an
-assignment. Those that implement \p{ExpressionContainer}
-(\p{ObjectMethodCall}, \p{ReturnStatement},
-\p{ConstructorInvocation}, \p{Object\-Field\-Access},
-\p{ArrayAccess}, \p{UnaryExpression}) are those that need another
-expression to be completed. An array access needs a qualified name
-where to look for the data, that qualified name is the expression
-contained. The interface \p{ExpressionStatement} is used only when
-\djava{} parses the source code to build up the \p{ForStatement}
-node. \p{ExpressionContainer} (\p{ObjectMethodCall},
+assignment. Those that implement \p{ExpressionContainer} (\p{ObjectMethodCall},
 \p{ReturnStatement}, \p{Constructor\-Invocation},
 \p{ObjectFieldAccess}, \p{ArrayAccess}, \p{UnaryExpression}) are
 those that need another expression to be completed. An array
@@ -319,7 +303,6 @@ access needs a qualified name where to look for the data, that
 qualified name is the expression contained. The interface
 \p{ExpressionStatement} is used only when \p{DynamicJava} parses
 the source code to build up the \p{ForStatement} node.
-
 
 \begin{figure}[!htb]
 \begin{center}
@@ -334,7 +317,7 @@ statements. \p{ReturnStatement} is implementing
 \p{ExpressionContainer} because it needs that interface when it is
 returning an expression. \p{Do}, \p{While} and \p{For} statements
 are implementing the \p{ContinueTarget} interface in order to
-allow \p{ContinueStatements} inside them.
+allow \p{ContinueStatements} inside of them.
 
 
 \begin{figure}[!htb]
@@ -397,14 +380,12 @@ and communication between \djava{} and the intermediate code interpreter.
 \subsection{Language Constructs}
 \label{sec:Language_package}
 
-The classes of \p{jeliot.lang} package represent Java language constructs.
-
-See Figure~\ref{fig:language_constructs_and_actors}.
+The classes of \p{jeliot.lang} package represent Java language constructs. They are mainly used to store and transfer the information about these language construct for the creation and handling of the corresponding \p{Actor}s (see section~\ref{sec:Actors}). The Figure~\ref{fig:language_constructs_and_actors} shows the class structure of the language construct classes and the corresponding \p{Actor}s that are used as attributes of the constructs. 
 
 \begin{figure}[!htb]
 \begin{center}
 \includegraphics[width=\textwidth]{images/language_constructs_and_actors.eps}
-\caption{The class hierarchy of the language constructs (gray boxes and solid lines) and the \p{Actor}s (white boxes and solid lines) and their usage relations to each other (dashed lines). \p{Actor}s (white boxes) implementing actor container are written in bold and italics and the other \p{Actor}s on just italics.}
+\caption{The class hierarchy of the language constructs (gray boxes and solid lines) and the \p{Actor}s (white boxes and solid lines) and their usage relations to each other (dashed lines). \p{Actor}s (white boxes) implementing actor container are written in bold and italics and the other \p{Actor}s on just italics (see section~\ref{sec:Actors}).}
 \label{fig:language_constructs_and_actors}
 \end{center}
 \end{figure}
@@ -412,10 +393,15 @@ See Figure~\ref{fig:language_constructs_and_actors}.
 \subsection{Visualization Engine}
 \label{sec:Visualization_Engine}
 
-The package \p{jeliot.theatre} contains classes that are used by the animation
-component called \p{Theatre}. We will here introduce the most important
-classes in the package and tell the meaning of these classes. For rest of
-the class see the documented source code.
+The package \p{jeliot.theatre} contains classes that are used to form the animation.
+We will here introduce the most important classes in the package and
+tell the meaning of these classes. For rest of the classes see their
+documented source codes.
+
+\subsubsection{Theatre}
+
+The \p{jeliot.theatre} package contains a class \p{Theatre} that extends \p{JComponent} class so that it can be entered inside the split pane in the user interface. It is the
+canvas for the animation and all the actors are drawn on it.
 
 See Figure~\ref{fig:jeliot3_theatre_structure}.
 
@@ -454,6 +440,7 @@ or uses existing actors. \p{Animation}s are created through \p{Actor}s' methods
 \p{MethodStage}).
 
 \subsubsection{Actor classes}
+\label{sec:Actors}
 
 See Figure~\ref{fig:class_hierarchy_of_Actor_class_small}.
 
