@@ -188,6 +188,8 @@ public class JeliotWindow {
 
     private HistoryView hv;
     
+    private boolean askForMethod = false;
+    
     /**
      * This JEditorPane errorJEditorPane will show the error messages for the
      * users.
@@ -738,6 +740,20 @@ public class JeliotWindow {
 
         editWidgets.addElement(menuItem);
 
+        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(bundle
+                .getString("menu.control.ask_for_method"),
+                false);
+        cbmenuItem.setMnemonic(KeyEvent.VK_F);
+        cbmenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
+                ActionEvent.CTRL_MASK));
+        cbmenuItem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                askForMethod = cbmenuItem.getState();
+            }
+        });
+        menu.add(cbmenuItem);
+        
         return menu;
     }
 
@@ -1024,7 +1040,16 @@ public class JeliotWindow {
                 String programCode = editor.getProgram();
 
                 String methodCall = null;
+                
                 methodCall = findMainMethodCall(programCode);
+                if (askForMethod) {
+                    methodCall = ((methodCall != null) ? methodCall : "");
+                    String inputValue = JOptionPane.showInputDialog(bundle
+                            .getString("dialog.ask_for_method"), methodCall);
+                    if (!inputValue.trim().equals("")) {
+                        methodCall = inputValue;
+                    }
+                } 
 
                 if (methodCall != null) {
 

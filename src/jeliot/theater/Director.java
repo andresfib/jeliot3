@@ -45,12 +45,6 @@ public class Director {
 
     //DOC: Document!
 
-    /**
-     * Set true if the highlighting is requested just to pause the animation
-     * and show the message on the screen.
-     */
-    private boolean messagePause = false;
-
     /** True, if the director should stop after executing one statement. */
     private boolean stepByStep;
 
@@ -225,11 +219,9 @@ public class Director {
     	this.hPrev = h;
         if (!mCodeInterpreter.starting()) {
 
-            if (stepByStep && !messagePause) {
+            if (stepByStep) {
                 jeliot.directorPaused();
                 controller.checkPoint();
-            } else {
-                messagePause = false;
             }
 
             if (h != null) {
@@ -1729,7 +1721,10 @@ public class Director {
         //int y = (tsize.height-msize.height)/2;
         ExpressionActor ea = currentScratch.getExpression(1, -3);
         Point loc = ea.getRootLocation();
+        ea.reserve(message);
+        ea.bind(message);
         showMessage(message, loc);
+        ea.removeActor(message);
     }
 
     /**
@@ -1739,10 +1734,10 @@ public class Director {
     private void showMessage(MessageActor message, Point p) {
         capture();
         engine.showAnimation(message.appear(p));
-        highlight(null);
-        messagePause = true;
-        theatre.removeActor(message);
         release();
+        highlight(null);
+        //messagePause = true;
+        theatre.removeActor(message);
     }
     
 	/* All the message formats are here */
