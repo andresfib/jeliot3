@@ -14,7 +14,6 @@ package koala.dynamicjava.util;
  */
 public class ParamTypes {
 
-
 	/**
 	 * Compares two method's list of parameters
 	 * 
@@ -38,8 +37,8 @@ public class ParamTypes {
 			int i = 0;
 			result = true;
 			while ((i < paramTypes1.length) && result) {
-				String p1 = paramTypes1[i].getClass().getName().toString();
-				String p2 = paramTypes2[i].getClass().getName().toString();
+				String p1 = paramTypes1[i].getName();
+				String p2 = paramTypes2[i].getName();
 				if (!p1.equals(p2)) {
 					result = false;
 				}
@@ -49,7 +48,6 @@ public class ParamTypes {
 		}
 		return result;
 	}
-
 
 }
 
