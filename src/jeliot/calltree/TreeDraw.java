@@ -1,7 +1,10 @@
 package jeliot.calltree;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -10,6 +13,9 @@ import javax.swing.JScrollPane;
  * @author Niko Myller
  */
 public class TreeDraw extends JComponent {
+
+	protected static final ResourceBundle bundle = ResourceBundle.getBundle(
+            "jeliot.calltree.resources.properties", Locale.getDefault());
 
     /**
      * 
@@ -26,6 +32,11 @@ public class TreeDraw extends JComponent {
      */
     private JScrollPane jsp;
 
+    /**
+     * Font to be used in the call tree
+     */
+    private static final Font FONT = new Font(bundle.getString("font.calltree"), Font.BOLD, Integer.parseInt(bundle.getString("font.calltree.size")));
+    
     /**
      * 
      *
@@ -64,10 +75,8 @@ public class TreeDraw extends JComponent {
      * </UL>
      */
     public void paint(Graphics g) {
-
-        g.setColor(getBackground());
-
-        BoundingBoxCalculator calc = new BoundingBoxCalculator(getGraphics());
+    	g.setFont(FONT);
+        BoundingBoxCalculator calc = new BoundingBoxCalculator(g /*getGraphics()*/ );
         calc.execute(tree);
         TreeDrawer drawer = new TreeDrawer(g);
 
