@@ -430,8 +430,13 @@ public class Director {
                 varact[i] = factory.produceVariableActor(vars[i]);
                 vars[i].setActor(varact[i]);
                 stage.reserve(varact[i]);
-                stage.extend();
+                //stage.extend();
                 stage.bind();
+            }
+
+            Animation a = stage.extend();
+            if (a != null) {
+                engine.showAnimation(a);
             }
         }
 
@@ -1120,7 +1125,7 @@ public class Director {
         theatre.removeActor(hand);
         theatre.release();
 
-        this.output(val.getValue());
+        this.output(val.getValue() + "\n");
     }
 
     public void showErrorMessage(InterpreterError e) {
@@ -1176,8 +1181,34 @@ public class Director {
         );
     }
 
-    //possible we will need some other input readers e.g. readString(), readChar()
+    public static Animator readString() {
+        return new InputAnimator(
+            "Please input a string.",
+            new InputValidator() {
+                public void validate(String s) {
+                    try {
+                        accept(new Value(s, "".getClass().getName()));
+                    }
+                    catch (NumberFormatException e) { }
+                }
+            }
+        );
+    }
 
+    public static Animator readChar() {
+        return new InputAnimator(
+            "Please input a character.",
+            new InputValidator() {
+                public void validate(String s) {
+                    if (s.length() == 1) {
+                        accept(new Value(s, char.class.getName()));
+                    }
+                }
+            }
+        );
+    }
+
+    //possibly we will need some other input readers e.g. readString(), readChar()
     private static class InputAnimator extends Animator {
 
         private String prompt;
@@ -1207,6 +1238,10 @@ public class Director {
             animator = readDouble();
         } else if (ECodeUtilities.resolveType(type) == ECodeUtilities.INT) {
             animator = readInt();
+        } else if (ECodeUtilities.resolveType(type) == ECodeUtilities.STRING) {
+            animator = readString();
+        } else if (ECodeUtilities.resolveType(type) == ECodeUtilities.CHAR) {
+            animator = readChar();
         }
 
         if (animator != null) {
