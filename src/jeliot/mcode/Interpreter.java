@@ -256,7 +256,7 @@ public class Interpreter {
         try {
             line = ecode.readLine();
             //TODO: comment the next line in the released versions
-            System.out.println(line);
+            //System.out.println(line);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -350,8 +350,9 @@ public class Interpreter {
 
         /*
          * TODO: Take this out of the comments for the versions to be realeased
-         * try {
          */
+          try {
+         
         director.openScratch();
 
         while (running) {
@@ -403,10 +404,13 @@ public class Interpreter {
 
         /*
          * TODO: Take this out of the comments for the versions to be
-         * realeased. } catch (Exception e) { director.showErrorMessage(new
-         * InterpreterError(" <H1> Runtime Error </H1> "+ " <P> The feature is
-         * not yet implemented. </P> ", null)); }
+         * realeased.
          */
+          } catch (Exception e) { 
+          	director.showErrorMessage(new InterpreterError(
+          			" <H1> Runtime Error </H1> "+ " <P> The feature is not yet implemented. </P> ", null)); 
+          	}
+         
     }
 
     /**

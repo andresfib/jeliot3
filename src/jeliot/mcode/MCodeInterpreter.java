@@ -198,11 +198,12 @@ public abstract class MCodeInterpreter {
 
         /* TODO: Take this out of the comments for the versions to be
          * realeased.
+         
+         } catch (Exception e) {
+             director.showErrorMessage(new InterpreterError(" <H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null));
+          }
          */
-        /* } catch (Exception e) {
-         *    director.showErrorMessage(new InterpreterError(" <H1> Runtime Error </H1> "+ " <P>The feature is not yet implemented. </P> ", null));
-         * }
-         */
+         
     }
 
     public void cleanEvaluationArea(int token) {}

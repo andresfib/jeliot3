@@ -295,7 +295,7 @@ public class TreeInterpreter implements Interpreter {
 			//e.printStackTrace();
 
 		} catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
 		    
 			String code =
 				"" + Code.ERROR + Code.DELIM + "<H1>Exception</H1><BR>";
