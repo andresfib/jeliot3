@@ -22,189 +22,196 @@ import koala.dynamicjava.parser.wrapper.JavaCCParserFactory;
  */
 public class Launcher extends Thread {
 
-//  DOC: document!
-	/**
-	 *
-	 */
-	private PipedWriter pipedWriter = null;
-	
-	/**
-	 *
-	 */
-	private PipedReader pipedReader = null;
+    //  DOC: document!
+    /**
+     *
+     */
+    private PipedWriter pipedWriter = null;
 
-	/**
-	 *
-	 */
-	private PrintWriter writer = null;
-	
-	/**
-	 *
-	 */
-	private BufferedReader reader = null;
-	
-	/**
-	 *
-	 */
-	private boolean running = true; //indicates if interpreterThread is running
+    /**
+     *
+     */
+    private PipedReader pipedReader = null;
 
-	/**
-	 * Pipe communicating Director ->DynamicJava
+    /**
+     *
+     */
+    private PrintWriter writer = null;
+
+    /**
+     *
+     */
+    private BufferedReader reader = null;
+
+    /**
+     *
+     */
+    private boolean running = true; //indicates if interpreterThread is running
+
+    /**
+     * Pipe communicating Director ->DynamicJava
      * For Input Requests!!!!!!
-	 */
-	private PipedWriter putInput = null;
-    
-	/**
-	 *
-	 */
-	private PipedReader getInput = null;
-    
-	/**
-	 *
-	 */
-	private PrintWriter inputWriter = null;
-    
-	/**
-	 *
-	 */
-	private BufferedReader inputReader = null;
+     */
+    private PipedWriter putInput = null;
 
-	/**
-	 *
-	 */
-	private String methodCall = null;
-    
-	/**
-	 *
-	 */
-	private Reader r = null;
-    
-	/**
-	 *
-	 */
-	private Interpreter interpreter = createInterpreter();
+    /**
+     *
+     */
+    private PipedReader getInput = null;
 
-	/**
-	 *
-	 */
-	private boolean compiling = false;
-    
-	/**
-	 * @return
-	 */
-	protected Interpreter createInterpreter() {
-		Interpreter result = new TreeInterpreter(new JavaCCParserFactory());
-		return result;
-	}
+    /**
+     *
+     */
+    private PrintWriter inputWriter = null;
 
-	/**
-	 * @param input
-	 */
-	public Launcher(Reader input) {
-		this.r = input;
+    /**
+     *
+     */
+    private BufferedReader inputReader = null;
 
-		makePipedStreams();
-	}
+    /**
+     *
+     */
+    private String methodCall = null;
 
-	/**
-	 * 
-	 */
-	public void makePipedStreams() {
-		pipedWriter = new PipedWriter();
-		writer = new PrintWriter(pipedWriter);
-		putInput = new PipedWriter();
-		inputWriter = new PrintWriter(putInput);
+    /**
+     *
+     */
+    private Reader r = null;
 
-		try {
-			pipedReader = new PipedReader(pipedWriter);
+    /**
+     *
+     */
+    private Interpreter interpreter = createInterpreter();
 
-			getInput = new PipedReader(putInput);
-		} catch (IOException e) {
-		}
+    /**
+     *
+     */
+    private boolean compiling = false;
 
-		reader = new BufferedReader(pipedReader);
-		inputReader = new BufferedReader(getInput);
+    /**
+     * @return
+     */
+    protected Interpreter createInterpreter() {
+        Interpreter result = new TreeInterpreter(new JavaCCParserFactory());
+        return result;
+    }
 
-		MCodeUtilities.setWriter(writer);
-		MCodeUtilities.setReader(inputReader);
-	}
+    /**
+     * @param input
+     */
+    public Launcher(Reader input) {
+        this.r = input;
 
-	/**
-	 * @param methodCall
-	 */
-	public void setMethodCall(String methodCall) {
-		this.methodCall = methodCall;
-	}
+        makePipedStreams();
+    }
 
-	/**
-	 * 
-	 */
-	public void compile() {
-		interpreter.interpret(r, "buffer");
-	}
+    /**
+     * 
+     */
+    public void makePipedStreams() {
+        pipedWriter = new PipedWriter();
+        writer = new PrintWriter(pipedWriter);
+        putInput = new PipedWriter();
+        inputWriter = new PrintWriter(putInput);
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
-	public void run() {
+        try {
+            pipedReader = new PipedReader(pipedWriter);
 
-		while (running && this == Thread.currentThread()) {
-			if (compiling) {
-				compile();
+            getInput = new PipedReader(putInput);
+        } catch (IOException e) {}
 
-				interpreter.interpret(
-					new BufferedReader(new StringReader(methodCall)),
-					"buffer");
+        reader = new BufferedReader(pipedReader);
+        inputReader = new BufferedReader(getInput);
 
-				/*
-				 * TODO: If we are allowing open scope execution of statements
-				 * we should not send Code.END statements.
-				 */
-				MCodeUtilities.write("" + Code.END);
-				compiling = false;
-			}
-			synchronized (this) {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-			}
-		}
-	}
+        MCodeUtilities.setWriter(writer);
+        MCodeUtilities.setReader(inputReader);
+        MCodeUtilities.setAccessingThread(this);
+    }
 
-	/**
-	 * 
-	 */
-	public void stopThread() {
-		running = false;
-	}
+    /**
+     * @param methodCall
+     */
+    public void setMethodCall(String methodCall) {
+        this.methodCall = methodCall;
+    }
 
-	/**
-	 * @param value
-	 */
-	public void setCompiling(boolean value) {
-		compiling = value;
-	}
+    /**
+     * 
+     */
+    public void compile() {
+        interpreter.interpret(r, "buffer");
+    }
 
-	/**
-	 * @return
-	 */
-	public PrintWriter getWriter() {
-		return writer;
-	}
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
+    public void run() {
+        try {
+            Object o = null;
+            while (running && this == Thread.currentThread()) {
+                if (compiling) {
+                    compile();
 
-	/**
-	 * @return
-	 */
-	public BufferedReader getReader() {
-		return reader;
-	}
+                    o = interpreter.interpret(new BufferedReader(new StringReader(methodCall)),
+                            "buffer");
 
-	/**
-	 * @return
-	 */
-	public PrintWriter getInputWriter() {
-		return inputWriter;
-	}
+                    if (!(o instanceof Throwable)) {
+                        /*
+                         * TODO: If we are allowing open scope execution of statements
+                         * we should not send Code.END statements.
+                         */
+                        MCodeUtilities.write("" + Code.END);
+                    }
+                    compiling = false;
+                }
+                if (!(o instanceof Throwable)) {
+                    synchronized (this) {
+                        try {
+                            this.wait();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }
+        } catch (StoppingRequestedError e) {
+
+        }
+    }
+
+    /**
+     * 
+     */
+    public void stopThread() {
+        running = false;
+    }
+
+    /**
+     * @param value
+     */
+    public void setCompiling(boolean value) {
+        compiling = value;
+    }
+
+    /**
+     * @return
+     */
+    public PrintWriter getWriter() {
+        return writer;
+    }
+
+    /**
+     * @return
+     */
+    public BufferedReader getReader() {
+        return reader;
+    }
+
+    /**
+     * @return
+     */
+    public PrintWriter getInputWriter() {
+        return inputWriter;
+    }
 }

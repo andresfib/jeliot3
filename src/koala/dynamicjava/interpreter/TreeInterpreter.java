@@ -52,6 +52,7 @@ import java.util.Vector;
 
 import jeliot.mcode.Code;
 import jeliot.mcode.MCodeUtilities;
+import jeliot.mcode.StoppingRequestedError;
 import koala.dynamicjava.interpreter.context.Context;
 import koala.dynamicjava.interpreter.context.GlobalContext;
 import koala.dynamicjava.interpreter.context.MethodContext;
@@ -219,6 +220,8 @@ public class TreeInterpreter implements Interpreter {
 
             return result;
 
+        } catch (StoppingRequestedError e) {
+            return e;
         } catch (ExecutionError e) {
             e.printStackTrace();
 
@@ -238,7 +241,7 @@ public class TreeInterpreter implements Interpreter {
             MCodeUtilities.write(code);
 
             //throw new InterpreterException(e);
-            //return e;
+            return e;
         } catch (ParseError e) {
             e.printStackTrace();
 
@@ -260,7 +263,7 @@ public class TreeInterpreter implements Interpreter {
             MCodeUtilities.write(code);
 
             //throw new InterpreterException(e);
-            //return e;
+            return e;
         } catch (Error e) {
             e.printStackTrace();
 
@@ -295,7 +298,7 @@ public class TreeInterpreter implements Interpreter {
             MCodeUtilities.write(code);
 
             //e.printStackTrace();
-            //return e;
+            return e;
         } catch (Exception e) {
             e.printStackTrace();
             e.toString();
@@ -331,9 +334,9 @@ public class TreeInterpreter implements Interpreter {
             MCodeUtilities.write(code);
 
             //throw new InterpreterException(e);
-            //return e;
+            return e;
         }
-        return null;
+        //return null;
     }
 
     public String removeBrackets(String str) {

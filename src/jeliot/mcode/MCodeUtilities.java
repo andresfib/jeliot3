@@ -880,10 +880,19 @@ public class MCodeUtilities {
         reader = r;
     }
 
+    private static Thread accessingThread = null;
+    
+    public static void setAccessingThread(Thread thread) {
+        accessingThread = thread;
+    }
+    
     /**
      * @param str
      */
     public static void write(String str) {
+        if (writer == null || accessingThread != Thread.currentThread()) {
+            throw new StoppingRequestedError();
+        }
         StringTokenizer tokenizer = new StringTokenizer(str, Code.DELIM);
               
         int token = Integer.parseInt(tokenizer.nextToken());
@@ -891,6 +900,9 @@ public class MCodeUtilities {
             str = MCodeUtilities.replace(str, "\n", "\\n");
             str = MCodeUtilities.replace(str, "\r", "");
             if (!redirectOutput) {
+                if (writer.checkError()) {
+                    throw new StoppingRequestedError();
+                }
                 writer.println(str);
             } else {
                 addToRedirectBuffer(str);
@@ -932,7 +944,8 @@ public class MCodeUtilities {
             result = Integer.parseInt(reader.readLine());
             return new Integer(result);
         } catch (Exception e) {
-            return null;
+            //return null;
+            throw new StoppingRequestedError();
             //ThrowException!!!!!!!!!!!!!!!
         }
     }
@@ -946,8 +959,9 @@ public class MCodeUtilities {
             result = Double.parseDouble(reader.readLine());
             return new Double(result);
         } catch (Exception e) {
-            return null;
+            //return null;
             //ThrowException!!!!!!!!!!!!!!!
+            throw new StoppingRequestedError();
         }
     }
 
@@ -961,8 +975,9 @@ public class MCodeUtilities {
             result = (reader.readLine()).charAt(0);
             return new Character(result);
         } catch (Exception e) {
-            return null;
+            //return null;
             //ThrowException!!!!!!!!!!!!!!!
+            throw new StoppingRequestedError();
         }
 
     }
@@ -977,8 +992,9 @@ public class MCodeUtilities {
             result = (reader.readLine());
             return new String(result);
         } catch (Exception e) {
-            return null;
+            //return null;
             //ThrowException!!!!!!!!!!!!!!!
+            throw new StoppingRequestedError();
         }
 
     }
@@ -1154,7 +1170,8 @@ public class MCodeUtilities {
             result = Long.parseLong(reader.readLine());
             return new Long(result);
         } catch (Exception e) {
-            return null;
+            //return null;
+            throw new StoppingRequestedError();
         }
     }
 
@@ -1164,7 +1181,8 @@ public class MCodeUtilities {
             result = Byte.parseByte(reader.readLine());
             return new Byte(result);
         } catch (Exception e) {
-            return null;
+            //return null;
+            throw new StoppingRequestedError();
         }
 
     }
@@ -1175,7 +1193,8 @@ public class MCodeUtilities {
             result = Float.parseFloat(reader.readLine());
             return new Float(result);
         } catch (Exception e) {
-            return null;
+            //return null;
+            throw new StoppingRequestedError();
         }
     }
 
@@ -1185,12 +1204,17 @@ public class MCodeUtilities {
             result = Boolean.getBoolean(reader.readLine());
             return new Boolean(result);
         } catch (Exception e) {
-            return null;
+            //return null;
+            throw new StoppingRequestedError();
         }
     }
 
     public static BufferedReader getReader () {
         return reader;
+    }
+    
+    public static PrintWriter getWriter() {
+        return writer;
     }
 
     public static Object readShort() {

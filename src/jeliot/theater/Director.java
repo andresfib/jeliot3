@@ -175,7 +175,7 @@ public class Director {
     /**
      * @throws Exception
      */
-    public void direct() throws Exception {
+    public boolean direct() throws Exception {
         errorOccured = false;
         highlight(new Highlight(0, 0, 0, 0));
         cbox = factory.produceConstantBox();
@@ -187,12 +187,13 @@ public class Director {
         theatre.addPassive(lat);
 
         //Excecution of the program code takes place here.
-        mCodeInterpreter.execute(); 
+        boolean finished = mCodeInterpreter.execute();
         if (!errorOccured) {
             highlight(new Highlight(0, 0, 0, 0));
         }
         theatre.flush();
         Tracker.writeToFile("AnimationEnded", System.currentTimeMillis());
+        return finished;
     }
 
     /**
@@ -2242,19 +2243,22 @@ public class Director {
          }
          */
 
+        Controlled c = new Controlled() {
+            public void suspend() {
+                jeliot.directorFreezed();
+            }
+            public void resume() {
+                jeliot.directorResumed();
+            }
+        };
+        
         do {
             controller.pause();
-
-            controller.checkPoint(new Controlled() {
-
-                public void suspend() {
-                    jeliot.directorFreezed();
-                }
-
-                public void resume() {
-                    jeliot.directorResumed();
-                }
-            });
+            try {
+                controller.checkPoint(c);
+            } catch (Exception e) {
+                //TODO should here be done something?
+            }
         } while (!validator.isOk());
 
         try {
