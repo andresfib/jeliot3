@@ -795,12 +795,12 @@ public class EvaluationVisitor extends VisitorObject {
                                      +Code.DELIM+locationToString(node));
                 result = ECodeUtilities.readDouble();
             }
-            /*
-            ECodeUtilities.write(""+Code.INPUTTED+Code.DELIM+(counter++)
+            
+            ECodeUtilities.write(""+Code.INPUTTED+Code.DELIM+counter
                                  +Code.DELIM+result.toString()
                                  +Code.DELIM+result.getClass()
                                  +Code.DELIM+locationToString(node));
-            */
+            
             return result;
         }
         else if( m.getDeclaringClass().getName().equals("jeliot.io.Output")){
