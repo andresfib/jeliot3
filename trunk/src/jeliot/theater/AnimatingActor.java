@@ -32,7 +32,6 @@ public class AnimatingActor extends Actor {
 	 */
 	public void paintActor(Graphics g) {
         //g.drawImage(image, insets.left, insets.top, null);
-        //HACK: I am not sure if this works if it causes problems use the previous line.
         g.drawImage(image, insets.left, insets.top, dummy);
     }
 
@@ -40,8 +39,8 @@ public class AnimatingActor extends Actor {
 	 * @see jeliot.theater.Actor#calculateSize()
 	 */
 	public void calculateSize() {
-        setSize(image.getWidth(null) + insets.left + insets.right,
-                 image.getHeight(null) + insets.top + insets.bottom);
+        setSize(image.getWidth(dummy) + insets.left + insets.right,
+                 image.getHeight(dummy) + insets.top + insets.bottom);
     }
 
     /**

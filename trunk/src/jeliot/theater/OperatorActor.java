@@ -45,15 +45,15 @@ public class OperatorActor extends Actor {
                 ( (light == SHADED) ?
                     darkImage:
                     image),
-                insets.left, insets.top, null);
+                insets.left, insets.top, dummy);
     }
 
     /* (non-Javadoc)
 	 * @see jeliot.theater.Actor#calculateSize()
 	 */
 	public void calculateSize() {
-        setSize(image.getWidth(null) + insets.left + insets.right,
-                 image.getHeight(null) + insets.top + insets.bottom);
+        setSize(image.getWidth(dummy) + insets.left + insets.right,
+                 image.getHeight(dummy) + insets.top + insets.bottom);
     }
 
     /**

@@ -158,7 +158,8 @@ public class EvaluationVisitor extends VisitorObject {
             + Code.LOC_DELIM
             + node.getEndColumn();
     }
-
+    
+    //DOC: Document!
     public void initialize() {
         counter = 1;
         evaluating = true;
@@ -292,9 +293,8 @@ public class EvaluationVisitor extends VisitorObject {
         return ((Long) returnExpressionCounterStack.peek()).equals(
             (Long) domesticStack.peek());
     }
-    //DOC
     private static Stack returnExpressionCounterStack = new Stack();
-    //DOC
+
     private static Stack domesticStack = new Stack();
 
     // Stack to keep cell numbers of arrays. Each element stores the cell number of one array in one list

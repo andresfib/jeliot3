@@ -142,7 +142,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 	 * @param g
 	 */
     private void paintCapturedScreen(Graphics g) {
-        g.drawImage(captScreen, 0, 0, null);
+        g.drawImage(captScreen, 0, 0, this);
     }
 
     /**
@@ -302,8 +302,8 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 	public void updateCapture() {
         int w = getWidth();
         int h = getHeight();
-        if (captScreen == null || captScreen.getWidth(null) != w ||
-                captScreen.getHeight(null) != h) {
+        if (captScreen == null || captScreen.getWidth(this) != w ||
+                captScreen.getHeight(this) != h) {
 
             captScreen = createImage(w, h);
             csg = captScreen.getGraphics();

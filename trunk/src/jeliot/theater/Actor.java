@@ -468,7 +468,7 @@ public abstract class Actor implements Cloneable {
 		if (biw >= 1 && bih >= 1) {
 			for (int x = 0; x < w; x += biw) {
 				for (int y = 0; y < h; y += bih) {
-					g.drawImage(backImage, xx + x, yy + y, null);
+					g.drawImage(backImage, xx + x, yy + y, dummy);
 				}
 			}
 		}
@@ -486,8 +486,10 @@ public abstract class Actor implements Cloneable {
 	/**
      * Makes the actor move to given point in given time (millis)
 	 * Returns a reference to the animation object.
+     * 
 	 * @param p
 	 * @param shadow
+     * 
 	 * @return
 	 */
 	public Animation fly(Point p, final int shadow) {
@@ -561,7 +563,9 @@ public abstract class Actor implements Cloneable {
      * Returns an animation that makes the actor appear. Default
 	 * implementation shows the actor highlighted for given number of
 	 * milliseconds.
+     * 
 	 * @param loc
+     * 
 	 * @return
 	 */
 	public Animation appear(final Point loc) {
