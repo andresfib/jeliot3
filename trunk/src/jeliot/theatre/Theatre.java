@@ -13,11 +13,10 @@ import jeliot.gui.*;
   */
 public class Theatre extends javax.swing.JComponent implements ActorContainer {
 
-    /** Background image, drawn behind everything */
+    /** Background image, drawn behind everything. */
     private Image backImage;
 
-    /** Captured image of the screen, used on active mode for extra
-      * efficiency. */
+    /** Captured image of the screen, used on active mode for extra efficiency. */
     private Image captScreen;
 
     /** Graphics object for captured image. */
@@ -34,11 +33,15 @@ public class Theatre extends javax.swing.JComponent implements ActorContainer {
       */
     private Vector actAct = new Vector();
 
-    /** Highlighted actor */
+    /** Highlighted actor if any.*/
     private Actor highActor;
 
     private TheatreManager manager = new TheatreManager(this);
 
+    /** Set true if there are other JComponents on the theatre component.
+      * At the moment only when input is requested. This changes the
+      * operation of the paint method.
+      */
     private boolean showComponents;
 
     public Theatre() {
