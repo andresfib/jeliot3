@@ -16,15 +16,16 @@ import javax.swing.JWindow;
 import jeliot.theater.*;
 
 /**
+ * This class is not used in the current version of Jeliot.
  * LoadJeliot displays a splash screen and starts the Jeliot application.
- * SHOULD NOT BE CURRENTLY IN USE IN JELIOT 3!
  *
  * @author Pekka Uronen
+ * @author Niko Myller
  */
 public class LoadJeliot {
 
     /**
-    * The resource bundle
+    * The resource bundle for gui package
     */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
                                       "jeliot.gui.resources.properties",

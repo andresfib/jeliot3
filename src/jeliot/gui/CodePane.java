@@ -32,7 +32,8 @@ public class CodePane extends JComponent {
 			Locale.getDefault());
 
 	/**
-	 * Line numbering component that handles the correct line numbering in the code view.
+	 * Line numbering component that handles the correct
+     * line numbering in the code view.
 	 */
 	private LineNumbers nb;
 
@@ -50,12 +51,14 @@ public class CodePane extends JComponent {
 	private Insets insets = new Insets(5, 5, 5, 5);
 
 	/**
-	 * Pane that handles the scrolling of the code view or the TextArea. 
+	 * Pane that handles the scrolling of the code view or the
+     * TextArea. 
 	 */
 	private JScrollPane jsp;
 
 	/**
-	 * The text area where the program code is shown and highlighted.
+	 * The text area where the program code is shown and
+     * highlighted.
 	 */
 	JTextArea area = new JTextArea();
 	{
@@ -153,7 +156,7 @@ public class CodePane extends JComponent {
 	 * Method highlights the specified Statement area
      * by selecting it.
 	 * 
-	 * @param h
+	 * @param h contains the area that should be highlighted.
 	 */
 	public void highlightStatement(Highlight h) {
 

@@ -8,6 +8,7 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  * Filter for the file chooser to only show the java source code files.
+ * Modified from the example for the Sun's Java Website.
  * 
  * @author Niko Myller
  */
