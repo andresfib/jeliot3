@@ -610,8 +610,11 @@ public class EvaluationVisitor extends VisitorObject {
             ECodeUtilities.write("" + Code.QN+Code.DELIM+(counter++)+Code.DELIM+node.getName()+//node.getRepresentation()+
                                  Code.DELIM+value+Code.DELIM+c.getName());
 
+            if (o != null )
+                value = o.toString();
+            else value = "null";
             ECodeUtilities.write("" + Code.A+Code.DELIM+assigncounter+Code.DELIM+auxcounter+
-                                 Code.DELIM+auxcounter2+Code.DELIM+o.toString()+
+                                 Code.DELIM+auxcounter2+Code.DELIM+value+//o.toString()+
                                  Code.DELIM+c.getName()+
                                  Code.DELIM+locationToString(node));
 
@@ -952,11 +955,17 @@ public class EvaluationVisitor extends VisitorObject {
         evaluating=true;
         val = performCast(NodeProperties.getType(node), val);
         mod.modify(context, val);
-
+        String value;
+        if (val == null ) {
+            value = "null";
+        }
+        else {
+            value = val.toString();
+        }
         ECodeUtilities.write("" + Code.A+Code.DELIM+assigncounter+Code.DELIM+auxcounter+
-                   Code.DELIM+auxcounter2+Code.DELIM+val.toString()+
-                   Code.DELIM+NodeProperties.getType(node).getName()+
-                   Code.DELIM+locationToString(node));
+                             Code.DELIM+auxcounter2+Code.DELIM+value+//val.toString()+
+                             Code.DELIM+NodeProperties.getType(node).getName()+
+                             Code.DELIM+locationToString(node));
 
         return val;
     }
@@ -973,13 +982,17 @@ public class EvaluationVisitor extends VisitorObject {
         Class c = NodeProperties.getType(node);
         String value=Code.UNKNOWN;
 
-        if (result != UninitializedObject.INSTANCE) {
+        if ( (result != UninitializedObject.INSTANCE) 
+             && (result != null) ) {
             value=result.toString();
+        }
+        else if (result  == null ) {
+            value = "null";
         }
 
         ECodeUtilities.write("" + Code.QN+Code.DELIM+(counter++)+Code.DELIM+node.getRepresentation()+
                    Code.DELIM+value+Code.DELIM+c.getName());
-
+        
         return result;
     }
 
@@ -1161,8 +1174,13 @@ public class EvaluationVisitor extends VisitorObject {
                                  +" references "+ arrayCellReferencesList.toString());
             */
             first = true;
-            
+            /*arrayCellNumbersList = (List)*/arrayCellNumbersStack.pop();
+            /*arrayCellReferencesList =(List)*/ arrayCellReferencesStack.pop();
+            ECodeUtilities.write("Stack contains : "+ arrayCellNumbersStack.toString());            
         }
+        
+
+       
         return result;
     }
     

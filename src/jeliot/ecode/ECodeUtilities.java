@@ -377,9 +377,9 @@ public class ECodeUtilities {
     public static void write(String str){
         if ( !EvaluationVisitor.isSetPreparing() ) {
 
-            // writer.println(str); // connected to jeliot
+            writer.println(str); // connected to jeliot
             
-            System.out.println(str);// Output to stdout ; debugging only
+            //System.out.println(str);// Output to stdout ; debugging only
         }
     }
 
