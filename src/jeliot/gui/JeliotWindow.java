@@ -1169,7 +1169,7 @@ public class JeliotWindow {
                         "\\s+?static\\s+?void\\s+?main\\s*?\\(\\s*?String.*?\\[\\]??\\s[^,]*?\\)",
                         2);
         if (method.length > 1 && method[1].length() > 0) {
-            String[] classes = method[0].split("\\s+?class\\s+?");
+            String[] classes = method[0].split("\\s*?class\\s+?");
             String[] classNames = classes[classes.length - 1].split("\\s");
             String className = classNames[0].replace('{', ' ');
             className = className.trim();
@@ -1181,7 +1181,7 @@ public class JeliotWindow {
         method = programCode.split(
                 "\\s+?static\\s+?void\\s+?main\\s*?\\(\\s*?\\)", 2);
         if (method.length > 1 && method[1].length() > 0) {
-            String[] classes = method[0].split("\\s+?class\\s+?");
+            String[] classes = method[0].split("\\s*?class\\s+?");
             String[] classNames = classes[classes.length - 1].split("\\s");
             String className = classNames[0].replace('{', ' ');
             className = className.trim();
