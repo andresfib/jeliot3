@@ -331,7 +331,7 @@ public class Actor implements Cloneable {
             public void finish() {
                 setShadow(0);
                 setLocation( (int)destx, (int)desty);
-                //this.repaint();
+                this.repaint();
             }
 
             public void finalFinish() {
@@ -350,7 +350,7 @@ public class Actor implements Cloneable {
                 this.addActor(Actor.this);
                 setLocation(loc);
                 setLight(HIGHLIGHT);
-                repaint();
+                this.repaint();
             }
 
             public void animate(double pulse) { }

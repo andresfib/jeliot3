@@ -379,9 +379,9 @@ public class ActorFactory {
         return produceOperatorActor(image);
     }
 
-    public Actor produceEllipsis() {
+    public OperatorActor produceEllipsis() {
         Image image = iLoad.getImage("dots.gif");
-        Actor actor = produceOperatorActor(image);
+        OperatorActor actor = produceOperatorActor(image);
         return actor;
     }
 

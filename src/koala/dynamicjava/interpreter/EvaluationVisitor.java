@@ -174,15 +174,18 @@ public class EvaluationVisitor extends VisitorObject {
             }
         } catch (BreakException e) {
             // 'break' statement management
-            ECodeUtilities.write(""+Code.BR+Code.DELIM+Code.WHI+Code.DELIM+locationToString(node.getBody()));
+            ECodeUtilities.write(""+Code.BR+Code.DELIM+Code.WHI+
+                           Code.DELIM+locationToString(node.getBody()));
             breakc=true;
             if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
                 throw e;
             }
         }
         if (!breakc)
-            ECodeUtilities.write(""+Code.WHI+Code.DELIM+condcounter+Code.DELIM+Code.FALSE+
-                       Code.DELIM+round+Code.DELIM+locationToString(node.getBody()));
+            ECodeUtilities.write(""+Code.WHI+Code.DELIM+condcounter+
+                                Code.DELIM+Code.FALSE+Code.DELIM+
+                                round+Code.DELIM+
+                                locationToString(node.getBody()));
 
         return null;
     }
@@ -217,8 +220,10 @@ public class EvaluationVisitor extends VisitorObject {
                 while (cond == null ||
                        ((Boolean)cond.acceptVisitor(this)).booleanValue()) {
                     try {
-                        ECodeUtilities.write(""+Code.FOR+Code.DELIM+condcounter+Code.DELIM+Code.TRUE+
-                                   Code.DELIM+round+Code.DELIM+locationToString(node.getBody()));
+                        ECodeUtilities.write(""+Code.FOR+Code.DELIM+
+                                       condcounter+Code.DELIM+Code.TRUE+
+                                       Code.DELIM+round+Code.DELIM+
+                                       locationToString(node.getBody()));
                         node.getBody().acceptVisitor(this);
                         condcounter=counter;
                         round++;
@@ -239,6 +244,9 @@ public class EvaluationVisitor extends VisitorObject {
                 }
             } catch (BreakException e) {
                 // 'break' statement management
+                ECodeUtilities.write(""+Code.BR+Code.DELIM+Code.FOR+
+                           Code.DELIM+locationToString(node.getBody()));
+                breakc=true;
                 if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
                     throw e;
                 }
@@ -284,6 +292,10 @@ public class EvaluationVisitor extends VisitorObject {
             } while (((Boolean)node.getCondition().acceptVisitor(this)).booleanValue());
         } catch (BreakException e) {
             // 'break' statement management
+            ECodeUtilities.write(""+Code.BR+Code.DELIM+Code.DO+
+                       Code.DELIM+locationToString(node.getBody()));
+            breakc=true;
+
             if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
                 throw e;
             }
@@ -300,8 +312,16 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(SwitchStatement node) {
+
+        boolean breakc = false;// Exiting while loop because of break
+
         try {
             boolean processed = false;
+
+            ECodeUtilities.write(""+Code.SWITCHB+Code.DELIM+
+                                  locationToString(node));
+
+            long selectorCounter = counter;
 
             // Evaluate the choice expression
             Object o = node.getSelector().acceptVisitor(this);
@@ -316,18 +336,28 @@ public class EvaluationVisitor extends VisitorObject {
             loop: while (it.hasNext()) {
                 SwitchBlock sc = (SwitchBlock)it.next();
                 Number l = null;
+
+                long switchBlockCounter = counter;
                 if (sc.getExpression() != null) {
+                    switchBlockCounter = counter;
                     o = sc.getExpression().acceptVisitor(this);
                     if (o instanceof Character) {
                         o = new Integer(((Character)o).charValue());
                     }
                     l= (Number)o;
                 } else {
-                    dit = node.getBindings().listIterator(it.nextIndex() - 1);
+                    dit = node.getBindings().listIterator(
+                                                    it.nextIndex() - 1);
                 }
 
                 if (l != null && n.intValue() == l.intValue()) {
                     processed = true;
+
+                    ECodeUtilities.write(""+Code.SWIBF+Code.DELIM+
+                                         selectorCounter+Code.DELIM+
+                                         switchBlockCounter+Code.DELIM+
+                                         locationToString(sc.getExpression()));
+
                     // When a matching label is found, interpret all the
                     // remaining statements
                     for(;;) {
@@ -346,15 +376,25 @@ public class EvaluationVisitor extends VisitorObject {
                 }
             }
 
+            // Default case handling if no matching case was found.
             if (!processed && dit != null) {
+
                 SwitchBlock sc = (SwitchBlock)dit.next();
+
+                ECodeUtilities.write(""+Code.SWIBF+Code.DELIM+
+                                     selectorCounter+Code.DELIM+
+                                     "-1"+Code.DELIM+
+                                     locationToString(sc.getExpression()));
+
                 for(;;) {
+
                     if (sc.getStatements() != null) {
                         Iterator it2 = sc.getStatements().iterator();
                         while (it2.hasNext()) {
                             ((Node)it2.next()).acceptVisitor(this);
                         }
                     }
+
                     if (dit.hasNext()) {
                         sc = (SwitchBlock)dit.next();
                     } else {
@@ -362,12 +402,22 @@ public class EvaluationVisitor extends VisitorObject {
                     }
                 }
             }
+
         } catch (BreakException e) {
             // 'break' statement management
+            ECodeUtilities.write(""+Code.BR+Code.DELIM+Code.SWITCH+
+                                     Code.DELIM+locationToString(node));
+            breakc=true;
             if (e.isLabeled()) {
                 throw e;
             }
         }
+
+        if (!breakc)
+            ECodeUtilities.write(""+Code.SWITCH+Code.DELIM+
+                                                locationToString(node));
+
+
         return null;
     }
 
@@ -498,12 +548,22 @@ public class EvaluationVisitor extends VisitorObject {
 
             o = node.getExpression().acceptVisitor(this);//
 
-            ECodeUtilities.write("" + Code.R+Code.DELIM+
-                       l.toString()+
-                       Code.DELIM+auxcounter+
-                       Code.DELIM+o.toString()+Code.DELIM+
-                       NodeProperties.getType(node.getExpression()).getName()+
-                       Code.DELIM+locationToString(node));//+Code.DELIM+m.getName());
+            if (o != null) {
+                ECodeUtilities.write(""+Code.R+Code.DELIM+
+                           l.toString()+Code.DELIM+auxcounter+
+                           Code.DELIM+o.toString()+Code.DELIM+
+                           NodeProperties.getType(node.getExpression()).getName()+
+                           Code.DELIM+locationToString(node));
+                           //+Code.DELIM+m.getName());
+            } else {
+                ECodeUtilities.write(""+Code.R+Code.DELIM+
+                           l.toString()+Code.DELIM+auxcounter+
+                           Code.DELIM+"null"+Code.DELIM+
+                           Code.REFERENCE+Code.DELIM+
+                           locationToString(node));
+                           //+Code.DELIM+m.getName());
+
+            }
 
             throw new ReturnException("return.statement",
                                       o,
@@ -814,22 +874,38 @@ public class EvaluationVisitor extends VisitorObject {
                     long auxcounter = counter;
                     ECodeUtilities.write("" + Code.BEGIN+Code.DELIM+Code.R+Code.DELIM+l.toString()+
                                          Code.DELIM+locationToString(node));
+
                     // Don't try this with objects, foreign method calls don't provide enough info to handle them
-                    if (o == null) {
-                        ECodeUtilities.write("" + Code.L+Code.DELIM+(counter++)+Code.DELIM+"null"+
-                                             Code.DELIM+Code.REFERENCE+Code.DELIM+locationToString(node));
-                    }
-                    else {
+                    if (o != null) {
+
                         ECodeUtilities.write(Code.L+Code.DELIM+(counter++)+Code.DELIM+o.toString()+
                                              Code.DELIM+o.getClass().getName()+Code.DELIM+locationToString(node));
+
+                        ECodeUtilities.write("" + Code.R+Code.DELIM+
+                                             l.toString()+
+                                             Code.DELIM+auxcounter+
+                                             Code.DELIM+o.toString()+Code.DELIM+
+                                             o.getClass().getName()+
+                                             Code.DELIM+locationToString(node));
+
+                    } else {
+
+                        ECodeUtilities.write("" + Code.L+Code.DELIM+
+                                             (counter++)+Code.DELIM+
+                                             "null"+Code.DELIM+
+                                             Code.REFERENCE+Code.DELIM+
+                                             locationToString(node));
+
+                        ECodeUtilities.write("" + Code.R+Code.DELIM+
+                                             l.toString()+
+                                             Code.DELIM+auxcounter+
+                                             Code.DELIM+"null"+
+                                             Code.DELIM+Code.REFERENCE+
+                                             Code.DELIM+
+                                             locationToString(node));
+
                     }
 
-                    ECodeUtilities.write("" + Code.R+Code.DELIM+
-                                         l.toString()+
-                                         Code.DELIM+auxcounter+
-                                         Code.DELIM+o.toString()+Code.DELIM+
-                                         o.getClass().getName()+
-                                         Code.DELIM+locationToString(node));
                 }
 
             } else {

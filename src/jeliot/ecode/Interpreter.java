@@ -20,6 +20,7 @@ public class Interpreter {
 
     private boolean running = true;
     private boolean start = true;
+    private boolean firstLineRead = false;
     private boolean invokingMethod = false;
 
     //Keeps track of current return value
@@ -40,6 +41,8 @@ public class Interpreter {
     private ClassInfo currentClass = null;
 
     private Hashtable classes = new Hashtable();
+
+    private String line = null;
 
     /**
     * currentMethodInvocation keeps track of all the information that
@@ -84,6 +87,31 @@ public class Interpreter {
         postIncsDecs = new Hashtable();
         instances = new Hashtable();
         classes = new Hashtable();
+
+        try {
+            line = ecode.readLine();
+            System.out.println(line);
+        } catch (Exception e) {}
+
+        //Change this to be something more meaningful!
+        if (line == null) {
+            line = "" + Code.ERROR + Code.DELIM +
+                   "<H1>Runtime Exception</H1>" +
+                   Code.DELIM + "0,0,0,0";
+        }
+
+        StringTokenizer tokenizer = new StringTokenizer(line, Code.DELIM);
+
+        if (Integer.parseInt(tokenizer.nextToken()) == Code.ERROR) {
+            String message = tokenizer.nextToken();
+            Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+
+            director.showErrorMessage(new InterpreterError(message, h));
+            running = false;
+        } else {
+            firstLineRead = true;
+        }
+
     }
 
     public boolean starting() {
@@ -100,17 +128,22 @@ public class Interpreter {
 
         while (running) {
 
-            String line = null;
+            if (!firstLineRead) {
+                try {
 
-            try {
+                    line = ecode.readLine();
+                    System.out.println(line);
 
-                line = ecode.readLine();
-                System.out.println(line);
+                } catch (Exception e) {}
 
-            } catch (Exception e) {}
-
-            if (line == null) {
-                line = "" + Code.ERROR + Code.DELIM + "<H1>Null Pointer Exception</H1>" + Code.DELIM + "0,0,0,0";
+                //Change this to be something more meaningful!
+                if (line == null) {
+                    line = "" + Code.ERROR + Code.DELIM +
+                           "<H1>Runtime Exception</H1>" +
+                           Code.DELIM + "0,0,0,0";
+                }
+            } else {
+                firstLineRead = false;
             }
 
             if (!line.equals("" + Code.END)) {
@@ -1112,8 +1145,8 @@ public class Interpreter {
                             currentMethodInvocation[3] = parameterTypes;
                             currentMethodInvocation[4] = parameterNames;
                             currentMethodInvocation[5] =
-                            ECodeUtilities.makeHighlight(
-                                                tokenizer.nextToken());
+                                           ECodeUtilities.makeHighlight(
+                                                 tokenizer.nextToken());
                             currentMethodInvocation[7] = parameterExpressionReferences;
 
                             break;
@@ -1512,12 +1545,16 @@ public class Interpreter {
                         //Do-While Statement
                         case Code.DO: {
 
-                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
+                            int expressionReference = Integer.parseInt(
+                                                 tokenizer.nextToken());
                             String value = tokenizer.nextToken();
-                            int round = Integer.parseInt(tokenizer.nextToken());
-                            Highlight h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+                            int round = Integer.parseInt(
+                                                 tokenizer.nextToken());
+                            Highlight h = ECodeUtilities.makeHighlight(
+                                                 tokenizer.nextToken());
 
-                            Value result = (Value) values.remove(new Integer(expressionReference));
+                            Value result = (Value) values.remove(
+                                      new Integer(expressionReference));
 
                             if (round == 0) {
 
@@ -1539,6 +1576,63 @@ public class Interpreter {
                             break;
                         }
 
+                        case Code.SWITCHB: {
+
+                            Highlight h = ECodeUtilities.makeHighlight(
+                                                 tokenizer.nextToken());
+
+                            director.openSwitch(h);
+
+                            director.closeScratch();
+                            director.openScratch();
+
+                            break;
+                        }
+
+                        case Code.SWIBF: {
+
+                            int selectorReference = Integer.parseInt(
+                                                 tokenizer.nextToken());
+                            int switchBlockReference = Integer.parseInt(
+                                                 tokenizer.nextToken());
+                            Highlight h = ECodeUtilities.makeHighlight(
+                                                 tokenizer.nextToken());
+
+                            if (switchBlockReference != -1) {
+
+                                Value selector = (Value) values.remove(new Integer(selectorReference));
+                                Value switchBlock = (Value) values.remove(new Integer(switchBlockReference));
+                                Value result = new Value("true", "boolean");
+
+                                director.animateBinaryExpression(
+                                    ECodeUtilities.resolveBinOperator(
+                                                               Code.EE),
+                                    selector,
+                                    switchBlock,
+                                    result,
+                                    -3,
+                                    h);
+                                director.switchSelected(h);
+                            } else {
+                                director.switchDefault(h);
+                            }
+
+                            break;
+                        }
+
+                        case Code.SWITCH: {
+
+                            Highlight h = ECodeUtilities.makeHighlight(
+                                                 tokenizer.nextToken());
+
+                            director.closeSwitch(h);
+
+                            director.closeScratch();
+                            director.openScratch();
+
+                            break;
+                        }
+
                         //Break Statement
                         case Code.BR: {
 
@@ -1548,13 +1642,16 @@ public class Interpreter {
 
                             if (statementName == Code.WHI) {
                                 stmt = "while";
+                                director.breakLoop(stmt, h);
                             } else if (statementName == Code.FOR) {
                                 stmt = "for";
+                                director.breakLoop(stmt, h);
                             } else if (statementName == Code.DO) {
                                 stmt = "do - while";
+                                director.breakLoop(stmt, h);
+                            } else if (statementName == Code.SWITCH) {
+                                director.breakSwitch(h);
                             }
-
-                            director.breakLoop(stmt, h);
 
                             director.closeScratch();
                             director.openScratch();
