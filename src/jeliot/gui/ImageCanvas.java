@@ -16,10 +16,11 @@ public class ImageCanvas extends JComponent {
 	
 	Image i;
 	
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		if (i != null) {
 			g.drawImage(i,0,0,this);
 			setPreferredSize(new Dimension(i.getWidth(this), i.getHeight(this)));
+            invalidate();
 		}
 	}
 	
