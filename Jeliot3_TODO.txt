@@ -5,15 +5,15 @@ JELIOT 3 TODO-LIST
 Urgent:
 
 * Problem with main method finding in the JeliotWindow class. (done)
-* Array initializers (but only for one dimensional arrays)
-* Static field access (into the constant area)
+* Array initializers (but only for one dimensional arrays)(done)
+* Static field access (into the constant area)(done)
 * super(...) method should be made working in the beginning of the classes.
 * Documentation
 * Initialization of object when it inherits user made class (super() call) (should be done)
 * casting of primitive types doesn't work. (done)
 * Automatic addition of "import jeliot.io.*" if it does not exist / Automaattinen jeliot.io.* importointi (done)
 * Casting a reference type should have no animation / Luokkacasteja ei tarvii tarkastaa... (done)
-* Emulate the class Lue that is used in ViSCoS with Input class / Lue-luokan "emulointi" jeliotissa
+* Emulate the class Lue that is used in ViSCoS with Input class / Lue-luokan "emulointi" jeliotissa (done)
 * The guide to install and use Jeliot in Finnish / Suomenkieliset asennus- ja käyttöohjeet.
 
 Bugs regarding inheritance:
@@ -26,7 +26,7 @@ Bugs regarding inheritance:
 
 Technical:
 
-* getValue -method for EvaluationVisitor. It returns string representation of the value. If value is primitive type then the values String presentation otherwise the hashcode.
+* getValue -method for EvaluationVisitor. It returns string representation of the value. If value is primitive type then the values String presentation otherwise the hashcode. (done)
 * Not implemented feature -message (Done, but needs to be added from comments to releases)
 * Use invokeLater method to build up the gui in the beginning of the program. (Should be done)
 * Default error message needs to be changed (Should be done)
