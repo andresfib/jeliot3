@@ -460,6 +460,9 @@ public class Director {
             scratch.memorizeLocation();
 
             scratch.removeCrap();
+            if (eCodeInterpreter.emptyScratch()) {
+                scratch.clean();
+        	}
             manager.removeScratch(scratch);
             Point p = new Point(scratch.getX(), -scratch.getHeight());
             theatre.updateCapture();
@@ -1070,7 +1073,11 @@ public class Director {
 
         highlight(h);
 
-        ValueActor actor = factory.produceValueActor(val);
+        ValueActor actor = val.getActor();
+        if (actor == null) {
+            actor = factory.produceValueActor(val);
+        }
+
         AnimatingActor hand = factory.produceHand();
 
         Point dest = manager.getOutputPoint();

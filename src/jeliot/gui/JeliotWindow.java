@@ -68,6 +68,8 @@ public class JeliotWindow {
     /** In this text area will come the output of the user-made programs. */
     private JTextArea outputConsole;
 
+    private Vector animationMenuItems = new Vector();
+
     /** This ImageLoader will load all the images. */
     private ImageLoader iLoad;
 
@@ -87,8 +89,8 @@ public class JeliotWindow {
 
     private JScrollPane errorPane = new JScrollPane(errorJEditorPane); {
         errorPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        //errorPane.setPreferredSize(new Dimension(250, 145));
     }
-    //errorPane.setPreferredSize(new Dimension(250, 145));
 
 
 
@@ -115,6 +117,7 @@ public class JeliotWindow {
             }
         }
     };
+
     {
         errorViewer.setBorder(
                 BorderFactory.createEmptyBorder(12, 12, 5, 12));
@@ -128,7 +131,7 @@ public class JeliotWindow {
             new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     changeTheatrePane(theatre);
-                    editButton.setEnabled(true);
+                    //editButton.setEnabled(true);
                 }
            }
         );
@@ -175,13 +178,6 @@ public class JeliotWindow {
                 rewindAnimation();
             }
         };
-
-    /**
-     * JFrame treeFrame for DEBUGGING.
-     */
-//    private JFrame treeFrame = new JFrame("Program"); {
-//        treeFrame.setSize(300, 400);
-//    }
 
     /**
      * Helping to enable and disable the components.
@@ -245,19 +241,18 @@ public class JeliotWindow {
         codePane.setMinimumSize(minimumSize);
         editor.setMinimumSize(minimumSize);
 
-        JPanel bottomPane = new JPanel(new BorderLayout()) ;
-            final JComponent conPan = makeControlPanel();
-            bottomPane.add("West", conPan);
+        JPanel bottomPane = new JPanel(new BorderLayout());
+        final JComponent conPan = makeControlPanel();
+        bottomPane.add("West", conPan);
 
-            OutputConsole oc = new OutputConsole(conPan);
-            this.outputConsole = oc;
-            bottomPane.add("Center", oc.container);
+        OutputConsole oc = new OutputConsole(conPan);
+        this.outputConsole = oc;
+
+        bottomPane.add("Center", oc.container);
 
         JPanel rootPane = new JPanel(new BorderLayout());
-
-            rootPane.add("Center", pane);
-
-            rootPane.add("South", bottomPane);
+        rootPane.add("Center", pane);
+        rootPane.add("South", bottomPane);
 
         frame.setContentPane(rootPane);
         frame.setSize(800, 600);
@@ -303,38 +298,168 @@ public class JeliotWindow {
         menuBar.add(editMenu);
         editWidgets.addElement(editMenu);
 
-        /**
-          *Just for debugging and testing
-          */
-//         JMenu debugMenu = makeDebugMenu();
-//         menuBar.add(debugMenu);
+        JMenu controlMenu = makeControlMenu();
+        menuBar.add(controlMenu);
+
+        JMenu animationMenu = makeAnimationMenu();
+        menuBar.add(animationMenu);
+        animWidgets.addElement(animationMenu);
+
+        JMenu[] jm = {controlMenu, animationMenu};
+        addInAnimationMenuItems(jm);
 
         return menuBar;
     }
 
     /**
-     * Makes the JMenu Debug for the JMenuBar.
-     * Things for debugging
-     *
-     * @return  The debugging menu.
+     * Adds the given JMenu's JMenuItems into the Vector animationMenuItems.
      */
-//     private JMenu makeDebugMenu() {
-//         JMenu menu = new JMenu("Debug");
-//         menu.setMnemonic(KeyEvent.VK_D);
-//         JMenuItem menuItem;
+    public void addInAnimationMenuItems(JMenu[] jm) {
+        for (int i = 0; i < jm.length; i++) {
+            int length = jm[i].getItemCount();
+            for (int j = 0; j < length; j++) {
+                JMenuItem jmi = jm[i].getItem(j);
+                if (jmi != null) {
+                    animationMenuItems.add(jmi);
+                }
+            }
+        }
+    }
 
-//         menuItem = new JMenuItem("View Tree");
-//         menuItem.setMnemonic(KeyEvent.VK_T);
-//         menuItem.addActionListener(
-//             new ActionListener() {
-//                 public void actionPerformed(ActionEvent e) {
-//                     showProgramTree();
-//                 }
-//             }
-//         );
-//         menu.add(menuItem);
-//         return menu;
-//     }
+    /**
+     * Menu with the VCR commands
+     */
+    private JMenu makeAnimationMenu() {
+
+        JMenu menu = new JMenu("Animation");
+        menu.setMnemonic(KeyEvent.VK_N);
+        JMenuItem menuItem;
+
+        menuItem = new JMenuItem("Pause");
+        menuItem.setMnemonic(KeyEvent.VK_U);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_U, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    pauseButton.doClick();
+                }
+            }
+        );
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Play");
+        menuItem.setMnemonic(KeyEvent.VK_P);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    playButton.doClick();
+                }
+            }
+        );
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Rewind");
+        menuItem.setMnemonic(KeyEvent.VK_R);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    rewindButton.doClick();
+                }
+            }
+        );
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Step");
+        menuItem.setMnemonic(KeyEvent.VK_T);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_T, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    stepButton.doClick();
+                }
+            }
+        );
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Faster");
+        menuItem.setMnemonic(KeyEvent.VK_PLUS);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_PLUS, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    speedSlider.setValue(speedSlider.getValue()+1);
+                }
+            }
+        );
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Slower");
+        menuItem.setMnemonic(KeyEvent.VK_MINUS);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_MINUS, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    speedSlider.setValue(speedSlider.getValue()-1);
+                }
+            }
+        );
+        menu.add(menuItem);
+
+
+        return menu;
+    }
+
+
+    /**
+     * Menu with the commands to enter to animate and edit.
+     */
+    private JMenu makeControlMenu() {
+
+        JMenu menu = new JMenu("Control");
+        menu.setMnemonic(KeyEvent.VK_L);
+        JMenuItem menuItem;
+
+        menuItem = new JMenuItem("Edit");
+        menuItem.setMnemonic(KeyEvent.VK_E);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    editButton.doClick();
+                }
+            }
+        );
+        menu.add(menuItem);
+
+        animWidgets.addElement(menuItem);
+
+        menuItem = new JMenuItem("Compile");
+        menuItem.setMnemonic(KeyEvent.VK_M);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_M, ActionEvent.CTRL_MASK));
+        menuItem.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    compileButton.doClick();
+                }
+            }
+        );
+        menu.add(menuItem);
+
+        editWidgets.addElement(menuItem);
+
+        return menu;
+    }
+
 
     /**
      * Makes the control buttons for the control panel.
@@ -365,6 +490,9 @@ public class JeliotWindow {
 
         editButton = makeControlButton("Edit", "editicon.gif");
         compileButton = makeControlButton("Compile", "compileicon.gif");
+
+        editButton.setMnemonic(KeyEvent.VK_E);
+        compileButton.setMnemonic(KeyEvent.VK_M);
 
         editButton.setMargin(new Insets(0, 2, 0, 2));
         compileButton.setMargin(new Insets(0, 2, 0, 2));
@@ -400,15 +528,24 @@ public class JeliotWindow {
         pauseButton = makeControlButton("Pause", "pauseicon.gif");
         rewindButton = makeControlButton("Rewind", "rewindicon.gif");
 
-        animWidgets.addElement(stepButton);
-        animWidgets.addElement(playButton);
-        animWidgets.addElement(pauseButton);
-        animWidgets.addElement(rewindButton);
+        stepButton = makeControlButton("Step", "stepicon.gif");
+        stepButton.setMnemonic(KeyEvent.VK_T);
+        playButton = makeControlButton("Play", "playicon.gif");
+        playButton.setMnemonic(KeyEvent.VK_P);
+        pauseButton = makeControlButton("Pause", "pauseicon.gif");
+        pauseButton.setMnemonic(KeyEvent.VK_U);
+        rewindButton = makeControlButton("Rewind", "rewindicon.gif");
+        rewindButton.setMnemonic(KeyEvent.VK_R);
 
         stepButton.addActionListener(stepAction);
         playButton.addActionListener(playAction);
         pauseButton.addActionListener(pauseAction);
         rewindButton.addActionListener(rewindAction);
+
+        animWidgets.addElement(stepButton);
+        animWidgets.addElement(playButton);
+        animWidgets.addElement(pauseButton);
+        animWidgets.addElement(rewindButton);
 
         // create animation speed control slider
         speedSlider = new JSlider(JSlider.HORIZONTAL, 1, 60, 15);
@@ -421,7 +558,7 @@ public class JeliotWindow {
             new ChangeListener() {
                 public void stateChanged(ChangeEvent e) {
                     int volume = speedSlider.getValue();
-                    engine.setVolume( (double)volume*100.0 );
+                    engine.setVolume((double)(volume * 100.0));
                 }
             }
         );
@@ -536,6 +673,9 @@ public class JeliotWindow {
      * This method is called when user clicks the "Edit" button.
      */
     void enterEdit() {
+
+        changeTheatrePane(theatre);
+
         panelController.slide(false,
             new Runnable() {
                 public void run() {
@@ -572,21 +712,15 @@ public class JeliotWindow {
     }
 
     /**
-     * Shows the program tree for debugging.
-     */
-//     void showProgramTree() {
-//         treeFrame.setContentPane(jeliot.getTree().createPanel());
-//         treeFrame.setVisible(true);
-//     }
-
-    /**f
      * Called when the user pushes the "Compile" button.
      * Gets the code from the CodeEditor -object.
      * Sends it to "compilation".
      */
     void tryToEnterAnimate() {
+
         try {
             try {
+
                 String programCode = editor.getProgram();
 
                 String methodCall = null;
@@ -615,10 +749,12 @@ public class JeliotWindow {
                             }
                         }
                     ).start();
+
                 } else {
+
                     showErrorMessage("<H2>No main method found</H2>"+
                     "<P>There was no method main found from any of the classes"+
-                    "and thus the program cannot be run. Add a method main to one of the classes.</P>" +
+                    "and thus the program cannot be run. Add a method main to one of the classes (the main class).</P>" +
                     "<P>For example like this:</P>" +
                     "<CODE>public class MyClass {<BR>&nbsp;&nbsp;&nbsp;public static void main() {" +
                     "<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//Your Algorithm" +
@@ -653,6 +789,7 @@ public class JeliotWindow {
     }
 
     public String replaceChar(String from, char c, String with) {
+
         int index = from.indexOf(c);
         while(index != -1) {
             from = from.substring(0,index) +
@@ -668,6 +805,7 @@ public class JeliotWindow {
      * Tries to find the main method call from one of the classes.
      */
     public String findMainMethodCall(String programCode) {
+
         String commentsRemoved = removeComments(programCode);
         commentsRemoved = replaceChar(commentsRemoved, '\n', " ");
         commentsRemoved = replaceChar(commentsRemoved, '\r', " ");
@@ -688,9 +826,22 @@ public class JeliotWindow {
                 //System.out.println(classNameIndex);
                 if (classNameIndex > -1) {
                     String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main();";
-                    replaceChar(mainMethodCall, '{', "");
+                    mainMethodCall = replaceChar(mainMethodCall, '{', "");
                     System.out.println(mainMethodCall);
                     return mainMethodCall;
+                }
+            } else {
+                if (partProgramCode.startsWith("class ")) {
+                    partProgramCode = partProgramCode.substring(classIndex + "class ".length()).trim();
+                    int classNameIndex = partProgramCode.indexOf(" ");
+                    //System.out.println(classNameIndex);
+                    if (classNameIndex > -1) {
+                        String mainMethodCall = partProgramCode.substring(0, classNameIndex).trim() + ".main();";
+                        mainMethodCall = replaceChar(mainMethodCall, '{', "");
+                        System.out.println(mainMethodCall);
+                        return mainMethodCall;
+                    }
+
                 }
             }
         }
@@ -741,18 +892,6 @@ public class JeliotWindow {
     }
 
 
-    /**
-     * Shows the error message of the syntax error exception in the theatre pane.
-     *
-     * @param   e   The exception that is wanted to show.
-     */
-/*    public void showErrorMessage(SyntaxErrorException e) {
-        errorPane.setText(e.toString());
-        changeTheatrePane(errorViewer);
-        editor.highlight(e.getHighlight());
-    }
-*/
-
     public void showErrorMessage(InterpreterError e) {
 
         pauseButton.setEnabled(false);
@@ -774,14 +913,29 @@ public class JeliotWindow {
         }
     }
 
+    public void setEnabledMenuItems(boolean enabled, String[] menuItems) {
+        for (int i = 0; i < animationMenuItems.size(); i++) {
+            JMenuItem jmi = (JMenuItem) animationMenuItems.elementAt(i);
+            if (jmi != null) {
+                for (int j = 0; j < menuItems.length; j++) {
+                    if (menuItems[j].equals(jmi.getText())) {
+                        jmi.setEnabled(enabled);
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Changes the user interface when the "Compile" button is pressed.
      * Rewinds the animation.
      */
     public void enterAnimate() {
+
         changeCodePane(codePane);
         enableWidgets(editWidgets.elements(), false);
         enableWidgets(animWidgets.elements(), true);
+
         rewindAnimation();
     }
 
@@ -793,11 +947,17 @@ public class JeliotWindow {
      * @see jeliot.Jeliot#step()
      */
     void stepAnimation() {
+
         stepButton.setEnabled(false);
         playButton.setEnabled(false);
         pauseButton.setEnabled(true);
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
+
+        String[] s1 = {"Pause"};
+        setEnabledMenuItems(true, s1);
+        String[] s2 = { "Step","Play","Rewind","Edit" };
+        setEnabledMenuItems(false, s2);
 
         jeliot.step();
     }
@@ -809,11 +969,17 @@ public class JeliotWindow {
      * @see jeliot.Jeliot#play()
      */
     void playAnimation() {
+
         stepButton.setEnabled(false);
         playButton.setEnabled(false);
         pauseButton.setEnabled(true);
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
+
+        String[] s1 = {"Pause"};
+        setEnabledMenuItems(true, s1);
+        String[] s2 = { "Step","Play","Rewind","Edit"};
+        setEnabledMenuItems(false, s2);
 
         jeliot.play();
     }
@@ -826,11 +992,17 @@ public class JeliotWindow {
      * @see jeliot.Jeliot#pause()
      */
     public void pauseAnimation() {
+
         stepButton.setEnabled(true);
         playButton.setEnabled(true);
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(true);
         editButton.setEnabled(true);
+
+        String[] s1 = {"Pause"};
+        setEnabledMenuItems(true, s1);
+        String[] s2 = { "Step","Play","Rewind","Edit" };
+        setEnabledMenuItems(false, s2);
 
         jeliot.pause();
     }
@@ -840,23 +1012,34 @@ public class JeliotWindow {
      * Changes the user interface when the "Resume" button is pressed.
      */
     public void resumeAnimation() {
+
         stepButton.setEnabled(false);
         playButton.setEnabled(false);
         pauseButton.setEnabled(true);
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
+
+        String[] s1 = { "Pause" };
+        setEnabledMenuItems(true, s1);
+        String[] s2 = { "Step","Play","Rewind","Edit" };
+        setEnabledMenuItems(false, s2);
     }
 
     /**
      * Changes the user interface when the animation is freezed.
      */
     public void freezeAnimation() {
+
         stepButton.setEnabled(false);
         playButton.setEnabled(false);
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(false);
         editButton.setEnabled(true);
 
+        String[] s1 = { "Edit" };
+        setEnabledMenuItems(true, s1);
+        String[] s2 = { "Step","Play","Rewind","Pause" };
+        setEnabledMenuItems(false, s2);
     }
 
     /**
@@ -873,16 +1056,23 @@ public class JeliotWindow {
 
         jeliot.recompile();
 
+/*
         try {
             Thread.sleep(25);
         } catch(InterruptedException e) {
             throw new RuntimeException(e);
         }
+*/
 
         stepButton.setEnabled(true);
         playButton.setEnabled(true);
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(false);
+
+        String[] s1 = { "Step","Play" };
+        setEnabledMenuItems(true, s1);
+        String[] s2 = { "Rewind","Pause" };
+        setEnabledMenuItems(false, s2);
 
         jeliot.rewind();
         theatre.repaint();
@@ -900,15 +1090,23 @@ public class JeliotWindow {
             rewindButton.setEnabled(true);
             editButton.setEnabled(true);
 
+            String[] s1 = { "Edit","Rewind" };
+            setEnabledMenuItems(true, s1);
+            String[] s2 = { "Step","Play","Pause" };
+            setEnabledMenuItems(false, s2);
+
         } else {
 
-            editButton.setEnabled(false);
+            editButton.setEnabled(true);
             stepButton.setEnabled(false);
             playButton.setEnabled(false);
             pauseButton.setEnabled(false);
-            rewindButton.setEnabled(false);
-            speedSlider.setEnabled(false);
+            rewindButton.setEnabled(true);
 
+            String[] s1 = {"Edit","Rewind"};
+            setEnabledMenuItems(true, s1);
+            String[] s2 = { "Step","Play","Pause" };
+            setEnabledMenuItems(false, s2);
         }
     }
 

@@ -19,6 +19,7 @@ public class Interpreter {
 
     private boolean running = true;
     private boolean start = true;
+    private boolean invokingMethod = false;
 
     //Keeps track of current return value
     private boolean returned = false;
@@ -72,6 +73,10 @@ public class Interpreter {
 
     public boolean starting() {
         return start;
+    }
+
+    public boolean emptyScratch() {
+        return exprs.empty();
     }
 
     public void execute() {
@@ -704,6 +709,9 @@ public class Interpreter {
 
                         //Static Method Call
                         case Code.SMC: {
+
+                            invokingMethod = true;
+
                             if (currentMethodInvocation != null) {
                                    methodInvocation.push(currentMethodInvocation);
                             }
@@ -770,6 +778,7 @@ public class Interpreter {
 
                         //Method declaration
                         case Code.MD: {
+
                             //Make the location information for the location token
                             currentMethodInvocation[6] =
                                 ECodeUtilities.makeHighlight(tokenizer.nextToken());
@@ -814,6 +823,9 @@ public class Interpreter {
                             if (!methodInvocation.empty()) {
                                 currentMethodInvocation = (Object[]) methodInvocation.pop();
                             }
+
+                            invokingMethod = false;
+
                             break;
                         }
 
@@ -1165,11 +1177,21 @@ public class Interpreter {
 
                         //Opening and closing scopes
                         case Code.OUTPUT: {
+
+                            int expressionReference = Integer.parseInt(tokenizer.nextToken());
                             String value = tokenizer.nextToken();
                             String type = tokenizer.nextToken();
                             Highlight highlight = ECodeUtilities.makeHighlight(
                                                 tokenizer.nextToken());
 
+                            Value output = (Value) values.remove(new Integer(expressionReference));
+                            if (output == null) {
+                                output = new Value(value, type);
+                            }
+
+                            director.output(output, highlight);
+
+                            break;
                         }
 
                         //Opening and closing scopes
@@ -1202,6 +1224,7 @@ public class Interpreter {
 
                             director.showErrorMessage(new InterpreterError(message, h));
                             running = false;
+
                             break;
                         }
 
@@ -1217,6 +1240,12 @@ public class Interpreter {
             } else {
                 running = false;
             }
+
+            if (exprs.empty() && !invokingMethod) {
+                director.closeScratch();
+                director.openScratch();
+            }
+
         }
         director.closeScratch();
     }
