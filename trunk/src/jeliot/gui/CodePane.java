@@ -87,6 +87,7 @@ public class CodePane extends JComponent {
         Runnable updateAComponent = new Runnable() {
             public void run() {
                 area.requestFocus();
+                area.setCaretPosition(left);
                 area.select(left, right);
             }
         };

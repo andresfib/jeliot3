@@ -28,8 +28,6 @@
 
 package koala.dynamicjava.interpreter;
 
-import java.text.*;
-
 import koala.dynamicjava.interpreter.error.*;
 import koala.dynamicjava.interpreter.throwable.*;
 import koala.dynamicjava.tree.*;
@@ -143,14 +141,23 @@ public class InterpreterException extends ThrownException {
 
         super(e);
 
+        boolean sourceGot = false;
+
         Node n = e.getNode();
 
         if (n != null && n.getFilename() != null) {
             message = "<H2>Execution Error</H2><P><B>Line "+
             n.getBeginLine()+", Column "+n.getBeginColumn()+
             ":</B></P>";
+
+            sourceInformation = new SourceInformation(n.getFilename(),
+                                                      n.getBeginLine(),
+                                                      n.getBeginColumn());
+            sourceGot = true;
         } else {
+
             message = "<H2>Execution Error</H2>";
+
         }
 
         if (e instanceof CatchedExceptionError) {
@@ -171,6 +178,53 @@ public class InterpreterException extends ThrownException {
 
             message += "<P>" + m + "</P>";
 
+            if (!sourceGot) {
+
+                int line = 0;
+                int column = 0;
+                String file = "buffer";
+
+                index = m.toLowerCase().indexOf("line");
+                if (index > -1) {
+                    String message = m.substring(index + "line".length()).trim();
+                    int i = 1;
+                    while (true) {
+                        try {
+                            Integer.parseInt(message.substring(i-1,i));
+                            i++;
+                        } catch (NumberFormatException ex) {
+                            break;
+                        }
+                    }
+                    if (i > 1) {
+                        line = Integer.parseInt(message.substring(0,i-1));
+                    }
+                }
+
+                index = m.toLowerCase().indexOf("column");
+                if (index > -1) {
+                    String message = m.substring(index + "column".length()).trim();
+                    int numberEndIndex = message.indexOf(" ");
+                    int i = 1;
+                    while (true) {
+                        try {
+                            Integer.parseInt(message.substring(i-1,i));
+                            i++;
+                        } catch (NumberFormatException ex) {
+                            break;
+                        }
+                    }
+                    if (i > 1) {
+                        column = Integer.parseInt(message.substring(0,i-1));
+                    }
+                }
+
+                //System.out.println(message);
+                sourceInformation = new SourceInformation(file,
+                                                          line,
+                                                          column);
+            }
+
         } else if (e instanceof ThrownException) {
 
             String m = ((ThrownException)e).getException().toString();
@@ -189,6 +243,52 @@ public class InterpreterException extends ThrownException {
 
             message += "<P>" + m + "</P>";
 
+            if (!sourceGot) {
+
+                int line = 0;
+                int column = 0;
+                String file = "buffer";
+
+                index = m.toLowerCase().indexOf("line");
+                if (index > -1) {
+                    String message = m.substring(index + "line".length()).trim();
+                    int i = 1;
+                    while (true) {
+                        try {
+                            Integer.parseInt(message.substring(i-1,i));
+                            i++;
+                        } catch (NumberFormatException ex) {
+                            break;
+                        }
+                    }
+                    if (i > 1) {
+                        line = Integer.parseInt(message.substring(0,i-1));
+                    }
+                }
+
+                index = m.toLowerCase().indexOf("column");
+                if (index > -1) {
+                    String message = m.substring(index + "column".length()).trim();
+                    int numberEndIndex = message.indexOf(" ");
+                    int i = 1;
+                    while (true) {
+                        try {
+                            Integer.parseInt(message.substring(i-1,i));
+                            i++;
+                        } catch (NumberFormatException ex) {
+                            break;
+                        }
+                    }
+                    if (i > 1) {
+                        column = Integer.parseInt(message.substring(0,i-1));
+                    }
+                }
+
+                //System.out.println(message);
+                sourceInformation = new SourceInformation(file,
+                                                          line,
+                                                          column);
+            }
         } else {
 
             String m = e.getMessage();
@@ -206,6 +306,53 @@ public class InterpreterException extends ThrownException {
             }
 
             message += "<P>" + m + "</P>";
+
+            if (!sourceGot) {
+
+                int line = 0;
+                int column = 0;
+                String file = "buffer";
+
+                index = m.toLowerCase().indexOf("line");
+                if (index > -1) {
+                    String message = m.substring(index + "line".length()).trim();
+                    int i = 1;
+                    while (true) {
+                        try {
+                            Integer.parseInt(message.substring(i-1,i));
+                            i++;
+                        } catch (NumberFormatException ex) {
+                            break;
+                        }
+                    }
+                    if (i > 1) {
+                        line = Integer.parseInt(message.substring(0,i-1));
+                    }
+                }
+
+                index = m.toLowerCase().indexOf("column");
+                if (index > -1) {
+                    String message = m.substring(index + "column".length()).trim();
+                    int numberEndIndex = message.indexOf(" ");
+                    int i = 1;
+                    while (true) {
+                        try {
+                            Integer.parseInt(message.substring(i-1,i));
+                            i++;
+                        } catch (NumberFormatException ex) {
+                            break;
+                        }
+                    }
+                    if (i > 1) {
+                        column = Integer.parseInt(message.substring(0,i-1));
+                    }
+                }
+
+                //System.out.println(message);
+                sourceInformation = new SourceInformation(file,
+                                                          line,
+                                                          column);
+            }
         }
     }
 
