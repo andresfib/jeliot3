@@ -1457,6 +1457,37 @@ public abstract class MCodeInterpreter {
                                 value, type, highlight);
                         break;
                     }
+                
+                //Beginning of the Array Initializer
+                case Code.AIBEGIN:
+                    {
+                        long cells = Long.parseLong(tokenizer.nextToken());
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        
+                        handleCodeAIBEGIN(cells, highlight);
+                    }
+                
+                //Array Initializer's element
+                case Code.AIE:
+                    {
+                        String arrayReference = tokenizer.nextToken();
+                        long cellNumber = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
+                        String value = tokenizer.nextToken();
+                        String type = tokenizer.nextToken();
+                        long literal = Long.parseLong(tokenizer.nextToken());
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        
+                        handleCodeAIE(arrayReference, cellNumber, expressionReference, value, type, literal, highlight);
+                    }
+                
+                case Code.AI:
+                    {
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        
+                        handleCodeAI(highlight);
+                    }
+                
                 //Class information starts for a class
                 case Code.CLASS:
                     {
@@ -1555,6 +1586,27 @@ public abstract class MCodeInterpreter {
             endRunning();
         }
     }
+
+    /**
+     * @param cells
+     * @param highlight
+     */
+    protected abstract void handleCodeAIBEGIN(long cells, Highlight highlight);
+
+    /**
+     * @param cellNumber
+     * @param expressionReference
+     * @param value
+     * @param type
+     * @param literal
+     * @param highlight
+     */
+    protected abstract void handleCodeAIE(String arrayReference, long cellNumber, long expressionReference, String value, String type, long literal, Highlight highlight);
+
+    /**
+     * @param highlight
+     */
+    protected abstract void handleCodeAI(Highlight highlight);
 
     /**
      * @param expressionCounter
