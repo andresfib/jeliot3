@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<jnlp spec="1.0+"
+      codebase="http://cs.joensuu.fi/jeliot/javaws/"
+      href="jeliot.jnlp">
+  <information>
+    <title>Jeliot 3</title>
+    <vendor>University of Joensuu</vendor>
+    <description>Jeliot 3, the program animation tool</description>
+    <offline-allowed/>
+  </information>
+  <security>
+   <all-permissions/>
+  </security>
+  <resources>
+   <j2se version="1.4+"/>
+   <jar href="jeliot.jar"/>
+  </resources>
+   <application-desc main-class="jeliot.Il3JeliotPlugin"/>
+<!-- <application-desc main-class="jeliot.Jeliot"/> -->
+</jnlp>
