@@ -5,8 +5,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
-import jeliot.mcode.*;
+import jeliot.mcode.Code;
 
 /**
  * Object of this class contains information about a single Java class.
@@ -27,6 +30,11 @@ public class ClassInfo {
 	 *
 	 */
 	private Hashtable fields;
+	
+    /**
+	 *
+	 */
+	private List fieldNamesInDeclarationOrder;
     
     /**
 	 *
@@ -50,6 +58,7 @@ public class ClassInfo {
         this.name = name;
         this.methods = new Hashtable();
         this.fields = new Hashtable();
+        this.fieldNamesInDeclarationOrder = new LinkedList();
         this.constructors = new Hashtable();
     }
 
@@ -167,6 +176,7 @@ public class ClassInfo {
 	 */
 	public void declareField(String key, String info) {
         fields.put(key, info);
+        fieldNamesInDeclarationOrder.add(key);
     }
 
     /**
@@ -238,10 +248,13 @@ public class ClassInfo {
 
         //Firstly the fields
         Hashtable hf = ci.getFields();
-        Enumeration enum = hf.keys();
-
-        while (enum.hasMoreElements()) {
-            String name = (String) enum.nextElement();
+        //Enumeration enum = hf.keys();
+        ListIterator i = ci.getFieldNamesInDeclarationOrder().listIterator();
+        
+        //while (enum.hasMoreElements()) {
+        while (i.hasNext()) {
+            //String name = (String) enum.nextElement();
+            String name = (String) i.next();
             String info = (String) hf.get(name);
             if (name != null && info != null) {
                 declareField(name, info + Code.DELIM + "<E>");
@@ -250,7 +263,7 @@ public class ClassInfo {
 
         //Secondly the methods
         Hashtable hm = ci.getMethods();
-        enum = hm.keys();
+        Enumeration enum = hm.keys();
         while (enum.hasMoreElements()) {
             String name = (String) enum.nextElement();
             String info = (String) hm.get(name);
@@ -258,5 +271,18 @@ public class ClassInfo {
                 declareMethod(name, info + Code.DELIM + "<E>");
             }
         }
+    }
+    /**
+     * @return Returns the fieldNamesInDeclarationOrder.
+     */
+    public List getFieldNamesInDeclarationOrder() {
+        return fieldNamesInDeclarationOrder;
+    }
+    /**
+     * @param fieldNamesInDeclarationOrder The fieldNamesInDeclarationOrder to set.
+     */
+    public void setFieldNamesInDeclarationOrder(
+            List fieldNamesInDeclarationOrder) {
+        this.fieldNamesInDeclarationOrder = fieldNamesInDeclarationOrder;
     }
 }
