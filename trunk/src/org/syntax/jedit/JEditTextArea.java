@@ -2374,4 +2374,17 @@ public class JEditTextArea extends JComponent
 	    return scrollBarsInitialized;
 	}
 	
+	private boolean caretReallyVisible = true;
+	
+	/**
+	 * Returns true if the caret is visible, false otherwise.
+	 */
+	public final boolean getCaretReallyVisible() {
+		return caretReallyVisible;
+	}
+	
+	public final void setCaretReallyVisible(boolean enabled) {
+		this.caretReallyVisible = enabled;
+	}
+	
 }

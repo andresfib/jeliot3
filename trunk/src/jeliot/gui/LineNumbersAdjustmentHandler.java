@@ -14,12 +14,12 @@ import org.syntax.jedit.JEditTextArea;
  * @author nmyller
  */
 
-class LineNumbersAdjustHandler implements AdjustmentListener {
+class LineNumbersAdjustmentHandler implements AdjustmentListener {
 
     private JEditTextArea jedit;
     private LineNumbers ln;
     
-    public LineNumbersAdjustHandler(JEditTextArea jedit, LineNumbers ln) {
+    public LineNumbersAdjustmentHandler(JEditTextArea jedit, LineNumbers ln) {
         this.jedit = jedit;
         this.ln = ln;
     }

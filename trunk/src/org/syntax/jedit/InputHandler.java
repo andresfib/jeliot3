@@ -734,8 +734,23 @@ public abstract class InputHandler extends KeyAdapter
 				textArea.getToolkit().beep();
 				return;
 			}
-
-			textArea.setSelectedText("\n");
+			
+			//Jeliot 3 added auto-indention.
+			String currentLine = textArea.getLineText(textArea.getCaretLine());
+			int i = 0;
+			int n = currentLine.length();
+			String tabs = "";
+			while (i < n) { 
+			    if (currentLine.substring(i,i+1).equals("\t")) {
+			        tabs += "\t";
+			        i++;
+			    } else {
+			        break;
+			    }
+			}
+			//Addtion for Jeliot 3 ends.
+			
+			textArea.setSelectedText("\n" /* <Jeliot 3> */ + tabs /* </Jeliot 3> */);
 		}
 	}
 

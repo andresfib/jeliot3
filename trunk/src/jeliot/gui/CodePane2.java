@@ -77,7 +77,7 @@ public class CodePane2 extends JComponent {
                 Font.PLAIN,
                 Integer.parseInt(bundle.getString("font.code_editor.size"))), new Insets(1,0,0,0));
         area.addToLeft(ln);
-        LineNumbersAdjustHandler lnah = new LineNumbersAdjustHandler(area, ln);
+        LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(area, ln);
         area.addAdjustListernerForVertical(lnah);
         add("Center", area);
 		area.getPainter().setBackground(
@@ -101,11 +101,13 @@ public class CodePane2 extends JComponent {
 		*/
         lnah.adjustmentValueChanged(null);
 		area.setEditable(false);
-        area.revalidate();
+		area.setCaretReallyVisible(false);
+		area.getPainter().setBracketHighlightEnabled(false);
+        //area.revalidate();
 	}
 
 	/**
-	 * Sets the given program code String text into
+	 * Sets the given program code <code>String text</code> into
 	 * the JTextArea area.
 	 *
 	 * @param text The program code to be set in the
