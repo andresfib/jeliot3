@@ -50,6 +50,7 @@ public class HistoryView extends JComponent {
                 		c.highlightStatement((Highlight) highlights.get(number));
                 	}
                 	ic.repaint();
+                    validate();
                 }
             }
         });
@@ -76,7 +77,7 @@ public class HistoryView extends JComponent {
     	if (highlights.get(value) != null) {
     		c.highlightStatement((Highlight) highlights.get(value));
     	}
-    	ic.repaint();
 		repaint();
+        validate();
 	}
 }
