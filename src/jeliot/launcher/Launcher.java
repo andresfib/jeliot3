@@ -78,6 +78,8 @@ public class Launcher extends Thread {
 
     public void run() {
 
+        //System.out.println("Before Compilation");
+	
         if (compiling && this == Thread.currentThread()) {
             compile();
 
@@ -90,16 +92,23 @@ public class Launcher extends Thread {
             }
         }
 
+	try {
+		Thread.sleep(100);
+	} catch (InterruptedException e) {
+		throw new RuntimeException(e);	
+	}
         //System.out.println("After Compilation");
 
         while (running && this == Thread.currentThread()) {
 
+            //System.out.println("Before interpretation");
             interpreter.interpret(new BufferedReader(
                                       new StringReader(methodCall)),
                                       "buffer");
                                       // (stream,"buffer");
 
             ECodeUtilities.write(""+jeliot.ecode.Code.END);
+            //System.out.println("After interpretation");
 
             synchronized(this) {
                 try {
@@ -110,6 +119,11 @@ public class Launcher extends Thread {
             }
         }
 
+	try {
+		Thread.sleep(100);
+	} catch (InterruptedException e) {
+		throw new RuntimeException(e);	
+	}
         //System.out.println("After execution");
 
     }
