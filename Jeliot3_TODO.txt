@@ -11,6 +11,7 @@
 * Problems with memory when history view has a large images in store. (done, pictures saved on disk and users have a option to use history view or not)
 * Starting the animation with only a constructor (and not a method call) now works. setInside was peeking an empty stack. (done)
 * It is possible to choose a font of editor and code pane from Jeliot. (done)
+* Change properties to use property files and save some of the values to user default values in their home directory. (partially done, fonts should be saved.)
 
 ----- JELIOT 3 TODO-LIST for next version 4.X:------
 
