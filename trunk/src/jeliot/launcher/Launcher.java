@@ -156,7 +156,7 @@ public class Launcher extends Thread {
                     o = interpreter.interpret(new BufferedReader(new StringReader(methodCall)),
                             "buffer");
 
-                    if (!(o instanceof Throwable)) {
+                    if (!(o instanceof StoppingRequestedError)) {
                         /*
                          * TODO: If we are allowing open scope execution of statements
                          * we should not send Code.END statements.
@@ -165,7 +165,7 @@ public class Launcher extends Thread {
                     }
                     compiling = false;
                 }
-                if (!(o instanceof Throwable)) {
+                if (!(o instanceof StoppingRequestedError)) {
                     synchronized (this) {
                         try {
                             this.wait();
@@ -173,6 +173,9 @@ public class Launcher extends Thread {
                             throw new RuntimeException(e);
                         }
                     }
+                }
+                if (o instanceof StoppingRequestedError) {
+                    stopThread();
                 }
             }
         } catch (StoppingRequestedError e) {
