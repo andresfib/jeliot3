@@ -757,7 +757,7 @@ public class Interpreter {
 
                             int operator = MCodeUtilities
                                     .resolveUnOperator(token);
-                            director.animatePreIncDec(operator, var, result, h);
+                            director.animateIncDec(operator, var, result, h);
 
                         } else {
 
@@ -796,7 +796,7 @@ public class Interpreter {
                                 expressionReference));
 
                         int operator = MCodeUtilities.resolveUnOperator(token);
-                        director.animatePreIncDec(operator, var, result, h);
+                        director.animateIncDec(operator, var, result, h);
                         values.put(new Long(expressionCounter), result);
 
                         exprs.pop();
@@ -3411,7 +3411,7 @@ public class Interpreter {
 
         Variable var = (Variable) variables.remove(postIncDecInfo[1]);
 
-        director.animatePreIncDec(((Long) postIncDecInfo[0]).intValue(), var,
+        director.animateIncDec(((Long) postIncDecInfo[0]).intValue(), var,
                 ((Value) postIncDecInfo[2]), ((Highlight) postIncDecInfo[3]));
     }
 

@@ -373,9 +373,12 @@ public class Director {
         // If there is a second operand, remove the ellipsis and
         // replace them with the second operand.
         if (operand != null) {
-            // Get the operand's actor.
-            ValueActor operandAct = operand.getActor();
-
+            // Get the operand's actor. A new copy is needed because
+            // the value could have been changed because of post inc/dec.
+            ValueActor operandAct = factory.produceValueActor(operand);
+            operandAct.setLocation(operand.getActor().getRootLocation());
+            operand.setActor(operandAct);
+            
             // Remove the ellipsis and reserve its place for the second
             // operand.
             expr.cut();
@@ -1344,7 +1347,7 @@ public class Director {
      * @param result
      * @param h
      */
-    public void animatePreIncDec(int operator, Variable var, Value result, Highlight h) {
+    public void animateIncDec(int operator, Variable var, Value result, Highlight h) {
 
         highlight(h);
 
@@ -1352,10 +1355,11 @@ public class Director {
         //Value value = var.getValue();
         ValueActor resAct = factory.produceValueActor(result);
         ValueActor valAct = var.getActor().getValue();
+        //valAct.setLabel(result.getValue());
         //ValueActor valact = factory.produceValueActor(value);
         Actor opAct = factory.produceUnaOpActor(operator);
 
-        Point resLoc = varAct.reserve(valAct);
+        Point resLoc = varAct.reserve(resAct);
         Point opLoc = varAct.getRootLocation();
 
         if (varAct instanceof VariableInArrayActor) {
@@ -1379,7 +1383,7 @@ public class Director {
         rAct.setLight(Actor.NORMAL);
         rAct.setLocation(resAct.getRootLocation());
         val.setActor(rAct);
-        //var.assign(val);
+        var.assign(val);
         var.getActor().setValue(rAct);
 
         theatre.removeActor(resAct);
@@ -1390,6 +1394,8 @@ public class Director {
     }
 
     /**
+     * NOT CURRENTLY USED.
+     * All inc/dec operations are done with animateIncDec method
      * @param operator
      * @param var
      * @param resVal
@@ -1432,7 +1438,7 @@ public class Director {
         //value.setActor(valact);
         if (resVal != null) {
             resVal.setActor(resAct);
-            //var.assign(resval); //jeliot 3
+            var.assign(resVal); //jeliot 3
             var.getActor().setValue(resAct);
             currentScratch.registerCrap(resAct);
         }
