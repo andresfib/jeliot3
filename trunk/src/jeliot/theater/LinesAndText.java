@@ -19,7 +19,7 @@ public class LinesAndText extends Actor {
      * The resource bundle for theater package
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
-                                      "jeliot.theater.resources.properties",
+                                      "jeliot.theater.resources.messages",
                                       Locale.getDefault());
 
 //DOC: Document!                                      

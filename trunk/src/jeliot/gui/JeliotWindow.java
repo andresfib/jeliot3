@@ -73,6 +73,8 @@ public class JeliotWindow {
      */
     static private ResourceBundle bundle = ResourceBundle.getBundle(
             "jeliot.gui.resources.properties", Locale.getDefault());
+    static private ResourceBundle bundle2 = ResourceBundle.getBundle(
+            "jeliot.gui.resources.messages", Locale.getDefault());
 
     /**
      * The version information about Jeliot from name and version from the
@@ -253,7 +255,7 @@ public class JeliotWindow {
         JPanel bp = new JPanel();
         bp.setOpaque(false);
 
-        JButton ok = new JButton(bundle.getString("button.ok"));
+        JButton ok = new JButton(bundle2.getString("button.ok"));
         ok.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -409,15 +411,15 @@ public class JeliotWindow {
         //theaterScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //theaterScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         
-        this.tabbedPane.addTab(bundle.getString("tab.title.theater"), theaterScrollPane);
+        this.tabbedPane.addTab(bundle2.getString("tab.title.theater"), theaterScrollPane);
         this.tabbedPane.setMnemonicAt(0, KeyEvent.VK_T);
 
         if (!jeliot.isExperiment()) {
-            this.tabbedPane.addTab(bundle.getString("tab.title.call_tree"),
+            this.tabbedPane.addTab(bundle2.getString("tab.title.call_tree"),
                     callTree.getComponent());
             this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
         
-            this.tabbedPane.addTab("History",
+            this.tabbedPane.addTab(bundle2.getString("tab.title.history"),
                     hv);
             this.tabbedPane.setMnemonicAt(2, KeyEvent.VK_Y);        
         }
@@ -472,8 +474,8 @@ public class JeliotWindow {
 
             public void windowClosing(WindowEvent e) {
                 if (editor.isChanged()) {
-                    int n = JOptionPane.showConfirmDialog(frame, bundle
-                            .getString("quit.without.saving.message"), bundle
+                    int n = JOptionPane.showConfirmDialog(frame, bundle2
+                            .getString("quit.without.saving.message"), bundle2
                             .getString("quit.without.saving.title"),
                             JOptionPane.YES_NO_OPTION);
                     if (n == JOptionPane.YES_OPTION) {
@@ -534,7 +536,7 @@ public class JeliotWindow {
         //a group of JMenuItems
         JMenu programMenu = editor.makeProgramMenu();
 
-        menuItem = new JMenuItem(bundle.getString("menu.program.exit"));
+        menuItem = new JMenuItem(bundle2.getString("menu.program.exit"));
         menuItem.setMnemonic(KeyEvent.VK_X);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
                 ActionEvent.CTRL_MASK));
@@ -584,11 +586,11 @@ public class JeliotWindow {
      */
     private JMenu makeHelpMenu() {
 
-        JMenu menu = new JMenu(bundle.getString("menu.help"));
+        JMenu menu = new JMenu(bundle2.getString("menu.help"));
         menu.setMnemonic(KeyEvent.VK_H);
         JMenuItem menuItem;
 
-        menuItem = new JMenuItem(bundle.getString("menu.help.help"));
+        menuItem = new JMenuItem(bundle2.getString("menu.help.help"));
         menuItem.setMnemonic(KeyEvent.VK_H);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
         menuItem.addActionListener(new ActionListener() {
@@ -603,7 +605,7 @@ public class JeliotWindow {
         });
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle.getString("menu.help.about"));
+        menuItem = new JMenuItem(bundle2.getString("menu.help.about"));
         menuItem.setMnemonic(KeyEvent.VK_B);
         //        menuItem.setAccelerator(KeyStroke.getKeyStroke(
         //        KeyEvent.VK_M, ActionEvent.CTRL_MASK));
@@ -628,11 +630,11 @@ public class JeliotWindow {
      */
     private JMenu makeAnimationMenu() {
 
-        JMenu menu = new JMenu(bundle.getString("menu.animation"));
+        JMenu menu = new JMenu(bundle2.getString("menu.animation"));
         menu.setMnemonic(KeyEvent.VK_A);
         JMenuItem menuItem;
 
-        menuItem = new JMenuItem(bundle.getString("menu.animation.pause"));
+        menuItem = new JMenuItem(bundle2.getString("menu.animation.pause"));
         menuItem.setMnemonic(KeyEvent.VK_U);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U,
                 ActionEvent.CTRL_MASK));
@@ -644,7 +646,7 @@ public class JeliotWindow {
         });
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle.getString("menu.animation.play"));
+        menuItem = new JMenuItem(bundle2.getString("menu.animation.play"));
         menuItem.setMnemonic(KeyEvent.VK_P);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
                 ActionEvent.CTRL_MASK));
@@ -656,7 +658,7 @@ public class JeliotWindow {
         });
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle.getString("menu.animation.rewind"));
+        menuItem = new JMenuItem(bundle2.getString("menu.animation.rewind"));
         menuItem.setMnemonic(KeyEvent.VK_R);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
                 ActionEvent.CTRL_MASK));
@@ -668,7 +670,7 @@ public class JeliotWindow {
         });
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle.getString("menu.animation.step"));
+        menuItem = new JMenuItem(bundle2.getString("menu.animation.step"));
         menuItem.setMnemonic(KeyEvent.VK_S);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
         menuItem.addActionListener(new ActionListener() {
@@ -679,7 +681,7 @@ public class JeliotWindow {
         });
         menu.add(menuItem);
 
-        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(bundle
+        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(bundle2
                 .getString("menu.animation.pause_on_message"),
                 showMessagesInDialogs);
         cbmenuItem.setMnemonic(KeyEvent.VK_D);
@@ -693,7 +695,7 @@ public class JeliotWindow {
         });
         menu.add(cbmenuItem);
 
-        menuItem = new JMenuItem(bundle.getString("menu.animation.faster"));
+        menuItem = new JMenuItem(bundle2.getString("menu.animation.faster"));
         menuItem.setMnemonic(KeyEvent.VK_F);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS,
                 ActionEvent.CTRL_MASK));
@@ -705,7 +707,7 @@ public class JeliotWindow {
         });
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle.getString("menu.animation.slower"));
+        menuItem = new JMenuItem(bundle2.getString("menu.animation.slower"));
         menuItem.setMnemonic(KeyEvent.VK_L);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
                 ActionEvent.CTRL_MASK));
@@ -717,7 +719,7 @@ public class JeliotWindow {
         });
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(bundle.getString("menu.animation.run_until"));
+        menuItem = new JMenuItem(bundle2.getString("menu.animation.run_until"));
         menuItem.setMnemonic(KeyEvent.VK_T);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
                 ActionEvent.CTRL_MASK));
@@ -737,11 +739,11 @@ public class JeliotWindow {
      */
     private JMenu makeControlMenu() {
 
-        JMenu menu = new JMenu(bundle.getString("menu.control"));
+        JMenu menu = new JMenu(bundle2.getString("menu.control"));
         menu.setMnemonic(KeyEvent.VK_C);
         JMenuItem menuItem;
 
-        menuItem = new JMenuItem(bundle.getString("menu.control.edit"));
+        menuItem = new JMenuItem(bundle2.getString("menu.control.edit"));
         menuItem.setMnemonic(KeyEvent.VK_E);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
                 ActionEvent.CTRL_MASK));
@@ -755,7 +757,7 @@ public class JeliotWindow {
 
         animWidgets.addElement(menuItem);
 
-        menuItem = new JMenuItem(bundle.getString("menu.control.compile"));
+        menuItem = new JMenuItem(bundle2.getString("menu.control.compile"));
         menuItem.setMnemonic(KeyEvent.VK_M);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,
                 ActionEvent.CTRL_MASK));
@@ -769,7 +771,7 @@ public class JeliotWindow {
 
         editWidgets.addElement(menuItem);
 
-        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(bundle
+        final JCheckBoxMenuItem cbmenuItem = new JCheckBoxMenuItem(bundle2
                 .getString("menu.control.ask_for_method"),
                 false);
         cbmenuItem.setMnemonic(KeyEvent.VK_F);
@@ -815,9 +817,9 @@ public class JeliotWindow {
      */
     private JPanel makeControlPanel() {
 
-        editButton = makeControlButton(bundle.getString("button.edit"), bundle
+        editButton = makeControlButton(bundle2.getString("button.edit"), bundle
                 .getString("image.edit_icon"));
-        compileButton = makeControlButton(bundle.getString("button.compile"),
+        compileButton = makeControlButton(bundle2.getString("button.compile"),
                 bundle.getString("image.compile_icon"));
 
         editButton.setMnemonic(KeyEvent.VK_E);
@@ -858,16 +860,16 @@ public class JeliotWindow {
         // pauseButton = makeControlButton("Pause", "pauseicon.gif");
         // rewindButton = makeControlButton("Rewind", "rewindicon.gif");
 
-        stepButton = makeControlButton(bundle.getString("button.step"), bundle
+        stepButton = makeControlButton(bundle2.getString("button.step"), bundle
                 .getString("image.step_icon"));
         stepButton.setMnemonic(KeyEvent.VK_S);
-        playButton = makeControlButton(bundle.getString("button.play"), bundle
+        playButton = makeControlButton(bundle2.getString("button.play"), bundle
                 .getString("image.play_icon"));
         playButton.setMnemonic(KeyEvent.VK_P);
-        pauseButton = makeControlButton(bundle.getString("button.pause"),
+        pauseButton = makeControlButton(bundle2.getString("button.pause"),
                 bundle.getString("image.pause_icon"));
         pauseButton.setMnemonic(KeyEvent.VK_U);
-        rewindButton = makeControlButton(bundle.getString("button.rewind"),
+        rewindButton = makeControlButton(bundle2.getString("button.rewind"),
                 bundle.getString("image.rewind_icon"));
         rewindButton.setMnemonic(KeyEvent.VK_R);
 
@@ -939,12 +941,12 @@ public class JeliotWindow {
         c.gridwidth = 1;
         c.insets = new Insets(0, 0, 0, 0);
         c.anchor = GridBagConstraints.WEST;
-        JLabel label = new JLabel(bundle.getString("label.animation_speed1"));
+        JLabel label = new JLabel(bundle2.getString("label.animation_speed1"));
         pl.setConstraints(label, c);
         p.add(label);
 
         c.gridy = 2;
-        label = new JLabel(bundle.getString("label.animation_speed2"));
+        label = new JLabel(bundle2.getString("label.animation_speed2"));
         pl.setConstraints(label, c);
         p.add(label);
 
@@ -1085,7 +1087,7 @@ public class JeliotWindow {
                     methodCall = findMainMethodCall(programCode);
                     if (askForMethod) {
                         methodCall = ((methodCall != null) ? methodCall : null);
-                        String inputValue = JOptionPane.showInputDialog(bundle
+                        String inputValue = JOptionPane.showInputDialog(bundle2
                                 .getString("dialog.ask_for_method"), methodCall);
                         if (inputValue != null && !inputValue.trim().equals("")) {
                             methodCall = inputValue + ";";
@@ -1123,7 +1125,7 @@ public class JeliotWindow {
                     }).start();
 
                 } else {
-                    errorJEditorPane.setText(bundle.getString("main_method_not_found.exception"));
+                    errorJEditorPane.setText(bundle2.getString("main_method_not_found.exception"));
                     changeTheatrePane(errorViewer);
                     
                     enableWidgets(editWidgets.elements(), true);
@@ -1141,7 +1143,6 @@ public class JeliotWindow {
         } catch (Exception e) {
             editButton.doClick();
             e.printStackTrace();
-            System.err.println(e.getMessage());
         }
     }
 
@@ -1311,13 +1312,13 @@ public class JeliotWindow {
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(false);
 
-        String[] s1 = { bundle.getString("menu.control.edit")};
+        String[] s1 = { bundle2.getString("menu.control.edit")};
         setEnabledMenuItems(true, s1);
-        String[] s2 = { bundle.getString("menu.animation.step"),
-                bundle.getString("menu.animation.play"),
-                bundle.getString("menu.animation.rewind"),
-                bundle.getString("menu.animation.run_until"),
-                bundle.getString("menu.animation.pause")};
+        String[] s2 = { bundle2.getString("menu.animation.step"),
+                bundle2.getString("menu.animation.play"),
+                bundle2.getString("menu.animation.rewind"),
+                bundle2.getString("menu.animation.run_until"),
+                bundle2.getString("menu.animation.pause")};
         setEnabledMenuItems(false, s2);
 
         errorJEditorPane.setText(e);
@@ -1408,13 +1409,13 @@ public class JeliotWindow {
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
 
-        String[] s1 = { bundle.getString("menu.animation.pause")};
+        String[] s1 = { bundle2.getString("menu.animation.pause")};
         setEnabledMenuItems(true, s1);
-        String[] s2 = { bundle.getString("menu.animation.step"),
-                bundle.getString("menu.animation.play"),
-                bundle.getString("menu.animation.rewind"),
-                bundle.getString("menu.control.edit"),
-                bundle.getString("menu.animation.run_until")};
+        String[] s2 = { bundle2.getString("menu.animation.step"),
+                bundle2.getString("menu.animation.play"),
+                bundle2.getString("menu.animation.rewind"),
+                bundle2.getString("menu.control.edit"),
+                bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
 
         jeliot.step();
@@ -1434,13 +1435,13 @@ public class JeliotWindow {
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
 
-        String[] s1 = { bundle.getString("menu.animation.pause")};
+        String[] s1 = { bundle2.getString("menu.animation.pause")};
         setEnabledMenuItems(true, s1);
-        String[] s2 = { bundle.getString("menu.animation.step"),
-                bundle.getString("menu.animation.play"),
-                bundle.getString("menu.animation.rewind"),
-                bundle.getString("menu.control.edit"),
-                bundle.getString("menu.animation.run_until")};
+        String[] s2 = { bundle2.getString("menu.animation.step"),
+                bundle2.getString("menu.animation.play"),
+                bundle2.getString("menu.animation.rewind"),
+                bundle2.getString("menu.control.edit"),
+                bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
 
         jeliot.play();
@@ -1460,13 +1461,13 @@ public class JeliotWindow {
         rewindButton.setEnabled(true);
         editButton.setEnabled(true);
 
-        String[] s1 = { bundle.getString("menu.animation.pause")};
+        String[] s1 = { bundle2.getString("menu.animation.pause")};
         setEnabledMenuItems(false, s1);
-        String[] s2 = { bundle.getString("menu.animation.step"),
-                bundle.getString("menu.animation.play"),
-                bundle.getString("menu.animation.rewind"),
-                bundle.getString("menu.control.edit"),
-                bundle.getString("menu.animation.run_until")};
+        String[] s2 = { bundle2.getString("menu.animation.step"),
+                bundle2.getString("menu.animation.play"),
+                bundle2.getString("menu.animation.rewind"),
+                bundle2.getString("menu.control.edit"),
+                bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(true, s2);
 
         jeliot.pause();
@@ -1483,13 +1484,13 @@ public class JeliotWindow {
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
 
-        String[] s1 = { bundle.getString("menu.animation.pause")};
+        String[] s1 = { bundle2.getString("menu.animation.pause")};
         setEnabledMenuItems(true, s1);
-        String[] s2 = { bundle.getString("menu.animation.step"),
-                bundle.getString("menu.animation.play"),
-                bundle.getString("menu.animation.rewind"),
-                bundle.getString("menu.control.edit"),
-                bundle.getString("menu.animation.run_until")};
+        String[] s2 = { bundle2.getString("menu.animation.step"),
+                bundle2.getString("menu.animation.play"),
+                bundle2.getString("menu.animation.rewind"),
+                bundle2.getString("menu.control.edit"),
+                bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
     }
 
@@ -1504,13 +1505,13 @@ public class JeliotWindow {
         rewindButton.setEnabled(false);
         editButton.setEnabled(true);
 
-        String[] s1 = { bundle.getString("menu.control.edit")};
+        String[] s1 = { bundle2.getString("menu.control.edit")};
         setEnabledMenuItems(true, s1);
-        String[] s2 = { bundle.getString("menu.animation.step"),
-                bundle.getString("menu.animation.play"),
-                bundle.getString("menu.animation.rewind"),
-                bundle.getString("menu.animation.pause"),
-                bundle.getString("menu.animation.run_until")};
+        String[] s2 = { bundle2.getString("menu.animation.step"),
+                bundle2.getString("menu.animation.play"),
+                bundle2.getString("menu.animation.rewind"),
+                bundle2.getString("menu.animation.pause"),
+                bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(false, s2);
     }
 
@@ -1545,12 +1546,12 @@ public class JeliotWindow {
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(false);
 
-        String[] s1 = { bundle.getString("menu.animation.step"),
-                bundle.getString("menu.animation.play"),
-                bundle.getString("menu.animation.run_until")};
+        String[] s1 = { bundle2.getString("menu.animation.step"),
+                bundle2.getString("menu.animation.play"),
+                bundle2.getString("menu.animation.run_until")};
         setEnabledMenuItems(true, s1);
-        String[] s2 = { bundle.getString("menu.animation.rewind"),
-                bundle.getString("menu.animation.pause")};
+        String[] s2 = { bundle2.getString("menu.animation.rewind"),
+                bundle2.getString("menu.animation.pause")};
         setEnabledMenuItems(false, s2);
 
         jeliot.rewind();
@@ -1569,13 +1570,13 @@ public class JeliotWindow {
             rewindButton.setEnabled(true);
             editButton.setEnabled(true);
 
-            String[] s1 = { bundle.getString("menu.control.edit"),
-                    bundle.getString("menu.animation.rewind")};
+            String[] s1 = { bundle2.getString("menu.control.edit"),
+                    bundle2.getString("menu.animation.rewind")};
             setEnabledMenuItems(true, s1);
-            String[] s2 = { bundle.getString("menu.animation.step"),
-                    bundle.getString("menu.animation.play"),
-                    bundle.getString("menu.animation.run_until"),
-                    bundle.getString("menu.animation.pause")};
+            String[] s2 = { bundle2.getString("menu.animation.step"),
+                    bundle2.getString("menu.animation.play"),
+                    bundle2.getString("menu.animation.run_until"),
+                    bundle2.getString("menu.animation.pause")};
             setEnabledMenuItems(false, s2);
 
         } else {
@@ -1586,13 +1587,13 @@ public class JeliotWindow {
             pauseButton.setEnabled(false);
             rewindButton.setEnabled(false);
 
-            String[] s1 = { bundle.getString("menu.control.edit")};
+            String[] s1 = { bundle2.getString("menu.control.edit")};
             setEnabledMenuItems(true, s1);
-            String[] s2 = { bundle.getString("menu.animation.step"),
-                    bundle.getString("menu.animation.play"),
-                    bundle.getString("menu.animation.run_until"),
-                    bundle.getString("menu.animation.rewind"),
-                    bundle.getString("menu.animation.pause")};
+            String[] s2 = { bundle2.getString("menu.animation.step"),
+                    bundle2.getString("menu.animation.play"),
+                    bundle2.getString("menu.animation.run_until"),
+                    bundle2.getString("menu.animation.rewind"),
+                    bundle2.getString("menu.animation.pause")};
             setEnabledMenuItems(false, s2);
         }
     }
@@ -1621,7 +1622,7 @@ public class JeliotWindow {
      * Method is used to implement the run until feature.
      */
     public void runUntil() {
-        String inputValue = JOptionPane.showInputDialog(bundle
+        String inputValue = JOptionPane.showInputDialog(bundle2
                 .getString("dialog.run_until"), new Integer(0));
         int lineNumber = 0;
 

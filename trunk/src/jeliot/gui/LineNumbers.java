@@ -7,6 +7,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JComponent;
 
@@ -20,6 +22,12 @@ import javax.swing.JComponent;
  */
 public class LineNumbers extends JComponent {
 
+    /**
+     * The resource bundle for gui package
+     */
+    static private ResourceBundle bundle = ResourceBundle.getBundle(
+            "jeliot.gui.resources.properties", Locale.getDefault());
+    
     /**
      * The width of the component.
      */
@@ -47,11 +55,19 @@ public class LineNumbers extends JComponent {
 
     private int startLine = 0;
 
-    //TODO: add to resources
-    private Color normalColor = Color.BLACK;
-    private Color highlightColor = Color.RED;
-    private Color backGroundColor = new Color(204, 204, 204);
-    
+    private Color normalColor = new Color(
+			Integer
+			.decode(bundle.getString("color.line_numbers.normal"))
+			.intValue());
+    private Color highlightColor = new Color(
+			Integer
+			.decode(bundle.getString("color.line_numbers.highlight"))
+			.intValue());
+    private Color backGroundColor = new Color(
+			Integer
+			.decode(bundle.getString("color.line_numbers.background"))
+			.intValue());
+			
     /**
      * Highlights the line during drawing if
      * it is set to some line

@@ -94,11 +94,14 @@ public class Il3JeliotPlugin extends Jeliot {
 
         final Il3JeliotPlugin jeliot = new Il3JeliotPlugin(udir, experiment);
 
-        (new LoadJeliot()).start(new Runnable() {
+        (new LoadJeliot()).start(jeliot);
+        /*
+        		 new Runnable() {
             public void run() {
                 jeliot.run();
             }
         });
+        */
 
         if (args.length >= 1) {
             File file = new File(udir);

@@ -36,6 +36,12 @@ public class ActorFactory {
     static private ResourceBundle bundle = ResourceBundle.getBundle(
             "jeliot.theater.resources.properties", Locale.getDefault());
 
+    /**
+     * The resource bundle for theater package
+     */
+    static private ResourceBundle bundle2 = ResourceBundle.getBundle(
+            "jeliot.theater.resources.messages", Locale.getDefault());
+
     //  DOC: document!
     /**
      *  
@@ -996,7 +1002,7 @@ public class ActorFactory {
     /**
      *  
      */
-    private MessageFormat objectStageTitle = new MessageFormat(bundle
+    private MessageFormat objectStageTitle = new MessageFormat(bundle2
             .getString("title.object_stage"));
 
     /**
@@ -1030,7 +1036,7 @@ public class ActorFactory {
     /**
      *  
      */
-    private MessageFormat classTitle = new MessageFormat(bundle
+    private MessageFormat classTitle = new MessageFormat(bundle2
             .getString("title.class"));
 
     

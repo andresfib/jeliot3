@@ -407,6 +407,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             Value val = new Value(value, type);
             Variable var = new Variable(name, type);
             var.assign(val);
+            var.setFinal(Modifier.isFinal(modifiers));
             ca.declareVariable(var);
             var.setLocationInCode(MCodeUtilities.makeHighlight(h));
             director.declareClassVariable(ca, var, val);

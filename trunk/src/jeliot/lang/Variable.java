@@ -46,6 +46,11 @@ public class Variable {
 	 */
 	Highlight locationInCode = null;
 	
+	/**
+	 *
+	 */
+	boolean isFinal = false;
+	
     /**
 	 * 
 	 */
@@ -136,5 +141,13 @@ public class Variable {
      */
     public void setLocationInCode(Highlight locationInCode) {
         this.locationInCode = locationInCode;
+    }
+    
+    public void setFinal(boolean f) {
+    	this.isFinal = f;
+    }
+    
+    public boolean isFinal() {
+    	return isFinal;
     }
 }

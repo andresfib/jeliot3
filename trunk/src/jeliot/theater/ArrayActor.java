@@ -28,7 +28,7 @@ public class ArrayActor extends InstanceActor {
 	 */
 	static private ResourceBundle bundle =
 		ResourceBundle.getBundle(
-			"jeliot.theater.resources.properties",
+			"jeliot.theater.resources.messages",
 			Locale.getDefault());
 	//DOC: Document!
 

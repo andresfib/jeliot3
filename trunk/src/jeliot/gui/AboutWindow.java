@@ -28,7 +28,7 @@ public class AboutWindow extends JFrame implements HyperlinkListener {
 	 */
 	static private ResourceBundle bundle =
 		ResourceBundle.getBundle(
-			"jeliot.gui.resources.properties",
+			"jeliot.gui.resources.messages",
 			Locale.getDefault());
 
 	/**
