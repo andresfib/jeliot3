@@ -441,10 +441,12 @@ public class CodeEditor2 extends JComponent {
             if (filename != null && filename.equals("")) {
                 masterFrame.setTitle(title);
                 
+                MCodeUtilities.setFilename("untitled");
                 Tracker.writeToFile("File", "untitled", System.currentTimeMillis());
             } else {
                 masterFrame.setTitle(title + " - " + filename);
                 
+                MCodeUtilities.setFilename(filename);
                 Tracker.writeToFile("File", filename, System.currentTimeMillis());
             }
         }

@@ -218,47 +218,11 @@ public class Jeliot {
         this.methodCall = methodCall;
 
         compiled = false;
-
-        //recompile();
-
-        /*
-         this.ecode = null;
-         
-         if (launcher != null) {
-         launcher.stopThread();
-         synchronized(launcher){
-         launcher.notify();
-         }
-         launcher = null;
-         }
-         
-         launcher = new Launcher(new BufferedReader(
-         new StringReader(this.sourceCode)));
-         
-         launcher.setCompiling(true);
-         launcher.start();
-         launcher.setMethodCall(this.methodCall);
-         try {
-         Thread.sleep(500);
-         } catch (InterruptedException e) {
-         e.printStackTrace();
-         }
-         
-         launcher.setCompiling(false);
-         synchronized(launcher){
-         launcher.notify();
-         }
-         
-         ecode = launcher.getReader();
-         pr = launcher.getInputWriter();
-         
-         
-         compiled = true;
-         */
     }
 
     /**
-     * Should not be called directly!
+     * This method handles the compilation process and
+     * it should not be called directly!
      */
     public void compile() {
 
@@ -278,13 +242,8 @@ public class Jeliot {
             launcher.setMethodCall(this.methodCall);
 
             launcher.setCompiling(true);
-            //            launcher.setExecuting(true);
 
             launcher.start();
-
-            //             synchronized(launcher){
-            //                 launcher.notify();
-            //             }
 
             ecode = launcher.getReader();
             pr = launcher.getInputWriter();
@@ -298,13 +257,26 @@ public class Jeliot {
     }
 
     /**
-     * Can be called outside Jeliot to make Jeliot compile the given source code
+     * Can be called outside Jeliot to make Jeliot compile the source code
      * and call the method that is given. If null is provided standard main method
-     * is tried to be found and called.
+     * is tried to be found and called. If it is not found, error message is shown.
      * 
      * @param methodCall
      */
     public void compile(String methodCall) {
+        gui.tryToEnterAnimate(methodCall);
+    }
+    
+    /**
+     * Can be called outside Jeliot to make Jeliot compile the given source code
+     * and call the method that is given. If null is provided standard main method
+     * is tried to be found and called. If it is not found, error message is shown.
+     * 
+     * @param programCode Source code of the program
+     * @param methodCall Method call that is made first in the program
+     */
+    public void recompile(String programCode, String methodCall) {
+    	setProgram(programCode);
         gui.tryToEnterAnimate(methodCall);
     }
     
@@ -339,12 +311,6 @@ public class Jeliot {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        //find the main method
-        //Enumeration enum = program.getClasses();
-        //PClass c = (PClass)enum.nextElement();
-        //PMethod m = c.getMainMethod();
-        //director.setMainMethod(m);
 
         // create the main loop for visualization
         controller = new ThreadController(new Runnable() {
@@ -530,17 +496,7 @@ public class Jeliot {
         File f = new File(udir);
         Tracker.openFile(f);
         
-        //f = new File(f, "examples");
-        //prop.put("user.dir", f.toString());
-
         final Jeliot jeliot = (new LoadJeliot()).start(udir, experiment);
-        /*
-        new Runnable() {
-            public void run() {
-                jeliot.run();
-            }
-        });
-        */
         		
         if (args.length >=1) {
             File file = new File(udir);
@@ -572,10 +528,6 @@ public class Jeliot {
             Jeliot.noSystemExit = Boolean.valueOf(args[1]).booleanValue();
         }
         
-        //File f = new File(udir);
-        //f = new File(f, "examples");
-        //prop.put("user.dir", f.toString());
-
         boolean experiment = false;
         if (args.length >= 4) {
             experiment = Boolean.valueOf(args[3]).booleanValue();

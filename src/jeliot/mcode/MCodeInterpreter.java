@@ -1323,8 +1323,11 @@ public abstract class MCodeInterpreter {
                         if (tokenizer.countTokens() >= 4) {
                             value = tokenizer.nextToken();
                         }
-                        String type = tokenizer.nextToken();
-                        String breakLine = tokenizer.nextToken();
+                        String type = "";
+                        if (tokenizer.countTokens() >= 3) {
+                        	type = tokenizer.nextToken();
+                        }
+                        boolean breakLine = tokenizer.nextToken().equals("1") ? true : false;
                         Highlight highlight = MCodeUtilities
                                 .makeHighlight(tokenizer.nextToken());
 
@@ -1788,7 +1791,7 @@ public abstract class MCodeInterpreter {
      * @param highlight
      */
     protected abstract void handleCodeOUTPUT(long expressionReference,
-            String className, String methodName, String value, String type, String breakLine, Highlight highlight);
+            String className, String methodName, String value, String type, boolean breakLine, Highlight highlight);
 
     /**
      * @param statementName
