@@ -65,7 +65,7 @@ public class LoadJeliot {
         window.toFront();
         
         try {
-            Thread.sleep(1000);
+            //Thread.sleep(1000);
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     jeliot.run();
