@@ -1,6 +1,7 @@
 package jeliot.theatre;
 
 import java.awt.*;
+import java.lang.reflect.*;
 import jeliot.lang.*;
 
 import jeliot.ecode.*;
@@ -148,10 +149,11 @@ public class ActorFactory {
     }
 
     Stage produceStage(MethodFrame m) {
-         //the getVarCount method is changed to a constant for a while
-         //because it is not set properly in our situation.
-         //Actually it is not easy to know how many variables there are.
-        Stage stage = new Stage(m.getMethodName());//, 6);// m.getVarCount());
+        //the getVarCount method is changed to a constant for a while
+        //because it is not set properly in our situation.
+        //Actually it is not easy to know how many variables there are.
+        //This is handled in the Stage class.
+        Stage stage = new Stage(m.getMethodName());
         stage.setFont(stageFont);
         stage.calculateSize(typeValWidth[8] + 60,
                             valueHeight + 8 +
@@ -201,24 +203,51 @@ public class ActorFactory {
             ReferenceVariableActor refAct =
                     new ReferenceVariableActor();
 
-            refAct.setName(v.getName());
-            refAct.setFont(variableFont);
+            if (ECodeUtilities.isArray(type)) {
+                String ct =
+                       ECodeUtilities.resolveComponentType(type);
+
+                if (ECodeUtilities.isPrimitive(ct)) {
+                    int ti = ECodeUtilities.resolveType(ct);
+                    refAct.setBackground(varColor[ti]);
+                }
+
+                String resolvedType = ECodeUtilities.changeComponentTypeToPrintableForm(ct);
+                int dotIndex = resolvedType.lastIndexOf(".");
+                if (dotIndex > -1) {
+                    resolvedType = resolvedType.substring(dotIndex+1);
+                }
+
+                int dims = ECodeUtilities.getNumberOfDimensions(type);
+                String arrayString = "";
+                for (int i = 0; i < dims; i++) {
+                    arrayString += "[ ]";
+                }
+
+                refAct.setName(resolvedType + arrayString + " " + v.getName());
+
+            } else {
+
+                String resolvedType = type;
+                int dotIndex = resolvedType.lastIndexOf(".");
+                if (dotIndex > -1) {
+                    resolvedType = resolvedType.substring(dotIndex+1);
+                }
+                refAct.setName(resolvedType + " " + v.getName());
+                refAct.setBackground(varColor[typeInfo]);
+            }
+
             refAct.setForeground(Color.black);
             refAct.setInsets(variableInsets);
-            refAct.setBackground(varColor[typeInfo]);
-            refAct.setValueDimension(6, valueHeight);
-            if (ECodeUtilities.isArray(type)) {
-                //Here is a problem!!!
-
-//                 String ct = v.getComponentType();
-//                 if (ECodeUtilities.isPrimitive(ct)) {
-//                     int ti = ECodeUtilities.resolveType(ct);
-//                     refAct.setBackground(varColor[ti]);
-//                 }
-            }
+            refAct.setFont(variableFont);
+            refAct.setValueDimension(6 + 6, valueHeight);
             refAct.calculateSize();
             refAct.setShadowImage(shadowImage);
-
+            ReferenceActor ra = new ReferenceActor();
+            ra.setBackground(refAct.getBackground());
+            ra.setShadowImage(shadowImage);
+            ra.calculateSize();
+            refAct.setValue(ra);
             actor = refAct;
         }
 
@@ -227,19 +256,20 @@ public class ActorFactory {
 
     public ValueActor produceValueActor(Value val) {
 
-        ValueActor actor = new ValueActor();
         String type = val.getType();
         int typeInfo = ECodeUtilities.resolveType(type);
 
         //System.out.println(type);
-
-        if (typeInfo == ECodeUtilities.BOOLEAN) {
-            boolean b = Boolean.getBoolean(val.getValue());
-            Color tcol = b ? trueColor : falseColor;
-            actor.setForeground(tcol);
-        }
-
         if (ECodeUtilities.isPrimitive(type)) {
+
+            ValueActor actor = new ValueActor();
+
+            if (typeInfo == ECodeUtilities.BOOLEAN) {
+                boolean b = Boolean.getBoolean(val.getValue());
+                Color tcol = b ? trueColor : falseColor;
+                actor.setForeground(tcol);
+            }
+
             actor.setBackground(valColor[typeInfo]);
             String label = val.getValue();
 
@@ -264,10 +294,62 @@ public class ActorFactory {
             actor.calculateSize();
 
             return actor;
+
+        } else {
+            ReferenceActor actor = null;
+            if (val instanceof jeliot.lang.Reference) {
+                actor = produceReferenceActor((jeliot.lang.Reference) val);
+            } else if (val.getActor() instanceof jeliot.theatre.ReferenceActor) {
+                actor = produceReferenceActor((ReferenceActor) val.getActor());
+            } else {
+                actor = new ReferenceActor();
+                actor.setBackground(valColor[typeInfo]);
+                actor.setShadowImage(shadowImage);
+                actor.calculateSize();
+            }
+            actor.setForeground(Color.black);
+
+            return actor;
         }
 
-        return null;
+    }
 
+    public ReferenceActor produceReferenceActor(jeliot.lang.Reference rf) {
+        Instance inst = rf.getInstance();
+        ReferenceActor actor = null;
+        int typeInfo = ECodeUtilities.resolveType("null");
+
+        if (inst != null) {
+            typeInfo = ECodeUtilities.resolveType(inst.getType());
+            actor = new ReferenceActor(inst.getActor());
+        } else if (rf.getActor() instanceof ReferenceActor) {
+            ReferenceActor rfa = (ReferenceActor) rf.getActor();
+            typeInfo = ECodeUtilities.resolveType(rf.getType());
+            actor = new ReferenceActor(rfa.getInstanceActor());
+        } else {
+            actor = new ReferenceActor();
+        }
+
+        actor.setBackground(valColor[typeInfo]);
+        actor.setShadowImage(shadowImage);
+        actor.calculateSize();
+        actor.setForeground(Color.black);
+
+        return actor;
+    }
+
+    public ReferenceActor produceReferenceActor(ReferenceActor cloneActor) {
+
+        ReferenceActor actor = new ReferenceActor(cloneActor.getInstanceActor());
+        actor.setBackground(cloneActor.getBackground());
+        actor.setShadowImage(shadowImage);
+        Point p = cloneActor.getLocation();
+        actor.setLocation(new Point(p.x, p.y));
+        actor.setParent(cloneActor.getParent());
+        actor.calculateSize();
+        actor.setForeground(Color.black);
+
+        return actor;
     }
 
     public ValueActor produceValueActor(ValueActor cloneActor) {
@@ -278,7 +360,9 @@ public class ActorFactory {
         actor.setLabel(cloneActor.getLabel());
         actor.setShadowImage(shadowImage);
         actor.calculateSize();
-
+        Point p = cloneActor.getLocation();
+        actor.setLocation(new Point(p.x, p.y));
+        actor.setParent(cloneActor.getParent());
         return actor;
     }
 
@@ -402,33 +486,68 @@ public class ActorFactory {
     public Image produceImage(String iname) {
         return iLoad.getLogicalImage(iname);
     }
-/*
-    public ArrayActor produceArrayActor(ArrayInstance array) {
-        int n = array.length();
-        ValueActor[] valueActors = new ValueActor[n];
-        for (int i = 0; i < n; ++i) {
-            Value value = array.getVariableAt(i).getValue();
-            valueActors[i] = produceValueActor(value);
-            value.setActor(valueActors[i]);
-        }
-        ArrayActor aactor = new ArrayActor(valueActors);
-        Type ctype = ((ArrayType)array.getType()).getComponentType();
-        if (ctype instanceof PrimitiveType) {
-            int index = ((PrimitiveType)ctype).getIndex();
-            aactor.setFont(indexFont);
-            aactor.setBackground(varColor[index]);
-            aactor.setValueColor(valColor[index]);
-            aactor.calculateSize(typeValWidth[index], valueHeight);
-        }
-        else return null;
 
-        for (int i = 0; i < n; ++i) {
-            array.getVariableAt(i).setActor(
-                    aactor.getVariableActor(i));
+    public ArrayActor produceArrayActor(ArrayInstance array) {
+
+        int[] dims = array.getDimensions();
+
+        Object valueActors = Array.newInstance(
+                                (new ValueActor()).getClass(),
+                                dims);
+
+        int n = dims.length;
+        int[] index = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            index[i] = 0;
         }
+
+        int k = 0;
+        do {
+            for (int i = 0; i < dims[n-1]; i++) {
+                index[n-1] = i;
+                Value value = array.getVariableAt(index).getValue();
+                ValueActor va = produceValueActor(value);
+                value.setActor(va);
+                ArrayUtilities.setObjectAt(valueActors, index, va);
+
+                //Testing
+                //System.out.println(""+k);
+                //k++;
+            }
+        } while (ArrayUtilities.nextIndex(index, dims));
+
+        ArrayActor aactor = new ArrayActor(valueActors, dims);
+
+        String ctype = array.getComponentType();
+        int typeInfo = ECodeUtilities.resolveType(ctype);
+
+        if (ECodeUtilities.isPrimitive(ctype)) {
+            aactor.setFont(indexFont);
+            aactor.setBackground(varColor[typeInfo]);
+            aactor.setValueColor(valColor[typeInfo]);
+            aactor.calculateSize(typeValWidth[typeInfo], valueHeight);
+        } else {
+            //If array's component type is reference type
+            //is not implemented.
+            return null;
+        }
+
+        for (int i = 0; i < n; i++) {
+            index[i] = 0;
+        }
+
+        do {
+            for (int i = 0; i < dims[n-1]; i++) {
+                index[n-1] = i;
+                VariableActor va = aactor.getVariableActor(index);
+                va.setValueDimension(typeValWidth[typeInfo], valueHeight);
+                array.getVariableAt(index).setActor(va);
+            }
+        } while (ArrayUtilities.nextIndex(index, dims));
+
         aactor.setShadow(6);
         return aactor;
     }
-*/
 }
 

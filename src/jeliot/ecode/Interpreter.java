@@ -32,6 +32,7 @@ public class Interpreter {
     private Stack exprs = new Stack();
     private Hashtable values = new Hashtable();
     private Hashtable variables = new Hashtable();
+    private Hashtable instances = new Hashtable();
     private Stack methodInvocation = new Stack();
 
     private Hashtable postIncsDecs = new Hashtable();
@@ -74,6 +75,7 @@ public class Interpreter {
         Value returnValue = null;
         Actor ReturnActor= null;
         postIncsDecs = new Hashtable();
+        instances = new Hashtable();
     }
 
     public boolean starting() {
@@ -178,18 +180,37 @@ public class Interpreter {
 
                             Variable toVariable = (Variable) variables.remove(new Integer(toExpression));
                             Value fromValue = (Value) values.remove(new Integer(fromExpression));
-                            Value casted = new Value(value, type);
-                            Value expressionValue = new Value(value, type);
+                            Value casted = null;
+                            Value expressionValue = null;
+                            if (ECodeUtilities.isPrimitive(type) || type.equals("null")) {
+                                casted = new Value(value, type);
+                                expressionValue = new Value(value, type);
 
-                            if (!casted.getType().equals(fromValue.getType())) {
-                                director.animateCastExpression(fromValue, casted);
-                                fromValue.setActor(casted.getActor());
+                                if (!casted.getType().equals(fromValue.getType()) &&
+                                    ECodeUtilities.resolveType(casted.getType()) !=
+                                    ECodeUtilities.resolveType(fromValue.getType())) {
+                                    director.animateCastExpression(fromValue, casted);
+                                    fromValue.setActor(casted.getActor());
+                                }
+
+                            } else {
+                                Instance inst =
+                                 (Instance) instances.get(
+                                        ECodeUtilities.getHashCode(value));
+                                if (inst != null) {
+                                    casted = new Reference(inst);
+                                    expressionValue = new Reference(inst);
+                                } else {
+                                    casted = new Reference();
+                                    expressionValue = new Reference();
+                                }
                             }
+
 
                             director.animateAssignment(toVariable, fromValue, casted, expressionValue, h);
                             toVariable.assign(casted);
 
-//                          values.put(new Integer(expressionCounter), expressionValue);
+                            values.put(new Integer(expressionCounter), expressionValue);
 
                             Object[] postIncDec = (Object[]) postIncsDecs.remove(new Integer(fromExpression));
 
@@ -681,13 +702,34 @@ public class Interpreter {
                                                 tokenizer.nextToken());
 
                             Variable var = director.declareVariable(variableName, type, highlight);
-                            Value casted = new Value(value, type);
+
+                            Value casted = null;
+
+                            if (ECodeUtilities.isPrimitive(type)) {
+                                casted = new Value(value, type);
+                            } else {
+                                if (value.equals("null")) {
+                                    casted = new Reference();
+                                } else {
+                                    Instance inst = (Instance) instances.get(
+                                                    ECodeUtilities.getHashCode(value));
+
+                                    if (inst != null) {
+                                        casted = new Reference(inst);
+                                    } else {
+                                        casted = new Reference();
+                                    }
+                                }
+                                casted.setActor(var.getActor().getValue());
+                            }
 
                             if (initializerExpression > 0) {
+
                                 Value val = (Value) values.remove(new Integer(initializerExpression));
                                 director.animateAssignment(var, val, casted, null, highlight);
 
-                                Object[] postIncDec = (Object[]) postIncsDecs.remove(new Integer(initializerExpression));
+                                Object[] postIncDec =
+                                    (Object[]) postIncsDecs.remove(new Integer(initializerExpression));
 
                                 if (postIncDec != null) {
                                     doPostIncDec(postIncDec);
@@ -757,9 +799,25 @@ public class Interpreter {
                                 expressionTokenizer.nextToken());
                             }
 
-                            Value val = new Value(value, type);
-                            ValueActor va = var.getActor().getValue();
-                            val.setActor(va);
+                            Value val = null;
+                            if (ECodeUtilities.isPrimitive(type)) {
+                                val = new Value(value, type);
+                                ValueActor va = var.getActor().getValue();
+                                val.setActor(va);
+                            } else {
+                                if (value.equals("null")) {
+                                    val = new Reference();
+                                } else {
+                                    Instance inst = (Instance) instances.get(
+                                                ECodeUtilities.getHashCode(value));
+                                    if (inst != null) {
+                                        val = new Reference(inst);
+                                    } else {
+                                        val = new Reference();
+                                    }
+                                }
+                                val.setActor(var.getActor().getValue());
+                            }
 
                             /**
                             * Do different kind of things depending on
@@ -834,7 +892,7 @@ public class Interpreter {
                             } else {
 
                                 values.put(new Integer(expressionCounter), val);
-                                //variables.put(new Integer(expressionCounter), var);
+                                variables.put(new Integer(expressionCounter), var);
 
                             }
 
@@ -1158,7 +1216,7 @@ public class Interpreter {
                                 rv.setActor(va);
 
                                 handleExpression(rv, returnExpressionCounter);
-                			}
+                            }
                             returned = false;
 
 /*
@@ -1637,6 +1695,275 @@ public class Interpreter {
                             break;
                         }
 
+                        //Array Allocation
+                        case Code.AA: {
+                            int expressionReference =
+                                        Integer.parseInt(tokenizer.nextToken());
+
+                            String hashCode = tokenizer.nextToken();
+                            String compType = tokenizer.nextToken();
+                            int dims = Integer.parseInt(tokenizer.nextToken());
+
+                            //References of the dimension values
+                            String dimensionReferences = tokenizer.nextToken();
+                            StringTokenizer st =
+                                  new StringTokenizer(dimensionReferences, ",");
+
+                            int [] dimensionReference = new int[dims];
+
+                            for (int i = 0; st.hasMoreTokens(); i++) {
+                                dimensionReference[i] =
+                                    Integer.parseInt(st.nextToken());
+                            }
+
+                            //int values of the dimension sizes
+                            String dimensionSizes = tokenizer.nextToken();
+                            st = new StringTokenizer(dimensionSizes, ",");
+                            int [] dimensionSize = new int[dims];
+
+                            for (int i = 0; st.hasMoreTokens(); i++) {
+                                dimensionSize[i] =
+                                    Integer.parseInt(st.nextToken());
+                            }
+
+                            Highlight h = null;
+                            if (tokenizer.hasMoreElements()) {
+                                h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+                            }
+
+                            Value[] dimensionValues = new Value[dims];
+
+                            for (int i = 0; i < dims; i++) {
+                                dimensionValues[i] = (Value) values.remove(
+                                            new Integer(dimensionReference[i]));
+
+                            }
+
+                            ArrayInstance ai = new ArrayInstance(hashCode,
+                                                                 compType,
+                                                                 dimensionSize);
+
+                            Reference ref = new Reference(ai);
+
+                            director.showArrayCreation(ai, ref, dimensionValues,
+                                              expressionReference, h);
+
+                            instances.put(hashCode, ai);
+
+                            values.put(new Integer(expressionReference), ref);
+
+                            break;
+                        }
+
+                        //Array Access
+                        case Code.AAC: {
+
+                            int expressionCounter =
+                                Integer.parseInt(tokenizer.nextToken());
+
+                            int expressionReference =
+                                Integer.parseInt(tokenizer.nextToken());
+
+                            int dims =
+                                Integer.parseInt(tokenizer.nextToken());
+
+                            String cellNumberReferences = tokenizer.nextToken();
+                            StringTokenizer st =
+                                  new StringTokenizer(cellNumberReferences, ",");
+
+                            int [] cellNumberReference = new int[dims];
+
+                            for (int i = 0; st.hasMoreTokens(); i++) {
+                                cellNumberReference[i] =
+                                    Integer.parseInt(st.nextToken());
+                            }
+
+                            //int values of the dimension sizes
+                            String cellNumbers = tokenizer.nextToken();
+                            st = new StringTokenizer(cellNumbers, ",");
+                            int [] cellNumber = new int[dims];
+
+                            for (int i = 0; st.hasMoreTokens(); i++) {
+                                cellNumber[i] =
+                                    Integer.parseInt(st.nextToken());
+                            }
+
+                            String value = null;
+
+                            if (tokenizer.countTokens() >= 3) {
+                                value = tokenizer.nextToken();
+                            } else {
+                                value = "";
+                            }
+
+                            String type = tokenizer.nextToken();
+
+                            Highlight h = null;
+                            if (tokenizer.hasMoreElements()) {
+                                h = ECodeUtilities.makeHighlight(tokenizer.nextToken());
+                            }
+
+                            //Finding the VariableInArray
+                            Variable variable = (Variable) variables.remove(new Integer(expressionReference));
+                            Reference varRef = (Reference) variable.getValue();
+                            ArrayInstance ainst = (ArrayInstance) varRef.getInstance();
+                            VariableInArray var = ainst.getVariableAt(cellNumber);
+
+                            //Getting the right Values that point to the cell in the array
+                            Value[] cellNumberValues = new Value[dims];
+                            for (int i = 0; i < dims; i++) {
+                                cellNumberValues[i] = (Value) values.remove(
+                                            new Integer(cellNumberReference[i]));
+
+                            }
+
+                            //Actual value in the array in pointed cell
+                            Value val = null;
+                            if (ECodeUtilities.isPrimitive(type)) {
+                                val = new Value(value, type);
+                            } else {
+                                if (value.equals("null")) {
+                                    val = new Reference();
+                                } else {
+                                    Instance inst = (Instance) instances.get(
+                                                ECodeUtilities.getHashCode(value));
+                                    if (inst != null) {
+                                        val = new Reference(inst);
+                                    } else {
+                                        val = new Reference();
+                                    }
+                                }
+                            }
+
+                            director.showArrayAccess(var,
+                                                     cellNumberValues,
+                                                     val, h);
+
+                            exprs.pop();
+
+                            //command that waits for this expression
+                            int command = -1;
+                            int oper = -1;
+                            int size = commands.size();
+
+                            //We find the command
+                            for (int i = size - 1; i >= 0; i--) {
+                                StringTokenizer commandTokenizer = new StringTokenizer(
+                                                (String) commands.elementAt(i),
+                                                Code.DELIM);
+                                int comm = Integer.parseInt(commandTokenizer.nextToken());
+                                int cid = Integer.parseInt(commandTokenizer.nextToken());
+
+                                if (expressionCounter == cid) {
+                                    command = comm;
+                                    commands.removeElementAt(i);
+                                    break;
+                                }
+                            }
+
+                            /**
+                            * Look from the expression stack
+                            * what expression should be shown next
+                            */
+                            expressionReference = 0;
+                            Highlight highlight = null;
+                            if (!exprs.empty()) {
+                                StringTokenizer expressionTokenizer = new StringTokenizer(
+                                                                     (String) exprs.peek(),
+                                                                      Code.DELIM);
+
+                                oper = Integer.parseInt(expressionTokenizer.nextToken());
+
+                                expressionReference = Integer.parseInt(
+                                                        expressionTokenizer.nextToken());
+
+                                //Make the location information for the location token
+                                highlight = ECodeUtilities.makeHighlight(
+                                expressionTokenizer.nextToken());
+                            }
+
+
+                            /**
+                            * Do different kind of things depending on
+                            * in what expression the variable is used.
+                            */
+
+                            //If operator is assignment we just store the value
+                            if (oper == Code.A) {
+
+                                if (command == Code.TO) {
+
+                                    variables.put(new Integer(expressionCounter), var);
+
+                                } else {
+
+                                    values.put(new Integer(expressionCounter), val);
+                                }
+
+                            //If oper is other binary operator we will show it
+                            //on the screen with operator
+                            } else if (ECodeUtilities.isBinary(oper)) {
+
+                                int operator = ECodeUtilities.resolveBinOperator(oper);
+
+                                if (command == Code.LEFT) {
+
+                                    director.beginBinaryExpression(val, operator,
+                                                expressionReference, highlight);
+
+                                } else if (command == Code.RIGHT) {
+
+                                    ExpressionActor ea = (ExpressionActor)
+                                        director.getCurrentScratch().findActor(expressionReference);
+                                    if (ea != null) {
+
+                                        director.rightBinaryExpression(val, ea, highlight);
+
+                                    } else {
+                                        values.put(new Integer(expressionCounter), val);
+                                    }
+                                } else {
+                                    values.put(new Integer(expressionCounter), val);
+                                }
+
+                            //If oper is a unary operator we will show it
+                            //on the screen with operator
+                            } else if (ECodeUtilities.isUnary(oper)) {
+
+                                if (oper == Code.PRIE ||
+                                    oper == Code.PRDE) {
+
+                                        variables.put(new Integer(expressionCounter), var);
+
+                                } else if (oper == Code.PIE  ||
+                                           oper == Code.PDE) {
+
+                                        variables.put(new Integer(expressionCounter), var);
+                                        values.put(new Integer(expressionReference), val);
+
+
+                                } else {
+
+                                    values.put(new Integer(expressionCounter), val);
+                                    int operator = ECodeUtilities.resolveUnOperator(oper);
+                                    if (command == Code.RIGHT) {
+                                        director.beginUnaryExpression(operator, val,
+                                                        expressionReference, highlight);
+                                    }
+                                }
+
+                            //If it is something else we will store it for later use.
+                            } else {
+
+                                values.put(new Integer(expressionCounter), val);
+                                variables.put(new Integer(expressionCounter), var);
+
+                            }
+
+
+                            break;
+                        }
+
                         case Code.ERROR: {
 
                             String message = tokenizer.nextToken();
@@ -1650,8 +1977,8 @@ public class Interpreter {
 
                         //There is an error if the execution comes here.
                         default: {
-                            System.out.println("Error! The feature not yet implemented or " +
-                                               "there is an error on the other side of the interface.");
+                            System.out.println("Error! The feature is not yet implemented or " +
+                                               "there is an error on the other side of the ecode interface.");
                             break;
                         }
                     }

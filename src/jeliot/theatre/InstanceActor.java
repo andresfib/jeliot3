@@ -15,7 +15,15 @@ public class InstanceActor extends Actor implements ActorContainer {
     public void addReference(ReferenceActor ref) {
         references.addElement(ref);
     }
-    
+
+    public void removeReference(ReferenceActor ref) {
+        references.removeElement(ref);
+    }
+
+    public int getNumberOfReferences() {
+        return references.size();
+    }
+
     public void setLocation(int x, int y) {
         super.setLocation(x, y);
         Enumeration enum = references.elements();
@@ -24,8 +32,8 @@ public class InstanceActor extends Actor implements ActorContainer {
             actor.calculateBends();
         }
     }
-    
+
     public void removeActor(Actor actor) { }
-    
+
 
 }
