@@ -98,7 +98,9 @@ public class CastActor extends Actor {
             
             public void animate(double pulse) { 
                 Point p = getRootLocation();
-                id = Tracker.writeToFile("Cast", p.x, p.y, CastActor.this.getWidth(), CastActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                //TRACKER
+                //id = Tracker.writeToFile("Cast", p.x, p.y, CastActor.this.getWidth(), CastActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                
                 h += plus * pulse;
                 line = (int)h;
                 this.repaint();

@@ -255,7 +255,7 @@ public class ObjectStage extends InstanceActor {
             double h;
             double plus;
             int full;
-            int id = -1;
+            long id = -1;
             public void init() {
                 size = new Dimension(getWidth(), nheight + margin * 3);
                 h = size.height;
@@ -272,7 +272,7 @@ public class ObjectStage extends InstanceActor {
             public void animate(double pulse) {
                 Point p = getRootLocation();
                 id = Tracker.writeToFile("Appear", p.x, p.y, ObjectStage.this.getWidth(), ObjectStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
-                
+                ObjectStage.this.setActorID(id);
                 h += plus * pulse;
                 size.height = (int) h;
                 setSize(size);
@@ -302,7 +302,7 @@ public class ObjectStage extends InstanceActor {
             double h;
             double plus;
             int full;
-            int id = -1;
+            long id = -1;
             
             public void init() {
                 size = getSize();

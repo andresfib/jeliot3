@@ -80,7 +80,7 @@ public class IndexActor extends Actor {
             double yp = startPoint.y;
             double l = 0;
             double step;
-            int id = -1;
+            long id = -1;
             public void init() {
                 this.addActor(IndexActor.this);
                 step = len / getDuration();

@@ -69,7 +69,8 @@ public class AnimatingActor extends Actor {
 
             public void finish() {
                 Point p = getRootLocation();
-                id = Tracker.writeToFile("ChangeImage", p.x, p.y, chim.getWidth(null), chim.getHeight(null), TrackerClock.currentTimeMillis(), id);
+//              //TRACKER
+                //id = Tracker.writeToFile("ChangeImage", p.x, p.y, chim.getWidth(null), chim.getHeight(null), TrackerClock.currentTimeMillis(), id);
                 setImage(chim);
             }
         };

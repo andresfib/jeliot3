@@ -322,8 +322,9 @@ public class MethodStage extends Actor implements ActorContainer {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                id = Tracker.writeToFile("Appear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
-                
+                //TRACKER
+                //id = Tracker.writeToFile("Appear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                MethodStage.this.setActorID(id);
                 h += plus * pulse;
                 size.height = (int)h;
                 setSize(size);
@@ -367,7 +368,8 @@ public class MethodStage extends Actor implements ActorContainer {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                id = Tracker.writeToFile("Disappear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                //TRACKER
+                //id = Tracker.writeToFile("Disappear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                 
                 h += plus * pulse;
                 size.height = (int)h;
@@ -410,7 +412,8 @@ public class MethodStage extends Actor implements ActorContainer {
 
                 public void animate(double pulse) {
                     Point p = getRootLocation();
-                    id = Tracker.writeToFile("Extend", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                    //TRACKER
+                    //id = Tracker.writeToFile("Extend", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                     
                     h += plus * pulse;
                     size.height = (int)h;
