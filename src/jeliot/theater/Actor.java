@@ -160,7 +160,7 @@ public abstract class Actor implements Cloneable {
     private String description;
     
     /**
-     * ID of an actor, used for tracking porpuses
+     * ID of an actor, used for tracking purposes
      * @see tracker
      */
     private long actorID;
@@ -524,7 +524,7 @@ public abstract class Actor implements Cloneable {
 
             double tracel = traceSpace;
 
-            int id = -1;
+            long id = -1;
             
             public void init() {
                 this.addActor(Actor.this);
@@ -536,10 +536,14 @@ public abstract class Actor implements Cloneable {
 
             public void animate(double pulse) {
                 setLocation((int) x, (int) y);
-
+                int[] xs = {new Double(destx).intValue()};
+                int[] ys = {new Double(desty).intValue()};
                 Point p = getRootLocation();
-                id = Tracker.writeToFile("Move", p.x, p.y, Actor.this.getWidth(),
-                        Actor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(),Tracker.MODIFY,
+                		getActorID(), Tracker.POLYGON,  xs, ys, Actor.this.getWidth(),
+                        Actor.this.getHeight(), angle, -1, description);
+                //id = Tracker.writeToFile("Move", p.x, p.y, Actor.this.getWidth(),
+                //        Actor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
 
                 x += pulse * step * cos;
                 y += pulse * step * sin;
@@ -585,7 +589,7 @@ public abstract class Actor implements Cloneable {
 
             int y = loc.y;
 
-            int id = -1;
+            long id = -1;
             
             public void init() {
                 this.addActor(Actor.this);
@@ -596,8 +600,16 @@ public abstract class Actor implements Cloneable {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                id = Tracker.writeToFile("Appear", p.x, p.y, Actor.this.getWidth(), Actor.this
-                        .getHeight(), TrackerClock.currentTimeMillis(), id);
+                int[] xs = {new Double(x).intValue()};
+                int[] ys = {new Double(y).intValue()};
+                setActorID(Tracker.getNewId());                
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(),Tracker.APPEAR,
+                		getActorID(), Tracker.POLYGON,  xs, ys, Actor.this.getWidth(),
+                        Actor.this.getHeight(), 0, -1, description);
+                
+                //id = Tracker.writeToFile("Appear", p.x, p.y, Actor.this.getWidth(), Actor.this
+                //        .getHeight(), TrackerClock.currentTimeMillis(), id);
+                
             }
 
             public void finish() {

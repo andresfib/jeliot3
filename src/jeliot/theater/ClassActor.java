@@ -255,7 +255,7 @@ public class ClassActor extends Actor implements ActorContainer {
             double h;
             double plus;
             int full;
-            int id = -1;
+            long id = -1;
             
             public void init() {
                 size = new Dimension(getWidth(), nheight + margin * 3);
@@ -273,7 +273,7 @@ public class ClassActor extends Actor implements ActorContainer {
             public void animate(double pulse) {
                 Point p = getRootLocation();
                 id = Tracker.writeToFile("Appear", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
-                
+                ClassActor.this.setActorID(id);
                 h += plus * pulse;
                 size.height = (int) h;
                 setSize(size);
@@ -302,7 +302,7 @@ public class ClassActor extends Actor implements ActorContainer {
             double h;
             double plus;
             int full;
-            int id = -1;
+            long id = -1;
             public void init() {
                 size = getSize();
                 full = nheight + margin * 3;
@@ -342,7 +342,7 @@ public class ClassActor extends Actor implements ActorContainer {
                 double h;
                 double plus;
                 int full;
-                int id = -1;
+                long id = -1;
 
                 public void init() {
                     size = getSize();
