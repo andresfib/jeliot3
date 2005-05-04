@@ -18,6 +18,9 @@ import java.util.StringTokenizer;
 
 import javax.swing.KeyStroke;
 
+import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
+
 /**
  * The default input handler. It maps sequences of keystrokes into actions
  * and inserts key typed events into the text area.
@@ -268,6 +271,8 @@ public class DefaultInputHandler extends InputHandler
 
 				executeAction(INSERT_CHAR,evt.getSource(),
 					String.valueOf(evt.getKeyChar()));
+				
+		        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.KEYBOARD, -1, -1, "KeyTyped: " + String.valueOf(evt.getKeyChar()));
 
 				repeatCount = 0;
 				repeat = false;
