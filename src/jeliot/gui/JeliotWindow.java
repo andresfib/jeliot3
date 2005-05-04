@@ -15,6 +15,8 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -79,7 +81,7 @@ import edu.unika.aifb.components.JFontChooser;
  * @author Pekka Uronen
  * @author Niko Myller
  */
-public class JeliotWindow implements PauseListener {
+public class JeliotWindow implements PauseListener, MouseListener {
 
     /**
      * The resource bundle for gui package
@@ -300,9 +302,9 @@ public class JeliotWindow implements PauseListener {
     private ActionListener stepAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.writeToFile("StepButton", TrackerClock.currentTimeMillis(), -1);
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "StepButton");
             stepAnimation();
-            Tracker.writeToFile("AnimationStarted", TrackerClock.currentTimeMillis(), -1);
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "AnimationStarted");
         }
     };
 
@@ -312,9 +314,9 @@ public class JeliotWindow implements PauseListener {
     private ActionListener playAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.writeToFile("PlayButton", TrackerClock.currentTimeMillis(), -1);
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "PlayButton");
             playAnimation();
-            Tracker.writeToFile("AnimationStarted", TrackerClock.currentTimeMillis(), -1);
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "AnimationStarted");
         }
     };
 
@@ -324,7 +326,7 @@ public class JeliotWindow implements PauseListener {
     private ActionListener pauseAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.writeToFile("PauseButton", TrackerClock.currentTimeMillis(), -1);
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "PauseButton");
             pauseAnimation();
         }
     };
@@ -335,7 +337,7 @@ public class JeliotWindow implements PauseListener {
     private ActionListener rewindAction = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.writeToFile("RewindButton", TrackerClock.currentTimeMillis(), -1);
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "RewindButton");
             rewindAnimation();
         }
     };
@@ -1066,7 +1068,7 @@ public class JeliotWindow implements PauseListener {
         editButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Tracker.writeToFile("EditButton", TrackerClock.currentTimeMillis(), -1);
+                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "EditButton");
                 enterEdit();
             }
         });
@@ -1074,8 +1076,7 @@ public class JeliotWindow implements PauseListener {
         compileButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Tracker.writeToFile("AnimationButton", TrackerClock.currentTimeMillis(), -1);
-
+                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "AnimationButton");
                 tryToEnterAnimate();
             }
         });
@@ -1129,7 +1130,7 @@ public class JeliotWindow implements PauseListener {
             public void stateChanged(ChangeEvent e) {
                 int volume = speedSlider.getValue();
                 engine.setVolume(volume * 50.0);
-                Tracker.writeToFile("Slider", "" + volume, TrackerClock.currentTimeMillis(), -1);
+                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Slider:" + volume);
             }
         });
 
@@ -2037,7 +2038,7 @@ public class JeliotWindow implements PauseListener {
                 messageBundle.getString("menu.control.edit"),
                 messageBundle.getString("menu.animation.run_until")};
         setEnabledMenuItems(true, s2);
-        Tracker.writeToFile("AnimationStopped", TrackerClock.currentTimeMillis(), -1);
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "AnimationStopped");
     }
 
     /**
@@ -2045,5 +2046,36 @@ public class JeliotWindow implements PauseListener {
      */
     public int getSelectedIndexInTabbedPane() {
         return selectedIndexInTabbedPane;
+    }
+
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+     */
+    public void mouseClicked(MouseEvent arg0) {
+    }
+
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
+     */
+    public void mouseEntered(MouseEvent arg0) {
+    }
+
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
+     */
+    public void mouseExited(MouseEvent arg0) {
+    }
+
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
+     */
+    public void mousePressed(MouseEvent arg0) {
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.MOUSEBUTTON, arg0.getX(), arg0.getY(), "MouseButton " + arg0.getButton() + " pressed");
+    }
+
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+     */
+    public void mouseReleased(MouseEvent arg0) {
     }
 }

@@ -536,12 +536,12 @@ public class CodeEditor2 extends JComponent {
                 masterFrame.setTitle(title);
 
                 MCodeUtilities.setFilename("untitled");
-                Tracker.writeToFile("File", "untitled", TrackerClock.currentTimeMillis(), -1);
+                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "File: untitled");
             } else {
                 masterFrame.setTitle(title + " - " + filename);
 
                 MCodeUtilities.setFilename(filename);
-                Tracker.writeToFile("File", filename, TrackerClock.currentTimeMillis(), -1);
+                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "File: " + filename);
             }
         }
     }
