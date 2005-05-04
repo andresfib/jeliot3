@@ -471,7 +471,7 @@ public class Jeliot {
      * @param str String that is outputted.
      */
     public void output(String str) {
-        Tracker.writeToFile("Output", str, TrackerClock.currentTimeMillis(), -1);
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Output: " + str);
         gui.output(str);
     }
 
@@ -479,9 +479,7 @@ public class Jeliot {
      * @param e
      */
     public void showErrorMessage(InterpreterError e) {
-        Tracker
-                .writeToFile("Error", e.getMessage(), TrackerClock
-                        .currentTimeMillis(), -1);
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Error: " + e.getMessage());
         gui.showErrorMessage(e);
     }
 
@@ -841,7 +839,7 @@ public class Jeliot {
         director = null;
         gui = null;
         theatre = null;
-        Tracker.writeToFile("JeliotClose", TrackerClock.currentTimeMillis(), -1);
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "JeliotClose");
         Tracker.closeFile();
     }
 

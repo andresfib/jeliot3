@@ -195,7 +195,7 @@ public class Director {
         if (!interrupted) {
             theatre.repaint();
         }
-        Tracker.writeToFile("AnimationEnded", TrackerClock.currentTimeMillis(), -1);
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "AnimationEnded");
         return interrupted;
     }
 
@@ -2269,7 +2269,7 @@ public class Director {
                 release();
                 ic.popup();
                 theatre.flush();
-                Tracker.writeToFile("InputDialogOn", TrackerClock.currentTimeMillis(), -1);
+                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "InputDialogOn");
             }
         });
         /*    
@@ -2305,7 +2305,7 @@ public class Director {
                     theatre.remove(ic);
                     theatre.showComponents(false);
                     theatre.flush();
-                    Tracker.writeToFile("InputDialogOff", TrackerClock.currentTimeMillis(), -1);
+                    Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "InputDialogOff");
                 }
             });
         } catch (java.lang.reflect.InvocationTargetException e) {
