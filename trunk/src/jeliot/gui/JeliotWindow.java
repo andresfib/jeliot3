@@ -1374,6 +1374,7 @@ public class JeliotWindow implements PauseListener {
                             SwingUtilities.invokeLater(new Runnable() {
 
                                 public void run() {
+                                    
                                     enterAnimate();
                                     //Buttons are enables just after the animation mode is not before
                                     enableWidgets(animWidgets.elements(), true);
@@ -1615,6 +1616,7 @@ public class JeliotWindow implements PauseListener {
         //enableWidgets(editWidgets.elements(), false);
         //enableWidgets(animWidgets.elements(), true);
         changeCodePane(codePane);
+        outputConsole.setText("");
         rewindAnimation();
     }
 
@@ -1771,6 +1773,7 @@ public class JeliotWindow implements PauseListener {
 
         jeliot.cleanUp();
         theatre.repaint();
+        outputConsole.setText("");
 
         if (runningUntil) {
             //TODO: Here ask if the user wants to continue with run until.
@@ -1869,6 +1872,7 @@ public class JeliotWindow implements PauseListener {
     public void output(String str) {
         //System.out.println("This is output: " + str);
         outputConsole.append(str);
+        outputConsole.setCaretPosition(outputConsole.getText().length());
     }
 
     /**
