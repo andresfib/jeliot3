@@ -153,7 +153,17 @@ public abstract class Actor implements Cloneable {
      * Parent actor.
      */
     private ActorContainer parent;
-
+    /**
+     * Description used for tracking porpuses
+     * @see tracker
+     */
+    private String description;
+    
+    /**
+     * ID of an actor, used for tracking porpuses
+     * @see tracker
+     */
+    private long actorID;
     public Actor() {
         super();
     }
@@ -609,4 +619,28 @@ public abstract class Actor implements Cloneable {
         return (x >= 0 && x < width && y >= 0 && y < height) ? this : null;
     }
 
+	/**
+	 * @return Returns the actorID.
+	 */
+	public long getActorID() {
+		return actorID;
+	}
+	/**
+	 * @param actorID The actorID to set.
+	 */
+	public void setActorID(long actorID) {
+		this.actorID = actorID;
+	}
+	/**
+	 * @return Returns the description.
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * @param description The description to set.
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

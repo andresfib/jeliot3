@@ -115,6 +115,8 @@ public class OMIActor extends Actor implements ActorContainer{
         bound = new boolean[n];
         FontMetrics fm = getFontMetrics();
         commaMargin = fm.stringWidth(",");
+        
+        setDescription("object method invocation: "+ name);
     }
 
     /**

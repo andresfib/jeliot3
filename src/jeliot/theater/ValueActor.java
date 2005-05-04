@@ -50,6 +50,11 @@ public class ValueActor extends Actor {
 	 */
 	private int margin = 2;
 
+	/**
+	 * type contains the type of the value
+	 */
+	private String type;
+	
     /**
 	 * 
 	 */
@@ -177,4 +182,16 @@ public class ValueActor extends Actor {
         int w = Math.max(h, sw+margin+6);
         return new Dimension(w, h);
     }
+	/**
+	 * @return Returns the type.
+	 */
+	public String getType() {
+		return type;
+	}
+	/**
+	 * @param type The type to set.
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
 }

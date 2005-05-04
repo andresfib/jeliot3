@@ -48,7 +48,8 @@ public class CastActor extends Actor {
 	public CastActor(ValueActor fromActor, ValueActor toActor) {
         this.fromActor = fromActor;
         this.toActor = toActor;
-        
+        setDescription("variable casted from " + fromActor.getType() +
+        			   " to " + toActor.getType());
         linex = 0;
         linew = Math.max(fromActor.getWidth(), toActor.getWidth());
         

@@ -110,6 +110,7 @@ public class MethodStage extends Actor implements ActorContainer {
 	public MethodStage(String name) {
         this.name = name;
         insets = new Insets(2, 6, 4, 6);
+        setDescription("method frame" + name + "creatd");
     }
 
     /**
@@ -432,4 +433,16 @@ public class MethodStage extends Actor implements ActorContainer {
         }
         return null;
     }
+	/**
+	 * @return Returns the name.
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name The name to set.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 }

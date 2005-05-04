@@ -40,6 +40,7 @@ public class IndexActor extends Actor {
 	public IndexActor(Actor source) {
         this.source = source;
         this.fgcolor = Color.white;
+        setDescription("index pointer created");
     }
 
     /* (non-Javadoc)

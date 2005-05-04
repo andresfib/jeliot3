@@ -88,7 +88,9 @@ public class SMIActor extends Actor implements ActorContainer{
         locs = new Point[n];
         bound = new boolean[n];
         FontMetrics fm = getFontMetrics();
-        commaMargin = fm.stringWidth(",");        
+        commaMargin = fm.stringWidth(",");
+        
+        setDescription("static method invocation: "+ name);
     }
 
     /**
