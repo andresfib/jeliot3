@@ -82,6 +82,8 @@ public class ClassActor extends Actor implements ActorContainer {
         this.name = name;
         this.varCount = varCount;
         insets = new Insets(2, 6, 4, 6);
+        
+        setDescription("allocated space for static variables from class " + name);
     }
 
 //  DOC: Document!
