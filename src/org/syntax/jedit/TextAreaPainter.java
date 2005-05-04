@@ -19,6 +19,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.Iterator;
+import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.ToolTipManager;
@@ -41,8 +43,8 @@ import org.syntax.jedit.tokenmarker.TokenMarker;
  */
 public class TextAreaPainter extends JComponent implements TabExpander {
 
-    int id = -1;
-    
+    Vector ids = new Vector();
+
     boolean printing = false;
 
     Rectangle clipRect;
@@ -95,7 +97,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
     public final boolean isManagingFocus() {
         return false;
     }
-    
+
     /**
      * Returns the syntax styles used to paint colorized text. Entry <i>n</i>
      * will be used to paint tokens with id = <i>n</i>.
@@ -357,12 +359,18 @@ public class TextAreaPainter extends JComponent implements TabExpander {
      * @param g The graphics context
      */
     public void paint(Graphics gfx) {
-        
-        id = -1;
-        
+
+        for (Iterator i = ids.iterator(); i.hasNext();) {
+            Vector info = (Vector) i.next();
+            long id = Tracker.trackCode(TrackerClock.currentTimeMillis(),
+                    Tracker.DISAPPEAR, ((Long) info.get(0)).longValue(), Tracker.RECTANGLE,
+                    (int[]) info.get(1), (int[]) info.get(2), ((Integer) info.get(3)).intValue(), ((Integer) info.get(4)).intValue(), 0, -1,
+                    (String) info.get(5));
+        }
+
         tabSize = fm.charWidth(' ')
-                * ((Integer) textArea.getDocument().getProperty(PlainDocument.tabSizeAttribute))
-                        .intValue();
+                * ((Integer) textArea.getDocument().getProperty(
+                        PlainDocument.tabSizeAttribute)).intValue();
 
         clipRect = gfx.getClipBounds();
 
@@ -382,7 +390,8 @@ public class TextAreaPainter extends JComponent implements TabExpander {
         // Because the clipRect's height is usually an even multiple
         // of the font height, we subtract 1 from it, otherwise one
         // too many lines will always be painted.
-        int lastInvalid = firstLine + (clipRect.y + clipRect.height - 1) / height;
+        int lastInvalid = firstLine + (clipRect.y + clipRect.height - 1)
+                / height;
 
         try {
             TokenMarker tokenMarker = textArea.getDocument().getTokenMarker();
@@ -397,8 +406,8 @@ public class TextAreaPainter extends JComponent implements TabExpander {
                 repaint(0, h, getWidth(), getHeight() - h);
             }
         } catch (Exception e) {
-            System.err.println("Error repainting line" + " range {" + firstInvalid + ","
-                    + lastInvalid + "}:");
+            System.err.println("Error repainting line" + " range {"
+                    + firstInvalid + "," + lastInvalid + "}:");
             e.printStackTrace();
         }
     }
@@ -408,8 +417,8 @@ public class TextAreaPainter extends JComponent implements TabExpander {
      * @param line The line to invalidate
      */
     public final void invalidateLine(int line) {
-        repaint(0, textArea.lineToY(line) + fm.getMaxDescent() + fm.getLeading(), getWidth(), fm
-                .getHeight());
+        repaint(0, textArea.lineToY(line) + fm.getMaxDescent()
+                + fm.getLeading(), getWidth(), fm.getHeight());
     }
 
     /**
@@ -418,15 +427,17 @@ public class TextAreaPainter extends JComponent implements TabExpander {
      * @param lastLine The last line to invalidate
      */
     public final void invalidateLineRange(int firstLine, int lastLine) {
-        repaint(0, textArea.lineToY(firstLine) + fm.getMaxDescent() + fm.getLeading(), getWidth(),
-                (lastLine - firstLine + 1) * fm.getHeight());
+        repaint(0, textArea.lineToY(firstLine) + fm.getMaxDescent()
+                + fm.getLeading(), getWidth(), (lastLine - firstLine + 1)
+                * fm.getHeight());
     }
 
     /**
      * Repaints the lines containing the selection.
      */
     public final void invalidateSelectedLines() {
-        invalidateLineRange(textArea.getSelectionStartLine(), textArea.getSelectionEndLine());
+        invalidateLineRange(textArea.getSelectionStartLine(), textArea
+                .getSelectionEndLine());
     }
 
     /**
@@ -501,7 +512,8 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 
     protected Highlight highlights;
 
-    protected void paintLine(Graphics gfx, TokenMarker tokenMarker, int line, int x) {
+    protected void paintLine(Graphics gfx, TokenMarker tokenMarker, int line,
+            int x) {
         Font defaultFont = getFont();
         Color defaultColor = getForeground();
 
@@ -517,12 +529,13 @@ public class TextAreaPainter extends JComponent implements TabExpander {
         } else if (tokenMarker == null) {
             paintPlainLine(gfx, line, defaultFont, defaultColor, x, y);
         } else {
-            paintSyntaxLine(gfx, tokenMarker, line, defaultFont, defaultColor, x, y);
+            paintSyntaxLine(gfx, tokenMarker, line, defaultFont, defaultColor,
+                    x, y);
         }
     }
 
-    protected void paintPlainLine(Graphics gfx, int line, Font defaultFont, Color defaultColor,
-            int x, int y) {
+    protected void paintPlainLine(Graphics gfx, int line, Font defaultFont,
+            Color defaultColor, int x, int y) {
         paintHighlight(gfx, line, y);
         textArea.getLineText(line, currentLine);
 
@@ -538,18 +551,19 @@ public class TextAreaPainter extends JComponent implements TabExpander {
         }
     }
 
-    protected void paintSyntaxLine(Graphics gfx, TokenMarker tokenMarker, int line,
-            Font defaultFont, Color defaultColor, int x, int y) {
+    protected void paintSyntaxLine(Graphics gfx, TokenMarker tokenMarker,
+            int line, Font defaultFont, Color defaultColor, int x, int y) {
         textArea.getLineText(currentLineIndex, currentLine);
-        currentLineTokens = tokenMarker.markTokens(currentLine, currentLineIndex);
+        currentLineTokens = tokenMarker.markTokens(currentLine,
+                currentLineIndex);
 
         paintHighlight(gfx, line, y);
 
         gfx.setFont(defaultFont);
         gfx.setColor(defaultColor);
         y += fm.getHeight();
-        x = SyntaxUtilities
-                .paintSyntaxLine(currentLine, currentLineTokens, styles, this, gfx, x, y);
+        x = SyntaxUtilities.paintSyntaxLine(currentLine, currentLineTokens,
+                styles, this, gfx, x, y);
 
         if (eolMarkers) {
             gfx.setColor(eolMarkerColor);
@@ -560,7 +574,8 @@ public class TextAreaPainter extends JComponent implements TabExpander {
     protected void paintHighlight(Graphics gfx, int line, int y) {
         if (!isPrinting()) {
 
-            if (line >= textArea.getSelectionStartLine() && line <= textArea.getSelectionEndLine())
+            if (line >= textArea.getSelectionStartLine()
+                    && line <= textArea.getSelectionEndLine())
                 paintLineHighlight(gfx, line, y);
 
             if (highlights != null)
@@ -585,8 +600,23 @@ public class TextAreaPainter extends JComponent implements TabExpander {
             if (lineHighlight) {
                 gfx.setColor(lineHighlightColor);
                 gfx.fillRect(0, y, getWidth(), height);
-                this.id = Tracker.writeToFileFromCodeView("CodeHighlight", 0, y, getWidth(), height, TrackerClock
-                        .currentTimeMillis(), this.id);
+                //this.id = Tracker.track("CodeHighlight", 0, y, getWidth(), height, TrackerClock.currentTimeMillis(), this.id);
+
+                //x=35 because of the area showing the line numbers
+                String desc = "Code Highlight:" + textArea.xyToOffset(0, y)
+                        + "," + textArea.getLineEndOffset(textArea.yToLine(y));
+                long id = Tracker.trackCode(TrackerClock.currentTimeMillis(),
+                        Tracker.APPEAR, -1, Tracker.RECTANGLE,
+                        new int[] { 35 }, new int[] { y }, getWidth(), height,
+                        0, -1, desc);
+                Vector info = new Vector();
+                info.add(new Long(id));
+                info.add(new int[] { 35 });
+                info.add(new int[] { y });
+                info.add(new Integer(getWidth()));
+                info.add(new Integer(height));
+                info.add(desc);
+                ids.add(info);
             }
         } else {
             gfx.setColor(selectionColor);
@@ -619,9 +649,29 @@ public class TextAreaPainter extends JComponent implements TabExpander {
             }
 
             // "inlined" min/max()
-            gfx.fillRect(x1 > x2 ? x2 : x1, y, x1 > x2 ? (x1 - x2) : (x2 - x1), height);
-            this.id = Tracker.writeToFileFromCodeView("CodeHighlight", x1 > x2 ? x2 : x1, y,
-                    x1 > x2 ? (x1 - x2) : (x2 - x1), height, TrackerClock.currentTimeMillis(), this.id);
+            int x = x1 > x2 ? x2 : x1;
+            int w = x1 > x2 ? (x1 - x2) : (x2 - x1);
+            gfx.fillRect(x, y, w, height);
+
+            //this.id = Tracker.writeToFileFromCodeView("CodeHighlight",
+            //        x1 > x2 ? x2 : x1, y, x1 > x2 ? (x1 - x2) : (x2 - x1),
+            //        height, TrackerClock.currentTimeMillis(), this.id);
+
+            String desc = "Code Highlight:" + textArea.xyToOffset(x, y) + ","
+                    + textArea.getLineEndOffset(textArea.yToLine(y));
+            //x+35 because of the area showing the line numbers
+            long id = Tracker.trackCode(TrackerClock.currentTimeMillis(),
+                    Tracker.APPEAR, -1, Tracker.RECTANGLE,
+                    new int[] { x + 35 }, new int[] { y }, w, height, 0, -1,
+                    desc);
+            Vector info = new Vector();
+            info.add(new Long(id));
+            info.add(new int[] { x + 35 });
+            info.add(new int[] { y });
+            info.add(new Integer(w));
+            info.add(new Integer(height));
+            info.add(desc);
+            ids.add(info);
         }
     }
 
@@ -643,9 +693,11 @@ public class TextAreaPainter extends JComponent implements TabExpander {
     protected void paintCaret(Graphics gfx, int line, int y) {
         if (!isPrinting()) {
             if (textArea.isCaretVisible() && textArea.getCaretReallyVisible()) {
-                int offset = textArea.getCaretPosition() - textArea.getLineStartOffset(line);
+                int offset = textArea.getCaretPosition()
+                        - textArea.getLineStartOffset(line);
                 int caretX = textArea._offsetToX(line, offset);
-                int caretWidth = ((blockCaret || textArea.isOverwriteEnabled()) ? fm.charWidth('w')
+                int caretWidth = ((blockCaret || textArea.isOverwriteEnabled()) ? fm
+                        .charWidth('w')
                         : 1);
                 y += fm.getLeading() + fm.getMaxDescent();
                 int height = fm.getHeight();

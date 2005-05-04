@@ -8,8 +8,10 @@ import java.awt.Rectangle;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import jeliot.gui.CodePane2;
 import jeliot.theater.Theater;
@@ -28,8 +30,33 @@ public class Tracker {
     /**
      * Comment for <code>DATE_FORMAT</code>
      */
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd't'HH.mm.ss.SSSS"); 
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd"); 
+    private static final DateFormat TIME_FORMAT = new SimpleDateFormat("HH.mm.ss.SSSS");
+    private static final String columns = "Timestamp\tAction\tNumber Type\tX,Y\tWidth\tHeight\tAngle\tLife\tDescription";
 
+    private static final String APPEAR_STRING = "Appear";
+    private static final String DISAPPEAR_STRING = "Disappear";
+    private static final String MODIFY_STRING = "Modify";
+
+    public static final int APPEAR = 0;
+    public static final int DISAPPEAR = 1;
+    public static final int MODIFY = 2;
+
+    private static final String POLYGON_STRING = "Polygon";
+    private static final String RECTANGLE_STRING = "Rectangle";
+    private static final String OVAL_STRING = "Oval";
+    private static final String LINE_STRING = "Line";
+
+    public static final int POLYGON = 0;
+    public static final int RECTANGLE = 1;
+    public static final int OVAL = 2;
+    public static final int LINE = 3;
+    
+    /**
+     * The id counter
+     */
+    private static long idCounter = 0;
+    
 	/**
 	 * Comment for <code>out</code>
 	 */
@@ -89,8 +116,11 @@ public class Tracker {
                 } while (file.exists());
 				file.createNewFile();
 				out = new BufferedWriter(new FileWriter(file));
-                out.write("StartTime:"+DATE_FORMAT.format(TrackerClock.getInstance().getStartTime()));
-                out.newLine();
+				Date time = TrackerClock.getInstance().getStartTime();
+                out.write("Recording date: " + DATE_FORMAT.format(time) + "\n");
+                out.write("Recording time: " + TIME_FORMAT.format(time) + " (corresponds to time 0)\n\n\n");
+                out.write(columns+"\n\n");
+
 			} catch (Exception e) {
                 if (DebugUtil.DEBUGGING) {
                     e.printStackTrace();
@@ -115,7 +145,101 @@ public class Tracker {
 			}
 		}
 	}
+	
+	public static String getActionDescription(int a) {
+	    switch(a) {
+	    case APPEAR:
+	        return APPEAR_STRING;
+	    case DISAPPEAR:
+	        return DISAPPEAR_STRING;
+	    case MODIFY:
+	        return MODIFY_STRING;
+	    default:
+	        throw new RuntimeException("Illegal action specified in Tracking.");
+	    }
+	}
 
+	public static String getTypeDescription(int t) {
+	    switch(t) {
+	    case POLYGON:
+	        return POLYGON_STRING;
+	    case RECTANGLE:
+	        return RECTANGLE_STRING;
+	    case OVAL:
+	        return OVAL_STRING;
+	    case LINE:
+	        return LINE_STRING;
+	    default:
+	        throw new RuntimeException("Illegal type specified in Tracking.");
+	    }
+	}
+
+	public static long getNewId() {
+	    return idCounter++;
+	}
+	
+	public static long trackTheater(long millis, int action, long id, int type, int[] x, int[] y, int w, int h, double angle, long lifeTime, String description) {
+	    //Do the conversions and validation of the data
+	    id = (id == -1) ? getNewId() : id;
+	    String actionStr = getActionDescription(action);
+	    String typeStr = getTypeDescription(type);
+	    if (x.length <= 0 && x.length != y.length) {
+	        throw new RuntimeException("Different number of X and Y coordinates in Tracker!");
+	    }
+	    
+		Point p = theater.getLocationOnScreen();
+		Rectangle r = theater.getClipRect();
+
+		String locations = "";
+	    for (int i = 0; i < x.length; i++) {
+	        if (i == x.length - 1) {
+	            locations += (p.x + x[i]) + "," + (p.y + y[i]);
+	            break;
+	        }
+	        locations += (p.x + x[i]) + "," + (p.y + y[i]) + ",";
+	    }
+	    
+	    
+	    try {
+            out.write("" + millis + "\t" + actionStr + "\t" + id + "\t" + typeStr + "\t" + locations + "\t" + w  + "\t" + h  + "\t" + angle  + "\t" + lifeTime + "\t" + description + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	    
+	    return id;
+	}
+
+	public static long trackCode(long millis, int action, long id, int type, int[] x, int[] y, int w, int h, double angle, long lifeTime, String description) {
+	    //Do the conversions and validation of the data
+	    id = (id == -1) ? getNewId() : id;
+	    String actionStr = getActionDescription(action);
+	    String typeStr = getTypeDescription(type);
+	    if (x.length <= 0 && x.length != y.length) {
+	        throw new RuntimeException("Different number of X and Y coordinates in Tracker!");
+	    }
+	    
+		Point p = codePane.getTextArea().getLocationOnScreen();
+		Rectangle r = codePane.getTextArea().getPainter().getClipRect();
+
+	    String locations = "";
+	    for (int i = 0; i < x.length; i++) {
+	        if (i == x.length - 1) {
+	            locations += (p.x + x[i]) + "," + (p.y + y[i]);
+	            break;
+	        }
+	        locations += (p.x + x[i]) + "," + (p.y + y[i]) + ",";
+	    }
+	    
+	    try {
+            out.write("" + millis + "\t" + actionStr + "\t" + id + "\t" + typeStr + "\t" + locations + "\t" + w  + "\t" + h  + "\t" + angle  + "\t" + lifeTime + "\t" + description + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	    
+	    return id;
+	}
+	
+	
 	/**
 	 * @param name
 	 * @param x
