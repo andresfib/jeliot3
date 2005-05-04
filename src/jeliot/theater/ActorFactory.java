@@ -535,6 +535,7 @@ public class ActorFactory {
             ValueActor vact = null;
             ImageValueActor valueActor = new ImageValueActor(iLoad.getImage(propertiesBundle
                     .getStringProperty("image.mystery")));
+            
             valueActor.calculateSize();
             vact = valueActor;
             int dotIndex = type.lastIndexOf(".");
@@ -561,7 +562,7 @@ public class ActorFactory {
             actor.reserve(vact);
             actor.bind();
             //Tracking purposes
-            actor.setDescription("variable of tipe " + v.getType() + " and name " + v.getName());
+            actor.setDescription("variable of tipe " + resolvedType + " and name " + v.getName());
             return actor;
         } else if (typeInfo == MCodeUtilities.REFERENCE) {
             ReferenceVariableActor refAct = new ReferenceVariableActor();
