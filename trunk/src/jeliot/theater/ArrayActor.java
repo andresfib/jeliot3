@@ -113,8 +113,9 @@ public class ArrayActor extends InstanceActor {
                 viaa.setParent(this);
                 variableActors[i] = viaa;
 
-            }
+            }            
         }
+        setDescription("array of type"+ valueActors[0].getType() + "allocated");
     }
 
     /**

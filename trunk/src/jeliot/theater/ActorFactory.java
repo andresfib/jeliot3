@@ -560,6 +560,8 @@ public class ActorFactory {
             actor.calculateSize();
             actor.reserve(vact);
             actor.bind();
+            //Tracking purposes
+            actor.setDescription("variable of tipe " + v.getType() + " and name " + v.getName());
             return actor;
         } else if (typeInfo == MCodeUtilities.REFERENCE) {
             ReferenceVariableActor refAct = new ReferenceVariableActor();
@@ -588,6 +590,9 @@ public class ActorFactory {
                     refAct.setName(resolvedType + arrayString + " " + v.getName());
                 }
                 //refAct.setName(resolvedType + arrayString + " " + v.getName());
+                //Tracking purposes
+                actor.setDescription("variable of type " + resolvedType + " and name " + v.getName());
+                
             } else {
                 String resolvedType = type;
                 int dotIndex = resolvedType.lastIndexOf(".");
@@ -604,6 +609,8 @@ public class ActorFactory {
                 }
                 //refAct.setName(resolvedType + " " + v.getName());
                 refAct.setBackground(varColor[typeInfo]);
+                //Tracking purposes
+                actor.setDescription("variable of type " + resolvedType + " and name " + v.getName());
             }
             refAct.setForeground(variableForegroundColor);
             refAct.setInsets(variableInsets);
@@ -615,6 +622,7 @@ public class ActorFactory {
             ra.calculateSize();
             refAct.setValue(ra);
             actor = refAct;
+            
         }
         return actor;
     }
@@ -728,6 +736,9 @@ public class ActorFactory {
             }
 
             actor.setLabel(label);
+            //Tracking porpuses
+            actor.setType(type);
+            actor.setDescription("value of type" + val.getType() + "and value" + val.getValue());
             //actor.setActor(val.getActor());
             actor.calculateSize();
             return actor;
