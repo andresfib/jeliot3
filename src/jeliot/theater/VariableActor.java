@@ -276,7 +276,9 @@ public class VariableActor extends Actor implements ActorContainer {
     }
 
     public Animation disappear() {
-        value.disappear();
+        if (value != null) {
+            value.disappear();
+        }
         Point p = getRootLocation();
         Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
         return null;
