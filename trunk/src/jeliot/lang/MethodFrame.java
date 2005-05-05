@@ -70,8 +70,7 @@ public class MethodFrame {
                 }
             }
         }
-        //throw new RuntimeException("No Variable " + name);
-        return null;
+        throw new RuntimeException("There is no local variable " + name);
     }
 
     /**

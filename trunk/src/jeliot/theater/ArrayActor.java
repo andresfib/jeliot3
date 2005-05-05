@@ -79,14 +79,17 @@ public class ArrayActor extends InstanceActor {
      */
     private boolean primitive;
 
+    private String componentType;
+    
     /**
      * @param valueActors
      * @param dimensions
      */
-    public ArrayActor(ValueActor[] valueActors, int length, boolean primitive) {
+    public ArrayActor(ValueActor[] valueActors, int length, boolean primitive, String compType) {
 
         this.length = length;
         this.primitive = primitive;
+        this.componentType = compType;
         if (primitive) {
             this.variableActors = new VariableInArrayActor[length];
         } else {
@@ -115,7 +118,7 @@ public class ArrayActor extends InstanceActor {
 
             }            
         }
-        setDescription("array of type" + valueActors[0].getType() + "allocated");
+        setDescription("array: type: " + compType);
     }
 
     /**
