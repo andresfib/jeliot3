@@ -10,8 +10,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.PlainDocument;
 
 import jeliot.mcode.Highlight;
-import jeliot.tracker.Tracker;
-import jeliot.tracker.TrackerClock;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
 
@@ -147,7 +145,7 @@ public class CodePane2 extends JComponent {
         final int left = l - 1;
         final int right = r;
 
-        Tracker.writeToFileFromCodeView("Highlight", left, right, TrackerClock.currentTimeMillis(), -1);
+        //Tracker.writeToFileFromCodeView("Highlight", left, right, TrackerClock.currentTimeMillis(), -1);
 
         Runnable updateAComponent = new Runnable() {
 

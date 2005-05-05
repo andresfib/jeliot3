@@ -581,6 +581,11 @@ public abstract class Actor implements Cloneable {
         };
     }
 
+    public Animation disappear() {
+        
+        return null;
+    }
+    
     /**
      * Returns an animation that makes the actor appear. Default
      * implementation shows the actor highlighted for given number of
@@ -661,4 +666,5 @@ public abstract class Actor implements Cloneable {
     public void setDescription(String description) {
         this.description = description;
     }
+    
 }

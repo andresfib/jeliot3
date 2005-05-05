@@ -13,9 +13,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import jeliot.gui.CodePane2;
 import jeliot.theater.Theater;
 import jeliot.util.DebugUtil;
+
+import org.syntax.jedit.JEditTextArea;
 
 /**
  * Most of the times the format for different tracker lines is
@@ -102,11 +103,6 @@ public class Tracker {
     private static boolean track = false;
 
     /**
-     * Comment for <code>codePane</code>
-     */
-    private static CodePane2 codePane;
-
-    /**
      * Comment for <code>nextId</code>
      */
     private static int nextId = 1;
@@ -116,13 +112,6 @@ public class Tracker {
      */
     public static void setTrack(boolean t) {
         track = t;
-    }
-
-    /**
-     * @param cp
-     */
-    public static void setCodePane2(CodePane2 cp) {
-        codePane = cp;
     }
 
     /**
@@ -259,10 +248,10 @@ public class Tracker {
 
     public static long trackCode(long millis, int action, long id, int type,
             int[] x, int[] y, int w, int h, double angle, long lifeTime,
-            String description) {
+            String description, JEditTextArea area) {
 
-        Point p = codePane.getTextArea().getLocationOnScreen();
-        Rectangle r = codePane.getTextArea().getPainter().getClipRect();
+        Point p = area.getLocationOnScreen();
+        Rectangle r = area.getPainter().getClipRect();
         if (x.length <= 0 && x.length != y.length) {
             throw new RuntimeException(
                     "Different number of X and Y coordinates in Tracker!");
@@ -307,6 +296,7 @@ public class Tracker {
      * @param h
      * @param millis
      */
+    /*
     public static int writeToFile(String name, int x, int y, int w, int h,
             long millis, int id) {
         if (id < 0) {
@@ -330,7 +320,7 @@ public class Tracker {
         }
         return id;
     }
-
+    */
     /**
      * @param name
      * @param x
@@ -339,6 +329,7 @@ public class Tracker {
      * @param h
      * @param millis
      */
+    /*
     public static int writeIndexToFile(String name, int x, int y, int x2,
             int y2, long millis, int id) {
         if (id < 0) {
@@ -362,7 +353,8 @@ public class Tracker {
         }
         return id;
     }
-
+    */
+    
     /**
      * @param name
      * @param x
@@ -371,6 +363,7 @@ public class Tracker {
      * @param h
      * @param millis
      */
+    /*
     public static int writeToFileFromCodeView(String name, int x, int y, int w,
             int h, long millis, int id) {
         if (id < 0) {
@@ -408,13 +401,14 @@ public class Tracker {
         }
         return id;
     }
-
+    */
     /**
      * @param name
      * @param l
      * @param r
      * @param millis
      */
+    /*
     public static int writeToFileFromCodeView(String name, int l, int r,
             long millis, int id) {
         if (id < 0) {
@@ -434,11 +428,12 @@ public class Tracker {
         }
         return id;
     }
-
+    */
     /**
      * @param name
      * @param millis
      */
+    /*
     public static int writeToFile(String name, long millis, int id) {
         if (id < 0) {
             id = Tracker.nextId++;
@@ -457,12 +452,14 @@ public class Tracker {
 
         return id;
     }
-
+    */
+    
     /**
      * @param name
      * @param fileName
      * @param millis
      */
+    /*
     public static int writeToFile(String name, String fileName, long millis,
             int id) {
         if (id < 0) {
@@ -481,4 +478,5 @@ public class Tracker {
         }
         return id;
     }
+    */
 }
