@@ -258,6 +258,7 @@ public class ClassActor extends Actor implements ActorContainer {
             long id = -1;
             
             public void init() {
+                Point p = getRootLocation();
                 size = new Dimension(getWidth(), nheight + margin * 3);
                 h = size.height;
                 full = getHeight();
@@ -268,16 +269,16 @@ public class ClassActor extends Actor implements ActorContainer {
                 setLight(HIGHLIGHT);
                 paintVars = false;
                 repaint();
+                setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription()));
             }
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                id = Tracker.writeToFile("Appear", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
-                ClassActor.this.setActorID(id);
                 h += plus * pulse;
                 size.height = (int) h;
                 setSize(size);
                 this.repaint();
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
             }
 
             public void finish() {
@@ -316,8 +317,7 @@ public class ClassActor extends Actor implements ActorContainer {
 
             public void animate(double pulse) {
                 Point p = getRootLocation();
-                id = Tracker.writeToFile("Disappear", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
-                
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, ClassActor.this.getWidth(), ClassActor.this.getHeight(), 0, -1, getDescription());
                 h += plus * pulse;
                 size.height = (int) h;
                 setSize(size);
@@ -325,6 +325,8 @@ public class ClassActor extends Actor implements ActorContainer {
             }
 
             public void finish() {
+                Point p = getRootLocation();
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, ClassActor.this.getWidth(), ClassActor.this.getHeight(), 0, -1, getDescription());
                 this.removeActor(ClassActor.this);
             }
         };
@@ -356,7 +358,7 @@ public class ClassActor extends Actor implements ActorContainer {
 
                 public void animate(double pulse) {
                     Point p = getRootLocation();
-                    id = Tracker.writeToFile("Extend", p.x, p.y, ClassActor.this.getWidth(), ClassActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
                     
                     h += plus * pulse;
                     size.height = (int)h;

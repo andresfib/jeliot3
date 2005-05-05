@@ -73,13 +73,13 @@ public class Tracker {
 
     private static final String LINE_STRING = "Line";
 
-    public static final int POLYGON = 0;
+    public static final int POLYGON = 10;
 
-    public static final int RECTANGLE = 1;
+    public static final int RECTANGLE = 11;
 
-    public static final int OVAL = 2;
+    public static final int OVAL = 12;
 
-    public static final int LINE = 3;
+    public static final int LINE = 13;
 
     /**
      * The id counter

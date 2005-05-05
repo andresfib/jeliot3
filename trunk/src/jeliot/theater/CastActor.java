@@ -94,16 +94,30 @@ public class CastActor extends Actor {
             
             public void init() {
                 plus = (double)getHeight() / getDuration();
+                
+                //TRACKER
+                Point p = getRootLocation();
+                //id = Tracker.writeToFile("Cast", p.x, p.y, CastActor.this.getWidth(), CastActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription()));
             }
             
             public void animate(double pulse) { 
-                Point p = getRootLocation();
-                //TRACKER
-                //id = Tracker.writeToFile("Cast", p.x, p.y, CastActor.this.getWidth(), CastActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
-                
+
                 h += plus * pulse;
                 line = (int)h;
+                
+                //TRACKER
+                Point p = getRootLocation();
+                //id = Tracker.writeToFile("Cast", p.x, p.y, CastActor.this.getWidth(), CastActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+
                 this.repaint();
+            }
+            
+            public void finish() {
+                //Tracker
+                Point p = getRootLocation();
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
             }
         };
     }

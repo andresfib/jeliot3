@@ -40,7 +40,7 @@ public class IndexActor extends Actor {
 	public IndexActor(Actor source) {
         this.source = source;
         this.fgcolor = Color.white;
-        setDescription("index pointer created");
+        setDescription("index pointer");
     }
 
     /* (non-Javadoc)
@@ -85,16 +85,18 @@ public class IndexActor extends Actor {
                 this.addActor(IndexActor.this);
                 step = len / getDuration();
                 endPoint = new Point(startPoint);
+                setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.POLYGON, new int[] {IndexActor.this.startPoint.x + 2, IndexActor.this.startPoint.x - 2, IndexActor.this.endPoint.x + 2, IndexActor.this.endPoint.x - 2}, new int[] {IndexActor.this.startPoint.y - 2, IndexActor.this.startPoint.y + 2, IndexActor.this.endPoint.y - 2, IndexActor.this.endPoint.x + 2}, getWidth(), getHeight(), 0, -1, getDescription()));
             }
 
             public void animate(double pulse) {
-                id = Tracker.writeIndexToFile("Indexing", IndexActor.this.startPoint.x, IndexActor.this.startPoint.y, IndexActor.this.endPoint.x, IndexActor.this.endPoint.y, TrackerClock.currentTimeMillis(), id);
                 xp += pulse * step * cos;
                 yp += pulse * step * sin;
                 l += pulse * step;
 
                 endPoint.x = (int)xp;
                 endPoint.y = (int)yp;
+                
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.POLYGON, new int[] {IndexActor.this.startPoint.x + 2, IndexActor.this.startPoint.x - 2, IndexActor.this.endPoint.x + 2, IndexActor.this.endPoint.x - 2}, new int[] {IndexActor.this.startPoint.y - 2, IndexActor.this.startPoint.y + 2, IndexActor.this.endPoint.y - 2, IndexActor.this.endPoint.x + 2}, -1, -1, 0, -1, getDescription());
 
                 repaint();
             }
@@ -102,6 +104,7 @@ public class IndexActor extends Actor {
             public void finish() {
                 endPoint = finalPoint;
                 //this.repaint();
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.POLYGON, new int[] {IndexActor.this.startPoint.x + 2, IndexActor.this.startPoint.x - 2, IndexActor.this.endPoint.x + 2, IndexActor.this.endPoint.x - 2}, new int[] {IndexActor.this.startPoint.y - 2, IndexActor.this.startPoint.y + 2, IndexActor.this.endPoint.y - 2, IndexActor.this.endPoint.x + 2}, -1, -1, 0, -1, getDescription());
             }
 
             public void finalFinish() {

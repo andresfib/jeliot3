@@ -52,8 +52,6 @@ public class BubbleActor extends Actor implements ActorContainer{
 	 */
 	public BubbleActor(Actor speaker) {
         this.speaker = speaker;
-        setDescription("method"+((MethodStage) this.speaker).getName()+
-					"returns"+"Missing ValueACtor!!!!");
     }
 
     /**
@@ -62,6 +60,8 @@ public class BubbleActor extends Actor implements ActorContainer{
 	public void setActor(Actor actor) {
         reserve(actor);
         bind();
+        setDescription("method: " + ((MethodStage) this.speaker).getName() + 
+                "returns " + actor.getDescription());
     }
 
     /**

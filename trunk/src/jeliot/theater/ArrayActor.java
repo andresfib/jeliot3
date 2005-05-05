@@ -115,7 +115,7 @@ public class ArrayActor extends InstanceActor {
 
             }            
         }
-        setDescription("array of type"+ valueActors[0].getType() + "allocated");
+        setDescription("array of type" + valueActors[0].getType() + "allocated");
     }
 
     /**

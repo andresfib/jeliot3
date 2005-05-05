@@ -32,8 +32,7 @@ public abstract class Actor implements Cloneable {
     /**
      * The resource bundle for theater package.
      */
-    private static UserProperties propertiesBundle = ResourceBundles
-            .getTheaterUserProperties();
+    private static UserProperties propertiesBundle = ResourceBundles.getTheaterUserProperties();
 
     /**
      *
@@ -48,8 +47,9 @@ public abstract class Actor implements Cloneable {
     /**
      *
      */
-    private static Font defaultFont = new Font(propertiesBundle.getStringProperty("font.actor.default.family"),
-            Font.PLAIN, Integer.parseInt(propertiesBundle.getStringProperty("font.actor.default.size")));
+    private static Font defaultFont = new Font(propertiesBundle
+            .getStringProperty("font.actor.default.family"), Font.PLAIN, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.actor.default.size")));
 
     /**
      *
@@ -89,7 +89,8 @@ public abstract class Actor implements Cloneable {
     /**
      * Width of actor's border.
      */
-    protected int borderWidth = Integer.parseInt(propertiesBundle.getStringProperty("actor.border_width"));
+    protected int borderWidth = Integer.parseInt(propertiesBundle
+            .getStringProperty("actor.border_width"));
 
     /**
      *
@@ -153,17 +154,19 @@ public abstract class Actor implements Cloneable {
      * Parent actor.
      */
     private ActorContainer parent;
+
     /**
      * Description used for tracking porpuses
      * @see tracker
      */
     private String description;
-    
+
     /**
-     * ID of an actor, used for tracking purposes
+     * Id of an actor, used for tracking purposes
      * @see tracker
      */
-    private long actorID;
+    private long actorId = -1;
+
     public Actor() {
         super();
     }
@@ -525,23 +528,28 @@ public abstract class Actor implements Cloneable {
             double tracel = traceSpace;
 
             long id = -1;
-            
+
             public void init() {
                 this.addActor(Actor.this);
                 step = len / getDuration();
                 setShadow(shadow);
                 x -= shadow;
                 y -= shadow;
+                if (getActorId() == -1) {
+                    Point p = getRootLocation();
+                    setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(),
+                            Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] { p.x},
+                            new int[] { p.y}, Actor.this.getWidth(), Actor.this.getHeight(), 0, -1,
+                            getDescription()));
+                }
             }
 
             public void animate(double pulse) {
                 setLocation((int) x, (int) y);
-                int[] xs = {new Double(destx).intValue()};
-                int[] ys = {new Double(desty).intValue()};
                 Point p = getRootLocation();
-                Tracker.trackTheater(TrackerClock.currentTimeMillis(),Tracker.MODIFY,
-                		getActorID(), Tracker.POLYGON,  xs, ys, Actor.this.getWidth(),
-                        Actor.this.getHeight(), angle, -1, description);
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY,
+                        getActorId(), Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y},
+                        Actor.this.getWidth(), Actor.this.getHeight(), 0, -1, getDescription());
                 //id = Tracker.writeToFile("Move", p.x, p.y, Actor.this.getWidth(),
                 //        Actor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
 
@@ -590,26 +598,21 @@ public abstract class Actor implements Cloneable {
             int y = loc.y;
 
             long id = -1;
-            
+
             public void init() {
                 this.addActor(Actor.this);
                 setLocation(loc);
                 setLight(HIGHLIGHT);
                 this.repaint();
+                Point p = getRootLocation();
+                setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR,
+                        getActorId(), Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y},
+                        Actor.this.getWidth(), Actor.this.getHeight(), 0, -1, getDescription()));
             }
 
             public void animate(double pulse) {
-                Point p = getRootLocation();
-                int[] xs = {new Double(x).intValue()};
-                int[] ys = {new Double(y).intValue()};
-                setActorID(Tracker.getNewId());                
-                Tracker.trackTheater(TrackerClock.currentTimeMillis(),Tracker.APPEAR,
-                		getActorID(), Tracker.POLYGON,  xs, ys, Actor.this.getWidth(),
-                        Actor.this.getHeight(), 0, -1, description);
-                
-                //id = Tracker.writeToFile("Appear", p.x, p.y, Actor.this.getWidth(), Actor.this
-                //        .getHeight(), TrackerClock.currentTimeMillis(), id);
-                
+            //id = Tracker.writeToFile("Appear", p.x, p.y, Actor.this.getWidth(), Actor.this
+            //        .getHeight(), TrackerClock.currentTimeMillis(), id);
             }
 
             public void finish() {
@@ -631,28 +634,31 @@ public abstract class Actor implements Cloneable {
         return (x >= 0 && x < width && y >= 0 && y < height) ? this : null;
     }
 
-	/**
-	 * @return Returns the actorID.
-	 */
-	public long getActorID() {
-		return actorID;
-	}
-	/**
-	 * @param actorID The actorID to set.
-	 */
-	public void setActorID(long actorID) {
-		this.actorID = actorID;
-	}
-	/**
-	 * @return Returns the description.
-	 */
-	public String getDescription() {
-		return description;
-	}
-	/**
-	 * @param description The description to set.
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @return Returns the actorID.
+     */
+    public long getActorId() {
+        return actorId;
+    }
+
+    /**
+     * @param actorID The actorID to set.
+     */
+    public void setActorId(long actorId) {
+        this.actorId = actorId;
+    }
+
+    /**
+     * @return Returns the description.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description The description to set.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

@@ -75,13 +75,13 @@ public class OperatorActor extends Actor {
                 setLocation(loc);
                 setLight(NORMAL);
                 this.repaint();
+                //TRACKER
+                Point p = getRootLocation();
+                //id = Tracker.writeToFile("Appear", p.x, p.y, OperatorActor.this.getWidth(), OperatorActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription()));
             }
 
             public void animate(double pulse) {
-                Point p = getRootLocation();
-                //TRACKER
-                //id = Tracker.writeToFile("Appear", p.x, p.y, OperatorActor.this.getWidth(), OperatorActor.this.getHeight(), TrackerClock.currentTimeMillis(), id);
-                OperatorActor.this.setActorID(id);
             }
 
             public void finish() {
