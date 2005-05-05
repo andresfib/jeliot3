@@ -1,5 +1,6 @@
 package jeliot.gui;
 
+import java.applet.AudioClip;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -30,6 +31,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
 import java.util.regex.Pattern;
+import java.applet.Applet;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -472,6 +474,16 @@ public class JeliotWindow implements PauseListener, MouseListener {
         editor.setMasterFrame(frame);
     }
 
+    public URL getURL(String filename) {
+         URL soundURL = Thread.currentThread().getContextClassLoader().getResource(
+                propertiesBundle.getStringProperty("directory.images") + filename);
+        if (soundURL == null) {
+            soundURL = (this.getClass().getClassLoader().getResource(propertiesBundle
+                    .getStringProperty("directory.images")
+                    + filename));
+        }
+        return soundURL;
+    }
     /**
      * Initializes the JFrame frame. Sets up all the basic things for the
      * window. (Panels, Panes, Menubars) Things for debugging.
@@ -573,6 +585,24 @@ public class JeliotWindow implements PauseListener, MouseListener {
             frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setVisible(true);
+            if (jeliot.isExperiment()){ 
+	            Object[] options = { "START", "CANCEL" };
+	            int n = JOptionPane.showOptionDialog(null, "Click START to proceed with the Experiment and start thinking loud!!",
+	            		"Starting experiment",JOptionPane.YES_NO_OPTION, 
+						JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+	            if (n == JOptionPane.YES_OPTION) {
+	            	URL clipFile = getURL("start.wav");
+	            		//(this.getClass().getResource("start.wav"));
+	            	AudioClip clip = Applet.newAudioClip(clipFile);
+	   	   			clip.play(); 
+				     
+	                //catch(MalformedURLException ex){
+				    //  System.err.println("Bad URL – terminating...\n"+ex);			      
+				    //}
+	                
+	   				    //play sound;
+	            }
+            }
             //editor.requestFocus();
             //System.out.println(theatre.getSize());
         } catch (Exception e) {
