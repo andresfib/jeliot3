@@ -187,6 +187,7 @@ public class CodeEditor2 extends JComponent {
     private ActionListener saver = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "SaveButton");
             saveProgram();
         }
     };
@@ -198,6 +199,7 @@ public class CodeEditor2 extends JComponent {
     private ActionListener saveAs = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "SaveAsButton");
             saveAsProgram();
         }
     };
@@ -209,6 +211,7 @@ public class CodeEditor2 extends JComponent {
     private ActionListener loader = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "LoadButton");
             loadProgram();
         }
     };
@@ -219,6 +222,7 @@ public class CodeEditor2 extends JComponent {
     private ActionListener clearer = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "ClearButton");
             clearProgram();
         }
     };
@@ -229,6 +233,7 @@ public class CodeEditor2 extends JComponent {
     private ActionListener cutter = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "CutButton");
             area.cut();
         }
     };
@@ -239,6 +244,7 @@ public class CodeEditor2 extends JComponent {
     private ActionListener copyist = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "CopyButton");
             area.copy();
         }
     };
@@ -249,6 +255,7 @@ public class CodeEditor2 extends JComponent {
     private ActionListener pasteur = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "ÅasteButton");
             area.paste();
         }
     };
@@ -259,6 +266,7 @@ public class CodeEditor2 extends JComponent {
     private ActionListener allSelector = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "SelectAllButton");
             area.requestFocusInWindow();
             area.selectAll();
         }
