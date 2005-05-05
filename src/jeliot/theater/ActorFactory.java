@@ -592,7 +592,6 @@ public class ActorFactory {
                 }
                 //refAct.setName(resolvedType + arrayString + " " + v.getName());
                 //Tracking purposes
-                actor.setDescription("local variable: " + actor.getName());
                 
             } else {
                 String resolvedType = type;
@@ -611,7 +610,7 @@ public class ActorFactory {
                 //refAct.setName(resolvedType + " " + v.getName());
                 refAct.setBackground(varColor[typeInfo]);
                 //Tracking purposes
-                actor.setDescription("local variable: " + actor.getName());
+
             }
             refAct.setForeground(variableForegroundColor);
             refAct.setInsets(variableInsets);
@@ -623,7 +622,7 @@ public class ActorFactory {
             ra.calculateSize();
             refAct.setValue(ra);
             actor = refAct;
-            
+            actor.setDescription("local variable: " + actor.getName());
         }
         return actor;
     }
@@ -1034,7 +1033,7 @@ public class ActorFactory {
         String ctype = array.getComponentType();
         int finalComponentTypeInfo = MCodeUtilities.resolveType(MCodeUtilities.resolveComponentType(ctype));
         int typeInfo = MCodeUtilities.resolveType(ctype);
-        ArrayActor aactor = new ArrayActor(valueActors, length, MCodeUtilities.isPrimitive(ctype));
+        ArrayActor aactor = new ArrayActor(valueActors, length, MCodeUtilities.isPrimitive(ctype), ctype);
         
         if (MCodeUtilities.isPrimitive(MCodeUtilities.resolveComponentType(ctype))) {
             aactor.setFont(indexFont);
@@ -1053,7 +1052,7 @@ public class ActorFactory {
             va.setValueDimension(typeValWidth[typeInfo], valueHeight);
             array.getVariableAt(i).setActor(va);
         }
-
+        array.setActor(aactor);
         aactor.setShadow(6);
         return aactor;
     }

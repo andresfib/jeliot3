@@ -50,6 +50,8 @@ public class Tracker {
 
     private static final String KEYBOARD_STRING = "Keyboard";
 
+    private static final String SCROLL_STRING = "Scroll";
+
     private static final String OTHER_STRING = "Other";
 
     public static final int APPEAR = 0;
@@ -64,7 +66,9 @@ public class Tracker {
 
     public static final int KEYBOARD = 5;
 
-    public static final int OTHER = 6;
+    public static final int SCROLL = 6;
+    
+    public static final int OTHER = 7;
 
     private static final String POLYGON_STRING = "Polygon";
 
@@ -152,7 +156,7 @@ public class Tracker {
      * 
      */
     public static void closeFile() {
-        if (track) {
+        if (out != null && track) {
             try {
                 out.flush();
                 out.close();
@@ -181,6 +185,8 @@ public class Tracker {
             return OTHER_STRING;
         case KEYBOARD:
             return KEYBOARD_STRING;
+        case SCROLL:
+            return SCROLL_STRING;
         default:
             return OTHER_STRING;
         }
@@ -205,87 +211,142 @@ public class Tracker {
         return idCounter++;
     }
 
+    public static void trackEvent(long millis, int action,
+            int x, int y, int w, int h, String description) {
+        if (out != null && track) {
+            //Do the conversions and validation of the data
+            long id = getNewId();
+            String actionStr = getActionDescription(action);
+
+            try {
+                out.write("" + millis + "\t" + actionStr + "\t" + id + "\t"
+                        + "\t" + x + "\t" + y + "\t" + w + "\t" + h
+                        + "\t" + "\t" + "\t" + description
+                        + "\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     public static void trackEvent(long millis, int action, int x, int y,
             String description) {
-        //Do the conversions and validation of the data
-        long id = getNewId();
-        String actionStr = getActionDescription(action);
-        String locations = "";
-        if (x >= 0 && y >= 0) {
-            locations+= x + "," + y;
-        }
-        try {
-            out.write("" + millis + "\t" + actionStr + "\t" + id + "\t"
-                    + "\t" + locations + "\t" + "\t" + "\t"
-                    + "\t" + "\t" + description + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (out != null && track) {
+            //Do the conversions and validation of the data
+            long id = getNewId();
+            String actionStr = getActionDescription(action);
+            String locations = "";
+            if (x >= 0 && y >= 0) {
+                locations += x + "," + y;
+            }
+            try {
+                out.write("" + millis + "\t" + actionStr + "\t" + id + "\t"
+                        + "\t" + locations + "\t" + "\t" + "\t" + "\t" + "\t"
+                        + description + "\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public static long trackTheater(long millis, int action, long id, int type,
             int[] x, int[] y, int w, int h, double angle, long lifeTime,
             String description) {
-        if (x.length <= 0 && x.length != y.length) {
-            throw new RuntimeException(
-                    "Different number of X and Y coordinates in Tracker!");
-        }
-        Point p = theater.getLocationOnScreen();
-        Rectangle r = theater.getClipRect();
+        if (out != null && track && theater.isShowing()) {
 
-        String locations = "";
-        for (int i = 0; i < x.length; i++) {
-            if (i == x.length - 1) {
-                locations += (p.x + x[i]) + "," + (p.y + y[i]);
-                break;
+            if (x.length <= 0 && x.length != y.length) {
+                throw new RuntimeException(
+                        "Different number of X and Y coordinates in Tracker!");
             }
-            locations += (p.x + x[i]) + "," + (p.y + y[i]) + ",";
-        }
+            
+            Point p = theater.getLocationOnScreen();
+            Rectangle r = theater.getClipRect();
+            
+            String locations = "";
+            for (int i = 0; i < x.length; i++) {
+                int finalX = (p.x + x[i]);
+                int finalY = (p.y + y[i]);
+                if (type == RECTANGLE) {
+                    
+                }
+                if (i == x.length - 1) {
+                    locations +=  finalX + ","
+                            + finalY;
+                    break;
+                }
+                locations += finalX + "," + finalY
+                        + ",";
+            }
 
-        return track(millis, action, id, type, locations, w, h, angle,
-                lifeTime, description);
+            return track(millis, action, id, type, locations, w, h, angle,
+                    lifeTime, description);
+        }
+        return -1;
     }
 
     public static long trackCode(long millis, int action, long id, int type,
             int[] x, int[] y, int w, int h, double angle, long lifeTime,
             String description, JEditTextArea area) {
+        if (out != null && track) {
 
-        Point p = area.getLocationOnScreen();
-        Rectangle r = area.getPainter().getClipRect();
-        if (x.length <= 0 && x.length != y.length) {
-            throw new RuntimeException(
-                    "Different number of X and Y coordinates in Tracker!");
-        }
-        String locations = "";
-        for (int i = 0; i < x.length; i++) {
-            if (i == x.length - 1) {
-                locations += (p.x + x[i]) + "," + (p.y + y[i]);
-                break;
+            Point p = area.getLocationOnScreen();
+            Rectangle r = area.getPainter().getClipRect();
+            int areaFirstY = Math.abs(area.lineToY(area.getFirstLine()));
+            int areaFirstX = Math.abs(area.getHorizontalOffset());
+            
+            //System.out.println("Code loc on screen");
+            //System.out.println(p);
+            //System.out.println("Code cliprect");
+            //System.out.println(r);            
+            //System.out.println("Code offset");
+            //System.out.println("" + areaFirstX + " " + areaFirstY);
+            //System.out.println("Code w and h");
+            //System.out.println("" + w + " " + h);
+            
+            if (x.length <= 0 && x.length != y.length) {
+                throw new RuntimeException(
+                        "Different number of X and Y coordinates in Tracker!");
             }
-            locations += (p.x + x[i]) + "," + (p.y + y[i]) + ",";
+            String locations = "";
+            for (int i = 0; i < x.length; i++) {
+                if (i == x.length - 1) {
+                    locations += (p.x + x[i]) + ","
+                            + (p.y + y[i]);
+                    break;
+                }
+                locations += (p.x + x[i]) + ","
+                        + (p.y + y[i]) + ",";
+            }
+            return track(millis, action, id, type, locations, w, h, angle,
+                    lifeTime, description);
         }
-        return track(millis, action, id, type, locations, w, h, angle,
-                lifeTime, description);
+        return -1;
+
     }
 
     public static long track(long millis, int action, long id, int type,
             String locations, int w, int h, double angle, long lifeTime,
             String description) {
+        if (out != null && track) {
 
-        //Do the conversions and validation of the data
-        id = (id == -1) ? getNewId() : id;
-        String actionStr = getActionDescription(action);
-        String typeStr = getTypeDescription(type);
+            //Do the conversions and validation of the data
+            id = (id == -1) ? getNewId() : id;
+            String actionStr = getActionDescription(action);
+            String typeStr = getTypeDescription(type);
 
-        try {
-            out.write("" + millis + "\t" + actionStr + "\t" + id + "\t"
-                    + typeStr + "\t" + locations + "\t" + w + "\t" + h + "\t"
-                    + angle + "\t" + lifeTime + "\t" + description + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                out.write("" + millis + "\t" + actionStr + "\t" + id + "\t"
+                        + typeStr + "\t" + locations + "\t" + w + "\t" + h
+                        + "\t" + angle + "\t" + lifeTime + "\t" + description
+                        + "\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return id;
         }
-
-        return id;
+        return -1;
     }
 
     /**
@@ -297,30 +358,30 @@ public class Tracker {
      * @param millis
      */
     /*
-    public static int writeToFile(String name, int x, int y, int w, int h,
-            long millis, int id) {
-        if (id < 0) {
-            id = Tracker.nextId++;
-        }
-        if (out != null && track && theater != null) {
-            try {
-                Point p = theater.getLocationOnScreen();
-                Rectangle r = theater.getClipRect();
-                if (r != null) {
-                    out.write(millis + ":" + id + ":" + name + ":"
-                            + (p.x + x - r.x) + ":" + (p.y + y - r.y) + ":" + w
-                            + ":" + h);
-                    out.newLine();
-                }
-            } catch (Exception e) {
-                if (DebugUtil.DEBUGGING) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return id;
-    }
-    */
+     public static int writeToFile(String name, int x, int y, int w, int h,
+     long millis, int id) {
+     if (id < 0) {
+     id = Tracker.nextId++;
+     }
+     if (out != null && track && theater != null) {
+     try {
+     Point p = theater.getLocationOnScreen();
+     Rectangle r = theater.getClipRect();
+     if (r != null) {
+     out.write(millis + ":" + id + ":" + name + ":"
+     + (p.x + x - r.x) + ":" + (p.y + y - r.y) + ":" + w
+     + ":" + h);
+     out.newLine();
+     }
+     } catch (Exception e) {
+     if (DebugUtil.DEBUGGING) {
+     e.printStackTrace();
+     }
+     }
+     }
+     return id;
+     }
+     */
     /**
      * @param name
      * @param x
@@ -330,78 +391,78 @@ public class Tracker {
      * @param millis
      */
     /*
-    public static int writeIndexToFile(String name, int x, int y, int x2,
-            int y2, long millis, int id) {
-        if (id < 0) {
-            id = Tracker.nextId++;
-        }
-        if (out != null && track && theater != null) {
-            try {
-                Point p = theater.getLocationOnScreen();
-                Rectangle r = theater.getClipRect();
-                if (r != null) {
-                    out.write(millis + ":" + id + ":" + name + ":"
-                            + (p.x + x - r.x) + ":" + (p.y + y - r.y) + ":"
-                            + (p.x + x2 - r.x) + ":" + (p.y + y2 - r.y));
-                    out.newLine();
-                }
-            } catch (Exception e) {
-                if (DebugUtil.DEBUGGING) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return id;
-    }
-    */
-    
-    /**
-     * @param name
-     * @param x
-     * @param y
-     * @param w
-     * @param h
-     * @param millis
+     public static int writeIndexToFile(String name, int x, int y, int x2,
+     int y2, long millis, int id) {
+     if (id < 0) {
+     id = Tracker.nextId++;
+     }
+     if (out != null && track && theater != null) {
+     try {
+     Point p = theater.getLocationOnScreen();
+     Rectangle r = theater.getClipRect();
+     if (r != null) {
+     out.write(millis + ":" + id + ":" + name + ":"
+     + (p.x + x - r.x) + ":" + (p.y + y - r.y) + ":"
+     + (p.x + x2 - r.x) + ":" + (p.y + y2 - r.y));
+     out.newLine();
+     }
+     } catch (Exception e) {
+     if (DebugUtil.DEBUGGING) {
+     e.printStackTrace();
+     }
+     }
+     }
+     return id;
+     }
      */
-    /*
-    public static int writeToFileFromCodeView(String name, int x, int y, int w,
-            int h, long millis, int id) {
-        if (id < 0) {
-            id = Tracker.nextId++;
-        }
 
-        if (out != null && track && codePane != null
-                && codePane.getTextArea().isShowing()) {
-            try {
-                Point p = codePane.getTextArea().getLocationOnScreen();
-                Rectangle r = codePane.getTextArea().getPainter().getClipRect();
-                if (r != null) {
-                    p.x = p.x + 35; //35 comes from the width of the line
-                    // numbers showing component that is for
-                    // some reason not regonized correctly.
-                    out.write(millis
-                            + ":"
-                            + id
-                            + ":"
-                            + name
-                            + ":"
-                            + (p.x + x - r.x)
-                            + ":"
-                            + (p.y + y - r.y)
-                            + ":"
-                            + (((x + w - r.x) < (codePane.getWidth() - 35)) ? w
-                                    : ((codePane.getWidth() - 35))) + ":" + h);
-                    out.newLine();
-                }
-            } catch (Exception e) {
-                if (DebugUtil.DEBUGGING) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return id;
-    }
-    */
+    /**
+     * @param name
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param millis
+     */
+    /*
+     public static int writeToFileFromCodeView(String name, int x, int y, int w,
+     int h, long millis, int id) {
+     if (id < 0) {
+     id = Tracker.nextId++;
+     }
+
+     if (out != null && track && codePane != null
+     && codePane.getTextArea().isShowing()) {
+     try {
+     Point p = codePane.getTextArea().getLocationOnScreen();
+     Rectangle r = codePane.getTextArea().getPainter().getClipRect();
+     if (r != null) {
+     p.x = p.x + 35; //35 comes from the width of the line
+     // numbers showing component that is for
+     // some reason not regonized correctly.
+     out.write(millis
+     + ":"
+     + id
+     + ":"
+     + name
+     + ":"
+     + (p.x + x - r.x)
+     + ":"
+     + (p.y + y - r.y)
+     + ":"
+     + (((x + w - r.x) < (codePane.getWidth() - 35)) ? w
+     : ((codePane.getWidth() - 35))) + ":" + h);
+     out.newLine();
+     }
+     } catch (Exception e) {
+     if (DebugUtil.DEBUGGING) {
+     e.printStackTrace();
+     }
+     }
+     }
+     return id;
+     }
+     */
     /**
      * @param name
      * @param l
@@ -409,74 +470,74 @@ public class Tracker {
      * @param millis
      */
     /*
-    public static int writeToFileFromCodeView(String name, int l, int r,
-            long millis, int id) {
-        if (id < 0) {
-            id = Tracker.nextId++;
-        }
+     public static int writeToFileFromCodeView(String name, int l, int r,
+     long millis, int id) {
+     if (id < 0) {
+     id = Tracker.nextId++;
+     }
 
-        if (out != null && track && codePane != null
-                && codePane.getTextArea().isShowing()) {
-            try {
-                out.write(millis + ":" + id + ":" + name + ":" + l + ":" + r);
-                out.newLine();
-            } catch (Exception e) {
-                if (DebugUtil.DEBUGGING) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return id;
-    }
-    */
+     if (out != null && track && codePane != null
+     && codePane.getTextArea().isShowing()) {
+     try {
+     out.write(millis + ":" + id + ":" + name + ":" + l + ":" + r);
+     out.newLine();
+     } catch (Exception e) {
+     if (DebugUtil.DEBUGGING) {
+     e.printStackTrace();
+     }
+     }
+     }
+     return id;
+     }
+     */
     /**
      * @param name
      * @param millis
      */
     /*
-    public static int writeToFile(String name, long millis, int id) {
-        if (id < 0) {
-            id = Tracker.nextId++;
-        }
+     public static int writeToFile(String name, long millis, int id) {
+     if (id < 0) {
+     id = Tracker.nextId++;
+     }
 
-        if (out != null && track) {
-            try {
-                out.write(millis + ":" + id + ":" + name);
-                out.newLine();
-            } catch (Exception e) {
-                if (DebugUtil.DEBUGGING) {
-                    e.printStackTrace();
-                }
-            }
-        }
+     if (out != null && track) {
+     try {
+     out.write(millis + ":" + id + ":" + name);
+     out.newLine();
+     } catch (Exception e) {
+     if (DebugUtil.DEBUGGING) {
+     e.printStackTrace();
+     }
+     }
+     }
 
-        return id;
-    }
-    */
-    
+     return id;
+     }
+     */
+
     /**
      * @param name
      * @param fileName
      * @param millis
      */
     /*
-    public static int writeToFile(String name, String fileName, long millis,
-            int id) {
-        if (id < 0) {
-            id = Tracker.nextId++;
-        }
+     public static int writeToFile(String name, String fileName, long millis,
+     int id) {
+     if (id < 0) {
+     id = Tracker.nextId++;
+     }
 
-        if (out != null && track) {
-            try {
-                out.write(millis + ":" + id + ":" + name + ":" + fileName);
-                out.newLine();
-            } catch (Exception e) {
-                if (DebugUtil.DEBUGGING) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return id;
-    }
-    */
+     if (out != null && track) {
+     try {
+     out.write(millis + ":" + id + ":" + name + ":" + fileName);
+     out.newLine();
+     } catch (Exception e) {
+     if (DebugUtil.DEBUGGING) {
+     e.printStackTrace();
+     }
+     }
+     }
+     return id;
+     }
+     */
 }

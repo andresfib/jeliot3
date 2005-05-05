@@ -367,7 +367,8 @@ public class TextAreaPainter extends JComponent implements TabExpander {
                     (int[]) info.get(1), (int[]) info.get(2), ((Integer) info.get(3)).intValue(), ((Integer) info.get(4)).intValue(), 0, -1,
                     (String) info.get(5), textArea);
         }
-
+        ids.clear();
+        
         tabSize = fm.charWidth(' ')
                 * ((Integer) textArea.getDocument().getProperty(
                         PlainDocument.tabSizeAttribute)).intValue();
