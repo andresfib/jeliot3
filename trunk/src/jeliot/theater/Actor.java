@@ -582,7 +582,9 @@ public abstract class Actor implements Cloneable {
     }
 
     public Animation disappear() {
-        
+        //Tracker
+        Point p = getRootLocation();
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
         return null;
     }
     

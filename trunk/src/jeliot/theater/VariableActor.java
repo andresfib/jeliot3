@@ -6,6 +6,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
+
 /**
  * <code>VariableActor</code> represent graphically the language construct
  * <code>Variable</code> for primitive data types and Strings.
@@ -272,4 +275,11 @@ public class VariableActor extends Actor implements ActorContainer {
         calcLabelPosition();
     }
 
+    public Animation disappear() {
+        value.disappear();
+        Point p = getRootLocation();
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+        return null;
+    }
+    
 }

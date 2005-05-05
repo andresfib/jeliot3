@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
+import java.util.Iterator;
 import java.util.Stack;
 
 import jeliot.tracker.Tracker;
@@ -387,8 +388,12 @@ public class MethodStage extends Actor implements ActorContainer {
 
             public void finish() {
                 //Tracker
+                for (Iterator i = variables.iterator(); i.hasNext();) {
+                    ((Actor) i.next()).disappear();
+                }
                 Point p = getRootLocation();
                 Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+                
                 this.removeActor(MethodStage.this);
             }
         };

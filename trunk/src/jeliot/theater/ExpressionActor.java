@@ -3,6 +3,9 @@ package jeliot.theater;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
+
 /**
  * ExpressionActor represents a single line of a scratch the evaluation
  * area. It can contain any number of different actors inside that it
@@ -109,10 +112,17 @@ public class ExpressionActor extends Actor implements ActorContainer {
                 bound[i] = true;
                 actor.setParent(this);
                 actor.setLocation(locs[i]);
+                //Tracker
+                Point p = getRootLocation();
+                if (getActorId() == -1) {
+                    setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription()));
+                } else {
+                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+                }
                 return;
             }
         }
-        throw new RuntimeException();
+        throw new RuntimeException("There was no reserved actor " + actor);
     }
 
     /**
@@ -121,6 +131,8 @@ public class ExpressionActor extends Actor implements ActorContainer {
     public void cut() {
         actors[--next] = null;
         bound[next] = false;
+        Point p = getRootLocation();
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
     }
 
     /* (non-Javadoc)
@@ -150,6 +162,17 @@ public class ExpressionActor extends Actor implements ActorContainer {
         }
         return max;
     }
+    
+    /* (non-Javadoc)
+     * @see jeliot.theater.Actor#getWidth()
+     */
+    public int getWidth() {
+        return locs[next - 1].x
+        + margin
+        + ((actors[next - 1] instanceof ReferenceActor) ?
+          ((ReferenceActor) actors[next - 1]).getReferenceWidth() :
+          actors[next - 1].getWidth());
+    }
 
     /* (non-Javadoc)
      * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
@@ -161,6 +184,8 @@ public class ExpressionActor extends Actor implements ActorContainer {
                 bound[i] = false;
             }
         }
+        Point p = getRootLocation();
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
     }
 
     /* (non-Javadoc)
@@ -172,5 +197,16 @@ public class ExpressionActor extends Actor implements ActorContainer {
         for (int i = 0; i < n; ++i) {
             actors[i].setLight(light);
         }
+    }
+    
+    public Animation disappear() {
+        for (int i = 0; i < next; i++) {
+            if (actors[i] != null) {
+                actors[i].disappear();
+            }
+        }
+        Point p = getRootLocation();
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+        return null;
     }
 }

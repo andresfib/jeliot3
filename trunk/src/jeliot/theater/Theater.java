@@ -287,6 +287,8 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 		} else {
 			pasAct.removeElement(actor);
 		}
+        //For tracking
+        actor.disappear();
 	}
 	/*
 	 * (non-Javadoc)
