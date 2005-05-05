@@ -90,13 +90,12 @@ public class ExpressionActor extends Actor implements ActorContainer {
     public Point reserve(Actor actor) {
         actors[next] = actor;
         int y = 0;
-        int x = (next == 0) ?
-                0 :
-                locs[next - 1].x
-                    + margin
-                    + ((actors[next - 1] instanceof ReferenceActor) ?
-                      ((ReferenceActor) actors[next - 1]).getReferenceWidth() :
-                      actors[next - 1].getWidth());
+        int x = (next == 0) ? 0
+                : locs[next - 1].x
+                        + margin
+                        + ((actors[next - 1] instanceof ReferenceActor) ? ((ReferenceActor) actors[next - 1])
+                                .getReferenceWidth()
+                                : actors[next - 1].getWidth());
         locs[next++] = new Point(x, y);
         Point rp = getRootLocation();
         rp.translate(x, y);
@@ -115,9 +114,13 @@ public class ExpressionActor extends Actor implements ActorContainer {
                 //Tracker
                 Point p = getRootLocation();
                 if (getActorId() == -1) {
-                    setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription()));
+                    setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(),
+                            Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] { p.x},
+                            new int[] { p.y}, getWidth(), getHeight(), 0, -1, getDescription()));
                 } else {
-                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY,
+                            getActorId(), Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y},
+                            getWidth(), getHeight(), 0, -1, getDescription());
                 }
                 return;
             }
@@ -132,7 +135,9 @@ public class ExpressionActor extends Actor implements ActorContainer {
         actors[--next] = null;
         bound[next] = false;
         Point p = getRootLocation();
-        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(),
+                Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y}, getWidth(), getHeight(), 0,
+                -1, getDescription());
     }
 
     /* (non-Javadoc)
@@ -162,16 +167,20 @@ public class ExpressionActor extends Actor implements ActorContainer {
         }
         return max;
     }
-    
+
     /* (non-Javadoc)
      * @see jeliot.theater.Actor#getWidth()
      */
     public int getWidth() {
-        return locs[next - 1].x
-        + margin
-        + ((actors[next - 1] instanceof ReferenceActor) ?
-          ((ReferenceActor) actors[next - 1]).getReferenceWidth() :
-          actors[next - 1].getWidth());
+        if (next - 1 >= 0) {
+            return locs[next - 1].x
+                    + margin
+                    + ((actors[next - 1] instanceof ReferenceActor) ? ((ReferenceActor) actors[next - 1])
+                            .getReferenceWidth()
+                            : actors[next - 1].getWidth());
+        } else {
+            return 0;
+        }
     }
 
     /* (non-Javadoc)
@@ -185,7 +194,9 @@ public class ExpressionActor extends Actor implements ActorContainer {
             }
         }
         Point p = getRootLocation();
-        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(),
+                Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y}, getWidth(), getHeight(), 0,
+                -1, getDescription());
     }
 
     /* (non-Javadoc)
@@ -198,7 +209,7 @@ public class ExpressionActor extends Actor implements ActorContainer {
             actors[i].setLight(light);
         }
     }
-    
+
     public Animation disappear() {
         for (int i = 0; i < next; i++) {
             if (actors[i] != null) {
@@ -206,7 +217,9 @@ public class ExpressionActor extends Actor implements ActorContainer {
             }
         }
         Point p = getRootLocation();
-        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(),
+                Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y}, getWidth(), getHeight(), 0,
+                -1, getDescription());
         return null;
     }
 }
