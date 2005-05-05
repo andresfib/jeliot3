@@ -317,17 +317,22 @@ public class MethodStage extends Actor implements ActorContainer {
                 setSize(size);
                 setLight(HIGHLIGHT);
                 paintVars = false;
+                //Tracker
+                Point p = getRootLocation();
+                setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription()));
                 repaint();
             }
 
             public void animate(double pulse) {
-                Point p = getRootLocation();
-                //TRACKER
-                //id = Tracker.writeToFile("Appear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
-                MethodStage.this.setActorID(id);
                 h += plus * pulse;
                 size.height = (int)h;
                 setSize(size);
+                
+                //TRACKER
+                Point p = getRootLocation();
+                //id = Tracker.writeToFile("Appear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+                
                 this.repaint();
             }
 
@@ -367,17 +372,23 @@ public class MethodStage extends Actor implements ActorContainer {
             }
 
             public void animate(double pulse) {
-                Point p = getRootLocation();
-                //TRACKER
-                //id = Tracker.writeToFile("Disappear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                 
                 h += plus * pulse;
                 size.height = (int)h;
                 setSize(size);
+
+                //TRACKER
+                Point p = getRootLocation();
+                //id = Tracker.writeToFile("Disappear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+
                 this.repaint();
             }
 
             public void finish() {
+                //Tracker
+                Point p = getRootLocation();
+                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
                 this.removeActor(MethodStage.this);
             }
         };
@@ -411,14 +422,16 @@ public class MethodStage extends Actor implements ActorContainer {
                 }
 
                 public void animate(double pulse) {
-                    Point p = getRootLocation();
-                    //TRACKER
-                    //id = Tracker.writeToFile("Extend", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
                     
                     h += plus * pulse;
                     size.height = (int)h;
                     setSize(size);
                     this.repaint();
+                    
+                    //TRACKER
+                    Point p = getRootLocation();
+                    //id = Tracker.writeToFile("Disappear", p.x, p.y, MethodStage.this.getWidth(), MethodStage.this.getHeight(), TrackerClock.currentTimeMillis(), id);
+                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
                 }
 
                 public void finish() {

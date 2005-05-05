@@ -60,7 +60,7 @@ public class AnimatingActor extends Actor {
 	 * @param chim
 	 * @return
 	 */
-    public Animation changeImage(final Image chim ) {
+    public Animation changeImage(final Image chim) {
         return new Animation() {
                      
             int id = -1;
@@ -68,9 +68,14 @@ public class AnimatingActor extends Actor {
             public void animate(double pulse) { }
 
             public void finish() {
+                //TRACKER
                 Point p = getRootLocation();
-//              //TRACKER
                 //id = Tracker.writeToFile("ChangeImage", p.x, p.y, chim.getWidth(null), chim.getHeight(null), TrackerClock.currentTimeMillis(), id);
+                if (getActorId() == -1) {
+                    setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription()));
+                } else {
+                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+                }
                 setImage(chim);
             }
         };

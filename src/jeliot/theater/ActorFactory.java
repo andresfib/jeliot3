@@ -562,7 +562,7 @@ public class ActorFactory {
             actor.reserve(vact);
             actor.bind();
             //Tracking purposes
-            actor.setDescription("variable of tipe " + resolvedType + " and name " + v.getName());
+            actor.setDescription("local variable: " + actor.getName());
             return actor;
         } else if (typeInfo == MCodeUtilities.REFERENCE) {
             ReferenceVariableActor refAct = new ReferenceVariableActor();
@@ -592,7 +592,7 @@ public class ActorFactory {
                 }
                 //refAct.setName(resolvedType + arrayString + " " + v.getName());
                 //Tracking purposes
-                actor.setDescription("variable of type " + resolvedType + " and name " + v.getName());
+                actor.setDescription("local variable: " + actor.getName());
                 
             } else {
                 String resolvedType = type;
@@ -611,7 +611,7 @@ public class ActorFactory {
                 //refAct.setName(resolvedType + " " + v.getName());
                 refAct.setBackground(varColor[typeInfo]);
                 //Tracking purposes
-                actor.setDescription("variable of type " + resolvedType + " and name " + v.getName());
+                actor.setDescription("local variable: " + actor.getName());
             }
             refAct.setForeground(variableForegroundColor);
             refAct.setInsets(variableInsets);
@@ -655,6 +655,9 @@ public class ActorFactory {
             actor.calculateSize();
             actor.reserve(vact);
             actor.bind();
+            //Tracking purposes
+            actor.setDescription("object variable: " + actor.getName());
+
             return actor;
         } else if (typeInfo == MCodeUtilities.REFERENCE) {
             ReferenceVariableActor refAct = new ReferenceVariableActor();
@@ -697,6 +700,9 @@ public class ActorFactory {
             ra.calculateSize();
             refAct.setValue(ra);
             actor = refAct;
+            //Tracking purposes
+            actor.setDescription("object variable " + actor.getName());
+
         }
         return actor;
     }
