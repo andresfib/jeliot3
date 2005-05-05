@@ -83,7 +83,7 @@ public class ObjectStage extends InstanceActor {
         this.name = name;
         this.varCount = varCount;
         insets = new Insets(2, 6, 4, 6);
-        setDescription("object of class " + name + "allocated");
+        setDescription("object stage: " + name);
     }
 
 //  DOC: Document!

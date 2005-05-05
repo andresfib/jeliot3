@@ -26,9 +26,11 @@ public class AnimatingActor extends Actor {
     /**
 	 * @param image
 	 */
-	public AnimatingActor(Image image) {
+	public AnimatingActor(Image image, String description) {
         this.image = image;
         setShadow(0);
+        
+        setDescription(description);
 	}
 
     /* (non-Javadoc)

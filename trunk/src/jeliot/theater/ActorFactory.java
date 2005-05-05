@@ -361,8 +361,8 @@ public class ActorFactory {
                     propertiesBundle.getStringProperty("image.binary_operator.result.logical_or")},
             //logical or
             { propertiesBundle.getStringProperty("image.binary_operator.logical_xor"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.logical_xor")} //logical
-    // xor
+                    propertiesBundle.getStringProperty("image.binary_operator.result.logical_xor")}
+            //logical xor
     };
 
     /**
@@ -745,7 +745,7 @@ public class ActorFactory {
             actor.setLabel(label);
             //Tracking porpuses
             actor.setType(type);
-            actor.setDescription("value of type" + val.getType() + "and value" + val.getValue());
+            actor.setDescription("value: (" + val.getType() + ") " + val.getValue() + "");
             //actor.setActor(val.getActor());
             actor.calculateSize();
             return actor;
@@ -761,6 +761,9 @@ public class ActorFactory {
                 actor.calculateSize();
             }
             actor.setForeground(valueForegroundColor);
+            
+            actor.setDescription("reference: (" + val.getType() + ") " + val.getValue() + "");
+
             return actor;
         }
     }
@@ -786,6 +789,9 @@ public class ActorFactory {
         actor.setBackground(valColor[typeInfo]);
         actor.calculateSize();
         actor.setForeground(valueForegroundColor);
+        
+        actor.setDescription("reference: (" + rf.getType() + ") " + rf.getValue() + "");
+
         return actor;
     }
 
@@ -801,6 +807,9 @@ public class ActorFactory {
         actor.setParent(cloneActor.getParent());
         actor.calculateSize();
         actor.setForeground(valueForegroundColor);
+        
+        actor.setDescription("reference: (" + cloneActor.getType() + ") " + cloneActor.valstr + "");
+
         return actor;
     }
 
@@ -817,6 +826,9 @@ public class ActorFactory {
         Point p = cloneActor.getLocation();
         actor.setLocation(new Point(p.x, p.y));
         actor.setParent(cloneActor.getParent());
+        
+        actor.setDescription("value: (" + cloneActor.getType() + ") " + cloneActor.valstr + "");
+
         return actor;
     }
 
@@ -826,7 +838,7 @@ public class ActorFactory {
      */
     public OperatorActor produceBinOpActor(int op) {
         Image image = iLoad.getImage(binOpImageName[op][0]);
-        return produceOperatorActor(image);
+        return produceOperatorActor(image, "equals");
     }
 
     /**
@@ -835,7 +847,7 @@ public class ActorFactory {
      */
     public OperatorActor produceBinOpResActor(int op) {
         Image image = iLoad.getImage(binOpImageName[op][1]);
-        return produceOperatorActor(image);
+        return produceOperatorActor(image, "equals");
     }
 
     /**
@@ -843,7 +855,7 @@ public class ActorFactory {
      */
     public OperatorActor produceEllipsis() {
         Image image = iLoad.getImage(propertiesBundle.getStringProperty("image.dots"));
-        OperatorActor actor = produceOperatorActor(image);
+        OperatorActor actor = produceOperatorActor(image, "ellipsis");
         return actor;
     }
 
@@ -853,7 +865,7 @@ public class ActorFactory {
      */
     public OperatorActor produceUnaOpActor(int op) {
         Image image = iLoad.getImage(unaOpImageName[op][0]);
-        return produceOperatorActor(image);
+        return produceOperatorActor(image, getBinOpDescription(op));
     }
 
     /**
@@ -862,15 +874,15 @@ public class ActorFactory {
      */
     public OperatorActor produceUnaOpResActor(int op) {
         Image image = iLoad.getImage(unaOpImageName[op][1]);
-        return produceOperatorActor(image);
+        return produceOperatorActor(image, getUnOpDescription(op));
     }
 
     /**
      * @param image
      * @return
      */
-    public OperatorActor produceOperatorActor(Image image) {
-        OperatorActor actor = new OperatorActor(image, iLoad.darken(image));
+    public OperatorActor produceOperatorActor(Image image, String description) {
+        OperatorActor actor = new OperatorActor(image, iLoad.darken(image), description);
         actor.calculateSize();
         int hh = valueHeight - actor.getHeight();
         if (hh > 0) {
@@ -991,7 +1003,7 @@ public class ActorFactory {
      * @return
      */
     public AnimatingActor produceHand() {
-        AnimatingActor hand = new AnimatingActor(produceImage("image.hand1"));
+        AnimatingActor hand = new AnimatingActor(produceImage("image.hand1"), "Output");
         hand.calculateSize();
         return hand;
     }
@@ -1096,5 +1108,76 @@ public class ActorFactory {
         ca.setBackground(classColor);
         ca.setShadow(6);
         return ca;
+    }
+    
+
+    public String getBinOpDescription(int op) {
+        switch(op) {
+            case 0:
+                return "multiplication";
+            case 1:
+                return "division";
+            case 2:
+                return "remainder";
+            case 3:
+                return "addition";
+            case 4:
+                return "substration";
+            case 5:
+                return "left shift";
+            case 6:
+                return "right shift";
+            case 7:
+                return "unsigned right shift";
+            case 8:
+                return "lesser than"; 
+            case 9:
+                return "greater than"; 
+            case 10:
+                return "lesser than or equals"; 
+            case 11:
+                return "greater than or equals"; 
+            case 12:
+                return "instanceof"; 
+            case 13:
+                return "equals"; 
+            case 14:
+                return "not equals"; 
+            case 15:
+                return "bitwise and"; 
+            case 16:
+                return "bitwise xor"; 
+            case 17:
+                return "bitwise or"; 
+            case 18:
+                return "logical and"; 
+            case 19:
+                return "logical or"; 
+            case 20:
+                return "logical xor";
+            default:
+                return "other";
+        }
+    }
+
+    public String getUnOpDescription(int op) {
+        switch(op) {
+            case 0:
+                return "plus";
+            case 1:
+                return "minus";
+            case 2:
+                return "preinc";
+            case 3:
+                return "predec";
+            case 4:
+                return "complement";
+            case 5:
+                return "postinc";
+            case 6:
+                return "postdec";
+            default:
+                return "other";
+        }
     }
 }

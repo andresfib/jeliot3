@@ -365,7 +365,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
             long id = Tracker.trackCode(TrackerClock.currentTimeMillis(),
                     Tracker.DISAPPEAR, ((Long) info.get(0)).longValue(), Tracker.RECTANGLE,
                     (int[]) info.get(1), (int[]) info.get(2), ((Integer) info.get(3)).intValue(), ((Integer) info.get(4)).intValue(), 0, -1,
-                    (String) info.get(5));
+                    (String) info.get(5), textArea);
         }
 
         tabSize = fm.charWidth(' ')
@@ -608,7 +608,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
                 long id = Tracker.trackCode(TrackerClock.currentTimeMillis(),
                         Tracker.APPEAR, -1, Tracker.RECTANGLE,
                         new int[] { 35 }, new int[] { y }, getWidth(), height,
-                        0, -1, desc);
+                        0, -1, desc, textArea);
                 Vector info = new Vector();
                 info.add(new Long(id));
                 info.add(new int[] { 35 });
@@ -663,7 +663,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
             long id = Tracker.trackCode(TrackerClock.currentTimeMillis(),
                     Tracker.APPEAR, -1, Tracker.RECTANGLE,
                     new int[] { x + 35 }, new int[] { y }, w, height, 0, -1,
-                    desc);
+                    desc, textArea);
             Vector info = new Vector();
             info.add(new Long(id));
             info.add(new int[] { x + 35 });

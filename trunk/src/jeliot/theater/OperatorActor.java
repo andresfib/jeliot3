@@ -35,9 +35,11 @@ public class OperatorActor extends Actor {
 	 * @param image
 	 * @param dark
 	 */
-	public OperatorActor(Image image, Image dark) {
+	public OperatorActor(Image image, Image dark, String description) {
         this.image = image;
         this.darkImage = dark;
+        
+        setDescription(description);
     }
 
     /* (non-Javadoc)

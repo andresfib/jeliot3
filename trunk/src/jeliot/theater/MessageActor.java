@@ -44,7 +44,12 @@ public class MessageActor extends Actor {
 	 */
 	public void setText(String[] text) {
         this.text = text;
-        setDescription("message with text: "+ text);
+        
+        String allText = "";
+        for (int i = 0; i < text.length; i++) {
+            allText += text[i] + " ";
+        }
+        setDescription("message: "+ allText);
     }
 
     /**
