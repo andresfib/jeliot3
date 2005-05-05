@@ -40,7 +40,7 @@ public class IndexActor extends Actor {
 	public IndexActor(Actor source) {
         this.source = source;
         this.fgcolor = Color.white;
-        setDescription("index pointer");
+        setDescription("indexing array");
     }
 
     /* (non-Javadoc)
@@ -104,12 +104,16 @@ public class IndexActor extends Actor {
             public void finish() {
                 endPoint = finalPoint;
                 //this.repaint();
-                Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.POLYGON, new int[] {IndexActor.this.startPoint.x + 2, IndexActor.this.startPoint.x - 2, IndexActor.this.endPoint.x + 2, IndexActor.this.endPoint.x - 2}, new int[] {IndexActor.this.startPoint.y - 2, IndexActor.this.startPoint.y + 2, IndexActor.this.endPoint.y - 2, IndexActor.this.endPoint.x + 2}, -1, -1, 0, -1, getDescription());
             }
 
             public void finalFinish() {
                 this.passivate(IndexActor.this);
             }
         };
+    }
+    
+    public Animation disappear() {
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.POLYGON, new int[] {IndexActor.this.startPoint.x + 2, IndexActor.this.startPoint.x - 2, IndexActor.this.endPoint.x + 2, IndexActor.this.endPoint.x - 2}, new int[] {IndexActor.this.startPoint.y - 2, IndexActor.this.startPoint.y + 2, IndexActor.this.endPoint.y - 2, IndexActor.this.endPoint.x + 2}, -1, -1, 0, -1, getDescription());
+        return null;
     }
 }

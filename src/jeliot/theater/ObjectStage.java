@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 import jeliot.tracker.Tracker;
@@ -342,6 +343,9 @@ public class ObjectStage extends InstanceActor {
             public void finish() {
                 
                 //Tracker
+                for (Iterator i = variables.iterator(); i.hasNext();) {
+                    ((Actor) i.next()).disappear();
+                }
                 Point p = getRootLocation();
                 Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
 

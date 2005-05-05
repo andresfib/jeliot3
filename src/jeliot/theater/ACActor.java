@@ -4,6 +4,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
+
 /**
  * Array Creation actor shows the "new Type[n]" is shown before the
  * array is created. The structure is similar to SMIActor.
@@ -126,6 +129,17 @@ public class ACActor extends Actor implements ActorContainer{
                 bound[i] = true;
                 actor.setParent(this);
                 actor.setLocation(locs[i]);
+                
+                if (getActorId() == -1) {
+                    //Tracker
+                    Point p = getRootLocation();
+                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+                } else {
+                    //Tracker
+                    Point p = getRootLocation();
+                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+                }
+                
                 return;
             }
         }
@@ -256,4 +270,20 @@ public class ACActor extends Actor implements ActorContainer{
             actors[i].setLight(light);
         }
     }
+    
+    public Animation disappear() {
+        
+        for (int i = 0; i < actors.length; i++) {
+            if (actors[i] != null) {
+                actors[i].disappear();
+            }
+        }
+        
+        //Tracker
+        Point p = getRootLocation();
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+
+        return null;
+    }
+
 }

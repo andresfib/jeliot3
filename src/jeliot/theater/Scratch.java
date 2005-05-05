@@ -2,6 +2,7 @@ package jeliot.theater;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -147,6 +148,7 @@ public class Scratch extends Actor implements ActorContainer {
             cont.removeActor(actor);
             ((Theater)cont).removePassive(actor);
         }
+        actor.disappear();
     }
 
     /**
@@ -161,6 +163,7 @@ public class Scratch extends Actor implements ActorContainer {
                 cont.removeActor(a); //Maybe this should be done even though the container is not a theater object.
                 ((Theater)cont).removePassive(a);
             }
+            a.disappear();
         }
         crap.removeAllElements();
 
@@ -183,9 +186,26 @@ public class Scratch extends Actor implements ActorContainer {
 	 * 
 	 */
 	public void clean() {
+        for (Iterator i = exprs.iterator(); i.hasNext();) {
+            ((Actor) i.next()).disappear();
+        }
         exprs.removeAllElements();
         removeCrap();
+        
     }
 
+    /* (non-Javadoc)
+     * @see jeliot.theater.Actor#disappear()
+     */
+    public Animation disappear() {
+        for (Iterator i = exprs.iterator(); i.hasNext();) {
+            ((Actor) i.next()).disappear();
+        }
+
+        //Should the scratch also disappear?
+        
+        return null;
+    }
+    
 }
 

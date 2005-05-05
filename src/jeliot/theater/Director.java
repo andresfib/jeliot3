@@ -275,6 +275,7 @@ public class Director {
     public void closeScratch() {
         if (currentScratch != null) {
             currentScratch.removeCrap();
+            currentScratch.disappear();
             manager.removeScratch(currentScratch);
             theatre.flush();
             if (!scratchStack.empty()) {
@@ -2302,6 +2303,7 @@ public class Director {
             SwingUtilities.invokeAndWait(new Runnable() {
 
                 public void run() {
+                    ic.disappear();
                     theatre.remove(ic);
                     theatre.showComponents(false);
                     theatre.flush();

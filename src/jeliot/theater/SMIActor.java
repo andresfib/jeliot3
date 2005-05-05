@@ -4,6 +4,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
+
 /**
  * SMIActor represents graphically the static method invocation. The
  * actor shows the  method name and the parameters in a similar
@@ -133,6 +136,17 @@ public class SMIActor extends Actor implements ActorContainer{
                 bound[i] = true;
                 actor.setParent(this);
                 actor.setLocation(locs[i]);
+                
+                if (getActorId() == -1) {
+                    //Tracker
+                    Point p = getRootLocation();
+                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+                } else {
+                    //Tracker
+                    Point p = getRootLocation();
+                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+                }
+                
                 return;
             }
         }
@@ -262,5 +276,19 @@ public class SMIActor extends Actor implements ActorContainer{
         for (int i = 0; i < n; ++i) {
             actors[i].setLight(light);
         }
+    }
+    
+    public Animation disappear() {
+        
+        //Tracker
+        for (int i = 0; i < actors.length; i++) {
+            if (actors[i] != null) {
+                actors[i].disappear();
+            }
+        }
+        Point p = getRootLocation();
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+
+        return null;
     }
 }

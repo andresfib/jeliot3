@@ -2,6 +2,7 @@ package jeliot.theater;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +11,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import jeliot.mcode.Highlight;
+import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
 
 /**
  * InputComponent is shown when ever the executed program
@@ -44,7 +49,7 @@ public class InputComponent extends JPanel implements ActionListener {
 	 *
 	 */
 	private Actor bgactor;
-    
+        
     /**
 	 * @param prompt
 	 * @param validator
@@ -74,6 +79,12 @@ public class InputComponent extends JPanel implements ActionListener {
             bgactor.paintActor(g);
             bgactor.paintShadow(g);
         }
+        
+        //Tracker
+        if (bgactor.getActorId() == -1) {
+            Point p = bgactor.getRootLocation();
+            bgactor.setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, -1, Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, bgactor.getWidth(), bgactor.getHeight(), 0, -1, "Input: "));
+        }
     }
     
     /**
@@ -102,7 +113,19 @@ public class InputComponent extends JPanel implements ActionListener {
         validator.validate(text);
     }
 	
+    /**
+     * 
+     */
     public void requestFocusForInputField() {
         field.requestFocus();
+    }
+    
+    
+    /**
+     * 
+     */
+    public void disappear() {
+        Point p = bgactor.getRootLocation();
+        bgactor.setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, -1, Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, bgactor.getWidth(), bgactor.getHeight(), 0, -1, "Input: "));        
     }
 }

@@ -4,6 +4,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
 
+import jeliot.tracker.Tracker;
+import jeliot.tracker.TrackerClock;
+
 /**
  * BubbleActor is used to move the return value from the method
  * stage to the scratch (evaluation area).
@@ -13,7 +16,7 @@ import java.awt.Polygon;
  * 
  * @see jeliot.theater.ValueActor
  */
-public class BubbleActor extends Actor implements ActorContainer{
+public class BubbleActor extends Actor implements ActorContainer {
 
 //DOC: Document!
 
@@ -162,7 +165,7 @@ public class BubbleActor extends Actor implements ActorContainer{
         int topgap = sy - (y + h)  ;
         int botgap = y - (sy + sh) ;
 
-        int stub =20;
+        int stub = 20;
 
         int xpp = lefgap > 0 ? lefgap : (
                 riggap > 0 ? -riggap : sx - x + sw/2);
@@ -178,8 +181,20 @@ public class BubbleActor extends Actor implements ActorContainer{
 	 */
 	public void removeActor(Actor actor) {
         if (actor == this.actor) {
+            actor.disappear();
             this.actor = null;
         }
     }
 
+    public Animation disappear() {
+        
+        actor.disappear();
+        
+        //Tracker
+        Point p = getRootLocation();
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+
+        return null;
+    }
+    
 }
