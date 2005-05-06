@@ -2038,7 +2038,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * Method is used to implement the run until feature.
      */
     public void runUntil() {
-        String inputValue = JOptionPane.showInputDialog(messageBundle
+        String inputValue = JOptionPane.showInputDialog(this.frame, messageBundle
                 .getString("dialog.run_until"), new Integer(0));
         int lineNumber = 0;
 
