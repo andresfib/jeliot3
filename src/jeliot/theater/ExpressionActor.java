@@ -55,6 +55,7 @@ public class ExpressionActor extends Actor implements ActorContainer {
         actors = new Actor[n];
         locs = new Point[n];
         bound = new boolean[n];
+        setDescription("Expression: ");
     }
 
     /**
@@ -62,10 +63,8 @@ public class ExpressionActor extends Actor implements ActorContainer {
      * @param i
      */
     public ExpressionActor(int n, long i) {
+        this(n);
         id = i;
-        actors = new Actor[n];
-        locs = new Point[n];
-        bound = new boolean[n];
     }
 
     /**
@@ -106,12 +105,19 @@ public class ExpressionActor extends Actor implements ActorContainer {
      * @param actor
      */
     public void bind(Actor actor) {
-        for (int i = 0; i < next; ++i) {
+        for (int i = 0; i < next; i++) {
             if (actors[i] == actor) {
                 bound[i] = true;
                 actor.setParent(this);
                 actor.setLocation(locs[i]);
                 //Tracker
+                String desc = "Expression: ";
+                for (int j = 0; j < next; j++) {
+                    if (actors[j] != null) {
+                        desc += actors[j].getDescription() + ": ";
+                    }
+                }
+                setDescription(desc);
                 Point p = getRootLocation();
                 if (getActorId() == -1) {
                     setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(),
@@ -122,6 +128,7 @@ public class ExpressionActor extends Actor implements ActorContainer {
                             getActorId(), Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y},
                             getWidth(), getHeight(), 0, -1, getDescription());
                 }
+                
                 return;
             }
         }
@@ -134,10 +141,20 @@ public class ExpressionActor extends Actor implements ActorContainer {
     public void cut() {
         actors[--next] = null;
         bound[next] = false;
+        
+        //Tracker
+        String desc = "Expression: ";
+        for (int j = 0; j < next; j++) {
+            if (actors[j] != null) {
+                desc += actors[j].getDescription() + ": ";
+            }
+        }
+        setDescription(desc);
         Point p = getRootLocation();
         Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(),
                 Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y}, getWidth(), getHeight(), 0,
                 -1, getDescription());
+
     }
 
     /* (non-Javadoc)
@@ -193,6 +210,15 @@ public class ExpressionActor extends Actor implements ActorContainer {
                 bound[i] = false;
             }
         }
+
+        //Tracker
+        String desc = "Expression: ";
+        for (int j = 0; j < next; j++) {
+            if (actors[j] != null) {
+                desc += actors[j].getDescription() + ": ";
+            }
+        }
+        setDescription(desc);
         Point p = getRootLocation();
         Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(),
                 Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y}, getWidth(), getHeight(), 0,
@@ -216,10 +242,12 @@ public class ExpressionActor extends Actor implements ActorContainer {
                 actors[i].disappear();
             }
         }
+                
         Point p = getRootLocation();
         Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(),
                 Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y}, getWidth(), getHeight(), 0,
                 -1, getDescription());
         return null;
     }
+    
 }
