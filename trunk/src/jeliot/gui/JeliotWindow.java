@@ -1,7 +1,5 @@
 package jeliot.gui;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -71,6 +69,7 @@ import jeliot.theater.ImageLoader;
 import jeliot.theater.PanelController;
 import jeliot.theater.PauseListener;
 import jeliot.theater.Theater;
+import jeliot.tracker.Reminder;
 import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
@@ -592,21 +591,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
             frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setVisible(true);
-            
             if (jeliot.isExperiment()){ 
-	            Object[] options = { "START" };
-	            int n = JOptionPane.showOptionDialog(this.frame, "Click START to proceed with the Experiment and start thinking aloud!",
-	            		"Starting experiment", JOptionPane.OK_OPTION, 
-						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-	            if (n == JOptionPane.OK_OPTION) {
-	                URL url = getURL("start.wav");
-	                AudioClip au = Applet.newAudioClip(url);
-	                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Sound");
-	                //This is faster but not very noisy hopefully it will be heard.
-	                Toolkit.getDefaultToolkit().beep();
-	                //This seems to take some time! So maybe it is not that good.
-	                au.play();
-	            }
+	                
             }
             //editor.requestFocus();
             //System.out.println(theatre.getSize());
@@ -614,7 +600,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
+
     }
+
+
+
 
     public void closeWindow() {
         if (editor.isChanged()) {
@@ -727,7 +717,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         JMenu[] jm = { controlMenu, animationMenu };
         addInAnimationMenuItems(jm);
-
+        
         return menuBar;
     }
 
@@ -952,9 +942,35 @@ public class JeliotWindow implements PauseListener, MouseListener {
             }
         });
         menu.add(menuItem);
+        if (jeliot.isExperiment()){
+        	
+        	menuItem = new JMenuItem("Start Experiment");
+	        menuItem.setMnemonic(KeyEvent.VK_X);
+	        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+	        //menuItem.setAccelerator(KeyStroke.getKeyStroke(
+	        //KeyEvent.VK_M, ActionEvent.CTRL_MASK));
+	        menuItem.addActionListener(new ActionListener() {
+	
+	            public void actionPerformed(ActionEvent e) {
+	            	Object[] options = { "START" };
+		            
+		            int n = JOptionPane.showOptionDialog(frame, "Click START to proceed with the Experiment and start thinking aloud!",
+		            		"Starting experiment", JOptionPane.OK_OPTION, 
+							JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+		            if (n == JOptionPane.OK_OPTION) {
+		                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Sound");
+		                //This is faster but not very noisy hopefully it will be heard.
+		                Toolkit.getDefaultToolkit().beep();
+		                Reminder warning = new Reminder(13*60);
+		            }            }
+	        });
+	
+        }
+        menu.add(menuItem);
 
         return menu;
     }
+
 
     /**
      * Menu with the VCR commands
@@ -2182,6 +2198,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         setEnabledMenuItems(true, s2);
         Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
                 -1, "AnimationStopped");
+        
     }
 
     /**
