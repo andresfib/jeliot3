@@ -389,7 +389,10 @@ public class MethodStage extends Actor implements ActorContainer {
             public void finish() {
                 //Tracker
                 for (Iterator i = variables.iterator(); i.hasNext();) {
-                    ((Actor) i.next()).disappear();
+                    Actor a = (Actor) i.next();
+                    if (a != null) {
+                        a.disappear();
+                    }
                 }
                 Point p = getRootLocation();
                 Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
