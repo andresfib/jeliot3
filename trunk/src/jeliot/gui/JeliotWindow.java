@@ -949,8 +949,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
 	        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 	        //menuItem.setAccelerator(KeyStroke.getKeyStroke(
 	        //KeyEvent.VK_M, ActionEvent.CTRL_MASK));
-	        menuItem.addActionListener(new ActionListener() {
-	
+	        JeliotWindow jeliotWindow = this;
+	        menuItem.addActionListener(new ActionListener() {	        	
 	            public void actionPerformed(ActionEvent e) {
 	            	Object[] options = { "START" };
 		            
@@ -961,8 +961,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
 		                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Sound");
 		                //This is faster but not very noisy hopefully it will be heard.
 		                Toolkit.getDefaultToolkit().beep();
-		                Reminder warning = new Reminder(13*60);
-		            }            }
+		                //The eexperiment is set up to last 15 min
+		                Reminder warning = new Reminder(15*60);
+		            }
+		       }
 	        });
 	
         }
@@ -1353,9 +1355,13 @@ public class JeliotWindow implements PauseListener, MouseListener {
         c.gridheight = 2;
         pl.setConstraints(speedSlider, c);
         p.add(speedSlider);
-
+        
+        int bottomBorder = 2;
+        if (jeliot.isExperiment()){
+        	bottomBorder = 40;
+        }
         p.setBorder(BorderFactory.createCompoundBorder(BorderFactory
-                .createEmptyBorder(5, 2, 2, 10), BorderFactory
+                .createEmptyBorder(5, 2, bottomBorder, 10), BorderFactory
                 .createEtchedBorder()));
 
         return p;
