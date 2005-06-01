@@ -22,9 +22,10 @@ public class Reminder {
      * Seconds until the end of the experiment.
      * @param seconds
      */
-    public Reminder(int seconds) {
+    public Reminder(JFrame frame, int seconds) {
         timer = new Timer();
         timer2 = new Timer();
+        this.frame = frame;
         
         //A beep reminder will sound 2 minutes before the end of the experiment
         timer.schedule(new RemindTask(), (seconds*1000)-(120*1000));
