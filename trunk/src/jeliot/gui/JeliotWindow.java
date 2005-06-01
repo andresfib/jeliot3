@@ -532,7 +532,13 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
             JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                     editor, tabbedPane);
-            pane.setOneTouchExpandable(true);
+            
+            if (jeliot.isExperiment()){
+            	pane.setEnabled(false);
+            }else{
+            	pane.setOneTouchExpandable(true);
+            }
+            
             codeNest = pane;
 
             Dimension minimumSize = new Dimension(0, 0);
@@ -949,7 +955,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 	        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 	        //menuItem.setAccelerator(KeyStroke.getKeyStroke(
 	        //KeyEvent.VK_M, ActionEvent.CTRL_MASK));
-	        JeliotWindow jeliotWindow = this;
+	        
 	        menuItem.addActionListener(new ActionListener() {	        	
 	            public void actionPerformed(ActionEvent e) {
 	            	Object[] options = { "START" };
@@ -962,7 +968,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 		                //This is faster but not very noisy hopefully it will be heard.
 		                Toolkit.getDefaultToolkit().beep();
 		                //The eexperiment is set up to last 15 min
-		                Reminder warning = new Reminder(15*60);
+		                Reminder warning = new Reminder(frame, 15*60);
 		            }
 		       }
 	        });
