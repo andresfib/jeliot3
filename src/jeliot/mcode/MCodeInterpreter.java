@@ -1133,7 +1133,10 @@ public abstract class MCodeInterpreter {
                     //Inputted value is returned
                     case Code.INPUTTED: {
                         long expressionCounter = Long.parseLong(tokenizer.nextToken());
-                        String value = tokenizer.nextToken();
+                        String value = "";
+                        if (tokenizer.countTokens() >= 3) {
+                            value = tokenizer.nextToken();
+                        }
                         String type = tokenizer.nextToken();
                         Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
