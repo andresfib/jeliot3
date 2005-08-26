@@ -34,7 +34,7 @@ public class DebugUtil {
     */
    public static void printDebugInfo(String str) {
        if (DEBUGGING) {
-           System.out.println(str);
+           System.err.println(str);
        }
    }
    
@@ -44,7 +44,7 @@ public class DebugUtil {
     */
    public static void handleThrowable(Throwable e) {
        if (DEBUGGING) {
-           e.printStackTrace();
+           e.printStackTrace(System.err);
        }
    }
    

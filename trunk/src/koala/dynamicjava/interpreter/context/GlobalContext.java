@@ -106,16 +106,22 @@ import koala.dynamicjava.util.ReflectionUtilities;
  */
 
 public class GlobalContext extends VariableContext implements Context {
+
     // Constant objects
-    protected final static ReferenceType CLASS_TYPE  = new ReferenceType("java.lang.Class");
-    protected final static ReferenceType MAP_TYPE    = new ReferenceType("java.util.Map");
+    protected final static ReferenceType CLASS_TYPE = new ReferenceType("java.lang.Class");
+
+    protected final static ReferenceType MAP_TYPE = new ReferenceType("java.util.Map");
+
     protected final static ReferenceType OBJECT_TYPE = new ReferenceType("java.lang.Object");
+
     protected final static ArrayType OBJECT_ARRAY_ARRAY = new ArrayType(OBJECT_TYPE, 2);
+
     protected final static TypeExpression OBJECT_CLASS = new TypeExpression(OBJECT_TYPE);
 
     protected final static String LOCALS_NAME = "local$Variables$Reference$0";
-    protected final static FieldDeclaration LOCALS =
-	new FieldDeclaration(Modifier.PUBLIC, MAP_TYPE, LOCALS_NAME, null);
+
+    protected final static FieldDeclaration LOCALS = new FieldDeclaration(Modifier.PUBLIC,
+            MAP_TYPE, LOCALS_NAME, null);
 
     /**
      * To generate an unique name for the generated classes
@@ -154,8 +160,8 @@ public class GlobalContext extends VariableContext implements Context {
      * @param i the interpreter
      */
     public GlobalContext(Interpreter i) {
-	importationManager = new BufferedImportationManager(i.getClassLoader());
-	interpreter        = i;
+        importationManager = new BufferedImportationManager(i.getClassLoader());
+        interpreter = i;
     }
 
     /**
@@ -165,9 +171,9 @@ public class GlobalContext extends VariableContext implements Context {
      * @param cl2 the additional classloader
      */
     public GlobalContext(Interpreter i, ClassLoader cl) {
-	importationManager = new BufferedImportationManager(cl);
-	interpreter        = i;
-	classLoader        = cl;
+        importationManager = new BufferedImportationManager(cl);
+        interpreter = i;
+        classLoader = cl;
     }
 
     /**
@@ -178,14 +184,14 @@ public class GlobalContext extends VariableContext implements Context {
      */
     public GlobalContext(Interpreter i, Set entries) {
         super(entries);
-	interpreter = i;
+        interpreter = i;
     }
 
     /**
      * Sets the additional class loader container
      */
     public void setAdditionalClassLoaderContainer(ClassLoaderContainer clc) {
-	this.clc = clc;
+        this.clc = clc;
     }
 
     /**
@@ -206,45 +212,55 @@ public class GlobalContext extends VariableContext implements Context {
      * Gets the additional class loader 
      */
     protected ClassLoader getAdditionalClassLoader() {
-	if (clc != null) {
-	    return clc.getClassLoader();
-	}
-	return null;
+        if (clc != null) {
+            return clc.getClassLoader();
+        }
+        return null;
+    }
+
+    /**
+     * Gets the additional class loader 
+     */
+    protected ClassLoader getExtraClassLoader() {
+        if (clc != null && clc instanceof TreeClassLoader) {
+            return ((TreeClassLoader) clc).getExtraClassLoader();
+        }
+        return null;
     }
 
     /**
      * Sets the defined functions
      */
     public void setFunctions(List l) {
-	functions = l;
+        functions = l;
     }
 
     /**
      * Returns the defined functions
      */
     public List getFunctions() {
-	return functions;
+        return functions;
     }
 
     /**
      * Returns the current interpreter
      */
     public Interpreter getInterpreter() {
-	return interpreter;
+        return interpreter;
     }
 
     /**
      * Returns the importation manager
      */
     public ImportationManager getImportationManager() {
-	return importationManager;
+        return importationManager;
     }
-    
+
     /**
      * Sets the importation manager
      */
     public void setImportationManager(ImportationManager im) {
-	importationManager = im;
+        importationManager = im;
     }
 
     /**
@@ -253,7 +269,7 @@ public class GlobalContext extends VariableContext implements Context {
      * @param name the identifier
      */
     public boolean exists(String name) {
-	return isDefined(name) || classExists(name);
+        return isDefined(name) || classExists(name);
     }
 
     /**
@@ -261,22 +277,22 @@ public class GlobalContext extends VariableContext implements Context {
      * @param name the identifier
      */
     public boolean classExists(String name) {
-	boolean result = false;
-	importationManager.setClassLoader(new PseudoClassLoader());
-	try {
-	    lookupClass(name);
-	    result = true;
-	} catch (ClassNotFoundException e) {
-	} catch (PseudoError e) {
-	    result = true;
-	} finally {
-	    if (classLoader == null) {
-		importationManager.setClassLoader(interpreter.getClassLoader());
-	    } else {
-		importationManager.setClassLoader(classLoader);
-	    }
-	}
-	return result;
+        boolean result = false;
+        importationManager.setClassLoader(new PseudoClassLoader());
+        try {
+            lookupClass(name);
+            result = true;
+        } catch (ClassNotFoundException e) {
+        } catch (PseudoError e) {
+            result = true;
+        } finally {
+            if (classLoader == null) {
+                importationManager.setClassLoader(interpreter.getClassLoader());
+            } else {
+                importationManager.setClassLoader(classLoader);
+            }
+        }
+        return result;
     }
 
     /**
@@ -284,7 +300,7 @@ public class GlobalContext extends VariableContext implements Context {
      * @param node the function declaration
      */
     public void defineFunction(MethodDeclaration node) {
-	functions.add(0, node);
+        functions.add(0, node);
     }
 
     /**
@@ -292,7 +308,7 @@ public class GlobalContext extends VariableContext implements Context {
      * @param node the class declaration
      */
     public void defineClass(TypeDeclaration node) {
-	new TreeCompiler(interpreter).compileTree(this, node);
+        new TreeCompiler(interpreter).compileTree(this, node);
     }
 
     /**
@@ -301,7 +317,7 @@ public class GlobalContext extends VariableContext implements Context {
      * @return false if the variable is undefined
      */
     public boolean isDefined(String name) {
-	return isDefinedVariable(name);
+        return isDefinedVariable(name);
     }
 
     /**
@@ -309,14 +325,14 @@ public class GlobalContext extends VariableContext implements Context {
      * @param pkg the package name
      */
     public void setCurrentPackage(String pkg) {
-	importationManager.setCurrentPackage(pkg);
+        importationManager.setCurrentPackage(pkg);
     }
 
     /**
      * Returns the current package
      */
     public String getCurrentPackage() {
-	return importationManager.getCurrentPackage();
+        return importationManager.getCurrentPackage();
     }
 
     /**
@@ -324,7 +340,7 @@ public class GlobalContext extends VariableContext implements Context {
      * @param pkg the package name
      */
     public void declarePackageImport(String pkg) {
-	importationManager.declarePackageImport(pkg);
+        importationManager.declarePackageImport(pkg);
     }
 
     /**
@@ -333,17 +349,17 @@ public class GlobalContext extends VariableContext implements Context {
      * @exception ClassNotFoundException if the class cannot be found
      */
     public void declareClassImport(String cname) throws ClassNotFoundException {
-	importationManager.setClassLoader(new PseudoClassLoader());
-	try {
-	    importationManager.declareClassImport(cname);
-	} catch (PseudoError e) {
-	} finally {
-	    if (classLoader == null) {
-		importationManager.setClassLoader(interpreter.getClassLoader());
-	    } else {
-		importationManager.setClassLoader(classLoader);
-	    }
-	}
+        importationManager.setClassLoader(new PseudoClassLoader());
+        try {
+            importationManager.declareClassImport(cname);
+        } catch (PseudoError e) {
+        } finally {
+            if (classLoader == null) {
+                importationManager.setClassLoader(interpreter.getClassLoader());
+            } else {
+                importationManager.setClassLoader(classLoader);
+            }
+        }
     }
 
     /**
@@ -351,7 +367,7 @@ public class GlobalContext extends VariableContext implements Context {
      * @param node the current node
      */
     public Node getDefaultQualifier(Node node) {
-	return getDefaultQualifier(node, "");
+        return getDefaultQualifier(node, "");
     }
 
     /**
@@ -360,7 +376,7 @@ public class GlobalContext extends VariableContext implements Context {
      * @param tname the qualifier of 'this'
      */
     public Node getDefaultQualifier(Node node, String tname) {
-	return null;
+        return null;
     }
 
     /**
@@ -368,11 +384,11 @@ public class GlobalContext extends VariableContext implements Context {
      * @param node a tree node
      */
     public LeftHandSideModifier getModifier(QualifiedName node) {
-	if (isFinal(node.getRepresentation())) {
-	    return new FinalVariableModifier(node, NodeProperties.getType(node));
-	} else {
-	    return new VariableModifier(node, NodeProperties.getType(node));
-	}
+        if (isFinal(node.getRepresentation())) {
+            return new FinalVariableModifier(node, NodeProperties.getType(node));
+        } else {
+            return new VariableModifier(node, NodeProperties.getType(node));
+        }
     }
 
     /**
@@ -380,12 +396,12 @@ public class GlobalContext extends VariableContext implements Context {
      * @param node a tree node
      */
     public LeftHandSideModifier getModifier(ObjectFieldAccess node) {
-	Field f = (Field)node.getProperty(NodeProperties.FIELD);
-	if (f.isAccessible()) {
-	    return new ObjectFieldModifier(f, node);
-	} else {
-	    return new InvalidModifier(node);
-	}
+        Field f = (Field) node.getProperty(NodeProperties.FIELD);
+        if (f.isAccessible()) {
+            return new ObjectFieldModifier(f, node);
+        } else {
+            return new InvalidModifier(node);
+        }
     }
 
     /**
@@ -393,12 +409,12 @@ public class GlobalContext extends VariableContext implements Context {
      * @param node a tree node
      */
     public LeftHandSideModifier getModifier(StaticFieldAccess node) {
-	Field f = (Field)node.getProperty(NodeProperties.FIELD);
-	if (f.isAccessible()) {
-	    return new StaticFieldModifier(f, node);
-	} else {
-	    return new InvalidModifier(node);
-	}
+        Field f = (Field) node.getProperty(NodeProperties.FIELD);
+        if (f.isAccessible()) {
+            return new StaticFieldModifier(f, node);
+        } else {
+            return new InvalidModifier(node);
+        }
     }
 
     /**
@@ -406,14 +422,14 @@ public class GlobalContext extends VariableContext implements Context {
      * @param node a tree node
      */
     public LeftHandSideModifier getModifier(SuperFieldAccess node) {
-	throw new IllegalStateException("internal.error");
+        throw new IllegalStateException("internal.error");
     }
 
     /**
      * Returns the default argument to pass to methods in this context
      */
     public Object getHiddenArgument() {
-	return null;
+        return null;
     }
 
     /**
@@ -423,11 +439,12 @@ public class GlobalContext extends VariableContext implements Context {
      * @exception IllegalStateException if the variable is not defined
      */
     public Expression createName(Node node, IdentifierToken name) {
-	if (!isDefined(name.image())) throw new IllegalStateException();
-	    
-	List l = new LinkedList();
-	l.add(name);
-	return new QualifiedName(l);
+        if (!isDefined(name.image()))
+            throw new IllegalStateException();
+
+        List l = new LinkedList();
+        l.add(name);
+        return new QualifiedName(l);
     }
 
     /**
@@ -436,7 +453,7 @@ public class GlobalContext extends VariableContext implements Context {
      * @exception ClassNotFoundException if the class cannot be found
      */
     public Class lookupClass(String cname) throws ClassNotFoundException {
-	return importationManager.lookupClass(cname, null);
+        return importationManager.lookupClass(cname, null);
     }
 
     /**
@@ -446,7 +463,7 @@ public class GlobalContext extends VariableContext implements Context {
      * @exception ClassNotFoundException if the class cannot be found
      */
     public Class lookupClass(String cname, String ccname) throws ClassNotFoundException {
-	return importationManager.lookupClass(cname, ccname);
+        return importationManager.lookupClass(cname, ccname);
     }
 
     /**
@@ -462,9 +479,9 @@ public class GlobalContext extends VariableContext implements Context {
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }
-        
+
         // Set the properties of this node
-        node.setProperty(NodeProperties.TYPE,        c);
+        node.setProperty(NodeProperties.TYPE, c);
         node.setProperty(NodeProperties.CONSTRUCTOR, cons);
         return c;
     }
@@ -477,107 +494,92 @@ public class GlobalContext extends VariableContext implements Context {
      * @param memb the class members
      */
     public Class setProperties(ClassAllocation node, Class c, Class[] args, List memb) {
-	String cname = "TopLevel" + "$" + classCount++;
-	FieldDeclaration fd;
-	ConstructorDeclaration csd;
-	
-	// Create the reference to the declaring class
-	fd = new FieldDeclaration(Modifier.PUBLIC | Modifier.STATIC,
-				  CLASS_TYPE,
-				  "declaring$Class$Reference$0",
-				  OBJECT_CLASS);
-	memb.add(fd);
+        String cname = "TopLevel" + "$" + classCount++;
+        FieldDeclaration fd;
+        ConstructorDeclaration csd;
 
-	// Add the reference to the final local variables map
-	memb.add(LOCALS);
+        // Create the reference to the declaring class
+        fd = new FieldDeclaration(Modifier.PUBLIC | Modifier.STATIC, CLASS_TYPE,
+                "declaring$Class$Reference$0", OBJECT_CLASS);
+        memb.add(fd);
 
-	// Create the reference to the final local variables map
-	fd = new FieldDeclaration(Modifier.PUBLIC | Modifier.STATIC,
-				  OBJECT_ARRAY_ARRAY,
-				  "local$Variables$Class$0",
-				  createClassArrayInitializer());
-	memb.add(fd);
+        // Add the reference to the final local variables map
+        memb.add(LOCALS);
 
-	// Create the constructor
-	List params = new LinkedList();
-	List stmts = new LinkedList();
+        // Create the reference to the final local variables map
+        fd = new FieldDeclaration(Modifier.PUBLIC | Modifier.STATIC, OBJECT_ARRAY_ARRAY,
+                "local$Variables$Class$0", createClassArrayInitializer());
+        memb.add(fd);
 
-	// Add the final local variables map parameter
-	params.add(new FormalParameter(false, MAP_TYPE, "param$0"));
+        // Create the constructor
+        List params = new LinkedList();
+        List stmts = new LinkedList();
 
-	// Add the other parameters
-	List superArgs = new LinkedList();
-	for (int i = 0; i < args.length; i++) {
-	    params.add(new FormalParameter(false, 
-					   TreeUtilities.classToType(args[i]),
-					   "param$" + (i + 1)));
-	    List l = new LinkedList();
-	    l.add(new Identifier("param$" + (i + 1)));
-	    superArgs.add(new QualifiedName(l));
-	}
+        // Add the final local variables map parameter
+        params.add(new FormalParameter(false, MAP_TYPE, "param$0"));
 
-	// Create the explicit constructor invocation
+        // Add the other parameters
+        List superArgs = new LinkedList();
+        for (int i = 0; i < args.length; i++) {
+            params.add(new FormalParameter(false, TreeUtilities.classToType(args[i]), "param$"
+                    + (i + 1)));
+            List l = new LinkedList();
+            l.add(new Identifier("param$" + (i + 1)));
+            superArgs.add(new QualifiedName(l));
+        }
+
+        // Create the explicit constructor invocation
         ConstructorInvocation ci = null;
         if (superArgs.size() > 0) {
             ci = new ConstructorInvocation(null, superArgs, true);
         }
-	
-	// Add the outer instance reference initialization statement
-	List p1 = new LinkedList();
-	p1.add(new Identifier("local$Variables$Reference$0"));
-	List p2 = new LinkedList();
-	p2.add(new Identifier("param$0"));
-	stmts.add(new SimpleAssignExpression(new QualifiedName(p1),
-					     new QualifiedName(p2)));
 
-	csd = new ConstructorDeclaration(Modifier.PUBLIC,
-					 cname,
-					 params,
-					 new LinkedList(),
-					 ci,
-					 stmts);
-	memb.add(csd);
+        // Add the outer instance reference initialization statement
+        List p1 = new LinkedList();
+        p1.add(new Identifier("local$Variables$Reference$0"));
+        List p2 = new LinkedList();
+        p2.add(new Identifier("param$0"));
+        stmts.add(new SimpleAssignExpression(new QualifiedName(p1), new QualifiedName(p2)));
 
-	// Set the inheritance
-	List ext = null;
-	List impl = null;
-	if (c.isInterface()) {
-	    impl = new LinkedList();
-	    List intf = new LinkedList();
-	    intf.add(new Identifier(c.getName()));
-	    impl.add(intf);
-	} else {
-	    ext = new LinkedList();
-	    ext.add(new Identifier(c.getName()));
-	}
-	
-	// Create the class
-	TypeDeclaration type = new ClassDeclaration(Modifier.PUBLIC,
-						    cname,
-						    ext,
-						    impl,
-						    memb);
+        csd = new ConstructorDeclaration(Modifier.PUBLIC, cname, params, new LinkedList(), ci,
+                stmts);
+        memb.add(csd);
 
-	type.setProperty(TreeClassInfo.ANONYMOUS_DECLARING_CLASS,
-			 new JavaClassInfo(Object.class));
+        // Set the inheritance
+        List ext = null;
+        List impl = null;
+        if (c.isInterface()) {
+            impl = new LinkedList();
+            List intf = new LinkedList();
+            intf.add(new Identifier(c.getName()));
+            impl.add(intf);
+        } else {
+            ext = new LinkedList();
+            ext.add(new Identifier(c.getName()));
+        }
 
-	Class cl = new TreeCompiler(interpreter).compileTree(this, type);
+        // Create the class
+        TypeDeclaration type = new ClassDeclaration(Modifier.PUBLIC, cname, ext, impl, memb);
 
-	// Update the argument types
-	Class[] tmp = new Class[args.length+1];
-	tmp[0] = Map.class;
-	for (int i = 1; i < tmp.length; i++) {
-	    tmp[i] = args[i - 1];
-	}
-	args = tmp;
-	try {
-	    node.setProperty(NodeProperties.CONSTRUCTOR, lookupConstructor(cl, args));
-	} catch (NoSuchMethodException e) {
-	    // Never get here
-	    e.printStackTrace();
-	}
-	node.setProperty(NodeProperties.TYPE, cl);
-	return cl;
+        type.setProperty(TreeClassInfo.ANONYMOUS_DECLARING_CLASS, new JavaClassInfo(Object.class));
+
+        Class cl = new TreeCompiler(interpreter).compileTree(this, type);
+
+        // Update the argument types
+        Class[] tmp = new Class[args.length + 1];
+        tmp[0] = Map.class;
+        for (int i = 1; i < tmp.length; i++) {
+            tmp[i] = args[i - 1];
+        }
+        args = tmp;
+        try {
+            node.setProperty(NodeProperties.CONSTRUCTOR, lookupConstructor(cl, args));
+        } catch (NoSuchMethodException e) {
+            // Never get here
+            e.printStackTrace();
+        }
+        node.setProperty(NodeProperties.TYPE, cl);
+        return cl;
     }
 
     /**
@@ -586,22 +588,22 @@ public class GlobalContext extends VariableContext implements Context {
      */
     protected ArrayInitializer createClassArrayInitializer() {
         List cells = new LinkedList();
-	ArrayInitializer cell;
+        ArrayInitializer cell;
 
-	Type tp = new ReferenceType(Object.class.getName());
-	Map m = getConstants();
-	Iterator it = m.keySet().iterator();
-	while (it.hasNext()) {
-            String s = (String)it.next();
+        Type tp = new ReferenceType(Object.class.getName());
+        Map m = getConstants();
+        Iterator it = m.keySet().iterator();
+        while (it.hasNext()) {
+            String s = (String) it.next();
             List pair = new LinkedList();
-	    pair.add(new StringLiteral('\"' + s + '\"'));
-            Class c = (Class)m.get(s);
+            pair.add(new StringLiteral('\"' + s + '\"'));
+            Class c = (Class) m.get(s);
             pair.add(new TypeExpression(TreeUtilities.classToType(c)));
-	    
-	    cell = new ArrayInitializer(pair);
-	    cell.setElementType(tp);
-	    cells.add(cell);
-	}
+
+            cell = new ArrayInitializer(pair);
+            cell.setElementType(tp);
+            cells.add(cell);
+        }
         tp = new ArrayType(tp, 1);
         ArrayInitializer ai = new ArrayInitializer(cells);
         ai.setElementType(tp);
@@ -614,11 +616,10 @@ public class GlobalContext extends VariableContext implements Context {
      * @param params the parameter types
      * @exception NoSuchMethodException if the constructor cannot be found
      */
-    public Constructor lookupConstructor(Class c, Class[] params)
-	throws NoSuchMethodException {
-	Constructor cons = ReflectionUtilities.lookupConstructor(c, params);
-	setAccessFlag(cons);
-	return cons;
+    public Constructor lookupConstructor(Class c, Class[] params) throws NoSuchMethodException {
+        Constructor cons = ReflectionUtilities.lookupConstructor(c, params);
+        setAccessFlag(cons);
+        return cons;
     }
 
     /**
@@ -627,17 +628,17 @@ public class GlobalContext extends VariableContext implements Context {
      * @param args the arguments
      */
     public Object invokeConstructor(SimpleAllocation node, Object[] args) {
-        Constructor cons = (Constructor)node.getProperty(NodeProperties.CONSTRUCTOR);
+        Constructor cons = (Constructor) node.getProperty(NodeProperties.CONSTRUCTOR);
 
-	try {
+        try {
             return cons.newInstance(args);
-	} catch (InvocationTargetException e) {
-	    if (e.getTargetException() instanceof Error) {
-		throw (Error)e.getTargetException();
-	    } else if (e.getTargetException() instanceof RuntimeException) {
-		throw (RuntimeException)e.getTargetException();
-	    }
-	    throw new ThrownException(e.getTargetException());
+        } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof Error) {
+                throw (Error) e.getTargetException();
+            } else if (e.getTargetException() instanceof RuntimeException) {
+                throw (RuntimeException) e.getTargetException();
+            }
+            throw new ThrownException(e.getTargetException());
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }
@@ -649,24 +650,24 @@ public class GlobalContext extends VariableContext implements Context {
      * @param args the arguments
      */
     public Object invokeConstructor(ClassAllocation node, Object[] args) {
-        Constructor cons = (Constructor)node.getProperty(NodeProperties.CONSTRUCTOR);
+        Constructor cons = (Constructor) node.getProperty(NodeProperties.CONSTRUCTOR);
 
-	Object[] t = new Object[args.length + 1];
-	t[0] = getConstants();
-	for (int i = 1; i < t.length; i++) {
-	    t[i] = args[i - 1];
-	}
-	args = t;
+        Object[] t = new Object[args.length + 1];
+        t[0] = getConstants();
+        for (int i = 1; i < t.length; i++) {
+            t[i] = args[i - 1];
+        }
+        args = t;
 
         try {
             return cons.newInstance(args);
-	} catch (InvocationTargetException e) {
-	    if (e.getTargetException() instanceof Error) {
-		throw (Error)e.getTargetException();
-	    } else if (e.getTargetException() instanceof RuntimeException) {
-		throw (RuntimeException)e.getTargetException();
-	    }
-	    throw new ThrownException(e.getTargetException());
+        } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof Error) {
+                throw (Error) e.getTargetException();
+            } else if (e.getTargetException() instanceof RuntimeException) {
+                throw (RuntimeException) e.getTargetException();
+            }
+            throw new ThrownException(e.getTargetException());
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }
@@ -680,14 +681,14 @@ public class GlobalContext extends VariableContext implements Context {
      * @exception NoSuchMethodException if the method cannot be found
      */
     public Method lookupMethod(Node prefix, String mname, Class[] params)
-	throws NoSuchMethodException {
-	Class  c = (Class)NodeProperties.getType(prefix);
-	Method m = ReflectionUtilities.lookupMethod(c, mname, params);
-	setAccessFlag(m);
-	if (m.getName().equals("clone")) {
-	    m.setAccessible(true);
-	}
-	return m;
+            throws NoSuchMethodException {
+        Class c = (Class) NodeProperties.getType(prefix);
+        Method m = ReflectionUtilities.lookupMethod(c, mname, params);
+        setAccessFlag(m);
+        if (m.getName().equals("clone")) {
+            m.setAccessible(true);
+        }
+        return m;
     }
 
     /**
@@ -697,39 +698,39 @@ public class GlobalContext extends VariableContext implements Context {
      * @exception NoSuchFunctionException if the function cannot be found
      */
     public MethodDeclaration lookupFunction(String mname, Class[] params)
-	throws NoSuchFunctionException {
-	Iterator it = functions.iterator();
-	List f = new LinkedList();
+            throws NoSuchFunctionException {
+        Iterator it = functions.iterator();
+        List f = new LinkedList();
 
-	while (it.hasNext()) {
-	    MethodDeclaration md = (MethodDeclaration)it.next();
-	    if (md.getName().equals(mname)) {
-		f.add(md);
-	    }
-	}
+        while (it.hasNext()) {
+            MethodDeclaration md = (MethodDeclaration) it.next();
+            if (md.getName().equals(mname)) {
+                f.add(md);
+            }
+        }
 
-	it = f.iterator();
-	while (it.hasNext()) {
-	    MethodDeclaration md = (MethodDeclaration)it.next();
-	    List l =  md.getParameters();
+        it = f.iterator();
+        while (it.hasNext()) {
+            MethodDeclaration md = (MethodDeclaration) it.next();
+            List l = md.getParameters();
 
-	    if (l.size() != params.length) {
-		continue;
-	    }
+            if (l.size() != params.length) {
+                continue;
+            }
 
-	    Class[] p = new Class[l.size()];
-	    Iterator it2 = l.iterator();
-	    int i = 0;
-	    while (it2.hasNext()) {
-		p[i++] = (Class)NodeProperties.getType((Node)it2.next());
-	    }
-	    
-	    if (ReflectionUtilities.hasCompatibleSignatures(p, params)) {
-		return md;
-	    }
-	}
+            Class[] p = new Class[l.size()];
+            Iterator it2 = l.iterator();
+            int i = 0;
+            while (it2.hasNext()) {
+                p[i++] = (Class) NodeProperties.getType((Node) it2.next());
+            }
 
-	throw new NoSuchFunctionException(mname);
+            if (ReflectionUtilities.hasCompatibleSignatures(p, params)) {
+                return md;
+            }
+        }
+
+        throw new NoSuchFunctionException(mname);
     }
 
     /**
@@ -740,8 +741,8 @@ public class GlobalContext extends VariableContext implements Context {
      * @exception NoSuchMethodException if the method cannot be find
      */
     public Method lookupSuperMethod(Node node, String mname, Class[] params)
-	throws NoSuchMethodException {
-	throw new ExecutionError("super.method", node);
+            throws NoSuchMethodException {
+        throw new ExecutionError("super.method", node);
     }
 
     /**
@@ -751,11 +752,10 @@ public class GlobalContext extends VariableContext implements Context {
      * @exception NoSuchFieldException if the field cannot be find
      * @exception AmbiguousFieldException if the field is ambiguous
      */
-    public Field getField(Class fc, String fn) throws NoSuchFieldException,
-                                                      AmbiguousFieldException {
-	Field f =  ReflectionUtilities.getField(fc, fn);
-	setAccessFlag(f);
-	return f;
+    public Field getField(Class fc, String fn) throws NoSuchFieldException, AmbiguousFieldException {
+        Field f = ReflectionUtilities.getField(fc, fn);
+        setAccessFlag(f);
+        return f;
     }
 
     /**
@@ -766,137 +766,140 @@ public class GlobalContext extends VariableContext implements Context {
      * @exception AmbiguousFieldException if the field is ambiguous
      */
     public Field getSuperField(Node node, String fn) throws NoSuchFieldException,
-                                                            AmbiguousFieldException {
-	throw new ExecutionError("super.field", node);
+            AmbiguousFieldException {
+        throw new ExecutionError("super.field", node);
     }
 
     /**
      * To test the existance of a class without loading it
      */
     protected class PseudoClassLoader extends ClassLoader {
-	/**
-	 * Finds the specified class.
-	 * @param  name the name of the class
-	 * @return the resulting <code>Class</code> object
-	 * @exception ClassNotFoundException if the class could not be find
-	 */
-	protected Class findClass(String name) throws ClassNotFoundException {
-	    try {
-		if (getAdditionalClassLoader() != null) {
-		    return Class.forName(name, true, getAdditionalClassLoader());
-		}
-	    } catch (ClassNotFoundException e) {
-	    }
 
-	    ClassLoader cl = (classLoader == null)
-		? interpreter.getClassLoader()
-		: classLoader;
-	    // Was this class previously defined ?
-	    if ((cl instanceof TreeClassLoader) &&
-		((TreeClassLoader)cl).hasDefined(name)) {
-		throw new PseudoError();
-	    }
+        /**
+         * Finds the specified class.
+         * @param  name the name of the class
+         * @return the resulting <code>Class</code> object
+         * @exception ClassNotFoundException if the class could not be find
+         */
+        protected Class findClass(String name) throws ClassNotFoundException {
+            try {
+                if (getAdditionalClassLoader() != null) {
+                    return Class.forName(name, true, getAdditionalClassLoader());
+                }
+            } catch (ClassNotFoundException e) {
+                try { //Jeliot 3
+                    if (getExtraClassLoader() != null) {
+                        return Class.forName(name, true, getExtraClassLoader());
+                    }
+                } catch (Exception e1) {
+                }
+            }
 
-	    // Is there a tree associated with this name ?
-	    TreeClassLoader cld = (TreeClassLoader)interpreter.getClassLoader();
-	    TypeDeclaration td = cld.getTree(name);
-	    if (td != null) {
-		ImportationManager im = (ImportationManager)td.getProperty
-		    (NodeProperties.IMPORTATION_MANAGER);
-		
-		CompilationUnitVisitor v  = new CompilationUnitVisitor(name, im);
-		if (td.acceptVisitor(v).equals(Boolean.TRUE)) {
-		    throw new PseudoError();
-		}
-	    }
+            ClassLoader cl = (classLoader == null) ? interpreter.getClassLoader() : classLoader;
+            // Was this class previously defined ?
+            if ((cl instanceof TreeClassLoader) && ((TreeClassLoader) cl).hasDefined(name)) {
+                throw new PseudoError();
+            }
 
-	    // Is the class tree already loaded ?
-	    LibraryFinder lf = interpreter.getLibraryFinder();
-	    try {
-		String cun = lf.findCompilationUnitName(name);
-		td = cld.getTree(cun);
-		if (td != null) {
-		    ImportationManager im = (ImportationManager)td.getProperty
-			(NodeProperties.IMPORTATION_MANAGER);
-		
-		    CompilationUnitVisitor v  = new CompilationUnitVisitor(name, im);
-		    if (td.acceptVisitor(v).equals(Boolean.TRUE)) {
-			throw new PseudoError();
-		    }
-		}
-	    } catch (ClassNotFoundException e) {
-	    }
+            // Is there a tree associated with this name ?
+            TreeClassLoader cld = (TreeClassLoader) interpreter.getClassLoader();
+            TypeDeclaration td = cld.getTree(name);
+            if (td != null) {
+                ImportationManager im = (ImportationManager) td
+                        .getProperty(NodeProperties.IMPORTATION_MANAGER);
 
-	    // Load the tree
-	    try {
-		File f = lf.findCompilationUnit(name);
-		FileInputStream fis = new FileInputStream(f);
+                CompilationUnitVisitor v = new CompilationUnitVisitor(name, im);
+                if (td.acceptVisitor(v).equals(Boolean.TRUE)) {
+                    throw new PseudoError();
+                }
+            }
 
-		ParserFactory pf = interpreter.getParserFactory();
-		SourceCodeParser p = pf.createParser(fis, f.getCanonicalPath());
-		List stmts = p.parseCompilationUnit();
+            // Is the class tree already loaded ?
+            LibraryFinder lf = interpreter.getLibraryFinder();
+            try {
+                String cun = lf.findCompilationUnitName(name);
+                td = cld.getTree(cun);
+                if (td != null) {
+                    ImportationManager im = (ImportationManager) td
+                            .getProperty(NodeProperties.IMPORTATION_MANAGER);
 
-		Iterator it = stmts.iterator();
-		CompilationUnitVisitor v  = new CompilationUnitVisitor(name);
-		boolean classFound = false;
-		while (it.hasNext()) {
-		    if (Boolean.TRUE.equals(((Node)it.next()).acceptVisitor(v))) {
-			classFound = true;
-		    }
-		}
+                    CompilationUnitVisitor v = new CompilationUnitVisitor(name, im);
+                    if (td.acceptVisitor(v).equals(Boolean.TRUE)) {
+                        throw new PseudoError();
+                    }
+                }
+            } catch (ClassNotFoundException e) {
+            }
 
-		if (classFound) {
-		    throw new PseudoError();
-		}
-	    } catch (IOException e) {
-	    }
-	    throw new ClassNotFoundException(name);
-	}
+            // Load the tree
+            try {
+                File f = lf.findCompilationUnit(name);
+                FileInputStream fis = new FileInputStream(f);
+
+                ParserFactory pf = interpreter.getParserFactory();
+                SourceCodeParser p = pf.createParser(fis, f.getCanonicalPath());
+                List stmts = p.parseCompilationUnit();
+
+                Iterator it = stmts.iterator();
+                CompilationUnitVisitor v = new CompilationUnitVisitor(name);
+                boolean classFound = false;
+                while (it.hasNext()) {
+                    if (Boolean.TRUE.equals(((Node) it.next()).acceptVisitor(v))) {
+                        classFound = true;
+                    }
+                }
+
+                if (classFound) {
+                    throw new PseudoError();
+                }
+            } catch (IOException e) {
+            }
+            throw new ClassNotFoundException(name);
+        }
     }
 
     /**
      * To test the existance of a class without loading it
      */
-    protected class PseudoError extends Error {
-    }
+    protected class PseudoError extends Error {}
 
     /**
      * Sets the access flag of a member
      */
     protected void setAccessFlag(Member m) {
-        int     mods    = m.getModifiers();
-        Class   c       = m.getDeclaringClass();
-        int     cmods   = c.getModifiers();
-        String  pkg     = importationManager.getCurrentPackage();
-        String  mp      = getPackageName(c);
+        int mods = m.getModifiers();
+        Class c = m.getDeclaringClass();
+        int cmods = c.getModifiers();
+        String pkg = importationManager.getCurrentPackage();
+        String mp = getPackageName(c);
         boolean samePkg = pkg.equals(mp);
 
         // Relax the protection for members.
         if (getAccessible()) {
-            ((AccessibleObject)m).setAccessible(true);
+            ((AccessibleObject) m).setAccessible(true);
         }
 
         if (Modifier.isPublic(cmods) || samePkg) {
             if (Modifier.isPublic(mods)) {
-                ((AccessibleObject)m).setAccessible(true);
+                ((AccessibleObject) m).setAccessible(true);
             } else if (Modifier.isProtected(mods)) {
                 if (samePkg) {
-                    ((AccessibleObject)m).setAccessible(true);
+                    ((AccessibleObject) m).setAccessible(true);
                 }
             } else if (!Modifier.isPrivate(mods)) {
                 if (samePkg) {
-                    ((AccessibleObject)m).setAccessible(true);
-                }               
+                    ((AccessibleObject) m).setAccessible(true);
+                }
             }
         }
     }
-    
+
     /**
      * Gets the package name for the given class
      */
     protected String getPackageName(Class c) {
         String s = c.getName();
-        int    i = s.lastIndexOf('.');
+        int i = s.lastIndexOf('.');
         return (i == -1) ? "" : s.substring(0, i);
     }
 
@@ -904,163 +907,165 @@ public class GlobalContext extends VariableContext implements Context {
      * To find a class in a compilation unit
      */
     private class CompilationUnitVisitor extends VisitorObject {
-	/**
-	 * The class to find
-	 */
-	private String className;
 
-	/**
-	 * The current package
-	 */
-	private String currentPackage;
+        /**
+         * The class to find
+         */
+        private String className;
 
-	/**
-	 * The importation manager
-	 */
-	private ImportationManager importationManager;
+        /**
+         * The current package
+         */
+        private String currentPackage;
 
-	/**
-	 * The current class loader
-	 */
-	private TreeClassLoader classLoader;
+        /**
+         * The importation manager
+         */
+        private ImportationManager importationManager;
 
-	/**
-	 * Creates a new visitor
-	 */
-	public CompilationUnitVisitor(String cname) {
-	    className = cname;
-	    importationManager = new BufferedImportationManager(new PseudoClassLoader());
-	    classLoader = (TreeClassLoader)interpreter.getClassLoader();
-	}
+        /**
+         * The current class loader
+         */
+        private TreeClassLoader classLoader;
 
-	/**
-	 * Creates a new visitor
-	 */
-	public CompilationUnitVisitor(String cname, ImportationManager im) {
-	    className = cname;
-	    importationManager = im;
-	    importationManager.setClassLoader(new PseudoClassLoader());
-	    classLoader = (TreeClassLoader)interpreter.getClassLoader();
-	}
+        /**
+         * Creates a new visitor
+         */
+        public CompilationUnitVisitor(String cname) {
+            className = cname;
+            importationManager = new BufferedImportationManager(new PseudoClassLoader());
+            classLoader = (TreeClassLoader) interpreter.getClassLoader();
+        }
 
-	/**
-	 * Visits a PackageDeclaration
-	 * @param node the node to visit
-	 * @return null
-	 */
-	public Object visit(PackageDeclaration node) {
-	    importationManager.setCurrentPackage(node.getName());
-	    return null;
-	}
+        /**
+         * Creates a new visitor
+         */
+        public CompilationUnitVisitor(String cname, ImportationManager im) {
+            className = cname;
+            importationManager = im;
+            importationManager.setClassLoader(new PseudoClassLoader());
+            classLoader = (TreeClassLoader) interpreter.getClassLoader();
+        }
 
-	/**
- 	 * Visits an ImportDeclaration
-	 * @param node the node to visit
-	 */
-	public Object visit(ImportDeclaration node) {
-	    // Declare the package or class importation
-	    if (node.isPackage()) {
-		importationManager.declarePackageImport(node.getName());
-	    } else {
-		try {
-		    importationManager.declareClassImport(node.getName());
-		} catch (ClassNotFoundException e) {
-		    throw new CatchedExceptionError(e, node);
-		} catch (PseudoError e) {
-		}
-	    }
-	    return null;
-	}
+        /**
+         * Visits a PackageDeclaration
+         * @param node the node to visit
+         * @return null
+         */
+        public Object visit(PackageDeclaration node) {
+            importationManager.setCurrentPackage(node.getName());
+            return null;
+        }
 
-	/**
-	 * Visits a ClassDeclaration
-	 * @param node the node to visit
-	 */
-	public Object visit(ClassDeclaration node) {
-	    return visitType(node);
-	}
+        /**
+         * Visits an ImportDeclaration
+         * @param node the node to visit
+         */
+        public Object visit(ImportDeclaration node) {
+            // Declare the package or class importation
+            if (node.isPackage()) {
+                importationManager.declarePackageImport(node.getName());
+            } else {
+                try {
+                    importationManager.declareClassImport(node.getName());
+                } catch (ClassNotFoundException e) {
+                    throw new CatchedExceptionError(e, node);
+                } catch (PseudoError e) {
+                }
+            }
+            return null;
+        }
 
-	/**
-	 * Visits an InterfaceDeclaration
-	 * @param node the node to visit
-	 */
-	public Object visit(InterfaceDeclaration node) {
-	    return visitType(node);
-	}
+        /**
+         * Visits a ClassDeclaration
+         * @param node the node to visit
+         */
+        public Object visit(ClassDeclaration node) {
+            return visitType(node);
+        }
 
-	/**
-	 * visits a TypeDeclaration
-	 */
-	private Object visitType(TypeDeclaration node) {
-	    String cname = importationManager.getCurrentPackage();
-	    cname = ((cname.equals("")) ? "" : cname + "." ) + node.getName();
-	    classLoader.addTree(cname, node);
-	    node.setProperty(NodeProperties.IMPORTATION_MANAGER, importationManager);
-	    if (className.equals(cname)) {
-		return Boolean.TRUE;
-	    } else {
-		Visitor v = new MembersVisitor(cname);
-		Iterator it = node.getMembers().iterator();
-		while (it.hasNext()) {
-		    Boolean b = (Boolean)((Node)it.next()).acceptVisitor(v);
-		    if (Boolean.TRUE.equals(b)) {
-			return b;
-		    }
-		}
-		return Boolean.FALSE;
-	    }
-	}
+        /**
+         * Visits an InterfaceDeclaration
+         * @param node the node to visit
+         */
+        public Object visit(InterfaceDeclaration node) {
+            return visitType(node);
+        }
 
-	/**
-	 * To find a class in a compilation unit
-	 */
-	private class MembersVisitor extends VisitorObject {
-	    /**
-	     * The outer class
-	     */
-	    private String outerName;
+        /**
+         * visits a TypeDeclaration
+         */
+        private Object visitType(TypeDeclaration node) {
+            String cname = importationManager.getCurrentPackage();
+            cname = ((cname.equals("")) ? "" : cname + ".") + node.getName();
+            classLoader.addTree(cname, node);
+            node.setProperty(NodeProperties.IMPORTATION_MANAGER, importationManager);
+            if (className.equals(cname)) {
+                return Boolean.TRUE;
+            } else {
+                Visitor v = new MembersVisitor(cname);
+                Iterator it = node.getMembers().iterator();
+                while (it.hasNext()) {
+                    Boolean b = (Boolean) ((Node) it.next()).acceptVisitor(v);
+                    if (Boolean.TRUE.equals(b)) {
+                        return b;
+                    }
+                }
+                return Boolean.FALSE;
+            }
+        }
 
-	    /**
-	     * Creates a new visitor
-	     */
-	    public MembersVisitor(String cname) {
-		outerName = cname;
-	    }
+        /**
+         * To find a class in a compilation unit
+         */
+        private class MembersVisitor extends VisitorObject {
 
-	    /**
-	     * Visits a ClassDeclaration
-	     * @param node the node to visit
-	     */
-	    public Object visit(ClassDeclaration node) {
-		return visitType(node);
-	    }
+            /**
+             * The outer class
+             */
+            private String outerName;
 
-	    /**
-	     * Visits an InterfaceDeclaration
-	     * @param node the node to visit
-	     */
-	    public Object visit(InterfaceDeclaration node) {
-		return visitType(node);
-	    }
+            /**
+             * Creates a new visitor
+             */
+            public MembersVisitor(String cname) {
+                outerName = cname;
+            }
 
-	    /**
-	     * visits a TypeDeclaration
-	     */
-	    private Object visitType(TypeDeclaration node) {
-		if (className.equals(outerName + "$" + node.getName())) {
-		    return Boolean.TRUE;
-		} else {
-		    Visitor v = new MembersVisitor(outerName + "$" + node.getName());
-		    Iterator it = node.getMembers().iterator();
-		    while (it.hasNext()) {
-			Boolean b = (Boolean)((Node)it.next()).acceptVisitor(v);
-			if (Boolean.TRUE.equals(b)) {
-			    return b;
-			}
-		    }
-		    return Boolean.FALSE;
-		}
-	    }
-	}
+            /**
+             * Visits a ClassDeclaration
+             * @param node the node to visit
+             */
+            public Object visit(ClassDeclaration node) {
+                return visitType(node);
+            }
+
+            /**
+             * Visits an InterfaceDeclaration
+             * @param node the node to visit
+             */
+            public Object visit(InterfaceDeclaration node) {
+                return visitType(node);
+            }
+
+            /**
+             * visits a TypeDeclaration
+             */
+            private Object visitType(TypeDeclaration node) {
+                if (className.equals(outerName + "$" + node.getName())) {
+                    return Boolean.TRUE;
+                } else {
+                    Visitor v = new MembersVisitor(outerName + "$" + node.getName());
+                    Iterator it = node.getMembers().iterator();
+                    while (it.hasNext()) {
+                        Boolean b = (Boolean) ((Node) it.next()).acceptVisitor(v);
+                        if (Boolean.TRUE.equals(b)) {
+                            return b;
+                        }
+                    }
+                    return Boolean.FALSE;
+                }
+            }
+        }
     }
 }
