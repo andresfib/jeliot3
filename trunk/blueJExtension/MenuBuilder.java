@@ -1,4 +1,3 @@
-
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -16,6 +15,7 @@ import bluej.extensions.BClass;
 import bluej.extensions.BObject;
 import bluej.extensions.BPackage;
 import bluej.extensions.BlueJ;
+import bluej.extensions.ClassNotFoundException;
 import bluej.extensions.MenuGenerator;
 import bluej.extensions.PackageNotFoundException;
 import bluej.extensions.ProjectNotOpenException;
@@ -65,7 +65,7 @@ public class MenuBuilder extends MenuGenerator {
     private BlueJ bluej;
 
     /**
-     *Constructor
+     * Constructor
      */
     MenuBuilder(BlueJ bluej) {
         this.bluej = bluej;
@@ -101,7 +101,7 @@ public class MenuBuilder extends MenuGenerator {
                 System.out.println("  Current Object=" + curObject);
             }
         } catch (Exception exc) {
-            System.out.println("JeliotExtension:PrintCurrentStatusError");
+            System.out.println("JeliotExtension: PrintCurrentStatusError");
         }
     }
 
@@ -278,26 +278,36 @@ public class MenuBuilder extends MenuGenerator {
                              catch( ProjectNotOpenException p) {System.out.println("project error");}
                              catch( ClassNotFoundException e) {System.out.println("class error");}
                              */
-                            //create a bufferdReader 
-                            BufferedReader in = new BufferedReader(new InputStreamReader(
-                                    new FileInputStream(classes[j].getJavaFile().getPath())));
+                            //create a bufferdReader
+                            String className = "";
+                            try {
+                                className = classes[j].getJavaClass().getName();
+                            } catch (ClassNotFoundException e) {
+                                className = classes[j].getJavaFile().getName().substring(0,
+                                        classes[j].getJavaFile().getName().length() - 5);
+                            }
+                            
+                            if (!className.equals("Lue")) {
+                                BufferedReader in = new BufferedReader(new InputStreamReader(
+                                        new FileInputStream(classes[j].getJavaFile().getPath())));
 
-                            String line = null;
+                                String line = null;
 
-                            //we put each line in the source string
-                            while ((line = in.readLine()) != null) {
-                                //printCurrentStatus(line);
-                                source += "\n" + line;
+                                //we put each line in the source string
+                                while ((line = in.readLine()) != null) {
+                                    //printCurrentStatus(line);
+                                    source += "\n" + line;
+                                }
                             }
 
                         }// and we go to the next file
                     }//we check the next package
                 } catch (ProjectNotOpenException e) {
-                    printCurrentStatus("jeliot extension error3: The project has been unexpectedly closed!");
+                    printCurrentStatus("jeliot extension: The project has been unexpectedly closed!");
                 } catch (IOException e) {
-                    printCurrentStatus("jeliot extension error4: error while creating jeliot.txt file");
+                    printCurrentStatus("jeliot extension: error while creating jeliot.txt file");
                 } catch (PackageNotFoundException e) {
-                    printCurrentStatus("jeliot extension error5: package not found");
+                    printCurrentStatus("jeliot extension: package not found");
                 }
             }
             return source;
