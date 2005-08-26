@@ -287,7 +287,7 @@ public class MenuBuilder extends MenuGenerator {
                                         classes[j].getJavaFile().getName().length() - 5);
                             }
                             
-                            if (!className.equals("Lue")) {
+                            if (!className.equals("Lue") && !className.equals("Input") && !className.equals("Output")) {
                                 BufferedReader in = new BufferedReader(new InputStreamReader(
                                         new FileInputStream(classes[j].getJavaFile().getPath())));
 
