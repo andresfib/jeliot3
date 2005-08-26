@@ -96,7 +96,18 @@ public abstract class InfoWindow extends JFrame implements HyperlinkListener {
         try {
             editorPane.setPage(url);
         } catch (IOException e) {
-            System.err.println(messageBundle.getString("bad.URL") + " " + url);
+            try {
+                editorPane.setPage(Thread.currentThread().getContextClassLoader().getResource(fileName));
+            } catch (IOException e1) {
+                try {
+                    editorPane.setPage(this.getClass().getClassLoader().getResource(fileName));
+                } catch (IOException e2) {
+                System.err.println(messageBundle.getString("bad.URL") + " " + url);
+                if (DebugUtil.DEBUGGING) {
+                    e1.printStackTrace();
+                }
+            }
+            }
         }
     }
 

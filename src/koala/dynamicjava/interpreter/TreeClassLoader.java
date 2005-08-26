@@ -57,16 +57,14 @@ import koala.dynamicjava.tree.TypeDeclaration;
  * @version 1.1 - 1999/05/18
  */
 
-public class TreeClassLoader extends SecureClassLoader
-                             implements ClassLoaderContainer {
+public class TreeClassLoader extends SecureClassLoader implements ClassLoaderContainer {
 
     /**
      * The default value for the {@link java.security.CodeSource} URL.
      * May be overriden by setting the system property with name given by
      * the value of {@link #CODE_SOURCE_URL_PROPERTY}.
      */
-    public static String DEFAULT_CODE_SOURCE_URL =
-        "http://koala.ilog.fr/djava/javadoc/koala/dynamicjava/interpreter/TreeClassLoader.html";
+    public static String DEFAULT_CODE_SOURCE_URL = "http://koala.ilog.fr/djava/javadoc/koala/dynamicjava/interpreter/TreeClassLoader.html";
 
     /**
      * Name of the system property to define the value for the URL
@@ -77,8 +75,7 @@ public class TreeClassLoader extends SecureClassLoader
      * <p>If the property value is not a wellformed URL, the URL is set
      * to <code>null</code>.
      */
-    public static String CODE_SOURCE_URL_PROPERTY =
-        "koala.dynamicjava.interpreter.TreeClassLoader.codesource.url";
+    public static String CODE_SOURCE_URL_PROPERTY = "koala.dynamicjava.interpreter.TreeClassLoader.codesource.url";
 
     /**
      * The code source for classes defined by instances of
@@ -96,7 +93,8 @@ public class TreeClassLoader extends SecureClassLoader
     static {
         try {
             String url = System.getProperty(CODE_SOURCE_URL_PROPERTY);
-            if ( url != null ) codeSource = new CodeSource(new URL(url), (Certificate[]) null);
+            if (url != null)
+                codeSource = new CodeSource(new URL(url), (Certificate[]) null);
         } catch (java.net.MalformedURLException mfue) {
             // property value malformed, return null
             // [XXX]: print error message
@@ -131,6 +129,11 @@ public class TreeClassLoader extends SecureClassLoader
     protected ClassLoader classLoader;
 
     /**
+     * Jeliot 3
+     */
+    protected ClassLoader extraClassLoader = this.getClass().getClassLoader();
+
+    /**
      * Creates a new class loader
      * @param i the object used to interpret the classes
      */
@@ -145,8 +148,8 @@ public class TreeClassLoader extends SecureClassLoader
      */
     public TreeClassLoader(Interpreter i, ClassLoader cl) {
         super(i.getClass().getClassLoader());
-        interpreter   = i;
-        classLoader   = cl; 
+        interpreter = i;
+        classLoader = cl;
     }
 
     /**
@@ -155,10 +158,10 @@ public class TreeClassLoader extends SecureClassLoader
      *
      * @exception ClassFormatError if the class could not be defined
      */
-    public Class defineClass(String name, byte[] code)  {
+    public Class defineClass(String name, byte[] code) {
         Class c = defineClass(name, code, 0, code.length, codeSource);
         classes.put(name, c);
-	trees.remove(name);
+        trees.remove(name);
         return c;
     }
 
@@ -168,21 +171,21 @@ public class TreeClassLoader extends SecureClassLoader
      * @return null if there is no additional class loader
      */
     public ClassLoader getClassLoader() {
-	return classLoader;
+        return classLoader;
     }
 
     /**
      * Whether a class was defined by this class loader
      */
     public boolean hasDefined(String name) {
-	return classes.containsKey(name);
+        return classes.containsKey(name);
     }
 
     /**
      * Returns the names of the defined classes in a set
      */
     public Set getClassNames() {
-	return classes.keySet();
+        return classes.keySet();
     }
 
     /**
@@ -191,25 +194,25 @@ public class TreeClassLoader extends SecureClassLoader
      * @param node the tree
      */
     public void addTree(String name, TypeDeclaration node) {
-	trees.put(name, node);
+        trees.put(name, node);
     }
 
     /**
      * Gets a tree
      */
     public TypeDeclaration getTree(String name) {
-	return (TypeDeclaration)trees.get(name);
+        return (TypeDeclaration) trees.get(name);
     }
 
     /**
      * Adds an URL in the class path
      */
     public void addURL(URL url) {
-	if (classLoader == null) {
-	    classLoader = new URLClassLoader(new URL[] { url });
-	} else {
-	    classLoader = new URLClassLoader(new URL[] { url }, classLoader);
-	}
+        if (classLoader == null) {
+            classLoader = new URLClassLoader(new URL[] { url});
+        } else {
+            classLoader = new URLClassLoader(new URL[] { url}, classLoader);
+        }
     }
 
     /**
@@ -220,17 +223,35 @@ public class TreeClassLoader extends SecureClassLoader
      * @exception ClassNotFoundException if the class could not be find
      */
     protected Class findClass(String name) throws ClassNotFoundException {
-	if (classes.containsKey(name)) {
-	    return (Class)classes.get(name);
-	}
-	
-	try {
-	    if (classLoader != null) {
-		return Class.forName(name, true, classLoader);
-	    }
-	} catch (ClassNotFoundException e) {
-	}
+        if (classes.containsKey(name)) {
+            return (Class) classes.get(name);
+        }
 
-	return interpreter.loadClass(name);
+        try {
+            if (classLoader != null) {
+                return Class.forName(name, true, classLoader);
+            }
+        } catch (ClassNotFoundException e) {
+            try {
+                //JELIOT 3
+                if (this.extraClassLoader != null) {
+                    return Class.forName(name, true, this.extraClassLoader);
+                }
+            } catch (ClassNotFoundException e1) {
+            }
+        }
+
+        return interpreter.loadClass(name);
     }
+
+    
+    
+    /**
+     * Jeliot 3
+     * @return Returns the extraClassLoader.
+     */
+    public ClassLoader getExtraClassLoader() {
+        return extraClassLoader;
+    }
+
 }

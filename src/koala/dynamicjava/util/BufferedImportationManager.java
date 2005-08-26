@@ -39,6 +39,7 @@ import java.util.Map;
  */
 
 public class BufferedImportationManager extends ImportationManager {
+
     /**
      * The class buffer
      */
@@ -49,7 +50,7 @@ public class BufferedImportationManager extends ImportationManager {
      * @param cl the class loader to use
      */
     public BufferedImportationManager(ClassLoader cl) {
-	super(cl);
+        super(cl);
     }
 
     /**
@@ -65,8 +66,8 @@ public class BufferedImportationManager extends ImportationManager {
      * @param pkg the package name
      */
     public void setCurrentPackage(String pkg) {
-	super.setCurrentPackage(pkg);
-	buffer.clear();
+        super.setCurrentPackage(pkg);
+        buffer.clear();
     }
 
     /**
@@ -74,11 +75,11 @@ public class BufferedImportationManager extends ImportationManager {
      * @param pkg the package name
      */
     public void declarePackageImport(String pkg) {
-	super.declarePackageImport(pkg);
-	if (buffer == null) {
-	    buffer = new HashMap(11);
-	}
-	buffer.clear();
+        super.declarePackageImport(pkg);
+        if (buffer == null) {
+            buffer = new HashMap(11);
+        }
+        buffer.clear();
     }
 
     /**
@@ -87,8 +88,8 @@ public class BufferedImportationManager extends ImportationManager {
      * @exception ClassNotFoundException if the class cannot be found
      */
     public void declareClassImport(String cname) throws ClassNotFoundException {
-	super.declareClassImport(cname);
-	buffer.clear();
+        super.declareClassImport(cname);
+        buffer.clear();
     }
 
     /**
@@ -98,31 +99,30 @@ public class BufferedImportationManager extends ImportationManager {
      * @return the class found
      * @exception ClassNotFoundException if the class cannot be loaded
      */
-    public Class lookupClass(String cname, String ccname)
-	throws ClassNotFoundException {
-	Map m = (Map)buffer.get(ccname);
-	if (m != null) {
-	    Class c = (Class)m.get(cname);
-	    if (c != null) {
-		return c;
-	    }
-	}
+    public Class lookupClass(String cname, String ccname) throws ClassNotFoundException {
+        Map m = (Map) buffer.get(ccname);
+        if (m != null) {
+            Class c = (Class) m.get(cname);
+            if (c != null) {
+                return c;
+            }
+        }
 
-	Class c = super.lookupClass(cname, ccname);
+        Class c = super.lookupClass(cname, ccname);
 
-	if (m == null) {
-	    m = new HashMap(11);
-	    buffer.put(ccname, m);
-	}
-	m.put(cname, c);
+        if (m == null) {
+            m = new HashMap(11);
+            buffer.put(ccname, m);
+        }
+        m.put(cname, c);
 
-	return c;
+        return c;
     }
 
     /**
      * Copy constructor
      */
     protected BufferedImportationManager(ImportationManager im) {
-	super(im);
+        super(im);
     }
 }
