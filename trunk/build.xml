@@ -222,11 +222,14 @@ To display the available targets type:
 	
   <!--create the jeliot extension for bluej -->
   <target name="blueJExt" depends="compile,jars">
-  	<javac sourcepath="blueJExtension/" destdir="blueJExtension/"  srcdir="blueJExtension/" classpath="${dist}/jeliot.jar;blueJExtension/bluejext.jar" />
+  	<javac sourcepath="blueJExtension/" destdir="blueJExtension/"  srcdir="blueJExtension/" classpath="${dist}/jeliot.jar;lib/bluejext.jar" />
   	<jar manifest="blueJExtension/blueJExtension.mf" jarfile="${release}/jeliotExtension.jar" basedir="${dest}">
       <fileset dir="blueJExtension">
         <include name="*.class"/>
       </fileset>
+        <fileset dir="src/docs">
+          <include name="**/*"/> 
+        </fileset>       
   		<!--
         <fileset dir="${dist}">
           <include name="jeliot.jar"/>
@@ -236,11 +239,14 @@ To display the available targets type:
   	</target>
 	  <!--create the jeliot extension for bluej -->
 	  <target name="blueJExtDebug" depends="debug">
-	  	<javac sourcepath="blueJExtension/" destdir="blueJExtension/"  srcdir="blueJExtension/" classpath="${dist}/jeliot.jar;blueJExtension/bluejext.jar" />
+	  	<javac sourcepath="blueJExtension/" destdir="blueJExtension/"  srcdir="blueJExtension/" classpath="${dist}/jeliot.jar;lib/bluejext.jar" />
 	  	<jar manifest="blueJExtension/blueJExtension.mf" jarfile="${release}/jeliotExtension.jar" basedir="${dest}">
 	      <fileset dir="blueJExtension">
 	        <include name="*.class"/>
 	      </fileset>
+          <fileset dir="src/docs">
+            <include name="**/*"/> 
+          </fileset>       
 	  		<!--
 	        <fileset dir="${dist}">
 	          <include name="jeliot.jar"/>

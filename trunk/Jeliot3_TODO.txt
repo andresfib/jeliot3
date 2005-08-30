@@ -61,11 +61,11 @@ Jeliot BlueJ Extension (partially done):
 User Interface:
 - Possibility to open or extend the output console
 - The previous output should be removed when rewind button is pressed.
-- Change the size of the theater to the original size when rewinded. When the animation is finished the space for a theater is not contracted to the original size so the scrollbars are all the time active and that can cause misconceptions or just be annoying.
+- Change the size of the theater to the original size when rewound. When the animation is finished the space for a theater is not contracted to the original size so the scrollbars are all the time active and that can cause misconceptions or just be annoying.
 - Mnemonics and accelerator in Resources for internationalization
 
 Editor:
-- Find & Replace for editor
+- Find & Replace for editor (done)
 - The user shouldn't be able to highlight the code while the animation is playing
 
 Visualization:

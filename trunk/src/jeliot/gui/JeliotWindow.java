@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -235,6 +236,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
     /** If a method call should be asked from the user */
     private boolean askForMethod = false;
 
+    /** If the starting method call is main with command line parameters should the parameters be asked.*/
+    private boolean askForMainMethodParameters = false;
+    
     /** If animation is running until certain line */
     private boolean runningUntil = false;
 
@@ -476,12 +480,15 @@ public class JeliotWindow implements PauseListener, MouseListener {
     }
 
     public URL getURL(String filename) {
-         URL soundURL = Thread.currentThread().getContextClassLoader().getResource(
-                propertiesBundle.getStringProperty("directory.images") + filename);
+        URL soundURL = Thread.currentThread().getContextClassLoader()
+                .getResource(
+                        propertiesBundle.getStringProperty("directory.images")
+                                + filename);
         if (soundURL == null) {
-            soundURL = (this.getClass().getClassLoader().getResource(propertiesBundle
-                    .getStringProperty("directory.images")
-                    + filename));
+            soundURL = (this.getClass().getClassLoader()
+                    .getResource(propertiesBundle
+                            .getStringProperty("directory.images")
+                            + filename));
         }
         if (soundURL == null) {
             soundURL = ClassLoader.getSystemResource(propertiesBundle
@@ -490,7 +497,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         }
         return soundURL;
     }
-    
+
     /**
      * Initializes the JFrame frame. Sets up all the basic things for the
      * window. (Panels, Panes, Menubars) Things for debugging.
@@ -532,13 +539,13 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
             JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                     editor, tabbedPane);
-            
-            if (jeliot.isExperiment()){
-            	pane.setEnabled(false);
-            }else{
-            	pane.setOneTouchExpandable(true);
+
+            if (jeliot.isExperiment()) {
+                pane.setEnabled(false);
+            } else {
+                pane.setOneTouchExpandable(true);
             }
-            
+
             codeNest = pane;
 
             Dimension minimumSize = new Dimension(0, 0);
@@ -597,20 +604,17 @@ public class JeliotWindow implements PauseListener, MouseListener {
             frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setVisible(true);
-            if (jeliot.isExperiment()){ 
-	                
+            if (jeliot.isExperiment()) {
+
             }
             //editor.requestFocus();
             //System.out.println(theatre.getSize());
-            
+
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
 
     }
-
-
-
 
     public void closeWindow() {
         if (editor.isChanged()) {
@@ -723,7 +727,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         JMenu[] jm = { controlMenu, animationMenu };
         addInAnimationMenuItems(jm);
-        
+
         return menuBar;
     }
 
@@ -802,6 +806,31 @@ public class JeliotWindow implements PauseListener, MouseListener {
             }
         });
         menu.add(askForMethodMenuItem);
+
+        //Ask for main method parameters
+        if (jeliotUserProperties.containsKey("ask_for_main_method_parameters")) {
+            this.askForMainMethodParameters = jeliotUserProperties
+                    .getBooleanProperty("ask_for_main_method_parameters");
+        } else {
+            jeliotUserProperties.setBooleanProperty("ask_for_main_method_parameters",
+                    askForMainMethodParameters);
+        }
+
+        final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(
+                messageBundle.getString("menu.options.ask_for_main_method_parameters"),
+                askForMainMethodParameters);
+        askForMainMethodParametersMenuItem.setMnemonic(KeyEvent.VK_A);
+        askForMainMethodParametersMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_A, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        askForMainMethodParametersMenuItem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                askForMainMethodParameters = askForMainMethodParametersMenuItem.getState();
+                jeliotUserProperties.setStringProperty("ask_for_main_method_parameters",
+                        Boolean.toString(askForMainMethodParameters));
+            }
+        });
+        menu.add(askForMainMethodParametersMenuItem);
 
         //Pause on message
         if (jeliotUserProperties.containsKey("pause_on_message")) {
@@ -948,37 +977,42 @@ public class JeliotWindow implements PauseListener, MouseListener {
             }
         });
         menu.add(menuItem);
-        if (jeliot.isExperiment()){
-        	
-        	menuItem = new JMenuItem("Start Experiment");
-	        menuItem.setMnemonic(KeyEvent.VK_X);
-	        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
-	        //menuItem.setAccelerator(KeyStroke.getKeyStroke(
-	        //KeyEvent.VK_M, ActionEvent.CTRL_MASK));
-	        
-	        menuItem.addActionListener(new ActionListener() {	        	
-	            public void actionPerformed(ActionEvent e) {
-	            	Object[] options = { "START" };
-		            
-		            int n = JOptionPane.showOptionDialog(frame, "Click START to proceed with the Experiment and start thinking aloud!",
-		            		"Starting experiment", JOptionPane.OK_OPTION, 
-							JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-		            if (n == JOptionPane.OK_OPTION) {
-		                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Sound");
-		                //This is faster but not very noisy hopefully it will be heard.
-		                Toolkit.getDefaultToolkit().beep();
-		                //The eexperiment is set up to last 15 min
-		                Reminder warning = new Reminder(frame, 15*60);
-		            }
-		       }
-	        });
-	
+        if (jeliot.isExperiment()) {
+
+            menuItem = new JMenuItem("Start Experiment");
+            menuItem.setMnemonic(KeyEvent.VK_X);
+            menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+            //menuItem.setAccelerator(KeyStroke.getKeyStroke(
+            //KeyEvent.VK_M, ActionEvent.CTRL_MASK));
+
+            menuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Object[] options = { "START" };
+
+                    int n = JOptionPane
+                            .showOptionDialog(
+                                    frame,
+                                    "Click START to proceed with the Experiment and start thinking aloud!",
+                                    "Starting experiment",
+                                    JOptionPane.OK_OPTION,
+                                    JOptionPane.INFORMATION_MESSAGE, null,
+                                    options, options[0]);
+                    if (n == JOptionPane.OK_OPTION) {
+                        Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                                Tracker.OTHER, -1, -1, "Sound");
+                        //This is faster but not very noisy hopefully it will be heard.
+                        Toolkit.getDefaultToolkit().beep();
+                        //The eexperiment is set up to last 15 min
+                        Reminder warning = new Reminder(frame, 15 * 60);
+                    }
+                }
+            });
+
         }
         menu.add(menuItem);
 
         return menu;
     }
-
 
     /**
      * Menu with the VCR commands
@@ -1361,10 +1395,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
         c.gridheight = 2;
         pl.setConstraints(speedSlider, c);
         p.add(speedSlider);
-        
+
         int bottomBorder = 2;
-        if (jeliot.isExperiment()){
-        	bottomBorder = 40;
+        if (jeliot.isExperiment()) {
+            bottomBorder = 40;
         }
         p.setBorder(BorderFactory.createCompoundBorder(BorderFactory
                 .createEmptyBorder(5, 2, bottomBorder, 10), BorderFactory
@@ -1636,7 +1670,25 @@ public class JeliotWindow implements PauseListener, MouseListener {
             className = className.trim();
             if (className.length() > 0) {
                 //System.out.println(className + ".main(new String[0]);");
-                return className + ".main(new String[0]);";
+                String methodCallBeginning = className + ".main(new String[] {";
+                String methodCallEnd = "});";
+                String parameters = "";
+                if (askForMainMethodParameters) {
+                    String inputValue = JOptionPane
+                            .showInputDialog(
+                                    this.frame,
+                                    messageBundle
+                                            .getString("dialog.ask_for_main_parameters")
+                                            + " " + className, "");
+                    if (inputValue != null && inputValue.length() > 0) {
+                        StringTokenizer st = new StringTokenizer(inputValue.trim());
+                        while (st.hasMoreTokens()) {
+                            parameters += "\"" + st.nextToken() + "\"";
+                            parameters += (st.hasMoreTokens() ? "," : "");
+                        }
+                    }
+                }
+                return methodCallBeginning + parameters + methodCallEnd;
             }
         }
 
@@ -2050,8 +2102,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * Method is used to implement the run until feature.
      */
     public void runUntil() {
-        String inputValue = JOptionPane.showInputDialog(this.frame, messageBundle
-                .getString("dialog.run_until"), new Integer(0));
+        String inputValue = JOptionPane.showInputDialog(this.frame,
+                messageBundle.getString("dialog.run_until"), new Integer(0));
         int lineNumber = 0;
 
         try {
@@ -2210,7 +2262,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         setEnabledMenuItems(true, s2);
         Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
                 -1, "AnimationStopped");
-        
+
     }
 
     /**

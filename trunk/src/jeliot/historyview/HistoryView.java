@@ -108,7 +108,7 @@ public class HistoryView extends JComponent implements ActionListener {
     /**
      * Comment for <code>enabled</code>
      */
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     /**
      * 
