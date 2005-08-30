@@ -2,6 +2,8 @@ Things to do for Jeliot:
 
 "Trivial":
 
+- When compile or rewind buttons are pressed, clear the output console and scroll it to the last addition when new lines are added.
+
 - Layout the method frames in more organized way
 
 - Mnemonics and accelerator in Resources for internationalization

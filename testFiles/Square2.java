@@ -44,8 +44,7 @@ public class MyClass {
     public static void main() {
         Square square;
         square = new Square(3);
-        int area;
-        area = square.getArea();
+        int area = square.getArea();
         System.out.println(Polygon.polygons);
     }
 }
