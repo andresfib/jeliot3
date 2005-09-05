@@ -285,6 +285,9 @@ public class MenuBuilder extends MenuGenerator {
                             } catch (ClassNotFoundException e) {
                                 className = classes[j].getJavaFile().getName().substring(0,
                                         classes[j].getJavaFile().getName().length() - 5);
+                            } catch (NoClassDefFoundError e) {
+                                className = classes[j].getJavaFile().getName().substring(0,
+                                        classes[j].getJavaFile().getName().length() - 5);
                             }
                             
                             if (!className.equals("Lue") && !className.equals("Input") && !className.equals("Output")) {
