@@ -1441,7 +1441,7 @@ public class MCodeUtilities {
 	}
 	public static String stringConversion(Node exp, EvaluationVisitor visitor) {
 		if (MCodeUtilities.isString(exp)) { //ask for type implements tree.Literal
-			return exp.acceptVisitor(visitor).toString();			
+			return String.valueOf(exp.acceptVisitor(visitor));			
 		} else {
 			return MCodeUtilities.toStringCall(exp, visitor);
 		}
@@ -1456,6 +1456,6 @@ public class MCodeUtilities {
                 || Boolean.class.getName().equals(c.getName()) || Float.class.getName().equals(c.getName())
                 || Character.class.getName().equals(c.getName()));
 
-		return automaticStringConversion || (koala.dynamicjava.tree.Literal.class.isInstance(exp.getClass()));
+		return automaticStringConversion || (exp instanceof koala.dynamicjava.tree.Literal);
 	}
 }
