@@ -80,15 +80,16 @@ public abstract class Literal extends PrimaryExpression {
      * @param ec  the end column
      * @exception IllegalArgumentException if rep is null
      */
-    protected Literal(String rep, Object val, Class typ,
-		      String fn, int bl, int bc, int el,int ec) {
-	super(fn, bl, bc, el, ec);
+    protected Literal(String rep, Object val, Class typ, String fn, int bl,
+            int bc, int el, int ec) {
+        super(fn, bl, bc, el, ec);
 
-	if (rep == null) throw new IllegalArgumentException("rep == null");
+        if (rep == null)
+            throw new IllegalArgumentException("rep == null");
 
-	representation = rep;
-	value          = val;
-	type           = typ;
+        representation = rep;
+        value = val;
+        type = typ;
     }
 
     /**
@@ -103,16 +104,17 @@ public abstract class Literal extends PrimaryExpression {
      * @exception IllegalArgumentException if s is null
      */
     public void setRepresentation(String s) {
-	if (s == null) throw new IllegalArgumentException("s == null");
-	
-	firePropertyChange(REPRESENTATION, representation, representation = s);
+        if (s == null)
+            throw new IllegalArgumentException("s == null");
+
+        firePropertyChange(REPRESENTATION, representation, representation = s);
     }
 
     /**
      * Returns the value of this expression
      */
     public Object getValue() {
-	return value;
+        return value;
     }
 
     /**
@@ -120,7 +122,7 @@ public abstract class Literal extends PrimaryExpression {
      * @exception IllegalArgumentException if o is null
      */
     public void setValue(Object o) {
-	firePropertyChange(VALUE, value, value = o);
+        firePropertyChange(VALUE, value, value = o);
     }
 
     /**
@@ -128,14 +130,14 @@ public abstract class Literal extends PrimaryExpression {
      * NOTE: the 'null' literal has a null type
      */
     public Class getType() {
-	return type;
+        return type;
     }
 
     /**
      * Sets the type of this object
      */
     public void setType(Class c) {
-	firePropertyChange(TYPE, type, type = c);
+        firePropertyChange(TYPE, type, type = c);
     }
 
     /**
@@ -143,6 +145,6 @@ public abstract class Literal extends PrimaryExpression {
      * @param visitor the visitor to accept
      */
     public Object acceptVisitor(Visitor visitor) {
-	return visitor.visit(this);
+        return visitor.visit(this);
     }
 }
