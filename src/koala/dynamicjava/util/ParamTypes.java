@@ -72,7 +72,7 @@ public class ParamTypes {
 	 * Compares two method's list of parameters
 	 * 
 	 * @param paramTypes1 Formal parameters
-	 * @param paramTypes2 Actual parameters
+	 * @param paramTypes2 Actual parameters or Formal parameters
 	 * @return Returns true if both of them are the same, false otherewise
 	 */
 	public static boolean compareSignatures(Class[] paramTypes1,
