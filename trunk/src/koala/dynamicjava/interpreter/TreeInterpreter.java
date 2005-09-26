@@ -1147,12 +1147,12 @@ public class TreeInterpreter implements Interpreter {
         Class[] previousParameters = (Class[]) MCodeUtilities.previousClassParametersStack.peek();
         
         // With previous values 
-        boolean signatureTest = ParamTypes.compareSignatures(types,previousParameters); 
+        boolean signatureTest = ParamTypes.compareSignatures(types, previousParameters); 
         boolean nameTest = previousClass.equals(c.getName());
         
         // With original constructor
         boolean consNameTest = c.getName().equals(MCodeUtilities.getConstructorName());
-        boolean consSignatureTest = ParamTypes.compareSignatures( types,
+        boolean consSignatureTest = ParamTypes.compareSignatures(types,
         							MCodeUtilities.getConstructorParamTypes());
         
         boolean inConstructorCall = consSignatureTest && consNameTest;

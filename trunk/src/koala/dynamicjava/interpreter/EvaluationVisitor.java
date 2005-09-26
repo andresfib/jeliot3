@@ -1749,8 +1749,14 @@ public class EvaluationVisitor extends VisitorObject {
 			int i = 0;
 			long auxcounter; //Records the previous counter value
 			Object auxarg; //Stores the current argument
-
-			while (it.hasNext()) {
+            
+            Class[] params = null;
+            Constructor constructor = (Constructor) node.getProperty(NodeProperties.CONSTRUCTOR);
+            if (constructor != null) {
+                params = constructor.getParameterTypes();
+            }
+             
+            while (it.hasNext()) {
 
 				MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
 						+ Code.DELIM + counter + Code.DELIM
@@ -1766,14 +1772,23 @@ public class EvaluationVisitor extends VisitorObject {
                 if (args[i] instanceof String) {
                     argType = String.class.getName();
                 } else {
-                    argType = args[i].getClass().getName();
+                    if (params != null) {
+                        argType = params[i].getName();
+                    } else {
+                        argType = args[i].getClass().getName();
+                    }
                 }
                 
 				MCodeUtilities.write("" + Code.P + Code.DELIM + auxcounter
 						+ Code.DELIM + MCodeUtilities.getValue(args[i]) + Code.DELIM
 						+ argType/*args[i].getClass().getName()*/);
 				
-				types[i]= args[i].getClass();
+                if (params != null) {
+                    types[i] = params[i];
+                } else {
+                    types[i] = args[i].getClass();
+                }
+				//types[i] = args[i].getClass();
 				i++;
 			}
 		}
@@ -1798,7 +1813,7 @@ public class EvaluationVisitor extends VisitorObject {
 			Object result = context.invokeConstructor(node, args);
 			MCodeUtilities.write("" + Code.SAC + Code.DELIM
 					+ simpleAllocationCounter + Code.DELIM
-					+ Integer.toHexString(System.identityHashCode(result)) + Code.DELIM
+					+ MCodeUtilities.getValue(result) + Code.DELIM
 					+ MCodeUtilities.locationToString(node));
 			//0 arguments
 			MCodeUtilities.popConstructorInfo();
