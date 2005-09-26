@@ -39,7 +39,7 @@ loop:		for(int i = offset; i < length; i++)
 				case '#': case ';':
 					if(i == offset)
 					{
-						addToken(line.count,Token.COMMENT1);
+						addToken(line.count,Token.COMMENT_1);
 						lastOffset = length;
 						break loop;
 					}
@@ -48,18 +48,18 @@ loop:		for(int i = offset; i < length; i++)
 					if(i == offset)
 					{
 						addToken(i - lastOffset,token);
-						token = Token.KEYWORD2;
+						token = Token.KEYWORD_2;
 						lastOffset = i;
 					}
 					break;
 				case '=':
-					addToken(i - lastOffset,Token.KEYWORD1);
+					addToken(i - lastOffset,Token.KEYWORD_1);
 					token = VALUE;
 					lastOffset = i;
 					break;
 				}
 				break;
-			case Token.KEYWORD2:
+			case Token.KEYWORD_2:
 				if(array[i] == ']')
 				{
 					addToken(i1 - lastOffset,token);

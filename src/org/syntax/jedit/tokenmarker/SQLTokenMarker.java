@@ -45,17 +45,17 @@ loop:
 			switch(line.array[i])
 			{
 			case '*':
-				if(token == Token.COMMENT1 && length - i >= 1 && line.array[i+1] == '/')
+				if(token == Token.COMMENT_1 && length - i >= 1 && line.array[i+1] == '/')
 				{
 					token = Token.NULL;
 					i++;
-					addToken((i + 1) - lastOffset,Token.COMMENT1);
+					addToken((i + 1) - lastOffset,Token.COMMENT_1);
 					lastOffset = i + 1;
 				}
 				else if (token == Token.NULL)
 				{
 					searchBack(line, i);
-					addToken(1,Token.OPERATOR);
+					addToken(1,Token.OPERATOR_1);
 					lastOffset = i + 1;
 				}
 				break;
@@ -63,17 +63,17 @@ loop:
 				if(token == Token.NULL)
 				{
 					searchBack(line, i);
-					token = Token.LITERAL1;
+					token = Token.LITERAL_1;
 					literalChar = '[';
 					lastOffset = i;
 				}
 				break;
 			case ']':
-				if(token == Token.LITERAL1 && literalChar == '[')
+				if(token == Token.LITERAL_1 && literalChar == '[')
 				{
 					token = Token.NULL;
 					literalChar = 0;
-					addToken((i + 1) - lastOffset,Token.LITERAL1);
+					addToken((i + 1) - lastOffset,Token.LITERAL_1);
 					lastOffset = i + 1;
 				}
 				break;
@@ -88,7 +88,7 @@ loop:
 			case '~': case '<': case '>': case '=':
 				if (token == Token.NULL) {
 					searchBack(line, i);
-					addToken(1,Token.OPERATOR);
+					addToken(1,Token.OPERATOR_1);
 					lastOffset = i + 1;
 				}
 				break;
@@ -100,7 +100,7 @@ loop:
 			case ':':
 				if(token == Token.NULL)
 				{
-					addToken((i+1) - lastOffset,Token.LABEL);
+					addToken((i+1) - lastOffset,Token.LABEL_1);
 					lastOffset = i + 1;
 				}
 				break;
@@ -110,14 +110,14 @@ loop:
 					if (length - i >= 2 && line.array[i + 1] == '*')
 					{
 						searchBack(line, i);
-						token = Token.COMMENT1;
+						token = Token.COMMENT_1;
 						lastOffset = i;
 						i++;
 					}
 					else
 					{
 						searchBack(line, i);
-						addToken(1,Token.OPERATOR);
+						addToken(1,Token.OPERATOR_1);
 						lastOffset = i + 1;
 					}
 				}
@@ -128,14 +128,14 @@ loop:
 					if (length - i >= 2 && line.array[i+1] == '-')
 					{
 						searchBack(line, i);
-						addToken(length - i,Token.COMMENT1);
+						addToken(length - i,Token.COMMENT_1);
 						lastOffset = length;
 						break loop;
 					}
 					else
 					{
 						searchBack(line, i);
-						addToken(1,Token.OPERATOR);
+						addToken(1,Token.OPERATOR_1);
 						lastOffset = i + 1;
 					}
 				}
@@ -145,23 +145,23 @@ loop:
 				(line.array[i+1] == '=' || line.array[i+1] == '<' || line.array[i+1] == '>'))
 				{
 					searchBack(line, i);
-					addToken(1,Token.OPERATOR);
+					addToken(1,Token.OPERATOR_1);
 					lastOffset = i + 1;
 				}
 				break;
 			case '"': case '\'':
 				if(token == Token.NULL)
 				{
-					token = Token.LITERAL1;
+					token = Token.LITERAL_1;
 					literalChar = line.array[i];
 					addToken(i - lastOffset,Token.NULL);
 					lastOffset = i;
 				}
-				else if(token == Token.LITERAL1 && literalChar == line.array[i])
+				else if(token == Token.LITERAL_1 && literalChar == line.array[i])
 				{
 					token = Token.NULL;
 					literalChar = 0;
-					addToken((i + 1) - lastOffset,Token.LITERAL1);
+					addToken((i + 1) - lastOffset,Token.LITERAL_1);
 					lastOffset = i + 1;
 				}
 				break;

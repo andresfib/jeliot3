@@ -47,7 +47,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					if(lastOffset == offset)
 					{
-						addToken(i1 - lastOffset,Token.KEYWORD1);
+						addToken(i1 - lastOffset,Token.KEYWORD_1);
 						lastOffset = i1;
 					}
 					break;
@@ -57,7 +57,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						addToken(length - i,Token.COMMENT1);
+						addToken(length - i,Token.COMMENT_1);
 						lastOffset = length;
 						break loop;
 					}
@@ -73,10 +73,10 @@ loop:		for(int i = offset; i < length; i++)
 						{
 							char c1 = array[i1];
 							if(c1 == '(' || c1 == '{')
-								token = Token.KEYWORD2;
+								token = Token.KEYWORD_2;
 							else
 							{
-								addToken(2,Token.KEYWORD2);
+								addToken(2,Token.KEYWORD_2);
 								lastOffset += 2;
 								i++;
 							}
@@ -89,7 +89,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL1;
+						token = Token.LITERAL_1;
 						lastOffset = i;
 					}
 					break;
@@ -99,7 +99,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL2;
+						token = Token.LITERAL_2;
 						lastOffset = i;
 					}
 					break;
@@ -107,7 +107,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					break;
 				}
-			case Token.KEYWORD2:
+			case Token.KEYWORD_2:
 				backslash = false;
 				if(c == ')' || c == '}')
 				{
@@ -116,7 +116,7 @@ loop:		for(int i = offset; i < length; i++)
 					lastOffset = i1;
 				}
 				break;
-			case Token.LITERAL1:
+			case Token.LITERAL_1:
 				if(backslash)
 					backslash = false;
 				else if(c == '"')
@@ -128,12 +128,12 @@ loop:		for(int i = offset; i < length; i++)
 				else
 					backslash = false;
 				break;
-			case Token.LITERAL2:
+			case Token.LITERAL_2:
 				if(backslash)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					token = Token.NULL;
 					lastOffset = i1;
 				}
@@ -144,12 +144,12 @@ loop:		for(int i = offset; i < length; i++)
 		}
 		switch(token)
 		{
-		case Token.KEYWORD2:
-			addToken(length - lastOffset,Token.INVALID);
+		case Token.KEYWORD_2:
+			addToken(length - lastOffset,Token.INVALID_1);
 			token = Token.NULL;
 			break;
-		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.LITERAL1);
+		case Token.LITERAL_2:
+			addToken(length - lastOffset,Token.LITERAL_1);
 			break;
 		default:
 			addToken(length - lastOffset,token);

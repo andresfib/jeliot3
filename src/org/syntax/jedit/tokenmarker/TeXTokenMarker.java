@@ -52,11 +52,11 @@ loop:		for(int i = offset; i < length; i++)
 					// we skip over this character,
 					// hence the `continue'
 					backslash = false;
-					if(token == Token.KEYWORD2 || token == EDFORMULA)
-						token = Token.KEYWORD2;
+					if(token == Token.KEYWORD_2 || token == EDFORMULA)
+						token = Token.KEYWORD_2;
 					addToken(i1 - lastOffset,token);
 					lastOffset = i1;
-					if(token == Token.KEYWORD1)
+					if(token == Token.KEYWORD_1)
 						token = Token.NULL;
 					continue;
 				}
@@ -67,9 +67,9 @@ loop:		for(int i = offset; i < length; i++)
 					// the stream, and it's not
 					// part of the command token
 					if(token == BDFORMULA || token == EDFORMULA)
-						token = Token.KEYWORD2;
+						token = Token.KEYWORD_2;
 					addToken(i - lastOffset,token);
-					if(token == Token.KEYWORD1)
+					if(token == Token.KEYWORD_1)
 						token = Token.NULL;
 					lastOffset = i;
 				}
@@ -83,14 +83,14 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				}
 				addToken(i - lastOffset,token);
-				addToken(length - i,Token.COMMENT1);
+				addToken(length - i,Token.COMMENT_1);
 				lastOffset = length;
 				break loop;
 			case '\\':
 				backslash = true;
 				if(token == Token.NULL)
 				{
-					token = Token.KEYWORD1;
+					token = Token.KEYWORD_1;
 					addToken(i - lastOffset,Token.NULL);
 					lastOffset = i;
 				}
@@ -99,17 +99,17 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(token == Token.NULL) // singe $
 				{
-					token = Token.KEYWORD2;
+					token = Token.KEYWORD_2;
 					addToken(i - lastOffset,Token.NULL);
 					lastOffset = i;
 				}
-				else if(token == Token.KEYWORD1) // \...$
+				else if(token == Token.KEYWORD_1) // \...$
 				{
-					token = Token.KEYWORD2;
-					addToken(i - lastOffset,Token.KEYWORD1);
+					token = Token.KEYWORD_2;
+					addToken(i - lastOffset,Token.KEYWORD_1);
 					lastOffset = i;
 				}
-				else if(token == Token.KEYWORD2) // $$aaa
+				else if(token == Token.KEYWORD_2) // $$aaa
 				{
 					if(i - lastOffset == 1 && array[i-1] == '$')
 					{
@@ -117,7 +117,7 @@ loop:		for(int i = offset; i < length; i++)
 						break;
 					}
 					token = Token.NULL;
-					addToken(i1 - lastOffset,Token.KEYWORD2);
+					addToken(i1 - lastOffset,Token.KEYWORD_2);
 					lastOffset = i1;
 				}
 				else if(token == BDFORMULA) // $$aaa$
@@ -127,7 +127,7 @@ loop:		for(int i = offset; i < length; i++)
 				else if(token == EDFORMULA) // $$aaa$$
 				{
 					token = Token.NULL;
-					addToken(i1 - lastOffset,Token.KEYWORD2);
+					addToken(i1 - lastOffset,Token.KEYWORD_2);
 					lastOffset = i1;
 				}
 				break;
@@ -135,8 +135,8 @@ loop:		for(int i = offset; i < length; i++)
 		}
 		if(lastOffset != length)
 			addToken(length - lastOffset,token == BDFORMULA
-				|| token == EDFORMULA ? Token.KEYWORD2 :
+				|| token == EDFORMULA ? Token.KEYWORD_2 :
 				token);
-		return (token != Token.KEYWORD1 ? token : Token.NULL);
+		return (token != Token.KEYWORD_1 ? token : Token.NULL);
 	}
 }

@@ -32,7 +32,7 @@ public class ShellScriptTokenMarker extends TokenMarker
 		int lastOffset = offset;
 		int length = line.count + offset;
 
-		if(token == Token.LITERAL1 && lineIndex != 0
+		if(token == Token.LITERAL_1 && lineIndex != 0
 			&& lineInfo[lineIndex - 1].obj != null)
 		{
 			String str = (String)lineInfo[lineIndex - 1].obj;
@@ -40,14 +40,14 @@ public class ShellScriptTokenMarker extends TokenMarker
 				&& SyntaxUtilities.regionMatches(false,line,
 				offset,str))
 			{
-				addToken(line.count,Token.LITERAL1);
+				addToken(line.count,Token.LITERAL_1);
 				return Token.NULL;
 			}
 			else
 			{
-				addToken(line.count,Token.LITERAL1);
+				addToken(line.count,Token.LITERAL_1);
 				lineInfo[lineIndex].obj = str;
-				return Token.LITERAL1;
+				return Token.LITERAL_1;
 			}
 		}
 
@@ -73,7 +73,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					if(cmdState == 1/*insideCmd*/)
 					{
-						addToken(i - lastOffset,Token.KEYWORD1);
+						addToken(i - lastOffset,Token.KEYWORD_1);
 						lastOffset = i;
 						cmdState = 2; /*afterCmd*/
 					}
@@ -99,7 +99,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						addToken(length - i,Token.COMMENT1);
+						addToken(length - i,Token.COMMENT_1);
 						lastOffset = length;
 						break loop;
 					}
@@ -122,12 +122,12 @@ loop:		for(int i = offset; i < length; i++)
 								token = LVARIABLE;
 								break;
 							default:
-								token = Token.KEYWORD2;
+								token = Token.KEYWORD_2;
 								break;
 							}
 						}
 						else
-							token = Token.KEYWORD2;
+							token = Token.KEYWORD_2;
 					}
 					break;
 				case '"':
@@ -136,7 +136,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL1;
+						token = Token.LITERAL_1;
 						lineInfo[lineIndex].obj = null;
 						cmdState = 2; /*afterCmd*/
 						lastOffset = i;
@@ -148,7 +148,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL2;
+						token = Token.LITERAL_2;
 						cmdState = 2; /*afterCmd*/
 						lastOffset = i;
 					}
@@ -162,7 +162,7 @@ loop:		for(int i = offset; i < length; i++)
 						{
 							addToken(i - lastOffset,
 								token);
-							token = Token.LITERAL1;
+							token = Token.LITERAL_1;
 							lastOffset = i;
 							lineInfo[lineIndex].obj =
 								new String(array,i + 2,
@@ -184,7 +184,7 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				}
 				break;
-			case Token.KEYWORD2:
+			case Token.KEYWORD_2:
 				backslash = false;
 				if(!Character.isLetterOrDigit(c) && c != '_')
 				{
@@ -203,7 +203,7 @@ loop:		for(int i = offset; i < length; i++)
 					}
 				}
 				break;
-			case Token.LITERAL1:
+			case Token.LITERAL_1:
 				if(backslash)
 					backslash = false;
 				else if(c == '"')
@@ -216,12 +216,12 @@ loop:		for(int i = offset; i < length; i++)
 				else
 					backslash = false;
 				break;
-			case Token.LITERAL2:
+			case Token.LITERAL_2:
 				if(backslash)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					cmdState = 2; /*afterCmd*/
 					lastOffset = i1;
 					token = Token.NULL;
@@ -233,7 +233,7 @@ loop:		for(int i = offset; i < length; i++)
 				backslash = false;
 				if(c == '}')
 				{
-					addToken(i1 - lastOffset,Token.KEYWORD2);
+					addToken(i1 - lastOffset,Token.KEYWORD_2);
 					lastOffset = i1;
 					token = Token.NULL;
 				}
@@ -247,19 +247,19 @@ loop:		for(int i = offset; i < length; i++)
 		{
 		case Token.NULL:
 			if(cmdState == 1)
-				addToken(length - lastOffset,Token.KEYWORD1);
+				addToken(length - lastOffset,Token.KEYWORD_1);
 			else
 				addToken(length - lastOffset,token);
 			break;
-		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.LITERAL1);
+		case Token.LITERAL_2:
+			addToken(length - lastOffset,Token.LITERAL_1);
 			break;
-		case Token.KEYWORD2:
+		case Token.KEYWORD_2:
 			addToken(length - lastOffset,token);
 			token = Token.NULL;
 			break;
 		case LVARIABLE:
-			addToken(length - lastOffset,Token.INVALID);
+			addToken(length - lastOffset,Token.INVALID_1);
 			token = Token.NULL;
 			break;
 		default:

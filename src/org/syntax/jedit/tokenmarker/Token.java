@@ -31,65 +31,65 @@ public class Token
 	/**
 	 * Comment 1 token id. This can be used to mark a comment.
 	 */
-	public static final byte COMMENT1 = 1;
+	public static final byte COMMENT_1 = 1;
 
 	/**
 	 * Comment 2 token id. This can be used to mark a comment.
 	 */
-	public static final byte COMMENT2 = 2;
+	public static final byte COMMENT_2 = 2;
 
 	
 	/**
 	 * Literal 1 token id. This can be used to mark a string
 	 * literal (eg, C mode uses this to mark "..." literals)
 	 */
-	public static final byte LITERAL1 = 3;
+	public static final byte LITERAL_1 = 3;
 
 	/**
 	 * Literal 2 token id. This can be used to mark an object
 	 * literal (eg, Java mode uses this to mark true, false, etc)
 	 */
-	public static final byte LITERAL2 = 4;
+	public static final byte LITERAL_2 = 4;
 
 	/**
 	 * Label token id. This can be used to mark labels
 	 * (eg, C mode uses this to mark ...: sequences)
 	 */
-	public static final byte LABEL = 5;
+	public static final byte LABEL_1 = 5;
 
 	/**
 	 * Keyword 1 token id. This can be used to mark a
 	 * keyword. This should be used for general language
 	 * constructs.
 	 */
-	public static final byte KEYWORD1 = 6;
+	public static final byte KEYWORD_1 = 6;
 
 	/**
 	 * Keyword 2 token id. This can be used to mark a
 	 * keyword. This should be used for preprocessor
 	 * commands, or variables.
 	 */
-	public static final byte KEYWORD2 = 7;
+	public static final byte KEYWORD_2 = 7;
 
 	/**
 	 * Keyword 3 token id. This can be used to mark a
 	 * keyword. This should be used for data types.
 	 */
-	public static final byte KEYWORD3 = 8;
+	public static final byte KEYWORD_3 = 8;
 
 	/**
 	 * Operator token id. This can be used to mark an
 	 * operator. (eg, SQL mode marks +, -, etc with this
 	 * token type)
 	 */
-	public static final byte OPERATOR = 9;
+	public static final byte OPERATOR_1 = 9;
 
 	/**
 	 * Invalid token id. This can be used to mark invalid
 	 * or incomplete tokens, so the user can easily spot
 	 * syntax errors.
 	 */
-	public static final byte INVALID = 10;
+	public static final byte INVALID_1 = 10;
 
 	/**
 	 * The total number of defined token ids.

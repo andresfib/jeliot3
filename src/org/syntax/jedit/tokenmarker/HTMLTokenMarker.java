@@ -66,28 +66,28 @@ loop:		for(int i = offset; i < length; i++)
 						line,i1,"!--"))
 					{
 						i += 3;
-						token = Token.COMMENT1;
+						token = Token.COMMENT_1;
 					}
 					else if(js && SyntaxUtilities.regionMatches(
 						true,line,i1,"script>"))
 					{
-						addToken(8,Token.KEYWORD1);
+						addToken(8,Token.KEYWORD_1);
 						lastOffset = lastKeyword = (i += 8);
 						token = JAVASCRIPT;
 					}
 					else
 					{
-						token = Token.KEYWORD1;
+						token = Token.KEYWORD_1;
 					}
 					break;
 				case '&':
 					addToken(i - lastOffset,token);
 					lastOffset = lastKeyword = i;
-					token = Token.KEYWORD2;
+					token = Token.KEYWORD_2;
 					break;
 				}
 				break;
-			case Token.KEYWORD1: // Inside a tag
+			case Token.KEYWORD_1: // Inside a tag
 				backslash = false;
 				if(c == '>')
 				{
@@ -96,7 +96,7 @@ loop:		for(int i = offset; i < length; i++)
 					token = Token.NULL;
 				}
 				break;
-			case Token.KEYWORD2: // Inside an entity
+			case Token.KEYWORD_2: // Inside an entity
 				backslash = false;
 				if(c == ';')
 				{
@@ -106,7 +106,7 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				}
 				break;
-			case Token.COMMENT1: // Inside a comment
+			case Token.COMMENT_1: // Inside a comment
 				backslash = false;
 				if(SyntaxUtilities.regionMatches(false,line,i,"-->"))
 				{
@@ -126,7 +126,7 @@ loop:		for(int i = offset; i < length; i++)
 					{
 						addToken(i - lastOffset,
 							Token.NULL);
-						addToken(9,Token.KEYWORD1);
+						addToken(9,Token.KEYWORD_1);
 						lastOffset = lastKeyword = (i += 9);
 						token = Token.NULL;
 					}
@@ -139,7 +139,7 @@ loop:		for(int i = offset; i < length; i++)
 						doKeyword(line,i,c);
 						addToken(i - lastOffset,Token.NULL);
 						lastOffset = lastKeyword = i;
-						token = Token.LITERAL1;
+						token = Token.LITERAL_1;
 					}
 					break;
 				case '\'':
@@ -150,7 +150,7 @@ loop:		for(int i = offset; i < length; i++)
 						doKeyword(line,i,c);
 						addToken(i - lastOffset,Token.NULL);
 						lastOffset = lastKeyword = i;
-						token = Token.LITERAL2;
+						token = Token.LITERAL_2;
 					}
 					break;
 				case '/':
@@ -162,13 +162,13 @@ loop:		for(int i = offset; i < length; i++)
 						lastOffset = lastKeyword = i;
 						if(array[i1] == '/')
 						{
-							addToken(length - i,Token.COMMENT2);
+							addToken(length - i,Token.COMMENT_2);
 							lastOffset = lastKeyword = length;
 							break loop;
 						}
 						else if(array[i1] == '*')
 						{
-							token = Token.COMMENT2;
+							token = Token.COMMENT_2;
 						}
 					}
 					break;
@@ -179,31 +179,31 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				}
 				break;
-			case Token.LITERAL1: // JavaScript "..."
+			case Token.LITERAL_1: // JavaScript "..."
 				if(backslash)
 					backslash = false;
 				else if(c == '"')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					lastOffset = lastKeyword = i1;
 					token = JAVASCRIPT;
 				}
 				break;
-			case Token.LITERAL2: // JavaScript '...'
+			case Token.LITERAL_2: // JavaScript '...'
 				if(backslash)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					lastOffset = lastKeyword = i1;
 					token = JAVASCRIPT;
 				}
 				break;
-			case Token.COMMENT2: // Inside a JavaScript comment
+			case Token.COMMENT_2: // Inside a JavaScript comment
 				backslash = false;
 				if(c == '*' && length - i > 1 && array[i1] == '/')
 				{
-					addToken((i+=2) - lastOffset,Token.COMMENT2);
+					addToken((i+=2) - lastOffset,Token.COMMENT_2);
 					lastOffset = lastKeyword = i;
 					token = JAVASCRIPT;
 				}
@@ -216,13 +216,13 @@ loop:		for(int i = offset; i < length; i++)
 
 		switch(token)
 		{
-		case Token.LITERAL1:
-		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.INVALID);
+		case Token.LITERAL_1:
+		case Token.LITERAL_2:
+			addToken(length - lastOffset,Token.INVALID_1);
 			token = JAVASCRIPT;
 			break;
-		case Token.KEYWORD2:
-			addToken(length - lastOffset,Token.INVALID);
+		case Token.KEYWORD_2:
+			addToken(length - lastOffset,Token.INVALID_1);
 			token = Token.NULL;
 			break;
 		case JAVASCRIPT:

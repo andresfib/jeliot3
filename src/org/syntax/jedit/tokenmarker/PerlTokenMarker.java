@@ -47,7 +47,7 @@ public class PerlTokenMarker extends TokenMarker
 		matchSpacesAllowed = false;
 		int length = line.count + offset;
 
-		if(token == Token.LITERAL1 && lineIndex != 0
+		if(token == Token.LITERAL_1 && lineIndex != 0
 			&& lineInfo[lineIndex - 1].obj != null)
 		{
 			String str = (String)lineInfo[lineIndex - 1].obj;
@@ -91,7 +91,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						addToken(length - i,Token.COMMENT1);
+						addToken(length - i,Token.COMMENT_1);
 						lastOffset = lastKeyword = length;
 						break loop;
 					}
@@ -100,7 +100,7 @@ loop:		for(int i = offset; i < length; i++)
 					backslash = false;
 					if(i == offset)
 					{
-						token = Token.COMMENT2;
+						token = Token.COMMENT_2;
 						addToken(length - i,token);
 						lastOffset = lastKeyword = length;
 						break loop;
@@ -122,7 +122,7 @@ loop:		for(int i = offset; i < length; i++)
 						{
 							addToken(i - lastOffset,token);
 							lastOffset = lastKeyword = i;
-							token = Token.KEYWORD2;
+							token = Token.KEYWORD_2;
 						}
 					}
 					break;
@@ -134,7 +134,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL1;
+						token = Token.LITERAL_1;
 						lineInfo[lineIndex].obj = null;
 						lastOffset = lastKeyword = i;
 					}
@@ -150,7 +150,7 @@ loop:		for(int i = offset; i < length; i++)
 						if(i != oldLastKeyword)
 							break;
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL2;
+						token = Token.LITERAL_2;
 						lastOffset = lastKeyword = i;
 					}
 					break;
@@ -162,7 +162,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.OPERATOR;
+						token = Token.OPERATOR_1;
 						lastOffset = lastKeyword = i;
 					}
 					break;
@@ -178,7 +178,7 @@ loop:		for(int i = offset; i < length; i++)
 						{
 							addToken(i - lastOffset,token);
 							lastOffset = lastKeyword = i;
-							token = Token.LITERAL1;
+							token = Token.LITERAL_1;
 							int len = length - (i+2);
 							if(array[length - 1] == ';')
 								len--;
@@ -196,7 +196,7 @@ loop:		for(int i = offset; i < length; i++)
 					// XXX::YYY
 					if(lastKeyword != 0)
 						break;
-					addToken(i1 - lastOffset,Token.LABEL);
+					addToken(i1 - lastOffset,Token.LABEL_1);
 					lastOffset = lastKeyword = i1;
 					break;
 				case '-':
@@ -217,7 +217,7 @@ loop:		for(int i = offset; i < length; i++)
 					case 'k': case 'T': case 'B':
 					case 'M': case 'A': case 'C':
 						addToken(i - lastOffset,token);
-						addToken(2,Token.KEYWORD3);
+						addToken(2,Token.KEYWORD_3);
 						lastOffset = lastKeyword = i+2;
 						i++;
 					}
@@ -246,7 +246,7 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				}
 				break;
-			case Token.KEYWORD2:
+			case Token.KEYWORD_2:
 				backslash = false;
 				// This test checks for an end-of-variable
 				// condition
@@ -324,7 +324,7 @@ loop:		for(int i = offset; i < length; i++)
 						{
 							token = S_END;
 							addToken(i1 - lastOffset,
-								Token.LITERAL2);
+								Token.LITERAL_2);
 							lastOffset = lastKeyword = i1;
 						}
 					}
@@ -336,7 +336,7 @@ loop:		for(int i = offset; i < length; i++)
 					&& c != '_')
 					doKeyword(line,i,c);
 				break;
-			case Token.COMMENT2:
+			case Token.COMMENT_2:
 				backslash = false;
 				if(i == offset)
 				{
@@ -348,7 +348,7 @@ loop:		for(int i = offset; i < length; i++)
 					break loop;
 				}
 				break;
-			case Token.LITERAL1:
+			case Token.LITERAL_1:
 				if(backslash)
 					backslash = false;
 				/* else if(c == '$')
@@ -360,19 +360,19 @@ loop:		for(int i = offset; i < length; i++)
 					lastOffset = lastKeyword = i1;
 				}
 				break;
-			case Token.LITERAL2:
+			case Token.LITERAL_2:
 				if(backslash)
 					backslash = false;
 				/* else if(c == '$')
 					backslash = true; */
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
 				break;
-			case Token.OPERATOR:
+			case Token.OPERATOR_1:
 				if(backslash)
 					backslash = false;
 				else if(c == '`')
@@ -393,19 +393,19 @@ loop:		for(int i = offset; i < length; i++)
 
 		switch(token)
 		{
-		case Token.KEYWORD2:
+		case Token.KEYWORD_2:
 			addToken(length - lastOffset,token);
 			token = Token.NULL;
 			break;
-		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.LITERAL1);
+		case Token.LITERAL_2:
+			addToken(length - lastOffset,Token.LITERAL_1);
 			break;
 		case S_END:
-			addToken(length - lastOffset,Token.LITERAL2);
+			addToken(length - lastOffset,Token.LITERAL_2);
 			token = Token.NULL;
 			break;
 		case S_ONE: case S_TWO:
-			addToken(length - lastOffset,Token.INVALID); // XXX
+			addToken(length - lastOffset,Token.INVALID_1); // XXX
 			token = Token.NULL;
 			break;
 		default:
@@ -430,7 +430,7 @@ loop:		for(int i = offset; i < length; i++)
 
 		if(token == S_END)
 		{
-			addToken(i - lastOffset,Token.LITERAL2);
+			addToken(i - lastOffset,Token.LITERAL_2);
 			token = Token.NULL;
 			lastOffset = i;
 			lastKeyword = i1;
@@ -443,7 +443,7 @@ loop:		for(int i = offset; i < length; i++)
 		{
 			if(lastKeyword != lastOffset)
 				addToken(lastKeyword - lastOffset,Token.NULL);
-			addToken(len,Token.LITERAL2);
+			addToken(len,Token.LITERAL_2);
 			lastOffset = i;
 			lastKeyword = i1;
 			if(Character.isWhitespace(c))
@@ -487,219 +487,219 @@ loop:		for(int i = offset; i < length; i++)
 		if(perlKeywords == null)
 		{
 			perlKeywords = new KeywordMap(false);
-			perlKeywords.add("my",Token.KEYWORD1);
-			perlKeywords.add("local",Token.KEYWORD1);
-			perlKeywords.add("new",Token.KEYWORD1);
-			perlKeywords.add("if",Token.KEYWORD1);
-			perlKeywords.add("until",Token.KEYWORD1);
-			perlKeywords.add("while",Token.KEYWORD1);
-			perlKeywords.add("elsif",Token.KEYWORD1);
-			perlKeywords.add("else",Token.KEYWORD1);
-			perlKeywords.add("eval",Token.KEYWORD1);
-			perlKeywords.add("unless",Token.KEYWORD1);
-			perlKeywords.add("foreach",Token.KEYWORD1);
-			perlKeywords.add("continue",Token.KEYWORD1);
-			perlKeywords.add("exit",Token.KEYWORD1);
-			perlKeywords.add("die",Token.KEYWORD1);
-			perlKeywords.add("last",Token.KEYWORD1);
-			perlKeywords.add("goto",Token.KEYWORD1);
-			perlKeywords.add("next",Token.KEYWORD1);
-			perlKeywords.add("redo",Token.KEYWORD1);
-			perlKeywords.add("goto",Token.KEYWORD1);
-			perlKeywords.add("return",Token.KEYWORD1);
-			perlKeywords.add("do",Token.KEYWORD1);
-			perlKeywords.add("sub",Token.KEYWORD1);
-			perlKeywords.add("use",Token.KEYWORD1);
-			perlKeywords.add("require",Token.KEYWORD1);
-			perlKeywords.add("package",Token.KEYWORD1);
-			perlKeywords.add("BEGIN",Token.KEYWORD1);
-			perlKeywords.add("END",Token.KEYWORD1);
-			perlKeywords.add("eq",Token.OPERATOR);
-			perlKeywords.add("ne",Token.OPERATOR);
-			perlKeywords.add("not",Token.OPERATOR);
-			perlKeywords.add("and",Token.OPERATOR);
-			perlKeywords.add("or",Token.OPERATOR);
+			perlKeywords.add("my",Token.KEYWORD_1);
+			perlKeywords.add("local",Token.KEYWORD_1);
+			perlKeywords.add("new",Token.KEYWORD_1);
+			perlKeywords.add("if",Token.KEYWORD_1);
+			perlKeywords.add("until",Token.KEYWORD_1);
+			perlKeywords.add("while",Token.KEYWORD_1);
+			perlKeywords.add("elsif",Token.KEYWORD_1);
+			perlKeywords.add("else",Token.KEYWORD_1);
+			perlKeywords.add("eval",Token.KEYWORD_1);
+			perlKeywords.add("unless",Token.KEYWORD_1);
+			perlKeywords.add("foreach",Token.KEYWORD_1);
+			perlKeywords.add("continue",Token.KEYWORD_1);
+			perlKeywords.add("exit",Token.KEYWORD_1);
+			perlKeywords.add("die",Token.KEYWORD_1);
+			perlKeywords.add("last",Token.KEYWORD_1);
+			perlKeywords.add("goto",Token.KEYWORD_1);
+			perlKeywords.add("next",Token.KEYWORD_1);
+			perlKeywords.add("redo",Token.KEYWORD_1);
+			perlKeywords.add("goto",Token.KEYWORD_1);
+			perlKeywords.add("return",Token.KEYWORD_1);
+			perlKeywords.add("do",Token.KEYWORD_1);
+			perlKeywords.add("sub",Token.KEYWORD_1);
+			perlKeywords.add("use",Token.KEYWORD_1);
+			perlKeywords.add("require",Token.KEYWORD_1);
+			perlKeywords.add("package",Token.KEYWORD_1);
+			perlKeywords.add("BEGIN",Token.KEYWORD_1);
+			perlKeywords.add("END",Token.KEYWORD_1);
+			perlKeywords.add("eq",Token.OPERATOR_1);
+			perlKeywords.add("ne",Token.OPERATOR_1);
+			perlKeywords.add("not",Token.OPERATOR_1);
+			perlKeywords.add("and",Token.OPERATOR_1);
+			perlKeywords.add("or",Token.OPERATOR_1);
 
-			perlKeywords.add("abs",Token.KEYWORD3);
-			perlKeywords.add("accept",Token.KEYWORD3);
-			perlKeywords.add("alarm",Token.KEYWORD3);
-			perlKeywords.add("atan2",Token.KEYWORD3);
-			perlKeywords.add("bind",Token.KEYWORD3);
-			perlKeywords.add("binmode",Token.KEYWORD3);
-			perlKeywords.add("bless",Token.KEYWORD3);
-			perlKeywords.add("caller",Token.KEYWORD3);
-			perlKeywords.add("chdir",Token.KEYWORD3);
-			perlKeywords.add("chmod",Token.KEYWORD3);
-			perlKeywords.add("chomp",Token.KEYWORD3);
-			perlKeywords.add("chr",Token.KEYWORD3);
-			perlKeywords.add("chroot",Token.KEYWORD3);
-			perlKeywords.add("chown",Token.KEYWORD3);
-			perlKeywords.add("closedir",Token.KEYWORD3);
-			perlKeywords.add("close",Token.KEYWORD3);
-			perlKeywords.add("connect",Token.KEYWORD3);
-			perlKeywords.add("cos",Token.KEYWORD3);
-			perlKeywords.add("crypt",Token.KEYWORD3);
-			perlKeywords.add("dbmclose",Token.KEYWORD3);
-			perlKeywords.add("dbmopen",Token.KEYWORD3);
-			perlKeywords.add("defined",Token.KEYWORD3);
-			perlKeywords.add("delete",Token.KEYWORD3);
-			perlKeywords.add("die",Token.KEYWORD3);
-			perlKeywords.add("dump",Token.KEYWORD3);
-			perlKeywords.add("each",Token.KEYWORD3);
-			perlKeywords.add("endgrent",Token.KEYWORD3);
-			perlKeywords.add("endhostent",Token.KEYWORD3);
-			perlKeywords.add("endnetent",Token.KEYWORD3);
-			perlKeywords.add("endprotoent",Token.KEYWORD3);
-			perlKeywords.add("endpwent",Token.KEYWORD3);
-			perlKeywords.add("endservent",Token.KEYWORD3);
-			perlKeywords.add("eof",Token.KEYWORD3);
-			perlKeywords.add("exec",Token.KEYWORD3);
-			perlKeywords.add("exists",Token.KEYWORD3);
-			perlKeywords.add("exp",Token.KEYWORD3);
-			perlKeywords.add("fctnl",Token.KEYWORD3);
-			perlKeywords.add("fileno",Token.KEYWORD3);
-			perlKeywords.add("flock",Token.KEYWORD3);
-			perlKeywords.add("fork",Token.KEYWORD3);
-			perlKeywords.add("format",Token.KEYWORD3);
-			perlKeywords.add("formline",Token.KEYWORD3);
-			perlKeywords.add("getc",Token.KEYWORD3);
-			perlKeywords.add("getgrent",Token.KEYWORD3);
-			perlKeywords.add("getgrgid",Token.KEYWORD3);
-			perlKeywords.add("getgrnam",Token.KEYWORD3);
-			perlKeywords.add("gethostbyaddr",Token.KEYWORD3);
-			perlKeywords.add("gethostbyname",Token.KEYWORD3);
-			perlKeywords.add("gethostent",Token.KEYWORD3);
-			perlKeywords.add("getlogin",Token.KEYWORD3);
-			perlKeywords.add("getnetbyaddr",Token.KEYWORD3);
-			perlKeywords.add("getnetbyname",Token.KEYWORD3);
-			perlKeywords.add("getnetent",Token.KEYWORD3);
-			perlKeywords.add("getpeername",Token.KEYWORD3);
-			perlKeywords.add("getpgrp",Token.KEYWORD3);
-			perlKeywords.add("getppid",Token.KEYWORD3);
-			perlKeywords.add("getpriority",Token.KEYWORD3);
-			perlKeywords.add("getprotobyname",Token.KEYWORD3);
-			perlKeywords.add("getprotobynumber",Token.KEYWORD3);
-			perlKeywords.add("getprotoent",Token.KEYWORD3);
-			perlKeywords.add("getpwent",Token.KEYWORD3);
-			perlKeywords.add("getpwnam",Token.KEYWORD3);
-			perlKeywords.add("getpwuid",Token.KEYWORD3);
-			perlKeywords.add("getservbyname",Token.KEYWORD3);
-			perlKeywords.add("getservbyport",Token.KEYWORD3);
-			perlKeywords.add("getservent",Token.KEYWORD3);
-			perlKeywords.add("getsockname",Token.KEYWORD3);
-			perlKeywords.add("getsockopt",Token.KEYWORD3);
-			perlKeywords.add("glob",Token.KEYWORD3);
-			perlKeywords.add("gmtime",Token.KEYWORD3);
-			perlKeywords.add("grep",Token.KEYWORD3);
-			perlKeywords.add("hex",Token.KEYWORD3);
-			perlKeywords.add("import",Token.KEYWORD3);
-			perlKeywords.add("index",Token.KEYWORD3);
-			perlKeywords.add("int",Token.KEYWORD3);
-			perlKeywords.add("ioctl",Token.KEYWORD3);
-			perlKeywords.add("join",Token.KEYWORD3);
-			perlKeywords.add("keys",Token.KEYWORD3);
-			perlKeywords.add("kill",Token.KEYWORD3);
-			perlKeywords.add("lcfirst",Token.KEYWORD3);
-			perlKeywords.add("lc",Token.KEYWORD3);
-			perlKeywords.add("length",Token.KEYWORD3);
-			perlKeywords.add("link",Token.KEYWORD3);
-			perlKeywords.add("listen",Token.KEYWORD3);
-			perlKeywords.add("log",Token.KEYWORD3);
-			perlKeywords.add("localtime",Token.KEYWORD3);
-			perlKeywords.add("lstat",Token.KEYWORD3);
-			perlKeywords.add("map",Token.KEYWORD3);
-			perlKeywords.add("mkdir",Token.KEYWORD3);
-			perlKeywords.add("msgctl",Token.KEYWORD3);
-			perlKeywords.add("msgget",Token.KEYWORD3);
-			perlKeywords.add("msgrcv",Token.KEYWORD3);
-			perlKeywords.add("no",Token.KEYWORD3);
-			perlKeywords.add("oct",Token.KEYWORD3);
-			perlKeywords.add("opendir",Token.KEYWORD3);
-			perlKeywords.add("open",Token.KEYWORD3);
-			perlKeywords.add("ord",Token.KEYWORD3);
-			perlKeywords.add("pack",Token.KEYWORD3);
-			perlKeywords.add("pipe",Token.KEYWORD3);
-			perlKeywords.add("pop",Token.KEYWORD3);
-			perlKeywords.add("pos",Token.KEYWORD3);
-			perlKeywords.add("printf",Token.KEYWORD3);
-			perlKeywords.add("print",Token.KEYWORD3);
-			perlKeywords.add("push",Token.KEYWORD3);
-			perlKeywords.add("quotemeta",Token.KEYWORD3);
-			perlKeywords.add("rand",Token.KEYWORD3);
-			perlKeywords.add("readdir",Token.KEYWORD3);
-			perlKeywords.add("read",Token.KEYWORD3);
-			perlKeywords.add("readlink",Token.KEYWORD3);
-			perlKeywords.add("recv",Token.KEYWORD3);
-			perlKeywords.add("ref",Token.KEYWORD3);
-			perlKeywords.add("rename",Token.KEYWORD3);
-			perlKeywords.add("reset",Token.KEYWORD3);
-			perlKeywords.add("reverse",Token.KEYWORD3);
-			perlKeywords.add("rewinddir",Token.KEYWORD3);
-			perlKeywords.add("rindex",Token.KEYWORD3);
-			perlKeywords.add("rmdir",Token.KEYWORD3);
-			perlKeywords.add("scalar",Token.KEYWORD3);
-			perlKeywords.add("seekdir",Token.KEYWORD3);
-			perlKeywords.add("seek",Token.KEYWORD3);
-			perlKeywords.add("select",Token.KEYWORD3);
-			perlKeywords.add("semctl",Token.KEYWORD3);
-			perlKeywords.add("semget",Token.KEYWORD3);
-			perlKeywords.add("semop",Token.KEYWORD3);
-			perlKeywords.add("send",Token.KEYWORD3);
-			perlKeywords.add("setgrent",Token.KEYWORD3);
-			perlKeywords.add("sethostent",Token.KEYWORD3);
-			perlKeywords.add("setnetent",Token.KEYWORD3);
-			perlKeywords.add("setpgrp",Token.KEYWORD3);
-			perlKeywords.add("setpriority",Token.KEYWORD3);
-			perlKeywords.add("setprotoent",Token.KEYWORD3);
-			perlKeywords.add("setpwent",Token.KEYWORD3);
-			perlKeywords.add("setsockopt",Token.KEYWORD3);
-			perlKeywords.add("shift",Token.KEYWORD3);
-			perlKeywords.add("shmctl",Token.KEYWORD3);
-			perlKeywords.add("shmget",Token.KEYWORD3);
-			perlKeywords.add("shmread",Token.KEYWORD3);
-			perlKeywords.add("shmwrite",Token.KEYWORD3);
-			perlKeywords.add("shutdown",Token.KEYWORD3);
-			perlKeywords.add("sin",Token.KEYWORD3);
-			perlKeywords.add("sleep",Token.KEYWORD3);
-			perlKeywords.add("socket",Token.KEYWORD3);
-			perlKeywords.add("socketpair",Token.KEYWORD3);
-			perlKeywords.add("sort",Token.KEYWORD3);
-			perlKeywords.add("splice",Token.KEYWORD3);
-			perlKeywords.add("split",Token.KEYWORD3);
-			perlKeywords.add("sprintf",Token.KEYWORD3);
-			perlKeywords.add("sqrt",Token.KEYWORD3);
-			perlKeywords.add("srand",Token.KEYWORD3);
-			perlKeywords.add("stat",Token.KEYWORD3);
-			perlKeywords.add("study",Token.KEYWORD3);
-			perlKeywords.add("substr",Token.KEYWORD3);
-			perlKeywords.add("symlink",Token.KEYWORD3);
-			perlKeywords.add("syscall",Token.KEYWORD3);
-			perlKeywords.add("sysopen",Token.KEYWORD3);
-			perlKeywords.add("sysread",Token.KEYWORD3);
-			perlKeywords.add("syswrite",Token.KEYWORD3);
-			perlKeywords.add("telldir",Token.KEYWORD3);
-			perlKeywords.add("tell",Token.KEYWORD3);
-			perlKeywords.add("tie",Token.KEYWORD3);
-			perlKeywords.add("tied",Token.KEYWORD3);
-			perlKeywords.add("time",Token.KEYWORD3);
-			perlKeywords.add("times",Token.KEYWORD3);
-			perlKeywords.add("truncate",Token.KEYWORD3);
-			perlKeywords.add("uc",Token.KEYWORD3);
-			perlKeywords.add("ucfirst",Token.KEYWORD3);
-			perlKeywords.add("umask",Token.KEYWORD3);
-			perlKeywords.add("undef",Token.KEYWORD3);
-			perlKeywords.add("unlink",Token.KEYWORD3);
-			perlKeywords.add("unpack",Token.KEYWORD3);
-			perlKeywords.add("unshift",Token.KEYWORD3);
-			perlKeywords.add("untie",Token.KEYWORD3);
-			perlKeywords.add("utime",Token.KEYWORD3);
-			perlKeywords.add("values",Token.KEYWORD3);
-			perlKeywords.add("vec",Token.KEYWORD3);
-			perlKeywords.add("wait",Token.KEYWORD3);
-			perlKeywords.add("waitpid",Token.KEYWORD3);
-			perlKeywords.add("wantarray",Token.KEYWORD3);
-			perlKeywords.add("warn",Token.KEYWORD3);
-			perlKeywords.add("write",Token.KEYWORD3);
+			perlKeywords.add("abs",Token.KEYWORD_3);
+			perlKeywords.add("accept",Token.KEYWORD_3);
+			perlKeywords.add("alarm",Token.KEYWORD_3);
+			perlKeywords.add("atan2",Token.KEYWORD_3);
+			perlKeywords.add("bind",Token.KEYWORD_3);
+			perlKeywords.add("binmode",Token.KEYWORD_3);
+			perlKeywords.add("bless",Token.KEYWORD_3);
+			perlKeywords.add("caller",Token.KEYWORD_3);
+			perlKeywords.add("chdir",Token.KEYWORD_3);
+			perlKeywords.add("chmod",Token.KEYWORD_3);
+			perlKeywords.add("chomp",Token.KEYWORD_3);
+			perlKeywords.add("chr",Token.KEYWORD_3);
+			perlKeywords.add("chroot",Token.KEYWORD_3);
+			perlKeywords.add("chown",Token.KEYWORD_3);
+			perlKeywords.add("closedir",Token.KEYWORD_3);
+			perlKeywords.add("close",Token.KEYWORD_3);
+			perlKeywords.add("connect",Token.KEYWORD_3);
+			perlKeywords.add("cos",Token.KEYWORD_3);
+			perlKeywords.add("crypt",Token.KEYWORD_3);
+			perlKeywords.add("dbmclose",Token.KEYWORD_3);
+			perlKeywords.add("dbmopen",Token.KEYWORD_3);
+			perlKeywords.add("defined",Token.KEYWORD_3);
+			perlKeywords.add("delete",Token.KEYWORD_3);
+			perlKeywords.add("die",Token.KEYWORD_3);
+			perlKeywords.add("dump",Token.KEYWORD_3);
+			perlKeywords.add("each",Token.KEYWORD_3);
+			perlKeywords.add("endgrent",Token.KEYWORD_3);
+			perlKeywords.add("endhostent",Token.KEYWORD_3);
+			perlKeywords.add("endnetent",Token.KEYWORD_3);
+			perlKeywords.add("endprotoent",Token.KEYWORD_3);
+			perlKeywords.add("endpwent",Token.KEYWORD_3);
+			perlKeywords.add("endservent",Token.KEYWORD_3);
+			perlKeywords.add("eof",Token.KEYWORD_3);
+			perlKeywords.add("exec",Token.KEYWORD_3);
+			perlKeywords.add("exists",Token.KEYWORD_3);
+			perlKeywords.add("exp",Token.KEYWORD_3);
+			perlKeywords.add("fctnl",Token.KEYWORD_3);
+			perlKeywords.add("fileno",Token.KEYWORD_3);
+			perlKeywords.add("flock",Token.KEYWORD_3);
+			perlKeywords.add("fork",Token.KEYWORD_3);
+			perlKeywords.add("format",Token.KEYWORD_3);
+			perlKeywords.add("formline",Token.KEYWORD_3);
+			perlKeywords.add("getc",Token.KEYWORD_3);
+			perlKeywords.add("getgrent",Token.KEYWORD_3);
+			perlKeywords.add("getgrgid",Token.KEYWORD_3);
+			perlKeywords.add("getgrnam",Token.KEYWORD_3);
+			perlKeywords.add("gethostbyaddr",Token.KEYWORD_3);
+			perlKeywords.add("gethostbyname",Token.KEYWORD_3);
+			perlKeywords.add("gethostent",Token.KEYWORD_3);
+			perlKeywords.add("getlogin",Token.KEYWORD_3);
+			perlKeywords.add("getnetbyaddr",Token.KEYWORD_3);
+			perlKeywords.add("getnetbyname",Token.KEYWORD_3);
+			perlKeywords.add("getnetent",Token.KEYWORD_3);
+			perlKeywords.add("getpeername",Token.KEYWORD_3);
+			perlKeywords.add("getpgrp",Token.KEYWORD_3);
+			perlKeywords.add("getppid",Token.KEYWORD_3);
+			perlKeywords.add("getpriority",Token.KEYWORD_3);
+			perlKeywords.add("getprotobyname",Token.KEYWORD_3);
+			perlKeywords.add("getprotobynumber",Token.KEYWORD_3);
+			perlKeywords.add("getprotoent",Token.KEYWORD_3);
+			perlKeywords.add("getpwent",Token.KEYWORD_3);
+			perlKeywords.add("getpwnam",Token.KEYWORD_3);
+			perlKeywords.add("getpwuid",Token.KEYWORD_3);
+			perlKeywords.add("getservbyname",Token.KEYWORD_3);
+			perlKeywords.add("getservbyport",Token.KEYWORD_3);
+			perlKeywords.add("getservent",Token.KEYWORD_3);
+			perlKeywords.add("getsockname",Token.KEYWORD_3);
+			perlKeywords.add("getsockopt",Token.KEYWORD_3);
+			perlKeywords.add("glob",Token.KEYWORD_3);
+			perlKeywords.add("gmtime",Token.KEYWORD_3);
+			perlKeywords.add("grep",Token.KEYWORD_3);
+			perlKeywords.add("hex",Token.KEYWORD_3);
+			perlKeywords.add("import",Token.KEYWORD_3);
+			perlKeywords.add("index",Token.KEYWORD_3);
+			perlKeywords.add("int",Token.KEYWORD_3);
+			perlKeywords.add("ioctl",Token.KEYWORD_3);
+			perlKeywords.add("join",Token.KEYWORD_3);
+			perlKeywords.add("keys",Token.KEYWORD_3);
+			perlKeywords.add("kill",Token.KEYWORD_3);
+			perlKeywords.add("lcfirst",Token.KEYWORD_3);
+			perlKeywords.add("lc",Token.KEYWORD_3);
+			perlKeywords.add("length",Token.KEYWORD_3);
+			perlKeywords.add("link",Token.KEYWORD_3);
+			perlKeywords.add("listen",Token.KEYWORD_3);
+			perlKeywords.add("log",Token.KEYWORD_3);
+			perlKeywords.add("localtime",Token.KEYWORD_3);
+			perlKeywords.add("lstat",Token.KEYWORD_3);
+			perlKeywords.add("map",Token.KEYWORD_3);
+			perlKeywords.add("mkdir",Token.KEYWORD_3);
+			perlKeywords.add("msgctl",Token.KEYWORD_3);
+			perlKeywords.add("msgget",Token.KEYWORD_3);
+			perlKeywords.add("msgrcv",Token.KEYWORD_3);
+			perlKeywords.add("no",Token.KEYWORD_3);
+			perlKeywords.add("oct",Token.KEYWORD_3);
+			perlKeywords.add("opendir",Token.KEYWORD_3);
+			perlKeywords.add("open",Token.KEYWORD_3);
+			perlKeywords.add("ord",Token.KEYWORD_3);
+			perlKeywords.add("pack",Token.KEYWORD_3);
+			perlKeywords.add("pipe",Token.KEYWORD_3);
+			perlKeywords.add("pop",Token.KEYWORD_3);
+			perlKeywords.add("pos",Token.KEYWORD_3);
+			perlKeywords.add("printf",Token.KEYWORD_3);
+			perlKeywords.add("print",Token.KEYWORD_3);
+			perlKeywords.add("push",Token.KEYWORD_3);
+			perlKeywords.add("quotemeta",Token.KEYWORD_3);
+			perlKeywords.add("rand",Token.KEYWORD_3);
+			perlKeywords.add("readdir",Token.KEYWORD_3);
+			perlKeywords.add("read",Token.KEYWORD_3);
+			perlKeywords.add("readlink",Token.KEYWORD_3);
+			perlKeywords.add("recv",Token.KEYWORD_3);
+			perlKeywords.add("ref",Token.KEYWORD_3);
+			perlKeywords.add("rename",Token.KEYWORD_3);
+			perlKeywords.add("reset",Token.KEYWORD_3);
+			perlKeywords.add("reverse",Token.KEYWORD_3);
+			perlKeywords.add("rewinddir",Token.KEYWORD_3);
+			perlKeywords.add("rindex",Token.KEYWORD_3);
+			perlKeywords.add("rmdir",Token.KEYWORD_3);
+			perlKeywords.add("scalar",Token.KEYWORD_3);
+			perlKeywords.add("seekdir",Token.KEYWORD_3);
+			perlKeywords.add("seek",Token.KEYWORD_3);
+			perlKeywords.add("select",Token.KEYWORD_3);
+			perlKeywords.add("semctl",Token.KEYWORD_3);
+			perlKeywords.add("semget",Token.KEYWORD_3);
+			perlKeywords.add("semop",Token.KEYWORD_3);
+			perlKeywords.add("send",Token.KEYWORD_3);
+			perlKeywords.add("setgrent",Token.KEYWORD_3);
+			perlKeywords.add("sethostent",Token.KEYWORD_3);
+			perlKeywords.add("setnetent",Token.KEYWORD_3);
+			perlKeywords.add("setpgrp",Token.KEYWORD_3);
+			perlKeywords.add("setpriority",Token.KEYWORD_3);
+			perlKeywords.add("setprotoent",Token.KEYWORD_3);
+			perlKeywords.add("setpwent",Token.KEYWORD_3);
+			perlKeywords.add("setsockopt",Token.KEYWORD_3);
+			perlKeywords.add("shift",Token.KEYWORD_3);
+			perlKeywords.add("shmctl",Token.KEYWORD_3);
+			perlKeywords.add("shmget",Token.KEYWORD_3);
+			perlKeywords.add("shmread",Token.KEYWORD_3);
+			perlKeywords.add("shmwrite",Token.KEYWORD_3);
+			perlKeywords.add("shutdown",Token.KEYWORD_3);
+			perlKeywords.add("sin",Token.KEYWORD_3);
+			perlKeywords.add("sleep",Token.KEYWORD_3);
+			perlKeywords.add("socket",Token.KEYWORD_3);
+			perlKeywords.add("socketpair",Token.KEYWORD_3);
+			perlKeywords.add("sort",Token.KEYWORD_3);
+			perlKeywords.add("splice",Token.KEYWORD_3);
+			perlKeywords.add("split",Token.KEYWORD_3);
+			perlKeywords.add("sprintf",Token.KEYWORD_3);
+			perlKeywords.add("sqrt",Token.KEYWORD_3);
+			perlKeywords.add("srand",Token.KEYWORD_3);
+			perlKeywords.add("stat",Token.KEYWORD_3);
+			perlKeywords.add("study",Token.KEYWORD_3);
+			perlKeywords.add("substr",Token.KEYWORD_3);
+			perlKeywords.add("symlink",Token.KEYWORD_3);
+			perlKeywords.add("syscall",Token.KEYWORD_3);
+			perlKeywords.add("sysopen",Token.KEYWORD_3);
+			perlKeywords.add("sysread",Token.KEYWORD_3);
+			perlKeywords.add("syswrite",Token.KEYWORD_3);
+			perlKeywords.add("telldir",Token.KEYWORD_3);
+			perlKeywords.add("tell",Token.KEYWORD_3);
+			perlKeywords.add("tie",Token.KEYWORD_3);
+			perlKeywords.add("tied",Token.KEYWORD_3);
+			perlKeywords.add("time",Token.KEYWORD_3);
+			perlKeywords.add("times",Token.KEYWORD_3);
+			perlKeywords.add("truncate",Token.KEYWORD_3);
+			perlKeywords.add("uc",Token.KEYWORD_3);
+			perlKeywords.add("ucfirst",Token.KEYWORD_3);
+			perlKeywords.add("umask",Token.KEYWORD_3);
+			perlKeywords.add("undef",Token.KEYWORD_3);
+			perlKeywords.add("unlink",Token.KEYWORD_3);
+			perlKeywords.add("unpack",Token.KEYWORD_3);
+			perlKeywords.add("unshift",Token.KEYWORD_3);
+			perlKeywords.add("untie",Token.KEYWORD_3);
+			perlKeywords.add("utime",Token.KEYWORD_3);
+			perlKeywords.add("values",Token.KEYWORD_3);
+			perlKeywords.add("vec",Token.KEYWORD_3);
+			perlKeywords.add("wait",Token.KEYWORD_3);
+			perlKeywords.add("waitpid",Token.KEYWORD_3);
+			perlKeywords.add("wantarray",Token.KEYWORD_3);
+			perlKeywords.add("warn",Token.KEYWORD_3);
+			perlKeywords.add("write",Token.KEYWORD_3);
 
 			perlKeywords.add("m",S_ONE);
 			perlKeywords.add("q",S_ONE);

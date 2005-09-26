@@ -58,7 +58,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL1;
+						token = Token.LITERAL_1;
 						lastOffset = lastKeyword = i;
 					}
 					break;
@@ -69,7 +69,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL2;
+						token = Token.LITERAL_2;
 						lastOffset = lastKeyword = i;
 					}
 					break;
@@ -79,7 +79,7 @@ loop:		for(int i = offset; i < length; i++)
 						if(doKeyword(line,i,c))
 							break;
 						backslash = false;
-						addToken(i1 - lastOffset,Token.LABEL);
+						addToken(i1 - lastOffset,Token.LABEL_1);
 						lastOffset = lastKeyword = i1;
 					}
 					else if(doKeyword(line,i,c))
@@ -94,7 +94,7 @@ loop:		for(int i = offset; i < length; i++)
 						{
 						case '-':
 							addToken(i - lastOffset,token);
-							addToken(length - i,Token.COMMENT1);
+							addToken(length - i,Token.COMMENT_1);
 							lastOffset = lastKeyword = length;
 							break loop;
 						}
@@ -108,10 +108,10 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				}
 				break;
-			case Token.COMMENT1:
-			case Token.COMMENT2:
+			case Token.COMMENT_1:
+			case Token.COMMENT_2:
 				throw new RuntimeException("Wrong eiffel parser state");
-			case Token.LITERAL1:
+			case Token.LITERAL_1:
 				if(backslash)
 					backslash = false;
 				else if(c == '"')
@@ -121,12 +121,12 @@ loop:		for(int i = offset; i < length; i++)
 					lastOffset = lastKeyword = i1;
 				}
 				break;
-			case Token.LITERAL2:
+			case Token.LITERAL_2:
 				if(backslash)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -142,12 +142,12 @@ loop:		for(int i = offset; i < length; i++)
 
 		switch(token)
 		{
-		case Token.LITERAL1:
-		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.INVALID);
+		case Token.LITERAL_1:
+		case Token.LITERAL_2:
+			addToken(length - lastOffset,Token.INVALID_1);
 			token = Token.NULL;
 			break;
-		case Token.KEYWORD2:
+		case Token.KEYWORD_2:
 			addToken(length - lastOffset,token);
 			if(!backslash)
 				token = Token.NULL;
@@ -164,65 +164,65 @@ loop:		for(int i = offset; i < length; i++)
 		if(eiffelKeywords == null)
 		{
 			eiffelKeywords = new KeywordMap(true);
-			eiffelKeywords.add("alias", Token.KEYWORD1);
-			eiffelKeywords.add("all", Token.KEYWORD1);
-			eiffelKeywords.add("and", Token.KEYWORD1);
-			eiffelKeywords.add("as", Token.KEYWORD1);
-			eiffelKeywords.add("check", Token.KEYWORD1);
-			eiffelKeywords.add("class", Token.KEYWORD1);
-			eiffelKeywords.add("creation", Token.KEYWORD1);
-			eiffelKeywords.add("debug", Token.KEYWORD1);
-			eiffelKeywords.add("deferred", Token.KEYWORD1);
-			eiffelKeywords.add("do", Token.KEYWORD1);
-			eiffelKeywords.add("else",Token.KEYWORD1);
-			eiffelKeywords.add("elseif", Token.KEYWORD1);
-			eiffelKeywords.add("end", Token.KEYWORD1);
-			eiffelKeywords.add("ensure", Token.KEYWORD1);
-			eiffelKeywords.add("expanded", Token.KEYWORD1);
-			eiffelKeywords.add("export", Token.KEYWORD1);
-			eiffelKeywords.add("external", Token.KEYWORD1);
-			eiffelKeywords.add("feature", Token.KEYWORD1);
-			eiffelKeywords.add("from", Token.KEYWORD1);
-			eiffelKeywords.add("frozen", Token.KEYWORD1);
-			eiffelKeywords.add("if", Token.KEYWORD1);
-			eiffelKeywords.add("implies",Token.KEYWORD1);
-			eiffelKeywords.add("indexing", Token.KEYWORD1);
-			eiffelKeywords.add("infix", Token.KEYWORD1);
-			eiffelKeywords.add("inherit", Token.KEYWORD1);
-			eiffelKeywords.add("inspect", Token.KEYWORD1);
-			eiffelKeywords.add("invariant", Token.KEYWORD1);
-			eiffelKeywords.add("is", Token.KEYWORD1);
-			eiffelKeywords.add("like", Token.KEYWORD1);
-			eiffelKeywords.add("local", Token.KEYWORD1);
-			eiffelKeywords.add("loop", Token.KEYWORD1);
-			eiffelKeywords.add("not", Token.KEYWORD1);
-			eiffelKeywords.add("obsolete", Token.KEYWORD1);
-			eiffelKeywords.add("old",Token.KEYWORD1);
-			eiffelKeywords.add("once", Token.KEYWORD1);
-			eiffelKeywords.add("or", Token.KEYWORD1);
-			eiffelKeywords.add("prefix", Token.KEYWORD1);
-			eiffelKeywords.add("redefine", Token.KEYWORD1);
-			eiffelKeywords.add("rename", Token.KEYWORD1);
-			eiffelKeywords.add("require", Token.KEYWORD1);
-			eiffelKeywords.add("rescue", Token.KEYWORD1);
-			eiffelKeywords.add("retry", Token.KEYWORD1);
-			eiffelKeywords.add("select", Token.KEYWORD1);
-			eiffelKeywords.add("separate", Token.KEYWORD1);
-			eiffelKeywords.add("then",Token.KEYWORD1);
-			eiffelKeywords.add("undefine", Token.KEYWORD1);
-			eiffelKeywords.add("until", Token.KEYWORD1);
-			eiffelKeywords.add("variant", Token.KEYWORD1);
-			eiffelKeywords.add("when", Token.KEYWORD1);
-			eiffelKeywords.add("xor", Token.KEYWORD1);
+			eiffelKeywords.add("alias", Token.KEYWORD_1);
+			eiffelKeywords.add("all", Token.KEYWORD_1);
+			eiffelKeywords.add("and", Token.KEYWORD_1);
+			eiffelKeywords.add("as", Token.KEYWORD_1);
+			eiffelKeywords.add("check", Token.KEYWORD_1);
+			eiffelKeywords.add("class", Token.KEYWORD_1);
+			eiffelKeywords.add("creation", Token.KEYWORD_1);
+			eiffelKeywords.add("debug", Token.KEYWORD_1);
+			eiffelKeywords.add("deferred", Token.KEYWORD_1);
+			eiffelKeywords.add("do", Token.KEYWORD_1);
+			eiffelKeywords.add("else",Token.KEYWORD_1);
+			eiffelKeywords.add("elseif", Token.KEYWORD_1);
+			eiffelKeywords.add("end", Token.KEYWORD_1);
+			eiffelKeywords.add("ensure", Token.KEYWORD_1);
+			eiffelKeywords.add("expanded", Token.KEYWORD_1);
+			eiffelKeywords.add("export", Token.KEYWORD_1);
+			eiffelKeywords.add("external", Token.KEYWORD_1);
+			eiffelKeywords.add("feature", Token.KEYWORD_1);
+			eiffelKeywords.add("from", Token.KEYWORD_1);
+			eiffelKeywords.add("frozen", Token.KEYWORD_1);
+			eiffelKeywords.add("if", Token.KEYWORD_1);
+			eiffelKeywords.add("implies",Token.KEYWORD_1);
+			eiffelKeywords.add("indexing", Token.KEYWORD_1);
+			eiffelKeywords.add("infix", Token.KEYWORD_1);
+			eiffelKeywords.add("inherit", Token.KEYWORD_1);
+			eiffelKeywords.add("inspect", Token.KEYWORD_1);
+			eiffelKeywords.add("invariant", Token.KEYWORD_1);
+			eiffelKeywords.add("is", Token.KEYWORD_1);
+			eiffelKeywords.add("like", Token.KEYWORD_1);
+			eiffelKeywords.add("local", Token.KEYWORD_1);
+			eiffelKeywords.add("loop", Token.KEYWORD_1);
+			eiffelKeywords.add("not", Token.KEYWORD_1);
+			eiffelKeywords.add("obsolete", Token.KEYWORD_1);
+			eiffelKeywords.add("old",Token.KEYWORD_1);
+			eiffelKeywords.add("once", Token.KEYWORD_1);
+			eiffelKeywords.add("or", Token.KEYWORD_1);
+			eiffelKeywords.add("prefix", Token.KEYWORD_1);
+			eiffelKeywords.add("redefine", Token.KEYWORD_1);
+			eiffelKeywords.add("rename", Token.KEYWORD_1);
+			eiffelKeywords.add("require", Token.KEYWORD_1);
+			eiffelKeywords.add("rescue", Token.KEYWORD_1);
+			eiffelKeywords.add("retry", Token.KEYWORD_1);
+			eiffelKeywords.add("select", Token.KEYWORD_1);
+			eiffelKeywords.add("separate", Token.KEYWORD_1);
+			eiffelKeywords.add("then",Token.KEYWORD_1);
+			eiffelKeywords.add("undefine", Token.KEYWORD_1);
+			eiffelKeywords.add("until", Token.KEYWORD_1);
+			eiffelKeywords.add("variant", Token.KEYWORD_1);
+			eiffelKeywords.add("when", Token.KEYWORD_1);
+			eiffelKeywords.add("xor", Token.KEYWORD_1);
 
-			eiffelKeywords.add("current",Token.LITERAL2);
-			eiffelKeywords.add("false",Token.LITERAL2);
-			eiffelKeywords.add("precursor",Token.LITERAL2);
-			eiffelKeywords.add("result",Token.LITERAL2);
-			eiffelKeywords.add("strip",Token.LITERAL2);
-			eiffelKeywords.add("true",Token.LITERAL2);
-			eiffelKeywords.add("unique",Token.LITERAL2);
-			eiffelKeywords.add("void",Token.LITERAL2);
+			eiffelKeywords.add("current",Token.LITERAL_2);
+			eiffelKeywords.add("false",Token.LITERAL_2);
+			eiffelKeywords.add("precursor",Token.LITERAL_2);
+			eiffelKeywords.add("result",Token.LITERAL_2);
+			eiffelKeywords.add("strip",Token.LITERAL_2);
+			eiffelKeywords.add("true",Token.LITERAL_2);
+			eiffelKeywords.add("unique",Token.LITERAL_2);
+			eiffelKeywords.add("void",Token.LITERAL_2);
 
 		}
 		return eiffelKeywords;
@@ -256,7 +256,7 @@ loop:		for(int i = offset; i < length; i++)
 				}
 			}
 			if ( klassname )
-				id = Token.KEYWORD3;
+				id = Token.KEYWORD_3;
 		}
 
 		if(id != Token.NULL)

@@ -26,13 +26,13 @@ public class PatchTokenMarker extends TokenMarker
 		switch(line.array[line.offset])
 		{
 		case '+': case '>':
-			addToken(line.count,Token.KEYWORD1);
+			addToken(line.count,Token.KEYWORD_1);
 			break;
 		case '-': case '<':
-			addToken(line.count,Token.KEYWORD2);
+			addToken(line.count,Token.KEYWORD_2);
 			break;
 		case '@': case '*':
-			addToken(line.count,Token.KEYWORD3);
+			addToken(line.count,Token.KEYWORD_3);
 			break;
 	        default:
 			addToken(line.count,Token.NULL);
