@@ -56,42 +56,42 @@ loop:		for(int i = offset; i < length; i++)
 						line,i1,"!--"))
 					{
 						i += 3;
-						token = Token.COMMENT1;
+						token = Token.COMMENT_1;
 					}
 					else if(SyntaxUtilities.regionMatches(
 						true,line,i1,"?php"))
 					{
-						addToken(5,Token.LABEL);
+						addToken(5,Token.LABEL_1);
 						lastOffset = lastKeyword = (i += 4) + 1;
 						token = SCRIPT;
 					}
 					else if(SyntaxUtilities.regionMatches(
 						true,line,i1,"?"))
 					{
-						addToken(2,Token.LABEL);
+						addToken(2,Token.LABEL_1);
 						lastOffset = lastKeyword = (i += 1) + 1;
 						token = SCRIPT;
 					}
 					else if(SyntaxUtilities.regionMatches(
 						true,line,i1,"script>"))
 					{
-						addToken(8,Token.LABEL);
+						addToken(8,Token.LABEL_1);
 						lastOffset = lastKeyword = (i += 7) + 1;
 						token = SCRIPT;
 					}
 					else
 					{
-						token = Token.KEYWORD1;
+						token = Token.KEYWORD_1;
 					}
 					break;
 				case '&':
 					addToken(i - lastOffset,token);
 					lastOffset = lastKeyword = i;
-					token = Token.KEYWORD2;
+					token = Token.KEYWORD_2;
 					break;
 				}
 				break;
-			case Token.KEYWORD1: // Inside a tag
+			case Token.KEYWORD_1: // Inside a tag
 				backslash = false;
 				if(c == '>')
 				{
@@ -100,7 +100,7 @@ loop:		for(int i = offset; i < length; i++)
 					token = Token.NULL;
 				}
 				break;
-			case Token.KEYWORD2: // Inside an entity
+			case Token.KEYWORD_2: // Inside an entity
 				backslash = false;
 				if(c == ';')
 				{
@@ -110,7 +110,7 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				}
 				break;
-			case Token.COMMENT1: // Inside a comment
+			case Token.COMMENT_1: // Inside a comment
 				backslash = false;
 				if(SyntaxUtilities.regionMatches(false,line,i,"-->"))
 				{
@@ -131,8 +131,8 @@ loop:		for(int i = offset; i < length; i++)
 					{
 						//Ending the script
 						addToken(i - lastOffset,
-							Token.KEYWORD3);
-						addToken(9,Token.LABEL);
+							Token.KEYWORD_3);
+						addToken(9,Token.LABEL_1);
 						lastOffset = lastKeyword = (i += 8) + 1;
 						token = Token.NULL;
 					}
@@ -140,8 +140,8 @@ loop:		for(int i = offset; i < length; i++)
 					{
 						// < operator
 						addToken(i - lastOffset,
-							Token.KEYWORD3);
-						addToken(1,Token.OPERATOR);
+							Token.KEYWORD_3);
+						addToken(1,Token.OPERATOR_1);
 						lastOffset = lastKeyword = i1;
 					}
 					break;
@@ -152,16 +152,16 @@ loop:		for(int i = offset; i < length; i++)
 					{
 						//Ending the script
 						addToken(i - lastOffset,
-						Token.KEYWORD3);
-						addToken(2,Token.LABEL);
+						Token.KEYWORD_3);
+						addToken(2,Token.LABEL_1);
 						lastOffset = lastKeyword = (i += 1) + 1;
 						token = Token.NULL;
 					}
 					else
 					{
 						//? operator
-						addToken(i - lastOffset, Token.KEYWORD3);
-						addToken(1,Token.OPERATOR);
+						addToken(i - lastOffset, Token.KEYWORD_3);
+						addToken(1,Token.OPERATOR_1);
 						lastOffset = lastKeyword = i1;
 					}
 					break;
@@ -171,9 +171,9 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						doKeyword(line,i,c);
-						addToken(i - lastOffset,Token.KEYWORD3);
+						addToken(i - lastOffset,Token.KEYWORD_3);
 						lastOffset = lastKeyword = i;
-						token = Token.LITERAL1;
+						token = Token.LITERAL_1;
 					}
 					break;
 				case '\'':
@@ -182,15 +182,15 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						doKeyword(line,i,c);
-						addToken(i - lastOffset,Token.KEYWORD3);
+						addToken(i - lastOffset,Token.KEYWORD_3);
 						lastOffset = lastKeyword = i;
-						token = Token.LITERAL2;
+						token = Token.LITERAL_2;
 					}
 					break;
 				case '#':
 					doKeyword(line,i,c);
-					addToken(i - lastOffset,Token.KEYWORD3);
-					addToken(length - i,Token.COMMENT2);
+					addToken(i - lastOffset,Token.KEYWORD_3);
+					addToken(length - i,Token.COMMENT_2);
 					lastOffset = lastKeyword = length;
 					break loop;
 				case '/':
@@ -198,31 +198,31 @@ loop:		for(int i = offset; i < length; i++)
 					doKeyword(line,i,c);
 					if(length - i > 1)  /*This is the same as if(length > i + 1) */
 					{
-						addToken(i - lastOffset,Token.KEYWORD3);
+						addToken(i - lastOffset,Token.KEYWORD_3);
 						lastOffset = lastKeyword = i;
 						if(array[i1] == '/')
 						{
-							addToken(length - i,Token.COMMENT2);
+							addToken(length - i,Token.COMMENT_2);
 							lastOffset = lastKeyword = length;
 							break loop;
 						}
 						else if(array[i1] == '*')
 						{
-							token = Token.COMMENT2;
+							token = Token.COMMENT_2;
 						}
 						else
 						{
 							// / operator
-							addToken(i - lastOffset, Token.KEYWORD3);
-							addToken(1,Token.OPERATOR);
+							addToken(i - lastOffset, Token.KEYWORD_3);
+							addToken(1,Token.OPERATOR_1);
 							lastOffset = lastKeyword = i1;
 						}
 	 				}
 					else
 					{
 						// / operator
-						addToken(i - lastOffset, Token.KEYWORD3);
-						addToken(1,Token.OPERATOR);
+						addToken(i - lastOffset, Token.KEYWORD_3);
+						addToken(1,Token.OPERATOR_1);
 						lastOffset = lastKeyword = i1;
 					}
 					break;
@@ -235,39 +235,39 @@ loop:		for(int i = offset; i < length; i++)
 						if (c != ' ')
 						{
 							//assume non alphanumeric characters are operators
-							addToken(i - lastOffset, Token.KEYWORD3);
-							addToken(1,Token.OPERATOR);
+							addToken(i - lastOffset, Token.KEYWORD_3);
+							addToken(1,Token.OPERATOR_1);
 							lastOffset = lastKeyword = i1;
 						}
 					}
 					break;
 				}
 				break;
-			case Token.LITERAL1: // Script "..."
+			case Token.LITERAL_1: // Script "..."
 				if(backslash)
 					backslash = false;
 				else if(c == '"')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					lastOffset = lastKeyword = i1;
 					token = SCRIPT;
 				}
 				break;
-			case Token.LITERAL2: // Script '...'
+			case Token.LITERAL_2: // Script '...'
 				if(backslash)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					lastOffset = lastKeyword = i1;
 					token = SCRIPT;
 				}
 				break;
-			case Token.COMMENT2: // Inside a Script comment
+			case Token.COMMENT_2: // Inside a Script comment
 				backslash = false;
 				if(c == '*' && length - i > 1 && array[i1] == '/')
 				{
-					addToken(i + 2 - lastOffset,Token.COMMENT2);
+					addToken(i + 2 - lastOffset,Token.COMMENT_2);
 					i += 1;
 					lastOffset = lastKeyword = i + 1;
 					token = SCRIPT;
@@ -281,19 +281,19 @@ loop:		for(int i = offset; i < length; i++)
 
 		switch(token)
 		{
-		case Token.LITERAL1:
-			addToken(length - lastOffset,Token.LITERAL1);
+		case Token.LITERAL_1:
+			addToken(length - lastOffset,Token.LITERAL_1);
 			break;
-		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.LITERAL2);
+		case Token.LITERAL_2:
+			addToken(length - lastOffset,Token.LITERAL_2);
 			break;
-		case Token.KEYWORD2:
-			addToken(length - lastOffset,Token.INVALID);
+		case Token.KEYWORD_2:
+			addToken(length - lastOffset,Token.INVALID_1);
 			token = Token.NULL;
 			break;
 		case SCRIPT:
 			doKeyword(line,length,'\0');
-			addToken(length - lastOffset,Token.KEYWORD3);
+			addToken(length - lastOffset,Token.KEYWORD_3);
 			break;
 		default:
 			addToken(length - lastOffset,token);
@@ -311,34 +311,34 @@ loop:		for(int i = offset; i < length; i++)
 	static
 	{
 		keywords = new KeywordMap(false);
-		keywords.add("function",Token.KEYWORD2);
-		keywords.add("class",Token.KEYWORD2);
-		keywords.add("var",Token.KEYWORD2);
-		keywords.add("require",Token.KEYWORD2);
-		keywords.add("include",Token.KEYWORD2);
-		keywords.add("else",Token.KEYWORD1);
-		keywords.add("elseif",Token.KEYWORD1);
-		keywords.add("do",Token.KEYWORD1);
-		keywords.add("for",Token.KEYWORD1);
-		keywords.add("if",Token.KEYWORD1);
-		keywords.add("endif",Token.KEYWORD1);
-		keywords.add("in",Token.KEYWORD1);
-		keywords.add("new",Token.KEYWORD1);
-		keywords.add("return",Token.KEYWORD1);
-		keywords.add("while",Token.KEYWORD1);
-		keywords.add("endwhile",Token.KEYWORD1);
-		keywords.add("with",Token.KEYWORD1);
-		keywords.add("break",Token.KEYWORD1);
-		keywords.add("switch",Token.KEYWORD1);
-		keywords.add("case",Token.KEYWORD1);
-		keywords.add("continue",Token.KEYWORD1);
-		keywords.add("default",Token.KEYWORD1);
-		keywords.add("echo",Token.KEYWORD1);
-		keywords.add("false",Token.KEYWORD1);
-		keywords.add("this",Token.KEYWORD1);
-		keywords.add("true",Token.KEYWORD1);
-		keywords.add("array",Token.KEYWORD1);
-		keywords.add("extends",Token.KEYWORD1);
+		keywords.add("function",Token.KEYWORD_2);
+		keywords.add("class",Token.KEYWORD_2);
+		keywords.add("var",Token.KEYWORD_2);
+		keywords.add("require",Token.KEYWORD_2);
+		keywords.add("include",Token.KEYWORD_2);
+		keywords.add("else",Token.KEYWORD_1);
+		keywords.add("elseif",Token.KEYWORD_1);
+		keywords.add("do",Token.KEYWORD_1);
+		keywords.add("for",Token.KEYWORD_1);
+		keywords.add("if",Token.KEYWORD_1);
+		keywords.add("endif",Token.KEYWORD_1);
+		keywords.add("in",Token.KEYWORD_1);
+		keywords.add("new",Token.KEYWORD_1);
+		keywords.add("return",Token.KEYWORD_1);
+		keywords.add("while",Token.KEYWORD_1);
+		keywords.add("endwhile",Token.KEYWORD_1);
+		keywords.add("with",Token.KEYWORD_1);
+		keywords.add("break",Token.KEYWORD_1);
+		keywords.add("switch",Token.KEYWORD_1);
+		keywords.add("case",Token.KEYWORD_1);
+		keywords.add("continue",Token.KEYWORD_1);
+		keywords.add("default",Token.KEYWORD_1);
+		keywords.add("echo",Token.KEYWORD_1);
+		keywords.add("false",Token.KEYWORD_1);
+		keywords.add("this",Token.KEYWORD_1);
+		keywords.add("true",Token.KEYWORD_1);
+		keywords.add("array",Token.KEYWORD_1);
+		keywords.add("extends",Token.KEYWORD_1);
 	}
 
 	private boolean doKeyword(Segment line, int i, char c)
@@ -350,7 +350,7 @@ loop:		for(int i = offset; i < length; i++)
 		if(id != Token.NULL)
 		{
 			if(lastKeyword != lastOffset)
-				addToken(lastKeyword - lastOffset,Token.KEYWORD3);
+				addToken(lastKeyword - lastOffset,Token.KEYWORD_3);
 			addToken(len,id);
 			lastOffset = i;
 		}

@@ -61,7 +61,7 @@ loop:		for(int i = offset; i < length; i++)
 					{
 						doKeyword(line,i,c);
 						addToken(i - lastOffset,token);
-						addToken(length - i,Token.COMMENT1);
+						addToken(length - i,Token.COMMENT_1);
 						lastOffset = lastKeyword = length;
 						break loop;
 					}
@@ -80,7 +80,7 @@ loop:		for(int i = offset; i < length; i++)
 						}
 						else
 						{
-							token = Token.LITERAL1;
+							token = Token.LITERAL_1;
 						}
 						lastOffset = lastKeyword = i;
 					}
@@ -99,7 +99,7 @@ loop:		for(int i = offset; i < length; i++)
 						}
 						else
 						{
-							token = Token.LITERAL2;
+							token = Token.LITERAL_2;
 						}
 						lastOffset = lastKeyword = i;
 					}
@@ -112,7 +112,7 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				}
 				break;
-			case Token.LITERAL1:
+			case Token.LITERAL_1:
 				if(backslash)
 					backslash = false;
 				else if(c == '"')
@@ -122,12 +122,12 @@ loop:		for(int i = offset; i < length; i++)
 					lastOffset = lastKeyword = i1;
 				}
 				break;
-			case Token.LITERAL2:
+			case Token.LITERAL_2:
 				if(backslash)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -139,7 +139,7 @@ loop:		for(int i = offset; i < length; i++)
 					line,i,"\"\"\""))
 				{
 					addToken((i+=4) - lastOffset,
-						Token.LITERAL1);
+						Token.LITERAL_1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i;
 				}
@@ -151,7 +151,7 @@ loop:		for(int i = offset; i < length; i++)
 					line,i,"'''"))
 				{
 					addToken((i+=4) - lastOffset,
-						Token.LITERAL1);
+						Token.LITERAL_1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i;
 				}
@@ -166,7 +166,7 @@ loop:		for(int i = offset; i < length; i++)
 		{
 			case TRIPLEQUOTE1:
 			case TRIPLEQUOTE2:
-				addToken(length - lastOffset,Token.LITERAL1);
+				addToken(length - lastOffset,Token.LITERAL_1);
 				break;
 			case Token.NULL:
 				doKeyword(line,length,'\0');
@@ -183,34 +183,34 @@ loop:		for(int i = offset; i < length; i++)
 		if (pyKeywords == null)
 		{
 			pyKeywords = new KeywordMap(false);
-			pyKeywords.add("and",Token.KEYWORD3);
-			pyKeywords.add("not",Token.KEYWORD3);
-			pyKeywords.add("or",Token.KEYWORD3);
-			pyKeywords.add("if",Token.KEYWORD1);
-			pyKeywords.add("for",Token.KEYWORD1);
-			pyKeywords.add("assert",Token.KEYWORD1);
-			pyKeywords.add("break",Token.KEYWORD1);
-			pyKeywords.add("continue",Token.KEYWORD1);
-			pyKeywords.add("elif",Token.KEYWORD1);
-			pyKeywords.add("else",Token.KEYWORD1);
-			pyKeywords.add("except",Token.KEYWORD1);
-			pyKeywords.add("exec",Token.KEYWORD1);
-			pyKeywords.add("finally",Token.KEYWORD1);
-			pyKeywords.add("raise",Token.KEYWORD1);
-			pyKeywords.add("return",Token.KEYWORD1);
-			pyKeywords.add("try",Token.KEYWORD1);
-			pyKeywords.add("while",Token.KEYWORD1);
-			pyKeywords.add("def",Token.KEYWORD2);
-			pyKeywords.add("class",Token.KEYWORD2);
-			pyKeywords.add("del",Token.KEYWORD2);
-			pyKeywords.add("from",Token.KEYWORD2);
-			pyKeywords.add("global",Token.KEYWORD2);
-			pyKeywords.add("import",Token.KEYWORD2);
-			pyKeywords.add("in",Token.KEYWORD2);
-			pyKeywords.add("is",Token.KEYWORD2);
-			pyKeywords.add("lambda",Token.KEYWORD2);
-			pyKeywords.add("pass",Token.KEYWORD2);
-			pyKeywords.add("print",Token.KEYWORD2);
+			pyKeywords.add("and",Token.KEYWORD_3);
+			pyKeywords.add("not",Token.KEYWORD_3);
+			pyKeywords.add("or",Token.KEYWORD_3);
+			pyKeywords.add("if",Token.KEYWORD_1);
+			pyKeywords.add("for",Token.KEYWORD_1);
+			pyKeywords.add("assert",Token.KEYWORD_1);
+			pyKeywords.add("break",Token.KEYWORD_1);
+			pyKeywords.add("continue",Token.KEYWORD_1);
+			pyKeywords.add("elif",Token.KEYWORD_1);
+			pyKeywords.add("else",Token.KEYWORD_1);
+			pyKeywords.add("except",Token.KEYWORD_1);
+			pyKeywords.add("exec",Token.KEYWORD_1);
+			pyKeywords.add("finally",Token.KEYWORD_1);
+			pyKeywords.add("raise",Token.KEYWORD_1);
+			pyKeywords.add("return",Token.KEYWORD_1);
+			pyKeywords.add("try",Token.KEYWORD_1);
+			pyKeywords.add("while",Token.KEYWORD_1);
+			pyKeywords.add("def",Token.KEYWORD_2);
+			pyKeywords.add("class",Token.KEYWORD_2);
+			pyKeywords.add("del",Token.KEYWORD_2);
+			pyKeywords.add("from",Token.KEYWORD_2);
+			pyKeywords.add("global",Token.KEYWORD_2);
+			pyKeywords.add("import",Token.KEYWORD_2);
+			pyKeywords.add("in",Token.KEYWORD_2);
+			pyKeywords.add("is",Token.KEYWORD_2);
+			pyKeywords.add("lambda",Token.KEYWORD_2);
+			pyKeywords.add("pass",Token.KEYWORD_2);
+			pyKeywords.add("print",Token.KEYWORD_2);
 		}
 		return pyKeywords;
 	}

@@ -64,7 +64,7 @@ loop:		for(int i = offset; i < length; i++)
 						if(doKeyword(line,i,c))
 							break;
 						addToken(i - lastOffset,token);
-						addToken(length - i,Token.KEYWORD2);
+						addToken(length - i,Token.KEYWORD_2);
 						lastOffset = lastKeyword = length;
 						break loop;
 					}
@@ -76,7 +76,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL1;
+						token = Token.LITERAL_1;
 						lastOffset = lastKeyword = i;
 					}
 					break;
@@ -87,7 +87,7 @@ loop:		for(int i = offset; i < length; i++)
 					else
 					{
 						addToken(i - lastOffset,token);
-						token = Token.LITERAL2;
+						token = Token.LITERAL_2;
 						lastOffset = lastKeyword = i;
 					}
 					break;
@@ -97,7 +97,7 @@ loop:		for(int i = offset; i < length; i++)
 						if(doKeyword(line,i,c))
 							break;
 						backslash = false;
-						addToken(i1 - lastOffset,Token.LABEL);
+						addToken(i1 - lastOffset,Token.LABEL_1);
 						lastOffset = lastKeyword = i1;
 					}
 					else if(doKeyword(line,i,c))
@@ -114,13 +114,13 @@ loop:		for(int i = offset; i < length; i++)
 							addToken(i - lastOffset,token);
 							lastOffset = lastKeyword = i;
 							if(length - i > 2 && array[i+2] == '*')
-								token = Token.COMMENT2;
+								token = Token.COMMENT_2;
 							else
-								token = Token.COMMENT1;
+								token = Token.COMMENT_1;
 							break;
 						case '/':
 							addToken(i - lastOffset,token);
-							addToken(length - i,Token.COMMENT1);
+							addToken(length - i,Token.COMMENT_1);
 							lastOffset = lastKeyword = length;
 							break loop;
 						}
@@ -134,8 +134,8 @@ loop:		for(int i = offset; i < length; i++)
 					break;
 				}
 				break;
-			case Token.COMMENT1:
-			case Token.COMMENT2:
+			case Token.COMMENT_1:
+			case Token.COMMENT_2:
 				backslash = false;
 				if(c == '*' && length - i > 1)
 				{
@@ -148,7 +148,7 @@ loop:		for(int i = offset; i < length; i++)
 					}
 				}
 				break;
-			case Token.LITERAL1:
+			case Token.LITERAL_1:
 				if(backslash)
 					backslash = false;
 				else if(c == '"')
@@ -158,12 +158,12 @@ loop:		for(int i = offset; i < length; i++)
 					lastOffset = lastKeyword = i1;
 				}
 				break;
-			case Token.LITERAL2:
+			case Token.LITERAL_2:
 				if(backslash)
 					backslash = false;
 				else if(c == '\'')
 				{
-					addToken(i1 - lastOffset,Token.LITERAL1);
+					addToken(i1 - lastOffset,Token.LITERAL_1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
@@ -179,12 +179,12 @@ loop:		for(int i = offset; i < length; i++)
 
 		switch(token)
 		{
-		case Token.LITERAL1:
-		case Token.LITERAL2:
-			addToken(length - lastOffset,Token.INVALID);
+		case Token.LITERAL_1:
+		case Token.LITERAL_2:
+			addToken(length - lastOffset,Token.INVALID_1);
 			token = Token.NULL;
 			break;
-		case Token.KEYWORD2:
+		case Token.KEYWORD_2:
 			addToken(length - lastOffset,token);
 			if(!backslash)
 				token = Token.NULL;
@@ -201,48 +201,48 @@ loop:		for(int i = offset; i < length; i++)
 		if(cKeywords == null)
 		{
 			cKeywords = new KeywordMap(false);
-			cKeywords.add("char",Token.KEYWORD3);
-			cKeywords.add("double",Token.KEYWORD3);
-			cKeywords.add("enum",Token.KEYWORD3);
-			cKeywords.add("float",Token.KEYWORD3);
-			cKeywords.add("int",Token.KEYWORD3);
-			cKeywords.add("long",Token.KEYWORD3);
-			cKeywords.add("short",Token.KEYWORD3);
-			cKeywords.add("signed",Token.KEYWORD3);
-			cKeywords.add("struct",Token.KEYWORD3);
-			cKeywords.add("typedef",Token.KEYWORD3);
-			cKeywords.add("union",Token.KEYWORD3);
-			cKeywords.add("unsigned",Token.KEYWORD3);
-			cKeywords.add("void",Token.KEYWORD3);
-			cKeywords.add("auto",Token.KEYWORD1);
-			cKeywords.add("const",Token.KEYWORD1);
-			cKeywords.add("extern",Token.KEYWORD1);
-			cKeywords.add("register",Token.KEYWORD1);
-			cKeywords.add("static",Token.KEYWORD1);
-			cKeywords.add("volatile",Token.KEYWORD1);
-			cKeywords.add("break",Token.KEYWORD1);
-			cKeywords.add("case",Token.KEYWORD1);
-			cKeywords.add("continue",Token.KEYWORD1);
-			cKeywords.add("default",Token.KEYWORD1);
-			cKeywords.add("do",Token.KEYWORD1);
-			cKeywords.add("else",Token.KEYWORD1);
-			cKeywords.add("for",Token.KEYWORD1);
-			cKeywords.add("goto",Token.KEYWORD1);
-			cKeywords.add("if",Token.KEYWORD1);
-			cKeywords.add("return",Token.KEYWORD1);
-			cKeywords.add("sizeof",Token.KEYWORD1);
-			cKeywords.add("switch",Token.KEYWORD1);
-			cKeywords.add("while",Token.KEYWORD1);
-			cKeywords.add("asm",Token.KEYWORD2);
-			cKeywords.add("asmlinkage",Token.KEYWORD2);
-			cKeywords.add("far",Token.KEYWORD2);
-			cKeywords.add("huge",Token.KEYWORD2);
-			cKeywords.add("inline",Token.KEYWORD2);
-			cKeywords.add("near",Token.KEYWORD2);
-			cKeywords.add("pascal",Token.KEYWORD2);
-			cKeywords.add("true",Token.LITERAL2);
-			cKeywords.add("false",Token.LITERAL2);
-			cKeywords.add("NULL",Token.LITERAL2);
+			cKeywords.add("char",Token.KEYWORD_3);
+			cKeywords.add("double",Token.KEYWORD_3);
+			cKeywords.add("enum",Token.KEYWORD_3);
+			cKeywords.add("float",Token.KEYWORD_3);
+			cKeywords.add("int",Token.KEYWORD_3);
+			cKeywords.add("long",Token.KEYWORD_3);
+			cKeywords.add("short",Token.KEYWORD_3);
+			cKeywords.add("signed",Token.KEYWORD_3);
+			cKeywords.add("struct",Token.KEYWORD_3);
+			cKeywords.add("typedef",Token.KEYWORD_3);
+			cKeywords.add("union",Token.KEYWORD_3);
+			cKeywords.add("unsigned",Token.KEYWORD_3);
+			cKeywords.add("void",Token.KEYWORD_3);
+			cKeywords.add("auto",Token.KEYWORD_1);
+			cKeywords.add("const",Token.KEYWORD_1);
+			cKeywords.add("extern",Token.KEYWORD_1);
+			cKeywords.add("register",Token.KEYWORD_1);
+			cKeywords.add("static",Token.KEYWORD_1);
+			cKeywords.add("volatile",Token.KEYWORD_1);
+			cKeywords.add("break",Token.KEYWORD_1);
+			cKeywords.add("case",Token.KEYWORD_1);
+			cKeywords.add("continue",Token.KEYWORD_1);
+			cKeywords.add("default",Token.KEYWORD_1);
+			cKeywords.add("do",Token.KEYWORD_1);
+			cKeywords.add("else",Token.KEYWORD_1);
+			cKeywords.add("for",Token.KEYWORD_1);
+			cKeywords.add("goto",Token.KEYWORD_1);
+			cKeywords.add("if",Token.KEYWORD_1);
+			cKeywords.add("return",Token.KEYWORD_1);
+			cKeywords.add("sizeof",Token.KEYWORD_1);
+			cKeywords.add("switch",Token.KEYWORD_1);
+			cKeywords.add("while",Token.KEYWORD_1);
+			cKeywords.add("asm",Token.KEYWORD_2);
+			cKeywords.add("asmlinkage",Token.KEYWORD_2);
+			cKeywords.add("far",Token.KEYWORD_2);
+			cKeywords.add("huge",Token.KEYWORD_2);
+			cKeywords.add("inline",Token.KEYWORD_2);
+			cKeywords.add("near",Token.KEYWORD_2);
+			cKeywords.add("pascal",Token.KEYWORD_2);
+			cKeywords.add("true",Token.LITERAL_2);
+			cKeywords.add("false",Token.LITERAL_2);
+			cKeywords.add("NULL",Token.LITERAL_2);
 		}
 		return cKeywords;
 	}

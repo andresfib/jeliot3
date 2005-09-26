@@ -29,7 +29,7 @@ public class BatchFileTokenMarker extends TokenMarker
 
 		if(SyntaxUtilities.regionMatches(true,line,offset,"rem"))
 		{
-			addToken(line.count,Token.COMMENT1);
+			addToken(line.count,Token.COMMENT_1);
 			return Token.NULL;
 		}
 
@@ -47,22 +47,22 @@ loop:		for(int i = offset; i < length; i++)
 					lastOffset = i;
 					if(length - i <= 3 || array[i+2] == ' ')
 					{
-						addToken(2,Token.KEYWORD2);
+						addToken(2,Token.KEYWORD_2);
 						i += 2;
 						lastOffset = i;
 					}
 					else
-						token = Token.KEYWORD2;
+						token = Token.KEYWORD_2;
 					break;
 				case '"':
 					addToken(i - lastOffset,token);
-					token = Token.LITERAL1;
+					token = Token.LITERAL_1;
 					lastOffset = i;
 					break;
 				case ':':
 					if(i == offset)
 					{
-						addToken(line.count,Token.LABEL);
+						addToken(line.count,Token.LABEL_1);
 						lastOffset = length;
 						break loop;
 					}
@@ -70,13 +70,13 @@ loop:		for(int i = offset; i < length; i++)
 				case ' ':
 					if(lastOffset == offset)
 					{
-						addToken(i - lastOffset,Token.KEYWORD1);
+						addToken(i - lastOffset,Token.KEYWORD_1);
 						lastOffset = i;
 					}
 					break;
 				}
 				break;
-			case Token.KEYWORD2:
+			case Token.KEYWORD_2:
 				if(array[i] == '%')
 				{
 					addToken(i1 - lastOffset,token);
@@ -84,7 +84,7 @@ loop:		for(int i = offset; i < length; i++)
 					lastOffset = i1;
 				}
 				break;
-			case Token.LITERAL1:
+			case Token.LITERAL_1:
 				if(array[i] == '"')
 				{
 					addToken(i1 - lastOffset,token);
@@ -100,9 +100,9 @@ loop:		for(int i = offset; i < length; i++)
 		if(lastOffset != length)
 		{
 			if(token != Token.NULL)
-				token = Token.INVALID;
+				token = Token.INVALID_1;
 			else if(lastOffset == offset)
-				token = Token.KEYWORD1;
+				token = Token.KEYWORD_1;
 			addToken(length - lastOffset,token);
 		}
 		return Token.NULL;
