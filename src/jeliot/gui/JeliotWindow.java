@@ -62,6 +62,7 @@ import jeliot.Jeliot;
 import jeliot.calltree.TreeDraw;
 import jeliot.historyview.HistoryView;
 import jeliot.mcode.InterpreterError;
+import jeliot.mcode.MCodeSaver;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.printing.PrintingUtil;
 import jeliot.theater.Animation;
@@ -77,7 +78,7 @@ import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
 
-import org.syntax.jedit.JEditTextArea;
+import org.syntax.jeliot_jedit.JEditTextArea;
 
 import edu.unika.aifb.components.JFontChooser;
 
@@ -241,6 +242,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
     
     /** If animation is running until certain line */
     private boolean runningUntil = false;
+    
+    /** If user wants to record the mcode to the corresponding animation */
+    
+    private MCodeSaver mCodeSaver = null;
 
     /** Keeps the previous value of the default duration of the Animation*/
     private int previousDefaultDuration;
@@ -475,8 +480,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
         this.frame.addMouseListener(this);
         this.panelController = new PanelController(theatre, iLoad);
         //this.editor = new CodeEditor(this.udir);
-        this.editor = new CodeEditor2(this.udir, jeliot.getImportIOStatement());
+        this.editor = new CodeEditor2(this.udir, jeliot.getImportIOStatement());        
         editor.setMasterFrame(frame);
+        this.mCodeSaver = new MCodeSaver();
     }
 
     public URL getURL(String filename) {
@@ -695,6 +701,12 @@ public class JeliotWindow implements PauseListener, MouseListener {
         });
         programMenu.add(menuItem);
 
+        programMenu.addSeparator();
+        //TODO: 
+        //programMenu.add(mCodeSaver.makeSaverMenuItem());
+        //programMenu.add(mCodeSaver.makeOpenMCodeMenuItem());
+        
+        
         programMenu.addSeparator();
 
         menuItem = new JMenuItem(messageBundle.getString("menu.program.exit"));
@@ -934,6 +946,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
         });
         menu.add(menuItem);
 
+        
+
+        
         return menu;
     }
 
@@ -1548,11 +1563,18 @@ public class JeliotWindow implements PauseListener, MouseListener {
                                 .showInputDialog(
                                         (methodCall != null) ? messageBundle
                                                 .getString("dialog.ask_for_method")
+                                                + "\n"
+                                                + messageBundle
+                                                	.getString("dialog.ask_for_method_extended_info")
                                                 : messageBundle
                                                         .getString("dialog.ask_for_method_when_main_method_not_found")
                                                         + "\n"
                                                         + messageBundle
-                                                                .getString("dialog.ask_for_method"),
+                                                                .getString("dialog.ask_for_method")
+                                                        + "\n"
+                                                        + messageBundle
+                                                        	.getString("dialog.ask_for_method_extended_info")
+                                                ,
                                         methodCall);
                         if (inputValue != null && !inputValue.trim().equals("")) {
                             methodCall = inputValue + ";";

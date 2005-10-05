@@ -4,12 +4,12 @@
 
 [Setup]
 AppName=Jeliot 3
-AppVerName=Jeliot 3.5.1+ Java Runtime Environment
+AppVerName=Jeliot 3.5.2+ Java Runtime Environment
 DefaultDirName={pf}\Jeliot3
 DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe
 OutputDir=Release
-SetupIconFile=src/jeliot.ico
+SetupIconFile=src/logo3d.ico
 [Dirs]
 Name: "{app}\examples"
 Name: "{app}\docs"
@@ -86,9 +86,9 @@ Name: "starticon"; Description: "Create a shortcut in the &Start Menu"; GroupDes
 
 
 [Icons]
-Name: "{group}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"; Tasks:starticon
-Name: "{userdesktop}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"; Tasks:desktopicon
-Name: "{app}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"
+Name: "{group}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\logo3d.ico"; WorkingDir: "{app}"; Tasks:starticon
+Name: "{userdesktop}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\logo3d.ico"; WorkingDir: "{app}"; Tasks:desktopicon
+Name: "{app}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\logo3d.ico"; WorkingDir: "{app}"
 
 [Code]
 var

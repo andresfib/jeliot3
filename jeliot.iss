@@ -4,11 +4,12 @@
 
 [Setup]
 AppName=Jeliot 3
-AppVerName=Jeliot 3.5.1
+AppVerName=Jeliot 3.5.2
 DefaultDirName={pf}\Jeliot3
 DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe
 OutputDir=Release
+SetupIconFile=src/logo3d.ico
 [Dirs]
 Name: "{app}\examples"
 Name: "{app}\docs"
@@ -26,11 +27,11 @@ Name: "starticon"; Description: "Create a shortcut in the &Start Menu"; GroupDes
 ;Name: "addJavaPath"; Description:"Add Java executble to Path variable (useful when Java is not properly installed)"; GroupDescription: "System Configuration"; Flags: unchecked
 
 [Icons]
-Name: "{group}\Jeliot 3";  Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"; Tasks:starticon
+Name: "{group}\Jeliot 3";  Filename: "{app}\jeliot.bat"; IconFilename: "{app}\logo3d.ico"; WorkingDir: "{app}"; Tasks:starticon
 Name: "{group}\User Guide"; Filename: "{app}\userguide.pdf"; Tasks:starticon
 Name: "{group}\Quick Tutorial"; Filename: "{app}\quicktutorial.pdf"; Tasks:starticon
-Name: "{userdesktop}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"; Tasks:desktopicon
-Name: "{app}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\jeliot.ico"; WorkingDir: "{app}"
+Name: "{userdesktop}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\logo3d.ico"; WorkingDir: "{app}"; Tasks:desktopicon
+Name: "{app}\Jeliot 3"; Filename: "{app}\jeliot.bat"; IconFilename: "{app}\logo3d.ico"; WorkingDir: "{app}"
 
 [Registry]
 
