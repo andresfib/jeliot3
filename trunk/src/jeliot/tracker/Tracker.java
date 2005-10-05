@@ -16,7 +16,7 @@ import java.util.Date;
 import jeliot.theater.Theater;
 import jeliot.util.DebugUtil;
 
-import org.syntax.jedit.JEditTextArea;
+import org.syntax.jeliot_jedit.JEditTextArea;
 
 /**
  * Most of the times the format for different tracker lines is
