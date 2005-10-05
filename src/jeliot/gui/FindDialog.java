@@ -33,7 +33,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
-import org.syntax.jedit.JEditTextArea;
+import org.syntax.jeliot_jedit.JEditTextArea;
 
 /**
  * @author Niko Myller

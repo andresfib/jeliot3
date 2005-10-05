@@ -13,8 +13,8 @@ import jeliot.mcode.Highlight;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
 
-import org.syntax.jedit.JEditTextArea;
-import org.syntax.jedit.tokenmarker.JavaTokenMarker;
+import org.syntax.jeliot_jedit.JEditTextArea;
+import org.syntax.jeliot_jedit.tokenmarker.JavaTokenMarker;
 
 /**
  * This is the component that shows and highlights the program while

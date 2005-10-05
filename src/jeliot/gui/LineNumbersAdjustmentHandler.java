@@ -5,7 +5,7 @@ import java.awt.event.AdjustmentListener;
 
 import javax.swing.SwingUtilities;
 
-import org.syntax.jedit.JEditTextArea;
+import org.syntax.jeliot_jedit.JEditTextArea;
 
 /**
  * Handles line number validations once the JEditTextArea is scrolled.
