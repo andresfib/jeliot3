@@ -62,7 +62,7 @@ import jeliot.Jeliot;
 import jeliot.calltree.TreeDraw;
 import jeliot.historyview.HistoryView;
 import jeliot.mcode.InterpreterError;
-import jeliot.mcode.MCodeSaver;
+/*import jeliot.mcode.MCodeSaver;*/
 import jeliot.mcode.MCodeUtilities;
 import jeliot.printing.PrintingUtil;
 import jeliot.theater.Animation;
@@ -245,7 +245,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     
     /** If user wants to record the mcode to the corresponding animation */
     
-    private MCodeSaver mCodeSaver = null;
+/*    private MCodeSaver mCodeSaver = null;*/
 
     /** Keeps the previous value of the default duration of the Animation*/
     private int previousDefaultDuration;
@@ -482,7 +482,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         //this.editor = new CodeEditor(this.udir);
         this.editor = new CodeEditor2(this.udir, jeliot.getImportIOStatement());        
         editor.setMasterFrame(frame);
-        this.mCodeSaver = new MCodeSaver();
+/*        this.mCodeSaver = new MCodeSaver();*/
     }
 
     public URL getURL(String filename) {
