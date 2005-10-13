@@ -18,8 +18,8 @@ import jeliot.util.UserProperties;
  * panes left side in the code view and code editor.
  * 
  * @author Niko Myller
- * @see jeliot.gui.CodePane
- * @see jelio.gui.CodeEditor
+ * @see jeliot.gui.CodePane2
+ * @see jelio.gui.CodeEditor2
  */
 public class LineNumbers extends JComponent {
 

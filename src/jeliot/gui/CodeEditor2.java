@@ -502,7 +502,8 @@ public class CodeEditor2 extends JComponent {
                 int y = Math.max((d2.height - d1.height) / 2, 0);
                 findDialog.setBounds(x + CodeEditor2.this.masterFrame.getX(), y
                         + CodeEditor2.this.masterFrame.getY(), d1.width, d1.height);
-                findDialog.show();
+                findDialog.pack();
+                findDialog.setVisible(true);
             }
         };
 
@@ -524,7 +525,8 @@ public class CodeEditor2 extends JComponent {
                 int y = Math.max((d2.height - d1.height) / 2, 0);
                 findDialog.setBounds(x + CodeEditor2.this.masterFrame.getX(),
                         y + CodeEditor2.this.masterFrame.getY(), d1.width, d1.height);
-                findDialog.show();
+                findDialog.pack();
+                findDialog.setVisible(true);
             }
         };
 

@@ -1495,12 +1495,22 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeOMC(String methodName, int parameterCount,
             long objectCounter, String objectValueOrClassName,
             Highlight highlight) {
+        
+        //See EvaluationVisitor.visit(SuperMethodCall node) for this hack.
+        //TODO: This should be changed to separate call in next versions!
+        int index = methodName.indexOf(",");
+        boolean superMethod = false;
+        if (index >= 0) {
+            methodName = methodName.substring(index + 1);
+            superMethod = true;
+        }
+        
         Value val = (Value) values.remove(new Long(objectCounter));
         Variable var = (Variable) variables.remove(new Long(objectCounter));
 
         if (val == null && !objectCreation.empty()) {
             val = (Reference) objectCreation.peek();
-        } else if (val.getValue().equals("null") && !objectCreation.empty()) {
+        } else if (val != null && val.getValue().equals("null") && !objectCreation.empty()) {
             val = (Reference) objectCreation.peek();
         }
 
@@ -1528,7 +1538,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         currentMethodInvocation[0] = methodName;
 
-        if (var != null) {
+        if (superMethod) {
+            currentMethodInvocation[1] = "super";
+        } else if (var != null) {
             currentMethodInvocation[1] = var.getName();
         } else {
             if (val instanceof Reference) {

@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
  * @author Pekka Uronen
  * @author Andrés Moreno
  * @see koala.dynamicJava.intepreter.EvaluationVisitor
- * @see jeliot.mcode.Interpreter
+ * @see jeliot.mcode.MCodeInterpreter
  */
 public class Input {
 

@@ -101,7 +101,7 @@ public class InputComponent extends JPanel implements ActionListener {
 	 * 
 	 */
 	public void popup() {
-       field.requestFocus();
+       field.requestFocusInWindow();
        bgactor.setSize(getSize());
     }
 
@@ -117,7 +117,7 @@ public class InputComponent extends JPanel implements ActionListener {
      * 
      */
     public void requestFocusForInputField() {
-        field.requestFocus();
+        field.requestFocusInWindow();
     }
     
     

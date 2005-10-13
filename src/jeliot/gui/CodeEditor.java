@@ -234,7 +234,7 @@ public class CodeEditor extends JComponent {
      */
     private ActionListener allSelector = new ActionListener() {
          public void actionPerformed(ActionEvent e) {
-            area.requestFocus();
+            area.requestFocusInWindow();
             area.selectAll();
         }
     };
@@ -645,7 +645,7 @@ public class CodeEditor extends JComponent {
 
         Runnable updateAComponent = new Runnable() {
             public void run() {
-                area.requestFocus();
+                area.requestFocusInWindow();
                 if (left != 0 && left == right) {
                     area.select(left, right+1);
                 } else {
@@ -678,7 +678,7 @@ public class CodeEditor extends JComponent {
         final int left = l-1;
         final int right = r;
 
-        area.requestFocus();
+        area.requestFocusInWindow();
         if (left != 0 && left == right) {
             area.select(left, right+1);
         } else {
