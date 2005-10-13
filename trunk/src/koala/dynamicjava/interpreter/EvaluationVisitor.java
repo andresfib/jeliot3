@@ -1300,20 +1300,35 @@ public class EvaluationVisitor extends VisitorObject {
 		Object[] args = Constants.EMPTY_OBJECT_ARRAY;
 		Class[] typs = m.getParameterTypes();
 
+        Long l = new Long(counter);
+        returnExpressionCounterStack.push(l);
+        counter++;
+        
+        Object thisObject = context.getHiddenArgument();        
+        long objectCounter = counter;
+        
+        MCodeUtilities.write("" + Code.QN + Code.DELIM
+                + (counter++) + Code.DELIM
+                + "this" + Code.DELIM
+                + MCodeUtilities.getValue(thisObject) + Code.DELIM + thisObject.getClass().getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
+        
 		if (larg != null) {
 
-			//TODO: This is not up-to-date. FIX!
-			MCodeUtilities.write("" + Code.OMC + Code.DELIM + m.getName()
-					+ Code.DELIM + m.getDeclaringClass().getName() + Code.DELIM
-					+ larg.size() + Code.DELIM
-					+ MCodeUtilities.locationToString(node));
+            MCodeUtilities.write("" + Code.OMC + Code.DELIM
+                    + "super," + m.getName() //.substring(m.getName().lastIndexOf("$") + 1)
+                    + Code.DELIM + larg.size()
+                    + Code.DELIM + objectCounter + Code.DELIM
+                    + m.getDeclaringClass().getSuperclass().getName() + Code.DELIM
+                    + MCodeUtilities.locationToString(node));
 
 		} else {
 
-			//TODO: This is not up-to-date. FIX!
-			MCodeUtilities.write("" + Code.OMC + Code.DELIM + m.getName()
-					+ Code.DELIM + m.getDeclaringClass().getName() + Code.DELIM
-					+ "0" + Code.DELIM + MCodeUtilities.locationToString(node));
+            MCodeUtilities.write("" + Code.OMC + Code.DELIM
+                    + "super," + m.getName().substring(m.getName().lastIndexOf("$") + 1) + Code.DELIM + "0"
+                    + Code.DELIM + objectCounter + Code.DELIM
+                    + m.getDeclaringClass().getSuperclass().getName() + Code.DELIM
+                    + MCodeUtilities.locationToString(node));
 			//0 arguments
 		}
 		// Fill the arguments
@@ -1340,8 +1355,58 @@ public class EvaluationVisitor extends VisitorObject {
 
 		// Invoke the method
 		try {
-			Object o = m.invoke(context.getHiddenArgument(), args);
+			Object o = m.invoke(thisObject, args);
+            
+            
+            if (!isSetInside()) {
+                //visit(o)
+
+                MCodeUtilities.write(Code.PARAMETERS
+                        + Code.DELIM
+                        + MCodeUtilities.parameterArrayToString(m
+                                .getParameterTypes()));
+                MCodeUtilities.write(Code.MD + Code.DELIM
+                        + MCodeUtilities.locationToString(node));
+
+                if (!m.getReturnType().getName().equals(
+                        Void.TYPE.getName())) {
+
+                    long auxcounter = counter;
+                    MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
+                            + Code.R + Code.DELIM + l.toString()
+                            + Code.DELIM
+                            + MCodeUtilities.locationToString(node));
+
+                    // Don't try this with objects, foreign method calls
+                    // don't provide enough info to handle them
+
+                    String value = MCodeUtilities.getValue(o);
+                    String className = (o == null) ? Code.REFERENCE : o
+                            .getClass().getName();
+                    MCodeUtilities.write(Code.L + Code.DELIM
+                            + (counter++) + Code.DELIM + value
+                            + Code.DELIM + className + Code.DELIM
+                            + MCodeUtilities.locationToString(node));
+
+                    MCodeUtilities.write("" + Code.R + Code.DELIM
+                            + l.toString() + Code.DELIM + auxcounter
+                            + Code.DELIM + value + Code.DELIM
+                            + className + Code.DELIM
+                            + MCodeUtilities.locationToString(node));
+
+                }
+
+            } else {
+                unsetInside();
+            }
+
+            
 			MCodeUtilities.write("" + Code.OMCC); //the method call is closed
+            
+            if (((Long) returnExpressionCounterStack.peek()).equals(l)) {
+                returnExpressionCounterStack.pop();
+            }
+            
 			return o;
 		} catch (InvocationTargetException e) {
 			if (e.getTargetException() instanceof Error) {

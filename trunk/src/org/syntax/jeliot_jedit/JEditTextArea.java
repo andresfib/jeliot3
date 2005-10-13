@@ -35,6 +35,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -132,7 +134,9 @@ public class JEditTextArea extends JComponent {
         vertical.addAdjustmentListener(new AdjustHandler());
         horizontal.addAdjustmentListener(new AdjustHandler());
         painter.addComponentListener(new ComponentHandler());
-        painter.addMouseListener(new MouseHandler());
+        MouseHandler mh = new MouseHandler();
+        painter.addMouseListener(mh);
+        painter.addMouseWheelListener(mh);
         painter.addMouseMotionListener(new DragHandler());
         addFocusListener(new FocusHandler());
 
@@ -1890,10 +1894,10 @@ public class JEditTextArea extends JComponent {
         }
     }
 
-    class MouseHandler extends MouseAdapter {
+    class MouseHandler extends MouseAdapter implements MouseWheelListener {
 
         public void mousePressed(MouseEvent evt) {
-            requestFocus();
+            requestFocusInWindow();
 
             // Focus events not fired sometimes?
             setCaretVisible(true);
@@ -2006,6 +2010,11 @@ public class JEditTextArea extends JComponent {
 
         private void doTripleClick(MouseEvent evt, int line, int offset, int dot) {
             select(getLineStartOffset(line), getLineEndOffset(line) - 1);
+        }
+
+        public void mouseWheelMoved(MouseWheelEvent mwe) {
+            int units = mwe.getUnitsToScroll();
+            vertical.setValue(vertical.getValue() + units);
         }
     }
 

@@ -5,9 +5,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
@@ -107,9 +106,23 @@ public class OutputConsole extends JTextArea {
         container.setBorder(title);
 
         addMouseListener(
-            new MouseAdapter() {
+            new MouseListener() {
                 public void mousePressed(MouseEvent evt) {
                     maybeShowPopup(evt);
+                }
+                
+                public void mouseReleased(MouseEvent evt) {
+                    maybeShowPopup(evt);
+                }
+
+                public void mouseClicked(MouseEvent evt) {                    
+                    maybeShowPopup(evt);
+                }
+
+                public void mouseEntered(MouseEvent arg0) {
+                }
+
+                public void mouseExited(MouseEvent arg0) {
                 }
             }
         );
@@ -122,11 +135,13 @@ public class OutputConsole extends JTextArea {
       *
       * @param  evt The mouse event that is supposed to be a popup menu trigger.
       */
+    /*
     private boolean isPopupTrigger(MouseEvent evt) {
         return evt.isPopupTrigger() ||
                 (evt.getModifiers() | InputEvent.BUTTON2_MASK) != 0;
     }
-
+    */
+    
     /** Checks if a mouse click is a popup menu trigger and if
       * it is, shows the popup menu.
       *
@@ -134,7 +149,7 @@ public class OutputConsole extends JTextArea {
       */
     private void maybeShowPopup(MouseEvent evt) {
         //System.err.println(evt);
-        if (!isPopupTrigger(evt)) {
+        if (!evt.isPopupTrigger()) {
             return;
         }
         menu.show(this, evt.getX(), evt.getY());

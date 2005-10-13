@@ -1451,7 +1451,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         int loc = codeNest.getDividerLocation();
         codeNest.setLeftComponent(comp);
         codeNest.setDividerLocation(loc);
-        conPan.requestFocus();
+        conPan.requestFocusInWindow();
     }
 
     /**
@@ -1466,7 +1466,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         int loc = codeNest.getDividerLocation();
         codeNest.setRightComponent(comp);
         codeNest.setDividerLocation(loc);
-        conPan.requestFocus();
+        conPan.requestFocusInWindow();
     }
 
     /**
