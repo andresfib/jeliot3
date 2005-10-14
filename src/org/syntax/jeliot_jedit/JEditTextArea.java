@@ -103,15 +103,15 @@ public class JEditTextArea extends JComponent {
     /**
      * Creates a new JEditTextArea with the default settings.
      */
-    public JEditTextArea() {
-        this(TextAreaDefaults.getDefaults());
+    public JEditTextArea(boolean inputEnabled) {
+        this(TextAreaDefaults.getDefaults(), inputEnabled);
     }
 
     /**
      * Creates a new JEditTextArea with the specified settings.
      * @param defaults The default settings
      */
-    public JEditTextArea(TextAreaDefaults defaults) {
+    public JEditTextArea(TextAreaDefaults defaults, boolean inputEnabled) {
         // Enable the necessary events
         enableEvents(AWTEvent.KEY_EVENT_MASK);
 
@@ -134,14 +134,17 @@ public class JEditTextArea extends JComponent {
         vertical.addAdjustmentListener(new AdjustHandler());
         horizontal.addAdjustmentListener(new AdjustHandler());
         painter.addComponentListener(new ComponentHandler());
+
+        if (inputEnabled) {
         MouseHandler mh = new MouseHandler();
-        painter.addMouseListener(mh);
-        painter.addMouseWheelListener(mh);
-        painter.addMouseMotionListener(new DragHandler());
+            painter.addMouseListener(mh);
+            painter.addMouseWheelListener(mh);
+            painter.addMouseMotionListener(new DragHandler());
+            setInputHandler(defaults.inputHandler);
+        }
         addFocusListener(new FocusHandler());
 
         // Load the defaults
-        setInputHandler(defaults.inputHandler);
         setDocument(defaults.document);
         editable = defaults.editable;
         caretVisible = defaults.caretVisible;

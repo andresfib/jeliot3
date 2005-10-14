@@ -56,7 +56,7 @@ public class CodePane2 extends JComponent {
         setLayout(new BorderLayout());
 
         //Special for JEditTextArea for syntax highlighting
-        area = new JEditTextArea();
+        area = new JEditTextArea(false);
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(font);
         area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute, new Integer(3));
