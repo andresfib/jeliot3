@@ -480,7 +480,7 @@ public class Jeliot {
      */
     public void showErrorMessage(InterpreterError e) {
         Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Error: " + e.getMessage());
-        gui.showErrorMessage(e);
+        gui.showErrorMessageDuringAnimation(e);
     }
 
     /**

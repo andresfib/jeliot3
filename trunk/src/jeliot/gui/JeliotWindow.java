@@ -57,12 +57,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jeliot.FeatureNotImplementedException;
 import jeliot.Jeliot;
 import jeliot.calltree.TreeDraw;
 import jeliot.historyview.HistoryView;
 import jeliot.mcode.InterpreterError;
-/*import jeliot.mcode.MCodeSaver;*/
 import jeliot.mcode.MCodeUtilities;
 import jeliot.printing.PrintingUtil;
 import jeliot.theater.Animation;
@@ -239,13 +237,13 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
     /** If the starting method call is main with command line parameters should the parameters be asked.*/
     private boolean askForMainMethodParameters = false;
-    
+
     /** If animation is running until certain line */
     private boolean runningUntil = false;
-    
+
     /** If user wants to record the mcode to the corresponding animation */
-    
-/*    private MCodeSaver mCodeSaver = null;*/
+
+    /*    private MCodeSaver mCodeSaver = null;*/
 
     /** Keeps the previous value of the default duration of the Animation*/
     private int previousDefaultDuration;
@@ -482,9 +480,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
         this.frame.addMouseListener(this);
         this.panelController = new PanelController(theatre, iLoad);
         //this.editor = new CodeEditor(this.udir);
-        this.editor = new CodeEditor2(this.udir, jeliot.getImportIOStatement());        
+        this.editor = new CodeEditor2(this.udir, jeliot.getImportIOStatement());
         editor.setMasterFrame(frame);
-/*        this.mCodeSaver = new MCodeSaver();*/
+        /*        this.mCodeSaver = new MCodeSaver();*/
     }
 
     public URL getURL(String filename) {
@@ -707,8 +705,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         //TODO: 
         //programMenu.add(mCodeSaver.makeSaverMenuItem());
         //programMenu.add(mCodeSaver.makeOpenMCodeMenuItem());
-        
-        
+
         programMenu.addSeparator();
 
         menuItem = new JMenuItem(messageBundle.getString("menu.program.exit"));
@@ -826,24 +823,30 @@ public class JeliotWindow implements PauseListener, MouseListener {
             this.askForMainMethodParameters = jeliotUserProperties
                     .getBooleanProperty("ask_for_main_method_parameters");
         } else {
-            jeliotUserProperties.setBooleanProperty("ask_for_main_method_parameters",
+            jeliotUserProperties.setBooleanProperty(
+                    "ask_for_main_method_parameters",
                     askForMainMethodParameters);
         }
 
         final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(
-                messageBundle.getString("menu.options.ask_for_main_method_parameters"),
+                messageBundle
+                        .getString("menu.options.ask_for_main_method_parameters"),
                 askForMainMethodParameters);
         askForMainMethodParametersMenuItem.setMnemonic(KeyEvent.VK_A);
-        askForMainMethodParametersMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_A, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
-        askForMainMethodParametersMenuItem.addActionListener(new ActionListener() {
+        askForMainMethodParametersMenuItem.setAccelerator(KeyStroke
+                .getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK
+                        + ActionEvent.ALT_MASK));
+        askForMainMethodParametersMenuItem
+                .addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent e) {
-                askForMainMethodParameters = askForMainMethodParametersMenuItem.getState();
-                jeliotUserProperties.setStringProperty("ask_for_main_method_parameters",
-                        Boolean.toString(askForMainMethodParameters));
-            }
-        });
+                    public void actionPerformed(ActionEvent e) {
+                        askForMainMethodParameters = askForMainMethodParametersMenuItem
+                                .getState();
+                        jeliotUserProperties.setStringProperty(
+                                "ask_for_main_method_parameters", Boolean
+                                        .toString(askForMainMethodParameters));
+                    }
+                });
         menu.add(askForMainMethodParametersMenuItem);
 
         //Pause on message
@@ -948,9 +951,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
         });
         menu.add(menuItem);
 
-        
-
-        
         return menu;
     }
 
@@ -1553,89 +1553,81 @@ public class JeliotWindow implements PauseListener, MouseListener {
         }
 
         try {
-            try {
-                enableWidgets(editWidgets.elements(), false);
-                String programCode = editor.getProgram();
+            enableWidgets(editWidgets.elements(), false);
+            String programCode = editor.getProgram();
 
-                if (methodCall == null) {
-                    methodCall = findMainMethodCall(programCode);
-                    if (askForMethod || methodCall == null) {
-                        methodCall = ((methodCall != null) ? methodCall : null);
-                        String inputValue = JOptionPane
-                                .showInputDialog(
-                                        (methodCall != null) ? messageBundle
-                                                .getString("dialog.ask_for_method")
-                                                + "\n"
-                                                + messageBundle
-                                                	.getString("dialog.ask_for_method_extended_info")
-                                                : messageBundle
-                                                        .getString("dialog.ask_for_method_when_main_method_not_found")
-                                                        + "\n"
-                                                        + messageBundle
-                                                                .getString("dialog.ask_for_method")
-                                                        + "\n"
-                                                        + messageBundle
-                                                        	.getString("dialog.ask_for_method_extended_info")
-                                                ,
-                                        methodCall);
-                        if (inputValue != null && !inputValue.trim().equals("")) {
-                            methodCall = inputValue + ";";
-                        }
+            if (methodCall == null) {
+                methodCall = findMainMethodCall(programCode);
+                if (askForMethod || methodCall == null) {
+                    methodCall = ((methodCall != null) ? methodCall : null);
+                    String inputValue = JOptionPane
+                            .showInputDialog(
+                                    (methodCall != null) ? messageBundle
+                                            .getString("dialog.ask_for_method")
+                                            + "\n"
+                                            + messageBundle
+                                                    .getString("dialog.ask_for_method_extended_info")
+                                            : messageBundle
+                                                    .getString("dialog.ask_for_method_when_main_method_not_found")
+                                                    + "\n"
+                                                    + messageBundle
+                                                            .getString("dialog.ask_for_method")
+                                                    + "\n"
+                                                    + messageBundle
+                                                            .getString("dialog.ask_for_method_extended_info"),
+                                    methodCall);
+                    if (inputValue != null && !inputValue.trim().equals("")) {
+                        methodCall = inputValue + ";";
                     }
                 }
+            }
 
-                if (methodCall != null) {
+            if (methodCall != null) {
 
-                    //Reader r = new BufferedReader(new
-                    // StringReader(programCode));
-                    //jeliot.createLauncher(r);
-                    //Reader s = new BufferedReader(new
-                    // StringReader(methodCall));
+                //Reader r = new BufferedReader(new
+                // StringReader(programCode));
+                //jeliot.createLauncher(r);
+                //Reader s = new BufferedReader(new
+                // StringReader(methodCall));
 
-                    changeTheatrePane(tabbedPane);
-                    tabbedPane.setSelectedIndex(0);
-                    jeliot.setSourceCode(programCode, methodCall);
-                    panelController.slide(true, new Runnable() {
+                changeTheatrePane(tabbedPane);
+                tabbedPane.setSelectedIndex(0);
+                jeliot.setSourceCode(programCode, methodCall);
+                panelController.slide(true, new Runnable() {
 
-                        public void run() {
-                            SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        SwingUtilities.invokeLater(new Runnable() {
 
-                                public void run() {
+                            public void run() {
 
-                                    enterAnimate();
-                                    //Buttons are enables just after the animation mode is not before
-                                    enableWidgets(animWidgets.elements(), true);
-                                    pauseButton.setEnabled(false);
-                                    rewindButton.setEnabled(false);
+                                enterAnimate();
+                                //Buttons are enables just after the animation mode is not before
+                                enableWidgets(animWidgets.elements(), true);
+                                pauseButton.setEnabled(false);
+                                rewindButton.setEnabled(false);
 
-                                    int index = tabbedPane
-                                            .indexOfTab(messageBundle
-                                                    .getString("tab.title.call_tree"));
-                                    if (index > 0) {
-                                        tabbedPane.setEnabledAt(index, true);
-                                    }
-                                    index = tabbedPane.indexOfTab(messageBundle
-                                            .getString("tab.title.history"));
-                                    if (index > 0) {
-                                        tabbedPane.setEnabledAt(index, jeliot
-                                                .getHistoryView().isEnabled());
-                                    }
+                                int index = tabbedPane.indexOfTab(messageBundle
+                                        .getString("tab.title.call_tree"));
+                                if (index > 0) {
+                                    tabbedPane.setEnabledAt(index, true);
                                 }
-                            });
-                        }
-                    }).start();
-                } else {
-                    errorJEditorPane.setText(messageBundle
-                            .getString("main_method_not_found.exception"));
-                    errorJEditorPane.setCaretPosition(0);
-                    changeTheatrePane(errorViewer);
+                                index = tabbedPane.indexOfTab(messageBundle
+                                        .getString("tab.title.history"));
+                                if (index > 0) {
+                                    tabbedPane.setEnabledAt(index, jeliot
+                                            .getHistoryView().isEnabled());
+                                }
+                            }
+                        });
+                    }
+                }).start();
+            } else {
 
-                    enableWidgets(editWidgets.elements(), true);
-                    enableWidgets(animWidgets.elements(), false);
-                }
-            } catch (FeatureNotImplementedException e) {
-                showErrorMessage(e);
-                return;
+                this.showErrorMessage(messageBundle
+                        .getString("main_method_not_found.exception"));
+
+                enableWidgets(editWidgets.elements(), true);
+                enableWidgets(animWidgets.elements(), false);
             }
             /*
              * catch (InterpreterException e) { showErrorMessage(e); return; }
@@ -1706,7 +1698,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
                                             .getString("dialog.ask_for_main_parameters")
                                             + " " + className, "");
                     if (inputValue != null && inputValue.length() > 0) {
-                        StringTokenizer st = new StringTokenizer(inputValue.trim());
+                        StringTokenizer st = new StringTokenizer(inputValue
+                                .trim());
                         while (st.hasMoreTokens()) {
                             parameters += "\"" + st.nextToken() + "\"";
                             parameters += (st.hasMoreTokens() ? "," : "");
@@ -1776,7 +1769,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * @param e
      *            the error message in String
      */
-    public void showErrorMessage(String e) {
+    public void showErrorMessageDuringAnimation(String e) {
         errorOccured = true;
 
         pauseButton.setEnabled(false);
@@ -1786,28 +1779,29 @@ public class JeliotWindow implements PauseListener, MouseListener {
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(true);
 
-        String[] s1 = { messageBundle.getString("menu.control.edit") };
+        String[] s1 = { messageBundle.getString("menu.control.edit"),
+                messageBundle.getString("menu.animation.rewind") };
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
                 messageBundle.getString("menu.animation.play"),
-                messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.animation.run_until"),
                 messageBundle.getString("menu.animation.pause") };
         setEnabledMenuItems(false, s2);
 
-        errorJEditorPane.setText(e);
-        errorJEditorPane.setCaretPosition(0);
-        changeTheatrePane(errorViewer);
+        showErrorMessage(e);
     }
 
     /**
-     * Show the error message of the exception in the theatre pane.
+     * Shows the error message in the errorViewer in the right hand side pane.
      * 
-     * @param e
-     *            The exception that is wanted to show.
+     * @param e Error message
      */
-    public void showErrorMessage(Exception e) {
-        showErrorMessage(e.toString());
+    public void showErrorMessage(String e) {
+        errorJEditorPane.setRequestFocusEnabled(false);
+        errorJEditorPane.setText(e);
+        errorJEditorPane.setCaretPosition(0);
+        errorJEditorPane.setRequestFocusEnabled(true);
+        changeTheatrePane(errorViewer);
     }
 
     /**
@@ -1816,11 +1810,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * @param e
      *            interpreter error that contains the error message and the
      *            highlighting information.
-     * @see JeliotWindow#showErrorMessage(String)
+     * @see JeliotWindow#showErrorMessageDuringAnimation(String)
      */
-    public void showErrorMessage(InterpreterError e) {
+    public void showErrorMessageDuringAnimation(InterpreterError e) {
 
-        showErrorMessage(e.getMessage());
+        showErrorMessageDuringAnimation(e.getMessage());
         Component c = codeNest.getLeftComponent();
 
         if (e.getHighlight() != null) {
