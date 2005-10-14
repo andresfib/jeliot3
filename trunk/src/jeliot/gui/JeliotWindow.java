@@ -261,6 +261,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         errorJEditorPane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLoweredBevelBorder(), BorderFactory
                         .createEmptyBorder(10, 10, 10, 10)));
+        errorJEditorPane.setRequestFocusEnabled(false);
     }
 
     /**
@@ -271,6 +272,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         errorPane
                 .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //errorPane.setPreferredSize(new Dimension(250, 145));
+        errorPane.setRequestFocusEnabled(false);
     }
 
     /**
@@ -1625,6 +1627,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 } else {
                     errorJEditorPane.setText(messageBundle
                             .getString("main_method_not_found.exception"));
+                    errorJEditorPane.setCaretPosition(0);
                     changeTheatrePane(errorViewer);
 
                     enableWidgets(editWidgets.elements(), true);
@@ -1793,6 +1796,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         setEnabledMenuItems(false, s2);
 
         errorJEditorPane.setText(e);
+        errorJEditorPane.setCaretPosition(0);
         changeTheatrePane(errorViewer);
     }
 

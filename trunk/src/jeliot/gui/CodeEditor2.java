@@ -292,7 +292,7 @@ public class CodeEditor2 extends JComponent {
         initFileChooser();
 
         //Special for JEditTextArea for syntax highlighting
-        area = new JEditTextArea();
+        area = new JEditTextArea(true);
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(
                 new Font(propertiesBundle.getStringProperty("font.code_editor.family"), Font.PLAIN,
