@@ -1483,9 +1483,13 @@ public class EvaluationVisitor extends VisitorObject {
 					i++;
 				}
 			}
-
-			result = inputHandler.handleInput(m.getReturnType(), inputCounter /* counter++ */, m,
-					node, prompt);
+			result = inputHandler.handleInput(m.getReturnType(), inputCounter /* counter++
+				*/, m, node, prompt);
+				 
+			if (prompt != null && prompt.length()>0)  {
+				inputCounter += 2;
+				counter +=2;
+			}
 
 			MCodeUtilities.write("" + Code.INPUTTED + Code.DELIM + inputCounter /*(counter++)*/
 					+ Code.DELIM + result + Code.DELIM + m.getReturnType().getName()
