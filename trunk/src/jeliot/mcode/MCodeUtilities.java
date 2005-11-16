@@ -1,12 +1,22 @@
 package jeliot.mcode;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import javax.swing.JFileChooser;
+
+import jeliot.gui.JavaFileFilter;
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserProperties;
 
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
@@ -289,6 +299,7 @@ public class MCodeUtilities {
      */
     public static Stack constructorParametersStack = new Stack();
 
+ 
     /**
      * 
      * @return
@@ -898,6 +909,7 @@ public class MCodeUtilities {
      */
     private static Thread accessingThread = null;
 
+
     /**
      * @param thread
      */
@@ -923,6 +935,9 @@ public class MCodeUtilities {
                     throw new StoppingRequestedError();
                 }
                 writer.println(str);
+               // if (enabledSaveMCode){
+               // 	writeToFile(str+"\n");
+               // }
                 //DebugUtil.printDebugInfo("    "+str);
             } else {
                 addToRedirectBuffer(str);
@@ -954,7 +969,20 @@ public class MCodeUtilities {
              */
         }
     }
-
+    
+/*    public static void openMCodeFile(){
+        try {
+        
+        outputFile = new File(filePath);
+        //we delete the file if it already exists
+        if (outputFile.exists()) outputFile.delete();
+        }catch(Exception e){
+            e.printStackTrace(System.out);    
+        }
+            
+        
+    }
+ */
     /**
      * @return
      */
@@ -1200,7 +1228,8 @@ public class MCodeUtilities {
      */
     public static String locationToString(Node node) {
         return node.getBeginLine() + Code.LOC_DELIM + node.getBeginColumn() + Code.LOC_DELIM
-                + node.getEndLine() + Code.LOC_DELIM + node.getEndColumn();
+                + node.getEndLine() + Code.LOC_DELIM + node.getEndColumn(); 
+				//+ Code.DELIM + node.getFilename();
     }
 
     /**
