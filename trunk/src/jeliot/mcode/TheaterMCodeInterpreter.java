@@ -12,14 +12,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.FeatureNotImplementedException;
-import jeliot.lang.ArrayInstance;
-import jeliot.lang.ClassInfo;
-import jeliot.lang.Instance;
-import jeliot.lang.ObjectFrame;
-import jeliot.lang.Reference;
-import jeliot.lang.Value;
-import jeliot.lang.Variable;
-import jeliot.lang.VariableInArray;
+import jeliot.lang.*;
 import jeliot.theater.Actor;
 import jeliot.theater.Director;
 import jeliot.theater.ExpressionActor;
@@ -425,7 +418,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             Value val = new Value(value, type);
             Variable var = new Variable(name, type);
             var.assign(val);
-            var.setFinal(Modifier.isFinal(modifiers));
+            var.setModifierCodes(modifiers);
             ca.declareVariable(var);
             var.setLocationInCode(MCodeUtilities.makeHighlight(h));
             director.declareClassVariable(ca, var, val);
@@ -484,6 +477,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param type
      * @param highlight
      */
+
     protected void handleCodeAL(long expressionCounter, long arrayCounter,
             String name, String value, String type, Highlight highlight) {
         Reference ref = (Reference) values.remove(new Long(arrayCounter));
@@ -1274,8 +1268,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     //There needs to be a check whether invoked
                     //class is primitive or not.
                     if (!MCodeUtilities
-                            .isPrimitive(((ClassInfo) currentMethodInvocation[8])
-                                    .getName())) {
+                            .isPrimitive(((ClassInfo) currentMethodInvocation[8]).getName())) {
                         ObjectFrame of = createNewInstance(
                                 (ClassInfo) currentMethodInvocation[8],
                                 (Highlight) currentMethodInvocation[5]);
@@ -1495,7 +1488,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeOMC(String methodName, int parameterCount,
             long objectCounter, String objectValueOrClassName,
             Highlight highlight) {
-        
+                
         //See EvaluationVisitor.visit(SuperMethodCall node) for this hack.
         //TODO: This should be changed to separate call in next versions!
         int index = methodName.indexOf(",");
@@ -1504,6 +1497,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             methodName = methodName.substring(index + 1);
             superMethod = true;
         }
+        
         
         Value val = (Value) values.remove(new Long(objectCounter));
         Variable var = (Variable) variables.remove(new Long(objectCounter));
@@ -1514,7 +1508,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             val = (Reference) objectCreation.peek();
         }
 
-        if (val instanceof Reference) {
+        // fixed by rku: check if instance is really an ObjectFrame
+        // e.g. char [] c = new char[2]; S.o.p (c); (failed here with type cast exception)
+        if (val instanceof Reference && ((Reference) val).getInstance() instanceof ObjectFrame) {
             ObjectFrame obj = (ObjectFrame) ((Reference) val).getInstance();
 
             if (obj == null && !objectCreation.empty()) {
@@ -1578,10 +1574,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param variableName
      * @param value
      * @param type
+     * @param modifiers
      * @param h
      */
     protected void handleCodeOFA(long expressionCounter, long objectCounter,
-            String variableName, String value, String type, Highlight h) {
+                                 String variableName, String value, String type, int modifiers, Highlight h) {
 
         Reference objVal = (Reference) values.remove(new Long(objectCounter));
 
@@ -1622,7 +1619,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
          */
         if (var == null) {
             handleCodeSFA(expressionCounter, obj.getType(), variableName, value,
-                    type, h);
+                    type, modifiers, h);
             
             /* Different version of this procedure.
              String className = obj.getType();
@@ -1941,9 +1938,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param value
      * @param type
      * @param highlight
+     * @param modifiers
      */
     protected void handleCodeSFA(long expressionCounter, String declaringClass,
-            String variableName, String value, String type, Highlight highlight) {
+                                 String variableName, String value, String type, int modifiers, Highlight highlight) {
         
         jeliot.lang.Class ca = null;
         boolean notFound = true;
@@ -1974,14 +1972,25 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             director.showClassCreation(ca);
         }
 
-        Variable var = ca.getVariable(variableName);
+        Variable var = null;
+        try {
+            var = ca.getVariable(variableName);
+        } catch (StaticVariableNotFoundException s) {
+            if (DebugUtil.DEBUGGING)
+                s.printStackTrace();
+        }
 
+        // static variable from external class?, then create it and show it
         if (var == null) {
             var = new Variable(variableName, type);
+            // fixed by rku: store modifiers in var
+            var.setModifierCodes(modifiers);
             ca.declareVariable(var);
             Value val = new Value(value, type);
             director.declareClassVariable(ca, var, val);
         }
+
+
 
         //command that waits for this expression
         int command = -1;
@@ -2693,8 +2702,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeA(long expressionCounter, long fromExpression,
             long toExpression, String value, String type, Highlight h) {
 
-        Variable toVariable = (Variable) variables
-                .remove(new Long(toExpression));
+        Variable toVariable = (Variable) variables.remove(new Long(toExpression));
 
         //just to get rid of extra references
         variables.remove(new Long(fromExpression));

@@ -1872,7 +1872,11 @@ public class TypeChecker extends VisitorObject {
                     ec = int.class;
                 }
             } else if (n.intValue() == n.shortValue()) {
-                ec = (c2 == char.class) ? char.class : short.class;
+                if (c2== char.class){
+                	ec = char.class;
+                } else {
+                	ec =  short.class;
+                }
             } else {
                 ec = int.class;
             }
@@ -1886,7 +1890,11 @@ public class TypeChecker extends VisitorObject {
                     ec = int.class;
                 }
             } else if (n.intValue() == n.shortValue()) {
-                ec = (c1 == char.class) ? char.class : short.class;
+            	if (c1 == char.class){
+                	ec = char.class;
+                } else {
+                	ec =  short.class;
+                }
             } else {
                 ec = int.class;
             }
@@ -2128,6 +2136,8 @@ public class TypeChecker extends VisitorObject {
                             rc == void.class  ||
                             rc == boolean.class)) {
                     throw new ExecutionError("assignment.types", node);
+                } else if (lc == char.class && rc !=char.class){ //Jeliot 3 addition
+                	throw new ExecutionError("assignment.types", node);
                 }
             } else if (rc != null) {
                 if (!lc.isAssignableFrom(rc) && !rc.isAssignableFrom(lc)) {
