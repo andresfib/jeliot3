@@ -591,7 +591,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeOFA(long, long, java.lang.String, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
-    protected void handleCodeOFA(long expressionCounter, long objectCounter, String variableName, String value, String type, Highlight h) {
+    protected void handleCodeOFA(long expressionCounter, long objectCounter, String variableName, String value, String type, int modifiers, Highlight h) {
     }
 
     /* (non-Javadoc)
@@ -611,7 +611,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeSFA(long, java.lang.String, java.lang.String, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
-    protected void handleCodeSFA(long expressionCounter, String declaringClass, String variableName, String value, String type, Highlight highlight) {
+    protected void handleCodeSFA(long expressionCounter, String declaringClass, String variableName, String value, String type, int modifiers, Highlight highlight) {
     }
 
 

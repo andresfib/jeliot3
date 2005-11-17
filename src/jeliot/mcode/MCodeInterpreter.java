@@ -805,7 +805,9 @@ public abstract class MCodeInterpreter {
                         String variableName = tokenizer.nextToken();
 
                         String value = null;
-                        if (tokenizer.countTokens() >= 3) {
+
+                        // fixed by rku:  3 to 4, because added modifier to mcode
+                        if (tokenizer.countTokens() >= 4) {
                             //Third token is the value of the literal
                             value = tokenizer.nextToken();
                         } else {
@@ -819,12 +821,15 @@ public abstract class MCodeInterpreter {
                         //Fourth token is the type of the literal
                         String type = tokenizer.nextToken();
 
+                        // fixed by rku, added modifiers
+                        int modifiers = Integer.parseInt(tokenizer.nextToken());
+
                         //Fifth token is the highlight information.
                         //Not normally used because the whole expression is highlighted.
                         Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeSFA(expressionCounter, declaringClass, variableName, value, type,
-                                highlight);
+                                modifiers, highlight);
                         break;
                     }
 
@@ -894,15 +899,18 @@ public abstract class MCodeInterpreter {
                         long objectCounter = Long.parseLong(tokenizer.nextToken());
                         String variableName = tokenizer.nextToken();
                         String value = "";
-                        if (tokenizer.countTokens() >= 3) {
+                        // fixed rku: used because we added modifiers in Mcode
+                        // was 3
+                        if (tokenizer.countTokens() >= 4) {
                             value = tokenizer.nextToken();
                         }
 
                         String type = tokenizer.nextToken();
+                        int modifiers = Integer.parseInt(tokenizer.nextToken());
                         Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
 
                         handleCodeOFA(expressionCounter, objectCounter, variableName, value, type,
-                                h);
+                                modifiers, h);
                         break;
                     }
 
@@ -1375,10 +1383,11 @@ public abstract class MCodeInterpreter {
      * @param expressionCounter
      * @param value
      * @param type
+     * @param modifiers
      * @param highlight
      */
     protected abstract void handleCodeSFA(long expressionCounter, String declaringClass,
-            String variableName, String value, String type, Highlight highlight);
+                                          String variableName, String value, String type, int modifiers, Highlight highlight);
 
     /**
      * @param expressionCounter
@@ -1673,10 +1682,11 @@ public abstract class MCodeInterpreter {
      * @param variableName
      * @param value
      * @param type
+     * @param modifiers
      * @param h
      */
     protected abstract void handleCodeOFA(long expressionCounter, long objectCounter,
-            String variableName, String value, String type, Highlight h);
+                                          String variableName, String value, String type, int modifiers, Highlight h);
 
     /**
      * @param expressionCounter

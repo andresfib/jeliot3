@@ -337,42 +337,42 @@ public class MCodeUtilities {
      */
     public static int resolveType(String type) {
         if (type.equals(boolean.class.getName())
-                || type.equals(Boolean.class.getName()) || type.equals("Z")) {
-            
+                || type.equals(Boolean.class.getName())) {
+
             return MCodeUtilities.BOOLEAN;
 
         } else if (type.equals(byte.class.getName())
-                || type.equals(Byte.class.getName()) || type.equals("B")) {
+                || type.equals(Byte.class.getName())) {
 
             return MCodeUtilities.BYTE;
 
         } else if (type.equals(short.class.getName())
-                || type.equals(Short.class.getName()) || type.equals("S")) {
+                || type.equals(Short.class.getName())) {
 
             return MCodeUtilities.SHORT;
 
         } else if (type.equals(int.class.getName())
-                || type.equals(Integer.class.getName()) || type.equals("I")) {
+                || type.equals(Integer.class.getName())) {
 
             return MCodeUtilities.INT;
 
         } else if (type.equals(long.class.getName())
-                || type.equals(Long.class.getName()) || type.equals("J")) {
+                || type.equals(Long.class.getName())) {
 
             return MCodeUtilities.LONG;
 
         } else if (type.equals(char.class.getName())
-                || type.equals(Character.class.getName()) || type.equals("C")) {
+                || type.equals(Character.class.getName())) {
 
             return MCodeUtilities.CHAR;
 
         } else if (type.equals(float.class.getName())
-                || type.equals(Float.class.getName()) || type.equals("F")) {
+                || type.equals(Float.class.getName())) {
 
             return MCodeUtilities.FLOAT;
 
         } else if (type.equals(double.class.getName())
-                || type.equals(Double.class.getName()) || type.equals("D")) {
+                || type.equals(Double.class.getName())) {
 
             return MCodeUtilities.DOUBLE;
 
@@ -387,7 +387,6 @@ public class MCodeUtilities {
         } else {
 
             return MCodeUtilities.REFERENCE;
-
         }
     }
 
@@ -1487,4 +1486,14 @@ public class MCodeUtilities {
 
 		return automaticStringConversion || (exp instanceof koala.dynamicjava.tree.Literal);
 	}
+    /**
+     * return a full qualified classname, e.g. [C resulting from char[] will be [char, because C [] will be [C as well...
+     * @param c
+     * @return qualified classname
+     */
+    public static String getFullQualifiedClassname(Class c) {
+        if (!c.isArray())
+            return c.getName();
+        return "["+getFullQualifiedClassname(c.getComponentType());  //To change body of created methods use File | Settings | File Templates.
+    }
 }

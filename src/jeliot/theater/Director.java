@@ -1336,7 +1336,8 @@ public class Director {
                 theatre.removePassive(refAct);
                 release();
             }
-            if (returnValue != null) {
+            // fixed by rku: was != null, but should check type compatibilty also
+            if (returnValue instanceof Reference) {
                 ValueActor returnAct = factory.produceReferenceActor((Reference) returnValue);
                 returnAct.setLocation(ra.getRootLocation());
                 returnValue.setActor(returnAct);
@@ -2790,5 +2791,5 @@ public class Director {
      */
     public void setInterpreter(MCodeInterpreter mCodeInterpreter) {
         this.mCodeInterpreter = mCodeInterpreter;
-    }
+    }   
 }
