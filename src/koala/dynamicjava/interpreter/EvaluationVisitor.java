@@ -159,7 +159,6 @@ public class EvaluationVisitor extends VisitorObject {
         return !constructorInfoNames.empty();
     }
 
-
     /**
      * Adds the info of the current constructor to the stack.
      * Used to solve the "this" method call problem
@@ -167,8 +166,7 @@ public class EvaluationVisitor extends VisitorObject {
      * @param name       Name of the constructor
      * @param paramTypes List of constructor parameters types
      */
-    public static void pushConstructorInfo(String name,
-                                           Class[] paramTypes) {
+    public static void pushConstructorInfo(String name, Class[] paramTypes) {
         MCodeUtilities.constructorParametersStack.push(paramTypes);
         MCodeUtilities.constructorNameStack.push(name);
     }
@@ -186,7 +184,7 @@ public class EvaluationVisitor extends VisitorObject {
 
     //DOC NIKO
     public static void newConstructorCall(String name,
-                                          Vector superClassesNames, long consCallNumber) {
+            Vector superClassesNames, long consCallNumber) {
         Long ccn = new Long(consCallNumber);
         constructorCallNumbers.push(ccn);
         constructorCallNames.push(name);
@@ -373,7 +371,7 @@ public class EvaluationVisitor extends VisitorObject {
                                 + round
                                 + Code.DELIM
                                 + MCodeUtilities.locationToString(node
-                                .getBody()));
+                                        .getBody()));
                         node.getBody().acceptVisitor(this);
                         condcounter = counter;
                         round++;
@@ -494,8 +492,7 @@ public class EvaluationVisitor extends VisitorObject {
             // Search for the matching label
             ListIterator it = node.getBindings().listIterator();
             ListIterator dit = null;
-            loop:
-            while (it.hasNext()) {
+            loop: while (it.hasNext()) {
                 SwitchBlock sc = (SwitchBlock) it.next();
                 Number l = null;
 
@@ -522,11 +519,11 @@ public class EvaluationVisitor extends VisitorObject {
                             + switchBlockCounter
                             + Code.DELIM
                             + MCodeUtilities.locationToString(sc
-                            .getExpression()));
+                                    .getExpression()));
 
                     // When a matching label is found, interpret all the
                     // remaining statements
-                    for (; ;) {
+                    for (;;) {
                         if (sc.getStatements() != null) {
                             Iterator it2 = sc.getStatements().iterator();
                             while (it2.hasNext()) {
@@ -551,7 +548,7 @@ public class EvaluationVisitor extends VisitorObject {
                         + selectorCounter + Code.DELIM + "-1" + Code.DELIM
                         + MCodeUtilities.locationToString(sc));
 
-                for (; ;) {
+                for (;;) {
 
                     if (sc.getStatements() != null) {
 
@@ -735,8 +732,8 @@ public class EvaluationVisitor extends VisitorObject {
             }
             MCodeUtilities.write("" + Code.R + Code.DELIM + l.toString()
                     + Code.DELIM + auxcounter + Code.DELIM + value + Code.DELIM
-                    + typeString
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + typeString + Code.DELIM
+                    + MCodeUtilities.locationToString(node));
 
             throw new ReturnException("return.statement", o, node);
             // If there is nothing to return we indicate this with the
@@ -970,8 +967,8 @@ public class EvaluationVisitor extends VisitorObject {
                 value = f.get(obj);
             } catch (NullPointerException e) {
                 if (!Modifier.isStatic(f.getModifiers())) {
-                    node.setProperty(NodeProperties.ERROR_STRINGS, new String[]{f
-                            .getName()});
+                    node.setProperty(NodeProperties.ERROR_STRINGS,
+                            new String[] { f.getName() });
                     throw new ExecutionError("j3.not.static.field", node);
                 }
                 throw new CatchedExceptionError(e, node);
@@ -984,19 +981,19 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.OFA + Code.DELIM + fieldCounter
                     + Code.DELIM + objectCounter + Code.DELIM + f.getName()
                     + Code.DELIM + objectValue + Code.DELIM
-                    + f.getType().getName() + Code.DELIM + f.getModifiers() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + f.getType().getName() + Code.DELIM + f.getModifiers()
+                    + Code.DELIM + MCodeUtilities.locationToString(node));
             /*
-                * if (value != null) { MCodeUtilities.write("" + Code.OFA +
-                * Code.DELIM + fieldCounter + Code.DELIM + objectCounter +
-                * Code.DELIM + f.getName() + Code.DELIM + value.toString() +
-                * Code.DELIM + f.getType().getName() + Code.DELIM +
-                * MCodeUtilities.locationToString(node)); } else {
-                * MCodeUtilities.write("" + Code.OFA + Code.DELIM + fieldCounter +
-                * Code.DELIM + objectCounter + Code.DELIM + f.getName() +
-                * Code.DELIM + Code.UNKNOWN + Code.DELIM + f.getType().getName() +
-                * Code.DELIM + MCodeUtilities.locationToString(node)); }
-                */
+             * if (value != null) { MCodeUtilities.write("" + Code.OFA +
+             * Code.DELIM + fieldCounter + Code.DELIM + objectCounter +
+             * Code.DELIM + f.getName() + Code.DELIM + value.toString() +
+             * Code.DELIM + f.getType().getName() + Code.DELIM +
+             * MCodeUtilities.locationToString(node)); } else {
+             * MCodeUtilities.write("" + Code.OFA + Code.DELIM + fieldCounter +
+             * Code.DELIM + objectCounter + Code.DELIM + f.getName() +
+             * Code.DELIM + Code.UNKNOWN + Code.DELIM + f.getType().getName() +
+             * Code.DELIM + MCodeUtilities.locationToString(node)); }
+             */
             return value;
         } else {
             // If the object is an array, the field must be 'length'.
@@ -1022,8 +1019,8 @@ public class EvaluationVisitor extends VisitorObject {
         //Check for System System output
         if ((node.hasProperty(NodeProperties.METHOD))
                 && ((Method) node.getProperty(NodeProperties.METHOD))
-                .getDeclaringClass().getName().equals(
-                "java.io.PrintStream")) {
+                        .getDeclaringClass().getName().equals(
+                                "java.io.PrintStream")) {
 
             Method m = (Method) node.getProperty(NodeProperties.METHOD);
             {
@@ -1050,18 +1047,27 @@ public class EvaluationVisitor extends VisitorObject {
                                     + MCodeUtilities.locationToString(node));
                             Expression exp = (Expression) it.next();
 
-                            args[i] = MCodeUtilities.stringConversion(exp, this);
+                            args[i] = MCodeUtilities
+                                    .stringConversion(exp, this);
 
                             //args[i] = ((Expression) it.next()).acceptVisitor(this);
-                            MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
-                                    + outputCounter + Code.DELIM + "System.out"
-                                    + Code.DELIM + m.getName() + Code.DELIM
-                                    //+ args[i].toString() + Code.DELIM
-                                    + MCodeUtilities.getValue(args[i]) + Code.DELIM
-                                    + typs[i].getName() + Code.DELIM
-                                    //To indicate newline or not
-                                    + (m.getName().equals("println") ? "1" : "0")
+                            MCodeUtilities.write(""
+                                    + Code.OUTPUT
                                     + Code.DELIM
+                                    + outputCounter
+                                    + Code.DELIM
+                                    + "System.out"
+                                    + Code.DELIM
+                                    + m.getName()
+                                    + Code.DELIM
+                                    //+ args[i].toString() + Code.DELIM
+                                    + MCodeUtilities.getValue(args[i])
+                                    + Code.DELIM
+                                    + typs[i].getName()
+                                    + Code.DELIM
+                                    //To indicate newline or not
+                                    + (m.getName().equals("println") ? "1"
+                                            : "0") + Code.DELIM
                                     + MCodeUtilities.locationToString(node));
                             i++;
                         }
@@ -1072,9 +1078,9 @@ public class EvaluationVisitor extends VisitorObject {
                                 + MCodeUtilities.locationToString(node));
                         MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
                                 + Code.NO_REFERENCE + Code.DELIM + "System.out"
-                                + Code.DELIM + m.getName() + Code.DELIM
-                                + "" + Code.DELIM
-                                + String.class.getName() + Code.DELIM
+                                + Code.DELIM + m.getName() + Code.DELIM + ""
+                                + Code.DELIM + String.class.getName()
+                                + Code.DELIM
                                 //To indicate newline or not
                                 + (m.getName().equals("println") ? "1" : "0")
                                 + Code.DELIM
@@ -1147,8 +1153,9 @@ public class EvaluationVisitor extends VisitorObject {
                             argType = typs[i].getName();
                         }
                         MCodeUtilities.write("" + Code.P + Code.DELIM
-                                + auxcounter + Code.DELIM + MCodeUtilities.getValue(args[i])
-                                + Code.DELIM + argType);
+                                + auxcounter + Code.DELIM
+                                + MCodeUtilities.getValue(args[i]) + Code.DELIM
+                                + argType);
                         i++;
 
                         //args[i++] =
@@ -1166,7 +1173,7 @@ public class EvaluationVisitor extends VisitorObject {
                         MCodeUtilities.write(Code.PARAMETERS
                                 + Code.DELIM
                                 + MCodeUtilities.parameterArrayToString(m
-                                .getParameterTypes()));
+                                        .getParameterTypes()));
                         MCodeUtilities.write(Code.MD + Code.DELIM
                                 + MCodeUtilities.locationToString(node));
 
@@ -1252,8 +1259,8 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write(Code.SFA + Code.DELIM + (counter++)
                     + Code.DELIM + f.getDeclaringClass().getName() + Code.DELIM
                     + f.getName() + Code.DELIM + value + Code.DELIM
-                    + f.getType().getName() + Code.DELIM + f.getModifiers() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + f.getType().getName() + Code.DELIM + f.getModifiers()
+                    + Code.DELIM + MCodeUtilities.locationToString(node));
             return o;
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
@@ -1274,76 +1281,76 @@ public class EvaluationVisitor extends VisitorObject {
         }
     }
 
-	/**
-	 * Visits a SuperMethodCall
-	 * 
-	 * @param node
-	 *            the node to visit
-	 */
-	public Object visit(SuperMethodCall node) {
-		Method m = (Method) node.getProperty(NodeProperties.METHOD);
-		List larg = node.getArguments();
-		Object[] args = Constants.EMPTY_OBJECT_ARRAY;
-		Class[] typs = m.getParameterTypes();
+    /**
+     * Visits a SuperMethodCall
+     * 
+     * @param node
+     *            the node to visit
+     */
+    public Object visit(SuperMethodCall node) {
+        Method m = (Method) node.getProperty(NodeProperties.METHOD);
+        List larg = node.getArguments();
+        Object[] args = Constants.EMPTY_OBJECT_ARRAY;
+        Class[] typs = m.getParameterTypes();
 
         Long l = new Long(counter);
         returnExpressionCounterStack.push(l);
         counter++;
-        
-        Object thisObject = context.getHiddenArgument();        
+
+        Object thisObject = context.getHiddenArgument();
         long objectCounter = counter;
-        
-        MCodeUtilities.write("" + Code.QN + Code.DELIM
-                + (counter++) + Code.DELIM
-                + "this" + Code.DELIM
-                + MCodeUtilities.getValue(thisObject) + Code.DELIM + thisObject.getClass().getName() + Code.DELIM
+
+        MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
+                + Code.DELIM + "this" + Code.DELIM
+                + MCodeUtilities.getValue(thisObject) + Code.DELIM
+                + thisObject.getClass().getName() + Code.DELIM
                 + MCodeUtilities.locationToString(node));
-        
-		if (larg != null) {
 
-            MCodeUtilities.write("" + Code.OMC + Code.DELIM
-                    + "super," + m.getName() //.substring(m.getName().lastIndexOf("$") + 1)
-                    + Code.DELIM + larg.size()
-                    + Code.DELIM + objectCounter + Code.DELIM
-                    + m.getDeclaringClass().getSuperclass().getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+        if (larg != null) {
 
-		} else {
+            MCodeUtilities.write("" + Code.OMC + Code.DELIM + "super,"
+                    + m.getName() //.substring(m.getName().lastIndexOf("$") + 1)
+                    + Code.DELIM + larg.size() + Code.DELIM + objectCounter
+                    + Code.DELIM
+                    + m.getDeclaringClass().getSuperclass().getName()
+                    + Code.DELIM + MCodeUtilities.locationToString(node));
 
-            MCodeUtilities.write("" + Code.OMC + Code.DELIM
-                    + "super," + m.getName().substring(m.getName().lastIndexOf("$") + 1) + Code.DELIM + "0"
-                    + Code.DELIM + objectCounter + Code.DELIM
-                    + m.getDeclaringClass().getSuperclass().getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
-			//0 arguments
-		}
-		// Fill the arguments
-		if (larg != null) {
-			Iterator it = larg.iterator();
-			int i = 0;
-			args = new Object[larg.size()];
-			long auxcounter; //Records the previous counter value
+        } else {
 
-			while (it.hasNext()) {
-				MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
-						+ Code.DELIM + counter + Code.DELIM
-						+ MCodeUtilities.locationToString(node));
-				//arguments construction
-				auxcounter = counter;
-				args[i] = ((Expression) it.next()).acceptVisitor(this);
+            MCodeUtilities.write("" + Code.OMC + Code.DELIM + "super,"
+                    + m.getName().substring(m.getName().lastIndexOf("$") + 1)
+                    + Code.DELIM + "0" + Code.DELIM + objectCounter
+                    + Code.DELIM
+                    + m.getDeclaringClass().getSuperclass().getName()
+                    + Code.DELIM + MCodeUtilities.locationToString(node));
+            //0 arguments
+        }
+        // Fill the arguments
+        if (larg != null) {
+            Iterator it = larg.iterator();
+            int i = 0;
+            args = new Object[larg.size()];
+            long auxcounter; //Records the previous counter value
 
-				MCodeUtilities.write("" + Code.P + Code.DELIM + auxcounter
-						+ Code.DELIM + MCodeUtilities.getValue(args[i]) + Code.DELIM
-						+ typs[i].getName());
-				i++;
-			}
-		}
+            while (it.hasNext()) {
+                MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
+                        + Code.DELIM + counter + Code.DELIM
+                        + MCodeUtilities.locationToString(node));
+                //arguments construction
+                auxcounter = counter;
+                args[i] = ((Expression) it.next()).acceptVisitor(this);
 
-		// Invoke the method
-		try {
-			Object o = m.invoke(thisObject, args);
-            
-            
+                MCodeUtilities.write("" + Code.P + Code.DELIM + auxcounter
+                        + Code.DELIM + MCodeUtilities.getValue(args[i])
+                        + Code.DELIM + typs[i].getName());
+                i++;
+            }
+        }
+
+        // Invoke the method
+        try {
+            Object o = m.invoke(thisObject, args);
+
             if (!isSetInside()) {
                 //visit(o)
 
@@ -1354,13 +1361,11 @@ public class EvaluationVisitor extends VisitorObject {
                 MCodeUtilities.write(Code.MD + Code.DELIM
                         + MCodeUtilities.locationToString(node));
 
-                if (!m.getReturnType().getName().equals(
-                        Void.TYPE.getName())) {
+                if (!m.getReturnType().getName().equals(Void.TYPE.getName())) {
 
                     long auxcounter = counter;
-                    MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
-                            + Code.R + Code.DELIM + l.toString()
-                            + Code.DELIM
+                    MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.R
+                            + Code.DELIM + l.toString() + Code.DELIM
                             + MCodeUtilities.locationToString(node));
 
                     // Don't try this with objects, foreign method calls
@@ -1369,15 +1374,15 @@ public class EvaluationVisitor extends VisitorObject {
                     String value = MCodeUtilities.getValue(o);
                     String className = (o == null) ? Code.REFERENCE : o
                             .getClass().getName();
-                    MCodeUtilities.write(Code.L + Code.DELIM
-                            + (counter++) + Code.DELIM + value
-                            + Code.DELIM + className + Code.DELIM
+                    MCodeUtilities.write(Code.L + Code.DELIM + (counter++)
+                            + Code.DELIM + value + Code.DELIM + className
+                            + Code.DELIM
                             + MCodeUtilities.locationToString(node));
 
                     MCodeUtilities.write("" + Code.R + Code.DELIM
                             + l.toString() + Code.DELIM + auxcounter
-                            + Code.DELIM + value + Code.DELIM
-                            + className + Code.DELIM
+                            + Code.DELIM + value + Code.DELIM + className
+                            + Code.DELIM
                             + MCodeUtilities.locationToString(node));
 
                 }
@@ -1386,25 +1391,24 @@ public class EvaluationVisitor extends VisitorObject {
                 unsetInside();
             }
 
-            
-			MCodeUtilities.write("" + Code.OMCC); //the method call is closed
-            
+            MCodeUtilities.write("" + Code.OMCC); //the method call is closed
+
             if (((Long) returnExpressionCounterStack.peek()).equals(l)) {
                 returnExpressionCounterStack.pop();
             }
-            
-			return o;
-		} catch (InvocationTargetException e) {
-			if (e.getTargetException() instanceof Error) {
-				throw (Error) e.getTargetException();
-			} else if (e.getTargetException() instanceof RuntimeException) {
-				throw (RuntimeException) e.getTargetException();
-			}
-			throw new ThrownException(e.getTargetException());
-		} catch (Exception e) {
-			throw new CatchedExceptionError(e, node);
-		}
-	}
+
+            return o;
+        } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof Error) {
+                throw (Error) e.getTargetException();
+            } else if (e.getTargetException() instanceof RuntimeException) {
+                throw (RuntimeException) e.getTargetException();
+            }
+            throw new ThrownException(e.getTargetException());
+        } catch (Exception e) {
+            throw new CatchedExceptionError(e, node);
+        }
+    }
 
     /**
      * Visits a StaticMethodCall
@@ -1424,7 +1428,8 @@ public class EvaluationVisitor extends VisitorObject {
         Object result = null;
 
         // If true Input Class, if false Lue class
-        final InputHandler inputHandler = InputHandlerFactory.createInputHandler(m.getDeclaringClass());
+        final InputHandler inputHandler = InputHandlerFactory
+                .createInputHandler(m.getDeclaringClass());
 
         if (inputHandler != null) {
             inputHandler.setInputReader(MCodeUtilities.getReader());
@@ -1443,18 +1448,18 @@ public class EvaluationVisitor extends VisitorObject {
                 }
             }
 
-            result = inputHandler.handleInput(
-                    m.getReturnType(), inputCounter, m,
-                    node, prompt);
+            result = inputHandler.handleInput(m.getReturnType(), inputCounter,
+                    m, node, prompt);
 
             MCodeUtilities.write("" + Code.INPUTTED + Code.DELIM + inputCounter
-                    + Code.DELIM + result + Code.DELIM + m.getReturnType().getName()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + result + Code.DELIM
+                    + m.getReturnType().getName() + Code.DELIM
+                    + MCodeUtilities.locationToString(node));
 
             if (prompt != null && prompt.length() > 0) {
                 inputHandler.out(counter, "println", result.toString(), node);
             }
-            
+
             return result;
         } else if (m.getDeclaringClass().getName().equals("jeliot.io.Output")) {
             if (m.getName().equals("println")) {
@@ -1476,8 +1481,9 @@ public class EvaluationVisitor extends VisitorObject {
                     MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
                             + outputCounter + Code.DELIM
                             + m.getDeclaringClass().getName() + Code.DELIM
-                            + m.getName() + Code.DELIM + MCodeUtilities.getValue(args[i])
-                            + Code.DELIM + typs[i].getName() + Code.DELIM + "1" //BREAKLINE
+                            + m.getName() + Code.DELIM
+                            + MCodeUtilities.getValue(args[i]) + Code.DELIM
+                            + typs[i].getName() + Code.DELIM + "1" //BREAKLINE
                             + Code.DELIM
                             + MCodeUtilities.locationToString(node));
                     i++;
@@ -1538,8 +1544,8 @@ public class EvaluationVisitor extends VisitorObject {
                 args[i] = ((Expression) it.next()).acceptVisitor(this);
 
                 MCodeUtilities.write("" + Code.P + Code.DELIM + auxcounter
-                        + Code.DELIM + MCodeUtilities.getValue(args[i]) + Code.DELIM
-                        + argType);
+                        + Code.DELIM + MCodeUtilities.getValue(args[i])
+                        + Code.DELIM + argType);
                 i++;
             }
         }
@@ -1554,7 +1560,7 @@ public class EvaluationVisitor extends VisitorObject {
                 MCodeUtilities.write(Code.PARAMETERS
                         + Code.DELIM
                         + MCodeUtilities.parameterArrayToString(m
-                        .getParameterTypes()));
+                                .getParameterTypes()));
                 MCodeUtilities.write(Code.MD + Code.DELIM
                         + MCodeUtilities.locationToString(node));
 
@@ -1601,8 +1607,8 @@ public class EvaluationVisitor extends VisitorObject {
             }
             throw new ThrownException(e.getTargetException());
         } catch (NullPointerException e) {
-            node.setProperty(NodeProperties.ERROR_STRINGS, new String[]{m
-                    .getName()});
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { m
+                    .getName() });
             throw new ExecutionError("j3.not.static.method", node);
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
@@ -1664,8 +1670,8 @@ public class EvaluationVisitor extends VisitorObject {
         try {
             result = context.get(node.getRepresentation());
         } catch (IllegalStateException e) {
-            node.setProperty(NodeProperties.ERROR_STRINGS, new String[]{node
-                    .getRepresentation()});
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { node
+                    .getRepresentation() });
             throw new ExecutionError("j3.variable.not.declared", node);
         }
 
@@ -1675,8 +1681,8 @@ public class EvaluationVisitor extends VisitorObject {
         if ((result != UninitializedObject.INSTANCE) && (result != null)) {
             value = MCodeUtilities.getValue(result);
         } else if (result == null && c.isPrimitive()) {
-            node.setProperty(NodeProperties.ERROR_STRINGS, new String[]{node
-                    .getRepresentation()});
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { node
+                    .getRepresentation() });
             throw new ExecutionError("j3.variable.not.declared", node);
         } else if (result == null) {
             value = "null";
@@ -1704,13 +1710,14 @@ public class EvaluationVisitor extends VisitorObject {
 
             if (result == UninitializedObject.INSTANCE) {
                 node.setProperty(NodeProperties.ERROR_STRINGS,
-                        new String[]{node.getRepresentation()});
+                        new String[] { node.getRepresentation() });
                 throw new ExecutionError("uninitialized.variable", node);
             }
 
             MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                     + Code.DELIM + node.getRepresentation() + Code.DELIM
-                    + MCodeUtilities.getValue(result) + Code.DELIM + c.getName() + Code.DELIM
+                    + MCodeUtilities.getValue(result) + Code.DELIM
+                    + c.getName() + Code.DELIM
                     + MCodeUtilities.locationToString(node));
 
             return result;
@@ -1728,69 +1735,70 @@ public class EvaluationVisitor extends VisitorObject {
         return node.getProperty(NodeProperties.VALUE);
     }
 
-	/**
-	 * Visits a SimpleAllocation
-	 * 
-	 * @param node
-	 *            the node to visit
-	 */
-	public Object visit(SimpleAllocation node) {
-		List larg = node.getArguments();
-		Object[] args = Constants.EMPTY_OBJECT_ARRAY;
-		long simpleAllocationCounter = counter++;
-		Constructor cons = (Constructor) node
-				.getProperty(NodeProperties.CONSTRUCTOR);
+    /**
+     * Visits a SimpleAllocation
+     * 
+     * @param node
+     *            the node to visit
+     */
+    public Object visit(SimpleAllocation node) {
+        List larg = node.getArguments();
+        Object[] args = Constants.EMPTY_OBJECT_ARRAY;
+        long simpleAllocationCounter = counter++;
+        Constructor cons = (Constructor) node
+                .getProperty(NodeProperties.CONSTRUCTOR);
         Class[] paramTypes = cons.getParameterTypes();
         Class[] types;
         if (larg != null) {
-        	types = new Class[larg.size()];
+            types = new Class[larg.size()];
         } else {
-        	types = new Class[0];
+            types = new Class[0];
         }
-		String consName = cons.getName();
-		String declaringClass = cons.getDeclaringClass().getName();
-		// Fill the arguments
+        String consName = cons.getName();
+        String declaringClass = cons.getDeclaringClass().getName();
+        // Fill the arguments
 
-		if (larg != null) {
+        if (larg != null) {
 
-			MCodeUtilities.write("" + Code.SA + Code.DELIM
-					+ simpleAllocationCounter + Code.DELIM + declaringClass
-					+ Code.DELIM + consName + Code.DELIM + larg.size()
-					+ Code.DELIM + MCodeUtilities.locationToString(node));
+            MCodeUtilities.write("" + Code.SA + Code.DELIM
+                    + simpleAllocationCounter + Code.DELIM + declaringClass
+                    + Code.DELIM + consName + Code.DELIM + larg.size()
+                    + Code.DELIM + MCodeUtilities.locationToString(node));
 
-		} else {
+        } else {
 
-			MCodeUtilities.write("" + Code.SA + Code.DELIM
-					+ simpleAllocationCounter + Code.DELIM + declaringClass
-					+ Code.DELIM + consName + Code.DELIM + "0" + Code.DELIM
-					+ MCodeUtilities.locationToString(node));
-			//0 arguments
-		}
+            MCodeUtilities.write("" + Code.SA + Code.DELIM
+                    + simpleAllocationCounter + Code.DELIM + declaringClass
+                    + Code.DELIM + consName + Code.DELIM + "0" + Code.DELIM
+                    + MCodeUtilities.locationToString(node));
+            //0 arguments
+        }
 
-		// Fill the arguments
-		if (larg != null) {
-			args = new Object[larg.size()];
-			Iterator it = larg.iterator();
-			int i = 0;
-			long auxcounter; //Records the previous counter value
-			Object auxarg; //Stores the current argument
-            
+        // Fill the arguments
+        if (larg != null) {
+            args = new Object[larg.size()];
+            Iterator it = larg.iterator();
+            int i = 0;
+            long auxcounter; //Records the previous counter value
+            Object auxarg; //Stores the current argument
+
             Class[] params = null;
-            Constructor constructor = (Constructor) node.getProperty(NodeProperties.CONSTRUCTOR);
+            Constructor constructor = (Constructor) node
+                    .getProperty(NodeProperties.CONSTRUCTOR);
             if (constructor != null) {
                 params = constructor.getParameterTypes();
             }
-             
+
             while (it.hasNext()) {
 
-				MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
-						+ Code.DELIM + counter + Code.DELIM
-						+ MCodeUtilities.locationToString(node));
-				//arguments construction
-				auxcounter = counter;
-				args[i] = ((Expression) it.next()).acceptVisitor(this);
+                MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
+                        + Code.DELIM + counter + Code.DELIM
+                        + MCodeUtilities.locationToString(node));
+                //arguments construction
+                auxcounter = counter;
+                args[i] = ((Expression) it.next()).acceptVisitor(this);
 
-				// HACK: If we can assure that the type of the argument is a
+                // HACK: If we can assure that the type of the argument is a
                 // String then specify it. Useful for external method call.
                 // Not working completely, or none at all, arg retrieved as null
                 String argType;
@@ -1803,84 +1811,85 @@ public class EvaluationVisitor extends VisitorObject {
                         argType = args[i].getClass().getName();
                     }
                 }
-                
-				MCodeUtilities.write("" + Code.P + Code.DELIM + auxcounter
-						+ Code.DELIM + MCodeUtilities.getValue(args[i]) + Code.DELIM
-						+ argType/*args[i].getClass().getName()*/);
-				
+
+                MCodeUtilities
+                        .write("" + Code.P + Code.DELIM + auxcounter
+                                + Code.DELIM + MCodeUtilities.getValue(args[i])
+                                + Code.DELIM + argType/*args[i].getClass().getName()*/);
+
                 if (params != null) {
                     types[i] = params[i];
                 } else {
                     types[i] = args[i].getClass();
                 }
-				//types[i] = args[i].getClass();
-				i++;
-			}
-		}
+                //types[i] = args[i].getClass();
+                i++;
+            }
+        }
 
-		newConstructorCall(consName, extractSuperClasses(cons
-				.getDeclaringClass()), simpleAllocationCounter);
-		MCodeUtilities.write("" + Code.CONSCN + Code.DELIM
-				+ EvaluationVisitor.getConstructorCallNumber());
+        newConstructorCall(consName, extractSuperClasses(cons
+                .getDeclaringClass()), simpleAllocationCounter);
+        MCodeUtilities.write("" + Code.CONSCN + Code.DELIM
+                + EvaluationVisitor.getConstructorCallNumber());
 
-		//To handle "super" recursive calls
-		MCodeUtilities.superClassesStack.push(new Integer(0));
-		
-		//To handle "this" method calls we store the constructor name, and it parameters list
-		pushConstructorInfo(consName, types);
-		MCodeUtilities.previousClassStack.push(consName);
-		MCodeUtilities.previousClassParametersStack.push(types);
-		
-		//Hack to avoid problems when jeliot is started with a constructor
-		returnExpressionCounterStack.push(new Long(0));
-		//}
-		try { // Jeliot 3
-			Object result = context.invokeConstructor(node, args);
-			MCodeUtilities.write("" + Code.SAC + Code.DELIM
-					+ simpleAllocationCounter + Code.DELIM
-					+ MCodeUtilities.getValue(result) + Code.DELIM
-					+ MCodeUtilities.locationToString(node));
-			//0 arguments
-			MCodeUtilities.popConstructorInfo();
-			MCodeUtilities.previousClassStack.pop();
-			MCodeUtilities.previousClassParametersStack.pop();
-			//MCodeUtilities.superClassesStack.pop();
-			returnExpressionCounterStack.pop();
-			
-			//This is now done for all the simple allocations but once Java API allocations are allowed this should be changed.
-			unsetInside();
-			
-			return result;
+        //To handle "super" recursive calls
+        MCodeUtilities.superClassesStack.push(new Integer(0));
 
-			/* Jeliot 3 addition begins */
-		} catch (NoSuchMethodError e) {
-			int n = paramTypes.length;
-			String params = "(";
-			for (int i = 0; i < n; i++) {
-				params += paramTypes[i].getName();
-				if (i == n - 1) {
-					break;
-				}
-				params += ",";
-			}
-			params += ")";
+        //To handle "this" method calls we store the constructor name, and it parameters list
+        pushConstructorInfo(consName, types);
+        MCodeUtilities.previousClassStack.push(consName);
+        MCodeUtilities.previousClassParametersStack.push(types);
 
-			node.setProperty(NodeProperties.ERROR_STRINGS, new String[] {
-					consName + params, declaringClass });
-			throw new ExecutionError("j3.no.such.constructor", node);
-		} /*
-		   * catch (NoSuchMethodException e) { Class[] paramTypes =
-		   * cons.getParameterTypes(); int n = paramTypes.length; String params =
-		   * "("; for (int i = 0; i < n; i++) { params +=
-		   * paramTypes[i].getName(); if (i == n-1) { break; } params += ","; }
-		   * params += ")";
-		   * 
-		   * node.setProperty(NodeProperties.ERROR_STRINGS, new String[] {
-		   * consName + params, declaringClass }); throw new
-		   * ExecutionError("j3.no.such.constructor", node); }
-		   */
-		/* Jeliot 3 addition ends */
-	}
+        //Hack to avoid problems when jeliot is started with a constructor
+        returnExpressionCounterStack.push(new Long(0));
+        //}
+        try { // Jeliot 3
+            Object result = context.invokeConstructor(node, args);
+            MCodeUtilities.write("" + Code.SAC + Code.DELIM
+                    + simpleAllocationCounter + Code.DELIM
+                    + MCodeUtilities.getValue(result) + Code.DELIM
+                    + MCodeUtilities.locationToString(node));
+            //0 arguments
+            MCodeUtilities.popConstructorInfo();
+            MCodeUtilities.previousClassStack.pop();
+            MCodeUtilities.previousClassParametersStack.pop();
+            //MCodeUtilities.superClassesStack.pop();
+            returnExpressionCounterStack.pop();
+
+            //This is now done for all the simple allocations but once Java API allocations are allowed this should be changed.
+            unsetInside();
+
+            return result;
+
+            /* Jeliot 3 addition begins */
+        } catch (NoSuchMethodError e) {
+            int n = paramTypes.length;
+            String params = "(";
+            for (int i = 0; i < n; i++) {
+                params += paramTypes[i].getName();
+                if (i == n - 1) {
+                    break;
+                }
+                params += ",";
+            }
+            params += ")";
+
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] {
+                    consName + params, declaringClass });
+            throw new ExecutionError("j3.no.such.constructor", node);
+        } /*
+         * catch (NoSuchMethodException e) { Class[] paramTypes =
+         * cons.getParameterTypes(); int n = paramTypes.length; String params =
+         * "("; for (int i = 0; i < n; i++) { params +=
+         * paramTypes[i].getName(); if (i == n-1) { break; } params += ","; }
+         * params += ")";
+         * 
+         * node.setProperty(NodeProperties.ERROR_STRINGS, new String[] {
+         * consName + params, declaringClass }); throw new
+         * ExecutionError("j3.no.such.constructor", node); }
+         */
+        /* Jeliot 3 addition ends */
+    }
 
     /**
      * Visits an ArrayAllocation
@@ -1954,9 +1963,10 @@ public class EvaluationVisitor extends VisitorObject {
         MCodeUtilities.write("" + Code.L + Code.DELIM + sizeCounter
                 + Code.DELIM + size + Code.DELIM + int.class.getName()
                 + Code.DELIM + MCodeUtilities.locationToString(node));
-        Long[] dimExpressionReferences = {new Long(sizeCounter)};
+        Long[] dimExpressionReferences = { new Long(sizeCounter) };
         int dimensions = 1;
-        String arrayHashCode = Integer.toHexString(System.identityHashCode(result));
+        String arrayHashCode = Integer.toHexString(System
+                .identityHashCode(result));
         String dimensionsReferences = MCodeUtilities
                 .arrayToString(dimExpressionReferences);
         String componentType = ((Class) node.getElementType().getProperty(
@@ -2043,17 +2053,20 @@ public class EvaluationVisitor extends VisitorObject {
         arrayCellReferencesList.add(new Long(cellCounter));
 
         /*
-		if (!iAmFirst) {
-			arrayCellNumbersStack.push(arrayCellNumbersList);
-			arrayCellReferencesStack.push(arrayCellReferencesList);
-		}
-        */
+         if (!iAmFirst) {
+         arrayCellNumbersStack.push(arrayCellNumbersList);
+         arrayCellReferencesStack.push(arrayCellReferencesList);
+         }
+         */
+
         Object result = null;
         try {
-        	result = Array.get(t, ((Number) o).intValue());
-        } catch (IndexOutOfBoundsException e){        	
-            throw new ExecutionError("j3.index.array.outofbounds", node);
+            result = Array.get(t, ((Number) o).intValue());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { "" + (Array.getLength(t) - 1), "" + ((Number) o).intValue()});
+            throw new ExecutionError("j3.array.index.out.of.bounds", node);
         }
+
         String resultString;
         if (result != null) {
             resultString = MCodeUtilities.getValue(result);
@@ -2072,20 +2085,19 @@ public class EvaluationVisitor extends VisitorObject {
                     + arrayCellNumbersList.size()
                     + Code.DELIM
                     + MCodeUtilities.arrayToString(arrayCellReferencesList
-                    .toArray())
+                            .toArray())
                     + Code.DELIM
                     + MCodeUtilities.arrayToString(arrayCellNumbersList
-                    .toArray())
-                    + Code.DELIM + resultString
+                            .toArray()) + Code.DELIM + resultString
                     + Code.DELIM + NodeProperties.getType(node).getName()
                     + Code.DELIM + MCodeUtilities.locationToString(node));
 
             /*
-                * ECodeUtilities.write("Array access of name "+ nameCounter +" with
-                * hashcode "+ Integer.toHexString(t.hashCode()) + "element "
-                * +arrayCellNumbersList.toString() +" references "+
-                * arrayCellReferencesList.toString());
-                */
+             * ECodeUtilities.write("Array access of name "+ nameCounter +" with
+             * hashcode "+ Integer.toHexString(t.hashCode()) + "element "
+             * +arrayCellNumbersList.toString() +" references "+
+             * arrayCellReferencesList.toString());
+             */
             first = true;
             /* arrayCellNumbersList = (List) */
             arrayCellNumbersStack.pop();
@@ -2120,7 +2132,7 @@ public class EvaluationVisitor extends VisitorObject {
                 args[i++] = ((Expression) it.next()).acceptVisitor(this);
             }
         } else {
-            args = new Object[]{node.getExpression().acceptVisitor(this)};
+            args = new Object[] { node.getExpression().acceptVisitor(this) };
         }
 
         // Invoke the constructor
@@ -2320,11 +2332,11 @@ public class EvaluationVisitor extends VisitorObject {
             return o;
         }
         /*
-           * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
-           * constant return node.getProperty(NodeProperties.VALUE); } else {
-           * return InterpreterUtilities.minus (NodeProperties.getType(node),
-           * node.getExpression().acceptVisitor(this)); }
-           */
+         * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
+         * constant return node.getProperty(NodeProperties.VALUE); } else {
+         * return InterpreterUtilities.minus (NodeProperties.getType(node),
+         * node.getExpression().acceptVisitor(this)); }
+         */
     }
 
     /**
@@ -2461,9 +2473,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
     }
@@ -2561,24 +2574,25 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
         /*
-           * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
-           * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
-           * context);
-           *  // Perform the operation Object result =
-           * InterpreterUtilities.subtract( NodeProperties.getType(node), lhs,
-           * node.getRightExpression().acceptVisitor(this));
-           *  // Cast the result result =
-           * performCast(NodeProperties.getType(left), result);
-           *  // Modify the variable and return mod.modify(context, result);
-           *
-           * return result;
-           */
+         * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
+         * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
+         * context);
+         *  // Perform the operation Object result =
+         * InterpreterUtilities.subtract( NodeProperties.getType(node), lhs,
+         * node.getRightExpression().acceptVisitor(this));
+         *  // Cast the result result =
+         * performCast(NodeProperties.getType(left), result);
+         *  // Modify the variable and return mod.modify(context, result);
+         *
+         * return result;
+         */
     }
 
     /**
@@ -2613,12 +2627,12 @@ public class EvaluationVisitor extends VisitorObject {
         return o;
 
         /*
-           * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
-           * constant return node.getProperty(NodeProperties.VALUE); } else {
-           * return InterpreterUtilities.multiply( NodeProperties.getType(node),
-           * node.getLeftExpression().acceptVisitor(this),
-           * node.getRightExpression().acceptVisitor(this)); }
-           */
+         * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
+         * constant return node.getProperty(NodeProperties.VALUE); } else {
+         * return InterpreterUtilities.multiply( NodeProperties.getType(node),
+         * node.getLeftExpression().acceptVisitor(this),
+         * node.getRightExpression().acceptVisitor(this)); }
+         */
     }
 
     /**
@@ -2680,24 +2694,25 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
         /*
-           * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
-           * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
-           * context);
-           *  // Perform the operation Object result =
-           * InterpreterUtilities.multiply( NodeProperties.getType(node), lhs,
-           * node.getRightExpression().acceptVisitor(this));
-           *  // Cast the result result =
-           * performCast(NodeProperties.getType(left), result);
-           *  // Modify the variable and return mod.modify(context, result);
-           *
-           * return result;
-           */
+         * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
+         * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
+         * context);
+         *  // Perform the operation Object result =
+         * InterpreterUtilities.multiply( NodeProperties.getType(node), lhs,
+         * node.getRightExpression().acceptVisitor(this));
+         *  // Cast the result result =
+         * performCast(NodeProperties.getType(left), result);
+         *  // Modify the variable and return mod.modify(context, result);
+         *
+         * return result;
+         */
     }
 
     /**
@@ -2731,12 +2746,12 @@ public class EvaluationVisitor extends VisitorObject {
         return o;
 
         /*
-           * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
-           * constant return node.getProperty(NodeProperties.VALUE); } else {
-           * return InterpreterUtilities.divide( NodeProperties.getType(node),
-           * node.getLeftExpression().acceptVisitor(this),
-           * node.getRightExpression().acceptVisitor(this)); }
-           */
+         * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
+         * constant return node.getProperty(NodeProperties.VALUE); } else {
+         * return InterpreterUtilities.divide( NodeProperties.getType(node),
+         * node.getLeftExpression().acceptVisitor(this),
+         * node.getRightExpression().acceptVisitor(this)); }
+         */
     }
 
     /**
@@ -2798,24 +2813,25 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
         /*
-           * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
-           * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
-           * context);
-           *  // Perform the operation Object result =
-           * InterpreterUtilities.divide( NodeProperties.getType(node), lhs,
-           * node.getRightExpression().acceptVisitor(this));
-           *  // Cast the result result =
-           * performCast(NodeProperties.getType(left), result);
-           *  // Modify the variable and return mod.modify(context, result);
-           *
-           * return result;
-           */
+         * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
+         * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
+         * context);
+         *  // Perform the operation Object result =
+         * InterpreterUtilities.divide( NodeProperties.getType(node), lhs,
+         * node.getRightExpression().acceptVisitor(this));
+         *  // Cast the result result =
+         * performCast(NodeProperties.getType(left), result);
+         *  // Modify the variable and return mod.modify(context, result);
+         *
+         * return result;
+         */
     }
 
     /**
@@ -2849,13 +2865,13 @@ public class EvaluationVisitor extends VisitorObject {
                 + MCodeUtilities.locationToString(node));
         return o;
         /*
-           * if (node.hasProperty(NodeProperties.VALUE)) {
-           *  // The expression is constant return
-           * node.getProperty(NodeProperties.VALUE); } else { return
-           * InterpreterUtilities.remainder( NodeProperties.getType(node),
-           * node.getLeftExpression().acceptVisitor(this),
-           * node.getRightExpression().acceptVisitor(this)); }
-           */
+         * if (node.hasProperty(NodeProperties.VALUE)) {
+         *  // The expression is constant return
+         * node.getProperty(NodeProperties.VALUE); } else { return
+         * InterpreterUtilities.remainder( NodeProperties.getType(node),
+         * node.getLeftExpression().acceptVisitor(this),
+         * node.getRightExpression().acceptVisitor(this)); }
+         */
     }
 
     /**
@@ -2919,9 +2935,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
 
@@ -2952,7 +2969,7 @@ public class EvaluationVisitor extends VisitorObject {
         Object robj = rightexp.acceptVisitor(this);
         Object o = InterpreterUtilities.equalTo(
                 NodeProperties.getType(leftexp), NodeProperties
-                .getType(rightexp), lobj, robj);
+                        .getType(rightexp), lobj, robj);
 
         MCodeUtilities.write("" + Code.EE + Code.DELIM + eecounter + Code.DELIM
                 + auxcounter + Code.DELIM + auxcounter2 + Code.DELIM
@@ -3166,7 +3183,7 @@ public class EvaluationVisitor extends VisitorObject {
                         + Code.TRUE
                         + Code.DELIM
                         + MCodeUtilities.locationToString(node
-                        .getIfTrueExpression()));
+                                .getIfTrueExpression()));
 
                 return node.getIfTrueExpression().acceptVisitor(this);
             } else {
@@ -3178,7 +3195,7 @@ public class EvaluationVisitor extends VisitorObject {
                         + Code.FALSE
                         + Code.DELIM
                         + MCodeUtilities.locationToString(node
-                        .getIfFalseExpression()));
+                                .getIfFalseExpression()));
 
                 return node.getIfFalseExpression().acceptVisitor(this);
             }
@@ -3213,9 +3230,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
 
         MCodeUtilities.write("" + Code.PIE + Code.DELIM + postinccounter
-                + Code.DELIM + auxcounter + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + Code.DELIM + auxcounter + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return v;
     }
@@ -3241,9 +3259,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, v = InterpreterUtilities.add(NodeProperties
                 .getType(node), v, InterpreterUtilities.ONE));
         MCodeUtilities.write("" + Code.PRIE + Code.DELIM + preinccounter
-                + Code.DELIM + auxcounter + Code.DELIM + MCodeUtilities.getValue(v)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + Code.DELIM + auxcounter + Code.DELIM
+                + MCodeUtilities.getValue(v) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return v;
     }
@@ -3272,9 +3291,10 @@ public class EvaluationVisitor extends VisitorObject {
 
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.PDE + Code.DELIM + postdeccounter
-                + Code.DELIM + auxcounter + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + Code.DELIM + auxcounter + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return v;
     }
@@ -3301,9 +3321,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, v = InterpreterUtilities.subtract(NodeProperties
                 .getType(node), v, InterpreterUtilities.ONE));
         MCodeUtilities.write("" + Code.PRDE + Code.DELIM + predeccounter
-                + Code.DELIM + auxcounter + Code.DELIM + MCodeUtilities.getValue(v)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + Code.DELIM + auxcounter + Code.DELIM
+                + MCodeUtilities.getValue(v) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
         return v;
     }
 
@@ -3362,13 +3383,13 @@ public class EvaluationVisitor extends VisitorObject {
                 + MCodeUtilities.locationToString(node));
         return o;
         /*
-           *
-           * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
-           * constant return node.getProperty(NodeProperties.VALUE); } else {
-           * return InterpreterUtilities.bitAnd( NodeProperties.getType(node),
-           * node.getLeftExpression().acceptVisitor(this),
-           * node.getRightExpression().acceptVisitor(this)); }
-           */
+         *
+         * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
+         * constant return node.getProperty(NodeProperties.VALUE); } else {
+         * return InterpreterUtilities.bitAnd( NodeProperties.getType(node),
+         * node.getLeftExpression().acceptVisitor(this),
+         * node.getRightExpression().acceptVisitor(this)); }
+         */
     }
 
     /**
@@ -3437,9 +3458,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
     }
@@ -3547,9 +3569,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
     }
@@ -3661,9 +3684,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
     }
@@ -3700,12 +3724,12 @@ public class EvaluationVisitor extends VisitorObject {
     }
 
     /*
-      * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
-      * constant return node.getProperty(NodeProperties.VALUE); } else { return
-      * InterpreterUtilities.shiftLeft( NodeProperties.getType(node),
-      * node.getLeftExpression().acceptVisitor(this),
-      * node.getRightExpression().acceptVisitor(this)); } }
-      */
+     * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
+     * constant return node.getProperty(NodeProperties.VALUE); } else { return
+     * InterpreterUtilities.shiftLeft( NodeProperties.getType(node),
+     * node.getLeftExpression().acceptVisitor(this),
+     * node.getRightExpression().acceptVisitor(this)); } }
+     */
 
     /**
      * Visits a ShiftLeftAssignExpression
@@ -3768,9 +3792,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
     }
@@ -3805,12 +3830,12 @@ public class EvaluationVisitor extends VisitorObject {
                 + MCodeUtilities.locationToString(node));
         return o;
         /*
-           * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
-           * constant return node.getProperty(NodeProperties.VALUE); } else {
-           * return InterpreterUtilities.shiftRight( NodeProperties.getType(node),
-           * node.getLeftExpression().acceptVisitor(this),
-           * node.getRightExpression().acceptVisitor(this)); }
-           */
+         * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
+         * constant return node.getProperty(NodeProperties.VALUE); } else {
+         * return InterpreterUtilities.shiftRight( NodeProperties.getType(node),
+         * node.getLeftExpression().acceptVisitor(this),
+         * node.getRightExpression().acceptVisitor(this)); }
+         */
     }
 
     /**
@@ -3874,9 +3899,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
     }
@@ -3911,13 +3937,13 @@ public class EvaluationVisitor extends VisitorObject {
                 + MCodeUtilities.locationToString(node));
         return o;
         /*
-           * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
-           * constant return node.getProperty(NodeProperties.VALUE); } else {
-           * return InterpreterUtilities.unsignedShiftRight(
-           * NodeProperties.getType(node),
-           * node.getLeftExpression().acceptVisitor(this),
-           * node.getRightExpression().acceptVisitor(this)); }
-           */
+         * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
+         * constant return node.getProperty(NodeProperties.VALUE); } else {
+         * return InterpreterUtilities.unsignedShiftRight(
+         * NodeProperties.getType(node),
+         * node.getLeftExpression().acceptVisitor(this),
+         * node.getRightExpression().acceptVisitor(this)); }
+         */
     }
 
     /**
@@ -3981,9 +4007,10 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, result);
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM + MCodeUtilities.getValue(result)
-                + Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + assignauxcounter2 + Code.DELIM
+                + MCodeUtilities.getValue(result) + Code.DELIM
+                + NodeProperties.getType(node).getName() + Code.DELIM
+                + MCodeUtilities.locationToString(node));
 
         return result;
     }
@@ -4186,12 +4213,12 @@ public class EvaluationVisitor extends VisitorObject {
                 o = new Long(((Number) o).longValue());
             } else if (tc == float.class) {
                 o = new Float(((Number) o).floatValue());
-			} else if (tc == double.class) {
-				o = new Double(((Number) o).doubleValue());
-			} else if (tc == char.class && ec != Character.class) {
-				o = new Character((char) ((Number) o).shortValue());
-			}
-		}
-		return o;
-	}
+            } else if (tc == double.class) {
+                o = new Double(((Number) o).doubleValue());
+            } else if (tc == char.class && ec != Character.class) {
+                o = new Character((char) ((Number) o).shortValue());
+            }
+        }
+        return o;
+    }
 }

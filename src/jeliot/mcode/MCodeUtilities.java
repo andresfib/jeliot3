@@ -1,22 +1,12 @@
 package jeliot.mcode;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
-import javax.swing.JFileChooser;
-
-import jeliot.gui.JavaFileFilter;
-import jeliot.util.ResourceBundles;
-import jeliot.util.UserProperties;
 
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
