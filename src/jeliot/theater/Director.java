@@ -2345,11 +2345,12 @@ public class Director {
      * @param ref
      * @param lenVal
      * @param expressionCounter
+     * @param actualDimension
      * @param h
      */
     public void showArrayCreation(ArrayInstance array, jeliot.lang.Reference ref,
             ArrayInstance[] level1, ArrayInstance[][] level2, Value[] lenVal,
-            long expressionCounter, Highlight h) {
+            long expressionCounter,int actualDimension, Highlight h) {
 
         highlight(h);
 
@@ -2359,7 +2360,6 @@ public class Director {
         if (lenVal != null) {
             n = lenVal.length;
         }
-
         ACActor actor = factory.produceACActor("new "
                 + MCodeUtilities.resolveComponentType(array.getComponentType()), n);
         ExpressionActor ea = currentScratch.getExpression(1, -1);
@@ -2402,6 +2402,7 @@ public class Director {
 
         highlight(h);
 
+
         ArrayActor arrayAct = factory.produceArrayActor(array);
         array.setArrayActor(arrayAct);
 
@@ -2412,8 +2413,9 @@ public class Director {
         manager.bind(arrayAct);
 
         if (level1 != null) {
-            for (int i = 0; i < level1.length; i++) {
+        	for (int i = 0; i < level1.length; i++) {
                 //Create array actor
+
                 ArrayActor level1ArrayActor = factory.produceArrayActor(level1[i]);
                 level1[i].setArrayActor(level1ArrayActor);
 
@@ -2449,6 +2451,7 @@ public class Director {
             for (int i = 0; i < level2.length; i++) {
                 for (int j = 0; j < level2[i].length; j++) {
                     //Create array actor
+                	
                     ArrayActor level2ArrayActor = factory.produceArrayActor(level2[i][j]);
                     level2[i][j].setArrayActor(level2ArrayActor);
 
