@@ -42,13 +42,15 @@ public class ArrayInstance extends Instance {
      * @param hashCode the hashCode of the array.
      * @param componentType The component type of the array.
      * @param dimensions The lengths of the dimensions of the array.
+     * @param actualDimension It includes even those that are not declared, e.g. new int[4][] => aD = 2
+     * 
      */
-    public ArrayInstance(String hashCode, String componentType, int dimensions, int length) {
+    public ArrayInstance(String hashCode, String componentType, int dimensions, int actualDimension, int length) {
         super(hashCode);
         
         String type = componentType;
         
-        for (int i = 0; i < dimensions; i++) {
+        for (int i = 0; i < actualDimension; i++) {
                type = "[" + type;
                if (i >= 1) {
                    componentType = "[" + componentType;
@@ -57,13 +59,14 @@ public class ArrayInstance extends Instance {
 
         setType(type);
 
+        
         this.componentType = componentType;
         this.array = new VariableInArray[length];
-        this.dimensions = dimensions;
+        this.dimensions = actualDimension;
         this.length = length;
         
         int n = length;
-
+        
         String defaultValue = MCodeUtilities.getDefaultValue(componentType);
         for (int i = 0; i < n; i++) {
             VariableInArray via = new VariableInArray(this, componentType);

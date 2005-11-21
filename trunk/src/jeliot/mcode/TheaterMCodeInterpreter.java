@@ -702,7 +702,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeAA(long expressionReference, String hashCode,
             String compType, int dims, String dimensionReferences,
-            String dimensionSizes, Highlight h) {
+            String dimensionSizes,int actualDimension, Highlight h) {
 
         StringTokenizer st = new StringTokenizer(dimensionReferences,
                 Code.LOC_DELIM);
@@ -734,7 +734,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
 
         ArrayInstance ai = new ArrayInstance(hashCode, compType,
-                dimensionSize.length, dimensionSize[0]);
+                dimensionSize.length, actualDimension, dimensionSize[0]);
 
         Reference ref = new Reference(ai);
 
@@ -743,7 +743,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             level1 = new ArrayInstance[dimensionSize[0]];
             for (int i = 0; i < dimensionSize[0]; i++) {
                 level1[i] = new ArrayInstance("", compType,
-                        dimensionSize.length - 1, dimensionSize[1]);
+                        dimensionSize.length - 1, actualDimension-1, dimensionSize[1]);
             }
         }
 
@@ -753,13 +753,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             for (int i = 0; i < dimensionSize[0]; i++) {
                 for (int j = 0; j < dimensionSize[1]; j++) {
                     level2[i][j] = new ArrayInstance("", compType,
-                            dimensionSize.length - 2, dimensionSize[2]);
+                            dimensionSize.length - 2, actualDimension-2, dimensionSize[2]);
                 }
             }
         }
 
         director.showArrayCreation(ai, ref, level1, level2, dimensionValues,
-                expressionReference, h);
+                expressionReference, actualDimension, h);
 
         //director.arrayCreation(dimensionSize, h);
 
