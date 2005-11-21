@@ -34,6 +34,7 @@ import java.util.List;
 
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.context.Context;
+import koala.dynamicjava.interpreter.error.ExecutionError;
 import koala.dynamicjava.tree.ArrayAccess;
 import koala.dynamicjava.tree.visitor.Visitor;
 
@@ -93,7 +94,13 @@ public class ArrayModifier extends LeftHandSideModifier {
 	    o = new Integer(((Character)o).charValue());
 	}
 	cell = (Number)o;
-	return Array.get(array, cell.intValue());
+	Object result = null;
+	try {
+    	result = Array.get(array, cell.intValue());
+    } catch (IndexOutOfBoundsException e){        	
+        throw new ExecutionError("j3.index.array.outofbounds", node);
+    }
+    return result;
     }
 
     /**
