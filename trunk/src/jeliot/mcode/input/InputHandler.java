@@ -28,34 +28,61 @@ public abstract class InputHandler  {
      * @return Input Handle, may throw NoSuchMethod Exception
      */
 
-    public Object handleInput(Class aClass, long counter, Method m, StaticMethodCall node, String prompt) {
-        
-        MCodeUtilities.write("" + Code.INPUT + Code.DELIM + (counter) + Code.DELIM
-                + m.getDeclaringClass().getName() + Code.DELIM + m.getName() + Code.DELIM
-                + aClass.getName() + Code.DELIM + prompt + Code.DELIM + MCodeUtilities.locationToString(node));
-        
-        return handleInput(aClass);
-    }
-
-
-    protected abstract Object handleInput(Class aClass);
-
-    public abstract void setInputReader(BufferedReader in);
-
-    public abstract boolean isIntegerInputMethod(Method m);
-
-    public abstract boolean isDoubleInputMethod(Method m);
-
-    public abstract boolean isLongInputMethod(Method m);
-
-    public abstract boolean isByteInputMethod(Method m);
-
-    public abstract boolean isCharInputMethod(Method m);
-
-    public abstract boolean isFloatInputMethod(Method m);
-
-    public abstract boolean isStringInputMethod(Method m);
-
-    public abstract boolean isShortInputMethod(Method m);
-
+	public Object handleInput(Class aClass, long counter, Method m,
+			StaticMethodCall node, String prompt) {
+		if (prompt != null && prompt.length() > 0) {
+			out(counter, "print", prompt, node);
+			counter ++;
+		}
+		
+		MCodeUtilities.write("" + Code.INPUT + Code.DELIM + counter +
+				Code.DELIM
+				+ m.getDeclaringClass().getName() + Code.DELIM +
+				m.getName() + Code.DELIM
+				+ aClass.getName() + Code.DELIM + prompt + Code.DELIM +
+				MCodeUtilities.locationToString(node));
+		
+		
+		Object result = handleInput(aClass);
+		
+		if (prompt != null && prompt.length() > 0) {
+			counter ++;
+			out(counter, "println", result.toString(), node);
+		}
+		
+		
+		return result;
+	}
+	
+	public void out(final long counter, final String methodPrint, final
+			String output, final StaticMethodCall node) {
+		MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
+				+ counter + Code.DELIM + "System.out"
+				+ Code.DELIM + methodPrint + Code.DELIM
+				+ output + Code.DELIM
+				+ String.class.getName() + Code.DELIM
+				+ (methodPrint.equals("println") ? "1" : "0")
+				+ Code.DELIM
+				+ MCodeUtilities.locationToString(node));
+	}
+	protected abstract Object handleInput(Class aClass);
+	
+	public abstract void setInputReader(BufferedReader in);
+	
+	public abstract boolean isIntegerInputMethod(Method m);
+	
+	public abstract boolean isDoubleInputMethod(Method m);
+	
+	public abstract boolean isLongInputMethod(Method m);
+	
+	public abstract boolean isByteInputMethod(Method m);
+	
+	public abstract boolean isCharInputMethod(Method m);
+	
+	public abstract boolean isFloatInputMethod(Method m);
+	
+	public abstract boolean isStringInputMethod(Method m);
+	
+	public abstract boolean isShortInputMethod(Method m);
+	
 }
