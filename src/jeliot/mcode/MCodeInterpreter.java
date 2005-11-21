@@ -1174,14 +1174,15 @@ public abstract class MCodeInterpreter {
 
                         //int values of the dimension sizes
                         String dimensionSizes = tokenizer.nextToken();
-
+                        //number of real dimensions the array has, even if they are not yet allocated	
+                        int actualDimension = Integer.parseInt(tokenizer.nextToken());
                         Highlight h = null;
                         if (tokenizer.hasMoreElements()) {
                             h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                         }
 
                         handleCodeAA(expressionReference, hashCode, compType, dims,
-                                dimensionReferences, dimensionSizes, h);
+                                dimensionReferences, dimensionSizes,actualDimension, h);
                         break;
                     }
 
@@ -1513,11 +1514,12 @@ public abstract class MCodeInterpreter {
      * @param dims
      * @param dimensionReferences
      * @param dimensionSizes
+     * @param actualdimensions
      * @param h
      */
     protected abstract void handleCodeAA(long expressionReference, String hashCode,
             String compType, int dims, String dimensionReferences, String dimensionSizes,
-            Highlight h);
+            int actualdimensions, Highlight h);
 
     /**
      * @param scope

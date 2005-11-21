@@ -579,7 +579,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeAA(long, java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
-    protected void handleCodeAA(long expressionReference, String hashCode, String compType, int dims, String dimensionReferences, String dimensionSizes, Highlight h) {
+    protected void handleCodeAA(long expressionReference, String hashCode, String compType, int dims, String dimensionReferences, String dimensionSizes, int actualdimensions, Highlight h) {
     }
 
     /* (non-Javadoc)

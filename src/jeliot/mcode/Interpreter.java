@@ -2753,6 +2753,8 @@ public class Interpreter {
                             dimensionSize[i] = Integer.parseInt(st.nextToken());
                         }
 
+                        int actualDimension = Integer.parseInt(tokenizer.nextToken());
+                        
                         Highlight h = null;
                         if (tokenizer.hasMoreElements()) {
                             h = MCodeUtilities.makeHighlight(tokenizer
@@ -2768,12 +2770,12 @@ public class Interpreter {
                         }
 
                         ArrayInstance ai = new ArrayInstance(hashCode,
-                                compType, dimensionSize.length, dimensionSize[0]);
+                                compType, dimensionSize.length, actualDimension, dimensionSize[0]);
 
                         Reference ref = new Reference(ai);
 
                         director.showArrayCreation(ai, ref, null, null, dimensionValues,
-                                expressionReference, h);
+                                expressionReference, actualDimension,  h);
 
                         //director.arrayCreation(dimensionSize, h);
 

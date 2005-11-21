@@ -1933,6 +1933,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + dims.length + Code.DELIM
                 + MCodeUtilities.arrayToString(dimExpressionReferences)
                 + Code.DELIM + dimensions + Code.DELIM
+                + node.getDimension() + Code.DELIM
                 + MCodeUtilities.locationToString(node));
         return newArray;
     }
@@ -2047,8 +2048,12 @@ public class EvaluationVisitor extends VisitorObject {
 			arrayCellReferencesStack.push(arrayCellReferencesList);
 		}
         */
-
-        Object result = Array.get(t, ((Number) o).intValue());
+        Object result = null;
+        try {
+        	result = Array.get(t, ((Number) o).intValue());
+        } catch (IndexOutOfBoundsException e){        	
+            throw new ExecutionError("j3.index.array.outofbounds", node);
+        }
         String resultString;
         if (result != null) {
             resultString = MCodeUtilities.getValue(result);
