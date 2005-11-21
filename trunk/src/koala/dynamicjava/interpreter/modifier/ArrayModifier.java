@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import koala.dynamicjava.interpreter.EvaluationVisitor;
+import koala.dynamicjava.interpreter.NodeProperties;
 import koala.dynamicjava.interpreter.context.Context;
 import koala.dynamicjava.interpreter.error.ExecutionError;
 import koala.dynamicjava.tree.ArrayAccess;
@@ -69,55 +70,62 @@ public class ArrayModifier extends LeftHandSideModifier {
     /**
      * A list used to manage recursive calls
      */
-    protected List cells  = new LinkedList();
+    protected List cells = new LinkedList();
 
     /**
      * Creates a new array modifier
      * @param node the node of that represents this array
      */
     public ArrayModifier(ArrayAccess node) {
-	this.node = node;
+        this.node = node;
     }
 
     /**
      * Prepares the modifier for modification
      */
     public Object prepare(Visitor v, Context ctx) {
-	arrays.add(0, array);
-	cells.add(0, cell);
-        EvaluationVisitor.setPreparing(); // Indicates to evaluation visitor 
-                                          // not to return E-Code
-	array = node.getExpression().acceptVisitor(v);
-	Object o   = node.getCellNumber().acceptVisitor(v);
+        arrays.add(0, array);
+        cells.add(0, cell);
+        
+        // Jeliot 3: Indicates to evaluation visitor not to return M-Code
+        EvaluationVisitor.setPreparing(); 
+        
+        array = node.getExpression().acceptVisitor(v);
+        Object o = node.getCellNumber().acceptVisitor(v);
+        
         EvaluationVisitor.unsetPreparing();
-	if (o instanceof Character) {
-	    o = new Integer(((Character)o).charValue());
-	}
-	cell = (Number)o;
-	Object result = null;
-	try {
-    	result = Array.get(array, cell.intValue());
-    } catch (IndexOutOfBoundsException e){        	
-        throw new ExecutionError("j3.index.array.outofbounds", node);
-    }
-    return result;
+        
+        if (o instanceof Character) {
+            o = new Integer(((Character) o).charValue());
+        }
+        cell = (Number) o;
+        try {
+            return Array.get(array, cell.intValue());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { "" + (Array.getLength(array) - 1), "" + cell.intValue()});
+            throw new ExecutionError("j3.array.index.out.of.bounds", node);
+        }
     }
 
     /**
      * Sets the value of the underlying left hand side expression
      */
     public void modify(Context ctx, Object value) {
-	try {
-	    Array.set(array, cell.intValue(), value);
-	} catch (IllegalArgumentException e) {
-	    // !!! Hummm ...
-	    if (e.getMessage().equals("array element type mismatch")) {
-		throw new ArrayStoreException();
-	    }
-	    throw e;
-	} finally {
-	    array = arrays.remove(0);
-	    cell  = (Number)cells.remove(0);
-	}
+        try {
+            Array.set(array, cell.intValue(), value);
+        } catch (IllegalArgumentException e) {
+            // !!! Hummm ...
+            if (e.getMessage().equals("array element type mismatch")) {
+                throw new ExecutionError(e.getMessage(), node);
+                //throw new ArrayStoreException();
+            }
+            throw e;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { "" + (Array.getLength(array) - 1), "" + cell.intValue()});
+            throw new ExecutionError("j3.array.index.out.of.bounds", node);
+        } finally {
+            array = arrays.remove(0);
+            cell = (Number) cells.remove(0);
+        }
     }
 }

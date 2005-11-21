@@ -51,14 +51,14 @@ public class InvalidModifier extends LeftHandSideModifier {
      * @param n the node
      */
     public InvalidModifier(Node n) {
-	node  = n;
+        node = n;
     }
 
     /**
      * Prepares the modifier for modification
      */
     public Object prepare(Visitor v, Context ctx) {
-	throw new ExecutionError("cannot.modify", node);
+        throw new ExecutionError("cannot.modify", node);
     }
 
     /**
