@@ -1303,7 +1303,7 @@ public class EvaluationVisitor extends VisitorObject {
         MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                 + Code.DELIM + "this" + Code.DELIM
                 + MCodeUtilities.getValue(thisObject) + Code.DELIM
-                + thisObject.getClass().getName() + Code.DELIM
+                + MCodeUtilities.getFullQualifiedClassname(thisObject.getClass()) + Code.DELIM
                 + MCodeUtilities.locationToString(node));
 
         if (larg != null) {
@@ -1690,7 +1690,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                 + Code.DELIM + node.getRepresentation() + Code.DELIM + value
-                + Code.DELIM + c.getName() + Code.DELIM
+                + Code.DELIM + MCodeUtilities.getFullQualifiedClassname(c) + Code.DELIM
                 + MCodeUtilities.locationToString(node));
 
         return result;
@@ -1717,7 +1717,7 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                     + Code.DELIM + node.getRepresentation() + Code.DELIM
                     + MCodeUtilities.getValue(result) + Code.DELIM
-                    + c.getName() + Code.DELIM
+                    + MCodeUtilities.getFullQualifiedClassname(c) + Code.DELIM
                     + MCodeUtilities.locationToString(node));
 
             return result;
