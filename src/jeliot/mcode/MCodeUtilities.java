@@ -1484,6 +1484,6 @@ public class MCodeUtilities {
     public static String getFullQualifiedClassname(Class c) {
         if (!c.isArray())
             return c.getName();
-        return "["+getFullQualifiedClassname(c.getComponentType());  //To change body of created methods use File | Settings | File Templates.
+        return "["+getFullQualifiedClassname(c.getComponentType());
     }
 }

@@ -1191,10 +1191,10 @@ public class TreeInterpreter implements Interpreter {
         		// so to describe a this call,
         		
         		MCodeUtilities.write("" + Code.QN + Code.DELIM + counter + Code.DELIM + "this"
-        				+ Code.DELIM + Code.UNKNOWN + Code.DELIM + c.getName() + Code.DELIM + "0,0,0,0");
+        				+ Code.DELIM + Code.UNKNOWN + Code.DELIM + MCodeUtilities.getFullQualifiedClassname(c) + Code.DELIM + "0,0,0,0");
         		
         		MCodeUtilities.write("" + Code.OMC + Code.DELIM + methodName + Code.DELIM + "0"
-        				+ Code.DELIM + counter + Code.DELIM + c.getName() + Code.DELIM + MCodeUtilities.locationToString(cpd.cd));
+        				+ Code.DELIM + counter + Code.DELIM + MCodeUtilities.getFullQualifiedClassname(c) + Code.DELIM + MCodeUtilities.locationToString(cpd.cd));
         		//+ MCodeUtilities.locationToString(meth));
         		
         	} else {
