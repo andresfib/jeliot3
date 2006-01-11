@@ -29,9 +29,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -61,7 +59,6 @@ import jeliot.Jeliot;
 import jeliot.calltree.TreeDraw;
 import jeliot.historyview.HistoryView;
 import jeliot.mcode.InterpreterError;
-import jeliot.mcode.MCodeUtilities;
 import jeliot.printing.PrintingUtil;
 import jeliot.theater.Animation;
 import jeliot.theater.AnimationEngine;
@@ -74,6 +71,7 @@ import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
+import jeliot.util.SourceCodeUtilities;
 import jeliot.util.UserProperties;
 
 import org.syntax.jeliot_jedit.JEditTextArea;
@@ -1557,7 +1555,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
             String programCode = editor.getProgram();
 
             if (methodCall == null) {
-                methodCall = findMainMethodCall(programCode);
+                methodCall = SourceCodeUtilities.findMainMethodCall(programCode, askForMainMethodParameters, this.frame);
                 if (askForMethod || methodCall == null) {
                     methodCall = ((methodCall != null) ? methodCall : null);
                     String inputValue = JOptionPane
@@ -1649,118 +1647,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * from.substring(0,index) + with + from.substring(index+1,from.length());
      * index = from.indexOf(c); } return from; }
      */
-
-    private static final Pattern method1 = Pattern
-            .compile("\\s+static\\s+void\\s+main\\s*\\(\\s*String[^,]*\\[\\s*\\][^,]*\\)");
-
-    private static final Pattern method2 = Pattern
-            .compile("\\s+static\\s+void\\s+main\\s*\\(\\s*\\)");
-
-    private static final Pattern class1 = Pattern.compile("\\s+class\\s+");
-
-    private static final Pattern class2 = Pattern.compile("\\s");
-
-    /**
-     * Tries to find the main method declaration
-     * from one of the classes.
-     * 
-     * @param programCode
-     * @return
-     */
-    public String findMainMethodCall(String programCode) {
-
-        String commentsRemoved = removeComments(programCode);
-        commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\n", " ");
-        commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\r", " ");
-        commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\t", " ");
-        commentsRemoved = " " + commentsRemoved;
-
-        //System.out.println(p.pattern());
-        String[] method = method1.split(commentsRemoved, 2);
-        //String[] method = programCode.split("\\s+static\\s+void\\s+main\\s*\\(\\s*String[^,]*\\[\\s*\\]\\s[^,]*\\)", 2);
-        if (method.length > 1 && method[1].length() > 0) {
-            //System.out.println(method[0]);
-            //System.out.println(method[1]);
-            String[] classes = class1.split(method[0]);
-            String[] classNames = class2.split(classes[classes.length - 1]);
-            String className = classNames[0].replace('{', ' ');
-            className = className.trim();
-            if (className.length() > 0) {
-                //System.out.println(className + ".main(new String[0]);");
-                String methodCallBeginning = className + ".main(new String[] {";
-                String methodCallEnd = "});";
-                String parameters = "";
-                if (askForMainMethodParameters) {
-                    String inputValue = JOptionPane
-                            .showInputDialog(
-                                    this.frame,
-                                    messageBundle
-                                            .getString("dialog.ask_for_main_parameters")
-                                            + " " + className, "");
-                    if (inputValue != null && inputValue.length() > 0) {
-                        StringTokenizer st = new StringTokenizer(inputValue
-                                .trim());
-                        while (st.hasMoreTokens()) {
-                            parameters += "\"" + st.nextToken() + "\"";
-                            parameters += (st.hasMoreTokens() ? "," : "");
-                        }
-                    }
-                }
-                return methodCallBeginning + parameters + methodCallEnd;
-            }
-        }
-
-        method = method2.split(commentsRemoved, 2);
-
-        if (method.length > 1 && method[1].length() > 0) {
-            //System.out.println(method[0]);
-            //System.out.println(method[1]);
-            String[] classes = class1.split(method[0]);
-            String[] classNames = class2.split(classes[classes.length - 1]);
-            String className = classNames[0].replace('{', ' ');
-            className = className.trim();
-            if (className.length() > 0) {
-                //System.out.println(className + ".main();");
-                return className + ".main();";
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Removes the comments from the source code.
-     * 
-     * @param programCode
-     *            the source code
-     * @return the source code without comments
-     */
-    public String removeComments(String programCode) {
-
-        String lineComment = "//";
-        String beginningComment = "/*";
-        String endingComment = "*/";
-
-        int index = programCode.indexOf(beginningComment);
-
-        while (index > -1) {
-            int endIndex = programCode.indexOf(endingComment, index);
-            programCode = programCode.substring(0, index)
-                    + programCode.substring(endIndex, programCode.length());
-            index = programCode.indexOf(beginningComment);
-        }
-
-        index = programCode.indexOf(lineComment);
-
-        while (index > -1) {
-            int endIndex = programCode.indexOf('\n', index);
-            programCode = programCode.substring(0, index)
-                    + programCode.substring(endIndex, programCode.length());
-            index = programCode.indexOf(lineComment);
-        }
-
-        return programCode;
-
-    }
 
     /**
      * Shows the given error message and sets the buttons and menuitems for
