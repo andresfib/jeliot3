@@ -702,7 +702,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeAA(long expressionReference, String hashCode,
             String compType, int dims, String dimensionReferences,
-            String dimensionSizes,int actualDimension, Highlight h) {
+            String dimensionSizes, int actualDimension, Highlight h) {
 
         StringTokenizer st = new StringTokenizer(dimensionReferences,
                 Code.LOC_DELIM);
