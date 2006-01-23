@@ -930,8 +930,8 @@ public class ActorFactory {
      * @param paramCount
      * @return
      */
-    public ACActor produceACActor(String name, int paramCount) {
-        ACActor actor = new ACActor(name, paramCount);
+    public ACActor produceACActor(String name, int paramCount, int emptyBracketsCount) {
+        ACActor actor = new ACActor(name, paramCount, emptyBracketsCount);
         actor.setFont(ACFont);
         actor.setBackground(ACColor);
         actor.setInsets(new Insets(6, 6, 6, 6));

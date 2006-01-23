@@ -2361,7 +2361,7 @@ public class Director {
             n = lenVal.length;
         }
         ACActor actor = factory.produceACActor("new "
-                + MCodeUtilities.resolveComponentType(array.getComponentType()), n);
+                + MCodeUtilities.resolveComponentType(array.getComponentType()), n, actualDimension - n);
         ExpressionActor ea = currentScratch.getExpression(1, -1);
         currentScratch.registerCrap(actor);
 

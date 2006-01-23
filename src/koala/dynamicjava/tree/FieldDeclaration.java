@@ -87,7 +87,7 @@ public class FieldDeclaration extends Node {
      * @exception IllegalArgumentException if name is null or type is null
      */
     public FieldDeclaration(int flags, Type type, String name, Expression init) {
-	this(flags, type, name, init, null, 0, 0 ,0 ,0);
+        this(flags, type, name, init, null, 0, 0, 0, 0);
     }
 
     /**
@@ -104,44 +104,46 @@ public class FieldDeclaration extends Node {
      * @exception IllegalArgumentException if name is null or type is null
      */
     public FieldDeclaration(int flags, Type type, String name, Expression init,
-			    String fn, int bl, int bc, int el, int ec) {
-	super(fn, bl, bc, el, ec);
+            String fn, int bl, int bc, int el, int ec) {
+        super(fn, bl, bc, el, ec);
 
-	if (type == null) throw new IllegalArgumentException("type == null");
-	if (name == null) throw new IllegalArgumentException("name == null");
+        if (type == null)
+            throw new IllegalArgumentException("type == null");
+        if (name == null)
+            throw new IllegalArgumentException("name == null");
 
-	accessFlags = flags;
-	this.type   = type;
-	this.name   = name;
-	initializer = init;
+        accessFlags = flags;
+        this.type = type;
+        this.name = name;
+        initializer = init;
 
-	if (type instanceof ArrayType) {
-	    if (initializer instanceof ArrayInitializer) {
-		((ArrayInitializer)initializer).setElementType
-		    (((ArrayType)type).getElementType());
-	    }
-	}
+        if (type instanceof ArrayType) {
+            if (initializer instanceof ArrayInitializer) {
+                ((ArrayInitializer) initializer)
+                        .setElementType(((ArrayType) type).getElementType());
+            }
+        }
     }
 
     /**
      * Returns the access flags for this method
      */
     public int getAccessFlags() {
-	return accessFlags;
+        return accessFlags;
     }
 
     /**
      * Sets the access flags for this constructor
      */
     public void setAccessFlags(int f) {
-	firePropertyChange(ACCESS_FLAGS, accessFlags, accessFlags = f);
+        firePropertyChange(ACCESS_FLAGS, accessFlags, accessFlags = f);
     }
 
     /**
      * Gets the declared type for this field
      */
     public Type getType() {
-	return type;
+        return type;
     }
 
     /**
@@ -149,40 +151,42 @@ public class FieldDeclaration extends Node {
      * @exception IllegalArgumentException if t is null
      */
     public void setType(Type t) {
-	if (t == null) throw new IllegalArgumentException("t == null");
+        if (t == null)
+            throw new IllegalArgumentException("t == null");
 
-	firePropertyChange(TYPE, type, type = t);
+        firePropertyChange(TYPE, type, type = t);
     }
 
     /**
      * Returns the name of this field
      */
     public String getName() {
-	return name;
+        return name;
     }
 
-     /**
+    /**
      * Sets the field's name
      * @exception IllegalArgumentException if s is null
      */
     public void setName(String s) {
-	if (s == null) throw new IllegalArgumentException("s == null");
+        if (s == null)
+            throw new IllegalArgumentException("s == null");
 
-	firePropertyChange(NAME, name, name = s);
+        firePropertyChange(NAME, name, name = s);
     }
 
-   /**
+    /**
      * Returns the initializer for this field
      */
     public Expression getInitializer() {
-	return initializer;
+        return initializer;
     }
 
     /**
      * Sets the initializer
      */
     public void setInitializer(Expression e) {
-	firePropertyChange(INITIALIZER, initializer, initializer = e);
+        firePropertyChange(INITIALIZER, initializer, initializer = e);
     }
 
     /**
@@ -190,6 +194,6 @@ public class FieldDeclaration extends Node {
      * @param visitor the visitor to accept
      */
     public Object acceptVisitor(Visitor visitor) {
-	return visitor.visit(this);
-    }    
+        return visitor.visit(this);
+    }
 }

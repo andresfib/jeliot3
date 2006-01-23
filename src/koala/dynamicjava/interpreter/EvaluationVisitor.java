@@ -1300,10 +1300,17 @@ public class EvaluationVisitor extends VisitorObject {
         Object thisObject = context.getHiddenArgument();
         long objectCounter = counter;
 
-        MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
-                + Code.DELIM + "this" + Code.DELIM
-                + MCodeUtilities.getValue(thisObject) + Code.DELIM
-                + MCodeUtilities.getFullQualifiedClassname(thisObject.getClass()) + Code.DELIM
+        MCodeUtilities.write(""
+                + Code.QN
+                + Code.DELIM
+                + (counter++)
+                + Code.DELIM
+                + "this"
+                + Code.DELIM
+                + MCodeUtilities.getValue(thisObject)
+                + Code.DELIM
+                + MCodeUtilities.getFullQualifiedClassname(thisObject
+                        .getClass()) + Code.DELIM
                 + MCodeUtilities.locationToString(node));
 
         if (larg != null) {
@@ -1690,8 +1697,8 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                 + Code.DELIM + node.getRepresentation() + Code.DELIM + value
-                + Code.DELIM + MCodeUtilities.getFullQualifiedClassname(c) + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + Code.DELIM + MCodeUtilities.getFullQualifiedClassname(c)
+                + Code.DELIM + MCodeUtilities.locationToString(node));
 
         return result;
     }
@@ -1936,14 +1943,15 @@ public class EvaluationVisitor extends VisitorObject {
         }
         //TODO: get all the hashcodes of the different dimensions from the array
 
+        //System.out.println("Array allocator");
+
         MCodeUtilities.write("" + Code.AA + Code.DELIM + arrayAllocationCounter
                 + Code.DELIM + MCodeUtilities.getValue(newArray) /*Integer.toHexString(newArray.hashCode())*/
                 + Code.DELIM + NodeProperties.getComponentType(node).getName()
                 + Code.DELIM + dims.length + Code.DELIM
                 + MCodeUtilities.arrayToString(dimExpressionReferences)
-                + Code.DELIM + dimensions + Code.DELIM
-                + node.getDimension() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + Code.DELIM + dimensions + Code.DELIM + node.getDimension()
+                + Code.DELIM + MCodeUtilities.locationToString(node));
         return newArray;
     }
 
@@ -1964,18 +1972,25 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + size + Code.DELIM + int.class.getName()
                 + Code.DELIM + MCodeUtilities.locationToString(node));
         Long[] dimExpressionReferences = { new Long(sizeCounter) };
-        int dimensions = 1;
         String arrayHashCode = Integer.toHexString(System
                 .identityHashCode(result));
         String dimensionsReferences = MCodeUtilities
                 .arrayToString(dimExpressionReferences);
         String componentType = ((Class) node.getElementType().getProperty(
                 "type")).getName();
+        int dimensions = 1;
+        int index = componentType.indexOf('[');
+        while (index >= 0) {
+            dimensions++;
+            index = componentType.indexOf('[', index + 1);
+        }
+
+        //System.out.println("Array initializer");
 
         MCodeUtilities.write("" + Code.AA + Code.DELIM + arrayAllocationCounter
                 + Code.DELIM + arrayHashCode + Code.DELIM + componentType
-                + Code.DELIM + dimensions + Code.DELIM + dimensionsReferences
-                + Code.DELIM + size + Code.DELIM
+                + Code.DELIM + 1 /* only the first dimension is known now */ + Code.DELIM + dimensionsReferences
+                + Code.DELIM + size + Code.DELIM + dimensions + Code.DELIM
                 + MCodeUtilities.locationToString(node));
 
         MCodeUtilities.write("" + Code.AIBEGIN + Code.DELIM + size + Code.DELIM
@@ -2063,7 +2078,9 @@ public class EvaluationVisitor extends VisitorObject {
         try {
             result = Array.get(t, ((Number) o).intValue());
         } catch (ArrayIndexOutOfBoundsException e) {
-            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { "" + (Array.getLength(t) - 1), "" + ((Number) o).intValue()});
+            node.setProperty(NodeProperties.ERROR_STRINGS,
+                    new String[] { "" + (Array.getLength(t) - 1),
+                            "" + ((Number) o).intValue() });
             throw new ExecutionError("j3.array.index.out.of.bounds", node);
         }
 

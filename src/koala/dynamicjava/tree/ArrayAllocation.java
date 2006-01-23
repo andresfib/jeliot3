@@ -52,7 +52,7 @@ public class ArrayAllocation extends Allocation {
      * @exception IllegalArgumentException if tp is null or td is null
      */
     public ArrayAllocation(Type tp, TypeDescriptor td) {
-	this(tp, td, null, 0, 0, 0, 0);
+        this(tp, td, null, 0, 0, 0, 0);
     }
 
     /**
@@ -66,35 +66,36 @@ public class ArrayAllocation extends Allocation {
      * @param ec    the end column
      * @exception IllegalArgumentException if tp is null or td is null
      */
-    public ArrayAllocation(Type tp, TypeDescriptor td,
-			   String fn, int bl, int bc, int el, int ec) {
-	super(tp, fn, bl, bc, el, ec);
+    public ArrayAllocation(Type tp, TypeDescriptor td, String fn, int bl,
+            int bc, int el, int ec) {
+        super(tp, fn, bl, bc, el, ec);
 
-	if (td == null) throw new IllegalArgumentException("td == null");
+        if (td == null)
+            throw new IllegalArgumentException("td == null");
 
-	typeDescriptor = td;
-	td.initialize(tp);
+        typeDescriptor = td;
+        td.initialize(tp);
     }
 
     /**
      * Returns the dimension of the array
      */
     public int getDimension() {
-	return typeDescriptor.dimension;
+        return typeDescriptor.dimension;
     }
 
     /**
      * Returns the size expressions
      */
     public List getSizes() {
-	return typeDescriptor.sizes;
+        return typeDescriptor.sizes;
     }
 
     /**
      * Returns the initialization expression
      */
     public ArrayInitializer getInitialization() {
-	return typeDescriptor.initialization;
+        return typeDescriptor.initialization;
     }
 
     /**
@@ -102,63 +103,60 @@ public class ArrayAllocation extends Allocation {
      * @param visitor the visitor to accept
      */
     public Object acceptVisitor(Visitor visitor) {
-	return visitor.visit(this);
+        return visitor.visit(this);
     }
 
     /**
      * This class contains informations about the array to create
      */
     public static class TypeDescriptor {
-	/**
-	 * The array dimension sizes
-	 */
-	List sizes;
+        /**
+         * The array dimension sizes
+         */
+        List sizes;
 
-	/**
-	 * The array dimension
-	 */
-	int dimension;
+        /**
+         * The array dimension
+         */
+        int dimension;
 
-	/**
-	 * The initialization expression
-	 */
-	ArrayInitializer initialization;
+        /**
+         * The initialization expression
+         */
+        ArrayInitializer initialization;
 
-	/**
-	 * The end line
-	 */
-	public int endLine;
+        /**
+         * The end line
+         */
+        public int endLine;
 
-	/**
-	 * The end column
-	 */
-	public int endColumn;
+        /**
+         * The end column
+         */
+        public int endColumn;
 
-	/**
-	 * Creates a new type descriptor
-	 */
-	public TypeDescriptor(List sizes, int dim,
-			      ArrayInitializer init, int el, int ec) {
-	    this.sizes     = sizes;
-	    dimension      = dim;
-	    initialization = init;
-	    endLine        = el;
-	    endColumn      = ec;
-	}
+        /**
+         * Creates a new type descriptor
+         */
+        public TypeDescriptor(List sizes, int dim, ArrayInitializer init,
+                int el, int ec) {
+            this.sizes = sizes;
+            dimension = dim;
+            initialization = init;
+            endLine = el;
+            endColumn = ec;
+        }
 
-	/**
-	 * Initializes the type descriptor
-	 */
-	void initialize(Type t) {
-	    if (initialization != null) {
-		Type et = (dimension > 1)
-		    ? new ArrayType(t, dimension,
-				    t.getFilename(),
-				    t.getBeginLine(), t.getBeginColumn(),
-				    endLine, endColumn)
-		    : t;
-		initialization.setElementType(et);
-	    }
-	}
+        /**
+         * Initializes the type descriptor
+         */
+        void initialize(Type t) {
+            if (initialization != null) {
+                Type et = (dimension > 1) ? new ArrayType(t, dimension - 1, /* Jeliot 3: added - 1 because otherwise dimension of component types is too large. */
+                        t.getFilename(), t.getBeginLine(), t.getBeginColumn(),
+                        endLine, endColumn) : t;
+                initialization.setElementType(et);
+            }
+        }
     }
 }

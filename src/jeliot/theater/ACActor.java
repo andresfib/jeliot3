@@ -20,69 +20,78 @@ public class ACActor extends Actor implements ActorContainer{
     /**
 	 *
 	 */
-	String name;
+	private String name;
 
     /**
 	 *
 	 */
-	Actor[] actors;
+    private Actor[] actors;
     
     /**
 	 *
 	 */
-	Point[] locs;
+    private Point[] locs;
     
     /**
 	 *
 	 */
-	boolean[] bound;
+    private boolean[] bound;
     
     /**
 	 *
 	 */
-	int next = 0;
+    private int next = 0;
 
     /**
 	 *
 	 */
-	int margin = 2;
+    private int margin = 2;
     
     
     /**
 	 *
 	 */
-	int namey;
+    private int namey;
     
     /**
 	 *
 	 */
-	int namex;
+    private int namex;
     
 	/**
 	 *
 	 */
-	int namew;
+    private int namew;
     
 	/**
 	 *
 	 */
-	int nameh;
+    private int nameh;
     
     /**
 	 *
 	 */
-	int bracketMargin;
+    private int bracketMargin;
 
+    /**
+     * If the dimension of the array is greater than the currently allocated part then empty brackets are shown in the end.
+     */
+    private String emptyBrackets;
+    
     /**
 	 * @param name
 	 * @param n
 	 */
-	public ACActor(String name, int n) {
+	public ACActor(String name, int n, int emptyBracketsCount) {
         this.name = name;
         actors = new Actor[n];
         locs = new Point[n];
         bound = new boolean[n];
-        bracketMargin = getFontMetrics().stringWidth("][") + 4;        
+        bracketMargin = getFontMetrics().stringWidth("][") + 4;
+        this.emptyBrackets = "";
+        for (int i = 0; i < emptyBracketsCount; i++) {
+            this.emptyBrackets += "[ ]";
+        }
     }
 
     /**
@@ -212,14 +221,14 @@ public class ACActor extends Actor implements ActorContainer{
 	       					 namey);
                     
 	       	} else {
-		       	g.drawString("]",
+		       	g.drawString("]" + emptyBrackets,
 	       					 locs[next-1].x +
 	       					 actors[next-1].getWidth() +
 	       					 margin,
 	       					 namey);
     	        	}
 		} else {
-        	g.drawString(name + "[]", namex, namey);			
+        	g.drawString(name + emptyBrackets, namex, namey);			
 		}
 
         paintActors(g);
