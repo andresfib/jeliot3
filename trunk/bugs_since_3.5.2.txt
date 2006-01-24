@@ -1,0 +1,4 @@
+- Bugs relating to array initializers: (fixed)
+	- Array initializer wasn't generating acceptable MCode because of the latest addition. Added ActualDimension.
+	- Array initializer with more than one dimension had incorrect element type in DJava. added (dimension - 1) into ArrayAllocation.TypeDescriptor.initialize(Type t).
+	
