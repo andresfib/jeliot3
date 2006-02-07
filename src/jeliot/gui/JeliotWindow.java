@@ -239,6 +239,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
     /** If animation is running until certain line */
     private boolean runningUntil = false;
 
+    private boolean useNullInMainMethodCall = false;
+
     /** If user wants to record the mcode to the corresponding animation */
 
     /*    private MCodeSaver mCodeSaver = null;*/
@@ -523,7 +525,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 this.tabbedPane.addTab(messageBundle
                         .getString("tab.title.call_tree"), callTree
                         .getComponent());
-                this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_E);
+                this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_A);
 
                 this.tabbedPane.addTab(messageBundle
                         .getString("tab.title.history"), hv);
@@ -700,7 +702,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
         programMenu.add(menuItem);
 
         programMenu.addSeparator();
-        //TODO: 
+
+        //TODO: MCodeSaver
         //programMenu.add(mCodeSaver.makeSaverMenuItem());
         //programMenu.add(mCodeSaver.makeOpenMCodeMenuItem());
 
@@ -713,20 +716,22 @@ public class JeliotWindow implements PauseListener, MouseListener {
         menuItem.addActionListener(exit);
         programMenu.add(menuItem);
 
+        addMenuIntoWidgets(programMenu, editWidgets);
+        //editWidgets.addElement(programMenu);
         menuBar.add(programMenu);
-        editWidgets.addElement(programMenu);
 
         JMenu editMenu = editor.makeEditMenu();
-
+        addMenuIntoWidgets(editMenu, editWidgets);
+        //editWidgets.addElement(editMenu);
         menuBar.add(editMenu);
-        editWidgets.addElement(editMenu);
 
         JMenu controlMenu = makeControlMenu();
         menuBar.add(controlMenu);
 
         JMenu animationMenu = makeAnimationMenu();
+        addMenuIntoWidgets(animationMenu, animWidgets);
+        //animWidgets.addElement(animationMenu);
         menuBar.add(animationMenu);
-        animWidgets.addElement(animationMenu);
 
         JMenu optionsMenu = makeOptionsMenu();
         menuBar.add(optionsMenu);
@@ -741,9 +746,25 @@ public class JeliotWindow implements PauseListener, MouseListener {
     }
 
     /**
-     * Adds the given JMenu's JMenuItems into the Vector animationMenuItems.
+     * 
+     * @param menu
+     * @param widgets
      */
-    public void addInAnimationMenuItems(JMenu[] jm) {
+    private void addMenuIntoWidgets(JMenu menu, Vector widgets) {
+        for (int i = 0; i < menu.getItemCount(); i++) {
+            JMenuItem item = menu.getItem(i);
+            if (item != null) {
+                widgets.add(item);
+            }
+        }
+        widgets.add(menu);
+    }
+
+    /**
+     * Adds the given JMenu's
+     * JMenuItems into the Vector animationMenuItems.
+     */
+    private void addInAnimationMenuItems(JMenu[] jm) {
         for (int i = 0; i < jm.length; i++) {
             int length = jm[i].getItemCount();
             for (int j = 0; j < length; j++) {
@@ -847,6 +868,33 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 });
         menu.add(askForMainMethodParametersMenuItem);
 
+        //Use null parameter when calling main(String[] args).
+        if (jeliotUserProperties.containsKey("use_null_to_call_main")) {
+            this.useNullInMainMethodCall = Boolean.valueOf(
+                    jeliotUserProperties
+                            .getStringProperty("use_null_to_call_main"))
+                    .booleanValue();
+        } else {
+            jeliotUserProperties.setStringProperty("use_null_to_call_main",
+                    Boolean.toString(this.useNullInMainMethodCall));
+        }
+        final JCheckBoxMenuItem useNullInMainMethodCallMenuItem = new JCheckBoxMenuItem(
+                messageBundle.getString("menu.options.use_null_to_call_main"),
+                this.useNullInMainMethodCall);
+        useNullInMainMethodCallMenuItem.setMnemonic(KeyEvent.VK_U);
+        useNullInMainMethodCallMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_U, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+
+        useNullInMainMethodCallMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JeliotWindow.this.useNullInMainMethodCall = useNullInMainMethodCallMenuItem
+                        .getState();
+                jeliotUserProperties.setBooleanProperty(
+                        "use_null_to_call_main", useNullInMainMethodCall);
+            }
+        });
+        menu.add(useNullInMainMethodCallMenuItem);
+
         //Pause on message
         if (jeliotUserProperties.containsKey("pause_on_message")) {
             showMessagesInDialogs = jeliotUserProperties
@@ -892,7 +940,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 jeliot.getHistoryView().isEnabled());
         enableHistoryViewMenuItem.setMnemonic(KeyEvent.VK_H);
         enableHistoryViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_H, ActionEvent.CTRL_MASK));
+                KeyEvent.VK_H, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
         enableHistoryViewMenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -914,7 +962,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 .getString("menu.options.font_select"));
         menuItem.setMnemonic(KeyEvent.VK_F);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
-                ActionEvent.CTRL_MASK));
+                ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -1432,7 +1480,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
      *            Sets wheter the components are enabled or disabled.
      */
     private void enableWidgets(Enumeration enumeration, boolean enable) {
-
         while (enumeration.hasMoreElements()) {
             Component comp = (Component) enumeration.nextElement();
             comp.setEnabled(enable);
@@ -1555,7 +1602,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
             String programCode = editor.getProgram();
 
             if (methodCall == null) {
-                methodCall = SourceCodeUtilities.findMainMethodCall(programCode, askForMainMethodParameters, this.frame);
+                methodCall = SourceCodeUtilities.findMainMethodCall(
+                        programCode, askForMainMethodParameters, this.frame,
+                        this.useNullInMainMethodCall);
                 if (askForMethod || methodCall == null) {
                     methodCall = ((methodCall != null) ? methodCall : null);
                     String inputValue = JOptionPane

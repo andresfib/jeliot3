@@ -434,6 +434,7 @@ public class CodeEditor2 extends JComponent {
         menu.add(menuItem);
 
         menuItem = new JMenuItem(messageBundle.getString("menu.program.save_as"));
+        menuItem.setMnemonic(KeyEvent.VK_A);
         menuItem.addActionListener(saveAs);
         menu.add(menuItem);
 
@@ -763,7 +764,7 @@ public class CodeEditor2 extends JComponent {
         try {
             FileWriter w = new FileWriter(file);
 
-            //Taking out \t characters
+            //Replacing \t characters with spaces
             String code = replaceTabs(area.getText());
             w.write(code);
             w.close();

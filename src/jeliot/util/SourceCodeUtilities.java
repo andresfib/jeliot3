@@ -45,7 +45,7 @@ public class SourceCodeUtilities {
      * @return
      */
     public static String findMainMethodCall(String programCode,
-            boolean askForMainMethodParameters, JFrame frame) {
+            boolean askForMainMethodParameters, JFrame frame, boolean useNullInMainMethodCall) {
 
         String commentsRemoved = removeComments(programCode);
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\n", " ");
@@ -65,8 +65,10 @@ public class SourceCodeUtilities {
             className = className.trim();
             if (className.length() > 0) {
                 //System.out.println(className + ".main(new String[0]);");
-                String methodCallBeginning = className + ".main(new String[] {";
-                String methodCallEnd = "});";
+                String methodCallStart = className + ".main(";
+                String arrayStart = "new String[] {";
+                String arrayEnd = "}";
+                String methodCallEnd = ");";
                 String parameters = "";
                 if (askForMainMethodParameters) {
                     String inputValue = JOptionPane
@@ -83,8 +85,12 @@ public class SourceCodeUtilities {
                             parameters += (st.hasMoreTokens() ? "," : "");
                         }
                     }
+                    return methodCallStart + arrayStart + parameters + arrayEnd + methodCallEnd;
+                } else if (useNullInMainMethodCall) {
+                    return methodCallStart + "null" + methodCallEnd;                                        
+                } else {
+                    return methodCallStart + arrayStart + arrayEnd + methodCallEnd;                    
                 }
-                return methodCallBeginning + parameters + methodCallEnd;
             }
         }
 

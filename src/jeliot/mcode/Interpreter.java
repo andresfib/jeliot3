@@ -3208,7 +3208,7 @@ public class Interpreter {
      */
     public ObjectFrame createNewInstance(ClassInfo ci, Highlight h) {
         ObjectFrame of = new ObjectFrame("-1", ci.getName(), ci
-                .getFieldNumber());
+                .getNonStaticFieldsAmount());
 
         //director: create object
         director.showObjectCreation(of, h);
