@@ -85,6 +85,13 @@ Java Language and Interpreters:
 
 
 ----- JELIOT 3.5.X bugs and features: ------
+* Left hand side of assignments evaluated twice (i++ is evaluated twice array[i++]=j;)
+* Wrong assignments when self assigning post-increments k = k++;
+* Remember last opened directory
+* Mnemonic for editing and call tree conflict
+* Mnemonics accessible when they are not
+* Objects returned from methods to non declared variables raises Runtime excetption
+* More flexible way of handling 2-dimensional arrays (e.g. array[2]= new int[3];) (done)
 * Printing (done)
 * Fixed bugs related to constructors, super and this method calls (done)
 * Fixed bugs related to fonts and changing the fonts (done)
