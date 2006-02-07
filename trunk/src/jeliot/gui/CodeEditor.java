@@ -4,6 +4,7 @@
 package jeliot.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -234,6 +235,10 @@ public class CodeEditor extends JComponent {
      */
     private ActionListener allSelector = new ActionListener() {
          public void actionPerformed(ActionEvent e) {
+            if (e.getSource() instanceof Component) {
+                Component c = (Component) e.getSource();
+                if (!c.isEnabled()) return;
+            }
             area.requestFocusInWindow();
             area.selectAll();
         }

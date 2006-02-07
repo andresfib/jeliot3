@@ -396,6 +396,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         currentClass.declareField(name, "" + modifiers + Code.DELIM + type
                 + Code.DELIM + value + Code.DELIM + h);
 
+        //We create static variable if it deosn't exist already
         if (Modifier.isStatic(modifiers) && name.indexOf("$") < 0) {
             //find class and add the static field
             String className = currentClass.getName();
@@ -1278,7 +1279,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                         objectCreation.push(new Reference(of));
                     } else {
                         //TODO: Make the constructor call work for
-                        // semi-primitive types
+                        // semi-primitive types (wrappers and String)
                     }
 
                 } else {
@@ -1848,8 +1849,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         ClassInfo ci = (ClassInfo) classes.get(declaringClass);
 
         //If ci is not null it means that we are dealing with
-        //user defined class and can find the class
-        // information
+        //user defined class and can find the class information
         //extracted during the compilation with DynamicJava.
         //If ci is null there is no user defined class and we
         //need to use the Class.for(String name) method to
@@ -2883,7 +2883,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     public ObjectFrame createNewInstance(ClassInfo ci, Highlight h) {
         ObjectFrame of = new ObjectFrame("-1", ci.getName(), ci
-                .getFieldNumber());
+                .getNonStaticFieldsAmount());
 
         //director: create object
         director.showObjectCreation(of, h);
