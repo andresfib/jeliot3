@@ -1,4 +1,10 @@
 - Bugs relating to array initializers: (fixed)
 	- Array initializer wasn't generating acceptable MCode because of the latest addition. Added ActualDimension.
 	- Array initializer with more than one dimension had incorrect element type in DJava. added (dimension - 1) into ArrayAllocation.TypeDescriptor.initialize(Type t).
-- Static variables increase also object's variable count.
+- Static variables increase also object's variable count. (fixed)
+- Overlapping mnemonics in edit and call tree. (fixed)
+- Menu items can be used even though the menu is being disabled. (fixed)
+- Wrong assignments when self assigning post-increments k = k++; (fixed, however the visualization isn't very intuitive)
+- Left hand side of assignments evaluated twice (i++ is evaluated twice array[i++]=j;)
+- Remember last opened directory 
+- Objects returned from methods to non declared variables raises Runtime exception

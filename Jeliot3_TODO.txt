@@ -1,24 +1,30 @@
 ----- JELIOT 4/XP THOUGHTS LIST for next version 4.X:------
 
 Documentation:
-* Documentation of the tool (user guide, tutorial, examples etc.)
+* Documentation of the tool should be updated (user guide, tutorial, examples etc.)
 * The guide to install and use Jeliot in Finnish / Suomenkieliset asennus- ja käyttöohjeet.
 
 Testing:
 * We need some kind of test environment to test Jeliot properly.
 
 Jeliot features:
-* Interaction mode (like BlueJ's object bench)
+* Interaction mode (like BlueJ's object bench or separate coding view)
 
 Language support:
 * Support for Java 1.5.0 with the DrJava/DynamicJava.
 * Support for wrapper classes
 * Support other API classes and objects
 * Constructor calls highlighted correctly
-* super method calls go in the correct order
+* super method calls go in the correct order (done)
 * Super field access
 * Instance garbage collection
 * Support for inner classes
+
+* C/C++ support with some free interpreter.
+
+Editing:
+* Annotation possibility to the source and visualization views
+* Possibility to edit several source code files.
 
 Graphical:
 * Returned value should not stay in the return "bubble" after it has been used or should it?
@@ -26,6 +32,8 @@ Graphical:
 	* Semantic Zooming
 * Customize the visualization (change visual attributes or change the granularity of visualization)
 	* Adaptable Jeliot
+
+* Algorithm analysis view (how many operations, how many method calls etc.)
 
 Help:
 - Help associated with different commands/keywords of the programming language
@@ -40,8 +48,8 @@ Connections to other softwares:
 	* New visualization (e.g. connecting Call tree viewer with this)
 	* New m-code inputs (e.g. read m-code from file or a stream or from other program (i.e. proxy object)
 * Using Vivaldi-kernel as a tool to visualize object oriented programming on more abstract level.
-* Combining Jeliot and JHave supporting self-assesment and explanations
-* Generating explanations from the intermediate code
+* Combining Jeliot and JHave supporting self-assesment and explanations or using of other Q/A toolkits.
+* Generating natural language explanations from the intermediate code.
 * If we can find someone interested, we could integrate Jeliot into Eclipse and see what kind of possibilities it could offer. However, this will need a person that knows something about Eclipse and is motivated to dig in even more.
 * All the static accesses in the code should be changed to use a singleton pattern for each instance of Jeliot even inside one VM. This would permit several instances of Jeliot to be run in BlueJ and EJE. This will require at least changes in Classes: MCodeUtilities, EvaluationVisitor, Jeliot, Tracker, TrackerClock etc.
 * Java compilation with standard compiler to get compiler error messages first
@@ -52,20 +60,21 @@ JeCo:
 
 Jeliot BlueJ Extension (partially done):
 - Interaction mode for interaction between Jeliot and BlueJ and why not for experimentation in Jeliot.
-- Enhance the interaction between Jeliot and BlueJ.
+- Enhance the interaction between Jeliot and BlueJ also the side from Jeliot to BlueJ.
 - Collaboration extension to BlueJ?
 
+Extreme:
+- Programming by Example = From manipulation of the visualization to program.
 
 ----- JELIOT 3.6.X bugs and features: ------
 
 User Interface:
 - Possibility to open or extend the output console
-- The previous output should be removed when rewind button is pressed.
+- The previous output should be removed when rewind button is pressed. (done)
 - Change the size of the theater to the original size when rewound. When the animation is finished the space for a theater is not contracted to the original size so the scrollbars are all the time active and that can cause misconceptions or just be annoying.
 - Mnemonics and accelerator in Resources for internationalization
 
 Editor:
-- Find & Replace for editor (done)
 - The user shouldn't be able to highlight the code while the animation is playing
 
 Visualization:
@@ -78,7 +87,7 @@ Visualization:
 																							 _______
 - The layout manager of the objects should probably place the objects into rows and columns  |OOOOO|
                                                                                              |OOOOO|
-
+                                                                                             
 Java Language and Interpreters:
 - The array variable names are incorrect in method frame names (e.g. array[0].method() -> 34j3jd<hashcode>.method and not array[0].method() or something like that.
 - Separate different files in the intermediate code to avoid wrong code highlights when calling other than main methods.
@@ -86,12 +95,13 @@ Java Language and Interpreters:
 
 ----- JELIOT 3.5.X bugs and features: ------
 * Left hand side of assignments evaluated twice (i++ is evaluated twice array[i++]=j;)
-* Wrong assignments when self assigning post-increments k = k++;
-* Remember last opened directory
-* Mnemonic for editing and call tree conflict
-* Mnemonics accessible when they are not
-* Objects returned from methods to non declared variables raises Runtime excetption
+* Remember last opened directory 
+* Objects returned from methods to non declared variables raises Runtime exception
+* Wrong assignments when self assigning post-increments k = k++; (fixed, however the visualization isn't very intuitive)
+* Mnemonic for editing and call tree conflict (fixed)
+* Mnemonics accessible when they are not visible (fixed)
 * More flexible way of handling 2-dimensional arrays (e.g. array[2]= new int[3];) (done)
+* Find & Replace for editor (done)
 * Printing (done)
 * Fixed bugs related to constructors, super and this method calls (done)
 * Fixed bugs related to fonts and changing the fonts (done)
