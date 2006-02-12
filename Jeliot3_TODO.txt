@@ -101,6 +101,7 @@ Java Language and Interpreters:
 * Mnemonic for editing and call tree conflict (fixed)
 * Mnemonics accessible when they are not visible (fixed)
 * More flexible way of handling 2-dimensional arrays (e.g. array[2]= new int[3];) (done)
+---3.5.2
 * Find & Replace for editor (done)
 * Printing (done)
 * Fixed bugs related to constructors, super and this method calls (done)
