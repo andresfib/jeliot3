@@ -29,9 +29,9 @@ Editing:
 Graphical:
 * Returned value should not stay in the return "bubble" after it has been used or should it?
 * Zoomable canvas for Theater (see Piccolo project -> requires quite a lot of work to transform all the drawing in piccolo)
-	* Semantic Zooming
+    * Semantic Zooming
 * Customize the visualization (change visual attributes or change the granularity of visualization)
-	* Adaptable Jeliot
+    * Adaptable Jeliot
 
 * Algorithm analysis view (how many operations, how many method calls etc.)
 
@@ -45,8 +45,8 @@ Web:
 Connections to other softwares:
 * Control Jeliot outside Jeliot or from other Jeliot
 * Connection framework (extension API) for different kinds of connections
-	* New visualization (e.g. connecting Call tree viewer with this)
-	* New m-code inputs (e.g. read m-code from file or a stream or from other program (i.e. proxy object)
+    * New visualization (e.g. connecting Call tree viewer with this)
+    * New m-code inputs (e.g. read m-code from file or a stream or from other program (i.e. proxy object)
 * Using Vivaldi-kernel as a tool to visualize object oriented programming on more abstract level.
 * Combining Jeliot and JHave supporting self-assesment and explanations or using of other Q/A toolkits.
 * Generating natural language explanations from the intermediate code.
@@ -84,10 +84,10 @@ Visualization:
 - It should be possible to add a ChangeListener, which would indicate any changes happened to the ActorContainer, into all the ActorContainers so the size of the Theater could be better controlled.
 - Move the constant box lower when the method exceeds its area (This will need the ChangeListener implementation).
 - Extend the method area if the method over runs the space where it should fit. For example more than 7 variables will be too much.
-																							 _______
+                                                                                             _______
 - The layout manager of the objects should probably place the objects into rows and columns  |OOOOO|
                                                                                              |OOOOO|
-                                                                                             
+
 Java Language and Interpreters:
 - The array variable names are incorrect in method frame names (e.g. array[0].method() -> 34j3jd<hashcode>.method and not array[0].method() or something like that.
 - Separate different files in the intermediate code to avoid wrong code highlights when calling other than main methods.
@@ -95,8 +95,9 @@ Java Language and Interpreters:
 
 ----- JELIOT 3.5.X bugs and features: ------
 * Left hand side of assignments evaluated twice (i++ is evaluated twice array[i++]=j;)
-* Remember last opened directory 
+* Remember last opened directory
 * Objects returned from methods to non declared variables raises Runtime exception
+* call main method with null reference in case of main(String[] args) (done)
 * Wrong assignments when self assigning post-increments k = k++; (fixed, however the visualization isn't very intuitive)
 * Mnemonic for editing and call tree conflict (fixed)
 * Mnemonics accessible when they are not visible (fixed)

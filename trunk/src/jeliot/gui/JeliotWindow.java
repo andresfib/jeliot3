@@ -525,7 +525,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 this.tabbedPane.addTab(messageBundle
                         .getString("tab.title.call_tree"), callTree
                         .getComponent());
-                this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_A);
+                this.tabbedPane.setMnemonicAt(1, KeyEvent.VK_L);
 
                 this.tabbedPane.addTab(messageBundle
                         .getString("tab.title.history"), hv);
@@ -795,6 +795,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         final JCheckBoxMenuItem saveAutomaticallyOnCompilationMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.save_automatically"),
                 editor.isSaveAutomatically());
+        saveAutomaticallyOnCompilationMenuItem.setMnemonic(KeyEvent.VK_S);
         saveAutomaticallyOnCompilationMenuItem.setAccelerator(KeyStroke
                 .getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK
                         + ActionEvent.ALT_MASK));
@@ -881,9 +882,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
         final JCheckBoxMenuItem useNullInMainMethodCallMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.use_null_to_call_main"),
                 this.useNullInMainMethodCall);
-        useNullInMainMethodCallMenuItem.setMnemonic(KeyEvent.VK_U);
+        useNullInMainMethodCallMenuItem.setMnemonic(KeyEvent.VK_N);
         useNullInMainMethodCallMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_U, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+                KeyEvent.VK_N, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 
         useNullInMainMethodCallMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -1150,7 +1151,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         menuItem = new JMenuItem(messageBundle
                 .getString("menu.animation.slower"));
-        menuItem.setMnemonic(KeyEvent.VK_L);
+        menuItem.setMnemonic(KeyEvent.VK_O);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
@@ -1163,8 +1164,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         menuItem = new JMenuItem(messageBundle
                 .getString("menu.animation.run_until"));
-        menuItem.setMnemonic(KeyEvent.VK_L);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
+        menuItem.setMnemonic(KeyEvent.VK_T);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
