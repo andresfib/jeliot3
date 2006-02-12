@@ -40,7 +40,8 @@ public class Director {
     /**
      * The resource bundle for theater package.
      */
-    static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
+    static private ResourceBundle messageBundle = ResourceBundles
+            .getTheaterMessageResourceBundle();
 
     //DOC: Document!
 
@@ -195,7 +196,8 @@ public class Director {
         if (!interrupted) {
             theatre.repaint();
         }
-        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "AnimationEnded");
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
+                -1, "AnimationEnded");
         return interrupted;
     }
 
@@ -245,13 +247,14 @@ public class Director {
                     theatre.repaint();
                 }
                 if (jeliot.getSelectedTabIndex() != 2)
-                jeliot.highlightStatement(h);
+                    jeliot.highlightStatement(h);
             }
         }
     }
 
     public void requestHistoryImage() {
-        if (!jeliot.isExperiment() && theatre.isVisible() && jeliot.getHistoryView().isEnabled()) {
+        if (!jeliot.isExperiment() && theatre.isVisible()
+                && jeliot.getHistoryView().isEnabled()) {
             jeliot.addImageToHistory(theatre.requestImage(), hPrev);
         }
     }
@@ -287,7 +290,8 @@ public class Director {
     /**
      * 
      */
-    public void closeExpression() {}
+    public void closeExpression() {
+    }
 
     public void capture() {
         requestHistoryImage();
@@ -323,7 +327,8 @@ public class Director {
 
         // Create the expression actor for 5 elements and reserve
         // places for the three first actors.
-        ExpressionActor expr = currentScratch.getExpression(5, expressionReference);
+        ExpressionActor expr = currentScratch.getExpression(5,
+                expressionReference);
         Point operandLoc = expr.reserve(operandAct);
         Point operatorLoc = expr.reserve(operatorAct);
         Point dotsLoc = expr.reserve(dotsAct);
@@ -359,7 +364,8 @@ public class Director {
      * @param h
      */
     //Added for Jeliot 3
-    public void rightBinaryExpression(Value operand, ExpressionActor expr, Highlight h) {
+    public void rightBinaryExpression(Value operand, ExpressionActor expr,
+            Highlight h) {
 
         highlight(h);
 
@@ -371,7 +377,7 @@ public class Director {
             ValueActor operandAct = factory.produceValueActor(operand);
             operandAct.setLocation(operand.getActor().getRootLocation());
             operand.setActor(operandAct);
-            
+
             // Remove the ellipsis and reserve its place for the second
             // operand.
             expr.cut();
@@ -398,8 +404,8 @@ public class Director {
      * @param h
      * @return
      */
-    public Value finishBinaryExpression(Value result, int operator, ExpressionActor expr,
-            Highlight h) {
+    public Value finishBinaryExpression(Value result, int operator,
+            ExpressionActor expr, Highlight h) {
 
         highlight(h);
 
@@ -479,7 +485,8 @@ public class Director {
      * @param thisValue
      * @return
      */
-    public Value[] animateOMInvocation(String methodCall, Value[] args, Highlight h, Value thisValue) {
+    public Value[] animateOMInvocation(String methodCall, Value[] args,
+            Highlight h, Value thisValue) {
         highlight(h);
 
         // Remember the scratch of current expression.
@@ -490,8 +497,8 @@ public class Director {
             valAct = factory.produceValueActor(thisValue);
             thisValue.setActor(valAct);
             if (valAct instanceof jeliot.theater.ReferenceActor) {
-                valAct.setLocation(((jeliot.theater.ReferenceActor) valAct).getInstanceActor()
-                        .getRootLocation());
+                valAct.setLocation(((jeliot.theater.ReferenceActor) valAct)
+                        .getInstanceActor().getRootLocation());
             }
         }
 
@@ -532,7 +539,8 @@ public class Director {
         capture();
 
         // Introduce the invocation and the this Value fly.
-        engine.showAnimation(new Animation[] { actor.appear(invoLoc), thisFly});
+        engine
+                .showAnimation(new Animation[] { actor.appear(invoLoc), thisFly });
         theatre.passivate(actor);
 
         //bind this value
@@ -560,7 +568,8 @@ public class Director {
      * @param h
      * @return
      */
-    public Value[] animateOMInvocation(String methodCall, Value[] args, Highlight h) {
+    public Value[] animateOMInvocation(String methodCall, Value[] args,
+            Highlight h) {
         return animateSMInvocation(methodCall, args, h);
     }
 
@@ -572,7 +581,8 @@ public class Director {
      * @param h
      * @return
      */
-    public Value[] animateSMInvocation(String methodName, Value[] args, Highlight h) {
+    public Value[] animateSMInvocation(String methodName, Value[] args,
+            Highlight h) {
 
         highlight(h);
 
@@ -637,8 +647,9 @@ public class Director {
      * @param h
      * @param thisValue
      */
-    public void setUpMethod(String methodName, Value[] args, String[] formalParameters,
-            String[] formalParameterTypes, Highlight h, Value thisValue) {
+    public void setUpMethod(String methodName, Value[] args,
+            String[] formalParameters, String[] formalParameterTypes,
+            Highlight h, Value thisValue) {
 
         // highlight the method header.
         highlight(h);
@@ -662,7 +673,8 @@ public class Director {
         Animation[] anim = null;
         ValueActor[] valact = null;
 
-        thisVariable = frame.declareVariable(new Variable("this", thisValue.getType()));
+        thisVariable = frame.declareVariable(new Variable("this", thisValue
+                .getType()));
         thisVariableActor = factory.produceVariableActor(thisVariable);
         thisVariable.setActor(thisVariableActor);
         stage.reserve(thisVariableActor);
@@ -676,8 +688,8 @@ public class Director {
             valact = new ValueActor[n];
 
             for (int i = 0; i < args.length; ++i) {
-                vars[i] = frame.declareVariable(new Variable(formalParameters[i],
-                        formalParameterTypes[i]));
+                vars[i] = frame.declareVariable(new Variable(
+                        formalParameters[i], formalParameterTypes[i]));
                 varact[i] = factory.produceVariableActor(vars[i]);
                 vars[i].setActor(varact[i]);
                 stage.reserve(varact[i]);
@@ -707,7 +719,8 @@ public class Director {
         if (thisValueActor == null) {
             thisValueActor = factory.produceValueActor(thisValue);
             if (thisValueActor instanceof ReferenceActor) {
-                InstanceActor ai = ((ReferenceActor) thisValueActor).getInstanceActor();
+                InstanceActor ai = ((ReferenceActor) thisValueActor)
+                        .getInstanceActor();
                 thisValueActor.setLocation(ai.getRootLocation());
             } else {
                 introduceLiteral(thisValue);
@@ -717,7 +730,8 @@ public class Director {
 
         thisValue.setActor(thisValueActor);
 
-        Animation thisAnim = thisValueActor.fly(thisVariableActor.reserve(thisCastAct));
+        Animation thisAnim = thisValueActor.fly(thisVariableActor
+                .reserve(thisCastAct));
 
         engine.showAnimation(thisAnim);
 
@@ -784,8 +798,9 @@ public class Director {
      * @param formalParameterTypes
      * @param h
      */
-    public void setUpMethod(String methodName, Value[] args, String[] formalParameters,
-            String[] formalParameterTypes, Highlight h) {
+    public void setUpMethod(String methodName, Value[] args,
+            String[] formalParameters, String[] formalParameterTypes,
+            Highlight h) {
 
         // highlight the method header.
         highlight(h);
@@ -813,8 +828,8 @@ public class Director {
             valact = new ValueActor[n];
 
             for (int i = 0; i < args.length; ++i) {
-                vars[i] = frame.declareVariable(new Variable(formalParameters[i],
-                        formalParameterTypes[i]));
+                vars[i] = frame.declareVariable(new Variable(
+                        formalParameters[i], formalParameterTypes[i]));
                 varact[i] = factory.produceVariableActor(vars[i]);
                 vars[i].setActor(varact[i]);
                 stage.reserve(varact[i]);
@@ -895,7 +910,7 @@ public class Director {
             currentScratch.removeCrap();
             returnAct.setShadow(4);
             engine.showAnimation(new Animation[] { stageDisappear,
-                    returnAct.fly(returnAct.getRootLocation())});
+                    returnAct.fly(returnAct.getRootLocation()) });
         } else {
             engine.showAnimation(stageDisappear);
         }
@@ -931,18 +946,18 @@ public class Director {
         Animation[] anim;
         if (returnAct == null) {
 
-            anim = new Animation[] { flyScratch};
+            anim = new Animation[] { flyScratch };
             engine.showAnimation(anim);
 
         } else {
 
             theatre.addPassive(currentScratch);
             Point returnLoc = expr.reserve(returnAct);
-            returnLoc.translate(scratchLoc.x - currentScratch.getX(), scratchLoc.y
-                    - currentScratch.getY());
+            returnLoc.translate(scratchLoc.x - currentScratch.getX(),
+                    scratchLoc.y - currentScratch.getY());
 
             Animation flyReturn = returnAct.fly(returnLoc);
-            anim = new Animation[] { flyScratch, flyReturn};
+            anim = new Animation[] { flyScratch, flyReturn };
 
             engine.showAnimation(anim);
             expr.bind(returnAct);
@@ -954,7 +969,9 @@ public class Director {
 
         release();
 
-        if (returnAct != null) { return (ValueActor) ((BubbleActor) returnAct).getActor(); }
+        if (returnAct != null) {
+            return (ValueActor) ((BubbleActor) returnAct).getActor();
+        }
         return null;
     }
 
@@ -1013,7 +1030,8 @@ public class Director {
      * @param toValue
      * @param h
      */
-    public void animateCastExpression(Value fromValue, Value toValue, Highlight h) {
+    public void animateCastExpression(Value fromValue, Value toValue,
+            Highlight h) {
         highlight(h);
         animateCastExpression(fromValue, toValue);
     }
@@ -1033,9 +1051,9 @@ public class Director {
         // appeared yet and this needs to be done before casting.
         Animation a = null;
         Point loc = fromActor.getRootLocation();
-        if (loc.y == TheaterManager.getConstantBoxPositionY() &&
-            loc.x == TheaterManager.constantBoxPositionX) {
-            
+        if (loc.y == TheaterManager.getConstantBoxPositionY()
+                && loc.x == TheaterManager.constantBoxPositionX) {
+
             a = fromActor.appear(loc);
         }
         toActor.setLocation(loc);
@@ -1054,7 +1072,7 @@ public class Director {
             release();
             theatre.removeActor(fromActor);
         } else {
-            engine.showAnimation(castActor.cast());            
+            engine.showAnimation(castActor.cast());
         }
         theatre.removeActor(castActor);
         theatre.addPassive(toActor);
@@ -1070,15 +1088,16 @@ public class Director {
      * @param h
      * @return
      */
-    public Value animateBinaryExpression(int operator, Value first, Value second, Value result,
-            long expressionCounter, Highlight h) {
+    public Value animateBinaryExpression(int operator, Value first,
+            Value second, Value result, long expressionCounter, Highlight h) {
 
         highlight(h);
 
         // prepare the actors
         Actor firstAct = first.getActor();
 
-        Actor secondAct = (second == null) ? (Actor) factory.produceEllipsis() : second.getActor();
+        Actor secondAct = (second == null) ? (Actor) factory.produceEllipsis()
+                : second.getActor();
 
         Actor resultAct = factory.produceValueActor(result);
 
@@ -1086,7 +1105,8 @@ public class Director {
 
         OperatorActor eqAct = factory.produceBinOpResActor(operator);
 
-        ExpressionActor expr = currentScratch.getExpression(5, expressionCounter);
+        ExpressionActor expr = currentScratch.getExpression(5,
+                expressionCounter);
         Point firstLoc = expr.reserve(firstAct);
         Point operatorLoc = expr.reserve(operatorAct);
         Point secondLoc = expr.reserve(secondAct);
@@ -1097,7 +1117,8 @@ public class Director {
         capture();
 
         // Move the operands to positions.
-        engine.showAnimation(new Animation[] { firstAct.fly(firstLoc), secondAct.fly(secondLoc)});
+        engine.showAnimation(new Animation[] { firstAct.fly(firstLoc),
+                secondAct.fly(secondLoc) });
 
         updateCapture();
 
@@ -1154,7 +1175,8 @@ public class Director {
         highlight(h);
 
         // Create a new variable and its actor.
-        Variable v = currentMethodFrame.declareVariable(new Variable(name, type));
+        Variable v = currentMethodFrame
+                .declareVariable(new Variable(name, type));
         VariableActor actor = factory.produceVariableActor(v);
         v.setActor(actor);
 
@@ -1183,7 +1205,8 @@ public class Director {
      * @param h
      * @return
      */
-    public Variable declareObjectVariable(ObjectFrame of, String name, String type, Highlight h) {
+    public Variable declareObjectVariable(ObjectFrame of, String name,
+            String type, Highlight h) {
 
         highlight(h);
 
@@ -1238,7 +1261,9 @@ public class Director {
     public ValueActor initiateVariableAccess(Variable var) {
 
         //Problem with instances.
-        if (!MCodeUtilities.isPrimitive(var.getType())) { return var.getValue().getActor(); }
+        if (!MCodeUtilities.isPrimitive(var.getType())) {
+            return var.getValue().getActor();
+        }
 
         //      Value value = var.getValue();
         //      Value clone = (Value)value.clone();
@@ -1260,14 +1285,39 @@ public class Director {
     }
 
     /**
+     * This method was done in order to preserve the value to be assigned in the case of k = k++;
+     * This will be thus called first before the actual assignment takes place.
+     * 
      * @param variable
      * @param value
+     * @return introduced copy of the value to be assigned to the variable. Null if the type of assignment is not primitive.
+     * 
+     */
+    public Value prepareForAssignment(Variable variable, Value value) {
+        String type = variable.getType();
+        if (MCodeUtilities.isPrimitive(type)) {
+            ValueActor valueAct = value.getActor();
+            Value copiedValue = (Value) value.clone();
+            ValueActor copiedValueAct = factory.produceValueActor(valueAct);
+            copiedValue.setActor(copiedValueAct);
+            copiedValueAct.setLocation(valueAct.getRootLocation());
+            theatre.addActor(copiedValueAct);
+            copiedValueAct.setShadow(3);
+            return copiedValue;
+        }
+        return null;
+    }
+
+    /**
+     * @param variable
+     * @param value
+     * @param copiedValue This should be the return value of the prepareForAssignment method. This value will be null if the type of the variable is not primitive.
      * @param casted
      * @param returnValue
      * @param h
      */
-    public void animateAssignment(Variable variable, Value value, Value casted, Value returnValue,
-            Highlight h) {
+    public void animateAssignment(Variable variable, Value value,
+            Value copiedValue, Value casted, Value returnValue, Highlight h) {
 
         highlight(h);
 
@@ -1281,12 +1331,13 @@ public class Director {
             ValueActor castAct = factory.produceValueActor(casted);
             casted.setActor(castAct);
 
-            ValueActor copiedValueAct = factory.produceValueActor(valueAct);
-            copiedValueAct.setLocation(valueAct.getRootLocation());
+            //ValueActor copiedValueAct = factory.produceValueActor(valueAct);
+            ValueActor copiedValueAct = copiedValue.getActor();
+            //copiedValueAct.setLocation(valueAct.getRootLocation());
 
             Point valueLoc = variableAct.reserve(castAct);
 
-            theatre.addActor(copiedValueAct);
+            //theatre.addActor(copiedValueAct);
             capture();
             theatre.removeActor(copiedValueAct);
             engine.showAnimation(valueAct.fly(valueLoc));
@@ -1338,7 +1389,8 @@ public class Director {
             }
             // fixed by rku: was != null, but should check type compatibilty also
             if (returnValue instanceof Reference) {
-                ValueActor returnAct = factory.produceReferenceActor((Reference) returnValue);
+                ValueActor returnAct = factory
+                        .produceReferenceActor((Reference) returnValue);
                 returnAct.setLocation(ra.getRootLocation());
                 returnValue.setActor(returnAct);
             }
@@ -1358,7 +1410,8 @@ public class Director {
      * @param result
      * @param h
      */
-    public void animateIncDec(int operator, Variable var, Value result, Highlight h) {
+    public void animateIncDec(int operator, Variable var, Value result,
+            Highlight h) {
 
         highlight(h);
 
@@ -1412,7 +1465,8 @@ public class Director {
      * @param resVal
      * @param h
      */
-    public void animatePostIncDec(int operator, Variable var, Value resVal, Highlight h) {
+    public void animatePostIncDec(int operator, Variable var, Value resVal,
+            Highlight h) {
 
         highlight(h);
 
@@ -1420,7 +1474,8 @@ public class Director {
         //Value value = var.getValue();
         ValueActor valAct = var.getActor().getValue();
         //ValueActor valact = factory.produceValueActor(value);
-        ValueActor resAct = (resVal == null) ? null : factory.produceValueActor(resVal);
+        ValueActor resAct = (resVal == null) ? null : factory
+                .produceValueActor(resVal);
 
         Actor opAct = factory.produceUnaOpActor(operator);
 
@@ -1466,8 +1521,8 @@ public class Director {
      * @param h
      * @return
      */
-    public ExpressionActor beginUnaryExpression(int operator, Value arg, long expressionCounter,
-            Highlight h) {
+    public ExpressionActor beginUnaryExpression(int operator, Value arg,
+            long expressionCounter, Highlight h) {
         highlight(h);
 
         ValueActor argAct = arg.getActor();
@@ -1475,7 +1530,8 @@ public class Director {
 
         capture();
 
-        ExpressionActor exp = currentScratch.getExpression(4, expressionCounter);
+        ExpressionActor exp = currentScratch
+                .getExpression(4, expressionCounter);
         Point oLoc = exp.reserve(opAct);
         Point aLoc = exp.reserve(argAct);
 
@@ -1500,8 +1556,8 @@ public class Director {
      * @param h
      * @return
      */
-    public Value finishUnaryExpression(int operator, ExpressionActor exp, Value result,
-            long expressionCounter, Highlight h) {
+    public Value finishUnaryExpression(int operator, ExpressionActor exp,
+            Value result, long expressionCounter, Highlight h) {
 
         highlight(h);
 
@@ -1564,7 +1620,8 @@ public class Director {
 
         capture();
 
-        ExpressionActor exp = currentScratch.getExpression(4, expressionCounter);
+        ExpressionActor exp = currentScratch
+                .getExpression(4, expressionCounter);
         Point oLoc = exp.reserve(opAct);
         Point aLoc = exp.reserve(argAct);
         Point eLoc = exp.reserve(eqAct);
@@ -1614,7 +1671,8 @@ public class Director {
             }
 
             JOptionPane.showMessageDialog(null, msg, messageBundle
-                    .getString("dialog.message.title"), JOptionPane.PLAIN_MESSAGE);
+                    .getString("dialog.message.title"),
+                    JOptionPane.PLAIN_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
             showMessage(actor, h);
@@ -1625,7 +1683,7 @@ public class Director {
      * @param message
      */
     private void showMessage(String message, Highlight h) {
-        String[] ms = { message};
+        String[] ms = { message };
         showMessage(ms, h);
     }
 
@@ -1711,7 +1769,8 @@ public class Director {
     /**
      *
      */
-    private MessageFormat exitLoop = new MessageFormat(messageBundle.getString("message.exit_loop"));
+    private MessageFormat exitLoop = new MessageFormat(messageBundle
+            .getString("message.exit_loop"));
 
     /**
      *
@@ -1722,7 +1781,8 @@ public class Director {
     /**
      *
      */
-    private MessageFormat skipLoop = new MessageFormat(messageBundle.getString("message.skip_loop"));
+    private MessageFormat skipLoop = new MessageFormat(messageBundle
+            .getString("message.skip_loop"));
 
     /**
      *
@@ -1733,8 +1793,8 @@ public class Director {
     /**
      *
      */
-    private MessageFormat arrayCreationDimensions = new MessageFormat(messageBundle
-            .getString("message.array_creation.dimensions"));
+    private MessageFormat arrayCreationDimensions = new MessageFormat(
+            messageBundle.getString("message.array_creation.dimensions"));
 
     //message.open_scope = Opening new scope for variables.
     //message.close_scope = Closing a scope and erasing the scope variables.
@@ -1771,7 +1831,7 @@ public class Director {
      */
     public void enterLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage(enterLoop.format(new String[] { statementName}), h);
+        showMessage(enterLoop.format(new String[] { statementName }), h);
     }
 
     /**
@@ -1781,7 +1841,7 @@ public class Director {
      */
     public void enterLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage(enterLoop.format(new String[] { statementName}), h);
+        showMessage(enterLoop.format(new String[] { statementName }), h);
         //, check);
     }
 
@@ -1792,7 +1852,7 @@ public class Director {
      */
     public void continueLoop(String statementName, Value check, Highlight h) {
         highlight(h);
-        showMessage(continueLoop.format(new String[] { statementName}), h);
+        showMessage(continueLoop.format(new String[] { statementName }), h);
         //, check);
     }
 
@@ -1802,7 +1862,7 @@ public class Director {
      */
     public void exitLoop(String statementName, Value check) {
         highlight(null);
-        showMessage(exitLoop.format(new String[] { statementName}), null);
+        showMessage(exitLoop.format(new String[] { statementName }), null);
         //, check);
     }
 
@@ -1812,7 +1872,7 @@ public class Director {
      */
     public void breakLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage(breakLoop.format(new String[] { statementName}), h);
+        showMessage(breakLoop.format(new String[] { statementName }), h);
     }
 
     /**
@@ -1829,7 +1889,7 @@ public class Director {
      */
     public void skipLoop(String statementName, Value check) {
         highlight(null);
-        showMessage(skipLoop.format(new String[] { statementName}), null);
+        showMessage(skipLoop.format(new String[] { statementName }), null);
         //, check);
     }
 
@@ -1839,7 +1899,7 @@ public class Director {
      */
     public void continueLoop(String statementName, Highlight h) {
         highlight(h);
-        showMessage(continueLoop.format(new String[] { statementName}), h);
+        showMessage(continueLoop.format(new String[] { statementName }), h);
     }
 
     /**
@@ -1903,12 +1963,14 @@ public class Director {
 
     public void openArrayInitializer(Highlight h) {
         highlight(h);
-        showMessage(messageBundle.getString("message.open_array_initializer"), h);
+        showMessage(messageBundle.getString("message.open_array_initializer"),
+                h);
     }
 
     public void closeArrayInitializer(Highlight h) {
         highlight(h);
-        showMessage(messageBundle.getString("message.close_array_initializer"), h);
+        showMessage(messageBundle.getString("message.close_array_initializer"),
+                h);
     }
 
     /**
@@ -1932,7 +1994,8 @@ public class Director {
         highlight(h);
         String[] message = new String[2];
         message[0] = arrayCreation.format(dimensionNumber);
-        message[1] = arrayCreationDimensions.format(new String[] { dimensions});
+        message[1] = arrayCreationDimensions
+                .format(new String[] { dimensions });
         showMessage(message, h);
     }
 
@@ -1953,7 +2016,8 @@ public class Director {
 
         Point dest = manager.getOutputPoint();
         Point handp = new Point(dest.x, dest.y - hand.getHeight());
-        Point vdp = new Point(dest.x + hand.getWidth() / 3, dest.y - hand.getHeight() * 2 / 3);
+        Point vdp = new Point(dest.x + hand.getWidth() / 3, dest.y
+                - hand.getHeight() * 2 / 3);
 
         Animation fist = hand.changeImage(factory.produceImage("image.hand2"));
         fist.setDuration(800);
@@ -1961,7 +2025,8 @@ public class Director {
         capture();
 
         hand.setLocation(dest);
-        engine.showAnimation(new Animation[] { actor.fly(vdp), hand.fly(handp, 0), fist});
+        engine.showAnimation(new Animation[] { actor.fly(vdp),
+                hand.fly(handp, 0), fist });
 
         hand.setImage(factory.produceImage("image.hand3"));
         theatre.removeActor(actor);
@@ -2030,7 +2095,8 @@ public class Director {
                 try {
                     Integer i = new Integer(s);
                     accept(new Value(i.toString(), int.class.getName()));
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException e) {
+                }
             }
         });
     }
@@ -2047,7 +2113,8 @@ public class Director {
                 try {
                     Double d = new Double(s);
                     accept(new Value(d.toString(), double.class.getName()));
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException e) {
+                }
             }
         });
     }
@@ -2063,7 +2130,8 @@ public class Director {
             public void validate(String s) {
                 try {
                     accept(new Value(s, "".getClass().getName()));
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException e) {
+                }
             }
         });
     }
@@ -2161,7 +2229,8 @@ public class Director {
                 try {
                     Byte d = new Byte(s);
                     accept(new Value(d.toString(), byte.class.getName()));
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException e) {
+                }
             }
         });
     }
@@ -2179,7 +2248,8 @@ public class Director {
                 try {
                     Short d = new Short(s);
                     accept(new Value(d.toString(), short.class.getName()));
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException e) {
+                }
             }
         });
     }
@@ -2197,7 +2267,8 @@ public class Director {
                 try {
                     Boolean d = new Boolean(s);
                     accept(new Value(d.toString(), boolean.class.getName()));
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException e) {
+                }
             }
         });
     }
@@ -2215,7 +2286,8 @@ public class Director {
                 try {
                     Float d = new Float(s);
                     accept(new Value(d.toString(), float.class.getName()));
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException e) {
+                }
             }
         });
     }
@@ -2233,7 +2305,8 @@ public class Director {
                 try {
                     Long d = new Long(s);
                     accept(new Value(d.toString(), long.class.getName()));
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException e) {
+                }
             }
         });
     }
@@ -2271,7 +2344,8 @@ public class Director {
                 release();
                 ic.popup();
                 theatre.flush();
-                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "InputDialogOn");
+                Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                        Tracker.OTHER, -1, -1, "InputDialogOn");
             }
         });
         /*    
@@ -2297,7 +2371,8 @@ public class Director {
             controller.pause();
             try {
                 controller.checkPoint(c, true);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         } while (!validator.isOk());
 
         try {
@@ -2308,7 +2383,8 @@ public class Director {
                     theatre.remove(ic);
                     theatre.showComponents(false);
                     theatre.flush();
-                    Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "InputDialogOff");
+                    Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                            Tracker.OTHER, -1, -1, "InputDialogOff");
                 }
             });
         } catch (java.lang.reflect.InvocationTargetException e) {
@@ -2348,9 +2424,10 @@ public class Director {
      * @param actualDimension
      * @param h
      */
-    public void showArrayCreation(ArrayInstance array, jeliot.lang.Reference ref,
-            ArrayInstance[] level1, ArrayInstance[][] level2, Value[] lenVal,
-            long expressionCounter,int actualDimension, Highlight h) {
+    public void showArrayCreation(ArrayInstance array,
+            jeliot.lang.Reference ref, ArrayInstance[] level1,
+            ArrayInstance[][] level2, Value[] lenVal, long expressionCounter,
+            int actualDimension, Highlight h) {
 
         highlight(h);
 
@@ -2360,8 +2437,10 @@ public class Director {
         if (lenVal != null) {
             n = lenVal.length;
         }
-        ACActor actor = factory.produceACActor("new "
-                + MCodeUtilities.resolveComponentType(array.getComponentType()), n, actualDimension - n);
+        ACActor actor = factory.produceACActor(
+                "new "
+                        + MCodeUtilities.resolveComponentType(array
+                                .getComponentType()), n, actualDimension - n);
         ExpressionActor ea = currentScratch.getExpression(1, -1);
         currentScratch.registerCrap(actor);
 
@@ -2402,7 +2481,6 @@ public class Director {
 
         highlight(h);
 
-
         ArrayActor arrayAct = factory.produceArrayActor(array);
         array.setArrayActor(arrayAct);
 
@@ -2413,10 +2491,11 @@ public class Director {
         manager.bind(arrayAct);
 
         if (level1 != null) {
-        	for (int i = 0; i < level1.length; i++) {
+            for (int i = 0; i < level1.length; i++) {
                 //Create array actor
 
-                ArrayActor level1ArrayActor = factory.produceArrayActor(level1[i]);
+                ArrayActor level1ArrayActor = factory
+                        .produceArrayActor(level1[i]);
                 level1[i].setArrayActor(level1ArrayActor);
 
                 //Show array actor
@@ -2428,10 +2507,11 @@ public class Director {
 
                 //Create reference
                 Reference level1Ref = new Reference(level1[i]);
-                ReferenceActor level1RefAct = factory.produceReferenceActor(level1Ref);
+                ReferenceActor level1RefAct = factory
+                        .produceReferenceActor(level1Ref);
                 level1Ref.setActor(level1RefAct);
                 level1RefAct.setLocation(level1ArrayActor.getRootLocation());
-                
+
                 //Show and bind reference to correct value
                 ReferenceVariableInArrayActor rva = (ReferenceVariableInArrayActor) arrayAct
                         .getVariableActor(i);
@@ -2442,7 +2522,7 @@ public class Director {
                 rva.bind();
                 theatre.removePassive(level1RefAct);
                 release();
-                
+
                 array.getVariableAt(i).assign(level1Ref);
             }
         }
@@ -2451,25 +2531,30 @@ public class Director {
             for (int i = 0; i < level2.length; i++) {
                 for (int j = 0; j < level2[i].length; j++) {
                     //Create array actor
-                	
-                    ArrayActor level2ArrayActor = factory.produceArrayActor(level2[i][j]);
+
+                    ArrayActor level2ArrayActor = factory
+                            .produceArrayActor(level2[i][j]);
                     level2[i][j].setArrayActor(level2ArrayActor);
 
                     //Show array actor
                     Point level2Location = manager.reserve(level2ArrayActor);
                     capture();
-                    engine.showAnimation(level2ArrayActor.appear(level2Location));
+                    engine.showAnimation(level2ArrayActor
+                            .appear(level2Location));
                     release();
                     manager.bind(level2ArrayActor);
 
                     //Create reference
                     Reference level2Ref = new Reference(level2[i][j]);
-                    ReferenceActor level2RefAct = factory.produceReferenceActor(level2Ref);
+                    ReferenceActor level2RefAct = factory
+                            .produceReferenceActor(level2Ref);
                     level2Ref.setActor(level2RefAct);
-                    level2RefAct.setLocation(level2ArrayActor.getRootLocation());
+                    level2RefAct
+                            .setLocation(level2ArrayActor.getRootLocation());
 
                     //Show and bind reference to correct value
-                    ReferenceVariableInArrayActor rva = (ReferenceVariableInArrayActor) level1[i].getArrayActor().getVariableActor(j);
+                    ReferenceVariableInArrayActor rva = (ReferenceVariableInArrayActor) level1[i]
+                            .getArrayActor().getVariableActor(j);
                     Point valueLoc = rva.reserve(level2RefAct);
 
                     capture();
@@ -2493,7 +2578,8 @@ public class Director {
 
         capture();
 
-        ExpressionActor expr = currentScratch.getExpression(1, expressionCounter);
+        ExpressionActor expr = currentScratch.getExpression(1,
+                expressionCounter);
         Point firstLoc = expr.reserve(refAct);
         engine.showAnimation(refAct.fly(firstLoc));
         expr.bind(refAct);
@@ -2507,8 +2593,8 @@ public class Director {
      * @param returnVal
      * @param h
      */
-    public void showArrayAccess(VariableInArray[] vars, Value[] indexVal, Value returnVal,
-            Highlight h) {
+    public void showArrayAccess(VariableInArray[] vars, Value[] indexVal,
+            Value returnVal, Highlight h) {
 
         highlight(h);
         int n = vars.length;
@@ -2532,7 +2618,7 @@ public class Director {
         IndexActor[] indexAct = new IndexActor[n];
         ValueActor[] indexValAct = new ValueActor[n];
         Point literalLocation = cbox.getRootLocation();
-        
+
         for (int i = 0; i < m; i++) {
             indexValAct[i] = indexVal[i].getActor();
             //TODO: change indexActor to use ActorFactory when creating new instances.
@@ -2542,7 +2628,7 @@ public class Director {
                 literalLocation.x += indexValAct[i].getWidth() + 5;
             }
             appear[i] = indexValAct[i].appear(indexValAct[i].getRootLocation());
-          
+
             appear[i].setDuration(600);
             index[i] = indexAct[i].index(varActs[i]);
         }
@@ -2581,12 +2667,13 @@ public class Director {
      * @param literal
      * @param h
      */
-    public void initializeArrayVariable(VariableInArray variable, Value value, Value casted,
-            boolean literal, Highlight h) {
+    public void initializeArrayVariable(VariableInArray variable, Value value,
+            Value casted, boolean literal, Highlight h) {
 
         highlight(h);
 
-        final VariableInArrayActor variableAct = (VariableInArrayActor) variable.getActor();
+        final VariableInArrayActor variableAct = (VariableInArrayActor) variable
+                .getActor();
 
         String type = variable.getType();
         ValueActor valueAct = value.getActor();
@@ -2752,7 +2839,8 @@ public class Director {
      * @param var
      * @param val
      */
-    public void declareClassVariable(jeliot.lang.Class c, Variable var, Value val) {
+    public void declareClassVariable(jeliot.lang.Class c, Variable var,
+            Value val) {
 
         highlight(var.getLocationInCode());
 
@@ -2783,7 +2871,9 @@ public class Director {
             Value returned = (Value) val.clone();
             returned.setActor(factory.produceValueActor(val));
 
-            animateAssignment(var, val, casted, returned, var.getLocationInCode());
+            Value copiedValue = prepareForAssignment(var, val);
+            animateAssignment(var, val, copiedValue, casted, returned, var
+                    .getLocationInCode());
             var.assign(casted);
         }
     }
@@ -2794,5 +2884,5 @@ public class Director {
      */
     public void setInterpreter(MCodeInterpreter mCodeInterpreter) {
         this.mCodeInterpreter = mCodeInterpreter;
-    }   
+    }
 }

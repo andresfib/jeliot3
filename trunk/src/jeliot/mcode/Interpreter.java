@@ -171,7 +171,6 @@ public class Interpreter {
      */
     private Stack objectCreation = new Stack();
 
-
     /**
      * Related to Super method calls in constructor's first line in classes
      * with inheritance.
@@ -201,12 +200,14 @@ public class Interpreter {
     /**
      * The resource bundle for mcode messages
      */
-    static private ResourceBundle messageBundle = ResourceBundles.getMCodeMessageResourceBundle();
+    static private ResourceBundle messageBundle = ResourceBundles
+            .getMCodeMessageResourceBundle();
 
     /**
      * The resource bundle for mcode properties
      */
-    static private UserProperties propertiesBundle = ResourceBundles.getMCodeUserProperties();
+    static private UserProperties propertiesBundle = ResourceBundles
+            .getMCodeUserProperties();
 
     /**
      *  
@@ -264,8 +265,8 @@ public class Interpreter {
 
         if (line == null) {
             line = "" + Code.ERROR + Code.DELIM
-                    + messageBundle.getString("unknown.exception") + Code.DELIM + "0"
-                    + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
+                    + messageBundle.getString("unknown.exception") + Code.DELIM
+                    + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0"
                     + Code.LOC_DELIM + "0";
         }
 
@@ -329,13 +330,13 @@ public class Interpreter {
         if (readLine == null) {
             readLine = "" + Code.ERROR + Code.DELIM
                     + messageBundle.getString("unknown.exception")/*
-                                                            * + " <H1> Runtime
-                                                            * Exception </H1> " + "
-                                                            * <P> The reason
-                                                            * for runtime
-                                                            * exception is
-                                                            * unknown. </P> "
-                                                            */
+                     * + " <H1> Runtime
+                     * Exception </H1> " + "
+                     * <P> The reason
+                     * for runtime
+                     * exception is
+                     * unknown. </P> "
+                     */
                     + Code.DELIM + "0" + Code.LOC_DELIM + "0" + Code.LOC_DELIM
                     + "0" + Code.LOC_DELIM + "0";
         }
@@ -350,64 +351,69 @@ public class Interpreter {
     public void execute() {
 
         try {
-         
-        director.openScratch();
 
-        while (running) {
+            director.openScratch();
 
-            if (!constructorCall) {
-                if (!firstLineRead) {
-                    line = readLine();
-                    interpret(line);
-                } else {
-                    firstLineRead = false;
-                    interpret(line);
-                }
-                //Constructor call is going in super method calls.
-            } else {
-                String storedLine = readLine();
+            while (running) {
 
-                StringTokenizer tokenizer = new StringTokenizer(storedLine,
-                        Code.DELIM);
-                int token = Integer.parseInt(tokenizer.nextToken());
-                if (token == Code.INPUT) {
-                    interpret("" + Code.ERROR + Code.DELIM
-                            + messageBundle.getString("inputInConstructor.exception")
-                            + Code.DELIM + "0" + Code.LOC_DELIM + "0"
-                            + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0");
-                }
-                if (token == Code.ERROR) {
-                    interpret(storedLine);
-                }
-                if (token == Code.CONSCN) {
-                    long number = Long.parseLong(tokenizer.nextToken());
-                    if (number == superMethodCallNumber) {
-                        //Interpret the rest of the constructor call
-                        interpret(readLine());
-                        interpret(readLine());
-
-                        //Then start using the collected statements
-                        constructorCalls.push(superMethodsReading);
-                        superMethods = superMethodsReading;
-                        superMethodsReading = null;
-                        constructorCall = false;
-                        continue;
+                if (!constructorCall) {
+                    if (!firstLineRead) {
+                        line = readLine();
+                        interpret(line);
+                    } else {
+                        firstLineRead = false;
+                        interpret(line);
                     }
+                    //Constructor call is going in super method calls.
+                } else {
+                    String storedLine = readLine();
+
+                    StringTokenizer tokenizer = new StringTokenizer(storedLine,
+                            Code.DELIM);
+                    int token = Integer.parseInt(tokenizer.nextToken());
+                    if (token == Code.INPUT) {
+                        interpret(""
+                                + Code.ERROR
+                                + Code.DELIM
+                                + messageBundle
+                                        .getString("inputInConstructor.exception")
+                                + Code.DELIM + "0" + Code.LOC_DELIM + "0"
+                                + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0");
+                    }
+                    if (token == Code.ERROR) {
+                        interpret(storedLine);
+                    }
+                    if (token == Code.CONSCN) {
+                        long number = Long.parseLong(tokenizer.nextToken());
+                        if (number == superMethodCallNumber) {
+                            //Interpret the rest of the constructor call
+                            interpret(readLine());
+                            interpret(readLine());
+
+                            //Then start using the collected statements
+                            constructorCalls.push(superMethodsReading);
+                            superMethods = superMethodsReading;
+                            superMethodsReading = null;
+                            constructorCall = false;
+                            continue;
+                        }
+                    }
+                    superMethodsReading.add(storedLine);
                 }
-                superMethodsReading.add(storedLine);
+
             }
+            director.closeScratch();
 
-        }
-        director.closeScratch();
-
-          } catch (Exception e) { 
+        } catch (Exception e) {
             if (DebugUtil.DEBUGGING) {
                 e.printStackTrace();
             }
-          	director.showErrorMessage(new InterpreterError(
-          			" <H1> Runtime Error </H1> "+ " <P> The feature is not yet implemented. </P> ", null)); 
-          	}
-         
+            director.showErrorMessage(new InterpreterError(
+                    " <H1> Runtime Error </H1> "
+                            + " <P> The feature is not yet implemented. </P> ",
+                    null));
+        }
+
     }
 
     /**
@@ -444,133 +450,122 @@ public class Interpreter {
                 switch (token) {
 
                 //Gives a reference to the left hand side of the expression
-                case Code.LEFT:
-                    {
+                case Code.LEFT: {
 
-                        long token1 = Long.parseLong(tokenizer.nextToken());
-                        commands.push("" + Code.LEFT + Code.DELIM + token1);
-                        break;
-                    }
+                    long token1 = Long.parseLong(tokenizer.nextToken());
+                    commands.push("" + Code.LEFT + Code.DELIM + token1);
+                    break;
+                }
 
                 //Gives a reference to the right hand side of the expression
-                case Code.RIGHT:
-                    {
+                case Code.RIGHT: {
 
-                        long token1 = Long.parseLong(tokenizer.nextToken());
-                        commands.push("" + Code.RIGHT + Code.DELIM + token1);
-                        break;
-                    }
+                    long token1 = Long.parseLong(tokenizer.nextToken());
+                    commands.push("" + Code.RIGHT + Code.DELIM + token1);
+                    break;
+                }
 
                 //Begins an expression
-                case Code.BEGIN:
-                    {
+                case Code.BEGIN: {
 
-                        //first token
-                        long expressionType = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        String location = tokenizer.nextToken();
-                        exprs.push(expressionType + Code.DELIM
-                                + expressionReference + Code.DELIM + location);
-                        break;
-                    }
+                    //first token
+                    long expressionType = Long.parseLong(tokenizer.nextToken());
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String location = tokenizer.nextToken();
+                    exprs.push(expressionType + Code.DELIM
+                            + expressionReference + Code.DELIM + location);
+                    break;
+                }
 
                 //Indicates where the value is assigned
-                case Code.TO:
-                    {
+                case Code.TO: {
 
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        commands.push("" + Code.TO + Code.DELIM
-                                + expressionReference);
-                        break;
-                    }
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    commands.push("" + Code.TO + Code.DELIM
+                            + expressionReference);
+                    break;
+                }
 
                 //Assignment
-                case Code.A:
-                    {
+                case Code.A: {
 
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long fromExpression = Long.parseLong(tokenizer
-                                .nextToken());
-                        long toExpression = Long.parseLong(tokenizer
-                                .nextToken());
-                        String value = "";
-                        if (tokenizer.countTokens() > 2) {
-                            value = tokenizer.nextToken();
-                        }
-                        String type = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-
-                        Variable toVariable = (Variable) variables
-                                .remove(new Long(toExpression));
-
-                        //just to get rid of extra references
-                        variables.remove(new Long(fromExpression));
-
-                        Value fromValue = (Value) values.remove(new Long(
-                                fromExpression));
-                        Value casted = null;
-                        Value expressionValue = null;
-                        if (MCodeUtilities.isPrimitive(type)
-                                || type.equals("null")) {
-                            casted = new Value(value, type);
-                            expressionValue = new Value(value, type);
-
-                            if (!casted.getType().equals(fromValue.getType())
-                                    && MCodeUtilities.resolveType(casted
-                                            .getType()) != MCodeUtilities
-                                            .resolveType(fromValue.getType())) {
-                                director.animateCastExpression(fromValue,
-                                        casted);
-                                fromValue.setActor(casted.getActor());
-                            }
-
-                        } else {
-                            Instance inst = (Instance) instances
-                                    .get(MCodeUtilities.getHashCode(value));
-                            if (inst != null) {
-                                casted = new Reference(inst);
-                                ((Reference) casted).makeReference();
-                                expressionValue = new Reference(inst);
-                            } else {
-                                casted = new Reference();
-                                expressionValue = new Reference();
-                            }
-                        }
-
-                        director.animateAssignment(toVariable, fromValue,
-                                casted, expressionValue, h);
-                        toVariable.assign(casted);
-
-                        values
-                                .put(new Long(expressionCounter),
-                                        expressionValue);
-
-                        Object[] postIncDec = (Object[]) postIncsDecs
-                                .remove(new Long(fromExpression));
-
-                        if (postIncDec != null) {
-                            doPostIncDec(postIncDec);
-                        }
-
-                        postIncDec = (Object[]) postIncsDecs.remove(new Long(
-                                toExpression));
-
-                        if (postIncDec != null) {
-                            doPostIncDec(postIncDec);
-                        }
-
-                        exprs.pop();
-
-                        director.closeScratch();
-                        director.openScratch();
-
-                        break;
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    long fromExpression = Long.parseLong(tokenizer.nextToken());
+                    long toExpression = Long.parseLong(tokenizer.nextToken());
+                    String value = "";
+                    if (tokenizer.countTokens() > 2) {
+                        value = tokenizer.nextToken();
                     }
+                    String type = tokenizer.nextToken();
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+
+                    Variable toVariable = (Variable) variables.remove(new Long(
+                            toExpression));
+
+                    //just to get rid of extra references
+                    variables.remove(new Long(fromExpression));
+
+                    Value fromValue = (Value) values.remove(new Long(
+                            fromExpression));
+                    Value casted = null;
+                    Value expressionValue = null;
+                    if (MCodeUtilities.isPrimitive(type) || type.equals("null")) {
+                        casted = new Value(value, type);
+                        expressionValue = new Value(value, type);
+
+                        if (!casted.getType().equals(fromValue.getType())
+                                && MCodeUtilities.resolveType(casted.getType()) != MCodeUtilities
+                                        .resolveType(fromValue.getType())) {
+                            director.animateCastExpression(fromValue, casted);
+                            fromValue.setActor(casted.getActor());
+                        }
+
+                    } else {
+                        Instance inst = (Instance) instances.get(MCodeUtilities
+                                .getHashCode(value));
+                        if (inst != null) {
+                            casted = new Reference(inst);
+                            ((Reference) casted).makeReference();
+                            expressionValue = new Reference(inst);
+                        } else {
+                            casted = new Reference();
+                            expressionValue = new Reference();
+                        }
+                    }
+                    Value copiedValue = director.prepareForAssignment(
+                            toVariable, fromValue);
+
+                    Object[] postIncDec = (Object[]) postIncsDecs
+                            .remove(new Long(fromExpression));
+
+                    if (postIncDec != null) {
+                        doPostIncDec(postIncDec);
+                    }
+
+                    director.animateAssignment(toVariable, fromValue,
+                            copiedValue, casted, expressionValue, h);
+                    toVariable.assign(casted);
+
+                    values.put(new Long(expressionCounter), expressionValue);
+
+                    postIncDec = (Object[]) postIncsDecs.remove(new Long(
+                            toExpression));
+
+                    if (postIncDec != null) {
+                        doPostIncDec(postIncDec);
+                    }
+
+                    exprs.pop();
+
+                    director.closeScratch();
+                    director.openScratch();
+
+                    break;
+                }
 
                 /*
                  * Unary Expressions
@@ -582,234 +577,228 @@ public class Interpreter {
                 // Minus operator
                 case Code.MINUS:
                 // Boolean Not
-                case Code.NO:
-                    {
+                case Code.NO: {
 
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long unaryExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
-                        String value = tokenizer.nextToken();
-                        String type = tokenizer.nextToken();
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    long unaryExpressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = tokenizer.nextToken();
+                    String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        Value result = new Value(value, type);
-                        Value val = (Value) values.remove(new Long(
-                                unaryExpressionReference));
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+                    Value result = new Value(value, type);
+                    Value val = (Value) values.remove(new Long(
+                            unaryExpressionReference));
 
-                        int unaryOperator = MCodeUtilities
-                                .resolveUnOperator(token);
+                    int unaryOperator = MCodeUtilities.resolveUnOperator(token);
 
-                        ExpressionActor expr = director.getCurrentScratch()
-                                .findActor(expressionCounter);
+                    ExpressionActor expr = director.getCurrentScratch()
+                            .findActor(expressionCounter);
 
-                        if (expr == null) {
-                            expr = director.beginUnaryExpression(unaryOperator,
-                                    val, expressionCounter, h);
-                        }
-
-                        Object[] postIncDec = (Object[]) postIncsDecs
-                                .remove(new Long(unaryExpressionReference));
-
-                        if (postIncDec != null) {
-                            doPostIncDec(postIncDec);
-                        }
-
-                        Value expressionValue = director.finishUnaryExpression(
-                                unaryOperator, expr, result, expressionCounter,
-                                h);
-
-                        //NOT NEEDED ANY MORE!
-                        //This is not needed after the changes.
-                        //Value expressionValue =
-                        //        director.animateUnaryExpression(operator,
-                        //                                        val,
-                        //                                        result,
-                        //                                        expressionCounter,
-                        //                                        h);
-
-                        //                          values.put(new Long(expressionCounter),
-                        // expressionValue);
-
-                        exprs.pop();
-
-                        handleExpression(expressionValue, expressionCounter);
-
-                        /*
-                         * //command that wait for this expression (left,
-                         * right) int command = -1; int oper = -1; int size =
-                         * commands.size();
-                         * 
-                         * //We find the command for (int i = size - 1; i >= 0;
-                         * i--) { StringTokenizer commandTokenizer = new
-                         * StringTokenizer( (String) commands.elementAt(i),
-                         * Code.DELIM); int comm =
-                         * Integer.parseInt(commandTokenizer.nextToken()); long
-                         * cid = Long.parseLong(commandTokenizer.nextToken());
-                         * if (expressionCounter == cid) { command = comm;
-                         * commands.removeElementAt(i); break; } }
-                         */
-                        /*
-                         * Look from the expression stack what expression
-                         * should be shown next
-                         */
-                        /*
-                         * long expressionReference = 0; Highlight highlight =
-                         * null;
-                         * 
-                         * if (!exprs.empty()) {
-                         * 
-                         * StringTokenizer expressionTokenizer = new
-                         * StringTokenizer( (String) exprs.peek(), Code.DELIM);
-                         * 
-                         * oper =
-                         * Integer.parseInt(expressionTokenizer.nextToken());
-                         * 
-                         * expressionReference = Long.parseLong(
-                         * expressionTokenizer.nextToken());
-                         * 
-                         * //Make the location information for the location
-                         * token highlight = ECodeUtilities.makeHighlight(
-                         * expressionTokenizer.nextToken()); }
-                         * 
-                         * //Do different things depending on in what
-                         * expression //the literal is used.
-                         * 
-                         * //If operator is assignment we just store the value
-                         * if (oper == Code.A) {
-                         * 
-                         * values.put(new Long(expressionCounter),
-                         * expressionValue);
-                         * 
-                         * //If oper is other binary operator we will show it
-                         * //on the screen with operator } else if
-                         * (ECodeUtilities.isBinary(oper)) {
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveBinOperator(oper);
-                         * 
-                         * if (command == Code.LEFT) {
-                         * 
-                         * director.beginBinaryExpression(expressionValue,
-                         * operator, expressionReference, highlight); } else if
-                         * (command == Code.RIGHT) {
-                         * 
-                         * ExpressionActor ea = (ExpressionActor)
-                         * director.getCurrentScratch().findActor(expressionReference);
-                         * if (ea != null) {
-                         * director.rightBinaryExpression(expressionValue, ea,
-                         * highlight); } else { values.put(new
-                         * Long(expressionCounter), expressionValue); } } else {
-                         * values.put(new Long(expressionCounter),
-                         * expressionValue); }
-                         * 
-                         * //If oper is a unary operator we will show it //on
-                         * the screen with operator } else if
-                         * (ECodeUtilities.isUnary(oper)) {
-                         * 
-                         * values.put(new Long(expressionCounter),
-                         * expressionValue);
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveUnOperator(oper);
-                         * 
-                         * if (command == Code.RIGHT) {
-                         * director.beginUnaryExpression(operator,
-                         * expressionValue, expressionReference, highlight); }
-                         * 
-                         * //If it is something else we will store it for later
-                         * use. } else {
-                         * 
-                         * values.put(new Long(expressionCounter),
-                         * expressionValue); }
-                         */
-                        break;
-
+                    if (expr == null) {
+                        expr = director.beginUnaryExpression(unaryOperator,
+                                val, expressionCounter, h);
                     }
+
+                    Object[] postIncDec = (Object[]) postIncsDecs
+                            .remove(new Long(unaryExpressionReference));
+
+                    if (postIncDec != null) {
+                        doPostIncDec(postIncDec);
+                    }
+
+                    Value expressionValue = director.finishUnaryExpression(
+                            unaryOperator, expr, result, expressionCounter, h);
+
+                    //NOT NEEDED ANY MORE!
+                    //This is not needed after the changes.
+                    //Value expressionValue =
+                    //        director.animateUnaryExpression(operator,
+                    //                                        val,
+                    //                                        result,
+                    //                                        expressionCounter,
+                    //                                        h);
+
+                    //                          values.put(new Long(expressionCounter),
+                    // expressionValue);
+
+                    exprs.pop();
+
+                    handleExpression(expressionValue, expressionCounter);
+
+                    /*
+                     * //command that wait for this expression (left,
+                     * right) int command = -1; int oper = -1; int size =
+                     * commands.size();
+                     * 
+                     * //We find the command for (int i = size - 1; i >= 0;
+                     * i--) { StringTokenizer commandTokenizer = new
+                     * StringTokenizer( (String) commands.elementAt(i),
+                     * Code.DELIM); int comm =
+                     * Integer.parseInt(commandTokenizer.nextToken()); long
+                     * cid = Long.parseLong(commandTokenizer.nextToken());
+                     * if (expressionCounter == cid) { command = comm;
+                     * commands.removeElementAt(i); break; } }
+                     */
+                    /*
+                     * Look from the expression stack what expression
+                     * should be shown next
+                     */
+                    /*
+                     * long expressionReference = 0; Highlight highlight =
+                     * null;
+                     * 
+                     * if (!exprs.empty()) {
+                     * 
+                     * StringTokenizer expressionTokenizer = new
+                     * StringTokenizer( (String) exprs.peek(), Code.DELIM);
+                     * 
+                     * oper =
+                     * Integer.parseInt(expressionTokenizer.nextToken());
+                     * 
+                     * expressionReference = Long.parseLong(
+                     * expressionTokenizer.nextToken());
+                     * 
+                     * //Make the location information for the location
+                     * token highlight = ECodeUtilities.makeHighlight(
+                     * expressionTokenizer.nextToken()); }
+                     * 
+                     * //Do different things depending on in what
+                     * expression //the literal is used.
+                     * 
+                     * //If operator is assignment we just store the value
+                     * if (oper == Code.A) {
+                     * 
+                     * values.put(new Long(expressionCounter),
+                     * expressionValue);
+                     * 
+                     * //If oper is other binary operator we will show it
+                     * //on the screen with operator } else if
+                     * (ECodeUtilities.isBinary(oper)) {
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveBinOperator(oper);
+                     * 
+                     * if (command == Code.LEFT) {
+                     * 
+                     * director.beginBinaryExpression(expressionValue,
+                     * operator, expressionReference, highlight); } else if
+                     * (command == Code.RIGHT) {
+                     * 
+                     * ExpressionActor ea = (ExpressionActor)
+                     * director.getCurrentScratch().findActor(expressionReference);
+                     * if (ea != null) {
+                     * director.rightBinaryExpression(expressionValue, ea,
+                     * highlight); } else { values.put(new
+                     * Long(expressionCounter), expressionValue); } } else {
+                     * values.put(new Long(expressionCounter),
+                     * expressionValue); }
+                     * 
+                     * //If oper is a unary operator we will show it //on
+                     * the screen with operator } else if
+                     * (ECodeUtilities.isUnary(oper)) {
+                     * 
+                     * values.put(new Long(expressionCounter),
+                     * expressionValue);
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveUnOperator(oper);
+                     * 
+                     * if (command == Code.RIGHT) {
+                     * director.beginUnaryExpression(operator,
+                     * expressionValue, expressionReference, highlight); }
+                     * 
+                     * //If it is something else we will store it for later
+                     * use. } else {
+                     * 
+                     * values.put(new Long(expressionCounter),
+                     * expressionValue); }
+                     */
+                    break;
+
+                }
 
                 // Unary Expression
                 // PostIncrement
                 case Code.PIE:
                 // PostDecrement
-                case Code.PDE:
-                    {
+                case Code.PDE: {
 
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
 
-                        String value = tokenizer.nextToken();
-                        String type = tokenizer.nextToken();
+                    String value = tokenizer.nextToken();
+                    String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
 
-                        Value result = new Value(value, type);
+                    Value result = new Value(value, type);
 
-                        exprs.pop();
+                    exprs.pop();
 
-                        if (exprs.empty()) {
+                    if (exprs.empty()) {
 
-                            Variable var = (Variable) variables
-                                    .remove(new Long(expressionReference));
-
-                            int operator = MCodeUtilities
-                                    .resolveUnOperator(token);
-                            director.animateIncDec(operator, var, result, h);
-
-                        } else {
-
-                            Object[] postIncDec = {
-                                    new Long(MCodeUtilities
-                                            .resolveUnOperator(token)),
-                                    new Long(expressionReference), result, h};
-                            postIncsDecs.put(new Long(expressionCounter),
-                                    postIncDec);
-
-                        }
-
-                        break;
-
-                    }
-
-                // Unary Expression
-                // PreIncrement
-                case Code.PRIE:
-                // PreDecrement
-                case Code.PRDE:
-                    {
-
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        String value = tokenizer.nextToken();
-                        String type = tokenizer.nextToken();
-
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-
-                        Value result = new Value(value, type);
                         Variable var = (Variable) variables.remove(new Long(
                                 expressionReference));
 
                         int operator = MCodeUtilities.resolveUnOperator(token);
                         director.animateIncDec(operator, var, result, h);
-                        values.put(new Long(expressionCounter), result);
 
-                        exprs.pop();
+                    } else {
 
-                        Object[] postIncDec = (Object[]) postIncsDecs
-                                .remove(new Long(expressionReference));
+                        Object[] postIncDec = {
+                                new Long(MCodeUtilities
+                                        .resolveUnOperator(token)),
+                                new Long(expressionReference), result, h };
+                        postIncsDecs.put(new Long(expressionCounter),
+                                postIncDec);
 
-                        if (postIncDec != null) {
-                            doPostIncDec(postIncDec);
-                        }
-
-                        break;
                     }
+
+                    break;
+
+                }
+
+                // Unary Expression
+                // PreIncrement
+                case Code.PRIE:
+                // PreDecrement
+                case Code.PRDE: {
+
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = tokenizer.nextToken();
+                    String type = tokenizer.nextToken();
+
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+
+                    Value result = new Value(value, type);
+                    Variable var = (Variable) variables.remove(new Long(
+                            expressionReference));
+
+                    int operator = MCodeUtilities.resolveUnOperator(token);
+                    director.animateIncDec(operator, var, result, h);
+                    values.put(new Long(expressionCounter), result);
+
+                    exprs.pop();
+
+                    Object[] postIncDec = (Object[]) postIncsDecs
+                            .remove(new Long(expressionReference));
+
+                    if (postIncDec != null) {
+                        doPostIncDec(postIncDec);
+                    }
+
+                    break;
+                }
 
                 /*
                  * Binary Expressions
@@ -858,2340 +847,2267 @@ public class Interpreter {
                 // Substract Expression
                 case Code.SE:
                 // Add Expression
-                case Code.AE:
-                    {
+                case Code.AE: {
 
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long leftExpressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long rightExpressionReference = Long
-                                .parseLong(tokenizer.nextToken());
-                        String value = null;
-                        if (tokenizer.countTokens() >= 3) {
-                            value = tokenizer.nextToken();
-                        } else {
-                            value = "";
-                        }
-                        String type = tokenizer.nextToken();
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    long leftExpressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    long rightExpressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = null;
+                    if (tokenizer.countTokens() >= 3) {
+                        value = tokenizer.nextToken();
+                    } else {
+                        value = "";
+                    }
+                    String type = tokenizer.nextToken();
 
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        Value result = new Value(value, type);
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+                    Value result = new Value(value, type);
 
-                        ExpressionActor expr = director.getCurrentScratch()
-                                .findActor(expressionCounter);
+                    ExpressionActor expr = director.getCurrentScratch()
+                            .findActor(expressionCounter);
 
-                        Value expressionValue = null;
+                    Value expressionValue = null;
+
+                    /*
+                     * The expression is created because its left side
+                     * consists of literal or variable.
+                     */
+                    if (expr != null) {
 
                         /*
-                         * The expression is created because its left side
-                         * consists of literal or variable.
+                         * It is possible that the right hand side is not
+                         * yet set thus we need to check that to be sure.
                          */
-                        if (expr != null) {
 
-                            /*
-                             * It is possible that the right hand side is not
-                             * yet set thus we need to check that to be sure.
-                             */
+                        Value right = (Value) values.remove(new Long(
+                                rightExpressionReference));
 
-                            Value right = (Value) values.remove(new Long(
-                                    rightExpressionReference));
-
-                            if (right != null) {
-                                director.rightBinaryExpression(right, expr, h);
-                            }
-
-                            // token is declared and assigned in the line 91.
-                            expressionValue = director
-                                    .finishBinaryExpression(result,
-                                            MCodeUtilities
-                                                    .resolveBinOperator(token),
-                                            expr, h);
-
-                            exprs.pop();
-
-                            //values.put(new Long(expressionCounter),
-                            // expressionValue);
-
-                            Object[] postIncDec = (Object[]) postIncsDecs
-                                    .remove(new Long(rightExpressionReference));
-
-                            if (postIncDec != null) {
-                                doPostIncDec(postIncDec);
-                            }
-
-                            /*
-                             * The expression is not created before because its
-                             * left side consists of expression.
-                             */
-                        } else {
-
-                            Value left = (Value) values.remove(new Long(
-                                    leftExpressionReference));
-                            Value right = (Value) values.remove(new Long(
-                                    rightExpressionReference));
-
-                            expr = director.beginBinaryExpression(left,
-                                    MCodeUtilities.resolveBinOperator(token),
-                                    expressionCounter, h);
-
-                            Object[] postIncDec = (Object[]) postIncsDecs
-                                    .remove(new Long(leftExpressionReference));
-
-                            if (postIncDec != null) {
-                                doPostIncDec(postIncDec);
-                            }
-
+                        if (right != null) {
                             director.rightBinaryExpression(right, expr, h);
-
-                            postIncDec = (Object[]) postIncsDecs
-                                    .remove(new Long(rightExpressionReference));
-
-                            if (postIncDec != null) {
-                                doPostIncDec(postIncDec);
-                            }
-                            // token is declared and assigned in the line 91.
-                            expressionValue = director
-                                    .finishBinaryExpression(result,
-                                            MCodeUtilities
-                                                    .resolveBinOperator(token),
-                                            expr, h);
-
-                            /*
-                             * Value expressionValue =
-                             * director.animateBinaryExpression(
-                             * ECodeUtilities.resolveBinOperator(token), left,
-                             * right, result, expressionCounter, h);
-                             */
-                            exprs.pop();
-
-                            //                              values.put(new Long(expressionCounter),
-                            // expressionValue);
-
                         }
 
-                        handleExpression(expressionValue, expressionCounter);
+                        // token is declared and assigned in the line 91.
+                        expressionValue = director.finishBinaryExpression(
+                                result, MCodeUtilities
+                                        .resolveBinOperator(token), expr, h);
+
+                        exprs.pop();
+
+                        //values.put(new Long(expressionCounter),
+                        // expressionValue);
+
+                        Object[] postIncDec = (Object[]) postIncsDecs
+                                .remove(new Long(rightExpressionReference));
+
+                        if (postIncDec != null) {
+                            doPostIncDec(postIncDec);
+                        }
 
                         /*
-                         * int command = -1; int oper = -1; int size =
-                         * commands.size();
-                         * 
-                         * //We find the command for (int i = size - 1; i >= 0;
-                         * i--) { StringTokenizer commandTokenizer = new
-                         * StringTokenizer( (String) commands.elementAt(i),
-                         * Code.DELIM); int comm =
-                         * Long.parseLong(commandTokenizer.nextToken()); int
-                         * cid = Long.parseLong(commandTokenizer.nextToken());
-                         * if (expressionCounter == cid) { command = comm;
-                         * commands.removeElementAt(i); break; } }
+                         * The expression is not created before because its
+                         * left side consists of expression.
                          */
+                    } else {
+
+                        Value left = (Value) values.remove(new Long(
+                                leftExpressionReference));
+                        Value right = (Value) values.remove(new Long(
+                                rightExpressionReference));
+
+                        expr = director.beginBinaryExpression(left,
+                                MCodeUtilities.resolveBinOperator(token),
+                                expressionCounter, h);
+
+                        Object[] postIncDec = (Object[]) postIncsDecs
+                                .remove(new Long(leftExpressionReference));
+
+                        if (postIncDec != null) {
+                            doPostIncDec(postIncDec);
+                        }
+
+                        director.rightBinaryExpression(right, expr, h);
+
+                        postIncDec = (Object[]) postIncsDecs.remove(new Long(
+                                rightExpressionReference));
+
+                        if (postIncDec != null) {
+                            doPostIncDec(postIncDec);
+                        }
+                        // token is declared and assigned in the line 91.
+                        expressionValue = director.finishBinaryExpression(
+                                result, MCodeUtilities
+                                        .resolveBinOperator(token), expr, h);
+
                         /*
-                         * Look from the expression stack what expression
-                         * should be shown next
+                         * Value expressionValue =
+                         * director.animateBinaryExpression(
+                         * ECodeUtilities.resolveBinOperator(token), left,
+                         * right, result, expressionCounter, h);
                          */
-                        /*
-                         * int expressionReference = 0; Highlight highlight =
-                         * null;
-                         * 
-                         * if (!exprs.empty()) {
-                         * 
-                         * StringTokenizer expressionTokenizer = new
-                         * StringTokenizer( (String) exprs.peek(), Code.DELIM);
-                         * 
-                         * oper =
-                         * Long.parseLong(expressionTokenizer.nextToken());
-                         * 
-                         * expressionReference = Long.parseLong(
-                         * expressionTokenizer.nextToken());
-                         * 
-                         * //Make the location information for the location
-                         * token highlight = ECodeUtilities.makeHighlight(
-                         * expressionTokenizer.nextToken()); }
-                         * 
-                         * //Do different things depending on in what
-                         * expression //the literal is used.
-                         * 
-                         * //If operator is assignment we just store the value
-                         * if (oper == Code.A){ values.put(new
-                         * Long(expressionCounter), expressionValue);
-                         * 
-                         * //If oper is other binary operator we will show it
-                         * //on the screen with operator } else if
-                         * (ECodeUtilities.isBinary(oper)) {
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveBinOperator(oper);
-                         * 
-                         * if (command == Code.LEFT) {
-                         * 
-                         * director.beginBinaryExpression(expressionValue,
-                         * operator, expressionReference, highlight); } else if
-                         * (command == Code.RIGHT) {
-                         * 
-                         * ExpressionActor ea = (ExpressionActor)
-                         * director.getCurrentScratch().findActor(expressionReference);
-                         * if (ea != null) {
-                         * director.rightBinaryExpression(expressionValue, ea,
-                         * highlight); } else { values.put(new
-                         * Long(expressionCounter), expressionValue); } } else {
-                         * values.put(new Long(expressionCounter),
-                         * expressionValue); }
-                         * 
-                         * //If oper is a unary operator we will show it //on
-                         * the screen with operator } else if
-                         * (ECodeUtilities.isUnary(oper)) {
-                         * 
-                         * values.put(new Long(expressionCounter),
-                         * expressionValue);
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveUnOperator(oper);
-                         * 
-                         * if (command == Code.RIGHT) {
-                         * director.beginUnaryExpression(operator,
-                         * expressionValue, expressionReference, highlight); }
-                         * 
-                         * //If it is something else we will store it for later
-                         * use. } else {
-                         * 
-                         * values.put(new Long(expressionCounter),
-                         * expressionValue); }
-                         */
-                        break;
+                        exprs.pop();
+
+                        //                              values.put(new Long(expressionCounter),
+                        // expressionValue);
+
                     }
 
+                    handleExpression(expressionValue, expressionCounter);
+
+                    /*
+                     * int command = -1; int oper = -1; int size =
+                     * commands.size();
+                     * 
+                     * //We find the command for (int i = size - 1; i >= 0;
+                     * i--) { StringTokenizer commandTokenizer = new
+                     * StringTokenizer( (String) commands.elementAt(i),
+                     * Code.DELIM); int comm =
+                     * Long.parseLong(commandTokenizer.nextToken()); int
+                     * cid = Long.parseLong(commandTokenizer.nextToken());
+                     * if (expressionCounter == cid) { command = comm;
+                     * commands.removeElementAt(i); break; } }
+                     */
+                    /*
+                     * Look from the expression stack what expression
+                     * should be shown next
+                     */
+                    /*
+                     * int expressionReference = 0; Highlight highlight =
+                     * null;
+                     * 
+                     * if (!exprs.empty()) {
+                     * 
+                     * StringTokenizer expressionTokenizer = new
+                     * StringTokenizer( (String) exprs.peek(), Code.DELIM);
+                     * 
+                     * oper =
+                     * Long.parseLong(expressionTokenizer.nextToken());
+                     * 
+                     * expressionReference = Long.parseLong(
+                     * expressionTokenizer.nextToken());
+                     * 
+                     * //Make the location information for the location
+                     * token highlight = ECodeUtilities.makeHighlight(
+                     * expressionTokenizer.nextToken()); }
+                     * 
+                     * //Do different things depending on in what
+                     * expression //the literal is used.
+                     * 
+                     * //If operator is assignment we just store the value
+                     * if (oper == Code.A){ values.put(new
+                     * Long(expressionCounter), expressionValue);
+                     * 
+                     * //If oper is other binary operator we will show it
+                     * //on the screen with operator } else if
+                     * (ECodeUtilities.isBinary(oper)) {
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveBinOperator(oper);
+                     * 
+                     * if (command == Code.LEFT) {
+                     * 
+                     * director.beginBinaryExpression(expressionValue,
+                     * operator, expressionReference, highlight); } else if
+                     * (command == Code.RIGHT) {
+                     * 
+                     * ExpressionActor ea = (ExpressionActor)
+                     * director.getCurrentScratch().findActor(expressionReference);
+                     * if (ea != null) {
+                     * director.rightBinaryExpression(expressionValue, ea,
+                     * highlight); } else { values.put(new
+                     * Long(expressionCounter), expressionValue); } } else {
+                     * values.put(new Long(expressionCounter),
+                     * expressionValue); }
+                     * 
+                     * //If oper is a unary operator we will show it //on
+                     * the screen with operator } else if
+                     * (ECodeUtilities.isUnary(oper)) {
+                     * 
+                     * values.put(new Long(expressionCounter),
+                     * expressionValue);
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveUnOperator(oper);
+                     * 
+                     * if (command == Code.RIGHT) {
+                     * director.beginUnaryExpression(operator,
+                     * expressionValue, expressionReference, highlight); }
+                     * 
+                     * //If it is something else we will store it for later
+                     * use. } else {
+                     * 
+                     * values.put(new Long(expressionCounter),
+                     * expressionValue); }
+                     */
+                    break;
+                }
+
                 //Variable Declaration
-                case Code.VD:
-                    {
+                case Code.VD: {
 
-                        String variableName = tokenizer.nextToken();
-                        long initializerExpression = Long.parseLong(tokenizer
-                                .nextToken());
-                        String value = null;
-                        if (tokenizer.countTokens() >= 4) {
-                            value = tokenizer.nextToken();
+                    String variableName = tokenizer.nextToken();
+                    long initializerExpression = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = null;
+                    if (tokenizer.countTokens() >= 4) {
+                        value = tokenizer.nextToken();
+                    } else {
+                        value = "";
+                    }
+                    String type = tokenizer.nextToken();
+                    String modifier = tokenizer.nextToken();
+
+                    //Make the location information for the location token
+                    Highlight highlight = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
+
+                    Variable var = director.declareVariable(variableName, type,
+                            highlight);
+
+                    Value casted = null;
+
+                    if (MCodeUtilities.isPrimitive(type)) {
+                        casted = new Value(value, type);
+                    } else {
+                        if (value.equals("null")) {
+                            casted = new Reference();
                         } else {
-                            value = "";
+                            Instance inst = (Instance) instances
+                                    .get(MCodeUtilities.getHashCode(value));
+
+                            if (inst != null) {
+                                casted = new Reference(inst);
+                            } else {
+                                casted = new Reference();
+                            }
                         }
-                        String type = tokenizer.nextToken();
-                        String modifier = tokenizer.nextToken();
+                        casted.setActor(var.getActor().getValue());
+                    }
 
-                        //Make the location information for the location token
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
+                    if (initializerExpression > 0) {
 
-                        Variable var = director.declareVariable(variableName,
-                                type, highlight);
+                        Value val = (Value) values.remove(new Long(
+                                initializerExpression));
+
+                        Value copiedValue = director.prepareForAssignment(var,
+                                val);
+                        director.animateAssignment(var, val, copiedValue,
+                                casted, null, highlight);
+
+                        Object[] postIncDec = (Object[]) postIncsDecs
+                                .remove(new Long(initializerExpression));
+
+                        if (postIncDec != null) {
+                            doPostIncDec(postIncDec);
+                        }
+                    }
+
+                    director.closeScratch();
+                    director.openScratch();
+
+                    break;
+                }
+
+                //Qualified Name (variable)
+                case Code.QN: {
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    String variableName = tokenizer.nextToken();
+                    String value = null;
+                    if (tokenizer.countTokens() >= 2) {
+                        value = tokenizer.nextToken();
+                    } else {
+                        value = "";
+                    }
+                    String type = tokenizer.nextToken();
+
+                    Variable var = director.getCurrentMethodFrame()
+                            .getVariable(variableName);
+
+                    //command that waits for this expression
+                    int command = -1;
+                    int oper = -1;
+                    int size = commands.size();
+
+                    //We find the command
+                    for (int i = size - 1; i >= 0; i--) {
+                        StringTokenizer commandTokenizer = new StringTokenizer(
+                                (String) commands.elementAt(i), Code.DELIM);
+                        int comm = Integer.parseInt(commandTokenizer
+                                .nextToken());
+                        long cid = Long.parseLong(commandTokenizer.nextToken());
+
+                        if (expressionCounter == cid) {
+                            command = comm;
+                            commands.removeElementAt(i);
+                            break;
+                        }
+                    }
+
+                    /*
+                     * Look from the expression stack what expression
+                     * should be shown next
+                     */
+
+                    long expressionReference = 0;
+                    Highlight highlight = null;
+                    if (!exprs.empty()) {
+                        StringTokenizer expressionTokenizer = new StringTokenizer(
+                                (String) exprs.peek(), Code.DELIM);
+
+                        oper = Integer
+                                .parseInt(expressionTokenizer.nextToken());
+
+                        expressionReference = Long
+                                .parseLong(expressionTokenizer.nextToken());
+
+                        //Make the location information for the location
+                        // token
+                        highlight = MCodeUtilities
+                                .makeHighlight(expressionTokenizer.nextToken());
+                    }
+
+                    Value val = null;
+                    if (MCodeUtilities.isPrimitive(type)) {
+                        val = new Value(value, type);
+                        ValueActor va = var.getActor().getValue();
+                        val.setActor(va);
+                    } else {
+                        if (value.equals("null")) {
+                            val = new Reference();
+                        } else {
+                            Instance inst = (Instance) instances
+                                    .get(MCodeUtilities.getHashCode(value));
+                            if (inst != null) {
+                                val = new Reference(inst);
+                            } else {
+                                val = new Reference();
+                            }
+                        }
+                        val.setActor(var.getActor().getValue());
+                        variables.put(new Long(expressionCounter), var);
+                    }
+
+                    /*
+                     * Do different kind of things depending on in what
+                     * expression the variable is used.
+                     */
+
+                    //If operator is assignment we just store the value
+                    if (oper == Code.A) {
+                        if (command == Code.TO) {
+                            variables.put(new Long(expressionCounter), var);
+                        } else {
+                            values.put(new Long(expressionCounter), val);
+                        }
+                        //If oper is other binary operator we will show it
+                        //on the screen with operator
+                    } else if (MCodeUtilities.isBinary(oper)) {
+                        int operator = MCodeUtilities.resolveBinOperator(oper);
+                        if (command == Code.LEFT) {
+                            director.beginBinaryExpression(val, operator,
+                                    expressionReference, highlight);
+                        } else if (command == Code.RIGHT) {
+                            ExpressionActor ea = director.getCurrentScratch()
+                                    .findActor(expressionReference);
+                            if (ea != null) {
+                                director.rightBinaryExpression(val, ea,
+                                        highlight);
+                            } else {
+                                values.put(new Long(expressionCounter), val);
+                            }
+                        } else {
+                            values.put(new Long(expressionCounter), val);
+                        }
+
+                        //If oper is a unary operator we will show it
+                        //on the screen with operator
+                    } else if (MCodeUtilities.isUnary(oper)) {
+                        if (oper == Code.PRIE || oper == Code.PRDE) {
+                            variables.put(new Long(expressionCounter), var);
+                            values.put(new Long(expressionCounter), val);
+                        } else if (oper == Code.PIE || oper == Code.PDE) {
+                            variables.put(new Long(expressionCounter), var);
+                            values.put(new Long(expressionReference), val);
+                            values.put(new Long(expressionCounter), val);
+                        } else {
+                            values.put(new Long(expressionCounter), val);
+                            int operator = MCodeUtilities
+                                    .resolveUnOperator(oper);
+                            if (command == Code.RIGHT) {
+                                director.beginUnaryExpression(operator, val,
+                                        expressionReference, highlight);
+                            }
+                        }
+                        //If it is something else we will store it for
+                        // later use.
+                    } else {
+                        values.put(new Long(expressionCounter), val);
+                        variables.put(new Long(expressionCounter), var);
+                    }
+
+                    break;
+                }
+
+                //Literal
+                case Code.L: {
+
+                    //Second token is the expression counter
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+
+                    String value = null;
+                    if (tokenizer.countTokens() >= 3) {
+                        //Third token is the value of the literal
+                        value = tokenizer.nextToken();
+                    } else {
+                        /**
+                         * There is no third token because the literal is
+                         * an empty string
+                         */
+                        value = "";
+                    }
+
+                    //Fourth token is the type of the literal
+                    String type = tokenizer.nextToken();
+
+                    //Fifth token is the highlight information.
+                    //Not used because the whole expression is
+                    // highlighted.
+                    //Highlight highlight =
+                    //ECodeUtilities.makeHighlight(tokenizer.nextToken());
+
+                    Value lit = new Value(value, type);
+                    director.introduceLiteral(lit);
+
+                    handleExpression(lit, expressionCounter);
+
+                    /*
+                     * //command that wait for this expression (left,
+                     * right) int command = -1; int oper = -1; int size =
+                     * commands.size();
+                     * 
+                     * //We find the command for (int i = size - 1; i >= 0;
+                     * i--) { StringTokenizer commandTokenizer = new
+                     * StringTokenizer( (String) commands.elementAt(i),
+                     * Code.DELIM); int comm =
+                     * Long.parseLong(commandTokenizer.nextToken()); int
+                     * cid = Long.parseLong(commandTokenizer.nextToken());
+                     * if (expressionCounter == cid) { command = comm;
+                     * commands.removeElementAt(i); break; } }
+                     */
+                    /*
+                     * Look from the expression stack what expression
+                     * should be shown next
+                     */
+                    /*
+                     * int expressionReference = 0; Highlight highlight =
+                     * null;
+                     * 
+                     * if (!exprs.empty()) { StringTokenizer
+                     * expressionTokenizer = new StringTokenizer( (String)
+                     * exprs.peek(), Code.DELIM);
+                     * 
+                     * oper =
+                     * Long.parseLong(expressionTokenizer.nextToken());
+                     * 
+                     * expressionReference = Long.parseLong(
+                     * expressionTokenizer.nextToken());
+                     * 
+                     * //Make the location information for the location
+                     * token highlight = ECodeUtilities.makeHighlight(
+                     * expressionTokenizer.nextToken()); }
+                     * 
+                     * //Value of the literal Value lit = new Value(value,
+                     * type); director.introduceLiteral(lit);
+                     * 
+                     * //Do different things depending on in what
+                     * expression //the literal is used.
+                     * 
+                     * //If operator is assignment we just store the value
+                     * if (oper == Code.A){ values.put(new
+                     * Long(expressionCounter), lit);
+                     * 
+                     * //If oper is other binary operator we will show it
+                     * //on the screen with operator } else if
+                     * (ECodeUtilities.isBinary(oper)) {
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveBinOperator(oper);
+                     * 
+                     * if (command == Code.LEFT) {
+                     * 
+                     * director.beginBinaryExpression(lit, operator,
+                     * expressionReference, highlight); } else if (command ==
+                     * Code.RIGHT) {
+                     * 
+                     * ExpressionActor ea = (ExpressionActor)
+                     * director.getCurrentScratch().findActor(expressionReference);
+                     * if (ea != null) {
+                     * director.rightBinaryExpression(lit, ea, highlight); }
+                     * else { values.put(new Long(expressionCounter), lit); } }
+                     * else { values.put(new Long(expressionCounter), lit); }
+                     * 
+                     * //If oper is a unary operator we will show it //on
+                     * the screen with operator } else if
+                     * (ECodeUtilities.isUnary(oper)) {
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveUnOperator(oper);
+                     * values.put(new Long(expressionCounter), lit); if
+                     * (command == Code.RIGHT) {
+                     * director.beginUnaryExpression(operator, lit,
+                     * expressionReference, highlight); }
+                     * 
+                     * //If it is something else we will store it for later
+                     * use. } else { values.put(new
+                     * Long(expressionCounter), lit); }
+                     */
+                    break;
+                }
+
+                //Simple Allocation (Object Allocation)
+                case Code.SA: {
+
+                    //simpleAllocationCounter
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+
+                    String declaringClass = tokenizer.nextToken();
+                    String constructorName = tokenizer.nextToken();
+
+                    int parameterCount = Integer
+                            .parseInt(tokenizer.nextToken());
+                    Highlight highlight = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
+
+                    //Create here Object Stage with initial variables and
+                    // values
+                    ClassInfo ci = (ClassInfo) classes.get(declaringClass);
+
+                    //If ci is not null it means that we are dealing with
+                    //user defined class and can find the class
+                    // information
+                    //extracted during the compilation with DynamicJava.
+                    //If ci is null there is no user defined class and we
+                    //need to use the Class.for(String name) method to
+                    //find out as much as possible from the class.
+                    if (ci == null) {
+                        Class declaredClass = null;
+                        try {
+                            declaredClass = Class.forName(declaringClass);
+                        } catch (Exception e) {
+                            //String message = "<H1>Runtime Error</H1>
+                            // <P>The class that was supposed to be
+                            // initiated could not be found.</P>";
+                            director
+                                    .showErrorMessage(new InterpreterError(
+                                            messageBundle
+                                                    .getString("notfoundclass.exception")));
+                        }
+                        ci = new ClassInfo(declaredClass);
+                        classes.put(ci.getName(), ci);
+                    }
+
+                    //This works for not primitive classes.
+                    //There needs to be a check whether invoked
+                    //class is primitive or not.
+                    //ObjectFrame of = createNewInstance(ci, highlight);
+                    //Reference ref = new Reference(of);
+
+                    invokingMethod = true;
+
+                    if (currentMethodInvocation != null) {
+                        methodInvocation.push(currentMethodInvocation);
+                    }
+                    currentMethodInvocation = new Object[9];
+
+                    int n = currentMethodInvocation.length;
+                    for (int i = 0; i < n; i++) {
+                        currentMethodInvocation[i] = null;
+                    }
+
+                    currentMethodInvocation[0] = constructorName;
+                    currentMethodInvocation[1] = "";
+
+                    Value[] parameterValues = new Value[parameterCount];
+                    String[] parameterTypes = new String[parameterCount];
+                    String[] parameterNames = new String[parameterCount];
+                    Long[] parameterExpressionReferences = new Long[parameterCount];
+
+                    for (int i = 0; i < parameterCount; i++) {
+                        parameterValues[i] = null;
+                        parameterTypes[i] = null;
+                        parameterNames[i] = null;
+                        parameterExpressionReferences[i] = null;
+                    }
+
+                    currentMethodInvocation[2] = parameterValues;
+                    currentMethodInvocation[3] = parameterTypes;
+                    currentMethodInvocation[4] = parameterNames;
+                    currentMethodInvocation[5] = highlight;
+                    currentMethodInvocation[7] = parameterExpressionReferences;
+                    //Here we put the ClassInfo of the class in the array
+                    //just to wait for the Method Declaration to be read
+                    // and the
+                    //object can be created from this method info.
+                    currentMethodInvocation[8] = ci /* ref */;
+
+                    /* objectCreation.push(new Reference(of)); */
+
+                    break;
+                }
+
+                case Code.CONSCN: {
+
+                    constructorCall = true;
+                    superMethodsReading = new Vector();
+                    superMethodCallNumber = Long.parseLong(tokenizer
+                            .nextToken());
+
+                    break;
+                }
+
+                // Simple class allocation close
+                case Code.SAC: {
+
+                    //simpleAllocationCounter
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+
+                    String hashCode = tokenizer.nextToken();
+
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+
+                    //This should handle the possible object
+                    //assignment etc.
+                    if (!objectCreation.empty()) {
+                        //First reference to the created object is taken
+                        Reference ref = (Reference) objectCreation.pop();
+                        Instance inst = ref.getInstance();
+                        inst.setHashCode(hashCode);
+                        //The instance is putted in the hashtable that
+                        //keeps the instances
+                        instances.put(hashCode, inst);
+                        //Then we handle the possible expressions
+                        //concerning this reference.
+                    }
+
+                    Value ret = director.getCurrentMethodFrame().getVariable(
+                            "this").getValue();
+                    Value casted = null;
+                    Instance inst = (Instance) instances.get(hashCode);
+
+                    if (inst != null) {
+                        casted = new Reference(inst);
+                    } else {
+                        casted = new Reference();
+                    }
+
+                    Actor returnActor = director.animateReturn(ret, casted, h);
+                    Value returnValue = (Value) casted.clone();
+                    Value rv;
+
+                    if (returnValue instanceof Reference) {
+                        rv = (Value) ((Reference) returnValue).clone();
+                    } else {
+                        rv = (Value) returnValue.clone();
+                    }
+
+                    ValueActor va = director.finishMethod(returnActor,
+                            expressionCounter);
+                    rv.setActor(va);
+                    handleExpression(rv, expressionCounter);
+
+                    break;
+                }
+
+                // Object field access
+                case Code.OFA: {
+
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    long objectCounter = Long.parseLong(tokenizer.nextToken());
+                    String variableName = tokenizer.nextToken();
+                    String value = "";
+                    if (tokenizer.countTokens() >= 3) {
+                        value = tokenizer.nextToken();
+                    }
+
+                    String type = tokenizer.nextToken();
+
+                    Reference objVal = (Reference) values.remove(new Long(
+                            objectCounter));
+                    if (objVal == null && !objectCreation.empty()) {
+                        objVal = (Reference) objectCreation.peek();
+                    }
+
+                    ObjectFrame obj = (ObjectFrame) objVal.getInstance();
+
+                    if (obj == null && !objectCreation.empty()) {
+                        objVal = (Reference) objectCreation.peek();
+                        obj = (ObjectFrame) objVal.getInstance();
+                    }
+
+                    Variable var = obj.getVariable(variableName);
+
+                    //command that waits for this expression
+                    int command = -1;
+                    int oper = -1;
+                    int size = commands.size();
+
+                    //We find the command
+                    for (int i = size - 1; i >= 0; i--) {
+                        StringTokenizer commandTokenizer = new StringTokenizer(
+                                (String) commands.elementAt(i), Code.DELIM);
+                        int comm = Integer.parseInt(commandTokenizer
+                                .nextToken());
+                        long cid = Long.parseLong(commandTokenizer.nextToken());
+
+                        if (expressionCounter == cid) {
+                            command = comm;
+                            commands.removeElementAt(i);
+                            break;
+                        }
+                    }
+
+                    /**
+                     * Look from the expression stack what expression
+                     * should be shown next
+                     */
+                    long expressionReference = 0;
+                    Highlight highlight = null;
+                    if (!exprs.empty()) {
+                        StringTokenizer expressionTokenizer = new StringTokenizer(
+                                (String) exprs.peek(), Code.DELIM);
+
+                        oper = Integer
+                                .parseInt(expressionTokenizer.nextToken());
+
+                        expressionReference = Long
+                                .parseLong(expressionTokenizer.nextToken());
+
+                        //Make the location information for the location
+                        // token
+                        highlight = MCodeUtilities
+                                .makeHighlight(expressionTokenizer.nextToken());
+                    }
+
+                    Value val = null;
+                    if (MCodeUtilities.isPrimitive(type)) {
+                        val = new Value(value, type);
+                        ValueActor va = var.getActor().getValue();
+                        val.setActor(va);
+                    } else {
+                        if (value.equals("null")) {
+                            val = new Reference();
+                        } else {
+                            Instance inst = (Instance) instances
+                                    .get(MCodeUtilities.getHashCode(value));
+                            if (inst != null) {
+                                val = new Reference(inst);
+                            } else {
+                                val = new Reference();
+                            }
+                        }
+                        val.setActor(var.getActor().getValue());
+                    }
+
+                    /**
+                     * Do different kind of things depending on in what
+                     * expression the variable is used.
+                     */
+
+                    //If operator is assignment we just store the value
+                    if (oper == Code.A) {
+
+                        if (command == Code.TO) {
+
+                            variables.put(new Long(expressionCounter), var);
+
+                        } else {
+
+                            values.put(new Long(expressionCounter), val);
+                        }
+
+                        //If oper is other binary operator we will show it
+                        //on the screen with operator
+                    } else if (MCodeUtilities.isBinary(oper)) {
+
+                        int operator = MCodeUtilities.resolveBinOperator(oper);
+
+                        if (command == Code.LEFT) {
+
+                            director.beginBinaryExpression(val, operator,
+                                    expressionReference, highlight);
+
+                        } else if (command == Code.RIGHT) {
+
+                            ExpressionActor ea = director.getCurrentScratch()
+                                    .findActor(expressionReference);
+                            if (ea != null) {
+
+                                director.rightBinaryExpression(val, ea,
+                                        highlight);
+
+                            } else {
+                                values.put(new Long(expressionCounter), val);
+                            }
+                        } else {
+                            values.put(new Long(expressionCounter), val);
+                        }
+
+                        //If oper is a unary operator we will show it
+                        //on the screen with operator
+                    } else if (MCodeUtilities.isUnary(oper)) {
+
+                        if (oper == Code.PRIE || oper == Code.PRDE) {
+
+                            variables.put(new Long(expressionCounter), var);
+                            values.put(new Long(expressionCounter), val);
+
+                        } else if (oper == Code.PIE || oper == Code.PDE) {
+
+                            variables.put(new Long(expressionCounter), var);
+                            values.put(new Long(expressionReference), val);
+                            values.put(new Long(expressionCounter), val);
+
+                        } else {
+
+                            values.put(new Long(expressionCounter), val);
+                            int operator = MCodeUtilities
+                                    .resolveUnOperator(oper);
+                            if (command == Code.RIGHT) {
+                                director.beginUnaryExpression(operator, val,
+                                        expressionReference, highlight);
+                            }
+                        }
+
+                        //If it is something else we will store it for
+                        // later use.
+                    } else {
+
+                        values.put(new Long(expressionCounter), val);
+                        variables.put(new Long(expressionCounter), var);
+
+                    }
+
+                    break;
+                }
+
+                // Object method call
+                case Code.OMC: {
+
+                    String methodName = tokenizer.nextToken();
+                    int parameterCount = Integer
+                            .parseInt(tokenizer.nextToken());
+                    long objectCounter = Long.parseLong(tokenizer.nextToken());
+                    Highlight highlight = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
+
+                    Value val = (Value) values.remove(new Long(objectCounter));
+                    Variable var = (Variable) variables.remove(new Long(
+                            objectCounter));
+
+                    if (val == null && !objectCreation.empty()) {
+                        val = (Reference) objectCreation.peek();
+                    } else if (val.getValue().equals("null")
+                            && !objectCreation.empty()) {
+                        val = (Reference) objectCreation.peek();
+                    }
+
+                    if (val instanceof Reference) {
+                        ObjectFrame obj = (ObjectFrame) ((Reference) val)
+                                .getInstance();
+
+                        if (obj == null && !objectCreation.empty()) {
+                            val = (Reference) objectCreation.peek();
+                            obj = (ObjectFrame) ((Reference) val).getInstance();
+                        }
+                    }
+
+                    invokingMethod = true;
+
+                    if (currentMethodInvocation != null) {
+                        methodInvocation.push(currentMethodInvocation);
+                    }
+                    currentMethodInvocation = new Object[9];
+
+                    /*
+                     * int n = currentMethodInvocation.length;
+                     *
+                     * for (int i = 0; i < n; i++) {
+                     * currentMethodInvocation[i] = null; }
+                     */
+
+                    currentMethodInvocation[0] = methodName;
+
+                    if (var != null) {
+                        currentMethodInvocation[1] = var.getName();
+                    } else {
+                        if (val instanceof Reference) {
+                            currentMethodInvocation[1] = "new "
+                                    + ((Reference) val).getInstance().getType();
+                        } else {
+                            currentMethodInvocation[1] = val.getValue();
+                        }
+                    }
+
+                    Value[] parameterValues = new Value[parameterCount];
+                    String[] parameterTypes = new String[parameterCount];
+                    String[] parameterNames = new String[parameterCount];
+                    Long[] parameterExpressionReferences = new Long[parameterCount];
+
+                    for (int i = 0; i < parameterCount; i++) {
+                        parameterValues[i] = null;
+                        parameterTypes[i] = null;
+                        parameterNames[i] = null;
+                        parameterExpressionReferences[i] = null;
+                    }
+
+                    currentMethodInvocation[2] = parameterValues;
+                    currentMethodInvocation[3] = parameterTypes;
+                    currentMethodInvocation[4] = parameterNames;
+                    currentMethodInvocation[5] = highlight;
+                    currentMethodInvocation[7] = parameterExpressionReferences;
+                    currentMethodInvocation[8] = val;
+
+                    break;
+                }
+
+                // Object method call close
+                case Code.OMCC: {
+
+                    if (!returned) {
+
+                        director.finishMethod(null, 0);
+
+                    } else {
+
+                        Value rv = null;
+
+                        if (returnValue instanceof Reference) {
+                            rv = (Value) ((Reference) returnValue).clone();
+                        } else {
+
+                            rv = (Value) returnValue.clone();
+                        }
+
+                        ValueActor va = director.finishMethod(returnActor,
+                                returnExpressionCounter);
+                        rv.setActor(va);
+
+                        handleExpression(rv, returnExpressionCounter);
+                    }
+
+                    returned = false;
+
+                    break;
+                }
+
+                //Static Method Call
+                case Code.SMC: {
+
+                    invokingMethod = true;
+
+                    if (currentMethodInvocation != null) {
+                        methodInvocation.push(currentMethodInvocation);
+                    }
+                    currentMethodInvocation = new Object[8];
+
+                    for (int i = 0; i < currentMethodInvocation.length; i++) {
+                        currentMethodInvocation[i] = null;
+                    }
+
+                    currentMethodInvocation[0] = tokenizer.nextToken();
+                    currentMethodInvocation[1] = tokenizer.nextToken();
+                    int parameterCount = Integer
+                            .parseInt(tokenizer.nextToken());
+
+                    Value[] parameterValues = new Value[parameterCount];
+                    String[] parameterTypes = new String[parameterCount];
+                    String[] parameterNames = new String[parameterCount];
+                    Long[] parameterExpressionReferences = new Long[parameterCount];
+
+                    for (int i = 0; i < parameterCount; i++) {
+                        parameterValues[i] = null;
+                        parameterTypes[i] = null;
+                        parameterNames[i] = null;
+                        parameterExpressionReferences[i] = null;
+                    }
+
+                    currentMethodInvocation[2] = parameterValues;
+                    currentMethodInvocation[3] = parameterTypes;
+                    currentMethodInvocation[4] = parameterNames;
+                    currentMethodInvocation[5] = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
+                    currentMethodInvocation[7] = parameterExpressionReferences;
+
+                    break;
+                }
+
+                //Parameter
+                case Code.P: {
+
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+
+                    Value[] parameterValues = (Value[]) currentMethodInvocation[2];
+                    String[] parameterTypes = (String[]) currentMethodInvocation[3];
+                    Long[] parameterExpressionReferences = (Long[]) currentMethodInvocation[7];
+
+                    Value parameterValue = (Value) values.remove(new Long(
+                            expressionReference));
+
+                    //if (parameterValue == null) {
+                    //  System.out.println("Mistake");
+                    //}
+
+                    int i = 0;
+                    while (parameterValues[i] != null) {
+                        i++;
+                    }
+                    parameterValues[i] = parameterValue;
+                    parameterTypes[i] = tokenizer.nextToken();
+                    parameterExpressionReferences[i] = new Long(
+                            expressionReference);
+
+                    exprs.pop();
+
+                    break;
+                }
+
+                //Method declaration
+                case Code.MD: {
+
+                    //Make the location information for the location token
+                    currentMethodInvocation[6] = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
+
+                    //Object method call or constructor
+                    if (currentMethodInvocation.length == 9) {
+
+                        Value[] args = null;
+
+                        if (currentMethodInvocation[1] != null
+                                && ((String) currentMethodInvocation[1])
+                                        .equals("")) {
+                            //System.out.println("CI: " + "new " +
+                            // ((String) currentMethodInvocation[0]));
+                            args = director.animateOMInvocation("new "
+                                    + ((String) currentMethodInvocation[0]),
+                                    (Value[]) currentMethodInvocation[2],
+                                    (Highlight) currentMethodInvocation[5]);
+
+                            //This works for not primitive classes.
+                            //There needs to be a check whether invoked
+                            //class is primitive or not.
+                            if (!MCodeUtilities
+                                    .isPrimitive(((ClassInfo) currentMethodInvocation[8])
+                                            .getName())) {
+                                ObjectFrame of = createNewInstance(
+                                        (ClassInfo) currentMethodInvocation[8],
+                                        (Highlight) currentMethodInvocation[5]);
+
+                                Reference ref = new Reference(of);
+                                currentMethodInvocation[8] = ref;
+                                objectCreation.push(new Reference(of));
+                            } else {
+                                //TODO: Make the contructor call work for
+                                // semi-primitive types
+                            }
+
+                        } else {
+                            //System.out.println("OMI: " + "." + ((String)
+                            // currentMethodInvocation[0]));
+                            args = director.animateOMInvocation("."
+                                    + ((String) currentMethodInvocation[0]),
+                                    (Value[]) currentMethodInvocation[2],
+                                    (Highlight) currentMethodInvocation[5],
+                                    (Value) currentMethodInvocation[8]);
+                        }
+
+                        String call;
+
+                        if (currentMethodInvocation[1] != null
+                                && ((String) currentMethodInvocation[1])
+                                        .equals("")) {
+                            call = (String) currentMethodInvocation[0];
+                        } else if (((String) currentMethodInvocation[0])
+                                .startsWith("super")) {
+                            call = "this."
+                                    + (String) currentMethodInvocation[0];
+                        } else if (currentMethodInvocation[1] == null) {
+                            call = ((Value) currentMethodInvocation[8])
+                                    .getValue()
+                                    + "." + (String) currentMethodInvocation[0];
+                        } else {
+                            call = (String) currentMethodInvocation[1] + "."
+                                    + (String) currentMethodInvocation[0];
+                            //System.out.println("METHOD: " + call);
+                        }
+
+                        director.setUpMethod(call, args,
+                                (String[]) currentMethodInvocation[4],
+                                (String[]) currentMethodInvocation[3],
+                                (Highlight) currentMethodInvocation[6],
+                                (Value) currentMethodInvocation[8]);
+
+                        //Static method invocation
+                    } else {
+                        Value[] args = null;
+                        if (start) {
+                            args = director
+                                    .animateSMInvocation(
+                                            ((String) currentMethodInvocation[1])
+                                                    + "."
+                                                    + ((String) currentMethodInvocation[0]),
+                                            (Value[]) currentMethodInvocation[2],
+                                            null);
+                            start = false;
+                        } else {
+                            args = director
+                                    .animateSMInvocation(
+                                            ((String) currentMethodInvocation[1])
+                                                    + "."
+                                                    + ((String) currentMethodInvocation[0]),
+                                            (Value[]) currentMethodInvocation[2],
+                                            (Highlight) currentMethodInvocation[5]);
+                        }
+
+                        director
+                                .setUpMethod(
+                                        ((String) currentMethodInvocation[1])
+                                                + "."
+                                                + ((String) currentMethodInvocation[0]),
+                                        args,
+                                        (String[]) currentMethodInvocation[4],
+                                        (String[]) currentMethodInvocation[3],
+                                        (Highlight) currentMethodInvocation[6]);
+                    }
+
+                    Long[] parameterExpressionReferences = (Long[]) currentMethodInvocation[7];
+
+                    if (parameterExpressionReferences != null) {
+                        int i = 0;
+                        while (i < parameterExpressionReferences.length) {
+                            Object[] postIncDec = (Object[]) postIncsDecs
+                                    .remove(parameterExpressionReferences[i]);
+                            if (postIncDec != null) {
+                                doPostIncDec(postIncDec);
+                            }
+                            i++;
+                        }
+                    }
+
+                    if (!methodInvocation.empty()) {
+                        currentMethodInvocation = (Object[]) methodInvocation
+                                .pop();
+                    } else {
+                        currentMethodInvocation = null;
+                    }
+
+                    invokingMethod = false;
+
+                    break;
+                }
+
+                //Parameters list
+                case Code.PARAMETERS: {
+
+                    if (tokenizer.hasMoreTokens()) {
+                        String parameters = tokenizer.nextToken();
+                        String[] parameterNames = (String[]) currentMethodInvocation[4];
+                        StringTokenizer names = new StringTokenizer(parameters,
+                                ",");
+                        for (int i = 0; i < parameterNames.length; i++) {
+                            parameterNames[i] = names.nextToken();
+                        }
+                    }
+                    break;
+                }
+
+                // Return Statement
+                case Code.R: {
+
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = null;
+                    if (tokenizer.countTokens() >= 3) {
+                        value = tokenizer.nextToken();
+                    } else {
+                        value = "";
+                    }
+                    String type = tokenizer.nextToken();
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+
+                    if (type.equals(Void.TYPE.getName())) {
+
+                        //director.finishMethod(null, expressionCounter);
+                        returned = false;
+
+                    } else {
+
+                        Value ret = (Value) values.remove(new Long(
+                                expressionReference));
 
                         Value casted = null;
 
                         if (MCodeUtilities.isPrimitive(type)) {
                             casted = new Value(value, type);
                         } else {
-                            if (value.equals("null")) {
+                            Instance inst = (Instance) instances
+                                    .get(MCodeUtilities.getHashCode(value));
+                            if (inst != null) {
+                                casted = new Reference(inst);
+                            } else {
                                 casted = new Reference();
-                            } else {
-                                Instance inst = (Instance) instances
-                                        .get(MCodeUtilities.getHashCode(value));
-
-                                if (inst != null) {
-                                    casted = new Reference(inst);
-                                } else {
-                                    casted = new Reference();
-                                }
-                            }
-                            casted.setActor(var.getActor().getValue());
-                        }
-
-                        if (initializerExpression > 0) {
-
-                            Value val = (Value) values.remove(new Long(
-                                    initializerExpression));
-                            director.animateAssignment(var, val, casted, null,
-                                    highlight);
-
-                            Object[] postIncDec = (Object[]) postIncsDecs
-                                    .remove(new Long(initializerExpression));
-
-                            if (postIncDec != null) {
-                                doPostIncDec(postIncDec);
                             }
                         }
 
-                        director.closeScratch();
-                        director.openScratch();
+                        returnActor = director.animateReturn(ret, casted, h);
+                        returnValue = (Value) casted.clone();
+                        returnExpressionCounter = expressionCounter;
+                        returned = true;
 
-                        break;
                     }
 
-                //Qualified Name (variable)
-                case Code.QN:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        String variableName = tokenizer.nextToken();
-                        String value = null;
-                        if (tokenizer.countTokens() >= 2) {
-                            value = tokenizer.nextToken();
-                        } else {
-                            value = "";
-                        }
-                        String type = tokenizer.nextToken();
+                    exprs.pop();
 
-                        Variable var = director.getCurrentMethodFrame()
-                                .getVariable(variableName);
+                    break;
+                }
 
-                        //command that waits for this expression
-                        int command = -1;
-                        int oper = -1;
-                        int size = commands.size();
+                // Static method call closed
+                case Code.SMCC: {
 
-                        //We find the command
-                        for (int i = size - 1; i >= 0; i--) {
-                            StringTokenizer commandTokenizer = new StringTokenizer(
-                                    (String) commands.elementAt(i), Code.DELIM);
-                            int comm = Integer.parseInt(commandTokenizer
-                                    .nextToken());
-                            long cid = Long.parseLong(commandTokenizer
-                                    .nextToken());
+                    if (!returned) {
 
-                            if (expressionCounter == cid) {
-                                command = comm;
-                                commands.removeElementAt(i);
-                                break;
-                            }
-                        }
+                        director.finishMethod(null, 0);
 
-                        /*
-                         * Look from the expression stack what expression
-                         * should be shown next
-                         */
+                    } else {
 
-                        long expressionReference = 0;
-                        Highlight highlight = null;
-                        if (!exprs.empty()) {
-                            StringTokenizer expressionTokenizer = new StringTokenizer(
-                                    (String) exprs.peek(), Code.DELIM);
-
-                            oper = Integer.parseInt(expressionTokenizer
-                                    .nextToken());
-
-                            expressionReference = Long
-                                    .parseLong(expressionTokenizer.nextToken());
-
-                            //Make the location information for the location
-                            // token
-                            highlight = MCodeUtilities
-                                    .makeHighlight(expressionTokenizer
-                                            .nextToken());
-                        }
-
-                        Value val = null;
-                        if (MCodeUtilities.isPrimitive(type)) {
-                            val = new Value(value, type);
-                            ValueActor va = var.getActor().getValue();
-                            val.setActor(va);
-                        } else {
-                            if (value.equals("null")) {
-                                val = new Reference();
-                            } else {
-                                Instance inst = (Instance) instances
-                                        .get(MCodeUtilities.getHashCode(value));
-                                if (inst != null) {
-                                    val = new Reference(inst);
-                                } else {
-                                    val = new Reference();
-                                }
-                            }
-                            val.setActor(var.getActor().getValue());
-                            variables.put(new Long(expressionCounter), var);
-                        }
-
-                        /*
-                         * Do different kind of things depending on in what
-                         * expression the variable is used.
-                         */
-
-                        //If operator is assignment we just store the value
-                        if (oper == Code.A) {
-                            if (command == Code.TO) {
-                                variables.put(new Long(expressionCounter), var);
-                            } else {
-                                values.put(new Long(expressionCounter), val);
-                            }
-                            //If oper is other binary operator we will show it
-                            //on the screen with operator
-                        } else if (MCodeUtilities.isBinary(oper)) {
-                            int operator = MCodeUtilities
-                                    .resolveBinOperator(oper);
-                            if (command == Code.LEFT) {
-                                director.beginBinaryExpression(val, operator,
-                                        expressionReference, highlight);
-                            } else if (command == Code.RIGHT) {
-                                ExpressionActor ea = director
-                                        .getCurrentScratch().findActor(
-                                                expressionReference);
-                                if (ea != null) {
-                                    director.rightBinaryExpression(val, ea,
-                                            highlight);
-                                } else {
-                                    values
-                                            .put(new Long(expressionCounter),
-                                                    val);
-                                }
-                            } else {
-                                values.put(new Long(expressionCounter), val);
-                            }
-
-                            //If oper is a unary operator we will show it
-                            //on the screen with operator
-                        } else if (MCodeUtilities.isUnary(oper)) {
-                            if (oper == Code.PRIE || oper == Code.PRDE) {
-                                variables.put(new Long(expressionCounter), var);
-                                values.put(new Long(expressionCounter), val);
-                            } else if (oper == Code.PIE || oper == Code.PDE) {
-                                variables.put(new Long(expressionCounter), var);
-                                values.put(new Long(expressionReference), val);
-                                values.put(new Long(expressionCounter), val);
-                            } else {
-                                values.put(new Long(expressionCounter), val);
-                                int operator = MCodeUtilities
-                                        .resolveUnOperator(oper);
-                                if (command == Code.RIGHT) {
-                                    director
-                                            .beginUnaryExpression(operator,
-                                                    val, expressionReference,
-                                                    highlight);
-                                }
-                            }
-                            //If it is something else we will store it for
-                            // later use.
-                        } else {
-                            values.put(new Long(expressionCounter), val);
-                            variables.put(new Long(expressionCounter), var);
-                        }
-
-                        break;
-                    }
-
-                //Literal
-                case Code.L:
-                    {
-
-                        //Second token is the expression counter
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-
-                        String value = null;
-                        if (tokenizer.countTokens() >= 3) {
-                            //Third token is the value of the literal
-                            value = tokenizer.nextToken();
-                        } else {
-                            /**
-                             * There is no third token because the literal is
-                             * an empty string
-                             */
-                            value = "";
-                        }
-
-                        //Fourth token is the type of the literal
-                        String type = tokenizer.nextToken();
-
-                        //Fifth token is the highlight information.
-                        //Not used because the whole expression is
-                        // highlighted.
-                        //Highlight highlight =
-                        //ECodeUtilities.makeHighlight(tokenizer.nextToken());
-
-                        Value lit = new Value(value, type);
-                        director.introduceLiteral(lit);
-
-                        handleExpression(lit, expressionCounter);
-
-                        /*
-                         * //command that wait for this expression (left,
-                         * right) int command = -1; int oper = -1; int size =
-                         * commands.size();
-                         * 
-                         * //We find the command for (int i = size - 1; i >= 0;
-                         * i--) { StringTokenizer commandTokenizer = new
-                         * StringTokenizer( (String) commands.elementAt(i),
-                         * Code.DELIM); int comm =
-                         * Long.parseLong(commandTokenizer.nextToken()); int
-                         * cid = Long.parseLong(commandTokenizer.nextToken());
-                         * if (expressionCounter == cid) { command = comm;
-                         * commands.removeElementAt(i); break; } }
-                         */
-                        /*
-                         * Look from the expression stack what expression
-                         * should be shown next
-                         */
-                        /*
-                         * int expressionReference = 0; Highlight highlight =
-                         * null;
-                         * 
-                         * if (!exprs.empty()) { StringTokenizer
-                         * expressionTokenizer = new StringTokenizer( (String)
-                         * exprs.peek(), Code.DELIM);
-                         * 
-                         * oper =
-                         * Long.parseLong(expressionTokenizer.nextToken());
-                         * 
-                         * expressionReference = Long.parseLong(
-                         * expressionTokenizer.nextToken());
-                         * 
-                         * //Make the location information for the location
-                         * token highlight = ECodeUtilities.makeHighlight(
-                         * expressionTokenizer.nextToken()); }
-                         * 
-                         * //Value of the literal Value lit = new Value(value,
-                         * type); director.introduceLiteral(lit);
-                         * 
-                         * //Do different things depending on in what
-                         * expression //the literal is used.
-                         * 
-                         * //If operator is assignment we just store the value
-                         * if (oper == Code.A){ values.put(new
-                         * Long(expressionCounter), lit);
-                         * 
-                         * //If oper is other binary operator we will show it
-                         * //on the screen with operator } else if
-                         * (ECodeUtilities.isBinary(oper)) {
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveBinOperator(oper);
-                         * 
-                         * if (command == Code.LEFT) {
-                         * 
-                         * director.beginBinaryExpression(lit, operator,
-                         * expressionReference, highlight); } else if (command ==
-                         * Code.RIGHT) {
-                         * 
-                         * ExpressionActor ea = (ExpressionActor)
-                         * director.getCurrentScratch().findActor(expressionReference);
-                         * if (ea != null) {
-                         * director.rightBinaryExpression(lit, ea, highlight); }
-                         * else { values.put(new Long(expressionCounter), lit); } }
-                         * else { values.put(new Long(expressionCounter), lit); }
-                         * 
-                         * //If oper is a unary operator we will show it //on
-                         * the screen with operator } else if
-                         * (ECodeUtilities.isUnary(oper)) {
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveUnOperator(oper);
-                         * values.put(new Long(expressionCounter), lit); if
-                         * (command == Code.RIGHT) {
-                         * director.beginUnaryExpression(operator, lit,
-                         * expressionReference, highlight); }
-                         * 
-                         * //If it is something else we will store it for later
-                         * use. } else { values.put(new
-                         * Long(expressionCounter), lit); }
-                         */
-                        break;
-                    }
-
-                //Simple Allocation (Object Allocation)
-                case Code.SA:
-                    {
-
-                        //simpleAllocationCounter
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-
-                        String declaringClass = tokenizer.nextToken();
-                        String constructorName = tokenizer.nextToken();
-
-                        int parameterCount = Integer.parseInt(tokenizer
-                                .nextToken());
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
-
-                        //Create here Object Stage with initial variables and
-                        // values
-                        ClassInfo ci = (ClassInfo) classes.get(declaringClass);
-
-                        //If ci is not null it means that we are dealing with
-                        //user defined class and can find the class
-                        // information
-                        //extracted during the compilation with DynamicJava.
-                        //If ci is null there is no user defined class and we
-                        //need to use the Class.for(String name) method to
-                        //find out as much as possible from the class.
-                        if (ci == null) {
-                            Class declaredClass = null;
-                            try {
-                                declaredClass = Class.forName(declaringClass);
-                            } catch (Exception e) {
-                                //String message = "<H1>Runtime Error</H1>
-                                // <P>The class that was supposed to be
-                                // initiated could not be found.</P>";
-                                director
-                                        .showErrorMessage(new InterpreterError(
-                                                messageBundle
-                                                        .getString("notfoundclass.exception")));
-                            }
-                            ci = new ClassInfo(declaredClass);
-                            classes.put(ci.getName(), ci);
-                        }
-
-                        //This works for not primitive classes.
-                        //There needs to be a check whether invoked
-                        //class is primitive or not.
-                        //ObjectFrame of = createNewInstance(ci, highlight);
-                        //Reference ref = new Reference(of);
-
-                        invokingMethod = true;
-
-                        if (currentMethodInvocation != null) {
-                            methodInvocation.push(currentMethodInvocation);
-                        }
-                        currentMethodInvocation = new Object[9];
-
-                        int n = currentMethodInvocation.length;
-                        for (int i = 0; i < n; i++) {
-                            currentMethodInvocation[i] = null;
-                        }
-
-                        currentMethodInvocation[0] = constructorName;
-                        currentMethodInvocation[1] = "";
-
-                        Value[] parameterValues = new Value[parameterCount];
-                        String[] parameterTypes = new String[parameterCount];
-                        String[] parameterNames = new String[parameterCount];
-                        Long[] parameterExpressionReferences = new Long[parameterCount];
-
-                        for (int i = 0; i < parameterCount; i++) {
-                            parameterValues[i] = null;
-                            parameterTypes[i] = null;
-                            parameterNames[i] = null;
-                            parameterExpressionReferences[i] = null;
-                        }
-
-                        currentMethodInvocation[2] = parameterValues;
-                        currentMethodInvocation[3] = parameterTypes;
-                        currentMethodInvocation[4] = parameterNames;
-                        currentMethodInvocation[5] = highlight;
-                        currentMethodInvocation[7] = parameterExpressionReferences;
-                        //Here we put the ClassInfo of the class in the array
-                        //just to wait for the Method Declaration to be read
-                        // and the
-                        //object can be created from this method info.
-                        currentMethodInvocation[8] = ci /* ref */;
-
-                        /* objectCreation.push(new Reference(of)); */
-
-                        break;
-                    }
-
-                case Code.CONSCN:
-                    {
-
-                        constructorCall = true;
-                        superMethodsReading = new Vector();
-                        superMethodCallNumber = Long.parseLong(tokenizer
-                                .nextToken());
-
-                        break;
-                    }
-
-                // Simple class allocation close
-                case Code.SAC:
-                    {
-
-                        //simpleAllocationCounter
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-
-                        String hashCode = tokenizer.nextToken();
-
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-
-                        //This should handle the possible object
-                        //assignment etc.
-                        if (!objectCreation.empty()) {
-                            //First reference to the created object is taken
-                            Reference ref = (Reference) objectCreation.pop();
-                            Instance inst = ref.getInstance();
-                            inst.setHashCode(hashCode);
-                            //The instance is putted in the hashtable that
-                            //keeps the instances
-                            instances.put(hashCode, inst);
-                            //Then we handle the possible expressions
-                            //concerning this reference.
-                        }
-
-                        Value ret = director.getCurrentMethodFrame()
-                                .getVariable("this").getValue();
-                        Value casted = null;
-                        Instance inst = (Instance) instances.get(hashCode);
-
-                        if (inst != null) {
-                            casted = new Reference(inst);
-                        } else {
-                            casted = new Reference();
-                        }
-
-                        Actor returnActor = director.animateReturn(ret, casted,
-                                h);
-                        Value returnValue = (Value) casted.clone();
-                        Value rv;
+                        Value rv = null;
 
                         if (returnValue instanceof Reference) {
                             rv = (Value) ((Reference) returnValue).clone();
                         } else {
+
                             rv = (Value) returnValue.clone();
                         }
 
                         ValueActor va = director.finishMethod(returnActor,
-                                expressionCounter);
+                                returnExpressionCounter);
                         rv.setActor(va);
-                        handleExpression(rv, expressionCounter);
 
-                        break;
+                        handleExpression(rv, returnExpressionCounter);
                     }
 
-                // Object field access
-                case Code.OFA:
-                    {
-
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long objectCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        String variableName = tokenizer.nextToken();
-                        String value = "";
-                        if (tokenizer.countTokens() >= 3) {
-                            value = tokenizer.nextToken();
-                        }
-
-                        String type = tokenizer.nextToken();
-
-                        Reference objVal = (Reference) values.remove(new Long(
-                                objectCounter));
-                        if (objVal == null && !objectCreation.empty()) {
-                            objVal = (Reference) objectCreation.peek();
-                        }
-
-                        ObjectFrame obj = (ObjectFrame) objVal.getInstance();
-
-                        if (obj == null && !objectCreation.empty()) {
-                            objVal = (Reference) objectCreation.peek();
-                            obj = (ObjectFrame) objVal.getInstance();
-                        }
-
-                        Variable var = obj.getVariable(variableName);
-
-                        //command that waits for this expression
-                        int command = -1;
-                        int oper = -1;
-                        int size = commands.size();
-
-                        //We find the command
-                        for (int i = size - 1; i >= 0; i--) {
-                            StringTokenizer commandTokenizer = new StringTokenizer(
-                                    (String) commands.elementAt(i), Code.DELIM);
-                            int comm = Integer.parseInt(commandTokenizer
-                                    .nextToken());
-                            long cid = Long.parseLong(commandTokenizer
-                                    .nextToken());
-
-                            if (expressionCounter == cid) {
-                                command = comm;
-                                commands.removeElementAt(i);
-                                break;
-                            }
-                        }
-
-                        /**
-                         * Look from the expression stack what expression
-                         * should be shown next
-                         */
-                        long expressionReference = 0;
-                        Highlight highlight = null;
-                        if (!exprs.empty()) {
-                            StringTokenizer expressionTokenizer = new StringTokenizer(
-                                    (String) exprs.peek(), Code.DELIM);
-
-                            oper = Integer.parseInt(expressionTokenizer
-                                    .nextToken());
-
-                            expressionReference = Long
-                                    .parseLong(expressionTokenizer.nextToken());
-
-                            //Make the location information for the location
-                            // token
-                            highlight = MCodeUtilities
-                                    .makeHighlight(expressionTokenizer
-                                            .nextToken());
-                        }
-
-                        Value val = null;
-                        if (MCodeUtilities.isPrimitive(type)) {
-                            val = new Value(value, type);
-                            ValueActor va = var.getActor().getValue();
-                            val.setActor(va);
-                        } else {
-                            if (value.equals("null")) {
-                                val = new Reference();
-                            } else {
-                                Instance inst = (Instance) instances
-                                        .get(MCodeUtilities.getHashCode(value));
-                                if (inst != null) {
-                                    val = new Reference(inst);
-                                } else {
-                                    val = new Reference();
-                                }
-                            }
-                            val.setActor(var.getActor().getValue());
-                        }
-
-                        /**
-                         * Do different kind of things depending on in what
-                         * expression the variable is used.
-                         */
-
-                        //If operator is assignment we just store the value
-                        if (oper == Code.A) {
-
-                            if (command == Code.TO) {
-
-                                variables.put(new Long(expressionCounter), var);
-
-                            } else {
-
-                                values.put(new Long(expressionCounter), val);
-                            }
-
-                            //If oper is other binary operator we will show it
-                            //on the screen with operator
-                        } else if (MCodeUtilities.isBinary(oper)) {
-
-                            int operator = MCodeUtilities
-                                    .resolveBinOperator(oper);
-
-                            if (command == Code.LEFT) {
-
-                                director.beginBinaryExpression(val, operator,
-                                        expressionReference, highlight);
-
-                            } else if (command == Code.RIGHT) {
-
-                                ExpressionActor ea = director
-                                        .getCurrentScratch().findActor(
-                                                expressionReference);
-                                if (ea != null) {
-
-                                    director.rightBinaryExpression(val, ea,
-                                            highlight);
-
-                                } else {
-                                    values
-                                            .put(new Long(expressionCounter),
-                                                    val);
-                                }
-                            } else {
-                                values.put(new Long(expressionCounter), val);
-                            }
-
-                            //If oper is a unary operator we will show it
-                            //on the screen with operator
-                        } else if (MCodeUtilities.isUnary(oper)) {
-
-                            if (oper == Code.PRIE || oper == Code.PRDE) {
-
-                                variables.put(new Long(expressionCounter), var);
-                                values.put(new Long(expressionCounter), val);
-
-                            } else if (oper == Code.PIE || oper == Code.PDE) {
-
-                                variables.put(new Long(expressionCounter), var);
-                                values.put(new Long(expressionReference), val);
-                                values.put(new Long(expressionCounter), val);
-
-                            } else {
-
-                                values.put(new Long(expressionCounter), val);
-                                int operator = MCodeUtilities
-                                        .resolveUnOperator(oper);
-                                if (command == Code.RIGHT) {
-                                    director
-                                            .beginUnaryExpression(operator,
-                                                    val, expressionReference,
-                                                    highlight);
-                                }
-                            }
-
-                            //If it is something else we will store it for
-                            // later use.
-                        } else {
-
-                            values.put(new Long(expressionCounter), val);
-                            variables.put(new Long(expressionCounter), var);
-
-                        }
-
-                        break;
-                    }
-
-                // Object method call
-                case Code.OMC:
-                    {
-
-                        String methodName = tokenizer.nextToken();
-                        int parameterCount = Integer.parseInt(tokenizer
-                                .nextToken());
-                        long objectCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
-
-                        Value val = (Value) values.remove(new Long(
-                                objectCounter));
-                        Variable var = (Variable) variables.remove(new Long(
-                                objectCounter));
-
-                        if (val == null && !objectCreation.empty()) {
-                            val = (Reference) objectCreation.peek();
-                        } else if (val.getValue().equals("null")
-                                && !objectCreation.empty()) {
-                            val = (Reference) objectCreation.peek();
-                        }
-
-                        if (val instanceof Reference) {
-                            ObjectFrame obj = (ObjectFrame) ((Reference) val)
-                                    .getInstance();
-
-                            if (obj == null && !objectCreation.empty()) {
-                                val = (Reference) objectCreation.peek();
-                                obj = (ObjectFrame) ((Reference) val)
-                                        .getInstance();
-                            }
-                        }
-
-                        invokingMethod = true;
-
-                        if (currentMethodInvocation != null) {
-                            methodInvocation.push(currentMethodInvocation);
-                        }
-                        currentMethodInvocation = new Object[9];
-                        
-                        /*
-                         * int n = currentMethodInvocation.length;
-                         *
-                         * for (int i = 0; i < n; i++) {
-                         * currentMethodInvocation[i] = null; }
-                         */
-
-                        currentMethodInvocation[0] = methodName;
-
-                        if (var != null) {
-                            currentMethodInvocation[1] = var.getName();
-                        } else {
-                            if (val instanceof Reference) {
-                                currentMethodInvocation[1] = "new "
-                                        + ((Reference) val).getInstance()
-                                                .getType();
-                            } else {
-                                currentMethodInvocation[1] = val.getValue();
-                            }
-                        }
-
-                        Value[] parameterValues = new Value[parameterCount];
-                        String[] parameterTypes = new String[parameterCount];
-                        String[] parameterNames = new String[parameterCount];
-                        Long[] parameterExpressionReferences = new Long[parameterCount];
-
-                        for (int i = 0; i < parameterCount; i++) {
-                            parameterValues[i] = null;
-                            parameterTypes[i] = null;
-                            parameterNames[i] = null;
-                            parameterExpressionReferences[i] = null;
-                        }
-
-                        currentMethodInvocation[2] = parameterValues;
-                        currentMethodInvocation[3] = parameterTypes;
-                        currentMethodInvocation[4] = parameterNames;
-                        currentMethodInvocation[5] = highlight;
-                        currentMethodInvocation[7] = parameterExpressionReferences;
-                        currentMethodInvocation[8] = val;
-
-                        break;
-                    }
-
-                // Object method call close
-                case Code.OMCC:
-                    {
-
-                        if (!returned) {
-
-                            director.finishMethod(null, 0);
-
-                        } else {
-
-                            Value rv = null;
-
-                            if (returnValue instanceof Reference) {
-                                rv = (Value) ((Reference) returnValue).clone();
-                            } else {
-
-                                rv = (Value) returnValue.clone();
-                            }
-
-                            ValueActor va = director.finishMethod(returnActor,
-                                    returnExpressionCounter);
-                            rv.setActor(va);
-
-                            handleExpression(rv, returnExpressionCounter);
-                        }
-
-                        returned = false;
-
-                        break;
-                    }
-
-                //Static Method Call
-                case Code.SMC:
-                    {
-
-                        invokingMethod = true;
-
-                        if (currentMethodInvocation != null) {
-                            methodInvocation.push(currentMethodInvocation);
-                        }
-                        currentMethodInvocation = new Object[8];
-
-                        for (int i = 0; i < currentMethodInvocation.length; i++) {
-                            currentMethodInvocation[i] = null;
-                        }
-
-                        currentMethodInvocation[0] = tokenizer.nextToken();
-                        currentMethodInvocation[1] = tokenizer.nextToken();
-                        int parameterCount = Integer.parseInt(tokenizer
-                                .nextToken());
-
-                        Value[] parameterValues = new Value[parameterCount];
-                        String[] parameterTypes = new String[parameterCount];
-                        String[] parameterNames = new String[parameterCount];
-                        Long[] parameterExpressionReferences = new Long[parameterCount];
-
-                        for (int i = 0; i < parameterCount; i++) {
-                            parameterValues[i] = null;
-                            parameterTypes[i] = null;
-                            parameterNames[i] = null;
-                            parameterExpressionReferences[i] = null;
-                        }
-
-                        currentMethodInvocation[2] = parameterValues;
-                        currentMethodInvocation[3] = parameterTypes;
-                        currentMethodInvocation[4] = parameterNames;
-                        currentMethodInvocation[5] = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
-                        currentMethodInvocation[7] = parameterExpressionReferences;
-
-                        break;
-                    }
-
-                //Parameter
-                case Code.P:
-                    {
-
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-
-                        Value[] parameterValues = (Value[]) currentMethodInvocation[2];
-                        String[] parameterTypes = (String[]) currentMethodInvocation[3];
-                        Long[] parameterExpressionReferences = (Long[]) currentMethodInvocation[7];
-
-                        Value parameterValue = (Value) values.remove(new Long(
-                                expressionReference));
-
-                        //if (parameterValue == null) {
-                        //  System.out.println("Mistake");
-                        //}
-
-                        int i = 0;
-                        while (parameterValues[i] != null) {
-                            i++;
-                        }
-                        parameterValues[i] = parameterValue;
-                        parameterTypes[i] = tokenizer.nextToken();
-                        parameterExpressionReferences[i] = new Long(
-                                expressionReference);
-
-                        exprs.pop();
-
-                        break;
-                    }
-
-                //Method declaration
-                case Code.MD:
-                    {
-
-                        //Make the location information for the location token
-                        currentMethodInvocation[6] = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
-
-                        //Object method call or constructor
-                        if (currentMethodInvocation.length == 9) {
-
-                            Value[] args = null;
-
-                            if (currentMethodInvocation[1] != null
-                                    && ((String) currentMethodInvocation[1])
-                                            .equals("")) {
-                                //System.out.println("CI: " + "new " +
-                                // ((String) currentMethodInvocation[0]));
-                                args = director
-                                        .animateOMInvocation(
-                                                "new "
-                                                        + ((String) currentMethodInvocation[0]),
-                                                (Value[]) currentMethodInvocation[2],
-                                                (Highlight) currentMethodInvocation[5]);
-
-                                //This works for not primitive classes.
-                                //There needs to be a check whether invoked
-                                //class is primitive or not.
-                                if (!MCodeUtilities
-                                        .isPrimitive(((ClassInfo) currentMethodInvocation[8])
-                                                .getName())) {
-                                    ObjectFrame of = createNewInstance(
-                                            (ClassInfo) currentMethodInvocation[8],
-                                            (Highlight) currentMethodInvocation[5]);
-
-                                    Reference ref = new Reference(of);
-                                    currentMethodInvocation[8] = ref;
-                                    objectCreation.push(new Reference(of));
-                                } else {
-                                    //TODO: Make the contructor call work for
-                                    // semi-primitive types
-                                }
-
-                            } else {
-                                //System.out.println("OMI: " + "." + ((String)
-                                // currentMethodInvocation[0]));
-                                args = director
-                                        .animateOMInvocation(
-                                                "."
-                                                        + ((String) currentMethodInvocation[0]),
-                                                (Value[]) currentMethodInvocation[2],
-                                                (Highlight) currentMethodInvocation[5],
-                                                (Value) currentMethodInvocation[8]);
-                            }
-
-                            String call;
-
-                            if (currentMethodInvocation[1] != null
-                                    && ((String) currentMethodInvocation[1])
-                                            .equals("")) {
-                                call = (String) currentMethodInvocation[0];
-                            } else if (((String) currentMethodInvocation[0])
-                                    .startsWith("super")) {
-                                call = "this."
-                                        + (String) currentMethodInvocation[0];
-                            } else if (currentMethodInvocation[1] == null) {
-                                call = ((Value) currentMethodInvocation[8])
-                                        .getValue()
-                                        + "."
-                                        + (String) currentMethodInvocation[0];
-                            } else {
-                                call = (String) currentMethodInvocation[1]
-                                        + "."
-                                        + (String) currentMethodInvocation[0];
-                                //System.out.println("METHOD: " + call);
-                            }
-
-                            director.setUpMethod(call, args,
-                                    (String[]) currentMethodInvocation[4],
-                                    (String[]) currentMethodInvocation[3],
-                                    (Highlight) currentMethodInvocation[6],
-                                    (Value) currentMethodInvocation[8]);
-
-                            //Static method invocation
-                        } else {
-                            Value[] args = null;
-                            if (start) {
-                                args = director
-                                        .animateSMInvocation(
-                                                ((String) currentMethodInvocation[1])
-                                                        + "."
-                                                        + ((String) currentMethodInvocation[0]),
-                                                (Value[]) currentMethodInvocation[2],
-                                                null);
-                                start = false;
-                            } else {
-                                args = director
-                                        .animateSMInvocation(
-                                                ((String) currentMethodInvocation[1])
-                                                        + "."
-                                                        + ((String) currentMethodInvocation[0]),
-                                                (Value[]) currentMethodInvocation[2],
-                                                (Highlight) currentMethodInvocation[5]);
-                            }
-
-                            director
-                                    .setUpMethod(
-                                            ((String) currentMethodInvocation[1])
-                                                    + "."
-                                                    + ((String) currentMethodInvocation[0]),
-                                            args,
-                                            (String[]) currentMethodInvocation[4],
-                                            (String[]) currentMethodInvocation[3],
-                                            (Highlight) currentMethodInvocation[6]);
-                        }
-
-                        Long[] parameterExpressionReferences = (Long[]) currentMethodInvocation[7];
-
-                        if (parameterExpressionReferences != null) {
-                            int i = 0;
-                            while (i < parameterExpressionReferences.length) {
-                                Object[] postIncDec = (Object[]) postIncsDecs
-                                        .remove(parameterExpressionReferences[i]);
-                                if (postIncDec != null) {
-                                    doPostIncDec(postIncDec);
-                                }
-                                i++;
-                            }
-                        }
-
-                        if (!methodInvocation.empty()) {
-                            currentMethodInvocation = (Object[]) methodInvocation
-                                    .pop();
-                        } else {
-                            currentMethodInvocation = null;
-                        }
-
-                        invokingMethod = false;
-
-                        break;
-                    }
-
-                //Parameters list
-                case Code.PARAMETERS:
-                    {
-
-                        if (tokenizer.hasMoreTokens()) {
-                            String parameters = tokenizer.nextToken();
-                            String[] parameterNames = (String[]) currentMethodInvocation[4];
-                            StringTokenizer names = new StringTokenizer(
-                                    parameters, ",");
-                            for (int i = 0; i < parameterNames.length; i++) {
-                                parameterNames[i] = names.nextToken();
-                            }
-                        }
-                        break;
-                    }
-
-                // Return Statement
-                case Code.R:
-                    {
-
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        String value = null;
-                        if (tokenizer.countTokens() >= 3) {
-                            value = tokenizer.nextToken();
-                        } else {
-                            value = "";
-                        }
-                        String type = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-
-                        if (type.equals(Void.TYPE.getName())) {
-
-                            //director.finishMethod(null, expressionCounter);
-                            returned = false;
-
-                        } else {
-
-                            Value ret = (Value) values.remove(new Long(
-                                    expressionReference));
-
-                            Value casted = null;
-
-                            if (MCodeUtilities.isPrimitive(type)) {
-                                casted = new Value(value, type);
-                            } else {
-                                Instance inst = (Instance) instances
-                                        .get(MCodeUtilities.getHashCode(value));
-                                if (inst != null) {
-                                    casted = new Reference(inst);
-                                } else {
-                                    casted = new Reference();
-                                }
-                            }
-
-                            returnActor = director
-                                    .animateReturn(ret, casted, h);
-                            returnValue = (Value) casted.clone();
-                            returnExpressionCounter = expressionCounter;
-                            returned = true;
-
-                        }
-
-                        exprs.pop();
-
-                        break;
-                    }
-
-                // Static method call closed
-                case Code.SMCC:
-                    {
-
-                        if (!returned) {
-
-                            director.finishMethod(null, 0);
-
-                        } else {
-
-                            Value rv = null;
-
-                            if (returnValue instanceof Reference) {
-                                rv = (Value) ((Reference) returnValue).clone();
-                            } else {
-
-                                rv = (Value) returnValue.clone();
-                            }
-
-                            ValueActor va = director.finishMethod(returnActor,
-                                    returnExpressionCounter);
-                            rv.setActor(va);
-
-                            handleExpression(rv, returnExpressionCounter);
-                        }
-
-                        returned = false;
-
-                        /*
-                         * //command that wait for this expression (left,
-                         * right) int command = -1; int size = commands.size();
-                         * //We find the command for (int i = size - 1; i >= 0;
-                         * i--) { StringTokenizer commandTokenizer = new
-                         * StringTokenizer( (String) commands.elementAt(i),
-                         * Code.DELIM); command =
-                         * Long.parseLong(commandTokenizer.nextToken()); int
-                         * cid = Long.parseLong(commandTokenizer.nextToken());
-                         * if (returnExpressionCounter == cid) {
-                         * commands.removeElementAt(i); break; } }
-                         */
-                        /*
-                         * Look from the expression stack what expression
-                         * should be shown next
-                         */
-                        /*
-                         * int expressionReference = 0; int oper = -1;
-                         * Highlight highlight = null;
-                         * 
-                         * if (!exprs.empty()) {
-                         * 
-                         * StringTokenizer expressionTokenizer = new
-                         * StringTokenizer( (String) exprs.peek(), Code.DELIM);
-                         * 
-                         * oper =
-                         * Long.parseLong(expressionTokenizer.nextToken());
-                         * 
-                         * expressionReference = Long.parseLong(
-                         * expressionTokenizer.nextToken());
-                         * 
-                         * //Make the location information for the location
-                         * token highlight = ECodeUtilities.makeHighlight(
-                         * expressionTokenizer.nextToken()); }
-                         * 
-                         * //Do different things to the return value
-                         * //depending on in what expression the return value
-                         * is used.
-                         * 
-                         * //If operator is assignment we just store the value
-                         * if (oper == Code.A){
-                         * 
-                         * values.put(new Long(returnExpressionCounter), rv);
-                         * 
-                         * //If oper is other binary operator we will show it
-                         * //on the screen with operator } else if
-                         * (ECodeUtilities.isBinary(oper)) {
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveBinOperator(oper);
-                         * 
-                         * if (command == Code.LEFT) {
-                         * 
-                         * director.beginBinaryExpression(rv, operator,
-                         * expressionReference, highlight); } else if (command ==
-                         * Code.RIGHT) {
-                         * 
-                         * ExpressionActor ea = (ExpressionActor)
-                         * director.getCurrentScratch().findActor(expressionReference);
-                         * director.rightBinaryExpression(rv, ea, highlight); }
-                         * else { values.put(new Long(returnExpressionCounter),
-                         * rv); }
-                         * 
-                         * //If oper is a unary operator we will show it //on
-                         * the screen with operator } else if
-                         * (ECodeUtilities.isUnary(oper)) {
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveUnOperator(oper);
-                         * 
-                         * values.put(new Long(returnExpressionCounter), rv);
-                         * 
-                         * if (command == Code.RIGHT) {
-                         * director.beginUnaryExpression(operator, rv,
-                         * expressionReference, highlight); }
-                         * 
-                         * //If it is something else we will store it for later
-                         * use. } else {
-                         * 
-                         * values.put(new Long(returnExpressionCounter), rv); } }
-                         * returned = false;
-                         */
-                        break;
-                    }
+                    returned = false;
+
+                    /*
+                     * //command that wait for this expression (left,
+                     * right) int command = -1; int size = commands.size();
+                     * //We find the command for (int i = size - 1; i >= 0;
+                     * i--) { StringTokenizer commandTokenizer = new
+                     * StringTokenizer( (String) commands.elementAt(i),
+                     * Code.DELIM); command =
+                     * Long.parseLong(commandTokenizer.nextToken()); int
+                     * cid = Long.parseLong(commandTokenizer.nextToken());
+                     * if (returnExpressionCounter == cid) {
+                     * commands.removeElementAt(i); break; } }
+                     */
+                    /*
+                     * Look from the expression stack what expression
+                     * should be shown next
+                     */
+                    /*
+                     * int expressionReference = 0; int oper = -1;
+                     * Highlight highlight = null;
+                     * 
+                     * if (!exprs.empty()) {
+                     * 
+                     * StringTokenizer expressionTokenizer = new
+                     * StringTokenizer( (String) exprs.peek(), Code.DELIM);
+                     * 
+                     * oper =
+                     * Long.parseLong(expressionTokenizer.nextToken());
+                     * 
+                     * expressionReference = Long.parseLong(
+                     * expressionTokenizer.nextToken());
+                     * 
+                     * //Make the location information for the location
+                     * token highlight = ECodeUtilities.makeHighlight(
+                     * expressionTokenizer.nextToken()); }
+                     * 
+                     * //Do different things to the return value
+                     * //depending on in what expression the return value
+                     * is used.
+                     * 
+                     * //If operator is assignment we just store the value
+                     * if (oper == Code.A){
+                     * 
+                     * values.put(new Long(returnExpressionCounter), rv);
+                     * 
+                     * //If oper is other binary operator we will show it
+                     * //on the screen with operator } else if
+                     * (ECodeUtilities.isBinary(oper)) {
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveBinOperator(oper);
+                     * 
+                     * if (command == Code.LEFT) {
+                     * 
+                     * director.beginBinaryExpression(rv, operator,
+                     * expressionReference, highlight); } else if (command ==
+                     * Code.RIGHT) {
+                     * 
+                     * ExpressionActor ea = (ExpressionActor)
+                     * director.getCurrentScratch().findActor(expressionReference);
+                     * director.rightBinaryExpression(rv, ea, highlight); }
+                     * else { values.put(new Long(returnExpressionCounter),
+                     * rv); }
+                     * 
+                     * //If oper is a unary operator we will show it //on
+                     * the screen with operator } else if
+                     * (ECodeUtilities.isUnary(oper)) {
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveUnOperator(oper);
+                     * 
+                     * values.put(new Long(returnExpressionCounter), rv);
+                     * 
+                     * if (command == Code.RIGHT) {
+                     * director.beginUnaryExpression(operator, rv,
+                     * expressionReference, highlight); }
+                     * 
+                     * //If it is something else we will store it for later
+                     * use. } else {
+                     * 
+                     * values.put(new Long(returnExpressionCounter), rv); } }
+                     * returned = false;
+                     */
+                    break;
+                }
 
                 //If Then Statement
-                case Code.IFT:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        String value = tokenizer.nextToken();
+                case Code.IFT: {
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = tokenizer.nextToken();
 
-                        Highlight h = null;
-                        if (tokenizer.hasMoreElements()) {
-                            h = MCodeUtilities.makeHighlight(tokenizer
-                                    .nextToken());
-                        }
-
-                        Value result = (Value) values.remove(new Long(
-                                expressionReference));
-
-                        if (value.equals(Boolean.TRUE.toString())) {
-                            director.branchThen(result, h);
-                        } else {
-                            director.skipIf(result, h);
-                        }
-
-                        director.closeScratch();
-                        director.openScratch();
-
-                        break;
+                    Highlight h = null;
+                    if (tokenizer.hasMoreElements()) {
+                        h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                     }
+
+                    Value result = (Value) values.remove(new Long(
+                            expressionReference));
+
+                    if (value.equals(Boolean.TRUE.toString())) {
+                        director.branchThen(result, h);
+                    } else {
+                        director.skipIf(result, h);
+                    }
+
+                    director.closeScratch();
+                    director.openScratch();
+
+                    break;
+                }
 
                 //IF Then Else Statement
-                case Code.IFTE:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        String value = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                case Code.IFTE: {
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = tokenizer.nextToken();
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
 
-                        Value result = (Value) values.remove(new Long(
-                                expressionReference));
+                    Value result = (Value) values.remove(new Long(
+                            expressionReference));
 
-                        if (value.equals(Boolean.TRUE.toString())) {
-                            director.branchThen(result, h);
-                        } else {
-                            director.branchElse(result, h);
-                        }
-
-                        director.closeScratch();
-                        director.openScratch();
-
-                        break;
+                    if (value.equals(Boolean.TRUE.toString())) {
+                        director.branchThen(result, h);
+                    } else {
+                        director.branchElse(result, h);
                     }
+
+                    director.closeScratch();
+                    director.openScratch();
+
+                    break;
+                }
 
                 //While Statement
-                case Code.WHI:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        String value = tokenizer.nextToken();
-                        int round = Integer.parseInt(tokenizer.nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                case Code.WHI: {
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = tokenizer.nextToken();
+                    int round = Integer.parseInt(tokenizer.nextToken());
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
 
-                        Value result = (Value) values.remove(new Long(
-                                expressionReference));
+                    Value result = (Value) values.remove(new Long(
+                            expressionReference));
 
-                        if (round == 0) {
+                    if (round == 0) {
 
-                            if (value.equals(Boolean.TRUE.toString())) {
-                                director.enterLoop(propertiesBundle
-                                        .getStringProperty("statement_name.while"),
-                                        result, h);
-                            } else {
-                                director.skipLoop(propertiesBundle
-                                        .getStringProperty("statement_name.while"),
-                                        result);
-                            }
-
+                        if (value.equals(Boolean.TRUE.toString())) {
+                            director.enterLoop(propertiesBundle
+                                    .getStringProperty("statement_name.while"),
+                                    result, h);
                         } else {
-
-                            if (value.equals(Boolean.TRUE.toString())) {
-                                director.continueLoop(propertiesBundle
-                                        .getStringProperty("statement_name.while"),
-                                        result, h);
-                            } else {
-                                director.exitLoop(propertiesBundle
-                                        .getStringProperty("statement_name.while"),
-                                        result);
-                            }
-
+                            director.skipLoop(propertiesBundle
+                                    .getStringProperty("statement_name.while"),
+                                    result);
                         }
 
-                        director.closeScratch();
-                        director.openScratch();
+                    } else {
 
-                        break;
+                        if (value.equals(Boolean.TRUE.toString())) {
+                            director.continueLoop(propertiesBundle
+                                    .getStringProperty("statement_name.while"),
+                                    result, h);
+                        } else {
+                            director.exitLoop(propertiesBundle
+                                    .getStringProperty("statement_name.while"),
+                                    result);
+                        }
+
                     }
+
+                    director.closeScratch();
+                    director.openScratch();
+
+                    break;
+                }
 
                 //For Statement
-                case Code.FOR:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        String value = tokenizer.nextToken();
-                        long round = Long.parseLong(tokenizer.nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                case Code.FOR: {
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = tokenizer.nextToken();
+                    long round = Long.parseLong(tokenizer.nextToken());
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
 
-                        Value result = (Value) values.remove(new Long(
-                                expressionReference));
+                    Value result = (Value) values.remove(new Long(
+                            expressionReference));
 
-                        if (round == 0) {
-                            if (value.equals(Boolean.TRUE.toString())) {
-                                director.enterLoop(propertiesBundle
-                                        .getStringProperty("statement_name.for"),
-                                        result, h);
-                            } else {
-                                director.skipLoop(propertiesBundle
-                                        .getStringProperty("statement_name.for"),
-                                        result);
-                            }
+                    if (round == 0) {
+                        if (value.equals(Boolean.TRUE.toString())) {
+                            director.enterLoop(propertiesBundle
+                                    .getStringProperty("statement_name.for"),
+                                    result, h);
                         } else {
-                            if (value.equals(Boolean.TRUE.toString())) {
-                                director.continueLoop(propertiesBundle
-                                        .getStringProperty("statement_name.for"),
-                                        result, h);
-                            } else {
-                                director.exitLoop(propertiesBundle
-                                        .getStringProperty("statement_name.for"),
-                                        result);
-                            }
+                            director.skipLoop(propertiesBundle
+                                    .getStringProperty("statement_name.for"),
+                                    result);
                         }
-                        director.closeScratch();
-                        director.openScratch();
-                        break;
+                    } else {
+                        if (value.equals(Boolean.TRUE.toString())) {
+                            director.continueLoop(propertiesBundle
+                                    .getStringProperty("statement_name.for"),
+                                    result, h);
+                        } else {
+                            director.exitLoop(propertiesBundle
+                                    .getStringProperty("statement_name.for"),
+                                    result);
+                        }
                     }
+                    director.closeScratch();
+                    director.openScratch();
+                    break;
+                }
 
                 //Do-While Statement
-                case Code.DO:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        String value = tokenizer.nextToken();
-                        long round = Long.parseLong(tokenizer.nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                case Code.DO: {
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = tokenizer.nextToken();
+                    long round = Long.parseLong(tokenizer.nextToken());
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
 
-                        Value result = (Value) values.remove(new Long(
-                                expressionReference));
+                    Value result = (Value) values.remove(new Long(
+                            expressionReference));
 
-                        if (round == 0) {
-                            director.enterLoop(propertiesBundle
-                                    .getStringProperty("statement_name.do_while"), h);
+                    if (round == 0) {
+                        director.enterLoop(propertiesBundle
+                                .getStringProperty("statement_name.do_while"),
+                                h);
+                    } else {
+                        if (value.equals(Boolean.TRUE.toString())) {
+                            director
+                                    .continueLoop(
+                                            propertiesBundle
+                                                    .getStringProperty("statement_name.do_while"),
+                                            result, h);
                         } else {
-                            if (value.equals(Boolean.TRUE.toString())) {
-                                director.continueLoop(propertiesBundle
-                                        .getStringProperty("statement_name.do_while"),
-                                        result, h);
-                            } else {
-                                director.exitLoop(propertiesBundle
-                                        .getStringProperty("statement_name.do_while"),
-                                        result);
-                            }
+                            director
+                                    .exitLoop(
+                                            propertiesBundle
+                                                    .getStringProperty("statement_name.do_while"),
+                                            result);
                         }
-                        director.closeScratch();
-                        director.openScratch();
+                    }
+                    director.closeScratch();
+                    director.openScratch();
 
-                        break;
+                    break;
+                }
+
+                case Code.SWITCHB: {
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+
+                    director.openSwitch(h);
+                    director.closeScratch();
+                    director.openScratch();
+
+                    break;
+                }
+
+                case Code.SWIBF: {
+                    long selectorReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    long switchBlockReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+
+                    if (switchBlockReference != -1) {
+                        Value selector = (Value) values.remove(new Long(
+                                selectorReference));
+                        Value switchBlock = (Value) values.remove(new Long(
+                                switchBlockReference));
+                        Value result = new Value("true", "boolean");
+
+                        director.animateBinaryExpression(MCodeUtilities
+                                .resolveBinOperator(Code.EE), selector,
+                                switchBlock, result, -3, h);
+                        director.switchSelected(h);
+                    } else {
+                        director.switchDefault(h);
                     }
 
-                case Code.SWITCHB:
-                    {
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    break;
+                }
 
-                        director.openSwitch(h);
-                        director.closeScratch();
-                        director.openScratch();
+                case Code.SWITCH: {
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
 
-                        break;
-                    }
+                    director.closeSwitch(h);
 
-                case Code.SWIBF:
-                    {
-                        long selectorReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        long switchBlockReference = Long.parseLong(tokenizer
-                                .nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    director.closeScratch();
+                    director.openScratch();
 
-                        if (switchBlockReference != -1) {
-                            Value selector = (Value) values.remove(new Long(
-                                    selectorReference));
-                            Value switchBlock = (Value) values.remove(new Long(
-                                    switchBlockReference));
-                            Value result = new Value("true", "boolean");
-
-                            director.animateBinaryExpression(MCodeUtilities
-                                    .resolveBinOperator(Code.EE), selector,
-                                    switchBlock, result, -3, h);
-                            director.switchSelected(h);
-                        } else {
-                            director.switchDefault(h);
-                        }
-
-                        break;
-                    }
-
-                case Code.SWITCH:
-                    {
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-
-                        director.closeSwitch(h);
-
-                        director.closeScratch();
-                        director.openScratch();
-
-                        break;
-                    }
+                    break;
+                }
 
                 //Break Statement
-                case Code.BR:
-                    {
-                        int statementName = Integer.parseInt(tokenizer
-                                .nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        String stmt = "";
+                case Code.BR: {
+                    int statementName = Integer.parseInt(tokenizer.nextToken());
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+                    String stmt = "";
 
-                        if (statementName == Code.WHI) {
-                            stmt = propertiesBundle
-                                    .getStringProperty("statement_name.while");
-                            director.breakLoop(stmt, h);
-                        } else if (statementName == Code.FOR) {
-                            stmt = propertiesBundle
-                                    .getStringProperty("statement_name.for");
-                            director.breakLoop(stmt, h);
-                        } else if (statementName == Code.DO) {
-                            stmt = propertiesBundle
-                                    .getStringProperty("statement_name.do_while");
-                            director.breakLoop(stmt, h);
-                        } else if (statementName == Code.SWITCH) {
-                            director.breakSwitch(h);
-                        }
-
-                        director.closeScratch();
-                        director.openScratch();
-
-                        break;
+                    if (statementName == Code.WHI) {
+                        stmt = propertiesBundle
+                                .getStringProperty("statement_name.while");
+                        director.breakLoop(stmt, h);
+                    } else if (statementName == Code.FOR) {
+                        stmt = propertiesBundle
+                                .getStringProperty("statement_name.for");
+                        director.breakLoop(stmt, h);
+                    } else if (statementName == Code.DO) {
+                        stmt = propertiesBundle
+                                .getStringProperty("statement_name.do_while");
+                        director.breakLoop(stmt, h);
+                    } else if (statementName == Code.SWITCH) {
+                        director.breakSwitch(h);
                     }
+
+                    director.closeScratch();
+                    director.openScratch();
+
+                    break;
+                }
 
                 //Continue Statement
-                case Code.CONT:
-                    {
-                        int statementName = Integer.parseInt(tokenizer
-                                .nextToken());
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        String stmt = "";
+                case Code.CONT: {
+                    int statementName = Integer.parseInt(tokenizer.nextToken());
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+                    String stmt = "";
 
-                        if (statementName == Code.WHI) {
-                            stmt = propertiesBundle
-                                    .getStringProperty("statement_name.while");
-                        } else if (statementName == Code.FOR) {
-                            stmt = propertiesBundle
-                                    .getStringProperty("statement_name.for");
-                        } else if (statementName == Code.DO) {
-                            stmt = propertiesBundle
-                                    .getStringProperty("statement_name.do_while");
+                    if (statementName == Code.WHI) {
+                        stmt = propertiesBundle
+                                .getStringProperty("statement_name.while");
+                    } else if (statementName == Code.FOR) {
+                        stmt = propertiesBundle
+                                .getStringProperty("statement_name.for");
+                    } else if (statementName == Code.DO) {
+                        stmt = propertiesBundle
+                                .getStringProperty("statement_name.do_while");
+                    }
+
+                    director.continueLoop(stmt, h);
+
+                    director.closeScratch();
+                    director.openScratch();
+
+                    break;
+                }
+
+                //Opening and closing scopes
+                case Code.OUTPUT: {
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+
+                    String value = tokenizer.nextToken();
+                    String type = tokenizer.nextToken();
+                    String breakLine = tokenizer.nextToken();
+                    Highlight highlight = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
+
+                    Value output = (Value) values.remove(new Long(
+                            expressionReference));
+
+                    if (output == null) {
+                        output = new Value(value, type);
+                    }
+                    if (breakLine.equals("1")) {
+                        output.setValue(output.getValue() + "\\n");
+                    }
+
+                    //Value output = new Value(value, type);
+
+                    director.output(output, highlight);
+
+                    // To pop the OUTPUT statement on top of the expression Stack if it is there
+                    if (!exprs.empty()) {
+                        StringTokenizer expressionTokenizer = new StringTokenizer(
+                                (String) exprs.peek(), Code.DELIM);
+                        if (Integer.parseInt(expressionTokenizer.nextToken()) == (Code.OUTPUT)) {
+                            exprs.pop();
                         }
+                    }
 
-                        director.continueLoop(stmt, h);
+                    // To handle the post increments and decrements if there are any.
+                    Object[] postIncDec = (Object[]) postIncsDecs
+                            .remove(new Long(expressionReference));
+                    if (postIncDec != null) {
+                        doPostIncDec(postIncDec);
+                    }
 
+                    break;
+                }
+
+                //Input needs to be read
+                case Code.INPUT: {
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    String type = tokenizer.nextToken();
+
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+                    Value in = director.animateInputHandling(type, null, h);
+
+                    input.println(in.getValue());
+                    values.put(new Long(expressionCounter), in);
+
+                    break;
+                }
+
+                //Inputted value is returned
+                case Code.INPUTTED: {
+
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+
+                    String value = tokenizer.nextToken();
+                    String type = tokenizer.nextToken();
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
+
+                    Value in = (Value) values
+                            .remove(new Long(expressionCounter));
+                    if (in == null) {
+                        in = new Value(value, type);
+                    }
+
+                    handleExpression(in, expressionCounter);
+
+                    /*
+                     * //command that wait for this expression (left,
+                     * right) int command = -1; int oper = -1; int size =
+                     * commands.size();
+                     * 
+                     * //We find the command for (int i = size - 1; i >= 0;
+                     * i--) { StringTokenizer commandTokenizer = new
+                     * StringTokenizer( (String) commands.elementAt(i),
+                     * Code.DELIM); int comm =
+                     * Integer.parseInt(commandTokenizer.nextToken()); long
+                     * cid = Long.parseLong(commandTokenizer.nextToken());
+                     * if (expressionCounter == cid) { command = comm;
+                     * commands.removeElementAt(i); break; } }
+                     */
+                    /*
+                     * Look from the expression stack what expression
+                     * should be shown next
+                     */
+                    /*
+                     * long expressionReference = 0; Highlight highlight =
+                     * null;
+                     * 
+                     * if (!exprs.empty()) { StringTokenizer
+                     * expressionTokenizer = new StringTokenizer( (String)
+                     * exprs.peek(), Code.DELIM);
+                     * 
+                     * oper = Long.parseLong(
+                     * expressionTokenizer.nextToken());
+                     * 
+                     * expressionReference = Long.parseLong(
+                     * expressionTokenizer.nextToken());
+                     * 
+                     * //Make the location information for the location
+                     * token highlight = ECodeUtilities.makeHighlight(
+                     * expressionTokenizer.nextToken()); }
+                     * 
+                     * //Do different things depending on in what
+                     * expression //the literal is used.
+                     * 
+                     * //If operator is assignment we just store the value
+                     * if (oper == Code.A){ values.put(new
+                     * Long(expressionCounter), in);
+                     * 
+                     * //If oper is other binary operator we will show it
+                     * //on the screen with operator } else if
+                     * (ECodeUtilities.isBinary(oper)) {
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveBinOperator(oper);
+                     * 
+                     * if (command == Code.LEFT) {
+                     * 
+                     * director.beginBinaryExpression(in, operator,
+                     * expressionReference, highlight); } else if (command ==
+                     * Code.RIGHT) {
+                     * 
+                     * ExpressionActor ea = (ExpressionActor)
+                     * director.getCurrentScratch().findActor(expressionReference);
+                     * if (ea != null) { director.rightBinaryExpression(in,
+                     * ea, highlight); } else { values.put(new
+                     * Long(expressionCounter), in); } } else {
+                     * values.put(new Long(expressionCounter), in); }
+                     * 
+                     * //If oper is a unary operator we will show it //on
+                     * the screen with operator } else if
+                     * (ECodeUtilities.isUnary(oper)) {
+                     * 
+                     * int operator =
+                     * ECodeUtilities.resolveUnOperator(oper);
+                     * 
+                     * values.put(new Long(expressionCounter), in);
+                     * 
+                     * if (command == Code.RIGHT) {
+                     * director.beginUnaryExpression(operator, in,
+                     * expressionReference, highlight); }
+                     * 
+                     * //If it is something else we will store it for later
+                     * use. } else { values.put(new
+                     * Long(expressionCounter), in); }
+                     */
+                    break;
+                }
+
+                //Opening and closing scopes
+                case Code.SCOPE: {
+
+                    int scope = Integer.parseInt(tokenizer.nextToken());
+
+                    //Open the scope
+                    if (scope == 1) {
+
+                        director.openScope();
                         director.closeScratch();
                         director.openScratch();
 
-                        break;
+                        //Close the scope
+                    } else if (scope == 0) {
+
+                        director.closeScope();
+                        director.closeScratch();
+                        director.openScratch();
                     }
 
-                //Opening and closing scopes
-                case Code.OUTPUT:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    break;
+                }
 
-                        String value = tokenizer.nextToken();
-                        String type = tokenizer.nextToken();
-                        String breakLine = tokenizer.nextToken();
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
+                //Array Allocation
+                case Code.AA: {
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
 
-                       Value output = (Value) values.remove(new Long(
-                                expressionReference));
-                       
-                        if (output == null) {
-                            output = new Value(value, type);
-                        }
-                        if(breakLine.equals("1")){
-                            output.setValue(output.getValue()+"\\n");
-                        }
-                        
-                        //Value output = new Value(value, type);
-                        
-                        director.output(output, highlight);
-                        
-                        // To pop the OUTPUT statement on top of the expression Stack if it is there
-                        if (!exprs.empty()) {
-                            StringTokenizer expressionTokenizer = new StringTokenizer(
-                                    (String) exprs.peek(), Code.DELIM);
-                            if (Integer.parseInt(expressionTokenizer.nextToken()) == (Code.OUTPUT)) {
-                                exprs.pop();
-                            }
-                        }
-                        
-                        // To handle the post increments and decrements if there are any.
+                    String hashCode = tokenizer.nextToken();
+                    String compType = tokenizer.nextToken();
+                    int dims = Integer.parseInt(tokenizer.nextToken());
+
+                    //References of the dimension values
+                    String dimensionReferences = tokenizer.nextToken();
+                    StringTokenizer st = new StringTokenizer(
+                            dimensionReferences, Code.LOC_DELIM);
+
+                    long[] dimensionReference = new long[dims];
+
+                    for (int i = 0; st.hasMoreTokens(); i++) {
+                        dimensionReference[i] = Long.parseLong(st.nextToken());
+                    }
+
+                    //int values of the dimension sizes
+                    String dimensionSizes = tokenizer.nextToken();
+                    st = new StringTokenizer(dimensionSizes, ",");
+                    int[] dimensionSize = new int[dims];
+
+                    for (int i = 0; st.hasMoreTokens(); i++) {
+                        dimensionSize[i] = Integer.parseInt(st.nextToken());
+                    }
+
+                    int actualDimension = Integer.parseInt(tokenizer
+                            .nextToken());
+
+                    Highlight h = null;
+                    if (tokenizer.hasMoreElements()) {
+                        h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                    }
+
+                    Value[] dimensionValues = new Value[dims];
+
+                    for (int i = 0; i < dims; i++) {
+                        dimensionValues[i] = (Value) values.remove(new Long(
+                                dimensionReference[i]));
+
+                    }
+
+                    ArrayInstance ai = new ArrayInstance(hashCode, compType,
+                            dimensionSize.length, actualDimension,
+                            dimensionSize[0]);
+
+                    Reference ref = new Reference(ai);
+
+                    director.showArrayCreation(ai, ref, null, null,
+                            dimensionValues, expressionReference,
+                            actualDimension, h);
+
+                    //director.arrayCreation(dimensionSize, h);
+
+                    instances.put(hashCode, ai);
+
+                    ref.makeReference();
+
+                    values.put(new Long(expressionReference), ref);
+
+                    for (int i = 0; i < dims; i++) {
                         Object[] postIncDec = (Object[]) postIncsDecs
-                        .remove(new Long(expressionReference));
+                                .remove(new Long(dimensionReference[i]));
+
                         if (postIncDec != null) {
                             doPostIncDec(postIncDec);
                         }
-
-                        break;
                     }
 
-                //Input needs to be read
-                case Code.INPUT:
-                    {
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        String type = tokenizer.nextToken();
-
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-                        Value in = director.animateInputHandling(type, null, h);
-
-                        input.println(in.getValue());
-                        values.put(new Long(expressionCounter), in);
-
-                        break;
-                    }
-
-                //Inputted value is returned
-                case Code.INPUTTED:
-                    {
-
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-
-                        String value = tokenizer.nextToken();
-                        String type = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
-
-                        Value in = (Value) values.remove(new Long(
-                                expressionCounter));
-                        if (in == null) {
-                            in = new Value(value, type);
-                        }
-
-                        handleExpression(in, expressionCounter);
-
-                        /*
-                         * //command that wait for this expression (left,
-                         * right) int command = -1; int oper = -1; int size =
-                         * commands.size();
-                         * 
-                         * //We find the command for (int i = size - 1; i >= 0;
-                         * i--) { StringTokenizer commandTokenizer = new
-                         * StringTokenizer( (String) commands.elementAt(i),
-                         * Code.DELIM); int comm =
-                         * Integer.parseInt(commandTokenizer.nextToken()); long
-                         * cid = Long.parseLong(commandTokenizer.nextToken());
-                         * if (expressionCounter == cid) { command = comm;
-                         * commands.removeElementAt(i); break; } }
-                         */
-                        /*
-                         * Look from the expression stack what expression
-                         * should be shown next
-                         */
-                        /*
-                         * long expressionReference = 0; Highlight highlight =
-                         * null;
-                         * 
-                         * if (!exprs.empty()) { StringTokenizer
-                         * expressionTokenizer = new StringTokenizer( (String)
-                         * exprs.peek(), Code.DELIM);
-                         * 
-                         * oper = Long.parseLong(
-                         * expressionTokenizer.nextToken());
-                         * 
-                         * expressionReference = Long.parseLong(
-                         * expressionTokenizer.nextToken());
-                         * 
-                         * //Make the location information for the location
-                         * token highlight = ECodeUtilities.makeHighlight(
-                         * expressionTokenizer.nextToken()); }
-                         * 
-                         * //Do different things depending on in what
-                         * expression //the literal is used.
-                         * 
-                         * //If operator is assignment we just store the value
-                         * if (oper == Code.A){ values.put(new
-                         * Long(expressionCounter), in);
-                         * 
-                         * //If oper is other binary operator we will show it
-                         * //on the screen with operator } else if
-                         * (ECodeUtilities.isBinary(oper)) {
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveBinOperator(oper);
-                         * 
-                         * if (command == Code.LEFT) {
-                         * 
-                         * director.beginBinaryExpression(in, operator,
-                         * expressionReference, highlight); } else if (command ==
-                         * Code.RIGHT) {
-                         * 
-                         * ExpressionActor ea = (ExpressionActor)
-                         * director.getCurrentScratch().findActor(expressionReference);
-                         * if (ea != null) { director.rightBinaryExpression(in,
-                         * ea, highlight); } else { values.put(new
-                         * Long(expressionCounter), in); } } else {
-                         * values.put(new Long(expressionCounter), in); }
-                         * 
-                         * //If oper is a unary operator we will show it //on
-                         * the screen with operator } else if
-                         * (ECodeUtilities.isUnary(oper)) {
-                         * 
-                         * int operator =
-                         * ECodeUtilities.resolveUnOperator(oper);
-                         * 
-                         * values.put(new Long(expressionCounter), in);
-                         * 
-                         * if (command == Code.RIGHT) {
-                         * director.beginUnaryExpression(operator, in,
-                         * expressionReference, highlight); }
-                         * 
-                         * //If it is something else we will store it for later
-                         * use. } else { values.put(new
-                         * Long(expressionCounter), in); }
-                         */
-                        break;
-                    }
-
-                //Opening and closing scopes
-                case Code.SCOPE:
-                    {
-
-                        int scope = Integer.parseInt(tokenizer.nextToken());
-
-                        //Open the scope
-                        if (scope == 1) {
-
-                            director.openScope();
-                            director.closeScratch();
-                            director.openScratch();
-
-                            //Close the scope
-                        } else if (scope == 0) {
-
-                            director.closeScope();
-                            director.closeScratch();
-                            director.openScratch();
-                        }
-
-                        break;
-                    }
-
-                //Array Allocation
-                case Code.AA:
-                    {
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
-
-                        String hashCode = tokenizer.nextToken();
-                        String compType = tokenizer.nextToken();
-                        int dims = Integer.parseInt(tokenizer.nextToken());
-
-                        //References of the dimension values
-                        String dimensionReferences = tokenizer.nextToken();
-                        StringTokenizer st = new StringTokenizer(
-                                dimensionReferences, Code.LOC_DELIM);
-
-                        long[] dimensionReference = new long[dims];
-
-                        for (int i = 0; st.hasMoreTokens(); i++) {
-                            dimensionReference[i] = Long.parseLong(st
-                                    .nextToken());
-                        }
-
-                        //int values of the dimension sizes
-                        String dimensionSizes = tokenizer.nextToken();
-                        st = new StringTokenizer(dimensionSizes, ",");
-                        int[] dimensionSize = new int[dims];
-
-                        for (int i = 0; st.hasMoreTokens(); i++) {
-                            dimensionSize[i] = Integer.parseInt(st.nextToken());
-                        }
-
-                        int actualDimension = Integer.parseInt(tokenizer.nextToken());
-                        
-                        Highlight h = null;
-                        if (tokenizer.hasMoreElements()) {
-                            h = MCodeUtilities.makeHighlight(tokenizer
-                                    .nextToken());
-                        }
-
-                        Value[] dimensionValues = new Value[dims];
-
-                        for (int i = 0; i < dims; i++) {
-                            dimensionValues[i] = (Value) values
-                                    .remove(new Long(dimensionReference[i]));
-
-                        }
-
-                        ArrayInstance ai = new ArrayInstance(hashCode,
-                                compType, dimensionSize.length, actualDimension, dimensionSize[0]);
-
-                        Reference ref = new Reference(ai);
-
-                        director.showArrayCreation(ai, ref, null, null, dimensionValues,
-                                expressionReference, actualDimension,  h);
-
-                        //director.arrayCreation(dimensionSize, h);
-
-                        instances.put(hashCode, ai);
-
-                        ref.makeReference();
-
-                        values.put(new Long(expressionReference), ref);
-
-                        for (int i = 0; i < dims; i++) {
-                            Object[] postIncDec = (Object[]) postIncsDecs
-                                    .remove(new Long(dimensionReference[i]));
-
-                            if (postIncDec != null) {
-                                doPostIncDec(postIncDec);
-                            }
-                        }
-
-                        break;
-                    }
+                    break;
+                }
 
                 //Array Access
-                case Code.AAC:
-                    {
+                case Code.AAC: {
 
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
 
-                        long expressionReference = Long.parseLong(tokenizer
-                                .nextToken());
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
 
-                        int dims = Integer.parseInt(tokenizer.nextToken());
+                    int dims = Integer.parseInt(tokenizer.nextToken());
 
-                        String cellNumberReferences = tokenizer.nextToken();
-                        StringTokenizer st = new StringTokenizer(
-                                cellNumberReferences, ",");
+                    String cellNumberReferences = tokenizer.nextToken();
+                    StringTokenizer st = new StringTokenizer(
+                            cellNumberReferences, ",");
 
-                        long[] cellNumberReference = new long[dims];
+                    long[] cellNumberReference = new long[dims];
 
-                        for (int i = 0; st.hasMoreTokens(); i++) {
-                            cellNumberReference[i] = Long.parseLong(st
-                                    .nextToken());
+                    for (int i = 0; st.hasMoreTokens(); i++) {
+                        cellNumberReference[i] = Long.parseLong(st.nextToken());
+                    }
+
+                    //int values of the dimension sizes
+                    String cellNumbers = tokenizer.nextToken();
+                    st = new StringTokenizer(cellNumbers, ",");
+                    int[] cellNumber = new int[dims];
+
+                    for (int i = 0; st.hasMoreTokens(); i++) {
+                        cellNumber[i] = Integer.parseInt(st.nextToken());
+                    }
+
+                    String value = null;
+
+                    if (tokenizer.countTokens() >= 3) {
+                        value = tokenizer.nextToken();
+                    } else {
+                        value = "";
+                    }
+
+                    String type = tokenizer.nextToken();
+
+                    Highlight h = null;
+                    if (tokenizer.hasMoreElements()) {
+                        h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                    }
+
+                    //Finding the VariableInArray
+                    values.remove(new Long(expressionReference));
+                    Variable variable = (Variable) variables.remove(new Long(
+                            expressionReference));
+                    Reference varRef = (Reference) variable.getValue();
+                    ArrayInstance ainst = (ArrayInstance) varRef.getInstance();
+                    int n = cellNumber.length;
+
+                    VariableInArray[] vars = new VariableInArray[n];
+                    for (int i = 0; i < n; i++) {
+                        vars[i] = ainst.getVariableAt(cellNumber[i]);
+                        if (i != n - 1) {
+                            ainst = (ArrayInstance) ((Reference) vars[i]
+                                    .getValue()).getInstance();
                         }
+                    }
+                    //Getting the right Values that point to the cell in
+                    // the array
+                    Value[] cellNumberValues = new Value[dims];
+                    for (int i = 0; i < dims; i++) {
+                        cellNumberValues[i] = (Value) values.remove(new Long(
+                                cellNumberReference[i]));
 
-                        //int values of the dimension sizes
-                        String cellNumbers = tokenizer.nextToken();
-                        st = new StringTokenizer(cellNumbers, ",");
-                        int[] cellNumber = new int[dims];
+                    }
 
-                        for (int i = 0; st.hasMoreTokens(); i++) {
-                            cellNumber[i] = Integer.parseInt(st.nextToken());
-                        }
-
-                        String value = null;
-
-                        if (tokenizer.countTokens() >= 3) {
-                            value = tokenizer.nextToken();
+                    //Actual value in the array in pointed cell
+                    Value val = null;
+                    if (MCodeUtilities.isPrimitive(type)) {
+                        val = new Value(value, type);
+                    } else {
+                        if (value.equals("null")) {
+                            val = new Reference();
                         } else {
-                            value = "";
-                        }
-
-                        String type = tokenizer.nextToken();
-
-                        Highlight h = null;
-                        if (tokenizer.hasMoreElements()) {
-                            h = MCodeUtilities.makeHighlight(tokenizer
-                                    .nextToken());
-                        }
-
-                        //Finding the VariableInArray
-                        values.remove(new Long(expressionReference));
-                        Variable variable = (Variable) variables
-                                .remove(new Long(expressionReference));
-                        Reference varRef = (Reference) variable.getValue();
-                        ArrayInstance ainst = (ArrayInstance) varRef
-                                .getInstance();
-                        int n = cellNumber.length;
-                        
-                        VariableInArray[] vars = new VariableInArray[n];
-                        for (int i = 0; i < n; i++) {
-                            vars[i] = ainst.getVariableAt(cellNumber[i]);
-                            if (i != n - 1) {
-                                ainst = (ArrayInstance) ((Reference) vars[i].getValue()).getInstance();
-                            }
-                        }
-                        //Getting the right Values that point to the cell in
-                        // the array
-                        Value[] cellNumberValues = new Value[dims];
-                        for (int i = 0; i < dims; i++) {
-                            cellNumberValues[i] = (Value) values
-                                    .remove(new Long(cellNumberReference[i]));
-
-                        }
-
-                        //Actual value in the array in pointed cell
-                        Value val = null;
-                        if (MCodeUtilities.isPrimitive(type)) {
-                            val = new Value(value, type);
-                        } else {
-                            if (value.equals("null")) {
+                            Instance inst = (Instance) instances
+                                    .get(MCodeUtilities.getHashCode(value));
+                            if (inst != null) {
+                                val = new Reference(inst);
+                            } else {
                                 val = new Reference();
-                            } else {
-                                Instance inst = (Instance) instances
-                                        .get(MCodeUtilities.getHashCode(value));
-                                if (inst != null) {
-                                    val = new Reference(inst);
-                                } else {
-                                    val = new Reference();
-                                }
                             }
                         }
+                    }
 
-                        director.showArrayAccess(vars, cellNumberValues, val, h);
+                    director.showArrayAccess(vars, cellNumberValues, val, h);
 
-                        exprs.pop();
+                    exprs.pop();
 
-                        //command that waits for this expression
-                        int command = -1;
-                        int oper = -1;
-                        int size = commands.size();
+                    //command that waits for this expression
+                    int command = -1;
+                    int oper = -1;
+                    int size = commands.size();
 
-                        //We find the command
-                        for (int i = size - 1; i >= 0; i--) {
-                            StringTokenizer commandTokenizer = new StringTokenizer(
-                                    (String) commands.elementAt(i), Code.DELIM);
-                            int comm = Integer.parseInt(commandTokenizer
-                                    .nextToken());
-                            long cid = Long.parseLong(commandTokenizer
-                                    .nextToken());
+                    //We find the command
+                    for (int i = size - 1; i >= 0; i--) {
+                        StringTokenizer commandTokenizer = new StringTokenizer(
+                                (String) commands.elementAt(i), Code.DELIM);
+                        int comm = Integer.parseInt(commandTokenizer
+                                .nextToken());
+                        long cid = Long.parseLong(commandTokenizer.nextToken());
 
-                            if (expressionCounter == cid) {
-                                command = comm;
-                                commands.removeElementAt(i);
-                                break;
-                            }
+                        if (expressionCounter == cid) {
+                            command = comm;
+                            commands.removeElementAt(i);
+                            break;
                         }
+                    }
 
-                        /**
-                         * Look from the expression stack what expression
-                         * should be shown next
-                         */
-                        expressionReference = 0;
-                        Highlight highlight = null;
-                        if (!exprs.empty()) {
-                            StringTokenizer expressionTokenizer = new StringTokenizer(
-                                    (String) exprs.peek(), Code.DELIM);
+                    /**
+                     * Look from the expression stack what expression
+                     * should be shown next
+                     */
+                    expressionReference = 0;
+                    Highlight highlight = null;
+                    if (!exprs.empty()) {
+                        StringTokenizer expressionTokenizer = new StringTokenizer(
+                                (String) exprs.peek(), Code.DELIM);
 
-                            oper = Integer.parseInt(expressionTokenizer
-                                    .nextToken());
+                        oper = Integer
+                                .parseInt(expressionTokenizer.nextToken());
 
-                            expressionReference = Long
-                                    .parseLong(expressionTokenizer.nextToken());
+                        expressionReference = Long
+                                .parseLong(expressionTokenizer.nextToken());
 
-                            //Make the location information for the location
-                            // token
-                            highlight = MCodeUtilities
-                                    .makeHighlight(expressionTokenizer
-                                            .nextToken());
-                        }
+                        //Make the location information for the location
+                        // token
+                        highlight = MCodeUtilities
+                                .makeHighlight(expressionTokenizer.nextToken());
+                    }
 
-                        /**
-                         * Do different kind of things depending on in what
-                         * expression the variable is used.
-                         */
+                    /**
+                     * Do different kind of things depending on in what
+                     * expression the variable is used.
+                     */
 
-                        //If operator is assignment we just store the value
-                        if (oper == Code.A) {
+                    //If operator is assignment we just store the value
+                    if (oper == Code.A) {
 
-                            if (command == Code.TO) {
+                        if (command == Code.TO) {
 
-                                variables.put(new Long(expressionCounter), vars[n-1]);
+                            variables.put(new Long(expressionCounter),
+                                    vars[n - 1]);
 
-                            } else {
-
-                                values.put(new Long(expressionCounter), val);
-                            }
-
-                            //If oper is other binary operator we will show it
-                            //on the screen with operator
-                        } else if (MCodeUtilities.isBinary(oper)) {
-
-                            int operator = MCodeUtilities
-                                    .resolveBinOperator(oper);
-
-                            if (command == Code.LEFT) {
-
-                                director.beginBinaryExpression(val, operator,
-                                        expressionReference, highlight);
-
-                            } else if (command == Code.RIGHT) {
-
-                                ExpressionActor ea = director
-                                        .getCurrentScratch().findActor(
-                                                expressionReference);
-                                if (ea != null) {
-
-                                    director.rightBinaryExpression(val, ea,
-                                            highlight);
-
-                                } else {
-                                    values
-                                            .put(new Long(expressionCounter),
-                                                    val);
-                                }
-                            } else {
-                                values.put(new Long(expressionCounter), val);
-                            }
-
-                            //If oper is a unary operator we will show it
-                            //on the screen with operator
-                        } else if (MCodeUtilities.isUnary(oper)) {
-
-                            if (oper == Code.PRIE || oper == Code.PRDE) {
-
-                                variables.put(new Long(expressionCounter), vars[n-1]);
-                                values.put(new Long(expressionCounter), val);
-
-                            } else if (oper == Code.PIE || oper == Code.PDE) {
-
-                                variables.put(new Long(expressionCounter), vars[n-1]);
-                                values.put(new Long(expressionReference), val);
-                                values.put(new Long(expressionCounter), val);
-
-                            } else {
-
-                                values.put(new Long(expressionCounter), val);
-                                int operator = MCodeUtilities
-                                        .resolveUnOperator(oper);
-                                if (command == Code.RIGHT) {
-                                    director
-                                            .beginUnaryExpression(operator,
-                                                    val, expressionReference,
-                                                    highlight);
-                                }
-                            }
-
-                            //If it is something else we will store it for
-                            // later use.
                         } else {
 
                             values.put(new Long(expressionCounter), val);
-                            variables.put(new Long(expressionCounter), vars[n-1]);
-
                         }
 
-                        for (int i = 0; i < dims; i++) {
-                            Object[] postIncDec = (Object[]) postIncsDecs
-                                    .remove(new Long(cellNumberReference[i]));
+                        //If oper is other binary operator we will show it
+                        //on the screen with operator
+                    } else if (MCodeUtilities.isBinary(oper)) {
 
-                            if (postIncDec != null) {
-                                doPostIncDec(postIncDec);
+                        int operator = MCodeUtilities.resolveBinOperator(oper);
+
+                        if (command == Code.LEFT) {
+
+                            director.beginBinaryExpression(val, operator,
+                                    expressionReference, highlight);
+
+                        } else if (command == Code.RIGHT) {
+
+                            ExpressionActor ea = director.getCurrentScratch()
+                                    .findActor(expressionReference);
+                            if (ea != null) {
+
+                                director.rightBinaryExpression(val, ea,
+                                        highlight);
+
+                            } else {
+                                values.put(new Long(expressionCounter), val);
+                            }
+                        } else {
+                            values.put(new Long(expressionCounter), val);
+                        }
+
+                        //If oper is a unary operator we will show it
+                        //on the screen with operator
+                    } else if (MCodeUtilities.isUnary(oper)) {
+
+                        if (oper == Code.PRIE || oper == Code.PRDE) {
+
+                            variables.put(new Long(expressionCounter),
+                                    vars[n - 1]);
+                            values.put(new Long(expressionCounter), val);
+
+                        } else if (oper == Code.PIE || oper == Code.PDE) {
+
+                            variables.put(new Long(expressionCounter),
+                                    vars[n - 1]);
+                            values.put(new Long(expressionReference), val);
+                            values.put(new Long(expressionCounter), val);
+
+                        } else {
+
+                            values.put(new Long(expressionCounter), val);
+                            int operator = MCodeUtilities
+                                    .resolveUnOperator(oper);
+                            if (command == Code.RIGHT) {
+                                director.beginUnaryExpression(operator, val,
+                                        expressionReference, highlight);
                             }
                         }
 
-                        break;
+                        //If it is something else we will store it for
+                        // later use.
+                    } else {
+
+                        values.put(new Long(expressionCounter), val);
+                        variables.put(new Long(expressionCounter), vars[n - 1]);
+
                     }
+
+                    for (int i = 0; i < dims; i++) {
+                        Object[] postIncDec = (Object[]) postIncsDecs
+                                .remove(new Long(cellNumberReference[i]));
+
+                        if (postIncDec != null) {
+                            doPostIncDec(postIncDec);
+                        }
+                    }
+
+                    break;
+                }
 
                 //Array Length
-                case Code.AL:
-                    {
+                case Code.AL: {
 
-                        //Second token is the expression counter
-                        long expressionCounter = Long.parseLong(tokenizer
-                                .nextToken());
-                        long arrayCounter = Long.parseLong(tokenizer
-                                .nextToken());
+                    //Second token is the expression counter
+                    long expressionCounter = Long.parseLong(tokenizer
+                            .nextToken());
+                    long arrayCounter = Long.parseLong(tokenizer.nextToken());
 
-                        String name = tokenizer.nextToken();
-                        String value = "";
-                        if (tokenizer.countTokens() >= 3) {
-                            //Third token is the value of the literal
-                            value = tokenizer.nextToken();
-                        }
-
-                        //Fourth token is the type of the literal
-                        String type = tokenizer.nextToken();
-
-                        //Fifth token is the highlight information.
-                        //Not used because the whole expression is
-                        // highlighted.
-                        Highlight highlight = MCodeUtilities
-                                .makeHighlight(tokenizer.nextToken());
-
-                        Reference ref = (Reference) values.remove(new Long(
-                                arrayCounter));
-                        ArrayInstance array = (ArrayInstance) ref.getInstance();
-
-                        Value length = new Value(value, type);
-                        director.introduceArrayLength(length, array);
-
-                        handleExpression(length, expressionCounter);
-
-                        break;
+                    String name = tokenizer.nextToken();
+                    String value = "";
+                    if (tokenizer.countTokens() >= 3) {
+                        //Third token is the value of the literal
+                        value = tokenizer.nextToken();
                     }
+
+                    //Fourth token is the type of the literal
+                    String type = tokenizer.nextToken();
+
+                    //Fifth token is the highlight information.
+                    //Not used because the whole expression is
+                    // highlighted.
+                    Highlight highlight = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
+
+                    Reference ref = (Reference) values.remove(new Long(
+                            arrayCounter));
+                    ArrayInstance array = (ArrayInstance) ref.getInstance();
+
+                    Value length = new Value(value, type);
+                    director.introduceArrayLength(length, array);
+
+                    handleExpression(length, expressionCounter);
+
+                    break;
+                }
                 //Class information starts for a class
-                case Code.CLASS:
-                    {
+                case Code.CLASS: {
 
-                        String name = tokenizer.nextToken();
-                        String extendedClass = "";
+                    String name = tokenizer.nextToken();
+                    String extendedClass = "";
 
-                        if (tokenizer.hasMoreTokens()) {
-                            extendedClass = tokenizer.nextToken();
-                        }
-
-                        currentClass = new ClassInfo(name);
-                        ClassInfo ci = (ClassInfo) classes.get(extendedClass);
-
-                        //if extended class is user defined class
-                        if (ci != null) {
-                            currentClass.extendClass(ci);
-                        }
-
-                        break;
+                    if (tokenizer.hasMoreTokens()) {
+                        extendedClass = tokenizer.nextToken();
                     }
+
+                    currentClass = new ClassInfo(name);
+                    ClassInfo ci = (ClassInfo) classes.get(extendedClass);
+
+                    //if extended class is user defined class
+                    if (ci != null) {
+                        currentClass.extendClass(ci);
+                    }
+
+                    break;
+                }
 
                 //Class information ends for a class
-                case Code.END_CLASS:
-                    {
+                case Code.END_CLASS: {
 
-                        if (currentClass != null) {
-                            classes.put(currentClass.getName(), currentClass);
-                        }
-
-                        currentClass = null;
-
-                        break;
+                    if (currentClass != null) {
+                        classes.put(currentClass.getName(), currentClass);
                     }
+
+                    currentClass = null;
+
+                    break;
+                }
 
                 //Class information for constructor
-                case Code.CONSTRUCTOR:
-                    {
+                case Code.CONSTRUCTOR: {
 
-                        String listOfParameters = "";
-                        if (tokenizer.hasMoreTokens()) {
-                            listOfParameters = tokenizer.nextToken();
-                        }
-
-                        currentClass.declareConstructor(currentClass.getName()
-                                + Code.DELIM + listOfParameters, "");
-
-                        break;
+                    String listOfParameters = "";
+                    if (tokenizer.hasMoreTokens()) {
+                        listOfParameters = tokenizer.nextToken();
                     }
+
+                    currentClass.declareConstructor(currentClass.getName()
+                            + Code.DELIM + listOfParameters, "");
+
+                    break;
+                }
 
                 //Class information for method
-                case Code.METHOD:
-                    {
+                case Code.METHOD: {
 
-                        String name = tokenizer.nextToken();
-                        String returnType = tokenizer.nextToken();
-                        int modifiers = -1;
-                        if (tokenizer.hasMoreTokens()) {
-                            modifiers = Integer.parseInt(tokenizer.nextToken());
-                        }
-
-                        String listOfParameters = "";
-                        if (tokenizer.hasMoreTokens()) {
-                            listOfParameters = tokenizer.nextToken();
-                        }
-
-                        currentClass.declareMethod(name + Code.DELIM
-                                + listOfParameters, "" + modifiers + Code.DELIM
-                                + returnType);
-
-                        break;
+                    String name = tokenizer.nextToken();
+                    String returnType = tokenizer.nextToken();
+                    int modifiers = -1;
+                    if (tokenizer.hasMoreTokens()) {
+                        modifiers = Integer.parseInt(tokenizer.nextToken());
                     }
+
+                    String listOfParameters = "";
+                    if (tokenizer.hasMoreTokens()) {
+                        listOfParameters = tokenizer.nextToken();
+                    }
+
+                    currentClass.declareMethod(name + Code.DELIM
+                            + listOfParameters, "" + modifiers + Code.DELIM
+                            + returnType);
+
+                    break;
+                }
 
                 //Class information for field
-                case Code.FIELD:
-                    {
+                case Code.FIELD: {
 
-                        String name = tokenizer.nextToken();
-                        String type = tokenizer.nextToken();
-                        int modifiers = Integer.parseInt(tokenizer.nextToken());
-                        String value = "";
-                        if (tokenizer.countTokens() > 1) {
-                            value = tokenizer.nextToken();
-                        }
-                        String h = tokenizer.nextToken();
-
-                        if (value.equals(Code.UNKNOWN)) {
-                            value = MCodeUtilities.getDefaultValue(type);
-                        }
-
-                        currentClass.declareField(name, "" + modifiers
-                                + Code.DELIM + type + Code.DELIM + value + Code.DELIM + h);
-
-                        break;
+                    String name = tokenizer.nextToken();
+                    String type = tokenizer.nextToken();
+                    int modifiers = Integer.parseInt(tokenizer.nextToken());
+                    String value = "";
+                    if (tokenizer.countTokens() > 1) {
+                        value = tokenizer.nextToken();
                     }
+                    String h = tokenizer.nextToken();
+
+                    if (value.equals(Code.UNKNOWN)) {
+                        value = MCodeUtilities.getDefaultValue(type);
+                    }
+
+                    currentClass.declareField(name, "" + modifiers + Code.DELIM
+                            + type + Code.DELIM + value + Code.DELIM + h);
+
+                    break;
+                }
 
                 //Error has occured during the execution
-                case Code.ERROR:
-                    {
+                case Code.ERROR: {
 
-                        String message = tokenizer.nextToken();
-                        Highlight h = MCodeUtilities.makeHighlight(tokenizer
-                                .nextToken());
+                    String message = tokenizer.nextToken();
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
 
-                        director.showErrorMessage(new InterpreterError(message,
-                                h));
-                        running = false;
+                    director.showErrorMessage(new InterpreterError(message, h));
+                    running = false;
 
-                        break;
-                    }
+                    break;
+                }
 
                 //There is an error if the execution comes here.
-                default:
-                    {
-                        director.showErrorMessage(new InterpreterError(messageBundle
-                                .getString("notImplemented.exception"), null));
-                        /*
-                         * " <H1> Runtime Error </H1><P> The feature is not
-                         * yet implemented or " +
-                         */
-                        break;
-                    }
+                default: {
+                    director
+                            .showErrorMessage(new InterpreterError(
+                                    messageBundle
+                                            .getString("notImplemented.exception"),
+                                    null));
+                    /*
+                     * " <H1> Runtime Error </H1><P> The feature is not
+                     * yet implemented or " +
+                     */
+                    break;
+                }
                 }
             }
 
@@ -3227,7 +3143,8 @@ public class Interpreter {
             String mods = st.nextToken();
             String type = st.nextToken();
             String value = "";
-            if ((st.countTokens() >= 2 && extended == false) || (st.countTokens() >= 3 && extended == true)) {
+            if ((st.countTokens() >= 2 && extended == false)
+                    || (st.countTokens() >= 3 && extended == true)) {
                 value = st.nextToken();
             }
             Highlight highlight = MCodeUtilities.makeHighlight(st.nextToken());
@@ -3372,8 +3289,8 @@ public class Interpreter {
 
             } else if (command == Code.RIGHT) {
 
-                ExpressionActor ea = director
-                        .getCurrentScratch().findActor(expressionReference);
+                ExpressionActor ea = director.getCurrentScratch().findActor(
+                        expressionReference);
 
                 if (ea != null) {
                     director.rightBinaryExpression(val, ea, highlight);

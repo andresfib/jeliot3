@@ -2280,8 +2280,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (initializerExpression > 0) {
 
             Value val = (Value) values.remove(new Long(initializerExpression));
-            director.animateAssignment(var, val, casted, null, highlight);
-
+            Value copiedValue = director.prepareForAssignment(var, val);
+            director.animateAssignment(var, val, copiedValue, casted, null, highlight);
+            
             Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(
                     initializerExpression));
 
@@ -2734,18 +2735,23 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             }
         }
 
-        director.animateAssignment(toVariable, fromValue, casted,
-                expressionValue, h);
-        toVariable.assign(casted);
+        //This was done in order to preserve the value to be assigned in the case of k = k++;
+        Value copiedValue = director.prepareForAssignment(toVariable, fromValue);
 
-        values.put(new Long(expressionCounter), expressionValue);
-
+        //Then we increment/decrement the value of the variable if needed in the left hand side.
         Object[] postIncDec = (Object[]) postIncsDecs.remove(new Long(
                 fromExpression));
-
         if (postIncDec != null) {
             doPostIncDec(postIncDec);
         }
+        
+        //We animate the assignment
+        director.animateAssignment(toVariable, fromValue, copiedValue, casted,
+                expressionValue, h);
+                
+        toVariable.assign(casted);
+
+        values.put(new Long(expressionCounter), expressionValue);
 
         postIncDec = (Object[]) postIncsDecs.remove(new Long(toExpression));
 
