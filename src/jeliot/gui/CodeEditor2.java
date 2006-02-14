@@ -61,12 +61,14 @@ public class CodeEditor2 extends JComponent {
     /**
      * The resource bundle for gui package
      */
-    static private UserProperties propertiesBundle = ResourceBundles.getGuiUserProperties();
+    static private UserProperties propertiesBundle = ResourceBundles
+            .getGuiUserProperties();
 
     /**
      * The resource bundle for gui package
      */
-    static private ResourceBundle messageBundle = ResourceBundles.getGuiMessageResourceBundle();
+    static private ResourceBundle messageBundle = ResourceBundles
+            .getGuiMessageResourceBundle();
 
     /**
      * The String for the basic code template that is shown to the user in the
@@ -92,8 +94,19 @@ public class CodeEditor2 extends JComponent {
      */
     private File currentFile = null;
 
+    private File currentDirectory;
+    {
+        if (propertiesBundle.containsKey("current.user.directory")) {
+            currentDirectory = new File(propertiesBundle
+                    .getStringProperty("current.user.directory"));
+            if (!currentDirectory.exists()) {
+                currentDirectory = null;
+            }
+        }
+    }
+
     /**
-     * The directory of the examples
+     * The directory from which the program was executed.
      */
     private String udir;
 
@@ -187,7 +200,8 @@ public class CodeEditor2 extends JComponent {
     private ActionListener saver = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "SaveButton");
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                    Tracker.BUTTON, -1, -1, "SaveButton");
             saveProgram();
         }
     };
@@ -199,7 +213,8 @@ public class CodeEditor2 extends JComponent {
     private ActionListener saveAs = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "SaveAsButton");
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                    Tracker.BUTTON, -1, -1, "SaveAsButton");
             saveAsProgram();
         }
     };
@@ -211,7 +226,8 @@ public class CodeEditor2 extends JComponent {
     private ActionListener loader = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "LoadButton");
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                    Tracker.BUTTON, -1, -1, "LoadButton");
             loadProgram();
         }
     };
@@ -222,7 +238,8 @@ public class CodeEditor2 extends JComponent {
     private ActionListener clearer = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "ClearButton");
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                    Tracker.BUTTON, -1, -1, "ClearButton");
             clearProgram();
         }
     };
@@ -233,7 +250,8 @@ public class CodeEditor2 extends JComponent {
     private ActionListener cutter = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "CutButton");
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                    Tracker.BUTTON, -1, -1, "CutButton");
             area.cut();
         }
     };
@@ -244,7 +262,8 @@ public class CodeEditor2 extends JComponent {
     private ActionListener copyist = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "CopyButton");
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                    Tracker.BUTTON, -1, -1, "CopyButton");
             area.copy();
         }
     };
@@ -255,7 +274,8 @@ public class CodeEditor2 extends JComponent {
     private ActionListener pasteur = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "ÅasteButton");
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                    Tracker.BUTTON, -1, -1, "ÅasteButton");
             area.paste();
         }
     };
@@ -266,7 +286,8 @@ public class CodeEditor2 extends JComponent {
     private ActionListener allSelector = new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.BUTTON, -1, -1, "SelectAllButton");
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                    Tracker.BUTTON, -1, -1, "SelectAllButton");
             area.requestFocusInWindow();
             area.selectAll();
         }
@@ -295,20 +316,25 @@ public class CodeEditor2 extends JComponent {
         area = new JEditTextArea(true);
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(
-                new Font(propertiesBundle.getStringProperty("font.code_editor.family"), Font.PLAIN,
-                        Integer.parseInt(propertiesBundle
+                new Font(propertiesBundle
+                        .getStringProperty("font.code_editor.family"),
+                        Font.PLAIN, Integer.parseInt(propertiesBundle
                                 .getStringProperty("font.code_editor.size"))));
-        area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute,
-                Integer.valueOf(propertiesBundle.getStringProperty("editor.tab_size")));
+        area.getDocument().getDocumentProperties().put(
+                PlainDocument.tabSizeAttribute,
+                Integer.valueOf(propertiesBundle
+                        .getStringProperty("editor.tab_size")));
         area.getDocument().addDocumentListener(dcl);
         area.setHorizontalOffsetForScrollBar(5);
         area.setHorizontalOffset(5);
-        ln = new LineNumbers(new Font(
-                propertiesBundle.getStringProperty("font.code_editor.family"), Font.PLAIN, Integer
-                        .parseInt(propertiesBundle.getStringProperty("font.code_editor.size"))),
+        ln = new LineNumbers(new Font(propertiesBundle
+                .getStringProperty("font.code_editor.family"), Font.PLAIN,
+                Integer.parseInt(propertiesBundle
+                        .getStringProperty("font.code_editor.size"))),
                 new Insets(1, 0, 0, 0));
         area.addToLeft(ln);
-        LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(area, ln);
+        LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(
+                area, ln);
         area.addAdjustListernerForVertical(lnah);
 
         setLayout(new BorderLayout());
@@ -330,10 +356,14 @@ public class CodeEditor2 extends JComponent {
         //Properties prop = System.getProperties();
         //String wdname = prop.getProperty("user.dir");
         //File wd = new File(wdname);
-        File wd = new File(udir);
-        wd = new File(wd, propertiesBundle.getStringProperty("directory.examples"));
+
+        if (currentDirectory == null) {
+            currentDirectory = new File(udir + File.separator + propertiesBundle
+                    .getStringProperty("directory.examples"));
+        }
+
         fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(wd);
+        fileChooser.setCurrentDirectory(currentDirectory);
         fileChooser.setFileFilter(new JavaFileFilter());
     }
 
@@ -348,13 +378,18 @@ public class CodeEditor2 extends JComponent {
      *            The actionlistener for that button.
      * @return The constructed button from the given parameters.
      */
-    private JButton makeToolButton(String label, String iconName, ActionListener listener) {
+    private JButton makeToolButton(String label, String iconName,
+            ActionListener listener) {
 
         URL imageURL = this.getClass().getClassLoader().getResource(
-                propertiesBundle.getStringProperty("directory.images") + iconName);
+                propertiesBundle.getStringProperty("directory.images")
+                        + iconName);
         if (imageURL == null) {
-            imageURL = Thread.currentThread().getContextClassLoader().getResource(
-                    propertiesBundle.getStringProperty("directory.images") + iconName);
+            imageURL = Thread.currentThread().getContextClassLoader()
+                    .getResource(
+                            propertiesBundle
+                                    .getStringProperty("directory.images")
+                                    + iconName);
         }
         ImageIcon icon = new ImageIcon(imageURL);
 
@@ -375,24 +410,30 @@ public class CodeEditor2 extends JComponent {
      * @see #makeToolButton(String, String, ActionListener)
      */
     private JToolBar makeToolBar() {
-        JButton loadButton = makeToolButton(messageBundle.getString("button.open"),
-                propertiesBundle.getStringProperty("image.open_icon"), loader);
+        JButton loadButton = makeToolButton(messageBundle
+                .getString("button.open"), propertiesBundle
+                .getStringProperty("image.open_icon"), loader);
         loadButton.setMnemonic(KeyEvent.VK_O);
-        JButton saveButton = makeToolButton(messageBundle.getString("button.save"),
-                propertiesBundle.getStringProperty("image.save_icon"), saver);
+        JButton saveButton = makeToolButton(messageBundle
+                .getString("button.save"), propertiesBundle
+                .getStringProperty("image.save_icon"), saver);
         saveButton.setMnemonic(KeyEvent.VK_S);
-        JButton clearButton = makeToolButton(messageBundle.getString("button.new"),
-                propertiesBundle.getStringProperty("image.new_icon"), clearer);
+        JButton clearButton = makeToolButton(messageBundle
+                .getString("button.new"), propertiesBundle
+                .getStringProperty("image.new_icon"), clearer);
         clearButton.setMnemonic(KeyEvent.VK_N);
 
-        JButton cutButton = makeToolButton(messageBundle.getString("button.cut"), propertiesBundle
+        JButton cutButton = makeToolButton(messageBundle
+                .getString("button.cut"), propertiesBundle
                 .getStringProperty("image.cut_icon"), cutter);
         cutButton.setMnemonic(KeyEvent.VK_U);
-        JButton copyButton = makeToolButton(messageBundle.getString("button.copy"),
-                propertiesBundle.getStringProperty("image.copy_icon"), copyist);
+        JButton copyButton = makeToolButton(messageBundle
+                .getString("button.copy"), propertiesBundle
+                .getStringProperty("image.copy_icon"), copyist);
         copyButton.setMnemonic(KeyEvent.VK_Y);
-        JButton pasteButton = makeToolButton(messageBundle.getString("button.paste"),
-                propertiesBundle.getStringProperty("image.paste_icon"), pasteur);
+        JButton pasteButton = makeToolButton(messageBundle
+                .getString("button.paste"), propertiesBundle
+                .getStringProperty("image.paste_icon"), pasteur);
         pasteButton.setMnemonic(KeyEvent.VK_T);
 
         JToolBar p = new JToolBar();
@@ -418,22 +459,27 @@ public class CodeEditor2 extends JComponent {
 
         menuItem = new JMenuItem(messageBundle.getString("menu.program.new"));
         menuItem.setMnemonic(KeyEvent.VK_N);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
+                ActionEvent.CTRL_MASK));
         menuItem.addActionListener(clearer);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(messageBundle.getString("menu.program.open"), KeyEvent.VK_O);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+        menuItem = new JMenuItem(messageBundle.getString("menu.program.open"),
+                KeyEvent.VK_O);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+                ActionEvent.CTRL_MASK));
         menuItem.addActionListener(loader);
         menu.add(menuItem);
 
         menuItem = new JMenuItem(messageBundle.getString("menu.program.save"));
         menuItem.setMnemonic(KeyEvent.VK_S);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+                ActionEvent.CTRL_MASK));
         menuItem.addActionListener(saver);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem(messageBundle.getString("menu.program.save_as"));
+        menuItem = new JMenuItem(messageBundle
+                .getString("menu.program.save_as"));
         menuItem.setMnemonic(KeyEvent.VK_A);
         menuItem.addActionListener(saveAs);
         menu.add(menuItem);
@@ -453,37 +499,44 @@ public class CodeEditor2 extends JComponent {
 
         menuItem = menu.add(undoredo.undoAction);
         menuItem.setMnemonic(KeyEvent.VK_D);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
+                ActionEvent.CTRL_MASK));
 
         menuItem = menu.add(undoredo.redoAction);
         menuItem.setMnemonic(KeyEvent.VK_R);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,
+                ActionEvent.CTRL_MASK));
 
         menu.addSeparator();
 
         menuItem = new JMenuItem(messageBundle.getString("menu.edit.cut"));
         menuItem.setMnemonic(KeyEvent.VK_U);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
+                ActionEvent.CTRL_MASK));
         menuItem.addActionListener(cutter);
         menu.add(menuItem);
 
         menuItem = new JMenuItem(messageBundle.getString("menu.edit.copy"));
         menuItem.setMnemonic(KeyEvent.VK_Y);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
+                ActionEvent.CTRL_MASK));
         menuItem.addActionListener(copyist);
         menu.add(menuItem);
 
         menuItem = new JMenuItem(messageBundle.getString("menu.edit.paste"));
         menuItem.setMnemonic(KeyEvent.VK_T);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
+                ActionEvent.CTRL_MASK));
         menuItem.addActionListener(pasteur);
         menu.add(menuItem);
 
         menu.addSeparator();
 
-        menuItem = new JMenuItem(messageBundle.getString("menu.edit.select_all"));
+        menuItem = new JMenuItem(messageBundle
+                .getString("menu.edit.select_all"));
         menuItem.setMnemonic(KeyEvent.VK_A);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
+                ActionEvent.CTRL_MASK));
         menuItem.addActionListener(allSelector);
         menu.add(menuItem);
 
@@ -493,7 +546,8 @@ public class CodeEditor2 extends JComponent {
 
             public void actionPerformed(ActionEvent e) {
                 if (findDialog == null) {
-                    findDialog = new FindDialog(CodeEditor2.this, 0, CodeEditor2.this.masterFrame);
+                    findDialog = new FindDialog(CodeEditor2.this, 0,
+                            CodeEditor2.this.masterFrame);
                 } else {
                     findDialog.setSelectedIndex(0);
                 }
@@ -502,7 +556,8 @@ public class CodeEditor2 extends JComponent {
                 int x = Math.max((d2.width - d1.width) / 2, 0);
                 int y = Math.max((d2.height - d1.height) / 2, 0);
                 findDialog.setBounds(x + CodeEditor2.this.masterFrame.getX(), y
-                        + CodeEditor2.this.masterFrame.getY(), d1.width, d1.height);
+                        + CodeEditor2.this.masterFrame.getY(), d1.width,
+                        d1.height);
                 findDialog.pack();
                 findDialog.setVisible(true);
             }
@@ -510,13 +565,15 @@ public class CodeEditor2 extends JComponent {
 
         menuItem = menu.add(findAction);
         menuItem.setMnemonic('f');
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
+                KeyEvent.CTRL_MASK));
 
         Action replaceAction = new AbstractAction("Replace...") {
 
             public void actionPerformed(ActionEvent e) {
                 if (findDialog == null) {
-                    findDialog = new FindDialog(CodeEditor2.this, 1, CodeEditor2.this.masterFrame);
+                    findDialog = new FindDialog(CodeEditor2.this, 1,
+                            CodeEditor2.this.masterFrame);
                 } else {
                     findDialog.setSelectedIndex(1);
                 }
@@ -524,8 +581,9 @@ public class CodeEditor2 extends JComponent {
                 Dimension d2 = CodeEditor2.this.masterFrame.getSize();
                 int x = Math.max((d2.width - d1.width) / 2, 0);
                 int y = Math.max((d2.height - d1.height) / 2, 0);
-                findDialog.setBounds(x + CodeEditor2.this.masterFrame.getX(),
-                        y + CodeEditor2.this.masterFrame.getY(), d1.width, d1.height);
+                findDialog.setBounds(x + CodeEditor2.this.masterFrame.getX(), y
+                        + CodeEditor2.this.masterFrame.getY(), d1.width,
+                        d1.height);
                 findDialog.pack();
                 findDialog.setVisible(true);
             }
@@ -533,7 +591,8 @@ public class CodeEditor2 extends JComponent {
 
         menuItem = menu.add(replaceAction);
         menuItem.setMnemonic('r');
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H,
+                KeyEvent.CTRL_MASK));
 
         return menu;
     }
@@ -547,12 +606,14 @@ public class CodeEditor2 extends JComponent {
                 masterFrame.setTitle(title);
 
                 MCodeUtilities.setFilename("untitled");
-                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "File: untitled");
+                Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                        Tracker.OTHER, -1, -1, "File: untitled");
             } else {
                 masterFrame.setTitle(title + " - " + filename);
 
                 MCodeUtilities.setFilename(filename);
-                Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "File: " + filename);
+                Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                        Tracker.OTHER, -1, -1, "File: " + filename);
             }
         }
     }
@@ -599,7 +660,8 @@ public class CodeEditor2 extends JComponent {
      * @return
      */
     public String replaceTabs(String code) {
-        int n = Integer.parseInt(propertiesBundle.getStringProperty("editor.tab_size"));
+        int n = Integer.parseInt(propertiesBundle
+                .getStringProperty("editor.tab_size"));
         String spaces = "";
         for (int i = 0; i < n; i++) {
             spaces += " ";
@@ -658,6 +720,7 @@ public class CodeEditor2 extends JComponent {
         int returnVal = fileChooser.showOpenDialog(masterFrame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
+            rememberPath(file);
             loadProgram(file);
         } else {
             if (selectionStart != selectionEnd) {
@@ -673,6 +736,13 @@ public class CodeEditor2 extends JComponent {
         area.requestFocusInWindow();
     }
 
+    private void rememberPath(File file) {
+        currentDirectory = file.getParentFile();
+        if (currentDirectory != null) {
+            propertiesBundle.setStringProperty("current.user.directory", currentDirectory.getAbsolutePath());
+        }
+    }
+    
     /**
      * Read the given file and sets the text in the given file to the
      * text area and the name of the file to the title of the frame.
@@ -699,7 +769,8 @@ public class CodeEditor2 extends JComponent {
     void saveProgram() {
         //This is to keep the caret position after the saving of the file.
         String code = area.getText();
-        int tabSize = Integer.parseInt(propertiesBundle.getStringProperty("editor.tab_size"));
+        int tabSize = Integer.parseInt(propertiesBundle
+                .getStringProperty("editor.tab_size"));
         int caretPosition = area.getCaretPosition();
         int selectionStart = area.getSelectionStart();
         int selectionEnd = area.getSelectionEnd();
@@ -714,8 +785,10 @@ public class CodeEditor2 extends JComponent {
         //If program was saved then the tabs are changed to spaces
         if (saved) {
             if (selectionStart != selectionEnd) {
-                selectionStart = getCorrectTextPosition(code, selectionStart, tabSize);
-                selectionEnd = getCorrectTextPosition(code, selectionEnd, tabSize);
+                selectionStart = getCorrectTextPosition(code, selectionStart,
+                        tabSize);
+                selectionEnd = getCorrectTextPosition(code, selectionEnd,
+                        tabSize);
             }
             caretPosition = getCorrectTextPosition(code, caretPosition, tabSize);
         }
@@ -744,6 +817,7 @@ public class CodeEditor2 extends JComponent {
         int returnVal = fileChooser.showSaveDialog(masterFrame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
+            rememberPath(file);
             if (file.getName().indexOf(".") < 0) {
                 file = new File(file.getPath() + ".java");
             }
