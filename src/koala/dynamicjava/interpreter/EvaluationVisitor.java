@@ -4,6 +4,19 @@
 
 package koala.dynamicjava.interpreter;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+import java.util.Stack;
+import java.util.Vector;
+
 import jeliot.mcode.Code;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.mcode.input.InputHandler;
@@ -17,14 +30,89 @@ import koala.dynamicjava.interpreter.throwable.BreakException;
 import koala.dynamicjava.interpreter.throwable.ContinueException;
 import koala.dynamicjava.interpreter.throwable.ReturnException;
 import koala.dynamicjava.interpreter.throwable.ThrownException;
-import koala.dynamicjava.tree.*;
+import koala.dynamicjava.tree.AddAssignExpression;
+import koala.dynamicjava.tree.AddExpression;
+import koala.dynamicjava.tree.AndExpression;
+import koala.dynamicjava.tree.ArrayAccess;
+import koala.dynamicjava.tree.ArrayAllocation;
+import koala.dynamicjava.tree.ArrayInitializer;
+import koala.dynamicjava.tree.BitAndAssignExpression;
+import koala.dynamicjava.tree.BitAndExpression;
+import koala.dynamicjava.tree.BitOrAssignExpression;
+import koala.dynamicjava.tree.BitOrExpression;
+import koala.dynamicjava.tree.BlockStatement;
+import koala.dynamicjava.tree.BreakStatement;
+import koala.dynamicjava.tree.CastExpression;
+import koala.dynamicjava.tree.CatchStatement;
+import koala.dynamicjava.tree.ClassAllocation;
+import koala.dynamicjava.tree.ComplementExpression;
+import koala.dynamicjava.tree.ConditionalExpression;
+import koala.dynamicjava.tree.ContinueStatement;
+import koala.dynamicjava.tree.DivideAssignExpression;
+import koala.dynamicjava.tree.DivideExpression;
+import koala.dynamicjava.tree.DoStatement;
+import koala.dynamicjava.tree.EqualExpression;
+import koala.dynamicjava.tree.ExclusiveOrAssignExpression;
+import koala.dynamicjava.tree.ExclusiveOrExpression;
+import koala.dynamicjava.tree.Expression;
+import koala.dynamicjava.tree.ForStatement;
+import koala.dynamicjava.tree.FormalParameter;
+import koala.dynamicjava.tree.FunctionCall;
+import koala.dynamicjava.tree.GreaterExpression;
+import koala.dynamicjava.tree.GreaterOrEqualExpression;
+import koala.dynamicjava.tree.IfThenElseStatement;
+import koala.dynamicjava.tree.IfThenStatement;
+import koala.dynamicjava.tree.InnerAllocation;
+import koala.dynamicjava.tree.InstanceOfExpression;
+import koala.dynamicjava.tree.LabeledStatement;
+import koala.dynamicjava.tree.LessExpression;
+import koala.dynamicjava.tree.LessOrEqualExpression;
+import koala.dynamicjava.tree.Literal;
+import koala.dynamicjava.tree.MethodDeclaration;
+import koala.dynamicjava.tree.MinusExpression;
+import koala.dynamicjava.tree.MultiplyAssignExpression;
+import koala.dynamicjava.tree.MultiplyExpression;
+import koala.dynamicjava.tree.Node;
+import koala.dynamicjava.tree.NotEqualExpression;
+import koala.dynamicjava.tree.NotExpression;
+import koala.dynamicjava.tree.ObjectFieldAccess;
+import koala.dynamicjava.tree.ObjectMethodCall;
+import koala.dynamicjava.tree.OrExpression;
+import koala.dynamicjava.tree.PlusExpression;
+import koala.dynamicjava.tree.PostDecrement;
+import koala.dynamicjava.tree.PostIncrement;
+import koala.dynamicjava.tree.PreDecrement;
+import koala.dynamicjava.tree.PreIncrement;
+import koala.dynamicjava.tree.QualifiedName;
+import koala.dynamicjava.tree.RemainderAssignExpression;
+import koala.dynamicjava.tree.RemainderExpression;
+import koala.dynamicjava.tree.ReturnStatement;
+import koala.dynamicjava.tree.ShiftLeftAssignExpression;
+import koala.dynamicjava.tree.ShiftLeftExpression;
+import koala.dynamicjava.tree.ShiftRightAssignExpression;
+import koala.dynamicjava.tree.ShiftRightExpression;
+import koala.dynamicjava.tree.SimpleAllocation;
+import koala.dynamicjava.tree.SimpleAssignExpression;
+import koala.dynamicjava.tree.StaticFieldAccess;
+import koala.dynamicjava.tree.StaticMethodCall;
+import koala.dynamicjava.tree.SubtractAssignExpression;
+import koala.dynamicjava.tree.SubtractExpression;
+import koala.dynamicjava.tree.SuperFieldAccess;
+import koala.dynamicjava.tree.SuperMethodCall;
+import koala.dynamicjava.tree.SwitchBlock;
+import koala.dynamicjava.tree.SwitchStatement;
+import koala.dynamicjava.tree.SynchronizedStatement;
+import koala.dynamicjava.tree.ThrowStatement;
+import koala.dynamicjava.tree.TryStatement;
+import koala.dynamicjava.tree.TypeExpression;
+import koala.dynamicjava.tree.UnsignedShiftRightAssignExpression;
+import koala.dynamicjava.tree.UnsignedShiftRightExpression;
+import koala.dynamicjava.tree.VariableDeclaration;
+import koala.dynamicjava.tree.WhileStatement;
 import koala.dynamicjava.tree.visitor.Visitor;
 import koala.dynamicjava.tree.visitor.VisitorObject;
 import koala.dynamicjava.util.Constants;
 import koala.dynamicjava.util.ImportationManager;
-
-import java.lang.reflect.*;
-import java.util.*;
 
 /**
  * This tree visitor evaluates each node of a syntax tree
@@ -966,12 +1054,8 @@ public class EvaluationVisitor extends VisitorObject {
             try {
                 value = f.get(obj);
             } catch (NullPointerException e) {
-                if (!Modifier.isStatic(f.getModifiers())) {
-                    node.setProperty(NodeProperties.ERROR_STRINGS,
-                            new String[] { f.getName() });
-                    throw new ExecutionError("j3.not.static.field", node);
-                }
-                throw new CatchedExceptionError(e, node);
+                throw new ExecutionError("j3.null.pointer.exception", node);
+                //throw new CatchedExceptionError(e, node);
             } catch (Exception e) {
                 throw new CatchedExceptionError(e, node);
             }
@@ -999,7 +1083,14 @@ public class EvaluationVisitor extends VisitorObject {
             // If the object is an array, the field must be 'length'.
             // This field is not a normal field and it is the only
             // way to get it
-            Integer integer = new Integer(Array.getLength(obj));
+
+            Integer integer = null;
+            try {
+                integer = new Integer(Array.getLength(obj));
+            } catch (NullPointerException e) {
+                throw new ExecutionError("j3.null.pointer.exception", node);
+            }
+
             MCodeUtilities.write("" + Code.AL + Code.DELIM + fieldCounter
                     + Code.DELIM + objectCounter + Code.DELIM + "length"
                     + Code.DELIM + integer.toString() + Code.DELIM
@@ -1262,6 +1353,10 @@ public class EvaluationVisitor extends VisitorObject {
                     + f.getType().getName() + Code.DELIM + f.getModifiers()
                     + Code.DELIM + MCodeUtilities.locationToString(node));
             return o;
+        } catch (NullPointerException e) {
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { f
+                    .getName() });
+            throw new ExecutionError("j3.not.static.field", node);
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }
@@ -1989,8 +2084,9 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.AA + Code.DELIM + arrayAllocationCounter
                 + Code.DELIM + arrayHashCode + Code.DELIM + componentType
-                + Code.DELIM + 1 /* only the first dimension is known now */ + Code.DELIM + dimensionsReferences
-                + Code.DELIM + size + Code.DELIM + dimensions + Code.DELIM
+                + Code.DELIM + 1 /* only the first dimension is known now */
+                + Code.DELIM + dimensionsReferences + Code.DELIM + size
+                + Code.DELIM + dimensions + Code.DELIM
                 + MCodeUtilities.locationToString(node));
 
         MCodeUtilities.write("" + Code.AIBEGIN + Code.DELIM + size + Code.DELIM
@@ -2082,6 +2178,8 @@ public class EvaluationVisitor extends VisitorObject {
                     new String[] { "" + (Array.getLength(t) - 1),
                             "" + ((Number) o).intValue() });
             throw new ExecutionError("j3.array.index.out.of.bounds", node);
+        } catch (NullPointerException e) {
+            throw new ExecutionError("j3.null.pointer.exception", node);
         }
 
         String resultString;

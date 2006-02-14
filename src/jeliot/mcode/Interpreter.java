@@ -532,8 +532,8 @@ public class Interpreter {
                             ((Reference) casted).makeReference();
                             expressionValue = new Reference(inst);
                         } else {
-                            casted = new Reference();
-                            expressionValue = new Reference();
+                            casted = new Reference(type);
+                            expressionValue = new Reference(type);
                         }
                     }
                     Value copiedValue = director.prepareForAssignment(
@@ -1073,7 +1073,7 @@ public class Interpreter {
                         casted = new Value(value, type);
                     } else {
                         if (value.equals("null")) {
-                            casted = new Reference();
+                            casted = new Reference(type);
                         } else {
                             Instance inst = (Instance) instances
                                     .get(MCodeUtilities.getHashCode(value));
@@ -1081,7 +1081,7 @@ public class Interpreter {
                             if (inst != null) {
                                 casted = new Reference(inst);
                             } else {
-                                casted = new Reference();
+                                casted = new Reference(type);
                             }
                         }
                         casted.setActor(var.getActor().getValue());
@@ -1177,14 +1177,14 @@ public class Interpreter {
                         val.setActor(va);
                     } else {
                         if (value.equals("null")) {
-                            val = new Reference();
+                            val = new Reference(type);
                         } else {
                             Instance inst = (Instance) instances
                                     .get(MCodeUtilities.getHashCode(value));
                             if (inst != null) {
                                 val = new Reference(inst);
                             } else {
-                                val = new Reference();
+                                val = new Reference(type);
                             }
                         }
                         val.setActor(var.getActor().getValue());
@@ -1505,7 +1505,7 @@ public class Interpreter {
                     if (inst != null) {
                         casted = new Reference(inst);
                     } else {
-                        casted = new Reference();
+                        casted = new Reference("null");
                     }
 
                     Actor returnActor = director.animateReturn(ret, casted, h);
@@ -1604,14 +1604,14 @@ public class Interpreter {
                         val.setActor(va);
                     } else {
                         if (value.equals("null")) {
-                            val = new Reference();
+                            val = new Reference(type);
                         } else {
                             Instance inst = (Instance) instances
                                     .get(MCodeUtilities.getHashCode(value));
                             if (inst != null) {
                                 val = new Reference(inst);
                             } else {
-                                val = new Reference();
+                                val = new Reference(type);
                             }
                         }
                         val.setActor(var.getActor().getValue());
@@ -2068,7 +2068,7 @@ public class Interpreter {
                             if (inst != null) {
                                 casted = new Reference(inst);
                             } else {
-                                casted = new Reference();
+                                casted = new Reference(type);
                             }
                         }
 
@@ -2804,14 +2804,14 @@ public class Interpreter {
                         val = new Value(value, type);
                     } else {
                         if (value.equals("null")) {
-                            val = new Reference();
+                            val = new Reference(type);
                         } else {
                             Instance inst = (Instance) instances
                                     .get(MCodeUtilities.getHashCode(value));
                             if (inst != null) {
                                 val = new Reference(inst);
                             } else {
-                                val = new Reference();
+                                val = new Reference(type);
                             }
                         }
                     }

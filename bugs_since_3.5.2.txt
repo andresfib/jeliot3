@@ -5,6 +5,7 @@
 - Overlapping mnemonics in edit and call tree. (fixed)
 - Menu items can be used even though the menu is being disabled. (fixed)
 - Wrong assignments when self assigning post-increments k = k++; (fixed, however the visualization isn't very intuitive)
+- NullPointerExceptions are not reported to the user as his fault but ours. (fixed)
 - Left hand side of assignments evaluated twice (i++ is evaluated twice array[i++]=j;)
 - Remember last opened directory 
 - Objects returned from methods to non declared variables raises Runtime exception
