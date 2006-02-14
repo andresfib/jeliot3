@@ -549,14 +549,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             val = new Value(value, type);
         } else {
             if (value.equals("null")) {
-                val = new Reference();
+                val = new Reference(type);
             } else {
                 Instance inst = (Instance) instances.get(MCodeUtilities
                         .getHashCode(value));
                 if (inst != null) {
                     val = new Reference(inst);
                 } else {
-                    val = new Reference();
+                    val = new Reference(type);
                 }
             }
         }
@@ -1210,7 +1210,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 if (inst != null) {
                     casted = new Reference(inst);
                 } else {
-                    casted = new Reference();
+                    casted = new Reference(type);
                 }
             }
 
@@ -1601,8 +1601,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             obj = (ObjectFrame) objVal.getInstance();
         }
 
-        Variable var = obj.getVariable(variableName);
-
+        Variable var = null;
+        if (obj != null) {
+            var = obj.getVariable(variableName);
+        }
         /*
          * This is a static field access if there isn't such variable in the object.
          * If the code is like this:
@@ -1619,7 +1621,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
          * Jeliot side.    
          */
         if (var == null) {
-            handleCodeSFA(expressionCounter, obj.getType(), variableName, value,
+            String classType = "";
+            if (obj != null) {
+                classType = obj.getType();
+            } else {
+                classType = objVal.getType();
+            }
+            handleCodeSFA(expressionCounter, classType, variableName, value,
                     type, modifiers, h);
             
             /* Different version of this procedure.
@@ -1690,14 +1698,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             val.setActor(va);
         } else {
             if (value.equals("null")) {
-                val = new Reference();
+                val = new Reference(type);
             } else {
                 Instance inst = (Instance) instances.get(MCodeUtilities
                         .getHashCode(value));
                 if (inst != null) {
                     val = new Reference(inst);
                 } else {
-                    val = new Reference();
+                    val = new Reference(type);
                 }
             }
             val.setActor(var.getActor().getValue());
@@ -1809,7 +1817,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (inst != null) {
             casted = new Reference(inst);
         } else {
-            casted = new Reference();
+            casted = new Reference("null");
         }
 
         Actor returnActor = director.animateReturn(ret, casted, h);
@@ -2040,14 +2048,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             val.setActor(va);
         } else {
             if (value.equals("null")) {
-                val = new Reference();
+                val = new Reference(type);
             } else {
                 Instance inst = (Instance) instances.get(MCodeUtilities
                         .getHashCode(value));
                 if (inst != null) {
                     val = new Reference(inst);
                 } else {
-                    val = new Reference();
+                    val = new Reference(type);
                 }
             }
             val.setActor(var.getActor().getValue());
@@ -2172,14 +2180,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             val.setActor(va);
         } else {
             if (value.equals("null")) {
-                val = new Reference();
+                val = new Reference(type);
             } else {
                 Instance inst = (Instance) instances.get(MCodeUtilities
                         .getHashCode(value));
                 if (inst != null) {
                     val = new Reference(inst);
                 } else {
-                    val = new Reference();
+                    val = new Reference(type);
                 }
             }
             val.setActor(var.getActor().getValue());
@@ -2263,7 +2271,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             casted = new Value(value, type);
         } else {
             if (value.equals("null")) {
-                casted = new Reference();
+                casted = new Reference(type);
             } else {
                 Instance inst = (Instance) instances.get(MCodeUtilities
                         .getHashCode(value));
@@ -2271,7 +2279,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 if (inst != null) {
                     casted = new Reference(inst);
                 } else {
-                    casted = new Reference();
+                    casted = new Reference(type);
                 }
             }
             casted.setActor(var.getActor().getValue());
@@ -2730,8 +2738,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 ((Reference) casted).makeReference();
                 expressionValue = new Reference(inst);
             } else {
-                casted = new Reference();
-                expressionValue = new Reference();
+                casted = new Reference(type);
+                expressionValue = new Reference(type);
             }
         }
 
@@ -2857,7 +2865,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 casted = new Reference(inst);
                 ((Reference) casted).makeReference();
             } else {
-                casted = new Reference();
+                casted = new Reference(type);
             }
 
         }
