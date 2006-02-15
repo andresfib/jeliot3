@@ -57,7 +57,8 @@ import koala.dynamicjava.tree.TypeDeclaration;
  * @version 1.1 - 1999/05/18
  */
 
-public class TreeClassLoader extends SecureClassLoader implements ClassLoaderContainer {
+public class TreeClassLoader extends SecureClassLoader implements
+        ClassLoaderContainer {
 
     /**
      * The default value for the {@link java.security.CodeSource} URL.
@@ -101,7 +102,8 @@ public class TreeClassLoader extends SecureClassLoader implements ClassLoaderCon
             codeSource = new CodeSource(null, (Certificate[]) null);
         }
         try {
-            codeSource = new CodeSource(new URL(DEFAULT_CODE_SOURCE_URL), (Certificate[]) null);
+            codeSource = new CodeSource(new URL(DEFAULT_CODE_SOURCE_URL),
+                    (Certificate[]) null);
         } catch (java.net.MalformedURLException mfue) {
             // should never appear
             throw new RuntimeException(mfue.getMessage());
@@ -209,9 +211,9 @@ public class TreeClassLoader extends SecureClassLoader implements ClassLoaderCon
      */
     public void addURL(URL url) {
         if (classLoader == null) {
-            classLoader = new URLClassLoader(new URL[] { url});
+            classLoader = new URLClassLoader(new URL[] { url });
         } else {
-            classLoader = new URLClassLoader(new URL[] { url}, classLoader);
+            classLoader = new URLClassLoader(new URL[] { url }, classLoader);
         }
     }
 
@@ -244,8 +246,6 @@ public class TreeClassLoader extends SecureClassLoader implements ClassLoaderCon
         return interpreter.loadClass(name);
     }
 
-    
-    
     /**
      * Jeliot 3
      * @return Returns the extraClassLoader.

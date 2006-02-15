@@ -7,5 +7,5 @@
 - Wrong assignments when self assigning post-increments k = k++; (fixed, however the visualization isn't very intuitive)
 - NullPointerExceptions are not reported to the user as his fault but ours. (fixed)
 - Remember last opened directory (done)
+- Objects returned from methods to non declared variables raises Runtime exception (fixed)
 - Left hand side of assignments evaluated twice (i++ is evaluated twice array[i++]=j;)
-- Objects returned from methods to non declared variables raises Runtime exception
