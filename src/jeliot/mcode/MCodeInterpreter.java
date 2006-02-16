@@ -987,7 +987,19 @@ public abstract class MCodeInterpreter {
                             variableName, value, type, modifiers, highlight);
                     break;
                 }
-
+                //Parameter
+                case Code.P: {
+                    long expressionReference = Long.parseLong(tokenizer.nextToken());
+                    String value = "";
+                    
+                    if (tokenizer.countTokens()>1){
+                    	value=tokenizer.nextToken();
+                    }
+                    String argType = tokenizer.nextToken();
+                    
+                    handleCodeP(expressionReference, value, argType);
+                    break;
+                }
                 //Literal
                 case Code.L: {
                     //Second token is the expression counter
@@ -1115,16 +1127,6 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Parameter
-                case Code.P: {
-                    long expressionReference = Long.parseLong(tokenizer
-                            .nextToken());
-                    String value = tokenizer.nextToken();
-                    String argType = tokenizer.nextToken();
-
-                    handleCodeP(expressionReference, value, argType);
-                    break;
-                }
 
                 //Method declaration
                 case Code.MD: {
@@ -1329,9 +1331,30 @@ public abstract class MCodeInterpreter {
 
                     handleCodeINPUT(expressionCounter, className, methodName,
                             type, ((prompt.equals("null")) ? null : prompt), h);
-
+                    
                     break;
-                }
+                    }	
+/*
+                    //Array Access
+                    case Code.AAC: {
+                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
+                        int dims = Integer.parseInt(tokenizer.nextToken());
+                        String cellNumberReferences = tokenizer.nextToken();
+
+                        //int values of the dimension sizes
+                        String cellNumbers = tokenizer.nextToken();
+                        String value = "";
+                        if (tokenizer.countTokens() >= 3) {
+                            value = tokenizer.nextToken();
+                        }
+                        String type = tokenizer.nextToken();
+                        Highlight h = null;
+                        if (tokenizer.hasMoreElements()) {
+                            h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                        }
+                    break;
+                }*/
 
                 //Inputted value is returned
                 case Code.INPUTTED: {
@@ -1373,19 +1396,37 @@ public abstract class MCodeInterpreter {
                     //int values of the dimension sizes
                     String dimensionSizes = tokenizer.nextToken();
                     //number of real dimensions the array has, even if they are not yet allocated	
-                    int actualDimension = Integer.parseInt(tokenizer
-                            .nextToken());
+                    int actualDimension = Integer.parseInt(tokenizer.nextToken());
+                    //Hashcodes of the sub arrays
+                    String subArraysHashCodes = tokenizer.nextToken();
                     Highlight h = null;
                     if (tokenizer.hasMoreElements()) {
                         h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                     }
-
                     handleCodeAA(expressionReference, hashCode, compType, dims,
-                            dimensionReferences, dimensionSizes,
-                            actualDimension, h);
+                            dimensionReferences, dimensionSizes,actualDimension, 
+                            subArraysHashCodes, h);
                     break;
                 }
+                    //Array Initializer's element
+                    case Code.AIE: {
+                        String arrayReference = tokenizer.nextToken();
+                        long cellNumber = Long.parseLong(tokenizer.nextToken());
+                        long expressionReference = Long.parseLong(tokenizer.nextToken());
+                        String value="";
+                        if (tokenizer.countTokens()>3){
+                        	value=tokenizer.nextToken();
+                        }
+                        String type = tokenizer.nextToken();
+                        long literal = Long.parseLong(tokenizer.nextToken());
+                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());                        
+                        handleCodeAIE(arrayReference, cellNumber,
+                                expressionReference, value, type, literal,
+                                highlight);
 
+                        break;
+                        
+                    }
                 //Array Access
                 case Code.AAC: {
                     long expressionCounter = Long.parseLong(tokenizer
@@ -1412,6 +1453,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
+
                 //Array Length
                 case Code.AL: {
                     //Second token is the expression counter
@@ -1433,10 +1475,10 @@ public abstract class MCodeInterpreter {
                     // highlighted.
                     Highlight highlight = MCodeUtilities
                             .makeHighlight(tokenizer.nextToken());
-
-                    handleCodeAL(expressionCounter, arrayCounter, name, value,
+				  	handleCodeAL(expressionCounter, arrayCounter, name, value,
                             type, highlight);
                     break;
+
                 }
 
                 //Beginning of the Array Initializer
@@ -1450,26 +1492,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Array Initializer's element
-                case Code.AIE: {
-                    String arrayReference = tokenizer.nextToken();
-                    long cellNumber = Long.parseLong(tokenizer.nextToken());
-                    long expressionReference = Long.parseLong(tokenizer
-                            .nextToken());
-                    String value = tokenizer.nextToken();
-                    String type = tokenizer.nextToken();
-                    long literal = Long.parseLong(tokenizer.nextToken());
-                    Highlight highlight = MCodeUtilities
-                            .makeHighlight(tokenizer.nextToken());
-
-                    handleCodeAIE(arrayReference, cellNumber,
-                            expressionReference, value, type, literal,
-                            highlight);
-
-                    break;
-                }
-
-                case Code.AI: {
+                 case Code.AI: {
                     Highlight highlight = MCodeUtilities
                             .makeHighlight(tokenizer.nextToken());
 
@@ -1735,10 +1758,9 @@ public abstract class MCodeInterpreter {
      * @param actualdimensions
      * @param h
      */
-    protected abstract void handleCodeAA(long expressionReference,
-            String hashCode, String compType, int dims,
-            String dimensionReferences, String dimensionSizes,
-            int actualdimensions, Highlight h);
+    protected abstract void handleCodeAA(long expressionReference, String hashCode,
+            String compType, int dims, String dimensionReferences, String dimensionSizes,
+            int actualdimensions, String subArraysHashCodes, Highlight h);
 
     /**
      * @param scope
