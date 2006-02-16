@@ -1042,6 +1042,14 @@ public class EvaluationVisitor extends VisitorObject {
         counter++;
 
         long objectCounter = counter;
+        
+        //Jeliot 3 modification
+        if (c.isArray()){
+        	MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
+        						 + Code.AL + Code.DELIM 
+        						 + fieldCounter + Code.DELIM  
+        						 + MCodeUtilities.locationToString(node));
+        }
         // Evaluate the object
         Object obj = node.getExpression().acceptVisitor(this);
         Object value;
@@ -1346,12 +1354,13 @@ public class EvaluationVisitor extends VisitorObject {
         try {
             Object o = f.get(null);
             String value = MCodeUtilities.getValue(o);
-            // fixed:  added modifiers to code
+             // fixed:  added modifiers to code
             MCodeUtilities.write(Code.SFA + Code.DELIM + (counter++)
                     + Code.DELIM + f.getDeclaringClass().getName() + Code.DELIM
                     + f.getName() + Code.DELIM + value + Code.DELIM
                     + f.getType().getName() + Code.DELIM + f.getModifiers()
                     + Code.DELIM + MCodeUtilities.locationToString(node));
+            
             return o;
         } catch (NullPointerException e) {
             node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { f
@@ -1728,17 +1737,20 @@ public class EvaluationVisitor extends VisitorObject {
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
                 + MCodeUtilities.locationToString(node));
-        //
+        
+        
         setPreparing();
         Node ln = node.getLeftExpression();
         LeftHandSideModifier mod = NodeProperties.getModifier(ln);
         mod.prepare(this, context);
         unsetPreparing();
         long auxcounter = counter;
-
+        
+        
         Object val = node.getRightExpression().acceptVisitor(this);
 
         MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+
         long auxcounter2 = counter;
 
         evaluating = false;
@@ -1859,7 +1871,6 @@ public class EvaluationVisitor extends VisitorObject {
         String consName = cons.getName();
         String declaringClass = cons.getDeclaringClass().getName();
         // Fill the arguments
-
         if (larg != null) {
 
             MCodeUtilities.write("" + Code.SA + Code.DELIM
@@ -1960,7 +1971,6 @@ public class EvaluationVisitor extends VisitorObject {
 
             //This is now done for all the simple allocations but once Java API allocations are allowed this should be changed.
             unsetInside();
-
             return result;
 
             /* Jeliot 3 addition begins */
@@ -2031,12 +2041,16 @@ public class EvaluationVisitor extends VisitorObject {
         if (node.getDimension() != dims.length) {
             Class c = NodeProperties.getComponentType(node);
             c = Array.newInstance(c, 0).getClass();
+            //Allow a second degree of freedom (new int[4][][]) (Jeliot 3 only supports 3D arrays
+            c = (node.getDimension() == (dims.length + 2))? Array.newInstance(c, 0).getClass():c; 
             newArray = Array.newInstance(c, dims);
         } else {
             newArray = Array.newInstance(NodeProperties.getComponentType(node),
                     dims);
         }
         //TODO: get all the hashcodes of the different dimensions from the array
+
+        String subArrayHashCodes = MCodeUtilities.getSubArrayHashCodes(newArray);
 
         //System.out.println("Array allocator");
 
@@ -2045,8 +2059,11 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + NodeProperties.getComponentType(node).getName()
                 + Code.DELIM + dims.length + Code.DELIM
                 + MCodeUtilities.arrayToString(dimExpressionReferences)
-                + Code.DELIM + dimensions + Code.DELIM + node.getDimension()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + Code.DELIM + dimensions + Code.DELIM
+                + node.getDimension() + Code.DELIM
+                + subArrayHashCodes + Code.DELIM
+                + MCodeUtilities.locationToString(node));
+
         return newArray;
     }
 
@@ -2084,9 +2101,9 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.AA + Code.DELIM + arrayAllocationCounter
                 + Code.DELIM + arrayHashCode + Code.DELIM + componentType
-                + Code.DELIM + 1 /* only the first dimension is known now */
-                + Code.DELIM + dimensionsReferences + Code.DELIM + size
-                + Code.DELIM + dimensions + Code.DELIM
+                + Code.DELIM + dimensions + Code.DELIM + dimensionsReferences
+                + Code.DELIM + size + Code.DELIM
+                + dimensions + Code.DELIM 
                 + MCodeUtilities.locationToString(node));
 
         MCodeUtilities.write("" + Code.AIBEGIN + Code.DELIM + size + Code.DELIM
@@ -2153,7 +2170,9 @@ public class EvaluationVisitor extends VisitorObject {
         // This way we allow array accesses inside cell numbers
 
         first = true;
+        evaluating = false;
         Object o = node.getCellNumber().acceptVisitor(this);
+        evaluating = true;
         first = false;
 
         if (o instanceof Character) {
@@ -2270,10 +2289,11 @@ public class EvaluationVisitor extends VisitorObject {
      *
      * @param node the node to visit
      */
-    public Object visit(ClassAllocation node) {
+    
+   public Object visit(ClassAllocation node) {
         List larg = node.getArguments();
         Object[] args = Constants.EMPTY_OBJECT_ARRAY;
-
+        
         // Fill the arguments
         if (larg != null) {
             args = new Object[larg.size()];
@@ -2286,6 +2306,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         return context.invokeConstructor(node, args);
     }
+
 
     /**
      * Visits a NotExpression
@@ -3339,6 +3360,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         LeftHandSideModifier mod = NodeProperties.getModifier(exp);
         Object v = mod.prepare(this, context);
+        
         Object result = InterpreterUtilities.add(NodeProperties.getType(node),
                 v, InterpreterUtilities.ONE);
 
