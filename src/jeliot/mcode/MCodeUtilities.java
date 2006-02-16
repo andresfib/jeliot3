@@ -2,11 +2,19 @@ package jeliot.mcode;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+/*import javax.naming.spi.DirStateFactory.Result;
+import javax.swing.JFileChooser;
+
+import jeliot.gui.JavaFileFilter;
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserProperties;*/
 
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
@@ -1037,6 +1045,40 @@ public class MCodeUtilities {
     }
 
     /**
+     * Gets the array elements hashcodes in case there are subarrays
+     * @param array
+     * @return string a1,a2,a11,a12,21,a22
+     * @author Jerome Lacoste
+     * @author www.javapractices.com
+     * @author Andrés Moreno
+     */
+    public static String getSubArrayHashCodes(Object array){
+    	
+    	if ( array.getClass().isArray()){
+    		StringBuffer result = new StringBuffer("");
+    		int length = Array.getLength(array);
+    		
+    		for ( int i = 0 ; i < length ; ++i ) {
+    			Object element = Array.get(array, i);
+    			if ( element != null && element.getClass().isArray()) {
+    				result.append(Integer.toHexString(System.identityHashCode(element)));
+    				result.append( ",");
+    			}
+    		}
+    		for ( int i = 0 ; i < length ; ++i ) {
+    			Object element = Array.get(array, i);
+    			if ( element != null && element.getClass().isArray()) {
+    				result.append( getSubArrayHashCodes(element));
+    			}
+    		}
+			
+    		return result.toString();
+    	} else { 
+    		return "";
+    	}
+    }
+    
+    /**
      * @param argnames
      * @return
      */
@@ -1188,6 +1230,7 @@ public class MCodeUtilities {
         registeredSecondaryMCodeConnections.clear();
     }
 
+    
     /**
      * 
      * @param o

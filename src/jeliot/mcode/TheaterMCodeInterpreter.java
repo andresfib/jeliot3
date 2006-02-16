@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Stack;
@@ -488,6 +489,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         director.introduceArrayLength(length, array);
 
         handleExpression(length, expressionCounter);
+        exprs.pop();
     }
 
     /**
@@ -688,7 +690,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             if (postIncDec != null) {
                 doPostIncDec(postIncDec);
             }
-        }
+        }	
 
     }
 
@@ -703,7 +705,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeAA(long expressionReference, String hashCode,
             String compType, int dims, String dimensionReferences,
-            String dimensionSizes, int actualDimension, Highlight h) {
+            String dimensionSizes,int actualDimension, 
+            String subArraysHashCodes, Highlight h) {
+
+//            String dimensionSizes, int actualDimension, Highlight h) {
+
 
         StringTokenizer st = new StringTokenizer(dimensionReferences,
                 Code.LOC_DELIM);
@@ -738,12 +744,22 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 dimensionSize.length, actualDimension, dimensionSize[0]);
 
         Reference ref = new Reference(ai);
+        
+        //Handling of subArrayHascodes.
+        // Sring format for a[2][2] is a1,a2,a11,a12,a21,a22 
+        st = new StringTokenizer(subArraysHashCodes, Code.LOC_DELIM);
+        Vector hashCodes = new Vector();
 
+        while (st.hasMoreTokens()){
+            hashCodes.add(st.nextToken());
+        }
+        
         ArrayInstance[] level1 = null;
+        Iterator itHashCodes = hashCodes.iterator();
         if (dimensionSize.length > 1) {
             level1 = new ArrayInstance[dimensionSize[0]];
             for (int i = 0; i < dimensionSize[0]; i++) {
-                level1[i] = new ArrayInstance("", compType,
+                level1[i] = new ArrayInstance((String) itHashCodes.next(), compType,
                         dimensionSize.length - 1, actualDimension-1, dimensionSize[1]);
             }
         }
@@ -753,7 +769,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             level2 = new ArrayInstance[dimensionSize[0]][dimensionSize[1]];
             for (int i = 0; i < dimensionSize[0]; i++) {
                 for (int j = 0; j < dimensionSize[1]; j++) {
-                    level2[i][j] = new ArrayInstance("", compType,
+                    level2[i][j] = new ArrayInstance((String) itHashCodes.next(), compType,
                             dimensionSize.length - 2, actualDimension-2, dimensionSize[2]);
                 }
             }
@@ -765,7 +781,21 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         //director.arrayCreation(dimensionSize, h);
 
         instances.put(hashCode, ai);
-
+        //Now we also put the sub array hashcodes
+        itHashCodes = hashCodes.iterator();
+        if (dimensionSize.length > 1) {
+            for (int i = 0; i < dimensionSize[0]; i++) {
+                instances.put(itHashCodes.next(), level1[i]);            	
+            }
+        }
+        if (dimensionSize.length > 2) {
+            for (int i = 0; i < dimensionSize[0]; i++) {
+                for (int j = 0; j < dimensionSize[1]; j++) {
+                    instances.put(itHashCodes.next(), level2[i][j]);            	
+                }
+            }
+        }
+        
         ref.makeReference();
 
         values.put(new Long(expressionReference), ref);
