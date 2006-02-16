@@ -15,6 +15,9 @@ public class InputHandlerFactory {
         if (aClass.getName().equals("Prog1Tools.IOTools")) {
             return new Prog1ToolsInputHandler();
         }
+        if (aClass.getName().equals("easyIn.EasyIn")){
+        	return new EasyInInputHandler();
+        }
         if (aClass.getName().equals("jeliot.io.Input")) {
             return new JeliotInputHandlerImpl();
         }
