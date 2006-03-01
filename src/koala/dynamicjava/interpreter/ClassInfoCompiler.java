@@ -276,7 +276,7 @@ public class ClassInfoCompiler {
                 }
 
                 MCodeUtilities.write("" + Code.CONSTRUCTOR + Code.DELIM
-                        + MCodeUtilities.arrayToString(params));
+                        + MCodeGenerator.arrayToString(params));
                 addConstructor((TreeConstructorInfo) cons[i]);
             }
         }
@@ -1933,13 +1933,13 @@ public class ClassInfoCompiler {
                             + fi.getType().getName() + Code.DELIM + af
                             + Code.DELIM + ((Literal) init).getValue()
                             + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
                 } else {
                     MCodeUtilities.write("" + Code.FIELD + Code.DELIM
                             + node.getName() + Code.DELIM
                             + fi.getType().getName() + Code.DELIM + af
                             + Code.DELIM + Code.UNKNOWN + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
                 }
 
             } else {
@@ -1947,7 +1947,7 @@ public class ClassInfoCompiler {
                 MCodeUtilities.write("" + Code.FIELD + Code.DELIM
                         + node.getName() + Code.DELIM + fi.getType().getName()
                         + Code.DELIM + af + Code.DELIM + Code.UNKNOWN
-                        + Code.DELIM + MCodeUtilities.locationToString(node));
+                        + Code.DELIM + MCodeGenerator.locationToString(node));
             }
             return null;
         }
@@ -1988,7 +1988,7 @@ public class ClassInfoCompiler {
             }
             MCodeUtilities.write("" + Code.METHOD + Code.DELIM + node.getName()
                     + Code.DELIM + rt + Code.DELIM + af + Code.DELIM
-                    + MCodeUtilities.arrayToString(params));
+                    + MCodeGenerator.arrayToString(params));
 
             // Create the exception array
             cia = mi.getExceptionTypes();

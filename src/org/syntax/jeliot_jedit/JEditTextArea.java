@@ -103,6 +103,13 @@ public class JEditTextArea extends JComponent {
     /**
      * Creates a new JEditTextArea with the default settings.
      */
+    public JEditTextArea(boolean inputEnabled, SyntaxDocument document) {
+        this(TextAreaDefaults.getDefaults(document), inputEnabled);
+    }
+
+    /**
+     * Creates a new JEditTextArea with the default settings.
+     */
     public JEditTextArea(boolean inputEnabled) {
         this(TextAreaDefaults.getDefaults(), inputEnabled);
     }
@@ -2021,7 +2028,7 @@ public class JEditTextArea extends JComponent {
         }
     }
 
-    class CaretUndo extends AbstractUndoableEdit {
+    public class CaretUndo extends AbstractUndoableEdit {
 
         private int start;
 
@@ -2058,7 +2065,7 @@ public class JEditTextArea extends JComponent {
                 start = cedit.start;
                 end = cedit.end;
                 cedit.die();
-
+                
                 return true;
             } else
                 return false;

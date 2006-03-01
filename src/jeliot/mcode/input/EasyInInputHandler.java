@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.lang.reflect.Method;
 
 import jeliot.mcode.MCodeUtilities;
-import easyIn.EasyIn;
 
 public class EasyInInputHandler extends InputHandler {
 

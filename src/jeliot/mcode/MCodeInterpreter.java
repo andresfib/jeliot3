@@ -230,9 +230,15 @@ public abstract class MCodeInterpreter {
             if (DebugUtil.DEBUGGING) {
                 e.printStackTrace();
             }
-            handleCodeERROR("<H1> Runtime Exception </H1> <P> "
-                    + e.getMessage()
-                    + " or the feature is not yet implemented. </P> ", null);
+            if (e.getMessage() != null) {
+                handleCodeERROR("<H1> Runtime Exception </H1> <P> "
+                        + e.getMessage()
+                        + " or the feature is not yet implemented. </P> ", null);
+            } else {
+                handleCodeERROR("<H1> Runtime Exception </H1> <P> "
+                        + "Feature is not yet implemented. </P> ", null);
+
+            }
             return true;
         }
         return true;

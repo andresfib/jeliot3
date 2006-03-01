@@ -32,6 +32,7 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -754,10 +755,20 @@ public class JeliotWindow implements PauseListener, MouseListener {
         for (int i = 0; i < menu.getItemCount(); i++) {
             JMenuItem item = menu.getItem(i);
             if (item != null) {
-                widgets.add(item);
+                Action a = item.getAction();
+                if (a != null) {
+                    widgets.add(a);
+                } else {
+                    widgets.add(item);
+                }
             }
         }
-        widgets.add(menu);
+        Action a = menu.getAction();
+        if (a != null) {
+            widgets.add(a);
+        } else {
+            widgets.add(menu);
+        }
     }
 
     /**
@@ -770,7 +781,12 @@ public class JeliotWindow implements PauseListener, MouseListener {
             for (int j = 0; j < length; j++) {
                 JMenuItem jmi = jm[i].getItem(j);
                 if (jmi != null) {
-                    animationMenuItems.add(jmi);
+                    Action a = jmi.getAction();
+                    if (a != null) {
+                        animationMenuItems.add(a);
+                    } else {
+                        animationMenuItems.add(jmi);
+                    }
                 }
             }
         }
@@ -1482,8 +1498,14 @@ public class JeliotWindow implements PauseListener, MouseListener {
      */
     private void enableWidgets(Enumeration enumeration, boolean enable) {
         while (enumeration.hasMoreElements()) {
-            Component comp = (Component) enumeration.nextElement();
-            comp.setEnabled(enable);
+            Object obj = enumeration.nextElement();
+            if (obj instanceof Component) {
+                Component comp = (Component) obj;
+                comp.setEnabled(enable);
+            } else if (obj instanceof Action) {
+                Action act = (Action) obj;
+                act.setEnabled(enable);
+            }
         }
     }
 
@@ -1775,11 +1797,22 @@ public class JeliotWindow implements PauseListener, MouseListener {
      */
     public void setEnabledMenuItems(boolean enabled, String[] menuItems) {
         for (int i = 0; i < animationMenuItems.size(); i++) {
-            JMenuItem jmi = (JMenuItem) animationMenuItems.elementAt(i);
-            if (jmi != null) {
-                for (int j = 0; j < menuItems.length; j++) {
-                    if (menuItems[j].equals(jmi.getText())) {
-                        jmi.setEnabled(enabled);
+            if (animationMenuItems.elementAt(i) instanceof JMenuItem) {
+                JMenuItem jmi = (JMenuItem) animationMenuItems.elementAt(i);
+                if (jmi != null) {
+                    for (int j = 0; j < menuItems.length; j++) {
+                        if (menuItems[j].equals(jmi.getText())) {
+                            jmi.setEnabled(enabled);
+                        }
+                    }
+                }
+            } else if (animationMenuItems.elementAt(i) instanceof Action) {
+                Action act = (Action) animationMenuItems.elementAt(i);
+                if (act != null) {
+                    for (int j = 0; j < menuItems.length; j++) {
+                        if (menuItems[j].equals(act.getValue(Action.NAME))) {
+                            act.setEnabled(enabled);
+                        }
                     }
                 }
             }

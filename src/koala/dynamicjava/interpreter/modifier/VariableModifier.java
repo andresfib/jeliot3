@@ -62,29 +62,28 @@ public class VariableModifier extends LeftHandSideModifier {
      * @param type the declared type of the variable
      */
     public VariableModifier(QualifiedName name, Class type) {
-	this.name = name;
-	this.type = type;
-	representation = name.getRepresentation();
+        this.name = name;
+        this.type = type;
+        representation = name.getRepresentation();
     }
 
     /**
      * Prepares the modifier for modification
      */
     public Object prepare(Visitor v, Context ctx) {
-	return ctx.get(representation);
+        return ctx.get(representation);
     }
 
     /**
      * Sets the value of the underlying left hand side expression
      */
     public void modify(Context ctx, Object value) {
-	if (type.isPrimitive()                     ||
-	    value == null                          ||
-	    type.isAssignableFrom(value.getClass())) {
-	    ctx.set(representation, value);
-	} else {
-	    Exception e = new ClassCastException(representation);
-	    throw new CatchedExceptionError(e, name);
-	}
+        if (type.isPrimitive() || value == null
+                || type.isAssignableFrom(value.getClass())) {
+            ctx.set(representation, value);
+        } else {
+            Exception e = new ClassCastException(representation);
+            throw new CatchedExceptionError(e, name);
+        }
     }
 }

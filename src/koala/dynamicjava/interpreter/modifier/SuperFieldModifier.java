@@ -59,29 +59,29 @@ public class SuperFieldModifier extends LeftHandSideModifier {
      * @param n the field access node
      */
     public SuperFieldModifier(Field f, SuperFieldAccess n) {
-	field = f;
-	node  = n;
+        field = f;
+        node = n;
     }
 
     /**
      * Prepares the modifier for modification
      */
     public Object prepare(Visitor v, Context ctx) {
-	try {
-	    return field.get(ctx.get("this"));
-	} catch (Exception e) {
+        try {
+            return field.get(ctx.get("this"));
+        } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
-	}
+        }
     }
 
     /**
      * Sets the value of the underlying left hand side expression
      */
     public void modify(Context ctx, Object value) {
-	try {
-	    field.set(ctx.get("this") , value);
-	} catch (Exception e) {
+        try {
+            field.set(ctx.get("this"), value);
+        } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
-	}
+        }
     }
 }

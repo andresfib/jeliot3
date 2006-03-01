@@ -113,83 +113,83 @@ public abstract class Node {
      * @param ec    the end column
      */
     protected Node(String fn, int bl, int bc, int el, int ec) {
-	filename              = fn;
-	beginLine             = bl;
-	beginColumn           = bc;
-	endLine               = el;
-	endColumn             = ec;
-	propertyChangeSupport = new PropertyChangeSupport(this);
-	properties            = new HashMap(11);
+        filename = fn;
+        beginLine = bl;
+        beginColumn = bc;
+        endLine = el;
+        endColumn = ec;
+        propertyChangeSupport = new PropertyChangeSupport(this);
+        properties = new HashMap(11);
     }
 
     /**
      * Returns the filename. Can be null.
      */
     public String getFilename() {
-	return filename;
+        return filename;
     }
 
     /**
      * Sets the filename
      */
     public void setFilename(String s) {
-	firePropertyChange(FILENAME, filename, filename = s);
+        firePropertyChange(FILENAME, filename, filename = s);
     }
 
     /**
      * Returns the begin line of this node in the source code
      */
     public int getBeginLine() {
-	return beginLine;
+        return beginLine;
     }
 
     /**
      * Sets the begin line
      */
     public void setBeginLine(int i) {
-	firePropertyChange(BEGIN_LINE, beginLine, beginLine = i);
+        firePropertyChange(BEGIN_LINE, beginLine, beginLine = i);
     }
 
     /**
      * Returns the begin column of this node in the begin line
      */
     public int getBeginColumn() {
-	return beginColumn;
+        return beginColumn;
     }
 
     /**
      * Sets the begin column
      */
     public void setBeginColumn(int i) {
-	firePropertyChange(BEGIN_COLUMN, beginColumn, beginColumn = i);
+        firePropertyChange(BEGIN_COLUMN, beginColumn, beginColumn = i);
     }
 
     /**
      * Returns the end line of this node in the source code
      */
     public int getEndLine() {
-	return endLine;
+        return endLine;
     }
 
     /**
      * Sets the end line
      */
     public void setEndLine(int i) {
-	firePropertyChange(END_LINE, endLine, endLine = i);
+        firePropertyChange(END_LINE, endLine, endLine = i);
     }
 
     /**
      * Returns the end column of this node in the end line
      */
     public int getEndColumn() {
-	return endColumn;
+        return endColumn;
     }
 
     /**
      * Sets the end column
      */
     public void setEndColumn(int i) {
-	firePropertyChange(END_COLUMN, endColumn, endColumn = i);
+        firePropertyChange(END_COLUMN, endColumn, endColumn = i);
     }
 
     // Properties support //////////////////////////////////////////////////
@@ -200,7 +200,7 @@ public abstract class Node {
      * @param value the new value to set
      */
     public void setProperty(String name, Object value) {
-	firePropertyChange(name, properties.put(name, value), value);
+        firePropertyChange(name, properties.put(name, value), value);
     }
 
     /**
@@ -209,7 +209,7 @@ public abstract class Node {
      * @return null if the property was not previously set
      */
     public Object getProperty(String name) {
-	return properties.get(name);
+        return properties.get(name);
     }
 
     /**
@@ -217,7 +217,7 @@ public abstract class Node {
      * @return a set of string
      */
     public Set getProperties() {
-	return properties.keySet();
+        return properties.keySet();
     }
 
     /**
@@ -225,7 +225,7 @@ public abstract class Node {
      * @param name the name of the property
      */
     public boolean hasProperty(String name) {
-	return properties.containsKey(name);
+        return properties.containsKey(name);
     }
 
     /**
@@ -234,7 +234,7 @@ public abstract class Node {
      * @param listener  The PropertyChangeListener to be added
      */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-	propertyChangeSupport.addPropertyChangeListener(listener);
+        propertyChangeSupport.addPropertyChangeListener(listener);
     }
 
     /**
@@ -244,7 +244,7 @@ public abstract class Node {
      * @param listener  The PropertyChangeListener to be removed
      */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-	propertyChangeSupport.removePropertyChangeListener(listener);
+        propertyChangeSupport.removePropertyChangeListener(listener);
     }
 
     /**
@@ -255,8 +255,8 @@ public abstract class Node {
      * @param listener  The PropertyChangeListener to be added
      */
     public void addPropertyChangeListener(String propertyName,
-					  PropertyChangeListener listener) {
-	propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+            PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
     }
 
     /**
@@ -265,8 +265,9 @@ public abstract class Node {
      * @param listener  The PropertyChangeListener to be removed
      */
     public void removePropertyChangeListener(String propertyName,
-					     PropertyChangeListener listener) {
-	propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+            PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(propertyName,
+                listener);
     }
 
     /**
@@ -276,9 +277,10 @@ public abstract class Node {
      * @param oldValue  The old value of the property.
      * @param newValue  The new value of the property.
      */
-    protected void firePropertyChange(String propertyName,
-				      boolean oldValue, boolean newValue) {
-	propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    protected void firePropertyChange(String propertyName, boolean oldValue,
+            boolean newValue) {
+        propertyChangeSupport.firePropertyChange(propertyName, oldValue,
+                newValue);
     }
 
     /**
@@ -288,9 +290,10 @@ public abstract class Node {
      * @param oldValue  The old value of the property.
      * @param newValue  The new value of the property.
      */
-    protected void firePropertyChange(String propertyName,
-				      int oldValue, int newValue) {
-	propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    protected void firePropertyChange(String propertyName, int oldValue,
+            int newValue) {
+        propertyChangeSupport.firePropertyChange(propertyName, oldValue,
+                newValue);
     }
 
     /**
@@ -300,9 +303,10 @@ public abstract class Node {
      * @param oldValue  The old value of the property.
      * @param newValue  The new value of the property.
      */
-    protected void firePropertyChange(String propertyName,
-				      Object oldValue, Object newValue) {
-	propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    protected void firePropertyChange(String propertyName, Object oldValue,
+            Object newValue) {
+        propertyChangeSupport.firePropertyChange(propertyName, oldValue,
+                newValue);
     }
 
     // Visitors support ///////////////////////////////////////////////////////////

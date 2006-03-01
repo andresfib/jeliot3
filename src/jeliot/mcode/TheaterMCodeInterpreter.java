@@ -522,10 +522,15 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
 
         //Finding the VariableInArray
-        values.remove(new Long(expressionReference));
         Variable variable = (Variable) variables.remove(new Long(
                 expressionReference));
-        Reference varRef = (Reference) variable.getValue();
+        Reference varRef = null;
+        if (variable != null) {
+            varRef = (Reference) variable.getValue();
+            values.remove(new Long(expressionReference));
+        } else {
+            varRef = (Reference) values.remove(new Long(expressionReference));
+        }        
         ArrayInstance ainst = (ArrayInstance) varRef.getInstance();
         int n = cellNumber.length;
         VariableInArray[] vars = new VariableInArray[n];
@@ -613,13 +618,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         //If operator is assignment we just store the value
         if (oper == Code.A) {
-
             if (command == Code.TO) {
-
                 variables.put(new Long(expressionCounter), vars[n - 1]);
-
             } else {
-
                 values.put(new Long(expressionCounter), val);
             }
 
@@ -630,6 +631,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             int operator = MCodeUtilities.resolveBinOperator(oper);
 
             if (command == Code.LEFT) {
+                //This is for compound assignments
+                if (vars[n-1] != null) {
+                    variables.put(new Long(expressionCounter), vars[n-1]);
+                }
 
                 director.beginBinaryExpression(val, operator,
                         expressionReference, highlight);
@@ -1766,6 +1771,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             int operator = MCodeUtilities.resolveBinOperator(oper);
 
             if (command == Code.LEFT) {
+                //This is for compound assignments
+                if (var != null) {
+                    variables.put(new Long(expressionCounter), var);
+                }
 
                 director.beginBinaryExpression(val, operator,
                         expressionReference, highlight);
@@ -2109,6 +2118,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         } else if (MCodeUtilities.isBinary(oper)) {
             int operator = MCodeUtilities.resolveBinOperator(oper);
             if (command == Code.LEFT) {
+                //This is for compound assignments
+                if (var != null) {
+                    variables.put(new Long(expressionCounter), var);
+                }
+                
                 director.beginBinaryExpression(val, operator,
                         expressionReference, highlight);
             } else if (command == Code.RIGHT) {
@@ -2241,6 +2255,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         } else if (MCodeUtilities.isBinary(oper)) {
             int operator = MCodeUtilities.resolveBinOperator(oper);
             if (command == Code.LEFT) {
+                //This is for compound assignments
+                if (var != null) {
+                    variables.put(new Long(expressionCounter), var);
+                }
+                
                 director.beginBinaryExpression(val, operator,
                         expressionReference, highlight);
             } else if (command == Code.RIGHT) {

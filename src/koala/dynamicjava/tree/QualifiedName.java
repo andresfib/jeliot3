@@ -66,7 +66,7 @@ public class QualifiedName extends PrimaryExpression implements LeftHandSide {
      * @exception IllegalArgumentException if ids is null
      */
     public QualifiedName(List ids) {
-	this(ids, null, 0, 0, 0, 0);
+        this(ids, null, 0, 0, 0, 0);
     }
 
     /**
@@ -80,26 +80,27 @@ public class QualifiedName extends PrimaryExpression implements LeftHandSide {
      * @exception IllegalArgumentException if ids is null
      */
     public QualifiedName(List ids, String fn, int bl, int bc, int el, int ec) {
-	super(fn, bl, bc, el, ec);
+        super(fn, bl, bc, el, ec);
 
-	if (ids == null) throw new IllegalArgumentException("ids == null");
+        if (ids == null)
+            throw new IllegalArgumentException("ids == null");
 
-	identifiers    = ids;
-	representation = TreeUtilities.listToName(ids);
+        identifiers = ids;
+        representation = TreeUtilities.listToName(ids);
     }
 
     /**
      * Returns the representation of this object
      */
     public String getRepresentation() {
-	return representation;
+        return representation;
     }
 
     /**
      * Returns the identifiers that compose this name
      */
     public List getIdentifiers() {
-	return identifiers;
+        return identifiers;
     }
 
     /**
@@ -107,19 +108,19 @@ public class QualifiedName extends PrimaryExpression implements LeftHandSide {
      * @exception IllegalArgumentException if l is null
      */
     public void setIdentifier(List l) {
-	if (l == null) throw new IllegalArgumentException("l == null");
-	
-	firePropertyChange(IDENTIFIERS, identifiers, identifiers = l);
-	firePropertyChange(REPRESENTATION,
-			   representation,
-			   representation = TreeUtilities.listToName(l));
+        if (l == null)
+            throw new IllegalArgumentException("l == null");
+
+        firePropertyChange(IDENTIFIERS, identifiers, identifiers = l);
+        firePropertyChange(REPRESENTATION, representation,
+                representation = TreeUtilities.listToName(l));
     }
-    
+
     /**
      * Allows a visitor to traverse the tree
      * @param visitor the visitor to accept
      */
     public Object acceptVisitor(Visitor visitor) {
-	return visitor.visit(this);
+        return visitor.visit(this);
     }
 }
