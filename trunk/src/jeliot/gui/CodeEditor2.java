@@ -94,6 +94,9 @@ public class CodeEditor2 extends JComponent {
      */
     private File currentFile = null;
 
+    /**
+     * 
+     */
     private File currentDirectory;
     {
         if (propertiesBundle.containsKey("current.user.directory")) {
@@ -133,13 +136,13 @@ public class CodeEditor2 extends JComponent {
     /**
      * 
      */
-    private UndoRedo undoredo = new UndoRedo();
+    private FindDialog findDialog;
 
     /**
      * 
      */
-    private FindDialog findDialog;
-
+    private UndoRedoSyntaxDocument.UndoRedo undoRedo;
+    
     /**
      * returns true if the document is changed and false if it is not changed.
      * This is the value of the changed field.
@@ -313,7 +316,10 @@ public class CodeEditor2 extends JComponent {
         initFileChooser();
 
         //Special for JEditTextArea for syntax highlighting
-        area = new JEditTextArea(true);
+        UndoRedoSyntaxDocument document = new UndoRedoSyntaxDocument();
+        this.undoRedo = document.getUndoredo();
+        
+        area = new JEditTextArea(true, document);
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(
                 new Font(propertiesBundle
@@ -343,7 +349,6 @@ public class CodeEditor2 extends JComponent {
         lnah.adjustmentValueChanged(null);
         area.revalidate();
         clearProgram();
-        area.getDocument().addUndoableEditListener(undoredo.myundoable);
     }
 
     /**
@@ -497,12 +502,16 @@ public class CodeEditor2 extends JComponent {
         menu.setMnemonic(KeyEvent.VK_E);
         JMenuItem menuItem;
 
-        menuItem = menu.add(undoredo.undoAction);
+        menuItem = menu.add(this.undoRedo.undoAction);
+        this.undoRedo.undoAction.updateUndoState();
+        //menuItem.setEnabled(false);
         menuItem.setMnemonic(KeyEvent.VK_D);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
                 ActionEvent.CTRL_MASK));
 
-        menuItem = menu.add(undoredo.redoAction);
+        menuItem = menu.add(this.undoRedo.redoAction);
+        this.undoRedo.redoAction.updateRedoState();
+        //menuItem.setEnabled(false);
         menuItem.setMnemonic(KeyEvent.VK_R);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,
                 ActionEvent.CTRL_MASK));
@@ -634,11 +643,11 @@ public class CodeEditor2 extends JComponent {
         area.setFirstLine(0);
         area.setCaretPosition(0);
         area.requestFocusInWindow();
+        
         //Clear undo/redo
-        undoredo.undo.discardAllEdits();
-        undoredo.undoAction.updateUndoState();
-        undoredo.redoAction.updateRedoState();
-
+        undoRedo.undo.discardAllEdits();
+        undoRedo.undoAction.updateUndoState();
+        undoRedo.redoAction.updateRedoState();
     }
 
     /**
@@ -767,6 +776,7 @@ public class CodeEditor2 extends JComponent {
      *
      */
     void saveProgram() {
+        
         //This is to keep the caret position after the saving of the file.
         String code = area.getText();
         int tabSize = Integer.parseInt(propertiesBundle
@@ -844,6 +854,7 @@ public class CodeEditor2 extends JComponent {
             w.close();
 
             area.setText(code);
+            
             currentFile = file; // Jeliot 3
             setChanged(false); //Jeliot 3
             setTitle(file.getName()); // Jeliot 3

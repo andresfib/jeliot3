@@ -51,6 +51,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import jeliot.mcode.Code;
+import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.mcode.StoppingRequestedError;
 import jeliot.util.DebugUtil;
@@ -1027,9 +1028,9 @@ public class TreeInterpreter implements Interpreter {
                         || inConstructorCall || !name.equals("<init>"))) {
 
             MCodeUtilities.write(Code.PARAMETERS + Code.DELIM
-                    + MCodeUtilities.argToString(argnames));
+                    + MCodeGenerator.argToString(argnames));
             MCodeUtilities.write(Code.MD + Code.DELIM
-                    + MCodeUtilities.locationToString(meth));
+                    + MCodeGenerator.locationToString(meth));
         }
         if (inConstructorCall) {
             EvaluationVisitor.constructorCallFinished();
@@ -1244,7 +1245,7 @@ public class TreeInterpreter implements Interpreter {
                 MCodeUtilities.write("" + Code.OMC + Code.DELIM + methodName
                         + Code.DELIM + "0" + Code.DELIM + counter + Code.DELIM
                         + MCodeUtilities.getFullQualifiedClassname(c)
-                        + Code.DELIM + MCodeUtilities.locationToString(cpd.cd));
+                        + Code.DELIM + MCodeGenerator.locationToString(cpd.cd));
                 //+ MCodeUtilities.locationToString(meth));
 
             } else {
@@ -1256,7 +1257,7 @@ public class TreeInterpreter implements Interpreter {
                 MCodeUtilities.write("" + Code.OMC + Code.DELIM + methodName
                         + Code.DELIM + numParameters + Code.DELIM + counter
                         + Code.DELIM + c.getName() + Code.DELIM
-                        + MCodeUtilities.locationToString(cpd.cd));
+                        + MCodeGenerator.locationToString(cpd.cd));
             }
         }
 
@@ -1284,7 +1285,7 @@ public class TreeInterpreter implements Interpreter {
 
                 MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
                         + Code.DELIM + auxCounter + Code.DELIM
-                        + MCodeUtilities.locationToString(n));
+                        + MCodeGenerator.locationToString(n));
 
                 result[i++] = n.acceptVisitor(v);
 
@@ -1303,9 +1304,9 @@ public class TreeInterpreter implements Interpreter {
 
         if (inThisCall || inSuperCall) {
             MCodeUtilities.write(Code.PARAMETERS + Code.DELIM
-                    + MCodeUtilities.argToString(argnames));
+                    + MCodeGenerator.argToString(argnames));
             MCodeUtilities.write(Code.MD + Code.DELIM
-                    + MCodeUtilities.locationToString(cpd.cd));
+                    + MCodeGenerator.locationToString(cpd.cd));
 
         }
         return result;

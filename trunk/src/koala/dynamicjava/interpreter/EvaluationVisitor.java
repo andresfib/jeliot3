@@ -18,6 +18,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 import jeliot.mcode.Code;
+import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.mcode.input.InputHandler;
 import jeliot.mcode.input.InputHandlerFactory;
@@ -25,7 +26,9 @@ import koala.dynamicjava.interpreter.context.Context;
 import koala.dynamicjava.interpreter.context.GlobalContext;
 import koala.dynamicjava.interpreter.error.CatchedExceptionError;
 import koala.dynamicjava.interpreter.error.ExecutionError;
+import koala.dynamicjava.interpreter.modifier.ArrayModifier;
 import koala.dynamicjava.interpreter.modifier.LeftHandSideModifier;
+import koala.dynamicjava.interpreter.modifier.ObjectFieldModifier;
 import koala.dynamicjava.interpreter.throwable.BreakException;
 import koala.dynamicjava.interpreter.throwable.ContinueException;
 import koala.dynamicjava.interpreter.throwable.ReturnException;
@@ -136,7 +139,7 @@ public class EvaluationVisitor extends VisitorObject {
     public void initialize() {
         counter = 1;
         evaluating = true;
-        preparing = false;
+        preparing = new Stack();
         constructorCallNames = new Stack();
         superClasses = new Stack();
         constructorCallNumbers = new Stack();
@@ -163,7 +166,7 @@ public class EvaluationVisitor extends VisitorObject {
      * Indicates when ArrayModifier is preparing the array, and and thus we
      * don't want info
      */
-    private static boolean preparing = false;
+    private static Stack preparing = new Stack();
 
     /**
      * Used in Simple Allocation and TreeInterpreter.interpretMethod Used to
@@ -205,7 +208,7 @@ public class EvaluationVisitor extends VisitorObject {
      * visit
      */
     public static void setPreparing() {
-        preparing = true;
+        preparing.push(new Boolean(true));
     }
 
     /**
@@ -213,14 +216,15 @@ public class EvaluationVisitor extends VisitorObject {
      * the array to visit
      */
     public static void unsetPreparing() {
-        preparing = false;
+        preparing.pop();
     }
 
     /**
      * Returns preparing value
      */
     public static boolean isSetPreparing() {
-        return preparing;
+        return !preparing.isEmpty()
+                && ((Boolean) preparing.peek()).booleanValue();
     }
 
     /**
@@ -383,14 +387,14 @@ public class EvaluationVisitor extends VisitorObject {
                     MCodeUtilities.write("" + Code.WHI + Code.DELIM
                             + condcounter + Code.DELIM + Code.TRUE + Code.DELIM
                             + round + Code.DELIM
-                            + MCodeUtilities.locationToString(node.getBody()));
+                            + MCodeGenerator.locationToString(node.getBody()));
                     node.getBody().acceptVisitor(this);
                     condcounter = counter;
                     round++;
                 } catch (ContinueException e) {
                     MCodeUtilities.write("" + Code.CONT + Code.DELIM + Code.WHI
                             + Code.DELIM
-                            + MCodeUtilities.locationToString(node.getBody()));
+                            + MCodeGenerator.locationToString(node.getBody()));
                     condcounter = counter;
                     // 'continue' statement management
                     if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
@@ -402,7 +406,7 @@ public class EvaluationVisitor extends VisitorObject {
             // 'break' statement management
             MCodeUtilities.write("" + Code.BR + Code.DELIM + Code.WHI
                     + Code.DELIM
-                    + MCodeUtilities.locationToString(node.getBody()));
+                    + MCodeGenerator.locationToString(node.getBody()));
             breakc = true;
             if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
                 throw e;
@@ -411,7 +415,7 @@ public class EvaluationVisitor extends VisitorObject {
         if (!breakc)
             MCodeUtilities.write("" + Code.WHI + Code.DELIM + condcounter
                     + Code.DELIM + Code.FALSE + Code.DELIM + round + Code.DELIM
-                    + MCodeUtilities.locationToString(node.getBody()));
+                    + MCodeGenerator.locationToString(node.getBody()));
 
         return null;
     }
@@ -458,7 +462,7 @@ public class EvaluationVisitor extends VisitorObject {
                                 + Code.DELIM
                                 + round
                                 + Code.DELIM
-                                + MCodeUtilities.locationToString(node
+                                + MCodeGenerator.locationToString(node
                                         .getBody()));
                         node.getBody().acceptVisitor(this);
                         condcounter = counter;
@@ -482,7 +486,7 @@ public class EvaluationVisitor extends VisitorObject {
                 // 'break' statement management
                 MCodeUtilities.write("" + Code.BR + Code.DELIM + Code.FOR
                         + Code.DELIM
-                        + MCodeUtilities.locationToString(node.getBody()));
+                        + MCodeGenerator.locationToString(node.getBody()));
                 breakc = true;
                 if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
                     throw e;
@@ -495,7 +499,7 @@ public class EvaluationVisitor extends VisitorObject {
                 MCodeUtilities.write("" + Code.FOR + Code.DELIM + condcounter
                         + Code.DELIM + Code.FALSE + Code.DELIM + round
                         + Code.DELIM
-                        + MCodeUtilities.locationToString(node.getBody()));
+                        + MCodeGenerator.locationToString(node.getBody()));
             }
             MCodeUtilities.write(Code.SCOPE + Code.DELIM + "0");
         }
@@ -519,7 +523,7 @@ public class EvaluationVisitor extends VisitorObject {
                 MCodeUtilities.write("" + Code.DO + Code.DELIM + condcounter
                         + Code.DELIM + Code.TRUE + Code.DELIM + round
                         + Code.DELIM
-                        + MCodeUtilities.locationToString(node.getBody()));
+                        + MCodeGenerator.locationToString(node.getBody()));
 
                 try {
                     node.getBody().acceptVisitor(this);
@@ -538,7 +542,7 @@ public class EvaluationVisitor extends VisitorObject {
             // 'break' statement management
             MCodeUtilities.write("" + Code.BR + Code.DELIM + Code.DO
                     + Code.DELIM
-                    + MCodeUtilities.locationToString(node.getBody()));
+                    + MCodeGenerator.locationToString(node.getBody()));
             breakc = true;
 
             if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
@@ -548,7 +552,7 @@ public class EvaluationVisitor extends VisitorObject {
         if (!breakc)
             MCodeUtilities.write("" + Code.DO + Code.DELIM + condcounter
                     + Code.DELIM + Code.FALSE + Code.DELIM + round + Code.DELIM
-                    + MCodeUtilities.locationToString(node.getBody()));
+                    + MCodeGenerator.locationToString(node.getBody()));
 
         return null;
     }
@@ -566,7 +570,7 @@ public class EvaluationVisitor extends VisitorObject {
             boolean processed = false;
 
             MCodeUtilities.write("" + Code.SWITCHB + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             long selectorCounter = counter;
 
@@ -606,7 +610,7 @@ public class EvaluationVisitor extends VisitorObject {
                             + Code.DELIM
                             + switchBlockCounter
                             + Code.DELIM
-                            + MCodeUtilities.locationToString(sc
+                            + MCodeGenerator.locationToString(sc
                                     .getExpression()));
 
                     // When a matching label is found, interpret all the
@@ -634,7 +638,7 @@ public class EvaluationVisitor extends VisitorObject {
 
                 MCodeUtilities.write("" + Code.SWIBF + Code.DELIM
                         + selectorCounter + Code.DELIM + "-1" + Code.DELIM
-                        + MCodeUtilities.locationToString(sc));
+                        + MCodeGenerator.locationToString(sc));
 
                 for (;;) {
 
@@ -657,7 +661,7 @@ public class EvaluationVisitor extends VisitorObject {
         } catch (BreakException e) {
             // 'break' statement management
             MCodeUtilities.write("" + Code.BR + Code.DELIM + Code.SWITCH
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
             breakc = true;
             if (e.isLabeled()) {
                 throw e;
@@ -666,7 +670,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         if (!breakc)
             MCodeUtilities.write("" + Code.SWITCH + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
         return null;
     }
@@ -806,7 +810,7 @@ public class EvaluationVisitor extends VisitorObject {
 
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.R
                     + Code.DELIM + l.toString() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             o = node.getExpression().acceptVisitor(this); //
             String value = MCodeUtilities.getValue(o);
@@ -821,7 +825,7 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.R + Code.DELIM + l.toString()
                     + Code.DELIM + auxcounter + Code.DELIM + value + Code.DELIM
                     + typeString + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             throw new ReturnException("return.statement", o, node);
             // If there is nothing to return we indicate this with the
@@ -830,12 +834,12 @@ public class EvaluationVisitor extends VisitorObject {
 
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.R
                     + Code.DELIM + Code.NO_REFERENCE + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             MCodeUtilities.write("" + Code.R + Code.DELIM + (counter++)
                     + Code.DELIM + Code.NO_REFERENCE + Code.DELIM
                     + Code.UNKNOWN + Code.DELIM + Void.TYPE.getName()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
 
             throw new ReturnException("return.statement", node);
         }
@@ -852,7 +856,7 @@ public class EvaluationVisitor extends VisitorObject {
 
             MCodeUtilities.write("" + Code.IFT + Code.DELIM + condcounter
                     + Code.DELIM + Code.TRUE + Code.DELIM
-                    + MCodeUtilities.locationToString(node.getThenStatement()));
+                    + MCodeGenerator.locationToString(node.getThenStatement()));
 
             node.getThenStatement().acceptVisitor(this);
         } else {
@@ -873,14 +877,14 @@ public class EvaluationVisitor extends VisitorObject {
         if (((Boolean) node.getCondition().acceptVisitor(this)).booleanValue()) {
             MCodeUtilities.write("" + Code.IFTE + Code.DELIM + condcounter
                     + Code.DELIM + Code.TRUE + Code.DELIM
-                    + MCodeUtilities.locationToString(node.getThenStatement()));
+                    + MCodeGenerator.locationToString(node.getThenStatement()));
 
             node.getThenStatement().acceptVisitor(this);
 
         } else {
             MCodeUtilities.write("" + Code.IFTE + Code.DELIM + condcounter
                     + Code.DELIM + Code.FALSE + Code.DELIM
-                    + MCodeUtilities.locationToString(node.getElseStatement()));
+                    + MCodeGenerator.locationToString(node.getElseStatement()));
 
             node.getElseStatement().acceptVisitor(this);
         }
@@ -925,11 +929,11 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.L + Code.DELIM + (counter++)
                     + Code.DELIM + node.getValue() + Code.DELIM
                     + Code.REFERENCE + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
         } else {
             MCodeUtilities.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
                     + node.getValue() + Code.DELIM + node.getType().getName()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
         }
 
         return node.getValue();
@@ -962,13 +966,13 @@ public class EvaluationVisitor extends VisitorObject {
         MCodeUtilities.write("" + Code.VD + Code.DELIM + node.getName()
                 + Code.DELIM + auxcounter + Code.DELIM + value + Code.DELIM
                 + classname + Code.DELIM + type + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         if (node.getInitializer() != null) {
             long assigncounter = counter++;
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A
                     + Code.DELIM + assigncounter + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             //
 
             auxcounter = counter;
@@ -983,16 +987,20 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + node.getName()
                     //+ node.getRepresentation()
                     + Code.DELIM + value + Code.DELIM + classname // c.getName()
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             value = MCodeUtilities.getValue(o);
 
+            MCodeGenerator.generateCodeA(assigncounter, auxcounter, auxcounter2, value, classname, MCodeGenerator.locationToString(node));
+
+            /*
             MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                     + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                     + Code.DELIM + value
                     //+ o.toString()
                     + Code.DELIM + classname + Code.DELIM //c.getName() + Code.DELIM
                     + MCodeUtilities.locationToString(node));
-
+            */
+            
             if (node.isFinal()) {
                 context.setConstant(node.getName(), o);
             } else {
@@ -1008,25 +1016,6 @@ public class EvaluationVisitor extends VisitorObject {
             }
         }
 
-        // } else {
-        //             if (node.isFinal()) {
-
-        //                 context.setConstant(node.getName(), UninitializedObject.INSTANCE);
-        //                 type=Code.FINAL;
-
-        //             } else {
-
-        //                 context.set(node.getName(), UninitializedObject.INSTANCE);
-        //                 type=Code.NOT_FINAL;
-
-        //             }
-        //             value=Code.UNKNOWN;
-        //             auxcounter=Code.NO_REFERENCE;
-        //         }
-
-        //         ECodeUtilities.write(""+Code.VD+Code.DELIM+node.getName()+Code.DELIM+auxcounter+
-        //                    Code.DELIM+value+Code.DELIM+c.getName()+Code.DELIM+type+
-        //                    Code.DELIM+locationToString(node));
         return null;
     }
 
@@ -1042,13 +1031,12 @@ public class EvaluationVisitor extends VisitorObject {
         counter++;
 
         long objectCounter = counter;
-        
+
         //Jeliot 3 modification
-        if (c.isArray()){
-        	MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
-        						 + Code.AL + Code.DELIM 
-        						 + fieldCounter + Code.DELIM  
-        						 + MCodeUtilities.locationToString(node));
+        if (c.isArray()) {
+            MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AL
+                    + Code.DELIM + fieldCounter + Code.DELIM
+                    + MCodeGenerator.locationToString(node));
         }
         // Evaluate the object
         Object obj = node.getExpression().acceptVisitor(this);
@@ -1074,7 +1062,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + objectCounter + Code.DELIM + f.getName()
                     + Code.DELIM + objectValue + Code.DELIM
                     + f.getType().getName() + Code.DELIM + f.getModifiers()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
             /*
              * if (value != null) { MCodeUtilities.write("" + Code.OFA +
              * Code.DELIM + fieldCounter + Code.DELIM + objectCounter +
@@ -1103,7 +1091,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + objectCounter + Code.DELIM + "length"
                     + Code.DELIM + integer.toString() + Code.DELIM
                     + int.class.getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             return integer;
         }
     }
@@ -1143,7 +1131,7 @@ public class EvaluationVisitor extends VisitorObject {
                             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
                                     + Code.OUTPUT + Code.DELIM + outputCounter
                                     + Code.DELIM
-                                    + MCodeUtilities.locationToString(node));
+                                    + MCodeGenerator.locationToString(node));
                             Expression exp = (Expression) it.next();
 
                             args[i] = MCodeUtilities
@@ -1167,14 +1155,14 @@ public class EvaluationVisitor extends VisitorObject {
                                     //To indicate newline or not
                                     + (m.getName().equals("println") ? "1"
                                             : "0") + Code.DELIM
-                                    + MCodeUtilities.locationToString(node));
+                                    + MCodeGenerator.locationToString(node));
                             i++;
                         }
                     } else {
                         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
                                 + Code.OUTPUT + Code.DELIM + Code.NO_REFERENCE
                                 + Code.DELIM
-                                + MCodeUtilities.locationToString(node));
+                                + MCodeGenerator.locationToString(node));
                         MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
                                 + Code.NO_REFERENCE + Code.DELIM + "System.out"
                                 + Code.DELIM + m.getName() + Code.DELIM + ""
@@ -1183,7 +1171,7 @@ public class EvaluationVisitor extends VisitorObject {
                                 //To indicate newline or not
                                 + (m.getName().equals("println") ? "1" : "0")
                                 + Code.DELIM
-                                + MCodeUtilities.locationToString(node));
+                                + MCodeGenerator.locationToString(node));
                     }
                 }
                 return null;
@@ -1216,7 +1204,7 @@ public class EvaluationVisitor extends VisitorObject {
                             + m.getName() + Code.DELIM + larg.size()
                             + Code.DELIM + objectCounter + Code.DELIM
                             + m.getDeclaringClass().getName() + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
 
                 } else {
 
@@ -1224,7 +1212,7 @@ public class EvaluationVisitor extends VisitorObject {
                             + m.getName() + Code.DELIM + "0" + Code.DELIM
                             + objectCounter + Code.DELIM
                             + m.getDeclaringClass().getName() + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
                 }
 
                 // Fill the arguments
@@ -1239,7 +1227,7 @@ public class EvaluationVisitor extends VisitorObject {
 
                         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
                                 + Code.P + Code.DELIM + counter + Code.DELIM
-                                + MCodeUtilities.locationToString(node));
+                                + MCodeGenerator.locationToString(node));
                         //arguments construction
                         auxcounter = counter;
                         Object p = ((Expression) it.next()).acceptVisitor(this);
@@ -1271,10 +1259,10 @@ public class EvaluationVisitor extends VisitorObject {
 
                         MCodeUtilities.write(Code.PARAMETERS
                                 + Code.DELIM
-                                + MCodeUtilities.parameterArrayToString(m
+                                + MCodeGenerator.parameterArrayToString(m
                                         .getParameterTypes()));
                         MCodeUtilities.write(Code.MD + Code.DELIM
-                                + MCodeUtilities.locationToString(node));
+                                + MCodeGenerator.locationToString(node));
 
                         if (!m.getReturnType().getName().equals(
                                 Void.TYPE.getName())) {
@@ -1283,7 +1271,7 @@ public class EvaluationVisitor extends VisitorObject {
                             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
                                     + Code.R + Code.DELIM + l.toString()
                                     + Code.DELIM
-                                    + MCodeUtilities.locationToString(node));
+                                    + MCodeGenerator.locationToString(node));
 
                             // Don't try this with objects, foreign method calls
                             // don't provide enough info to handle them
@@ -1294,13 +1282,13 @@ public class EvaluationVisitor extends VisitorObject {
                             MCodeUtilities.write(Code.L + Code.DELIM
                                     + (counter++) + Code.DELIM + value
                                     + Code.DELIM + className + Code.DELIM
-                                    + MCodeUtilities.locationToString(node));
+                                    + MCodeGenerator.locationToString(node));
 
                             MCodeUtilities.write("" + Code.R + Code.DELIM
                                     + l.toString() + Code.DELIM + auxcounter
                                     + Code.DELIM + value + Code.DELIM
                                     + className + Code.DELIM
-                                    + MCodeUtilities.locationToString(node));
+                                    + MCodeGenerator.locationToString(node));
 
                         }
 
@@ -1354,13 +1342,13 @@ public class EvaluationVisitor extends VisitorObject {
         try {
             Object o = f.get(null);
             String value = MCodeUtilities.getValue(o);
-             // fixed:  added modifiers to code
+            // fixed:  added modifiers to code
             MCodeUtilities.write(Code.SFA + Code.DELIM + (counter++)
                     + Code.DELIM + f.getDeclaringClass().getName() + Code.DELIM
                     + f.getName() + Code.DELIM + value + Code.DELIM
                     + f.getType().getName() + Code.DELIM + f.getModifiers()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
-            
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
+
             return o;
         } catch (NullPointerException e) {
             node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { f
@@ -1415,7 +1403,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM
                 + MCodeUtilities.getFullQualifiedClassname(thisObject
                         .getClass()) + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         if (larg != null) {
 
@@ -1424,7 +1412,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + larg.size() + Code.DELIM + objectCounter
                     + Code.DELIM
                     + m.getDeclaringClass().getSuperclass().getName()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
 
         } else {
 
@@ -1433,7 +1421,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + "0" + Code.DELIM + objectCounter
                     + Code.DELIM
                     + m.getDeclaringClass().getSuperclass().getName()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
             //0 arguments
         }
         // Fill the arguments
@@ -1446,7 +1434,7 @@ public class EvaluationVisitor extends VisitorObject {
             while (it.hasNext()) {
                 MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
                         + Code.DELIM + counter + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
                 //arguments construction
                 auxcounter = counter;
                 args[i] = ((Expression) it.next()).acceptVisitor(this);
@@ -1467,17 +1455,17 @@ public class EvaluationVisitor extends VisitorObject {
 
                 MCodeUtilities.write(Code.PARAMETERS
                         + Code.DELIM
-                        + MCodeUtilities.parameterArrayToString(m
+                        + MCodeGenerator.parameterArrayToString(m
                                 .getParameterTypes()));
                 MCodeUtilities.write(Code.MD + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
 
                 if (!m.getReturnType().getName().equals(Void.TYPE.getName())) {
 
                     long auxcounter = counter;
                     MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.R
                             + Code.DELIM + l.toString() + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
 
                     // Don't try this with objects, foreign method calls
                     // don't provide enough info to handle them
@@ -1488,13 +1476,13 @@ public class EvaluationVisitor extends VisitorObject {
                     MCodeUtilities.write(Code.L + Code.DELIM + (counter++)
                             + Code.DELIM + value + Code.DELIM + className
                             + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
 
                     MCodeUtilities.write("" + Code.R + Code.DELIM
                             + l.toString() + Code.DELIM + auxcounter
                             + Code.DELIM + value + Code.DELIM + className
                             + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
 
                 }
 
@@ -1565,7 +1553,7 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.INPUTTED + Code.DELIM + inputCounter
                     + Code.DELIM + result + Code.DELIM
                     + m.getReturnType().getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             if (prompt != null && prompt.length() > 0) {
                 inputHandler.out(counter, "println", result.toString(), node);
@@ -1587,7 +1575,7 @@ public class EvaluationVisitor extends VisitorObject {
                     MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
                             + Code.OUTPUT + Code.DELIM + outputCounter
                             + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
                     args[i] = ((Expression) it.next()).acceptVisitor(this);
                     MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
                             + outputCounter + Code.DELIM
@@ -1596,7 +1584,7 @@ public class EvaluationVisitor extends VisitorObject {
                             + MCodeUtilities.getValue(args[i]) + Code.DELIM
                             + typs[i].getName() + Code.DELIM + "1" //BREAKLINE
                             + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
                     i++;
                 }
                 //Exit output function!!!
@@ -1611,13 +1599,13 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.SMC + Code.DELIM + m.getName()
                     + Code.DELIM + m.getDeclaringClass().getName() + Code.DELIM
                     + larg.size() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
         } else {
 
             MCodeUtilities.write("" + Code.SMC + Code.DELIM + m.getName()
                     + Code.DELIM + m.getDeclaringClass().getName() + Code.DELIM
-                    + "0" + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + "0" + Code.DELIM + MCodeGenerator.locationToString(node));
             //0 arguments
         }
 
@@ -1649,7 +1637,7 @@ public class EvaluationVisitor extends VisitorObject {
                 }
                 MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
                         + Code.DELIM + counter + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
                 //arguments construction
                 auxcounter = counter;
                 args[i] = ((Expression) it.next()).acceptVisitor(this);
@@ -1670,17 +1658,17 @@ public class EvaluationVisitor extends VisitorObject {
 
                 MCodeUtilities.write(Code.PARAMETERS
                         + Code.DELIM
-                        + MCodeUtilities.parameterArrayToString(m
+                        + MCodeGenerator.parameterArrayToString(m
                                 .getParameterTypes()));
                 MCodeUtilities.write(Code.MD + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
 
                 if (!m.getReturnType().getName().equals(Void.TYPE.getName())) {
 
                     long auxcounter = counter;
                     MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.R
                             + Code.DELIM + l.toString() + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
                     // Don't try this with objects, foreign method calls don't
                     // provide enough info to handle them
                     //TODO: How to handle objects from foreign method calls.
@@ -1690,13 +1678,13 @@ public class EvaluationVisitor extends VisitorObject {
                     MCodeUtilities.write("" + Code.L + Code.DELIM + (counter++)
                             + Code.DELIM + value + Code.DELIM + className
                             + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
 
                     MCodeUtilities.write("" + Code.R + Code.DELIM
                             + l.toString() + Code.DELIM + auxcounter
                             + Code.DELIM + value + Code.DELIM + className
                             + Code.DELIM
-                            + MCodeUtilities.locationToString(node));
+                            + MCodeGenerator.locationToString(node));
                 }
 
             } else {
@@ -1736,37 +1724,50 @@ public class EvaluationVisitor extends VisitorObject {
         long assigncounter = counter++;
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        
-        
-        setPreparing();
-        Node ln = node.getLeftExpression();
-        LeftHandSideModifier mod = NodeProperties.getModifier(ln);
-        mod.prepare(this, context);
-        unsetPreparing();
-        long auxcounter = counter;
-        
-        
-        Object val = node.getRightExpression().acceptVisitor(this);
+                + MCodeGenerator.locationToString(node));
 
         MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
 
         long auxcounter2 = counter;
 
-        evaluating = false;
-        node.getLeftExpression().acceptVisitor(this);
-        evaluating = true;
+        /*
+         //setPreparing();
+         Node ln = node.getLeftExpression();
+         LeftHandSideModifier mod = NodeProperties.getModifier(ln);
+         mod.prepare(this, context);
+         //unsetPreparing();
+         */
+
+        Node left = node.getLeftExpression();
+        LeftHandSideModifier mod = NodeProperties.getModifier(left);
+        Object v = prepareLeftHandSideModifier(mod, left);
+
+        /*
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         node.getLeftExpression().acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
+        
+        long auxcounter = counter;
+
+        Object val = node.getRightExpression().acceptVisitor(this);
+
         val = performCast(NodeProperties.getType(node), val);
         mod.modify(context, val);
         String value = MCodeUtilities.getValue(val);
 
+        MCodeGenerator.generateCodeA(assigncounter, auxcounter, auxcounter2, value, node);
+        
+        /*
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + value +
                 //val.toString()+
                 Code.DELIM + NodeProperties.getType(node).getName()
                 + Code.DELIM + MCodeUtilities.locationToString(node));
-
+        */
+        
         return val;
     }
 
@@ -1805,7 +1806,7 @@ public class EvaluationVisitor extends VisitorObject {
         MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                 + Code.DELIM + node.getRepresentation() + Code.DELIM + value
                 + Code.DELIM + MCodeUtilities.getFullQualifiedClassname(c)
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + Code.DELIM + MCodeGenerator.locationToString(node));
 
         return result;
     }
@@ -1818,7 +1819,6 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(QualifiedName node) {
         if (evaluating) {
-
             Object result = context.get(node.getRepresentation());
             Class c = NodeProperties.getType(node);
 
@@ -1832,7 +1832,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + node.getRepresentation() + Code.DELIM
                     + MCodeUtilities.getValue(result) + Code.DELIM
                     + MCodeUtilities.getFullQualifiedClassname(c) + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             return result;
         } else {
@@ -1876,14 +1876,14 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.SA + Code.DELIM
                     + simpleAllocationCounter + Code.DELIM + declaringClass
                     + Code.DELIM + consName + Code.DELIM + larg.size()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
 
         } else {
 
             MCodeUtilities.write("" + Code.SA + Code.DELIM
                     + simpleAllocationCounter + Code.DELIM + declaringClass
                     + Code.DELIM + consName + Code.DELIM + "0" + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             //0 arguments
         }
 
@@ -1906,7 +1906,7 @@ public class EvaluationVisitor extends VisitorObject {
 
                 MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
                         + Code.DELIM + counter + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
                 //arguments construction
                 auxcounter = counter;
                 args[i] = ((Expression) it.next()).acceptVisitor(this);
@@ -1961,7 +1961,7 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.SAC + Code.DELIM
                     + simpleAllocationCounter + Code.DELIM
                     + MCodeUtilities.getValue(result) + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             //0 arguments
             MCodeUtilities.popConstructorInfo();
             MCodeUtilities.previousClassStack.pop();
@@ -2042,7 +2042,8 @@ public class EvaluationVisitor extends VisitorObject {
             Class c = NodeProperties.getComponentType(node);
             c = Array.newInstance(c, 0).getClass();
             //Allow a second degree of freedom (new int[4][][]) (Jeliot 3 only supports 3D arrays
-            c = (node.getDimension() == (dims.length + 2))? Array.newInstance(c, 0).getClass():c; 
+            c = (node.getDimension() == (dims.length + 2)) ? Array.newInstance(
+                    c, 0).getClass() : c;
             newArray = Array.newInstance(c, dims);
         } else {
             newArray = Array.newInstance(NodeProperties.getComponentType(node),
@@ -2050,7 +2051,8 @@ public class EvaluationVisitor extends VisitorObject {
         }
         //TODO: get all the hashcodes of the different dimensions from the array
 
-        String subArrayHashCodes = MCodeUtilities.getSubArrayHashCodes(newArray);
+        String subArrayHashCodes = MCodeUtilities
+                .getSubArrayHashCodes(newArray);
 
         //System.out.println("Array allocator");
 
@@ -2058,11 +2060,10 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + MCodeUtilities.getValue(newArray) /*Integer.toHexString(newArray.hashCode())*/
                 + Code.DELIM + NodeProperties.getComponentType(node).getName()
                 + Code.DELIM + dims.length + Code.DELIM
-                + MCodeUtilities.arrayToString(dimExpressionReferences)
-                + Code.DELIM + dimensions + Code.DELIM
-                + node.getDimension() + Code.DELIM
-                + subArrayHashCodes + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.arrayToString(dimExpressionReferences)
+                + Code.DELIM + dimensions + Code.DELIM + node.getDimension()
+                + Code.DELIM + subArrayHashCodes + Code.DELIM
+                + MCodeGenerator.locationToString(node));
 
         return newArray;
     }
@@ -2082,11 +2083,11 @@ public class EvaluationVisitor extends VisitorObject {
         long sizeCounter = counter++;
         MCodeUtilities.write("" + Code.L + Code.DELIM + sizeCounter
                 + Code.DELIM + size + Code.DELIM + int.class.getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
+                + Code.DELIM + MCodeGenerator.locationToString(node));
         Long[] dimExpressionReferences = { new Long(sizeCounter) };
         String arrayHashCode = Integer.toHexString(System
                 .identityHashCode(result));
-        String dimensionsReferences = MCodeUtilities
+        String dimensionsReferences = MCodeGenerator
                 .arrayToString(dimExpressionReferences);
         String componentType = ((Class) node.getElementType().getProperty(
                 "type")).getName();
@@ -2102,12 +2103,11 @@ public class EvaluationVisitor extends VisitorObject {
         MCodeUtilities.write("" + Code.AA + Code.DELIM + arrayAllocationCounter
                 + Code.DELIM + arrayHashCode + Code.DELIM + componentType
                 + Code.DELIM + dimensions + Code.DELIM + dimensionsReferences
-                + Code.DELIM + size + Code.DELIM
-                + dimensions + Code.DELIM 
-                + MCodeUtilities.locationToString(node));
+                + Code.DELIM + size + Code.DELIM + dimensions + Code.DELIM
+                + MCodeGenerator.locationToString(node));
 
         MCodeUtilities.write("" + Code.AIBEGIN + Code.DELIM + size + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         Iterator it = node.getCells().iterator();
         int i = 0;
@@ -2122,11 +2122,11 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + i + Code.DELIM + elementCounter + Code.DELIM
                     + value + Code.DELIM + o.getClass().getName() + Code.DELIM
                     + isLiteral + Code.DELIM
-                    + MCodeUtilities.locationToString(expression));
+                    + MCodeGenerator.locationToString(expression));
             Array.set(result, i++, o);
         }
         MCodeUtilities.write("" + Code.AI + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return result;
     }
 
@@ -2153,7 +2153,7 @@ public class EvaluationVisitor extends VisitorObject {
             arrayCellReferencesList = new ArrayList();
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AAC
                     + Code.DELIM + arrayAccessCounter + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             nameCounter = counter;
             arrayCellNumbersStack.push(arrayCellNumbersList);
             arrayCellReferencesStack.push(arrayCellReferencesList);
@@ -2168,11 +2168,10 @@ public class EvaluationVisitor extends VisitorObject {
 
         long cellCounter = counter;
         // This way we allow array accesses inside cell numbers
-
         first = true;
-        evaluating = false;
+        //evaluating = false;
         Object o = node.getCellNumber().acceptVisitor(this);
-        evaluating = true;
+        //evaluating = true;
         first = false;
 
         if (o instanceof Character) {
@@ -2218,13 +2217,13 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM
                     + arrayCellNumbersList.size()
                     + Code.DELIM
-                    + MCodeUtilities.arrayToString(arrayCellReferencesList
+                    + MCodeGenerator.arrayToString(arrayCellReferencesList
                             .toArray())
                     + Code.DELIM
-                    + MCodeUtilities.arrayToString(arrayCellNumbersList
+                    + MCodeGenerator.arrayToString(arrayCellNumbersList
                             .toArray()) + Code.DELIM + resultString
                     + Code.DELIM + NodeProperties.getType(node).getName()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
 
             /*
              * ECodeUtilities.write("Array access of name "+ nameCounter +" with
@@ -2289,11 +2288,11 @@ public class EvaluationVisitor extends VisitorObject {
      *
      * @param node the node to visit
      */
-    
-   public Object visit(ClassAllocation node) {
+
+    public Object visit(ClassAllocation node) {
         List larg = node.getArguments();
         Object[] args = Constants.EMPTY_OBJECT_ARRAY;
-        
+
         // Fill the arguments
         if (larg != null) {
             args = new Object[larg.size()];
@@ -2307,7 +2306,6 @@ public class EvaluationVisitor extends VisitorObject {
         return context.invokeConstructor(node, args);
     }
 
-
     /**
      * Visits a NotExpression
      *
@@ -2320,14 +2318,14 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.NO + Code.DELIM + (counter++)
                     + Code.DELIM + Code.NO_REFERENCE + Code.DELIM
                     + node.getProperty(NodeProperties.VALUE) + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             return node.getProperty(NodeProperties.VALUE);
         } else {
             long notcounter = counter++;
             long auxcounter = counter;
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.NO
                     + Code.DELIM + notcounter + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
             Boolean b = (Boolean) node.getExpression().acceptVisitor(this);
@@ -2335,7 +2333,7 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.NO + Code.DELIM + notcounter
                     + Code.DELIM + auxcounter + Code.DELIM + !b.booleanValue()
                     + Code.DELIM + NodeProperties.getType(node).getName()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
 
             if (b.booleanValue()) {
                 return Boolean.FALSE;
@@ -2357,7 +2355,7 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.NO + Code.DELIM + (counter++)
                     + Code.DELIM + Code.NO_REFERENCE + Code.DELIM
                     + node.getProperty(NodeProperties.VALUE) + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             return node.getProperty(NodeProperties.VALUE);
         } else {
@@ -2365,7 +2363,7 @@ public class EvaluationVisitor extends VisitorObject {
             long auxcounter = counter;
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.COMP
                     + Code.DELIM + compcounter + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
             Class c = NodeProperties.getType(node);
@@ -2374,19 +2372,20 @@ public class EvaluationVisitor extends VisitorObject {
             if (o instanceof Character) {
                 o = new Integer(((Character) o).charValue());
             }
+
             if (c == int.class) {
                 MCodeUtilities.write("" + Code.COMP + Code.DELIM + compcounter
                         + Code.DELIM + auxcounter + Code.DELIM
                         + (~((Number) o).intValue()) + Code.DELIM
                         + NodeProperties.getType(node).getName() + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
                 return new Integer(~((Number) o).intValue());
             } else {
                 MCodeUtilities.write("" + Code.COMP + Code.DELIM + compcounter
                         + Code.DELIM + auxcounter + Code.DELIM
                         + (~((Number) o).longValue()) + Code.DELIM
                         + NodeProperties.getType(node).getName() + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
                 return new Long(~((Number) o).longValue());
             }
 
@@ -2404,7 +2403,7 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.L + Code.DELIM + (counter++)
                     + Code.DELIM + node.getProperty(NodeProperties.VALUE)
                     + Code.DELIM + NodeProperties.getType(node).getName()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
 
             return node.getProperty(NodeProperties.VALUE);
         } else {
@@ -2412,7 +2411,7 @@ public class EvaluationVisitor extends VisitorObject {
             long auxcounter = counter;
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.PLUS
                     + Code.DELIM + pluscounter + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
             Class c = NodeProperties.getType(node);
@@ -2422,7 +2421,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + auxcounter + Code.DELIM
                     + MCodeUtilities.getValue(o) + Code.DELIM
                     + NodeProperties.getType(node).getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             return o;
         }
@@ -2441,7 +2440,7 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.L + Code.DELIM + (counter++)
                     + Code.DELIM + node.getProperty(NodeProperties.VALUE)
                     + Code.DELIM + NodeProperties.getType(node).getName()
-                    + Code.DELIM + MCodeUtilities.locationToString(node));
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
 
             return node.getProperty(NodeProperties.VALUE);
 
@@ -2452,7 +2451,7 @@ public class EvaluationVisitor extends VisitorObject {
 
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.MINUS
                     + Code.DELIM + minuscounter + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
@@ -2464,7 +2463,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + auxcounter + Code.DELIM
                     + MCodeUtilities.getValue(o) + Code.DELIM
                     + NodeProperties.getType(node).getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             return o;
         }
         /*
@@ -2491,7 +2490,7 @@ public class EvaluationVisitor extends VisitorObject {
 
             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AE
                     + Code.DELIM + addcounter + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
             Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -2508,7 +2507,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                     + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                     + NodeProperties.getType(node).getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
             return o;
         }
     }
@@ -2521,7 +2520,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AE
                 + Code.DELIM + addcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         String str1 = "";
         Node exp = node.getLeftExpression();
@@ -2543,7 +2542,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + o.toString() + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return o;
 
     }
@@ -2555,33 +2554,29 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(AddAssignExpression node) {
         //Simulate that a+=3-b -->> a= a+ (3-b)
-        //Added 2 evaluations to left hand side ...
+
         long assigncounter = counter++;
         long assignauxcounter = counter;
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        //
+                + MCodeGenerator.locationToString(node));
+
         //Start ad expression
         long addcounter = counter++;
         long auxcounter = counter;
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AE
                 + Code.DELIM + addcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the add expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
-        long auxcounter2 = counter;
+        Object lhs = prepareLeftHandSideModifier(mod, left);
 
+        long auxcounter2 = counter;
         // Get right hand side for the add expression
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
         Object val = node.getRightExpression().acceptVisitor(this);
@@ -2597,23 +2592,30 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        //long assignauxcounter2 = counter;
+        //MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+
+        //boolean evaluatingPreviously = evaluating;
+        //evaluating = false;
+        //left.acceptVisitor(this);
+        //evaluating = evaluatingPreviously;
 
         // Modify the variable and return
         mod.modify(context, result);
+        
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+
+        /*
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
+                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeUtilities.locationToString(node));
-
+        */
+        
         return result;
     }
 
@@ -2630,7 +2632,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.SE
                 + Code.DELIM + substractcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -2645,7 +2647,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return o;
 
@@ -2662,25 +2664,33 @@ public class EvaluationVisitor extends VisitorObject {
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        //
+                + MCodeGenerator.locationToString(node));
+
         //Start ad expression
         long subcounter = counter++;
         long auxcounter = counter;
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.SE
                 + Code.DELIM + subcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the subtract expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
+        Object lhs = prepareLeftHandSideModifier(mod, left);
+
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
+
         long auxcounter2 = counter;
 
         // Get right hand side for the subtract expression
@@ -2698,24 +2708,30 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        //long assignauxcounter2 = counter;
+        //MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+        //evaluatingPreviously = evaluating;
+        //evaluating = false;
+        //left.acceptVisitor(this);
+        //evaluating = evaluatingPreviously;
 
         // Modify the variable and return
         mod.modify(context, result);
+        
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+        /*
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
+                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeUtilities.locationToString(node));
+        */
 
         return result;
+        
         /*
          * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
          * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
@@ -2744,7 +2760,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.ME
                 + Code.DELIM + multiplycounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -2759,7 +2775,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return o;
 
         /*
@@ -2782,7 +2798,7 @@ public class EvaluationVisitor extends VisitorObject {
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         //
         //Start ad expression
         long multcounter = counter++;
@@ -2790,17 +2806,25 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.ME
                 + Code.DELIM + multcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the add expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
+        Object lhs = prepareLeftHandSideModifier(mod, left);
+
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
+
         long auxcounter2 = counter;
 
         // Get right hand side for the add expression
@@ -2818,24 +2842,31 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        //long assignauxcounter2 = counter;
+        //MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+        //evaluatingPreviously = evaluating;
+        //evaluating = false;
+        //left.acceptVisitor(this);
+        //evaluating = evaluatingPreviously;
 
         // Modify the variable and return
         mod.modify(context, result);
+        
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+
+        /*
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
+                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeUtilities.locationToString(node));
-
+        */
+        
         return result;
+        
         /*
          * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
          * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
@@ -2863,7 +2894,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.DE
                 + Code.DELIM + dividecounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -2878,7 +2909,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return o;
 
         /*
@@ -2901,7 +2932,7 @@ public class EvaluationVisitor extends VisitorObject {
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         //
         //Start divide expression
         long divcounter = counter++;
@@ -2909,17 +2940,24 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.DE
                 + Code.DELIM + divcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the divide expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
+        Object lhs = prepareLeftHandSideModifier(mod, left);
+
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
+
         long auxcounter2 = counter;
 
         // Get right hand side for the divide expression
@@ -2937,24 +2975,31 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        //long assignauxcounter2 = counter;
+        //MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+        //evaluatingPreviously = evaluating;
+        //evaluating = false;
+        //left.acceptVisitor(this);
+        //evaluating = evaluatingPreviously;
 
         // Modify the variable and return
         mod.modify(context, result);
+        
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+
+        /*
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
+                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeUtilities.locationToString(node));
-
+        */
+        
         return result;
+        
         /*
          * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
          * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
@@ -2983,7 +3028,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.RE
                 + Code.DELIM + remaindercounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -2998,8 +3043,10 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
+        
         return o;
+        
         /*
          * if (node.hasProperty(NodeProperties.VALUE)) {
          *  // The expression is constant return
@@ -3017,13 +3064,13 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(RemainderAssignExpression node) {
         //Simulate that a%=b -->> a= a%b
-        //Added 2 evaluations to left hand side ...
+
         long assigncounter = counter++;
         long assignauxcounter = counter;
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         //
         //Start remainder expression
         long addcounter = counter++;
@@ -3031,17 +3078,24 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.RE
                 + Code.DELIM + addcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the remainder expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
+        Object lhs = prepareLeftHandSideModifier(mod, left);
+
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
         long auxcounter2 = counter;
 
         // Get right hand side for the remainder expression
@@ -3059,23 +3113,29 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        //long assignauxcounter2 = counter;
+        //MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+        //evaluatingPreviously = evaluating;
+        //evaluating = false;
+        //left.acceptVisitor(this);
+        //evaluating = evaluatingPreviously;
 
         // Modify the variable and return
         mod.modify(context, result);
+        
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+
+        /*
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
+                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeUtilities.locationToString(node));
-
+        */
+        
         return result;
 
     }
@@ -3092,7 +3152,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.EE
                 + Code.DELIM + eecounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node leftexp = node.getLeftExpression();
@@ -3111,7 +3171,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + auxcounter + Code.DELIM + auxcounter2 + Code.DELIM
                 + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return o;
     }
@@ -3128,7 +3188,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.NE
                 + Code.DELIM + necounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node leftexp = node.getLeftExpression();
@@ -3147,7 +3207,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + auxcounter + Code.DELIM + auxcounter2 + Code.DELIM
                 + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return o;
     }
@@ -3164,7 +3224,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.LE
                 + Code.DELIM + lecounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -3179,7 +3239,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + auxcounter + Code.DELIM + auxcounter2 + Code.DELIM
                 + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return o;
     }
@@ -3196,7 +3256,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.LQE
                 + Code.DELIM + lqecounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -3211,7 +3271,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return o;
     }
@@ -3229,7 +3289,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.GT
                 + Code.DELIM + gtcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -3244,7 +3304,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + auxcounter + Code.DELIM + auxcounter2 + Code.DELIM
                 + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return o;
     }
@@ -3260,7 +3320,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.GQT
                 + Code.DELIM + gqtcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -3275,7 +3335,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return o;
     }
@@ -3306,9 +3366,8 @@ public class EvaluationVisitor extends VisitorObject {
             Boolean b = (Boolean) node.getConditionExpression().acceptVisitor(
                     this);
             //TODO: There should be a better way to do this. But Assigment is
-            // waiting for the initial counter,
-            // that condition modifies here, and thus we need to reset it after
-            // evaluating the condition
+            // waiting for the initial counter, that condition modifies here, and
+            // thus we need to reset it after evaluating the condition
             counter = condcounter;
             if (b.booleanValue()) {
                 MCodeUtilities.write(""
@@ -3318,7 +3377,7 @@ public class EvaluationVisitor extends VisitorObject {
                         + Code.DELIM
                         + Code.TRUE
                         + Code.DELIM
-                        + MCodeUtilities.locationToString(node
+                        + MCodeGenerator.locationToString(node
                                 .getIfTrueExpression()));
 
                 return node.getIfTrueExpression().acceptVisitor(this);
@@ -3330,7 +3389,7 @@ public class EvaluationVisitor extends VisitorObject {
                         + Code.DELIM
                         + Code.FALSE
                         + Code.DELIM
-                        + MCodeUtilities.locationToString(node
+                        + MCodeGenerator.locationToString(node
                                 .getIfFalseExpression()));
 
                 return node.getIfFalseExpression().acceptVisitor(this);
@@ -3344,23 +3403,43 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(PostIncrement node) {
-
         long postinccounter = counter++;
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.PIE
                 + Code.DELIM + postinccounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        //
+                + MCodeGenerator.locationToString(node));
+
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
-        Node exp = node.getExpression();
         long auxcounter = counter;
 
-        exp.acceptVisitor(this);
-
+        Node exp = node.getExpression();
         LeftHandSideModifier mod = NodeProperties.getModifier(exp);
-        Object v = mod.prepare(this, context);
-        
+        Object v = prepareLeftHandSideModifier(mod, exp);
+
+        /*
+         Node exp = node.getExpression();
+         LeftHandSideModifier mod = NodeProperties.getModifier(exp);
+         Object v = mod.prepare(this, context);
+
+         //This is a hack to prevent increments to be evaluated twice
+         if (!evaluating) {
+         mod.modify(context, v = InterpreterUtilities.subtract(
+         NodeProperties.getType(node), v, InterpreterUtilities.ONE));
+         }
+         */
+
+        /*
+         boolean evaluatingPreviously = evaluating;
+         if (mod instanceof ArrayModifier) {
+         evaluating = false;
+         }
+         exp.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
+
+        //LeftHandSideModifier mod = NodeProperties.getModifier(exp);
+        //Object v = mod.prepare(this, context);
         Object result = InterpreterUtilities.add(NodeProperties.getType(node),
                 v, InterpreterUtilities.ONE);
 
@@ -3370,7 +3449,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM
                 + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return v;
     }
@@ -3384,22 +3463,46 @@ public class EvaluationVisitor extends VisitorObject {
         long preinccounter = counter++;
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.PRIE
                 + Code.DELIM + preinccounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        //
+                + MCodeGenerator.locationToString(node));
+
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
-        Node exp = node.getExpression();
         long auxcounter = counter;
-        exp.acceptVisitor(this);
+
+        Node exp = node.getExpression();
         LeftHandSideModifier mod = NodeProperties.getModifier(exp);
-        Object v = mod.prepare(this, context);
+        Object v = prepareLeftHandSideModifier(mod, exp);
+
+        /*
+         Node exp = node.getExpression();
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(exp);
+         Object v = mod.prepare(this, context);
+
+         //This is a hack to prevent increments to be evaluated twice
+         if (!evaluating) {
+         mod.modify(context, v = InterpreterUtilities.subtract(
+         NodeProperties.getType(node), v, InterpreterUtilities.ONE));
+         }
+         */
+
+        /*
+         boolean evaluatingPreviously = evaluating;
+         if (mod instanceof ArrayModifier) {
+         evaluating = false;
+         }
+         exp.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
+
         mod.modify(context, v = InterpreterUtilities.add(NodeProperties
                 .getType(node), v, InterpreterUtilities.ONE));
+
         MCodeUtilities.write("" + Code.PRIE + Code.DELIM + preinccounter
                 + Code.DELIM + auxcounter + Code.DELIM
                 + MCodeUtilities.getValue(v) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return v;
     }
@@ -3413,16 +3516,36 @@ public class EvaluationVisitor extends VisitorObject {
         long postdeccounter = counter++;
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.PDE
                 + Code.DELIM + postdeccounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        //
+                + MCodeGenerator.locationToString(node));
+
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
-        Node exp = node.getExpression();
         long auxcounter = counter;
-        exp.acceptVisitor(this);
 
+        Node exp = node.getExpression();
         LeftHandSideModifier mod = NodeProperties.getModifier(exp);
-        Object v = mod.prepare(this, context);
+        Object v = prepareLeftHandSideModifier(mod, exp);
+
+        /*
+         Node exp = node.getExpression();
+         LeftHandSideModifier mod = NodeProperties.getModifier(exp);
+         Object v = mod.prepare(this, context);
+         
+         //This is a hack to prevent decrements to be evaluated twice
+         if (!evaluating) {
+         mod.modify(context, v = InterpreterUtilities.add(NodeProperties
+         .getType(node), v, InterpreterUtilities.ONE));
+         }
+
+         long auxcounter = counter;
+         boolean evaluatingPreviously = evaluating;
+         if (mod instanceof ArrayModifier) {
+         evaluating = false;
+         }
+         exp.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
+
         Object result = InterpreterUtilities.subtract(NodeProperties
                 .getType(node), v, InterpreterUtilities.ONE);
 
@@ -3431,7 +3554,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM
                 + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         return v;
     }
@@ -3445,23 +3568,44 @@ public class EvaluationVisitor extends VisitorObject {
         long predeccounter = counter++;
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.PRDE
                 + Code.DELIM + predeccounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        //
+                + MCodeGenerator.locationToString(node));
+
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
-        Node exp = node.getExpression();
         long auxcounter = counter;
-        exp.acceptVisitor(this);
+
+        Node exp = node.getExpression();
         LeftHandSideModifier mod = NodeProperties.getModifier(exp);
-        Object v = mod.prepare(this, context);
+        Object v = prepareLeftHandSideModifier(mod, exp);
+
+        /*
+         Node exp = node.getExpression();
+         LeftHandSideModifier mod = NodeProperties.getModifier(exp);
+         Object v = mod.prepare(this, context);
+
+         //This is a hack to prevent decrements to be evaluated twice
+         if (!evaluating) {
+         mod.modify(context, v = InterpreterUtilities.add(NodeProperties
+         .getType(node), v, InterpreterUtilities.ONE));
+         }
+
+         long auxcounter = counter;
+         boolean evaluatingPreviously = evaluating;
+         if (mod instanceof ArrayModifier) {
+         evaluating = false;
+         }
+         exp.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
 
         mod.modify(context, v = InterpreterUtilities.subtract(NodeProperties
                 .getType(node), v, InterpreterUtilities.ONE));
+
         MCodeUtilities.write("" + Code.PRDE + Code.DELIM + predeccounter
                 + Code.DELIM + auxcounter + Code.DELIM
                 + MCodeUtilities.getValue(v) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return v;
     }
 
@@ -3480,7 +3624,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + auxCounter + Code.DELIM
                     + MCodeUtilities.getValue(o) + Code.DELIM
                     + NodeProperties.getType(node).getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
         }
         return o;
     }
@@ -3495,14 +3639,17 @@ public class EvaluationVisitor extends VisitorObject {
         long bitAndcounter = counter++;
         long auxcounter = counter;
         int expression;
-        if (NodeProperties.getType(node).getName() == "boolean") {
+        if (NodeProperties.getType(node).getName().equals(
+                boolean.class.getName())
+                || NodeProperties.getType(node).getName().equals(
+                        Boolean.class.getName())) {
             expression = Code.AND;
         } else
             expression = Code.BITAND;
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + expression
                 + Code.DELIM + bitAndcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -3517,7 +3664,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return o;
         /*
          *
@@ -3536,38 +3683,48 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(BitAndAssignExpression node) {
         //Simulate that a&=b -->> a= a&b
-        //Added 2 evaluations to left hand side ...
+
         long assigncounter = counter++;
         long assignauxcounter = counter;
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         //
         //Start bit and expression
         long bitAndcounter = counter++;
         long auxcounter = counter;
         int expression;
-        if (NodeProperties.getType(node).getName() == "boolean") {
+        if (NodeProperties.getType(node).getName().equals(
+                boolean.class.getName())
+                || NodeProperties.getType(node).getName().equals(
+                        Boolean.class.getName())) {
             expression = Code.AND;
         } else
             expression = Code.BITAND;
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + expression
                 + Code.DELIM + bitAndcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the bitand expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
-        long auxcounter2 = counter;
+        Object lhs = prepareLeftHandSideModifier(mod, left);
 
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
+
+        long auxcounter2 = counter;
         // Get right hand side for the bitand expression
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
         Object val = node.getRightExpression().acceptVisitor(this);
@@ -3583,22 +3740,29 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        /*
+         long assignauxcounter2 = counter;
+         MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+         evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
 
         // Modify the variable and return
         mod.modify(context, result);
+        
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+        /*
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
+                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeUtilities.locationToString(node));
+        */
 
         return result;
     }
@@ -3614,14 +3778,17 @@ public class EvaluationVisitor extends VisitorObject {
         long auxcounter = counter;
 
         int expression;
-        if (NodeProperties.getType(node).getName() == "boolean") {
+        if (NodeProperties.getType(node).getName().equals(
+                boolean.class.getName())
+                || NodeProperties.getType(node).getName().equals(
+                        Boolean.class.getName())) {
             expression = Code.XOR;
         } else
             expression = Code.BITXOR;
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + expression
                 + Code.DELIM + xOrcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -3636,7 +3803,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return o;
     }
 
@@ -3647,38 +3814,48 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(ExclusiveOrAssignExpression node) {
         //Simulate that a^=b -->> a= a^b
-        //Added 2 evaluations to left hand side ...
+        
         long assigncounter = counter++;
         long assignauxcounter = counter;
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         //
         //Start bit and expression
         long xOrcounter = counter++;
         long auxcounter = counter;
         int expression;
-        if (NodeProperties.getType(node).getName() == "boolean") {
+        if (NodeProperties.getType(node).getName().equals(
+                boolean.class.getName())
+                || NodeProperties.getType(node).getName().equals(
+                        Boolean.class.getName())) {
             expression = Code.XOR;
         } else
             expression = Code.BITXOR;
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + expression
                 + Code.DELIM + xOrcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the bitand expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
-        long auxcounter2 = counter;
+        Object lhs = prepareLeftHandSideModifier(mod, left);
 
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
+
+        long auxcounter2 = counter;
         // Get right hand side for the XOR expression
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
         Object val = node.getRightExpression().acceptVisitor(this);
@@ -3694,23 +3871,30 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        /*
+         long assignauxcounter2 = counter;
+         MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+         evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
 
         // Modify the variable and return
         mod.modify(context, result);
+        
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+        
+        /*
         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
+                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeUtilities.locationToString(node));
-
+        */
         return result;
     }
 
@@ -3725,15 +3909,17 @@ public class EvaluationVisitor extends VisitorObject {
         long auxcounter = counter;
         int expression;
 
-        if (NodeProperties.getType(node).getName() == "boolean") {
+        if (NodeProperties.getType(node).getName().equals(
+                boolean.class.getName())
+                || NodeProperties.getType(node).getName().equals(
+                        Boolean.class.getName())) {
             expression = Code.OR;
-
         } else {
             expression = Code.BITOR;
         }
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + expression
                 + Code.DELIM + bitOrcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -3748,7 +3934,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return o;
     }
 
@@ -3759,20 +3945,23 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(BitOrAssignExpression node) {
         //Simulate that a|=b -->> a= a|b
-        //Added 2 evaluations to left hand side ...
+
         long assigncounter = counter++;
         long assignauxcounter = counter;
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         //
         //Start bitor expression
         long bitOrcounter = counter++;
         long auxcounter = counter;
         int expression;
 
-        if (NodeProperties.getType(node).getName() == "boolean") {
+        if (NodeProperties.getType(node).getName().equals(
+                boolean.class.getName())
+                || NodeProperties.getType(node).getName().equals(
+                        Boolean.class.getName())) {
             expression = Code.OR;
 
         } else {
@@ -3781,19 +3970,26 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + expression
                 + Code.DELIM + bitOrcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the bitor expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
-        long auxcounter2 = counter;
+        Object lhs = prepareLeftHandSideModifier(mod, left);
 
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
+
+        long auxcounter2 = counter;
         // Get right hand side for the bitor expression
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
         Object val = node.getRightExpression().acceptVisitor(this);
@@ -3809,23 +4005,31 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        /*
+         long assignauxcounter2 = counter;
+         MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+         evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
 
         // Modify the variable and return
         mod.modify(context, result);
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
 
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+        /*
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM
+         + auxcounter //assignauxcounter2
+         + Code.DELIM
+         + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
         return result;
     }
 
@@ -3841,7 +4045,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.LSHIFT
                 + Code.DELIM + shiftcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -3856,7 +4060,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return o;
     }
 
@@ -3875,13 +4079,13 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(ShiftLeftAssignExpression node) {
         //Simulate that a<<=b -->> a= a<<b
-        //Added 2 evaluations to left hand side ...
+
         long assigncounter = counter++;
         long assignauxcounter = counter;
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         //
         //Start shift expression
         long shiftcounter = counter++;
@@ -3889,19 +4093,26 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.LSHIFT
                 + Code.DELIM + shiftcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the shift expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
-        long auxcounter2 = counter;
+        Object lhs = prepareLeftHandSideModifier(mod, left);
 
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
+
+        long auxcounter2 = counter;
         // Get right hand side for the shift expression
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
         Object val = node.getRightExpression().acceptVisitor(this);
@@ -3917,23 +4128,30 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        /*
+         long assignauxcounter2 = counter;
+         MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+         evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
 
         // Modify the variable and return
         mod.modify(context, result);
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+        /*
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM
+         + auxcounter //assignauxcounter2
+         + Code.DELIM
+         + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
         return result;
     }
 
@@ -3949,7 +4167,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.RSHIFT
                 + Code.DELIM + shiftcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -3964,7 +4182,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return o;
         /*
          * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
@@ -3982,13 +4200,13 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(ShiftRightAssignExpression node) {
         //Simulate that a>>=b -->> a= a>>b
-        //Added 2 evaluations to left hand side ...
+
         long assigncounter = counter++;
         long assignauxcounter = counter;
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         //
         //Start shift expression
         long shiftcounter = counter++;
@@ -3996,17 +4214,25 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.RSHIFT
                 + Code.DELIM + shiftcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the shift expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
+        Object lhs = prepareLeftHandSideModifier(mod, left);
+
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
+
         long auxcounter2 = counter;
 
         // Get right hand side for the shift expression
@@ -4024,23 +4250,31 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        /*
+         long assignauxcounter2 = counter;
+         MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+         evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
 
         // Modify the variable and return
         mod.modify(context, result);
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
 
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+        /*
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM
+         + auxcounter //assignauxcounter2
+         + Code.DELIM
+         + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
         return result;
     }
 
@@ -4056,7 +4290,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.URSHIFT
                 + Code.DELIM + shiftcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Object lobj = node.getLeftExpression().acceptVisitor(this);
@@ -4071,7 +4305,7 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         return o;
         /*
          * if (node.hasProperty(NodeProperties.VALUE)) { // The expression is
@@ -4090,13 +4324,13 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(UnsignedShiftRightAssignExpression node) {
         //Simulate that a>>>=b -->> a= a>>>b
-        //Added 2 evaluations to left hand side ...
+
         long assigncounter = counter++;
         long assignauxcounter = counter;
         //Start assignment
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A + Code.DELIM
                 + assigncounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         //
         //Start shift expression
         long shiftcounter = counter++;
@@ -4104,17 +4338,25 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.URSHIFT
                 + Code.DELIM + shiftcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         // Get left hand side for the shift expression
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
         Node left = node.getLeftExpression();
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
-
         LeftHandSideModifier mod = NodeProperties.getModifier(left);
-        Object lhs = mod.prepare(this, context);
+        Object lhs = prepareLeftHandSideModifier(mod, left);
+
+        /*
+         Node left = node.getLeftExpression();
+         boolean evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+
+         LeftHandSideModifier mod = NodeProperties.getModifier(left);
+         Object lhs = mod.prepare(this, context);
+         */
+
         long auxcounter2 = counter;
 
         // Get right hand side for the shift expression
@@ -4132,23 +4374,31 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                 + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
-        long assignauxcounter2 = counter;
-        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
-        evaluating = false;
-        left.acceptVisitor(this);
-        evaluating = true;
+        /*
+         long assignauxcounter2 = counter;
+         MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
+         evaluatingPreviously = evaluating;
+         evaluating = false;
+         left.acceptVisitor(this);
+         evaluating = evaluatingPreviously;
+         */
 
         // Modify the variable and return
         mod.modify(context, result);
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM
-                + assignauxcounter2 + Code.DELIM
-                + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
 
+        MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
+                auxcounter /*assignauxcounter2*/, result, node);
+        /*
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM
+         + auxcounter //assignauxcounter2
+         + Code.DELIM
+         + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
         return result;
     }
 
@@ -4163,7 +4413,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AND
                 + Code.DELIM + andcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
 
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
@@ -4175,7 +4425,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + auxcounter + Code.DELIM + Code.NO_REFERENCE
                     + Code.DELIM + Code.FALSE + Code.DELIM
                     + NodeProperties.getType(node).getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             return Boolean.FALSE;
 
@@ -4192,7 +4442,7 @@ public class EvaluationVisitor extends VisitorObject {
                         + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                         + Code.DELIM + Code.TRUE + Code.DELIM
                         + NodeProperties.getType(node).getName() + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
 
                 return Boolean.TRUE;
 
@@ -4202,7 +4452,7 @@ public class EvaluationVisitor extends VisitorObject {
                         + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                         + Code.DELIM + Code.FALSE + Code.DELIM
                         + NodeProperties.getType(node).getName() + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
 
                 return Boolean.FALSE;
             }
@@ -4220,7 +4470,7 @@ public class EvaluationVisitor extends VisitorObject {
         long auxcounter = counter;
         MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.OR
                 + Code.DELIM + orcounter + Code.DELIM
-                + MCodeUtilities.locationToString(node));
+                + MCodeGenerator.locationToString(node));
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
         boolean left = ((Boolean) node.getLeftExpression().acceptVisitor(this))
                 .booleanValue();
@@ -4230,7 +4480,7 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + auxcounter + Code.DELIM + Code.NO_REFERENCE
                     + Code.DELIM + Code.TRUE + Code.DELIM
                     + NodeProperties.getType(node).getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
+                    + MCodeGenerator.locationToString(node));
 
             return Boolean.TRUE;
 
@@ -4246,7 +4496,7 @@ public class EvaluationVisitor extends VisitorObject {
                         + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                         + Code.DELIM + Code.TRUE + Code.DELIM
                         + NodeProperties.getType(node).getName() + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
 
                 return Boolean.TRUE;
 
@@ -4256,7 +4506,7 @@ public class EvaluationVisitor extends VisitorObject {
                         + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                         + Code.DELIM + Code.FALSE + Code.DELIM
                         + NodeProperties.getType(node).getName() + Code.DELIM
-                        + MCodeUtilities.locationToString(node));
+                        + MCodeGenerator.locationToString(node));
 
                 return Boolean.FALSE;
             }
@@ -4357,5 +4607,54 @@ public class EvaluationVisitor extends VisitorObject {
             }
         }
         return o;
+    }
+
+    public boolean isFirst() {
+        return first;
+    }
+
+    public void setFirst(boolean first) {
+        this.first = first;
+    }
+
+    public Stack getArrayCellNumbersStack() {
+        return arrayCellNumbersStack;
+    }
+
+    public void setArrayCellNumbersStack(Stack arrayCellNumbersStack) {
+        this.arrayCellNumbersStack = arrayCellNumbersStack;
+    }
+
+    public Stack getArrayCellReferencesStack() {
+        return arrayCellReferencesStack;
+    }
+
+    public void setArrayCellReferencesStack(Stack arrayCellReferencesStack) {
+        this.arrayCellReferencesStack = arrayCellReferencesStack;
+    }
+
+    /**
+     * This method will handle the preparation of <code>LeftHandSideModifier</code> in cases of
+     * assignments and pre/post-increments/decrements
+     * 
+     * @param mod
+     * @param left
+     * @return
+     */
+    private Object prepareLeftHandSideModifier(LeftHandSideModifier mod,
+            Node exp) {
+        Object lhs;
+        if (mod instanceof ArrayModifier) {
+            lhs = mod.prepare(this, context);
+        } else if (mod instanceof ObjectFieldModifier) {
+            lhs = mod.prepare(this, context);
+        } else {
+            boolean evaluatingPreviously = evaluating;
+            evaluating = false;
+            exp.acceptVisitor(this);
+            evaluating = evaluatingPreviously;
+            lhs = mod.prepare(this, context);
+        }
+        return lhs;
     }
 }

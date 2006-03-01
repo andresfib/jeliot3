@@ -4,6 +4,7 @@
 package jeliot.mcode.input;
 
 import jeliot.mcode.Code;
+import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodeUtilities;
 import koala.dynamicjava.tree.StaticMethodCall;
 
@@ -40,7 +41,7 @@ public abstract class InputHandler  {
 				+ m.getDeclaringClass().getName() + Code.DELIM +
 				m.getName() + Code.DELIM
 				+ aClass.getName() + Code.DELIM + prompt + Code.DELIM +
-				MCodeUtilities.locationToString(node));
+				MCodeGenerator.locationToString(node));
 		
 		
 		Object result = handleInput(aClass);
@@ -63,7 +64,7 @@ public abstract class InputHandler  {
 				+ String.class.getName() + Code.DELIM
 				+ (methodPrint.equals("println") ? "1" : "0")
 				+ Code.DELIM
-				+ MCodeUtilities.locationToString(node));
+				+ MCodeGenerator.locationToString(node));
 	}
 	protected abstract Object handleInput(Class aClass);
 	

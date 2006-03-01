@@ -18,69 +18,90 @@ import java.awt.Color;
  * The advantage of doing this over calling lots of set() methods after
  * creating the text area is that this method is faster.
  */
-public class TextAreaDefaults
-{
-	private static TextAreaDefaults DEFAULTS;
+public class TextAreaDefaults {
+    private static TextAreaDefaults DEFAULTS;
 
-	public InputHandler inputHandler;
-	public SyntaxDocument document;
-	public boolean editable;
+    public InputHandler inputHandler;
 
-	public boolean caretVisible;
-	public boolean caretBlinks;
-	public boolean blockCaret;
-	public int electricScroll;
+    public SyntaxDocument document;
 
-	public int cols;
-	public int rows;
-	public SyntaxStyle[] styles;
-	public Color caretColor;
-	public Color selectionColor;
-	public Color lineHighlightColor;
-	public boolean lineHighlight;
-	public Color bracketHighlightColor;
-	public boolean bracketHighlight;
-	public Color eolMarkerColor;
-	public boolean eolMarkers;
-	public boolean paintInvalid;
+    public boolean editable;
 
-	public JPopupMenu popup;
+    public boolean caretVisible;
 
-	/**
-	 * Returns a new TextAreaDefaults object with the default values filled
-	 * in.
-	 */
-	public static TextAreaDefaults getDefaults()
-	{
-		if(DEFAULTS == null)
-		{
-			DEFAULTS = new TextAreaDefaults();
+    public boolean caretBlinks;
 
-			DEFAULTS.inputHandler = new DefaultInputHandler();
-			DEFAULTS.inputHandler.addDefaultKeyBindings();
-			//DEFAULTS.document = new SyntaxDocument();
-			DEFAULTS.editable = true;
+    public boolean blockCaret;
 
-			DEFAULTS.blockCaret = false;
-			DEFAULTS.caretVisible = true;
-			DEFAULTS.caretBlinks = true;
-			DEFAULTS.electricScroll = 3;
+    public int electricScroll;
 
-			DEFAULTS.cols = 80;
-			DEFAULTS.rows = 25;
-			DEFAULTS.styles = SyntaxUtilities.getDefaultSyntaxStyles();
-			DEFAULTS.caretColor = Color.black; // Color.red;
-			DEFAULTS.selectionColor = new Color(0xccccff);
-			DEFAULTS.lineHighlightColor = new Color(0xe0e0e0);
-			DEFAULTS.lineHighlight = true;
-			DEFAULTS.bracketHighlightColor = Color.black;
-			DEFAULTS.bracketHighlight = true;
-			DEFAULTS.eolMarkerColor = new Color(0x009999);
-			DEFAULTS.eolMarkers = false; //true; 
-			DEFAULTS.paintInvalid = false; //true; 
-		}
-		DEFAULTS.document = new SyntaxDocument();
+    public int cols;
 
-		return DEFAULTS;
-	}
+    public int rows;
+
+    public SyntaxStyle[] styles;
+
+    public Color caretColor;
+
+    public Color selectionColor;
+
+    public Color lineHighlightColor;
+
+    public boolean lineHighlight;
+
+    public Color bracketHighlightColor;
+
+    public boolean bracketHighlight;
+
+    public Color eolMarkerColor;
+
+    public boolean eolMarkers;
+
+    public boolean paintInvalid;
+
+    public JPopupMenu popup;
+
+    public static TextAreaDefaults getDefaults() {
+        return getDefaults(null);
+    }
+
+    /**
+     * Returns a new TextAreaDefaults object with the default values filled
+     * in.
+     */
+    public static TextAreaDefaults getDefaults(SyntaxDocument doc) {
+        if (DEFAULTS == null) {
+            DEFAULTS = new TextAreaDefaults();
+
+            DEFAULTS.inputHandler = new DefaultInputHandler();
+            DEFAULTS.inputHandler.addDefaultKeyBindings();
+            //DEFAULTS.document = new SyntaxDocument();
+            DEFAULTS.editable = true;
+
+            DEFAULTS.blockCaret = false;
+            DEFAULTS.caretVisible = true;
+            DEFAULTS.caretBlinks = true;
+            DEFAULTS.electricScroll = 3;
+
+            DEFAULTS.cols = 80;
+            DEFAULTS.rows = 25;
+            DEFAULTS.styles = SyntaxUtilities.getDefaultSyntaxStyles();
+            DEFAULTS.caretColor = Color.black; // Color.red;
+            DEFAULTS.selectionColor = new Color(0xccccff);
+            DEFAULTS.lineHighlightColor = new Color(0xe0e0e0);
+            DEFAULTS.lineHighlight = true;
+            DEFAULTS.bracketHighlightColor = Color.black;
+            DEFAULTS.bracketHighlight = true;
+            DEFAULTS.eolMarkerColor = new Color(0x009999);
+            DEFAULTS.eolMarkers = false; //true; 
+            DEFAULTS.paintInvalid = false; //true; 
+        }
+        if (doc != null) {
+            DEFAULTS.document = doc;
+        } else {
+            DEFAULTS.document = new SyntaxDocument();
+        }
+
+        return DEFAULTS;
+    }
 }

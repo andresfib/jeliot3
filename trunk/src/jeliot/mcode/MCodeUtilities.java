@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -1079,54 +1078,6 @@ public class MCodeUtilities {
     }
     
     /**
-     * @param argnames
-     * @return
-     */
-    public static String argToString(List argnames) {
-        //Change to extract elements from list and add delims
-
-        if (!argnames.isEmpty()) {
-            String result = "";
-            Iterator it = argnames.listIterator();
-            while (it.hasNext()) {
-                result += (String) it.next() + Code.LOC_DELIM;
-            }
-            return result.substring(0, result.length() - 1);
-        }
-        return "";
-    }
-
-    /**
-     * @param array
-     * @return
-     */
-    public static String parameterArrayToString(Object[] array) {
-        String result = "";
-        for (int i = 0; i < array.length; i++) {
-            result += ((Class) array[i]).getName();
-            if (i < array.length - 1)
-                result += Code.LOC_DELIM;
-        }
-
-        return result;
-    }
-
-    /**
-     * @param array
-     * @return
-     */
-    public static String arrayToString(Object[] array) {
-        //Displays the array as an string
-        String result = "";
-        for (int i = 0; i < array.length; i++) {
-            result += array[i];
-            if (i < array.length - 1)
-                result += Code.LOC_DELIM;
-        }
-        return result;
-    }
-
-    /**
      * @return
      */
     public static boolean getRedirectOutput() {
@@ -1251,17 +1202,6 @@ public class MCodeUtilities {
        
         return Integer.toHexString(System.identityHashCode(o));            
 
-    }
-
-    /**
-     * Converts the node location into a string list. Each element is delimited
-     * by Code.LOC_DELIM
-     * @param node the node to visit
-     */
-    public static String locationToString(Node node) {
-        return node.getBeginLine() + Code.LOC_DELIM + node.getBeginColumn() + Code.LOC_DELIM
-                + node.getEndLine() + Code.LOC_DELIM + node.getEndColumn(); 
-				//+ Code.DELIM + node.getFilename();
     }
 
     /**
@@ -1444,67 +1384,11 @@ public class MCodeUtilities {
         toStringOverLoadedStack.push(new Boolean(value));
     }
 	
-	/**
-	 * @param visitor
-	 * @param robj
-	 * @return
-	 */
-	public static String toStringCall(Node expression, EvaluationVisitor visitor) {
-
-		Long l = new Long(EvaluationVisitor.getCounter());
-		EvaluationVisitor.returnExpressionCounterStack.push(l);
-		EvaluationVisitor.incrementCounter();
-		Class[] typs;
-		long counter = EvaluationVisitor.getCounter();
-
-		Object obj = expression.acceptVisitor(visitor);
-
-		MCodeUtilities.startToString();
-		
-		MCodeUtilities.write("" + Code.OMC + Code.DELIM
-				+ "toString" + Code.DELIM + "0"
-				+ Code.DELIM + counter + Code.DELIM
-				+ String.class.getName() + Code.DELIM
-				+ "0,0,0,0");
-		
-		String result = obj.toString();
-		
-		if (!isToStringOverloaded()){
-			//fake everything
-			MCodeUtilities.write(Code.PARAMETERS
-					+ Code.DELIM
-					+ "");
-			MCodeUtilities.write(Code.MD + Code.DELIM
-					+ "0,0,0,0");
-			
-			long auxCounter = EvaluationVisitor.getCounter();
-
-			MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.R
-					+ Code.DELIM + l.toString() + Code.DELIM
-					+ MCodeUtilities.locationToString(expression));
-
-			MCodeUtilities.write(Code.L + Code.DELIM
-					+ auxCounter + Code.DELIM + result
-					+ Code.DELIM + String.class.getName() + Code.DELIM
-					+ "0,0,0,0");
-			EvaluationVisitor.incrementCounter();
-			MCodeUtilities.write("" + Code.R + Code.DELIM
-					+ EvaluationVisitor.returnExpressionCounterStack.pop() + Code.DELIM + auxCounter
-					+ Code.DELIM + result + Code.DELIM
-					+ String.class.getName() + Code.DELIM
-					+ "0,0,0,0");		
-		}
-		
-		MCodeUtilities.endToString();
-		MCodeUtilities.write("" + Code.OMCC);
-		
-		return result;
-	}
 	public static String stringConversion(Node exp, EvaluationVisitor visitor) {
 		if (MCodeUtilities.isString(exp)) { //ask for type implements tree.Literal
 			return String.valueOf(exp.acceptVisitor(visitor));			
 		} else {
-			return MCodeUtilities.toStringCall(exp, visitor);
+			return MCodeGenerator.toStringCall(exp, visitor);
 		}
 	}
 	public static boolean isString( Node exp){

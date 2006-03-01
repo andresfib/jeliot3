@@ -29,8 +29,13 @@
 package koala.dynamicjava.interpreter.modifier;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import jeliot.mcode.Code;
+import jeliot.mcode.MCodeGenerator;
+import jeliot.mcode.MCodeUtilities;
 
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
@@ -86,25 +91,137 @@ public class ArrayModifier extends LeftHandSideModifier {
     public Object prepare(Visitor v, Context ctx) {
         arrays.add(0, array);
         cells.add(0, cell);
-        
-        // Jeliot 3: Indicates to evaluation visitor not to return M-Code
-        EvaluationVisitor.setPreparing(); 
-        
-        array = node.getExpression().acceptVisitor(v);
-        Object o = node.getCellNumber().acceptVisitor(v);
-        
-        EvaluationVisitor.unsetPreparing();
-        
-        if (o instanceof Character) {
-            o = new Integer(((Character) o).charValue());
+
+        if (v instanceof EvaluationVisitor) {
+            EvaluationVisitor ve = (EvaluationVisitor) v;
+            List arrayCellNumbersList;
+            List arrayCellReferencesList;
+
+            long arrayAccessCounter = EvaluationVisitor.getCounter();
+
+            boolean iAmFirst = ve.isFirst();
+            ve.setFirst(false);
+            long nameCounter = 0; // Not used if not first
+            if (iAmFirst) {
+                EvaluationVisitor.incrementCounter();
+                arrayCellNumbersList = new ArrayList();
+                arrayCellReferencesList = new ArrayList();
+                MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AAC
+                        + Code.DELIM + arrayAccessCounter + Code.DELIM
+                        + MCodeGenerator.locationToString(node));
+                nameCounter = EvaluationVisitor.getCounter();
+                ve.getArrayCellNumbersStack().push(arrayCellNumbersList);
+                ve.getArrayCellReferencesStack().push(arrayCellReferencesList);
+            } else {
+                arrayCellNumbersList = (List) ve.getArrayCellNumbersStack()
+                        .peek();
+                arrayCellReferencesList = (List) ve
+                        .getArrayCellReferencesStack().peek();
+            }
+
+            //This is for array reference when the qualified name is visited
+            long arrayCounter = EvaluationVisitor.getCounter();
+            Object t = node.getExpression().acceptVisitor(v);
+
+            long cellCounter = EvaluationVisitor.getCounter();
+            // This way we allow array accesses inside cell numbers
+
+            ve.setFirst(true);
+            Object o = node.getCellNumber().acceptVisitor(v);
+            ve.setFirst(false);
+
+            if (o instanceof Character) {
+                o = new Integer(((Character) o).charValue());
+            }
+
+            arrayCellNumbersList.add(o);
+            arrayCellReferencesList.add(new Long(cellCounter));
+
+            /*
+             if (!iAmFirst) {
+             arrayCellNumbersStack.push(arrayCellNumbersList);
+             arrayCellReferencesStack.push(arrayCellReferencesList);
+             }
+             */
+
+            Object result = null;
+            try {
+                result = Array.get(t, ((Number) o).intValue());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] {
+                        "" + (Array.getLength(t) - 1),
+                        "" + ((Number) o).intValue() });
+                throw new ExecutionError("j3.array.index.out.of.bounds", node);
+            } catch (NullPointerException e) {
+                throw new ExecutionError("j3.null.pointer.exception", node);
+            }
+
+            String resultString;
+            if (result != null) {
+                resultString = MCodeUtilities.getValue(result);
+            } else {
+                resultString = Code.UNKNOWN;
+            }
+
+            if (iAmFirst) {
+                MCodeUtilities.write(""
+                        + Code.AAC
+                        + Code.DELIM
+                        + arrayAccessCounter
+                        + Code.DELIM
+                        + arrayCounter
+                        + Code.DELIM
+                        + arrayCellNumbersList.size()
+                        + Code.DELIM
+                        + MCodeGenerator.arrayToString(arrayCellReferencesList
+                                .toArray())
+                        + Code.DELIM
+                        + MCodeGenerator.arrayToString(arrayCellNumbersList
+                                .toArray()) + Code.DELIM + resultString
+                        + Code.DELIM + NodeProperties.getType(node).getName()
+                        + Code.DELIM + MCodeGenerator.locationToString(node));
+
+                /*
+                 * ECodeUtilities.write("Array access of name "+ nameCounter +" with
+                 * hashcode "+ Integer.toHexString(t.hashCode()) + "element "
+                 * +arrayCellNumbersList.toString() +" references "+
+                 * arrayCellReferencesList.toString());
+                 */
+                ve.setFirst(true);
+                /* arrayCellNumbersList = (List) */
+                ve.getArrayCellNumbersStack().pop();
+                /* arrayCellReferencesList =(List) */
+                ve.getArrayCellReferencesStack().pop();
+
+            }
+            
+            cell = (Number) o;
+            array = t;
+            
+            return result;
+        } else {
+            // Jeliot 3: Indicates to evaluation visitor not to return M-Code
+            //EvaluationVisitor.setPreparing();
+
+            array = node.getExpression().acceptVisitor(v);
+            Object o = node.getCellNumber().acceptVisitor(v);
+
+            //EvaluationVisitor.unsetPreparing();
+
+            if (o instanceof Character) {
+                o = new Integer(((Character) o).charValue());
+            }
+            cell = (Number) o;
+            try {
+                return Array.get(array, cell.intValue());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                node.setProperty(NodeProperties.ERROR_STRINGS,
+                        new String[] { "" + (Array.getLength(array) - 1),
+                                "" + cell.intValue() });
+                throw new ExecutionError("j3.array.index.out.of.bounds", node);
+            }
         }
-        cell = (Number) o;
-        try {
-            return Array.get(array, cell.intValue());
-        } catch (ArrayIndexOutOfBoundsException e) {
-            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { "" + (Array.getLength(array) - 1), "" + cell.intValue()});
-            throw new ExecutionError("j3.array.index.out.of.bounds", node);
-        }
+
     }
 
     /**
@@ -121,7 +238,8 @@ public class ArrayModifier extends LeftHandSideModifier {
             }
             throw e;
         } catch (ArrayIndexOutOfBoundsException e) {
-            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { "" + (Array.getLength(array) - 1), "" + cell.intValue()});
+            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] {
+                    "" + (Array.getLength(array) - 1), "" + cell.intValue() });
             throw new ExecutionError("j3.array.index.out.of.bounds", node);
         } finally {
             array = arrays.remove(0);
