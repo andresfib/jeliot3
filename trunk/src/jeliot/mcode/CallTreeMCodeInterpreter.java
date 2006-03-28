@@ -49,7 +49,8 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @param programCode
      */
     public CallTreeMCodeInterpreter(BufferedReader bf, TreeDraw callTree, String programCode, Jeliot jeliot, int tabNumber) {
-        this.mcode = bf;
+        super(bf);
+        //this.mcode = bf;
         this.programCode = programCode;
         this.callTree = callTree;
         this.methodCalls = new Stack();

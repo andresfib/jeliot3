@@ -9,11 +9,11 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 /*import javax.naming.spi.DirStateFactory.Result;
-import javax.swing.JFileChooser;
+ import javax.swing.JFileChooser;
 
-import jeliot.gui.JavaFileFilter;
-import jeliot.util.ResourceBundles;
-import jeliot.util.UserProperties;*/
+ import jeliot.gui.JavaFileFilter;
+ import jeliot.util.ResourceBundles;
+ import jeliot.util.UserProperties;*/
 
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
@@ -37,7 +37,8 @@ public class MCodeUtilities {
     /**
      * Should be never used. 
      */
-    private MCodeUtilities() {}
+    private MCodeUtilities() {
+    }
 
     //Unary expressions in Jeliot 3 visualization engine
     /**
@@ -256,7 +257,12 @@ public class MCodeUtilities {
      */
     private static BufferedReader reader = null;
 
+    /**
+     * 
+     */
     private static Vector registeredSecondaryMCodeConnections = new Vector();
+
+    private static Vector registeredPrePrimaryMCodeConnections = new Vector();
 
     /**
      * Hack flag to get the output into see below
@@ -296,7 +302,6 @@ public class MCodeUtilities {
      */
     public static Stack constructorParametersStack = new Stack();
 
- 
     /**
      * 
      * @return
@@ -373,7 +378,8 @@ public class MCodeUtilities {
 
             return MCodeUtilities.DOUBLE;
 
-        } else if (type.equals(String.class.getName()) || type.equals("L" + String.class.getName() + ";")) {
+        } else if (type.equals(String.class.getName())
+                || type.equals("L" + String.class.getName() + ";")) {
 
             return MCodeUtilities.STRING;
 
@@ -384,6 +390,25 @@ public class MCodeUtilities {
         } else {
 
             return MCodeUtilities.REFERENCE;
+        }
+    }
+
+    public static boolean isNumeric(String type) {
+        if (type.equals(byte.class.getName())
+                || type.equals(Byte.class.getName())
+                || type.equals(short.class.getName())
+                || type.equals(Short.class.getName())
+                || type.equals(int.class.getName())
+                || type.equals(Integer.class.getName())
+                || type.equals(long.class.getName())
+                || type.equals(Long.class.getName())
+                || type.equals(float.class.getName())
+                || type.equals(Float.class.getName())
+                || type.equals(double.class.getName())
+                || type.equals(Double.class.getName())) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -422,7 +447,8 @@ public class MCodeUtilities {
      * @return
      */
     public static boolean isPrimitive(String type) {
-        if (resolveType(type) != MCodeUtilities.REFERENCE && resolveType(type) != MCodeUtilities.VOID) {
+        if (resolveType(type) != MCodeUtilities.REFERENCE
+                && resolveType(type) != MCodeUtilities.VOID) {
             return true;
         }
         return false;
@@ -512,7 +538,8 @@ public class MCodeUtilities {
         int index = from.indexOf(c);
         int l = c.length();
         while (index != -1) {
-            from = from.substring(0, index) + with + from.substring(index + l, from.length());
+            from = from.substring(0, index) + with
+                    + from.substring(index + l, from.length());
             index = from.indexOf(c);
         }
         return from;
@@ -548,110 +575,110 @@ public class MCodeUtilities {
      */
     public static int resolveBinOperator(int operator) {
         switch (operator) {
-            //Add expression (+ sign)
-            case Code.AE: {
-                return ADD;
-            }
+        //Add expression (+ sign)
+        case Code.AE: {
+            return ADD;
+        }
 
-            //Substract expression (- sign)
-            case Code.SE: {
-                return SUBSTRACT;
-            }
+        //Substract expression (- sign)
+        case Code.SE: {
+            return SUBSTRACT;
+        }
 
-            //Greater than expression (> sign)
-            case Code.GT: {
-                return GT;
-            }
+        //Greater than expression (> sign)
+        case Code.GT: {
+            return GT;
+        }
 
-            //Logical AND expression (&& sign)
-            case Code.AND: {
-                return ANDAND;
-            }
+        //Logical AND expression (&& sign)
+        case Code.AND: {
+            return ANDAND;
+        }
 
-            // Logical Xor Expression (^ sign)
-            case Code.XOR: {
-                return LXOR;
-            }
+        // Logical Xor Expression (^ sign)
+        case Code.XOR: {
+            return LXOR;
+        }
 
-            //Arithmetic multiplication (* sign)
-            case Code.ME: {
-                return MULT;
-            }
+        //Arithmetic multiplication (* sign)
+        case Code.ME: {
+            return MULT;
+        }
 
-            //Arithmetic division (/ sign)
-            case Code.DE: {
-                return DIV;
-            }
+        //Arithmetic division (/ sign)
+        case Code.DE: {
+            return DIV;
+        }
 
-            //Arithmetic remainder (% sign)
-            case Code.RE: {
-                return MOD;
-            }
+        //Arithmetic remainder (% sign)
+        case Code.RE: {
+            return MOD;
+        }
 
-            // Or Expression (|| sign)
-            case Code.OR: {
-                return OROR;
-            }
+        // Or Expression (|| sign)
+        case Code.OR: {
+            return OROR;
+        }
 
-            // Equal Expression (== sign)
-            case Code.EE: {
-                return EQEQ;
-            }
+        // Equal Expression (== sign)
+        case Code.EE: {
+            return EQEQ;
+        }
 
-            // Not Equal Expression (!= sign)
-            case Code.NE: {
-                return NOTEQ;
-            }
+        // Not Equal Expression (!= sign)
+        case Code.NE: {
+            return NOTEQ;
+        }
 
-            // Less Expression (< sign)
-            case Code.LE: {
-                return LT;
-            }
+        // Less Expression (< sign)
+        case Code.LE: {
+            return LT;
+        }
 
-            // Less or Equal Expression (<= sign)
-            case Code.LQE: {
-                return LTEQ;
-            }
+        // Less or Equal Expression (<= sign)
+        case Code.LQE: {
+            return LTEQ;
+        }
 
-            // Greater or Equal Expression (>= sign)
-            case Code.GQT: {
-                return GTEQ;
-            }
+        // Greater or Equal Expression (>= sign)
+        case Code.GQT: {
+            return GTEQ;
+        }
 
-            // Bitwise Or Expression (| sign)
-            case Code.BITOR: {
-                return OR;
-            }
+        // Bitwise Or Expression (| sign)
+        case Code.BITOR: {
+            return OR;
+        }
 
-            // Bitwise Xor Expression (^ sign)
-            case Code.BITXOR: {
-                return XOR;
-            }
+        // Bitwise Xor Expression (^ sign)
+        case Code.BITXOR: {
+            return XOR;
+        }
 
-            // Bitwise And Expression (& sign)
-            case Code.BITAND: {
-                return AND;
-            }
+        // Bitwise And Expression (& sign)
+        case Code.BITAND: {
+            return AND;
+        }
 
-            // Bitwise Left Shift Expression (<< sign)
-            case Code.LSHIFT: {
-                return LSHIFT;
-            }
+        // Bitwise Left Shift Expression (<< sign)
+        case Code.LSHIFT: {
+            return LSHIFT;
+        }
 
-            // Bitwise Right Shift Expression (>> sign)
-            case Code.RSHIFT: {
-                return RSHIFT;
-            }
+        // Bitwise Right Shift Expression (>> sign)
+        case Code.RSHIFT: {
+            return RSHIFT;
+        }
 
-            // Bitwise Unsigned Right Shift Expression (>>> sign)
-            case Code.URSHIFT: {
-                return URSHIFT;
-            }
+        // Bitwise Unsigned Right Shift Expression (>>> sign)
+        case Code.URSHIFT: {
+            return URSHIFT;
+        }
 
-            //This is an error.
-            default: {
-                return -1;
-            }
+        //This is an error.
+        default: {
+            return -1;
+        }
         }
     }
 
@@ -662,50 +689,50 @@ public class MCodeUtilities {
     public static int resolveUnOperator(int operator) {
         switch (operator) {
 
-            //Logical NOT expression (! sign)
-            case Code.NO: {
-                return NOT;
-            }
+        //Logical NOT expression (! sign)
+        case Code.NO: {
+            return NOT;
+        }
 
-            //Aritmetic minus expression (- sign)
-            case Code.MINUS: {
-                return MINUS;
-            }
+        //Aritmetic minus expression (- sign)
+        case Code.MINUS: {
+            return MINUS;
+        }
 
-            //Aritmetic plus expression (+ sign)
-            case Code.PLUS: {
-                return PLUS;
-            }
+        //Aritmetic plus expression (+ sign)
+        case Code.PLUS: {
+            return PLUS;
+        }
 
-            //PostIncrement expression (++ sign)
-            case Code.PIE: {
-                return POSTPLUSPLUS;
-            }
+        //PostIncrement expression (++ sign)
+        case Code.PIE: {
+            return POSTPLUSPLUS;
+        }
 
-            //PreIncrement expression (sign ++)
-            case Code.PRIE: {
-                return PLUSPLUS;
-            }
+        //PreIncrement expression (sign ++)
+        case Code.PRIE: {
+            return PLUSPLUS;
+        }
 
-            //PostDecrement expression (-- sign)
-            case Code.PDE: {
-                return POSTMINUSMINUS;
-            }
+        //PostDecrement expression (-- sign)
+        case Code.PDE: {
+            return POSTMINUSMINUS;
+        }
 
-            //PreDecrement expression (sign --)
-            case Code.PRDE: {
-                return MINUSMINUS;
-            }
+        //PreDecrement expression (sign --)
+        case Code.PRDE: {
+            return MINUSMINUS;
+        }
 
-            //Complement expression (~ sign)
-            case Code.COMP: {
-                return COMP;
-            }
+        //Complement expression (~ sign)
+        case Code.COMP: {
+            return COMP;
+        }
 
-            //This is an error.
-            default: {
-                return -1;
-            }
+        //This is an error.
+        default: {
+            return -1;
+        }
         }
     }
 
@@ -715,27 +742,27 @@ public class MCodeUtilities {
      */
     public static boolean isUnary(int operator) {
         switch (operator) {
-            case Code.COMP:
-            //Complement expression
-            case Code.MINUS:
-            //Unary minus expression
-            case Code.PLUS:
-            //Unary plus expression
-            case Code.NO:
-            //Unary not expression
-            case Code.PIE:
-            //PostIncrement expression (++ sign)
-            case Code.PRIE:
-            //PreIncrement expression (sign ++)
-            case Code.PDE:
-            //PostDecrement expression (-- sign)
-            case Code.PRDE: { //PreDecrement expression (sign --)
-                return true;
-            }
+        case Code.COMP:
+        //Complement expression
+        case Code.MINUS:
+        //Unary minus expression
+        case Code.PLUS:
+        //Unary plus expression
+        case Code.NO:
+        //Unary not expression
+        case Code.PIE:
+        //PostIncrement expression (++ sign)
+        case Code.PRIE:
+        //PreIncrement expression (sign ++)
+        case Code.PDE:
+        //PostDecrement expression (-- sign)
+        case Code.PRDE: { //PreDecrement expression (sign --)
+            return true;
+        }
 
-            default: {
-                return false;
-            }
+        default: {
+            return false;
+        }
         }
     }
 
@@ -746,57 +773,57 @@ public class MCodeUtilities {
     public static boolean isBinary(int operator) {
         switch (operator) {
 
-            case Code.BITOR:
-            // Bitwise Or Expression
-            case Code.BITXOR:
-            // Bitwise Xor Expression
-            case Code.BITAND:
-            // Bitwise And Expression
-            case Code.LSHIFT:
-            // Bitwise Left Shift Expression
-            case Code.RSHIFT:
-            // Bitwise Right Shift Expression
-            case Code.URSHIFT:
-            // Bitwise Unsigned Right Shift Expression
+        case Code.BITOR:
+        // Bitwise Or Expression
+        case Code.BITXOR:
+        // Bitwise Xor Expression
+        case Code.BITAND:
+        // Bitwise And Expression
+        case Code.LSHIFT:
+        // Bitwise Left Shift Expression
+        case Code.RSHIFT:
+        // Bitwise Right Shift Expression
+        case Code.URSHIFT:
+        // Bitwise Unsigned Right Shift Expression
 
-            case Code.EE:
-            // Equal Expression
-            case Code.NE:
-            // Not Equal Expression
-            case Code.LE:
-            // Less Expression
-            case Code.GT:
-            // Greater Than
-            case Code.LQE:
-            // Less or Equal Expression
-            case Code.GQT:
-            // Greater or Equal Expression
+        case Code.EE:
+        // Equal Expression
+        case Code.NE:
+        // Not Equal Expression
+        case Code.LE:
+        // Less Expression
+        case Code.GT:
+        // Greater Than
+        case Code.LQE:
+        // Less or Equal Expression
+        case Code.GQT:
+        // Greater or Equal Expression
 
-            case Code.A:
-            // Assignment Expression
+        case Code.A:
+        // Assignment Expression
 
-            case Code.OR:
-            // Or Expression
-            case Code.XOR:
-            // Xor Expression
-            case Code.AND:
-            // And Expression
+        case Code.OR:
+        // Or Expression
+        case Code.XOR:
+        // Xor Expression
+        case Code.AND:
+        // And Expression
 
-            case Code.ME:
-            // Multiplication Expression
-            case Code.RE:
-            // Remainder (mod) Expression
-            case Code.DE:
-            // Division Expression
-            case Code.SE:
-            // Substract Expression
-            case Code.AE: { // Add Expression
-                return true;
-            }
+        case Code.ME:
+        // Multiplication Expression
+        case Code.RE:
+        // Remainder (mod) Expression
+        case Code.DE:
+        // Division Expression
+        case Code.SE:
+        // Substract Expression
+        case Code.AE: { // Add Expression
+            return true;
+        }
 
-            default: {
-                return false;
-            }
+        default: {
+            return false;
+        }
         }
     }
 
@@ -831,46 +858,55 @@ public class MCodeUtilities {
      */
     public static String getDefaultValue(String type) {
         if (type.equals(boolean.class.getName())
-                || type.equals((new Boolean(true)).getClass().getName()) || type.equals("Z")) {
+                || type.equals((new Boolean(true)).getClass().getName())
+                || type.equals("Z")) {
 
             return String.valueOf(false);
 
         } else if (type.equals(byte.class.getName())
-                || type.equals((new Byte((byte) 0)).getClass().getName()) || type.equals("B")) {
+                || type.equals((new Byte((byte) 0)).getClass().getName())
+                || type.equals("B")) {
 
             return String.valueOf((byte) 0);
 
         } else if (type.equals(short.class.getName())
-                || type.equals((new Short((short) 0)).getClass().getName()) || type.equals("S")) {
+                || type.equals((new Short((short) 0)).getClass().getName())
+                || type.equals("S")) {
 
             return String.valueOf((short) 0);
 
         } else if (type.equals(int.class.getName())
-                || type.equals((new Integer(0)).getClass().getName()) || type.equals("I")) {
+                || type.equals((new Integer(0)).getClass().getName())
+                || type.equals("I")) {
 
             return String.valueOf(0);
 
         } else if (type.equals(long.class.getName())
-                || type.equals((new Long(0)).getClass().getName()) || type.equals("J")) {
+                || type.equals((new Long(0)).getClass().getName())
+                || type.equals("J")) {
 
             return String.valueOf(0L);
 
         } else if (type.equals(char.class.getName())
-                || type.equals((new Character('\0')).getClass().getName()) || type.equals("C")) {
+                || type.equals((new Character('\0')).getClass().getName())
+                || type.equals("C")) {
 
             return String.valueOf('\u0000');
 
         } else if (type.equals(float.class.getName())
-                || type.equals((new Float(0.0f)).getClass().getName()) || type.equals("F")) {
+                || type.equals((new Float(0.0f)).getClass().getName())
+                || type.equals("F")) {
 
             return String.valueOf(0.0f);
 
         } else if (type.equals(double.class.getName())
-                || type.equals((new Double(0.0)).getClass().getName()) || type.equals("D")) {
+                || type.equals((new Double(0.0)).getClass().getName())
+                || type.equals("D")) {
 
             return String.valueOf(0.0);
 
-        } else if (type.equals("".getClass().getName()) || type.equals("L".getClass().getName())) {
+        } else if (type.equals("".getClass().getName())
+                || type.equals("L".getClass().getName())) {
 
             return String.valueOf("null");
 
@@ -905,7 +941,6 @@ public class MCodeUtilities {
      */
     private static Thread accessingThread = null;
 
-
     /**
      * @param thread
      */
@@ -926,14 +961,15 @@ public class MCodeUtilities {
         if (!EvaluationVisitor.isSetPreparing() || token == Code.ERROR) {
             str = MCodeUtilities.replace(str, "\n", "\\n");
             str = MCodeUtilities.replace(str, "\r", "");
-            if (!redirectOutput  || token == Code.ERROR) {
+            if (!redirectOutput || token == Code.ERROR) {
                 if (writer.checkError()) {
                     throw new StoppingRequestedError();
                 }
+                printlnToRegisteredPrePrimaryMCodeConnections(str);
                 writer.println(str);
-               // if (enabledSaveMCode){
-               // 	writeToFile(str+"\n");
-               // }
+                // if (enabledSaveMCode){
+                // 	writeToFile(str+"\n");
+                // }
                 //DebugUtil.printDebugInfo("    "+str);
             } else {
                 addToRedirectBuffer(str);
@@ -965,20 +1001,20 @@ public class MCodeUtilities {
              */
         }
     }
-    
-/*    public static void openMCodeFile(){
-        try {
-        
-        outputFile = new File(filePath);
-        //we delete the file if it already exists
-        if (outputFile.exists()) outputFile.delete();
-        }catch(Exception e){
-            e.printStackTrace(System.out);    
-        }
-            
-        
-    }
- */
+
+    /*    public static void openMCodeFile(){
+     try {
+     
+     outputFile = new File(filePath);
+     //we delete the file if it already exists
+     if (outputFile.exists()) outputFile.delete();
+     }catch(Exception e){
+     e.printStackTrace(System.out);    
+     }
+     
+     
+     }
+     */
     /**
      * @return
      */
@@ -1051,32 +1087,33 @@ public class MCodeUtilities {
      * @author www.javapractices.com
      * @author Andrés Moreno
      */
-    public static String getSubArrayHashCodes(Object array){
-    	
-    	if ( array.getClass().isArray()){
-    		StringBuffer result = new StringBuffer("");
-    		int length = Array.getLength(array);
-    		
-    		for ( int i = 0 ; i < length ; ++i ) {
-    			Object element = Array.get(array, i);
-    			if ( element != null && element.getClass().isArray()) {
-    				result.append(Integer.toHexString(System.identityHashCode(element)));
-    				result.append( ",");
-    			}
-    		}
-    		for ( int i = 0 ; i < length ; ++i ) {
-    			Object element = Array.get(array, i);
-    			if ( element != null && element.getClass().isArray()) {
-    				result.append( getSubArrayHashCodes(element));
-    			}
-    		}
-			
-    		return result.toString();
-    	} else { 
-    		return "";
-    	}
+    public static String getSubArrayHashCodes(Object array) {
+
+        if (array.getClass().isArray()) {
+            StringBuffer result = new StringBuffer("");
+            int length = Array.getLength(array);
+
+            for (int i = 0; i < length; ++i) {
+                Object element = Array.get(array, i);
+                if (element != null && element.getClass().isArray()) {
+                    result.append(Integer.toHexString(System
+                            .identityHashCode(element)));
+                    result.append(",");
+                }
+            }
+            for (int i = 0; i < length; ++i) {
+                Object element = Array.get(array, i);
+                if (element != null && element.getClass().isArray()) {
+                    result.append(getSubArrayHashCodes(element));
+                }
+            }
+
+            return result.toString();
+        } else {
+            return "";
+        }
     }
-    
+
     /**
      * @return
      */
@@ -1115,7 +1152,7 @@ public class MCodeUtilities {
      */
     public static void addToRedirectBuffer(String string) {
         redirectBuffer.add(string);
-        
+
     }
 
     /**
@@ -1150,7 +1187,7 @@ public class MCodeUtilities {
      * 
      * @param str
      */
-    public static void printToRegisteredSecondaryMCodeConnections(String str) {
+    public static void printlnToRegisteredSecondaryMCodeConnections(String str) {
         Iterator i = registeredSecondaryMCodeConnections.iterator();
         while (i.hasNext()) {
             ((PrintWriter) i.next()).println(str);
@@ -1177,11 +1214,47 @@ public class MCodeUtilities {
             PrintWriter pw = (PrintWriter) i.next();
             pw.println("" + Code.END);
             pw.flush();
+            pw.close();
         }
         registeredSecondaryMCodeConnections.clear();
     }
 
-    
+    /**
+     * 
+     * @param str
+     */
+    public static void printlnToRegisteredPrePrimaryMCodeConnections(String str) {
+        Iterator i = registeredPrePrimaryMCodeConnections.iterator();
+        while (i.hasNext()) {
+            ((PrintWriter) i.next()).println(str);
+        }
+    }
+
+    /**
+     * 
+     * @param pw
+     */
+    public static void addRegisteredPrePrimaryMCodeConnections(PrintWriter pw) {
+        if (!registeredPrePrimaryMCodeConnections.contains(pw)) {
+            registeredPrePrimaryMCodeConnections.add(pw);
+        }
+    }
+
+    /**
+     * 
+     *
+     */
+    public static void clearRegisteredPrePrimaryMCodeConnections() {
+        Iterator i = registeredPrePrimaryMCodeConnections.iterator();
+        while (i.hasNext()) {
+            PrintWriter pw = (PrintWriter) i.next();
+            pw.println("" + Code.END);
+            pw.flush();
+            pw.close();
+        }
+        registeredPrePrimaryMCodeConnections.clear();
+    }
+
     /**
      * 
      * @param o
@@ -1191,16 +1264,16 @@ public class MCodeUtilities {
         if (o == null) {
             return "null";
         }
-        if (o.getClass().isPrimitive() || String.class.isInstance(o) || Integer.class.isInstance(o)
-                || Double.class.isInstance(o) || Byte.class.isInstance(o)
-                || Long.class.isInstance(o) || Short.class.isInstance(o)
-                || Boolean.class.isInstance(o) || Float.class.isInstance(o)
-                || Character.class.isInstance(o)) {
+        if (o.getClass().isPrimitive() || String.class.isInstance(o)
+                || Integer.class.isInstance(o) || Double.class.isInstance(o)
+                || Byte.class.isInstance(o) || Long.class.isInstance(o)
+                || Short.class.isInstance(o) || Boolean.class.isInstance(o)
+                || Float.class.isInstance(o) || Character.class.isInstance(o)) {
 
             return o.toString();
         }
-       
-        return Integer.toHexString(System.identityHashCode(o));            
+
+        return Integer.toHexString(System.identityHashCode(o));
 
     }
 
@@ -1326,36 +1399,35 @@ public class MCodeUtilities {
         return filename;
     }
 
-	/**
-	 * Called by Launcher.
-	 */
-	public static void initialize() {
-	    toStringOverLoadedStack = new Stack();
-		previousClassStack = new Stack();
-		previousParametersStack = new Stack();
-		constructorNameStack = new Stack();
-		constructorParametersStack = new Stack();
-	}
+    /**
+     * Called by Launcher.
+     */
+    public static void initialize() {
+        toStringOverLoadedStack = new Stack();
+        previousClassStack = new Stack();
+        previousParametersStack = new Stack();
+        constructorNameStack = new Stack();
+        constructorParametersStack = new Stack();
+    }
 
     /**
      * Set to true when visiting overloaded toString method
      */
     private static Boolean toStringOverloaded;
-    
 
     /**
      * Comment for <code>toStringOverLoadedStack</code>
      */
-    private static Stack toStringOverLoadedStack = new Stack(); 
-    
-   
+    private static Stack toStringOverLoadedStack = new Stack();
+
     /**
      * @return
      */
-    public static boolean isToStringOverloaded(){
-    	return !toStringOverLoadedStack.isEmpty() && ((Boolean) toStringOverLoadedStack.peek()).booleanValue();
+    public static boolean isToStringOverloaded() {
+        return !toStringOverLoadedStack.isEmpty()
+                && ((Boolean) toStringOverLoadedStack.peek()).booleanValue();
     }
-    
+
     /**
      * 
      *
@@ -1363,7 +1435,7 @@ public class MCodeUtilities {
     public static void startToString() {
         toStringOverLoadedStack.push(new Boolean(false));
     }
-    
+
     /**
      * 
      *
@@ -1373,7 +1445,7 @@ public class MCodeUtilities {
             toStringOverLoadedStack.pop();
         }
     }
-    
+
     /**
      * @param value
      */
@@ -1383,26 +1455,44 @@ public class MCodeUtilities {
         }
         toStringOverLoadedStack.push(new Boolean(value));
     }
-	
-	public static String stringConversion(Node exp, EvaluationVisitor visitor) {
-		if (MCodeUtilities.isString(exp)) { //ask for type implements tree.Literal
-			return String.valueOf(exp.acceptVisitor(visitor));			
-		} else {
-			return MCodeGenerator.toStringCall(exp, visitor);
-		}
-	}
-	public static boolean isString( Node exp){
-		
-		Class c = (Class) NodeProperties.getType(exp);
-		boolean automaticStringConversion = (c.isPrimitive() 
-				|| String.class.getName().equals(c.getName()) || Integer.class.getName().equals(c.getName())
-                || Double.class.getName().equals(c.getName()) || Byte.class.getName().equals(c.getName())
-                || Long.class.getName().equals(c.getName()) || Short.class.getName().equals(c.getName())
-                || Boolean.class.getName().equals(c.getName()) || Float.class.getName().equals(c.getName())
-                || Character.class.getName().equals(c.getName()));
 
-		return automaticStringConversion || (exp instanceof koala.dynamicjava.tree.Literal);
-	}
+    /**
+     * 
+     * @param exp
+     * @param visitor
+     * @return
+     */
+    public static String stringConversion(Node exp, EvaluationVisitor visitor) {
+        if (MCodeUtilities.isConvertedToString(exp)) { //ask for type implements tree.Literal
+            return String.valueOf(exp.acceptVisitor(visitor));
+        } else {
+            return MCodeGenerator.toStringCall(exp, visitor);
+        }
+    }
+
+    /**
+     * 
+     * @param exp
+     * @return
+     */
+    public static boolean isConvertedToString(Node exp) {
+
+        Class c = (Class) NodeProperties.getType(exp);
+        boolean automaticStringConversion = (c.isPrimitive()
+                || String.class.getName().equals(c.getName())
+                || Integer.class.getName().equals(c.getName())
+                || Double.class.getName().equals(c.getName())
+                || Byte.class.getName().equals(c.getName())
+                || Long.class.getName().equals(c.getName())
+                || Short.class.getName().equals(c.getName())
+                || Boolean.class.getName().equals(c.getName())
+                || Float.class.getName().equals(c.getName()) || Character.class
+                .getName().equals(c.getName()));
+
+        return automaticStringConversion
+                || (exp instanceof koala.dynamicjava.tree.Literal);
+    }
+
     /**
      * return a full qualified classname, e.g. [C resulting from char[] will be [char, because C [] will be [C as well...
      * @param c
@@ -1411,6 +1501,6 @@ public class MCodeUtilities {
     public static String getFullQualifiedClassname(Class c) {
         if (!c.isArray())
             return c.getName();
-        return "["+getFullQualifiedClassname(c.getComponentType());
+        return "[" + getFullQualifiedClassname(c.getComponentType());
     }
 }

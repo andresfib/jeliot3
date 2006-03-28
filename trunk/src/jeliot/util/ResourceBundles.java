@@ -56,6 +56,11 @@ public class ResourceBundles {
     private static ResourceBundle theaterMessages;
 
     /**
+     * 
+     */
+    private static ResourceBundle avInteractionMessages;
+    
+    /**
      * @return
      */
     public static UserProperties getJeliotUserProperties() {
@@ -205,5 +210,14 @@ public class ResourceBundles {
         saveMCodeUserProperties();
         saveTheaterUserProperties();
         saveJeliotUserProperties();
+    }
+
+    public static ResourceBundle getAvInteractionResourceBundle() {
+        if (avInteractionMessages == null) {
+            avInteractionMessages = ResourceBundle.getBundle(
+                    "jeliot.mcode.resources.questions", Locale.getDefault());
+        }
+
+        return avInteractionMessages;
     }
 }

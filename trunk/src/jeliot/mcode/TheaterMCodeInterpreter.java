@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.FeatureNotImplementedException;
+import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.lang.*;
 import jeliot.theater.Actor;
 import jeliot.theater.Director;
@@ -25,8 +26,9 @@ import jeliot.util.DebugUtil;
  */
 public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
-    //  DOC: document!
-
+    //DOC: document!
+    protected AVInteractionEngine avInteractionEngine = null;
+    
     /**
      * 
      */
@@ -158,7 +160,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     public TheaterMCodeInterpreter(BufferedReader r, Director d,
             String programCode, PrintWriter pr) {
-        this.mcode = r;
+        super(r);
+        //this.mcode = r;
         this.director = d;
         this.programCode = programCode;
         this.input = pr;
@@ -193,12 +196,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         superMethodCallNumber = 0;
         arrayInitialization = new Stack();
         //expressionStack = new Stack();
+        avInteractionEngine = null;
 
         super.initialize();
 
         try {
             line = readLine();
-            MCodeUtilities.printToRegisteredSecondaryMCodeConnections(line);
+            MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
             //This is for debugging purposes.
             DebugUtil.printDebugInfo(line);
         } catch (Exception e) {
@@ -264,7 +268,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#beforeInterpretation(java.lang.String)
      */
     protected void beforeInterpretation(String line) {
-        MCodeUtilities.printToRegisteredSecondaryMCodeConnections(line);
+        MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
     }
 
     /*
@@ -320,6 +324,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void endRunning() {
         removeInstances();
+        //TODO fix this hack!
+        if (avInteractionEngine != null) {
+            this.director.getTheatre().requestFocus();
+            avInteractionEngine.getResults();
+        }
     }
 
     /**
@@ -2840,6 +2849,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             long expressionReference, String location) {
         exprs.push(expressionType + Code.DELIM + expressionReference
                 + Code.DELIM + location);
+        if (avInteractionEngine != null && expressionType == Code.A) {
+            Highlight h = MCodeUtilities.makeHighlight(location);
+            director.highlightForMessage(h);
+            avInteractionEngine.interaction("" + expressionReference);
+        }
     }
 
     /**
@@ -3347,5 +3361,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     protected void closeExpressionStack() {
         exprs = (Stack) stackOfExprsStacks.pop();
+    }
+
+    public AVInteractionEngine getAvInteractionEngine() {
+        return avInteractionEngine;
+    }
+
+    public void setAvInteractionEngine(AVInteractionEngine avInteractionEngine) {
+        this.avInteractionEngine = avInteractionEngine;
     }
 }

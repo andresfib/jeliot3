@@ -38,6 +38,11 @@ public abstract class Animation {
      */
     public static int defaultDuration = 1000;
     
+    /**
+     * 
+     */
+    public static boolean disableDurationChanging = false;
+    
 	/**
      * This flag is set by the doFinish() method when the animation
      * is at end.
@@ -57,7 +62,7 @@ public abstract class Animation {
 	/**
      * Desired duration of the animation, in milliseconds.
      */
-    private int duration = 1000;
+    private int duration = defaultDuration;
 
 	/**
      * An actor associated with this animation -- the actor that gets
@@ -69,7 +74,7 @@ public abstract class Animation {
      * 
      */
     public Animation() {
-        duration = defaultDuration;
+        //duration = defaultDuration;
     }
     
 	/** Initializes the animation. This method is called by the
@@ -124,7 +129,7 @@ public abstract class Animation {
       * @param duration The desired duration in milliseconds.
       */
     public void setDuration(int duration) {
-         if (defaultDuration > 0) {
+         if (defaultDuration > 0 && !disableDurationChanging) {
              this.duration = duration;
          }
     }

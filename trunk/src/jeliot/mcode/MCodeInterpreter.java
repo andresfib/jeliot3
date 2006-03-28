@@ -111,6 +111,13 @@ public abstract class MCodeInterpreter {
     }
 
     /**
+     *  
+     */
+    protected MCodeInterpreter(BufferedReader br) {
+        this.mcode = br;
+    }
+
+    /**
      * Initializes the
      */
     public void initialize() {

@@ -33,12 +33,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.calltree.TreeDraw;
 import jeliot.gui.CodePane2;
 import jeliot.gui.JeliotWindow;
 import jeliot.gui.LoadJeliot;
 import jeliot.historyview.HistoryView;
 import jeliot.launcher.Launcher;
+import jeliot.mcode.AVInteractionMCodeInterpreter;
 import jeliot.mcode.CallTreeMCodeInterpreter;
 import jeliot.mcode.Highlight;
 import jeliot.mcode.InterpreterError;
@@ -185,12 +187,16 @@ public class Jeliot {
      * A director for animating the program.
      */
     private Director director;
-    
+
     /**
      * An image loader that takes care of loading the required
      * images.
      */
     private ImageLoader iLoad = new ImageLoader();
+
+    private AVInteractionMCodeInterpreter mCodeInterpreterForAVInteraction;
+
+    private Thread avInteractionThread;
 
     /**
      * 
@@ -206,7 +212,7 @@ public class Jeliot {
      * @param udir
      * 
      */
-    public Jeliot(String defaultIO) {        
+    public Jeliot(String defaultIO) {
         setIOPackageName(defaultIO);
 
         //Set LookAndFeel
@@ -227,9 +233,9 @@ public class Jeliot {
         Tracker.setTheater(theatre);
         //Tracker.setCodePane2(codePane);
 
-        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad, userDirectory,
-                callTree, hv);
-        
+        gui = new JeliotWindow(this, codePane, theatre, engine, iLoad,
+                userDirectory, callTree, hv);
+
     }
 
     /**
@@ -294,7 +300,7 @@ public class Jeliot {
             ecodeReader = launcher.getReader();
             inputWriter = launcher.getInputWriter();
             MCodeUtilities.clearRegisteredSecondaryMCodeConnections();
-
+            MCodeUtilities.clearRegisteredPrePrimaryMCodeConnections();
             compiled = true;
         }
 
@@ -378,6 +384,28 @@ public class Jeliot {
             }
         }
 
+        if (gui.isAskingQuestions()) {
+            //AVInteractionEngine and Interpreter initialization!
+            try {
+                AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
+                        this.gui.getFrame());
+                //TODO: pass this as a constructor parameter.
+                ((TheaterMCodeInterpreter) mCodeInterpreterForTheater)
+                        .setAvInteractionEngine(avinteractionEngine);
+                PipedReader pr = new PipedReader();
+                PipedWriter pw = new PipedWriter(pr);
+                MCodeUtilities
+                        .addRegisteredPrePrimaryMCodeConnections(new PrintWriter(
+                                pw));
+                mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
+                        new BufferedReader(pr), avinteractionEngine);
+            } catch (Exception e) {
+                if (DebugUtil.DEBUGGING) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         // create the main loop for visualization
         controller = new ThreadController(new Runnable() {
 
@@ -413,6 +441,23 @@ public class Jeliot {
             }
         });
         callTreeThread.start();
+
+        //a new thread for AVInteraction interpreter
+        if (this.gui.isAskingQuestions()) {
+        avInteractionThread = new Thread(new Runnable() {
+
+            public void run() {
+                try {
+                    mCodeInterpreterForAVInteraction.execute();
+                } catch (Exception e) {
+                    if (DebugUtil.DEBUGGING) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        avInteractionThread.start();
+        }
 
         engine.setController(controller);
         director.setController(controller);
@@ -471,7 +516,8 @@ public class Jeliot {
      * @param str String that is outputted.
      */
     public void output(String str) {
-        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Output: " + str);
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
+                -1, "Output: " + str);
         gui.output(str);
     }
 
@@ -479,7 +525,8 @@ public class Jeliot {
      * @param e
      */
     public void showErrorMessage(InterpreterError e) {
-        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "Error: " + e.getMessage());
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
+                -1, "Error: " + e.getMessage());
         gui.showErrorMessageDuringAnimation(e);
     }
 
@@ -566,6 +613,9 @@ public class Jeliot {
         if (mCodeInterpreterForCallTree != null) {
             mCodeInterpreterForCallTree.setRunning(false);
         }
+        if (mCodeInterpreterForAVInteraction != null) {
+            mCodeInterpreterForAVInteraction.setRunning(false);
+        }
         if (controller != null) {
             controller.quit();
         }
@@ -627,7 +677,9 @@ public class Jeliot {
         launcher = null;
         controller = null;
         callTreeThread = null;
+        avInteractionThread = null;
         MCodeUtilities.clearRegisteredSecondaryMCodeConnections();
+        MCodeUtilities.clearRegisteredPrePrimaryMCodeConnections();
         inputWriter = null;
         ecodeReader = null;
     }
@@ -643,10 +695,10 @@ public class Jeliot {
         userDirectory = prop.getProperty("user.dir");
 
         if (args.length >= 4) {
-            TrackerClock.setNativeTracking(Boolean.valueOf(args[3]).booleanValue());
+            TrackerClock.setNativeTracking(Boolean.valueOf(args[3])
+                    .booleanValue());
         }
 
-        
         if (args.length >= 2) {
             if (args[1] != null) {
                 Tracker.setTrack(Boolean.valueOf(args[1]).booleanValue());
@@ -680,7 +732,7 @@ public class Jeliot {
                 }
             }
         }
-        
+
     }
 
     /**
@@ -719,8 +771,8 @@ public class Jeliot {
         //Should experimental settings be used
         if (args.length >= 4) {
             experiment = Boolean.valueOf(args[3]).booleanValue();
-        }        
-        
+        }
+
         final Jeliot jeliot = new Jeliot("jeliot.io.*");
 
         //Do the mapping to other resources.
@@ -839,7 +891,8 @@ public class Jeliot {
         director = null;
         gui = null;
         theatre = null;
-        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1, -1, "JeliotClose");
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
+                -1, "JeliotClose");
         Tracker.closeFile();
     }
 

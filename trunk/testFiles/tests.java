@@ -1,5 +1,6 @@
 //Class:Hello
-//Called-Method:(new Hello("Hello all!")).print()
+//Call-Method:(new Hello("Hello all!")).print()
+//NonStaticCall
 /**
  * Class Hello:
  *
