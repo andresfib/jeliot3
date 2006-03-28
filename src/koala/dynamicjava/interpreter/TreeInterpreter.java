@@ -320,6 +320,7 @@ public class TreeInterpreter implements Interpreter {
             //e.printStackTrace();
             return e;
         } catch (Exception e) {
+            
             DebugUtil.handleThrowable(e);
 
             String code = "" + Code.ERROR + Code.DELIM
@@ -340,7 +341,6 @@ public class TreeInterpreter implements Interpreter {
                 //String message = MCodeUtilities.replace(e.getMessage(), "<", "&lt;");
                 //message = MCodeUtilities.replace(message, ">", "&gt;");
                 //code += message;
-
             }
 
             code = MCodeUtilities.replace(code, "\n", "<BR>");

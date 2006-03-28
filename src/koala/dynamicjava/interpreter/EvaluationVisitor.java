@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -990,17 +991,19 @@ public class EvaluationVisitor extends VisitorObject {
                     + MCodeGenerator.locationToString(node));
             value = MCodeUtilities.getValue(o);
 
-            MCodeGenerator.generateCodeA(assigncounter, auxcounter, auxcounter2, value, classname, MCodeGenerator.locationToString(node));
+            MCodeGenerator.generateCodeA(assigncounter, auxcounter,
+                    auxcounter2, value, classname, MCodeGenerator
+                            .locationToString(node));
 
             /*
-            MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                    + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
-                    + Code.DELIM + value
-                    //+ o.toString()
-                    + Code.DELIM + classname + Code.DELIM //c.getName() + Code.DELIM
-                    + MCodeUtilities.locationToString(node));
-            */
-            
+             MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+             + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
+             + Code.DELIM + value
+             //+ o.toString()
+             + Code.DELIM + classname + Code.DELIM //c.getName() + Code.DELIM
+             + MCodeUtilities.locationToString(node));
+             */
+
             if (node.isFinal()) {
                 context.setConstant(node.getName(), o);
             } else {
@@ -1308,6 +1311,14 @@ public class EvaluationVisitor extends VisitorObject {
                 } catch (InvocationTargetException e) {
                     if (e.getTargetException() instanceof Error) {
                         throw (Error) e.getTargetException();
+                    } else if (e.getTargetException() instanceof NullPointerException
+                            && !m.getReturnType().getName().equals(
+                                    Void.TYPE.getName())) {
+                        node.setProperty(NodeProperties.ERROR_STRINGS,
+                                new String[] { m.getName(),
+                                        m.getReturnType().getName() });
+                        throw new ExecutionError("j3.no.return.exception", node);
+
                     } else if (e.getTargetException() instanceof RuntimeException) {
                         throw (RuntimeException) e.getTargetException();
                     }
@@ -1321,13 +1332,18 @@ public class EvaluationVisitor extends VisitorObject {
                 // Since the 'clone' method of an array is not a normal
                 // method, the only way to invoke it is to simulate its
                 // behaviour.
-                Class c = NodeProperties.getType(exp);
-                int len = Array.getLength(obj);
-                Object result = Array.newInstance(c.getComponentType(), len);
-                for (int i = 0; i < len; i++) {
-                    Array.set(result, i, Array.get(obj, i));
+                try {
+                    Class c = NodeProperties.getType(exp);
+                    int len = Array.getLength(obj);
+                    Object result = Array
+                            .newInstance(c.getComponentType(), len);
+                    for (int i = 0; i < len; i++) {
+                        Array.set(result, i, Array.get(obj, i));
+                    }
+                    return result;
+                } catch (NullPointerException e) {
+                    throw new ExecutionError("j3.null.pointer.exception", node);
                 }
-                return result;
             }
         }
     }
@@ -1701,17 +1717,37 @@ public class EvaluationVisitor extends VisitorObject {
         } catch (InvocationTargetException e) {
             if (e.getTargetException() instanceof Error) {
                 throw (Error) e.getTargetException();
+            } else if (e.getTargetException() instanceof NullPointerException
+                    && Modifier.isStatic(m.getModifiers())
+                    && !m.getReturnType().getName().equals(Void.TYPE.getName())) {
+                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] {
+                        m.getName(), m.getReturnType().getName() });
+                throw new ExecutionError("j3.no.return.exception", node);
+
             } else if (e.getTargetException() instanceof RuntimeException) {
                 throw (RuntimeException) e.getTargetException();
             }
             throw new ThrownException(e.getTargetException());
         } catch (NullPointerException e) {
-            node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { m
-                    .getName() });
-            throw new ExecutionError("j3.not.static.method", node);
+            if (!Modifier.isStatic(m.getModifiers())) {
+                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] { m
+                        .getName() });
+                throw new ExecutionError("j3.not.static.method", node);
+            } else if (!m.getReturnType().getName()
+                    .equals(Void.class.getName())) {
+                node.setProperty(NodeProperties.ERROR_STRINGS, new String[] {
+                        m.getName(), m.getReturnType().getName() });
+                throw new ExecutionError("j3.no.return.exception", node);
+            }
+            throw new CatchedExceptionError(e, node);
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
+        } catch (Throwable e1) {
+            System.out.print(e1);
+            throw new CatchedExceptionError(
+                    "Throwable in static method invocation", e1, node);
         }
+
     }
 
     /**
@@ -1748,7 +1784,7 @@ public class EvaluationVisitor extends VisitorObject {
          node.getLeftExpression().acceptVisitor(this);
          evaluating = evaluatingPreviously;
          */
-        
+
         long auxcounter = counter;
 
         Object val = node.getRightExpression().acceptVisitor(this);
@@ -1757,17 +1793,18 @@ public class EvaluationVisitor extends VisitorObject {
         mod.modify(context, val);
         String value = MCodeUtilities.getValue(val);
 
-        MCodeGenerator.generateCodeA(assigncounter, auxcounter, auxcounter2, value, node);
-        
+        MCodeGenerator.generateCodeA(assigncounter, auxcounter, auxcounter2,
+                value, node);
+
         /*
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
-                + Code.DELIM + value +
-                //val.toString()+
-                Code.DELIM + NodeProperties.getType(node).getName()
-                + Code.DELIM + MCodeUtilities.locationToString(node));
-        */
-        
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
+         + Code.DELIM + value +
+         //val.toString()+
+         Code.DELIM + NodeProperties.getType(node).getName()
+         + Code.DELIM + MCodeUtilities.locationToString(node));
+         */
+
         return val;
     }
 
@@ -2604,18 +2641,18 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Modify the variable and return
         mod.modify(context, result);
-        
+
         MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
                 auxcounter /*assignauxcounter2*/, result, node);
 
         /*
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
-                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        */
-        
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+         + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
+
         return result;
     }
 
@@ -2719,19 +2756,19 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Modify the variable and return
         mod.modify(context, result);
-        
+
         MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
                 auxcounter /*assignauxcounter2*/, result, node);
         /*
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
-                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        */
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+         + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
 
         return result;
-        
+
         /*
          * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
          * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
@@ -2853,20 +2890,20 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Modify the variable and return
         mod.modify(context, result);
-        
+
         MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
                 auxcounter /*assignauxcounter2*/, result, node);
 
         /*
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
-                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        */
-        
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+         + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
+
         return result;
-        
+
         /*
          * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
          * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
@@ -2986,20 +3023,20 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Modify the variable and return
         mod.modify(context, result);
-        
+
         MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
                 auxcounter /*assignauxcounter2*/, result, node);
 
         /*
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
-                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        */
-        
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+         + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
+
         return result;
-        
+
         /*
          * Node left = node.getLeftExpression(); LeftHandSideModifier mod =
          * NodeProperties.getModifier(left); Object lhs = mod.prepare(this,
@@ -3044,9 +3081,9 @@ public class EvaluationVisitor extends VisitorObject {
                 + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeGenerator.locationToString(node));
-        
+
         return o;
-        
+
         /*
          * if (node.hasProperty(NodeProperties.VALUE)) {
          *  // The expression is constant return
@@ -3124,18 +3161,18 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Modify the variable and return
         mod.modify(context, result);
-        
+
         MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
                 auxcounter /*assignauxcounter2*/, result, node);
 
         /*
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
-                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        */
-        
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+         + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
+
         return result;
 
     }
@@ -3753,16 +3790,16 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Modify the variable and return
         mod.modify(context, result);
-        
+
         MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
                 auxcounter /*assignauxcounter2*/, result, node);
         /*
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
-                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        */
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+         + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
 
         return result;
     }
@@ -3814,7 +3851,7 @@ public class EvaluationVisitor extends VisitorObject {
      */
     public Object visit(ExclusiveOrAssignExpression node) {
         //Simulate that a^=b -->> a= a^b
-        
+
         long assigncounter = counter++;
         long assignauxcounter = counter;
         //Start assignment
@@ -3884,17 +3921,17 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Modify the variable and return
         mod.modify(context, result);
-        
+
         MCodeGenerator.generateCodeA(assigncounter, assignauxcounter,
                 auxcounter /*assignauxcounter2*/, result, node);
-        
+
         /*
-        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
-                + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
-                + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
-                + NodeProperties.getType(node).getName() + Code.DELIM
-                + MCodeUtilities.locationToString(node));
-        */
+         MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
+         + Code.DELIM + assignauxcounter + Code.DELIM + auxcounter //assignauxcounter2
+         + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
+         + NodeProperties.getType(node).getName() + Code.DELIM
+         + MCodeUtilities.locationToString(node));
+         */
         return result;
     }
 
