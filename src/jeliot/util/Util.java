@@ -4,6 +4,7 @@
 package jeliot.util;
 
 import java.io.File;
+import java.net.URL;
 
 /**
  * @author nmyller
@@ -43,4 +44,12 @@ public class Util {
         return userPath;
     }
 
+    public static URL getResourceURL(String resource, Class loader) {
+        URL imageURL = Thread.currentThread().getContextClassLoader().getResource(resource);
+        if (imageURL == null) {
+            imageURL = (loader.getClassLoader().getResource(resource));
+        }
+        return imageURL;
+    }
+    
 }

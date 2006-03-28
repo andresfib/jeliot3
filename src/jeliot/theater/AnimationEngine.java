@@ -26,6 +26,8 @@ package jeliot.theater;
  */
 public class AnimationEngine implements Controlled {
 
+    private boolean runUntil = false;
+    
     /**
      * Amount of action for one second period
      */
@@ -155,7 +157,8 @@ public class AnimationEngine implements Controlled {
             // Spend the excess time waiting.
             long waitTime = (long)(1000/fps) + time -
                     (time = System.currentTimeMillis());
-            if (waitTime > 0) {
+            
+            if (waitTime > 0 && !runUntil) {
                 try {
                     Thread.sleep(waitTime);
                 }
@@ -165,7 +168,7 @@ public class AnimationEngine implements Controlled {
             // If the engine is controlled, inform the controller.
             if (controller != null) {
                 try {
-                controller.checkPoint(this, false);
+                    controller.checkPoint(this, false);
                 } catch (Exception e) {
                 }
             }
@@ -195,5 +198,13 @@ public class AnimationEngine implements Controlled {
      */
     public void resume() {
         theatre.capture();
+    }
+
+    public boolean isRunUntilEnabled() {
+        return runUntil;
+    }
+
+    public void setRunUntilEnabled(boolean runUntil) {
+        this.runUntil = runUntil;
     }
 }

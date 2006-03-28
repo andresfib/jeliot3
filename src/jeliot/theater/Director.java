@@ -173,7 +173,7 @@ public class Director {
      */
     public boolean direct() throws Exception {
         errorOccured = false;
-        highlight(new Highlight(0, 0, 0, 0));
+        doHighlight(new Highlight(0, 0, 0, 0));
         cbox = factory.produceConstantBox();
         theatre.addPassive(cbox);
         manager.setConstantBox(cbox);
@@ -189,7 +189,7 @@ public class Director {
          * interrupted flag is set true.
          */
         boolean interrupted = mCodeInterpreter.execute();
-
+        
         if (!errorOccured) {
             jeliot.highlightStatement(new Highlight(0, 0, 0, 0));
         }
@@ -214,18 +214,90 @@ public class Director {
     public void runUntil(int line) {
         if (line > 0) {
             runUntilLine = line;
-            theatre.setRunUntilEnabled(true);
+            setRunUntilEnabled(true);
         } else {
             theatre.flush();
             runUntilLine = 0;
-            theatre.setRunUntilEnabled(false);
+            setRunUntilEnabled(false);
         }
+    }
+    
+    private void setRunUntilEnabled(boolean b) {
+        theatre.setRunUntilEnabled(b);
+        engine.setRunUntilEnabled(b);
+    }
+    /**
+     * 
+     * @param h
+     */
+    public void highlightExpression(Highlight h) {
+        if (h != null) {
+
+            if (runUntilLine >= h.getBeginLine()
+                    && runUntilLine <= h.getEndLine()) {
+                runUntilLine = -1;
+                setRunUntilEnabled(false);
+                jeliot.runUntilDone();
+                theatre.repaint();
+            }
+        }
+        doHighlight(h);
+    }
+
+    /**
+     * 
+     * @param h
+     */
+    public void highlightStatement(Highlight h) {
+        if (h != null) {
+
+            if (runUntilLine >= h.getBeginLine()
+                    && runUntilLine <= h.getEndLine()) {
+                runUntilLine = -1;
+                setRunUntilEnabled(false);
+                jeliot.runUntilDone();
+                theatre.repaint();
+            }
+        }
+        doHighlight(h);
+    }
+
+    /**
+     * 
+     * @param h
+     */
+    public void highlightDeclaration(Highlight h) {
+        if (h != null) {
+            if (runUntilLine == h.getBeginLine()) {
+                runUntilLine = -1;
+                setRunUntilEnabled(false);
+                jeliot.runUntilDone();
+                theatre.repaint();
+            }
+        }
+        doHighlight(h);
+    }
+
+    /**
+     * 
+     * @param h
+     */
+    public void highlightForMessage(Highlight h) {
+        if (h != null) {
+            if (runUntilLine == h.getBeginLine()) {
+                runUntilLine = -1;
+                setRunUntilEnabled(false);
+                jeliot.runUntilDone();
+                theatre.repaint();
+            }
+        }
+        doHighlight(h);
     }
 
     /**
      * @param h
      */
-    public void highlight(Highlight h) {
+    private void doHighlight(Highlight h) {
         //requestHistoryImage();
         this.hPrev = h;
         if (!mCodeInterpreter.starting()) {
@@ -235,20 +307,8 @@ public class Director {
                 controller.checkPoint();
             }
 
-            if (h != null) {
-                /*
-                 if (runUntilLine >= h.getBeginLine() &&
-                 runUntilLine <= h.getEndLine()) {
-                 */
-                if (runUntilLine == h.getBeginLine()) {
-                    runUntilLine = -1;
-                    theatre.setRunUntilEnabled(false);
-                    jeliot.runUntilDone();
-                    theatre.repaint();
-                }
-                if (jeliot.getSelectedTabIndex() != 2)
-                    jeliot.highlightStatement(h);
-            }
+            if (h != null && jeliot.getSelectedTabIndex() != 2)
+                jeliot.highlightStatement(h);
         }
     }
 
@@ -318,7 +378,7 @@ public class Director {
     public ExpressionActor beginBinaryExpression(Value operand, int operator,
             long expressionReference, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         // Prepare the actors
         ValueActor operandAct = operand.getActor();
@@ -367,7 +427,7 @@ public class Director {
     public void rightBinaryExpression(Value operand, ExpressionActor expr,
             Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         // If there is a second operand, remove the ellipsis and
         // replace them with the second operand.
@@ -407,7 +467,7 @@ public class Director {
     public Value finishBinaryExpression(Value result, int operator,
             ExpressionActor expr, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         // Prepare the actors.
         ValueActor resultAct = factory.produceValueActor(result);
@@ -487,7 +547,7 @@ public class Director {
      */
     public Value[] animateOMInvocation(String methodCall, Value[] args,
             Highlight h, Value thisValue) {
-        highlight(h);
+        highlightExpression(h);
 
         // Remember the scratch of current expression.
         // scratchStack.push(currentScratch);
@@ -584,7 +644,7 @@ public class Director {
     public Value[] animateSMInvocation(String methodName, Value[] args,
             Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         // Remember the scratch of current expression.
         // scratchStack.push(currentScratch);
@@ -652,7 +712,7 @@ public class Director {
             Highlight h, Value thisValue) {
 
         // highlight the method header.
-        highlight(h);
+        highlightDeclaration(h);
 
         // create new method frame
         MethodFrame frame = new MethodFrame(methodName);
@@ -803,7 +863,7 @@ public class Director {
             Highlight h) {
 
         // highlight the method header.
-        highlight(h);
+        highlightDeclaration(h);
 
         // create new method frame
         MethodFrame frame = new MethodFrame(methodName);
@@ -985,7 +1045,7 @@ public class Director {
      */
     public Actor animateReturn(Value returnValue, Value casted, Highlight h) {
 
-        highlight(h);
+        highlightStatement(h);
 
         ValueActor castAct = factory.produceValueActor(casted);
         casted.setActor(castAct);
@@ -1032,7 +1092,7 @@ public class Director {
      */
     public void animateCastExpression(Value fromValue, Value toValue,
             Highlight h) {
-        highlight(h);
+        highlightExpression(h);
         animateCastExpression(fromValue, toValue);
     }
 
@@ -1091,7 +1151,7 @@ public class Director {
     public Value animateBinaryExpression(int operator, Value first,
             Value second, Value result, long expressionCounter, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         // prepare the actors
         Actor firstAct = first.getActor();
@@ -1172,7 +1232,7 @@ public class Director {
      */
     public Variable declareVariable(String name, String type, Highlight h) {
 
-        highlight(h);
+        highlightStatement(h);
 
         // Create a new variable and its actor.
         Variable v = currentMethodFrame
@@ -1208,7 +1268,7 @@ public class Director {
     public Variable declareObjectVariable(ObjectFrame of, String name,
             String type, Highlight h) {
 
-        highlight(h);
+        highlightStatement(h);
 
         // Create a new variable and its actor.
         Variable v = of.declareVariable(new Variable(name, type));
@@ -1319,7 +1379,7 @@ public class Director {
     public void animateAssignment(Variable variable, Value value,
             Value copiedValue, Value casted, Value returnValue, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         String type = variable.getType();
         VariableActor variableAct = variable.getActor();
@@ -1413,7 +1473,7 @@ public class Director {
     public void animateIncDec(int operator, Variable var, Value result,
             Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         VariableActor varAct = var.getActor();
         //Value value = var.getValue();
@@ -1468,7 +1528,7 @@ public class Director {
     public void animatePostIncDec(int operator, Variable var, Value resVal,
             Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         VariableActor varAct = var.getActor();
         //Value value = var.getValue();
@@ -1523,7 +1583,7 @@ public class Director {
      */
     public ExpressionActor beginUnaryExpression(int operator, Value arg,
             long expressionCounter, Highlight h) {
-        highlight(h);
+        highlightExpression(h);
 
         ValueActor argAct = arg.getActor();
         OperatorActor opAct = factory.produceUnaOpActor(operator);
@@ -1559,7 +1619,7 @@ public class Director {
     public Value finishUnaryExpression(int operator, ExpressionActor exp,
             Value result, long expressionCounter, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         ValueActor resAct = factory.produceValueActor(result);
         OperatorActor eqAct = factory.produceUnaOpResActor(operator);
@@ -1610,7 +1670,7 @@ public class Director {
     public Value animateUnaryExpression(int operator, Value arg, Value result,
             long expressionCounter, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         ValueActor argAct = arg.getActor();
         ValueActor resAct = factory.produceValueActor(result);
@@ -1747,7 +1807,7 @@ public class Director {
         capture();
         engine.showAnimation(message.appear(p));
         release();
-        highlight(h);
+        highlightForMessage(h);
         //messagePause = true;
         theatre.removeActor(message);
     }
@@ -1830,7 +1890,7 @@ public class Director {
      * @param h
      */
     public void enterLoop(String statementName, Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(enterLoop.format(new String[] { statementName }), h);
     }
 
@@ -1840,7 +1900,7 @@ public class Director {
      * @param h
      */
     public void enterLoop(String statementName, Value check, Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(enterLoop.format(new String[] { statementName }), h);
         //, check);
     }
@@ -1851,7 +1911,7 @@ public class Director {
      * @param h
      */
     public void continueLoop(String statementName, Value check, Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(continueLoop.format(new String[] { statementName }), h);
         //, check);
     }
@@ -1861,7 +1921,7 @@ public class Director {
      * @param check
      */
     public void exitLoop(String statementName, Value check) {
-        highlight(null);
+        highlightDeclaration(null);
         showMessage(exitLoop.format(new String[] { statementName }), null);
         //, check);
     }
@@ -1871,7 +1931,7 @@ public class Director {
      * @param h
      */
     public void breakLoop(String statementName, Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(breakLoop.format(new String[] { statementName }), h);
     }
 
@@ -1879,7 +1939,7 @@ public class Director {
      * @param h
      */
     public void breakSwitch(Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.break_switch"), h);
     }
 
@@ -1888,7 +1948,7 @@ public class Director {
      * @param check
      */
     public void skipLoop(String statementName, Value check) {
-        highlight(null);
+        highlightDeclaration(null);
         showMessage(skipLoop.format(new String[] { statementName }), null);
         //, check);
     }
@@ -1898,7 +1958,7 @@ public class Director {
      * @param h
      */
     public void continueLoop(String statementName, Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(continueLoop.format(new String[] { statementName }), h);
     }
 
@@ -1907,7 +1967,7 @@ public class Director {
      * @param h
      */
     public void branchThen(Value check, Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.if_then"), h); //, check, h);
     }
 
@@ -1916,7 +1976,7 @@ public class Director {
      * @param h
      */
     public void branchElse(Value check, Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.if_else"), h); //, check, h);
     }
 
@@ -1925,7 +1985,7 @@ public class Director {
      * @param h
      */
     public void skipIf(Value check, Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.skip_if"), h); //, check, h);
     }
 
@@ -1933,7 +1993,7 @@ public class Director {
      * @param h
      */
     public void openSwitch(Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.enter_switch"), h); //, check, h);
     }
 
@@ -1941,7 +2001,7 @@ public class Director {
      * @param h
      */
     public void closeSwitch(Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.exit_switch"), h); //, check, h);
     }
 
@@ -1949,7 +2009,7 @@ public class Director {
      * @param h
      */
     public void switchSelected(Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.select_switch"), h); //, check, h);
     }
 
@@ -1957,18 +2017,18 @@ public class Director {
      * @param h
      */
     public void switchDefault(Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.default_switch"), h); //, check, h);
     }
 
     public void openArrayInitializer(Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.open_array_initializer"),
                 h);
     }
 
     public void closeArrayInitializer(Highlight h) {
-        highlight(h);
+        highlightDeclaration(h);
         showMessage(messageBundle.getString("message.close_array_initializer"),
                 h);
     }
@@ -1977,6 +2037,7 @@ public class Director {
      * @param dims
      * @param h
      */
+    /*
     public void arrayCreation(int[] dims, Highlight h) {
 
         String dimensions = "";
@@ -1991,21 +2052,22 @@ public class Director {
         String[] dimensionNumber = new String[1];
         dimensionNumber[0] = String.valueOf(dims.length);
 
-        highlight(h);
+        highlightStatement(h);
         String[] message = new String[2];
         message[0] = arrayCreation.format(dimensionNumber);
         message[1] = arrayCreationDimensions
                 .format(new String[] { dimensions });
         showMessage(message, h);
     }
-
+    */
+    
     /**
      * @param val
      * @param h
      */
     public void output(Value val, Highlight h) {
 
-        highlight(h);
+        highlightStatement(h);
 
         ValueActor actor = val.getActor();
         if (actor == null) {
@@ -2208,7 +2270,7 @@ public class Director {
         }
 
         if (animator != null) {
-            highlight(h);
+            highlightStatement(h);
             animator.animate(this);
             return animator.getReturnValue();
         }
@@ -2429,7 +2491,7 @@ public class Director {
             ArrayInstance[][] level2, Value[] lenVal, long expressionCounter,
             int actualDimension, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         //Array creation here
         //Use SMIActor as base.
@@ -2479,7 +2541,7 @@ public class Director {
         }
         release();
 
-        highlight(h);
+        highlightExpression(h);
 
         ArrayActor arrayAct = factory.produceArrayActor(array);
         array.setArrayActor(arrayAct);
@@ -2596,7 +2658,7 @@ public class Director {
     public void showArrayAccess(VariableInArray[] vars, Value[] indexVal,
             Value returnVal, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
         int n = vars.length;
 
         Value value = vars[n - 1].getValue();
@@ -2670,7 +2732,7 @@ public class Director {
     public void initializeArrayVariable(VariableInArray variable, Value value,
             Value casted, boolean literal, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         final VariableInArrayActor variableAct = (VariableInArrayActor) variable
                 .getActor();
@@ -2754,7 +2816,7 @@ public class Director {
      */
     public void showObjectCreation(ObjectFrame of, Highlight h) {
 
-        highlight(h);
+        highlightExpression(h);
 
         ObjectStage os = factory.produceObjectStage(of);
         of.setObjectStage(os);
@@ -2815,7 +2877,7 @@ public class Director {
      */
     public void showClassCreation(jeliot.lang.Class c) {
 
-        highlight(null);
+        highlightDeclaration(null);
 
         ClassActor ca = factory.produceClassActor(c);
         c.setClassActor(ca);
@@ -2842,7 +2904,7 @@ public class Director {
     public void declareClassVariable(jeliot.lang.Class c, Variable var,
             Value val) {
 
-        highlight(var.getLocationInCode());
+        highlightStatement(var.getLocationInCode());
 
         ClassActor ca = c.getClassActor();
         VariableActor actor = factory.produceVariableActor(var);

@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
+import jeliot.util.Util;
 
 /**
  * This class handles the image loading and caching for the animation.
@@ -87,13 +88,8 @@ public class ImageLoader {
     public Image getImage(String filename) {
         if (images.containsKey(filename)) { return (Image) images.get(filename); }
 
-        URL imageURL = Thread.currentThread().getContextClassLoader().getResource(
-                propertiesBundle.getStringProperty("directory.images") + filename);
-        if (imageURL == null) {
-            imageURL = (this.getClass().getClassLoader().getResource(propertiesBundle
-                    .getStringProperty("directory.images")
-                    + filename));
-        }
+        URL imageURL = Util.getResourceURL(propertiesBundle.getStringProperty("directory.images") + filename, this.getClass());
+
         Image image = getImage(imageURL);
         images.put(filename, image);
         return image;

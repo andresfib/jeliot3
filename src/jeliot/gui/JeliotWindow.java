@@ -447,6 +447,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
     /** Control panel */
     private JComponent conPan;
 
+    private boolean askQuestions = false;
+
     /**
      * Assigns the values of the parameters in the object values. Constructs the
      * panelController with theatre and iload.
@@ -952,6 +954,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     .getHistoryView().isEnabled());
         }
 
+        
         final JCheckBoxMenuItem enableHistoryViewMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.show_history_view"),
                 jeliot.getHistoryView().isEnabled());
@@ -971,6 +974,30 @@ public class JeliotWindow implements PauseListener, MouseListener {
             }
         });
         menu.add(enableHistoryViewMenuItem);
+        
+        
+        if (jeliotUserProperties.containsKey("ask_questions")) {
+            this.askQuestions =
+                    jeliotUserProperties
+                            .getBooleanProperty("ask_questions");
+        } else {
+            jeliotUserProperties.setBooleanProperty("ask_questions", this.askQuestions);
+        }
+        final JCheckBoxMenuItem enableQuestionAskingMenuItem = new JCheckBoxMenuItem(
+                messageBundle.getString("menu.options.ask_questions"),
+                this.askQuestions);
+        enableQuestionAskingMenuItem.setMnemonic(KeyEvent.VK_Q);
+        enableQuestionAskingMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_Q, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        enableQuestionAskingMenuItem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                boolean state = enableQuestionAskingMenuItem.getState();
+                JeliotWindow.this.askQuestions = state;
+                jeliotUserProperties.setBooleanProperty("ask_questions", JeliotWindow.this.askQuestions);
+            }
+        });
+        menu.add(enableQuestionAskingMenuItem);
 
         menu.addSeparator();
 
@@ -2104,12 +2131,15 @@ public class JeliotWindow implements PauseListener, MouseListener {
             jeliot.runUntil(lineNumber);
             previousSpeed = speedSlider.getValue();
             speedSlider.setValue(speedSlider.getMaximum());
+            
+            //TODO: move these to Director as they are not a GUI's concern
             previousDefaultDuration = Animation.defaultDuration;
-            Animation.defaultDuration = 2;
+            Animation.defaultDuration = 1;
+            Animation.disableDurationChanging = true;            
+            
             runningUntil = true;
             codePane.highlightLineNumber(lineNumber);
             SwingUtilities.invokeLater(new Runnable() {
-
                 public void run() {
                     playButton.doClick();
                 }
@@ -2129,7 +2159,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
     public void runUntilFinished() {
         codePane.highlightLineNumber(-1);
         speedSlider.setValue(previousSpeed);
+        
+        //TODO: move these to Director as they are not a GUI's concern
         Animation.defaultDuration = previousDefaultDuration;
+        Animation.disableDurationChanging = false;
+        
         runningUntil = false;
     }
 
@@ -2139,7 +2173,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
     public void runUntilDone() {
         runUntilFinished();
         SwingUtilities.invokeLater(new Runnable() {
-
             public void run() {
                 pauseButton.doClick();
             }
@@ -2215,8 +2248,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
             tabbedPane.setForegroundAt(i, normalTabColor);
         }
     }
-
+    
     // These methods are for testing
+    public boolean isAskingQuestions() {
+        return askQuestions;
+    }
 
     public JButton getPlayButton() {
         return playButton;
@@ -2293,4 +2329,5 @@ public class JeliotWindow implements PauseListener, MouseListener {
      */
     public void mouseReleased(MouseEvent arg0) {
     }
+    
 }
