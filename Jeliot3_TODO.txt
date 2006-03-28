@@ -70,7 +70,6 @@ Extreme:
 
 User Interface:
 - Possibility to open or extend the output console
-- The previous output should be removed when rewind button is pressed. (done)
 - Change the size of the theater to the original size when rewound. When the animation is finished the space for a theater is not contracted to the original size so the scrollbars are all the time active and that can cause misconceptions or just be annoying.
 - Mnemonics and accelerator in Resources for internationalization
 
@@ -94,7 +93,9 @@ Java Language and Interpreters:
 
 
 ----- JELIOT 3.5.X bugs and features: ------
-* Left hand side of assignments evaluated twice (i++ is evaluated twice array[i++]=j;)
+* Handling of array accesses and object field accesses as left hand side operands on assignments, compound assignments and pre/post-increments/decrements where handled agains JLS. (fixed, but same problem as in the previous case)
+* Left hand side of assignments evaluated twice (i++ is evaluated twice array[i++]=j;) (fixed, but because there are several places that needed to be modified we would need a proper regression testing)
+* Pressing undo after saving makes the whole program code disappear because of incorrect handling of compound undoable edits. (fixed, plus added support for different compound undoable edits if necessary in future)
 * Objects returned from methods to non declared variables raises Runtime exception. (fixed)
 * Remember last opened directory. (done)
 * NullPointerExceptions are not reported to the user as his fault but ours. (fixed)
@@ -103,6 +104,7 @@ Java Language and Interpreters:
 * Mnemonic for editing and call tree conflict (fixed)
 * Mnemonics accessible when they are not visible (fixed)
 * More flexible way of handling 2-dimensional arrays (e.g. array[2]= new int[3];) (done)
+* The previous output should be removed when rewind button is pressed. (done)
 ---3.5.2
 * Find & Replace for editor (done)
 * Printing (done)
