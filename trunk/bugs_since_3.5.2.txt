@@ -10,4 +10,4 @@
 - Objects returned from methods to non declared variables raises Runtime exception (fixed)
 - Left hand side of assignments evaluated twice (i++ is evaluated twice array[i++]=j;) (fixed, but because there are several places that needed to be modified we would need a proper regression testing)
 - Pressing undo after saving makes the whole program code disappear because of incorrect handling of compound undoable edits. (fixed, plus added support for different compound undoable edits if necessary in future)
-- Handling of array accesses and object field accesses as left hand side operands on assignments, compound assignments and pre/post-increments/decrements where handled agains JLS. (fixed)
+- Handling of array accesses and object field accesses as left hand side operands on assignments, compound assignments and pre/post-increments/decrements were handled agains JLS. (fixed)
