@@ -14,7 +14,7 @@ import jeliot.util.UserProperties;
  * 
  * @author Niko Myller
  */
-public class JavaFileFilter extends FileFilter {
+public class JavaFileFilter extends FileFilter implements java.io.FileFilter {
 
 	/**
 	 * The resource bundle for gui package
