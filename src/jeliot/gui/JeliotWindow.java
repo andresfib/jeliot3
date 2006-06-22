@@ -105,7 +105,46 @@ public class JeliotWindow implements PauseListener, MouseListener {
      */
     private UserProperties jeliotUserProperties = ResourceBundles
             .getJeliotUserProperties();
+    {
+        /* If a method call should be asked from the user */
+        if (!jeliotUserProperties.containsKey("ask_for_method")) {
+            jeliotUserProperties.setBooleanProperty("ask_for_method", false);
+        }
 
+        /* If the starting method call is main with command line parameters should the parameters be asked.*/
+        if (!jeliotUserProperties.containsKey("ask_for_main_method_parameters")) {
+            jeliotUserProperties.setBooleanProperty(
+                    "ask_for_main_method_parameters", false);
+        }
+
+        /* if the new String[0] should be replaced with null in the main method call. */
+        if (!jeliotUserProperties.containsKey("use_null_to_call_main")) {
+            jeliotUserProperties.setBooleanProperty("use_null_to_call_main",
+                    false);
+        }
+
+        /* Whether Jeliot should be asking questions during the animation */
+        if (!jeliotUserProperties.containsKey("ask_questions")) {
+            jeliotUserProperties.setBooleanProperty("ask_questions", false);
+        }
+
+        /* Should the messages during the program visualization be shown as message dialogs. */
+        if (!jeliotUserProperties.containsKey("pause_on_message")) {
+            jeliotUserProperties.setBooleanProperty("pause_on_message", false);
+        }
+
+    }
+
+    /* If a method call should be asked from the user */
+    //private boolean askForMethod = false;
+    /* If the starting method call is main with command line parameters should the parameters be asked.*/
+    //private boolean askForMainMethodParameters = false;
+    /* if the new String[0] should be replaced with null in the main method call. */
+    //private boolean useNullInMainMethodCall = false;
+    /* Whether Jeliot should be asking questions during the animation */
+    //private boolean askQuestions = false;
+    /* Should the messages during the program visualization be shown as message dialogs. */
+    //private boolean showMessagesInDialogs = false;
     /**
      * The version information about Jeliot from name and version from the
      * resource bundle.
@@ -113,7 +152,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
     private String jeliotVersion = messageBundle.getString("name") + " "
             + messageBundle.getString("version");
 
-    
     /**
      * Helping to enable and disable the components.
      */
@@ -131,17 +169,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
     /** Control panel */
     private JComponent conPan;
-
-    /**
-     * 
-     */
-    private boolean askQuestions = false;
-    
-    /**
-     * Should the messages during the program visualization be shown as message
-     * dialogs.
-     */
-    private boolean showMessagesInDialogs = false;
 
     /**
      * True if an error has occured during the execution and false if no error
@@ -190,13 +217,19 @@ public class JeliotWindow implements PauseListener, MouseListener {
         });
     }
 
+    /**
+     * 
+     */
     private int selectedIndexInTabbedPane = 0;
+
+    /** If animation is running until certain line */
+    private boolean runningUntil = false;
 
     /** TreeDraw view that shows the call tree of the program execution. */
     private TreeDraw callTree;
 
-    /** The theatre in which the programs are animated. */
-    private Theater theatre;
+    /** The theater in which the programs are animated. */
+    private Theater theater;
 
     private JScrollPane theaterScrollPane;
 
@@ -256,20 +289,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
     /** Showing the history of the program execution */
     private HistoryView hv;
 
-    /** If a method call should be asked from the user */
-    private boolean askForMethod = false;
-
-    /** If the starting method call is main with command line parameters should the parameters be asked.*/
-    private boolean askForMainMethodParameters = false;
-
-    /** If animation is running until certain line */
-    private boolean runningUntil = false;
-
-    private boolean useNullInMainMethodCall = false;
-
     /** If user wants to record the mcode to the corresponding animation */
 
-    /*    private MCodeSaver mCodeSaver = null;*/
+    /* private MCodeSaver mCodeSaver = null; */
 
     /** Keeps the previous value of the default duration of the Animation*/
     private int previousDefaultDuration;
@@ -350,10 +372,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
      */
     private AdjustmentListener scrollPaneListener = new AdjustmentListener() {
         public void adjustmentValueChanged(AdjustmentEvent e) {
-            if (theatre.isShowing()) {
+            if (theater.isShowing()) {
                 Rectangle r = theaterScrollPane.getViewport().getViewRect();
-                Point t = theatre.getLocationOnScreen();
-                Dimension d = theatre.getSize();
+                Point t = theater.getLocationOnScreen();
+                Dimension d = theater.getSize();
                 Tracker.trackEvent(TrackerClock.currentTimeMillis(),
                         Tracker.SCROLL, (int) (t.x + r.getX()), (int) (t.y + r
                                 .getY()), (int) r.getWidth(), (int) r
@@ -368,9 +390,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
             messageBundle.getString("menu.options.use_null_to_call_main")) {
 
         public void actionPerformed(ActionEvent e) {
-            JeliotWindow.this.useNullInMainMethodCall = !JeliotWindow.this.useNullInMainMethodCall;
             jeliotUserProperties.setBooleanProperty("use_null_to_call_main",
-                    useNullInMainMethodCall);
+                    !jeliotUserProperties
+                            .getBooleanProperty("use_null_to_call_main"));
         }
 
     };
@@ -473,17 +495,16 @@ public class JeliotWindow implements PauseListener, MouseListener {
         }
     };
 
-
     /**
      * Assigns the values of the parameters in the object values. Constructs the
-     * panelController with theatre and iload.
+     * panelController with theater and iload.
      * 
      * @param jeliot
      *            The main program.
      * @param codePane
      *            The pane where all the code is shown while animated.
-     * @param theatre
-     *            The theatre where all the code is animated.
+     * @param theater
+     *            The theater where all the code is animated.
      * @param engine
      *            The engine that animates the code.
      * @param iLoad
@@ -497,7 +518,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         this.jeliot = jeliot;
         this.codePane = codePane;
-        this.theatre = theatre;
+        this.theater = theatre;
         this.engine = engine;
         this.iLoad = iLoad;
         this.udir = udir;
@@ -538,7 +559,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
      */
     public void setUp() {
         try {
-            this.theaterScrollPane = new JScrollPane(this.theatre);
+            this.theaterScrollPane = new JScrollPane(this.theater);
             this.theaterScrollPane.getHorizontalScrollBar()
                     .addAdjustmentListener(scrollPaneListener);
             this.theaterScrollPane.getVerticalScrollBar()
@@ -627,8 +648,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
             pane.setDividerLocation((jeliot.isExperiment()) ? 512 : 300);
 
             //TheatrePopup popup = new TheatrePopup();
-            //theatre.addMouseListener(popup);
-            //theatre.addMouseMotionListener(popup);
+            //theater.addMouseListener(popup);
+            //theater.addMouseMotionListener(popup);
 
             hw = new HelpWindow(iLoad.getImage(propertiesBundle
                     .getStringProperty("image.jeliot_icon")), udir);
@@ -642,7 +663,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
             }
             //editor.requestFocus();
-            //System.out.println(theatre.getSize());
+            //System.out.println(theater.getSize());
 
         } catch (Exception e) {
             e.printStackTrace(System.out);
@@ -835,6 +856,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
             jeliotUserProperties.setStringProperty("save_automatically",
                     Boolean.toString(editor.isSaveAutomatically()));
         }
+
         final JCheckBoxMenuItem saveAutomaticallyOnCompilationMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.save_automatically"),
                 editor.isSaveAutomatically());
@@ -845,7 +867,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         saveAutomaticallyOnCompilationMenuItem
                 .addActionListener(new ActionListener() {
-
                     public void actionPerformed(ActionEvent e) {
                         boolean saveAutomatically = saveAutomaticallyOnCompilationMenuItem
                                 .getState();
@@ -857,44 +878,46 @@ public class JeliotWindow implements PauseListener, MouseListener {
         menu.add(saveAutomaticallyOnCompilationMenuItem);
 
         //Ask for method
-        if (jeliotUserProperties.containsKey("ask_for_method")) {
-            askForMethod = jeliotUserProperties
-                    .getBooleanProperty("ask_for_method");
-        } else {
-            jeliotUserProperties.setBooleanProperty("ask_for_method",
-                    askForMethod);
-        }
-
+        /*
+         if (jeliotUserProperties.containsKey("ask_for_method")) {
+         askForMethod = jeliotUserProperties
+         .getBooleanProperty("ask_for_method");
+         } else {
+         jeliotUserProperties.setBooleanProperty("ask_for_method",
+         askForMethod);
+         }
+         */
         final JCheckBoxMenuItem askForMethodMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.ask_for_method"),
-                askForMethod);
+                jeliotUserProperties.getBooleanProperty("ask_for_method"));
         askForMethodMenuItem.setMnemonic(KeyEvent.VK_M);
         askForMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_M, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
         askForMethodMenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                askForMethod = askForMethodMenuItem.getState();
-                jeliotUserProperties.setStringProperty("ask_for_method",
-                        Boolean.toString(askForMethod));
+                jeliotUserProperties.setBooleanProperty("ask_for_method",
+                        askForMethodMenuItem.getState());
             }
         });
         menu.add(askForMethodMenuItem);
 
         //Ask for main method parameters
-        if (jeliotUserProperties.containsKey("ask_for_main_method_parameters")) {
-            this.askForMainMethodParameters = jeliotUserProperties
-                    .getBooleanProperty("ask_for_main_method_parameters");
-        } else {
-            jeliotUserProperties.setBooleanProperty(
-                    "ask_for_main_method_parameters",
-                    askForMainMethodParameters);
-        }
-
+        /*
+         if (jeliotUserProperties.containsKey("ask_for_main_method_parameters")) {
+         this.askForMainMethodParameters = jeliotUserProperties
+         .getBooleanProperty("ask_for_main_method_parameters");
+         } else {
+         jeliotUserProperties.setBooleanProperty(
+         "ask_for_main_method_parameters",
+         askForMainMethodParameters);
+         }
+         */
         final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(
                 messageBundle
                         .getString("menu.options.ask_for_main_method_parameters"),
-                askForMainMethodParameters);
+                jeliotUserProperties
+                        .getBooleanProperty("ask_for_main_method_parameters"));
         askForMainMethodParametersMenuItem.setMnemonic(KeyEvent.VK_A);
         askForMainMethodParametersMenuItem.setAccelerator(KeyStroke
                 .getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK
@@ -903,50 +926,52 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 .addActionListener(new ActionListener() {
 
                     public void actionPerformed(ActionEvent e) {
-                        askForMainMethodParameters = askForMainMethodParametersMenuItem
-                                .getState();
-                        jeliotUserProperties.setStringProperty(
-                                "ask_for_main_method_parameters", Boolean
-                                        .toString(askForMainMethodParameters));
+                        jeliotUserProperties.setBooleanProperty(
+                                "ask_for_main_method_parameters",
+                                askForMainMethodParametersMenuItem.getState());
                     }
                 });
         menu.add(askForMainMethodParametersMenuItem);
 
         //Use null parameter when calling main(String[] args).
-        if (jeliotUserProperties.containsKey("use_null_to_call_main")) {
-            this.useNullInMainMethodCall = Boolean.valueOf(
-                    jeliotUserProperties
-                            .getStringProperty("use_null_to_call_main"))
-                    .booleanValue();
-        } else {
-            jeliotUserProperties.setStringProperty("use_null_to_call_main",
-                    Boolean.toString(this.useNullInMainMethodCall));
-        }
-        final JCheckBoxMenuItem useNullInMainMethodCallMenuItem = new JCheckBoxMenuItem(this.useNullInMainMethodCallAction);        
-        useNullInMainMethodCallMenuItem.setState(this.useNullInMainMethodCall);
+        /*
+         if (jeliotUserProperties.containsKey("use_null_to_call_main")) {
+         this.useNullInMainMethodCall = Boolean.valueOf(
+         jeliotUserProperties
+         .getStringProperty("use_null_to_call_main"))
+         .booleanValue();
+         } else {
+         jeliotUserProperties.setStringProperty("use_null_to_call_main",
+         Boolean.toString(this.useNullInMainMethodCall));
+         }
+         */
+        final JCheckBoxMenuItem useNullInMainMethodCallMenuItem = new JCheckBoxMenuItem(
+                this.useNullInMainMethodCallAction);
+        useNullInMainMethodCallMenuItem.setState(jeliotUserProperties
+                .getBooleanProperty("use_null_to_call_main"));
         menu.add(useNullInMainMethodCallMenuItem);
 
         //Pause on message
-        if (jeliotUserProperties.containsKey("pause_on_message")) {
-            showMessagesInDialogs = jeliotUserProperties
-                    .getBooleanProperty("pause_on_message");
-        } else {
-            jeliotUserProperties.setBooleanProperty("pause_on_message",
-                    showMessagesInDialogs);
-        }
-
+        /*
+         if (jeliotUserProperties.containsKey("pause_on_message")) {
+         showMessagesInDialogs = jeliotUserProperties
+         .getBooleanProperty("pause_on_message");
+         } else {
+         jeliotUserProperties.setBooleanProperty("pause_on_message",
+         showMessagesInDialogs);
+         }
+         */
         final JCheckBoxMenuItem pauseOnMessageMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.pause_on_message"),
-                showMessagesInDialogs);
+                jeliotUserProperties.getBooleanProperty("pause_on_message"));
         pauseOnMessageMenuItem.setMnemonic(KeyEvent.VK_U);
         pauseOnMessageMenuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_U, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
         pauseOnMessageMenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                showMessagesInDialogs = pauseOnMessageMenuItem.getState();
                 jeliotUserProperties.setBooleanProperty("pause_on_message",
-                        showMessagesInDialogs);
+                        pauseOnMessageMenuItem.getState());
             }
         });
         menu.add(pauseOnMessageMenuItem);
@@ -986,29 +1011,32 @@ public class JeliotWindow implements PauseListener, MouseListener {
         });
         menu.add(enableHistoryViewMenuItem);
 
-        if (jeliotUserProperties.containsKey("ask_questions")) {
-            this.askQuestions = jeliotUserProperties
-                    .getBooleanProperty("ask_questions");
-        } else {
-            jeliotUserProperties.setBooleanProperty("ask_questions",
-                    this.askQuestions);
-        }
+        //If Jeliot should ask questions during animation
+        /*
+         if (jeliotUserProperties.containsKey("ask_questions")) {
+         this.askQuestions = jeliotUserProperties
+         .getBooleanProperty("ask_questions");
+         } else {
+         jeliotUserProperties.setBooleanProperty("ask_questions",
+         this.askQuestions);
+         }
+         */
         final JCheckBoxMenuItem enableQuestionAskingMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.ask_questions"),
-                this.askQuestions);
+                jeliotUserProperties.getBooleanProperty("ask_questions"));
         enableQuestionAskingMenuItem.setMnemonic(KeyEvent.VK_Q);
         enableQuestionAskingMenuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_Q, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
         enableQuestionAskingMenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                boolean state = enableQuestionAskingMenuItem.getState();
-                JeliotWindow.this.askQuestions = state;
                 jeliotUserProperties.setBooleanProperty("ask_questions",
-                        JeliotWindow.this.askQuestions);
+                        enableQuestionAskingMenuItem.getState());
             }
         });
         menu.add(enableQuestionAskingMenuItem);
+
+        this.editWidgets.add(enableQuestionAskingMenuItem);
 
         menu.addSeparator();
 
@@ -1563,11 +1591,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
     }
 
     /**
-     * Changes the theatre pane in the codeNest. Sets inside the codeNest the
-     * new theatre pane.
+     * Changes the theater pane in the codeNest. Sets inside the codeNest the
+     * new theater pane.
      * 
      * @param comp
-     *            The component that is changes in the theatre pane.
+     *            The component that is changes in the theater pane.
      */
     private void changeTheatrePane(JComponent comp) {
 
@@ -1592,7 +1620,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         //enableWidgets(editWidgets.elements(), true);
         enableWidgets(animWidgets.elements(), false);
-        
+
         tabbedPane.setSelectedIndex(0);
         changeTheatrePane(tabbedPane);
         unhighlightTabTitles();
@@ -1663,10 +1691,16 @@ public class JeliotWindow implements PauseListener, MouseListener {
             String programCode = editor.getProgram();
 
             if (methodCall == null) {
-                methodCall = SourceCodeUtilities.findMainMethodCall(
-                        programCode, askForMainMethodParameters, this.frame,
-                        this.useNullInMainMethodCall);
-                if (askForMethod || methodCall == null) {
+                methodCall = SourceCodeUtilities
+                        .findMainMethodCall(
+                                programCode,
+                                jeliotUserProperties
+                                        .getBooleanProperty("ask_for_main_method_parameters"),
+                                this.frame,
+                                jeliotUserProperties
+                                        .getBooleanProperty("use_null_to_call_main"));
+                if (jeliotUserProperties.getBooleanProperty("ask_for_method")
+                        || methodCall == null) {
                     methodCall = ((methodCall != null) ? methodCall : null);
                     String inputValue = JOptionPane
                             .showInputDialog(
@@ -1992,7 +2026,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
     /**
      * Changes the user interface when the "Rewind" button is pressed. Calls
-     * methods jeliot.rewind() and theatre.repaint().
+     * methods jeliot.rewind() and theater.repaint().
      * 
      * @see jeliot.Jeliot#rewind()
      * @see jeliot.theatre.Theatre#repaint()
@@ -2021,7 +2055,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         errorOccured = false;
 
         jeliot.cleanUp();
-        theatre.repaint();
+        theater.repaint();
         outputConsole.setText("");
 
         if (runningUntil) {
@@ -2043,7 +2077,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 jeliot.compile();
 
                 jeliot.rewind();
-                theatre.repaint();
+                theater.repaint();
 
                 editButton.setEnabled(true);
                 stepButton.setEnabled(true);
@@ -2110,7 +2144,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * @return
      */
     public boolean showMessagesInDialogs() {
-        return showMessagesInDialogs;
+        return jeliotUserProperties.getBooleanProperty("pause_on_message");
     }
 
     /**
@@ -2260,27 +2294,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
         }
     }
 
-    // These methods are for testing
-    public boolean isAskingQuestions() {
-        return askQuestions;
-    }
-
-    public JButton getPlayButton() {
-        return playButton;
-    }
-
-    public JButton getRewindButton() {
-        return rewindButton;
-    }
-
-    public JButton getEditButton() {
-        return editButton;
-    }
-
-    public JSlider getSpeedSlider() {
-        return speedSlider;
-    }
-
     public void paused() {
         stepButton.setEnabled(true);
         playButton.setEnabled(true);
@@ -2299,6 +2312,27 @@ public class JeliotWindow implements PauseListener, MouseListener {
         Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
                 -1, "AnimationStopped");
 
+    }
+
+    // These methods are for testing
+    public boolean isAskingQuestions() {
+        return jeliotUserProperties.getBooleanProperty("ask_questions");
+    }
+
+    public JButton getPlayButton() {
+        return playButton;
+    }
+
+    public JButton getRewindButton() {
+        return rewindButton;
+    }
+
+    public JButton getEditButton() {
+        return editButton;
+    }
+
+    public JSlider getSpeedSlider() {
+        return speedSlider;
     }
 
     /**
