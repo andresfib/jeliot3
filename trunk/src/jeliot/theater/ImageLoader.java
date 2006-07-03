@@ -10,7 +10,6 @@ import java.awt.image.RGBImageFilter;
 import java.net.URL;
 import java.util.Hashtable;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import jeliot.util.ResourceBundles;
@@ -100,7 +99,12 @@ public class ImageLoader {
      * @return
      */
     public Image getImage(URL name) {
-        Image image = new ImageIcon(name).getImage();
+        //Image image = new ImageIcon(name).getImage();
+        Image image = toolkit.createImage(name);
+        tracker.addImage(image, 0);
+        try {
+            tracker.waitForID(0);
+        } catch (InterruptedException e) {}
         return image;
     }
 

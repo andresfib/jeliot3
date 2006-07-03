@@ -123,7 +123,7 @@ public class FIBQuestion extends Question implements FIBQuestionInterface {
 
         URL imageURL = Util.getResourceURL(avInteractionProperties
                 .getString("directory.images")
-                + avInteractionProperties.getString("fib_question"), this.getClass());
+                + avInteractionProperties.getString("image.fib_question"), this.getClass());
 
         // constructs the headline of the question window
         fibIcon = new ImageIcon(imageURL);
@@ -248,6 +248,10 @@ public class FIBQuestion extends Question implements FIBQuestionInterface {
 
                 fireSubmit(event);
 
+                submitted = true;
+                submitButton.setText("Close");
+                submitButton.setEnabled(true);
+                submitButton.setVisible(true);
                 return;
             }
         }
@@ -257,5 +261,6 @@ public class FIBQuestion extends Question implements FIBQuestionInterface {
         submitted = true;
         submitButton.setText("Close");
         submitButton.setEnabled(true);
+        submitButton.setVisible(true);
     }
 }

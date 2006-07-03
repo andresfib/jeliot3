@@ -6,6 +6,7 @@ package jeliot.avinteraction;
 import javax.swing.JFrame;
 
 import jeliot.util.DebugUtil;
+import avinteraction.FIBQuestion;
 import avinteraction.HTMLDocumentation;
 import avinteraction.InteractionModule;
 import avinteraction.MCQuestion;
@@ -93,6 +94,18 @@ public class AVInteractionEngine {
         testModule.addInteractionObject(id, question);
     }
 
+    public void addFIBQuestion(String id, String groupId, String questionText,
+            String answer, int points, String comment) {
+        FIBQuestion question = new FIBQuestion(id, groupId, DebugUtil.DEBUGGING);
+        question.setQuestion(questionText);
+        question.addAnswer(answer);
+        question.setPoints(points);
+        question.setComment(comment);
+        
+        // add it to the interactions
+        testModule.addInteractionObject(id, question);        
+    }
+    
     /**
      * 
      * @param interactionID

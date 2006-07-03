@@ -101,7 +101,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
             int[] correctAnswers = new int[1];
             if (type.equals(boolean.class.getName())
                     || type.equals(Boolean.class.getName())) {
-                boolean correct = value.equalsIgnoreCase("true");
+                boolean correct = Boolean.valueOf(value).booleanValue();
                 engine
                         .addTFQuestion(
                                 id,
@@ -255,7 +255,13 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
 
             } else if (type.equals(String.class.getName())
                     || type.equals("L" + String.class.getName() + ";")) {
-
+                engine.addFIBQuestion(id, id, question, value, 1,
+                        MessageFormat
+                        .format(
+                                questionsResources
+                                        .getString("avinteraction.assignment.boolean.general_reply"),
+                                new Object[] { value }));
+                return;
             }
             engine.addMCQuestion(id, id, question, answers, new int[0], 1,
                     comments, correctAnswers);
