@@ -42,18 +42,30 @@ import org.syntax.jeliot_jedit.JEditTextArea;
 public class FindDialog extends JDialog {
 
     protected JFrame frame;
+
     protected CodeEditor2 m_owner;
+
     protected JTabbedPane m_tb;
+
     protected JTextField m_txtFind1;
+
     protected JTextField m_txtFind2;
+
     protected Document m_docFind;
+
     protected Document m_docReplace;
+
     //protected ButtonModel m_modelWord;
     protected ButtonModel m_modelCase;
+
     protected ButtonModel m_modelUp;
+
     protected ButtonModel m_modelDown;
+
     protected int m_searchIndex = -1;
+
     protected boolean m_searchUp = false;
+
     protected String m_searchData;
 
     public FindDialog(CodeEditor2 owner, int index, JFrame frame) {
@@ -186,8 +198,9 @@ public class FindDialog extends JDialog {
                     counter++;
                 }
                 m_owner.getTextArea().repaint();
-                JOptionPane.showMessageDialog(FindDialog.this.frame, counter + " replacement(s) have been done",
-                        "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(FindDialog.this.frame, counter
+                        + " replacement(s) have been done", "Info",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         };
 
@@ -273,17 +286,17 @@ public class FindDialog extends JDialog {
         }
 
         /*
-        if (m_modelWord.isSelected()) {
-            for (int k = 0; k < FindReplaceUtil.WORD_SEPARATORS.length; k++) {
-                if (key.indexOf(FindReplaceUtil.WORD_SEPARATORS[k]) >= 0) {
-                    warning("The text target contains an illegal " + "character \'"
-                            + FindReplaceUtil.WORD_SEPARATORS[k] + "\'");
-                    return -1;
-                }
-            }
-        }
-        */
-        
+         if (m_modelWord.isSelected()) {
+         for (int k = 0; k < FindReplaceUtil.WORD_SEPARATORS.length; k++) {
+         if (key.indexOf(FindReplaceUtil.WORD_SEPARATORS[k]) >= 0) {
+         warning("The text target contains an illegal " + "character \'"
+         + FindReplaceUtil.WORD_SEPARATORS[k] + "\'");
+         return -1;
+         }
+         }
+         }
+         */
+
         String replacement = "";
         if (doReplace) {
             try {
@@ -307,45 +320,44 @@ public class FindDialog extends JDialog {
             }
 
             xFinish = xStart + key.length();
-            
+
             /*
-            if (m_modelWord.isSelected()) {
-                boolean s1 = xStart > 0;
-                boolean b1 = s1 && !FindReplaceUtil.isSeparator(m_searchData.charAt(xStart - 1));
-                boolean s2 = xFinish < m_searchData.length();
-                boolean b2 = s2 && !FindReplaceUtil.isSeparator(m_searchData.charAt(xFinish));
-                if (b1 || b2) { // Not a whole word
-                    if (m_searchUp && s1) { // Can continue up
-                        pos = xStart;
-                        continue;
-                    }
-                    if (!m_searchUp && s2) { // Can continue down
-                        pos = xFinish;
-                        continue;
-                    }
-                    // Found, but not a whole word, and we cannot continue
-                    if (showWarnings) {
-                        warning("Text not found");
-                    }
-                    return 0;
-                }
-            }
-            */
+             if (m_modelWord.isSelected()) {
+             boolean s1 = xStart > 0;
+             boolean b1 = s1 && !FindReplaceUtil.isSeparator(m_searchData.charAt(xStart - 1));
+             boolean s2 = xFinish < m_searchData.length();
+             boolean b2 = s2 && !FindReplaceUtil.isSeparator(m_searchData.charAt(xFinish));
+             if (b1 || b2) { // Not a whole word
+             if (m_searchUp && s1) { // Can continue up
+             pos = xStart;
+             continue;
+             }
+             if (!m_searchUp && s2) { // Can continue down
+             pos = xFinish;
+             continue;
+             }
+             // Found, but not a whole word, and we cannot continue
+             if (showWarnings) {
+             warning("Text not found");
+             }
+             return 0;
+             }
+             }
+             */
             break;
         }
-
 
         if (!m_searchUp) {
             xStart += m_searchIndex;
             xFinish += m_searchIndex;
         }
-        
+
         if (doReplace) {
             //m_owner.setSelection(xStart, xFinish, m_searchUp);
-            monitor.select(xFinish,xStart);
+            monitor.select(xFinish, xStart);
             monitor.setSelectedText(replacement);
             //monitor.setSelection(xStart, xStart + replacement.length(), m_searchUp);
-            monitor.select(xStart + replacement.length(),xStart);
+            monitor.select(xStart + replacement.length(), xStart);
             m_searchIndex = -1;
         } else {
             //m_owner.setSelection(xStart, xFinish, m_searchUp);
@@ -356,7 +368,8 @@ public class FindDialog extends JDialog {
     }
 
     protected void warning(String message) {
-        JOptionPane.showMessageDialog(frame, message, "Warning", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(frame, message, "Warning",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 }
