@@ -180,12 +180,12 @@ public class JeliotWindow implements PauseListener, MouseListener {
     /**
      * The about window of Jeliot 3.
      */
-    private AboutWindow aw = null;
+    private InfoWindow aw = null;
 
     /**
      * The help window of Jeliot 3.
      */
-    private HelpWindow hw = null;
+    private InfoWindow hw = null;
 
     /** Color for highlighting a tab name when its content has changed. */
     private Color highlightTabColor = new Color(Integer.decode(
@@ -652,17 +652,17 @@ public class JeliotWindow implements PauseListener, MouseListener {
             //theater.addMouseListener(popup);
             //theater.addMouseMotionListener(popup);
 
-            hw = new HelpWindow(iLoad.getImage(propertiesBundle
-                    .getStringProperty("image.jeliot_icon")), udir);
-            aw = new AboutWindow(iLoad.getImage(propertiesBundle
-                    .getStringProperty("image.jeliot_icon")), udir);
+            hw = new InfoWindow(messageBundle.getString("window.help.content"), udir, iLoad.getImage(propertiesBundle
+                    .getStringProperty("image.jeliot_icon")), messageBundle.getString("window.help.title"));
+            aw = new InfoWindow(messageBundle.getString("window.about.content"), udir, iLoad.getImage(propertiesBundle
+                    .getStringProperty("image.jeliot_icon")), messageBundle.getString("window.about.title"));
 
             frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setVisible(true);
-            if (jeliot.isExperiment()) {
-
-            }
+            //if (jeliot.isExperiment()) {
+            //}
+            
             //editor.requestFocus();
             //System.out.println(theater.getSize());
 
