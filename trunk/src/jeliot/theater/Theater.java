@@ -144,7 +144,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     }
 
     /**
-     * Painting the component and other components if it contains any to the
+     * Painting the component and other components (if it contains any) to the
      * given Graphics object.
      * 
      * @see java.awt.Component#paint(java.awt.Graphics)
@@ -239,8 +239,9 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
     }
 
-    //  DOC: Document!
+    //DOC: Document!
     /**
+     * 
      * @param b
      */
     public void setRunUntilEnabled(boolean b) {
@@ -433,7 +434,15 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         int h = getHeight();
         Image i = createImage(w, h);
         Graphics gr = i.getGraphics();
-        paint(gr);
+        if (this.showComponents) {
+            synchronized (this) {
+                InputComponent.showComponents = false;
+                paint(gr);
+                InputComponent.showComponents = true;
+            }
+        } else {
+            paint(gr);
+        }
         return i;
     }
 

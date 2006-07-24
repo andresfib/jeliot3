@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import jeliot.Jeliot;
+import jeliot.explanations.ExplanationGenerator;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.MethodFrame;
 import jeliot.lang.ObjectFrame;
@@ -189,7 +190,7 @@ public class Director {
          * interrupted flag is set true.
          */
         boolean interrupted = mCodeInterpreter.execute();
-        
+
         if (!errorOccured) {
             jeliot.highlightStatement(new Highlight(0, 0, 0, 0));
         }
@@ -221,11 +222,16 @@ public class Director {
             setRunUntilEnabled(false);
         }
     }
-    
+
+    /**
+     * 
+     * @param b
+     */
     private void setRunUntilEnabled(boolean b) {
         theatre.setRunUntilEnabled(b);
         engine.setRunUntilEnabled(b);
     }
+
     /**
      * 
      * @param h
@@ -312,6 +318,10 @@ public class Director {
         }
     }
 
+    /**
+     * 
+     *
+     */
     public void requestHistoryImage() {
         if (!jeliot.isExperiment() && theatre.isVisible()
                 && jeliot.getHistoryView().isEnabled()) {
@@ -353,16 +363,28 @@ public class Director {
     public void closeExpression() {
     }
 
+    /**
+     * 
+     *
+     */
     public void capture() {
         requestHistoryImage();
         theatre.capture();
     }
 
+    /**
+     * 
+     *
+     */
     public void updateCapture() {
         theatre.updateCapture();
         requestHistoryImage();
     }
 
+    /**
+     * 
+     *
+     */
     public void release() {
         theatre.release();
         requestHistoryImage();
@@ -512,6 +534,11 @@ public class Director {
         rAct.setLocation(resultAct.getRootLocation());
         val.setActor(rAct);
 
+        ExplanationGenerator eg = ExplanationGenerator.getInstance();
+        if (eg != null) {
+            eg.addExplanation(expr.toString(), h);
+        }
+
         return val;
     }
 
@@ -619,6 +646,11 @@ public class Director {
         // De-activate the theatre.
         release();
 
+        ExplanationGenerator eg = ExplanationGenerator.getInstance();
+        if (eg != null) {
+            eg.addExplanation(actor.toString(), h);
+        }
+
         return args;
     }
 
@@ -628,33 +660,44 @@ public class Director {
      * @param h
      * @return
      */
-    public Value[] animateOMInvocation(String methodCall, Value[] args,
-            Highlight h) {
-        return animateSMInvocation(methodCall, args, h);
+    public Value[] animateConstructorInvocation(String methodCall,
+            Value[] args, Highlight h) {
+        highlightExpression(h);
+        // Create the actor for the invocation.
+        int n = 0;
+        if (args != null) {
+            n = args.length;
+        }
+        CIActor actor = factory.produceCIActor(methodCall, n);
+        return animateMInvocation(methodCall, args, h, actor);
     }
 
-    /**
-     * Animates the invocation of a domestic (user-defined) method.
-     *
-     * @param methodName
-     * @param args
-     * @param h
-     * @return
-     */
     public Value[] animateSMInvocation(String methodName, Value[] args,
             Highlight h) {
-
         highlightExpression(h);
-
-        // Remember the scratch of current expression.
-        // scratchStack.push(currentScratch);
-
         // Create the actor for the invocation.
         int n = 0;
         if (args != null) {
             n = args.length;
         }
         SMIActor actor = factory.produceSMIActor(methodName, n);
+        return animateMInvocation(methodName, args, h, actor);
+    }
+
+    /**
+     * Animates the invocation of a domestic method.
+     *
+     * @param methodName
+     * @param args
+     * @param h
+     * @return
+     */
+    public Value[] animateMInvocation(String methodName, Value[] args,
+            Highlight h, MIActor actor) {
+
+        // Remember the scratch of current expression.
+        // scratchStack.push(currentScratch);
+
         ExpressionActor expr = currentScratch.getExpression(1, -1);
         currentScratch.registerCrap(actor);
 
@@ -663,9 +706,9 @@ public class Director {
 
         // Create actors and reserve places for all argument values,
         // and create animations to bring them in their right places.
-        ValueActor[] argact = new ValueActor[n];
-        Animation[] fly = new Animation[n];
-        for (int i = 0; i < n; ++i) {
+        ValueActor[] argact = new ValueActor[actor.getParameterCount()];
+        Animation[] fly = new Animation[actor.getParameterCount()];
+        for (int i = 0; i < actor.getParameterCount(); ++i) {
             argact[i] = args[i].getActor();
             args[i].setActor(argact[i]);
             fly[i] = argact[i].fly(actor.reserve(argact[i]));
@@ -686,12 +729,17 @@ public class Director {
         engine.showAnimation(fly);
 
         // Bind argument actors to the invocation actor.
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < actor.getParameterCount(); ++i) {
             actor.bind(argact[i]);
         }
 
         // De-activate the theatre.
         release();
+
+        ExplanationGenerator eg = ExplanationGenerator.getInstance();
+        if (eg != null) {
+            eg.addExplanation(actor.toString(), h);
+        }
 
         return args;
     }
@@ -1411,6 +1459,13 @@ public class Director {
                 returnAct.setLocation(castAct.getRootLocation());
                 returnValue.setActor(returnAct);
             }
+
+            ExplanationGenerator eg = ExplanationGenerator.getInstance();
+            if (eg != null) {
+                eg.addAssignmentExplanation(variableAct.toString(), valueAct
+                        .toString(), h);
+            }
+
         } else {
             // Get/create actors.
             ReferenceActor refAct = (ReferenceActor) value.getActor();
@@ -2038,29 +2093,29 @@ public class Director {
      * @param h
      */
     /*
-    public void arrayCreation(int[] dims, Highlight h) {
+     public void arrayCreation(int[] dims, Highlight h) {
 
-        String dimensions = "";
-        int n = dims.length;
-        for (int i = 0; i < n; i++) {
-            if (i == n - 1) {
-                dimensions += dims[i];
-            } else {
-                dimensions += dims[i] + ", ";
-            }
-        }
-        String[] dimensionNumber = new String[1];
-        dimensionNumber[0] = String.valueOf(dims.length);
+     String dimensions = "";
+     int n = dims.length;
+     for (int i = 0; i < n; i++) {
+     if (i == n - 1) {
+     dimensions += dims[i];
+     } else {
+     dimensions += dims[i] + ", ";
+     }
+     }
+     String[] dimensionNumber = new String[1];
+     dimensionNumber[0] = String.valueOf(dims.length);
 
-        highlightStatement(h);
-        String[] message = new String[2];
-        message[0] = arrayCreation.format(dimensionNumber);
-        message[1] = arrayCreationDimensions
-                .format(new String[] { dimensions });
-        showMessage(message, h);
-    }
-    */
-    
+     highlightStatement(h);
+     String[] message = new String[2];
+     message[0] = arrayCreation.format(dimensionNumber);
+     message[1] = arrayCreationDimensions
+     .format(new String[] { dimensions });
+     showMessage(message, h);
+     }
+     */
+
     /**
      * @param val
      * @param h
@@ -2392,7 +2447,7 @@ public class Director {
 
         Actor bga = factory.produceMessageActor(null);
         final Point p = ea.reserve(bga);
-        ic.setBgactor(bga);
+        ic.setBgActor(bga);
 
         //try {
         SwingUtilities.invokeLater(new Runnable() {

@@ -123,7 +123,7 @@ public class MethodStage extends Actor implements ActorContainer {
         //Find the variable with the given name.
         for (int i = 0; i < variables.size(); i++) {
             VariableActor va = (VariableActor) variables.elementAt(i);
-            if (name.equals(va.getName())) {
+            if (name.equals(va.getName()) || va.getLabel().equals(name)) {
                 return va;
             }
         }

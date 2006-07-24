@@ -10,7 +10,7 @@ import java.awt.event.MouseMotionListener;
 
 /**
  * This class is not currently used by Jeliot.
- * ComponentDragger is helping the draggin of the Theater's components.
+ * ComponentDragger is helping the dragging of the Theater's components.
  *
  * @author Pekka Uronen
  * @author Niko Myller

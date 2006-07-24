@@ -18,115 +18,49 @@ import jeliot.tracker.TrackerClock;
  * @see jeliot.theater.SMIActor
  * @see jeliot.theater.ObjectStage
  */
-public class OMIActor extends Actor implements ActorContainer{
+public class OMIActor extends MIActor {
 
-//DOC: Document!
-
-    /**
-	 *
-	 */
-	String name;
+    //DOC: Document!
 
     /**
-	 *
-	 */
-	Actor thisActor;
-    
-    /**
-	 *
-	 */
-	Point thisActorPoint;
-    
-    /**
-	 *
-	 */
-	boolean thisActorBound = false;
-    
-    /**
-	 *
-	 */
-	int thisActorw = 0;
-    
-    /**
-	 *
-	 */
-	int thisActorh = 0;
+     *
+     */
+    private Actor thisActor;
 
     /**
-	 *
-	 */
-	Actor[] actors;
-    
-    /**
-	 *
-	 */
-	Point[] locs;
-    
-    /**
-	 *
-	 */
-	boolean[] bound;
-    
-    /**
-	 *
-	 */
-	int next = 0;
+     *
+     */
+    private Point thisActorPoint;
 
     /**
-	 *
-	 */
-	int margin = 2;
-    
-    /**
-	 *
-	 */
-	int titlemargin = 4;
-    
-    /**
-	 *
-	 */
-	int namey;
-    
-    /**
-	 *
-	 */
-	int namex;
-    
-    /**
-	 *
-	 */
-	int namew;
-    
-    /**
-	 *
-	 */
-	int nameh;
-    
-    /**
-	 *
-	 */
-	int commaMargin;
+     *
+     */
+    private boolean thisActorBound = false;
 
     /**
-	 * @param name
-	 * @param n
-	 */
-	public OMIActor(String name, int n) {
-        this.name = name;
-        actors = new Actor[n];
-        locs = new Point[n];
-        bound = new boolean[n];
-        FontMetrics fm = getFontMetrics();
-        commaMargin = fm.stringWidth(",");
-        
-        setDescription("object method invocation: "+ name);
+     *
+     */
+    private int thisActorw = 0;
+
+    /**
+     *
+     */
+    private int thisActorh = 0;
+
+    /**
+     * @param name
+     * @param n
+     */
+    public OMIActor(String name, int n) {
+        super(name, n);
+        setDescription("object method invocation: " + name);
     }
 
     /**
-	 * @param actor
-	 * @return
-	 */
-	public Point reserveThisActor(Actor actor) {
+     * @param actor
+     * @return
+     */
+    public Point reserveThisActor(Actor actor) {
         thisActor = actor;
 
         int y = insets.top;
@@ -139,30 +73,36 @@ public class OMIActor extends Actor implements ActorContainer{
     }
 
     /**
-	 * 
-	 */
-	public void bindThisActor() {
+     * 
+     */
+    public void bindThisActor() {
         thisActorBound = true;
         thisActor.setParent(this);
         thisActor.setLocation(thisActorPoint);
-        
+
         if (getActorId() == -1) {
             //Tracker
             Point p = getRootLocation();
-            Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+            Tracker.trackTheater(TrackerClock.currentTimeMillis(),
+                    Tracker.APPEAR, getActorId(), Tracker.RECTANGLE,
+                    new int[] { p.x }, new int[] { p.y }, getWidth(),
+                    getHeight(), 0, -1, getDescription());
         } else {
             //Tracker
             Point p = getRootLocation();
-            Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+            Tracker.trackTheater(TrackerClock.currentTimeMillis(),
+                    Tracker.MODIFY, getActorId(), Tracker.RECTANGLE,
+                    new int[] { p.x }, new int[] { p.y }, getWidth(),
+                    getHeight(), 0, -1, getDescription());
         }
 
     }
 
     /**
-	 * @param actor
-	 * @return
-	 */
-	public Point reserve(Actor actor) {
+     * @param actor
+     * @return
+     */
+    public Point reserve(Actor actor) {
         actors[next] = actor;
         //int y = insets.top + namey + titlemargin;
         //int x = insets.left;
@@ -170,11 +110,10 @@ public class OMIActor extends Actor implements ActorContainer{
         int x = insets.left + thisActorw + margin + namew + margin;
 
         if (next > 0) {
-                x = locs[next - 1].x +
-                    margin + commaMargin + margin +
-                    actors[next - 1].getWidth();
+            x = locs[next - 1].x + margin + getCommaMargin() + margin
+                    + actors[next - 1].getWidth();
 
-            if (actors[next-1] instanceof ReferenceActor) {
+            if (actors[next - 1] instanceof ReferenceActor) {
                 x += ((ReferenceActor) actors[next - 1]).getReferenceWidth();
             }
 
@@ -186,45 +125,11 @@ public class OMIActor extends Actor implements ActorContainer{
         return rp;
     }
 
-
     /**
-	 * @param actor
-	 */
-	public void bind(Actor actor) {
-        for (int i = 0; i < next; ++i) {
-            if (actors[i] == actor) {
-                bound[i] = true;
-                actor.setParent(this);
-                actor.setLocation(locs[i]);
-                
-                if (getActorId() == -1) {
-                    //Tracker
-                    Point p = getRootLocation();
-                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.APPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
-                } else {
-                    //Tracker
-                    Point p = getRootLocation();
-                    Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.MODIFY, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
-                }
-
-                return;
-            }
-        }
-        throw new RuntimeException();
-    }
-
-    /**
-	 * @param g
-	 */
-	public void paintActors(Graphics g) {
-        int n = next;
-        for (int i = 0; i < n; ++i) {
-            if (bound[i]) {
-                g.translate(locs[i].x, locs[i].y);
-                actors[i].paintActor(g);
-                g.translate(-locs[i].x, -locs[i].y);
-            }
-        }
+     * @param g
+     */
+    public void paintActors(Graphics g) {
+        super.paintActors(g);
         if (thisActorBound) {
             g.translate(thisActorPoint.x, thisActorPoint.y);
             thisActor.paintActor(g);
@@ -234,9 +139,9 @@ public class OMIActor extends Actor implements ActorContainer{
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
-	 */
-	public void paintActor(Graphics g) {
+     * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+     */
+    public void paintActor(Graphics g) {
         //int w = getWidth();
         //int h = getHeight();
 
@@ -254,67 +159,58 @@ public class OMIActor extends Actor implements ActorContainer{
         g.setFont(getFont());
 
         if (next > 0) {
-            g.drawString(name + "(", namex, namey);
+            g.drawString(getName() + "(", namex, namey);
 
             for (int i = 0; i < next; i++) {
-                if (i != (next-1)) {
+                if (i != (next - 1)) {
                     if (actors[i] instanceof ReferenceActor) {
-                        g.drawString(",",
-                                 locs[i].x +
-                                 actors[i].getWidth() +
-                                 ((ReferenceActor) actors[i]).getReferenceWidth() +
-                                 margin,
-                                 namey);
+                        g.drawString(",", locs[i].x
+                                + actors[i].getWidth()
+                                + ((ReferenceActor) actors[i])
+                                        .getReferenceWidth() + margin, namey);
 
                     } else {
-                        g.drawString(",",
-                                 locs[i].x +
-                                 actors[i].getWidth() +
-                                 margin,
-                                 namey);
+                        g.drawString(",", locs[i].x + actors[i].getWidth()
+                                + margin, namey);
                     }
                 }
             }
 
-            if (actors[next-1] instanceof ReferenceActor) {
-                g.drawString(")",
-                             locs[next-1].x +
-                             actors[next-1].getWidth() +
-                             ((ReferenceActor) actors[next-1]).getReferenceWidth() +
-                             margin,
-                             namey);
+            if (actors[next - 1] instanceof ReferenceActor) {
+                g.drawString(")", locs[next - 1].x
+                        + actors[next - 1].getWidth()
+                        + ((ReferenceActor) actors[next - 1])
+                                .getReferenceWidth() + margin, namey);
 
             } else {
-                g.drawString(")",
-                             locs[next-1].x +
-                             actors[next-1].getWidth() +
-                             margin,
-                             namey);
-                    }
+                g.drawString(")", locs[next - 1].x
+                        + actors[next - 1].getWidth() + margin, namey);
+            }
         } else {
-            g.drawString(name + "()", namex, namey);
+            g.drawString(getName() + "()", namex, namey);
         }
 
         paintActors(g);
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.Actor#calculateSize()
-	 */
-	public void calculateSize() {
+     * @see jeliot.theater.Actor#calculateSize()
+     */
+    public void calculateSize() {
         // Get the size of the name.
         FontMetrics fm = getFontMetrics();
         nameh = fm.getHeight();
-        namew = fm.stringWidth(this.name + "(");
+        namew = fm.stringWidth(getName() + "(");
         int parenthesisw = fm.stringWidth("(");
 
-//        int thisActorw = 0;
-//        int thisActorh = 0;
+        //        int thisActorw = 0;
+        //        int thisActorh = 0;
 
         if (thisActor != null) {
-                thisActorh = thisActor.getHeight();
+            thisActorh = thisActor.getHeight();
             if (thisActor instanceof ReferenceActor) {
-                thisActorw = thisActor.getWidth() + ((ReferenceActor) thisActor).getReferenceWidth();
+                thisActorw = thisActor.getWidth()
+                        + ((ReferenceActor) thisActor).getReferenceWidth();
             } else {
                 thisActorw = thisActor.getWidth();
             }
@@ -322,7 +218,8 @@ public class OMIActor extends Actor implements ActorContainer{
 
         int n = next;
         int maxh = insets.top + titlemargin + nameh;
-        maxh = (maxh > (insets.top + thisActorh)) ? maxh : (insets.top + thisActorh);
+        maxh = (maxh > (insets.top + thisActorh)) ? maxh
+                : (insets.top + thisActorh);
         int maxw = insets.left + thisActorw + namew + parenthesisw;
         for (int i = 0; i < n; ++i) {
             int h = locs[i].y + actors[i].getHeight();
@@ -336,16 +233,11 @@ public class OMIActor extends Actor implements ActorContainer{
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
-	 */
-	public void removeActor(Actor actor) {
-        int n = next;
-        for (int i = 0; i < n; ++i) {
-            if (actors[i] == actor) {
-                bound[i] = false;
-            }
-        }
-        
+     * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+     */
+    public void removeActor(Actor actor) {
+        super.removeActor(actor);
+
         if (actor == thisActor) {
             thisActor = null;
             thisActorBound = false;
@@ -353,29 +245,32 @@ public class OMIActor extends Actor implements ActorContainer{
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.Actor#setLight(int)
-	 */
-	public void setLight(int light) {
+     * @see jeliot.theater.Actor#setLight(int)
+     */
+    public void setLight(int light) {
         super.setLight(light);
-        int n = next;
-        for (int i = 0; i < n; ++i) {
-            actors[i].setLight(light);
-        }
+        this.thisActor.setLight(light);
     }
+
+    
     
     public Animation disappear() {
-        
-        for (int i = 0; i < actors.length; i++) {
-            if (actors[i] != null) {
-                actors[i].disappear();
-            }
+        thisActor.disappear();
+        Animation a = super.disappear();
+        return a;
+    }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Method of ");
+        if (thisActorBound) {
+            sb.append(((ReferenceActor) this.thisActor).getInstanceActor().toString());
+            sb.append(" ");
         }
-        
-        //Tracker
-        Point p = getRootLocation();
-        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
-
-        return null;
+        sb.append(getName());
+        sb.append(" is called ");
+        sb.append(parametersToString());
+        return sb.toString();
     }
 
 }

@@ -1898,8 +1898,8 @@ public class Interpreter {
                                         .equals("")) {
                             //System.out.println("CI: " + "new " +
                             // ((String) currentMethodInvocation[0]));
-                            args = director.animateOMInvocation("new "
-                                    + ((String) currentMethodInvocation[0]),
+                            args = director.animateConstructorInvocation(
+                                    (String) currentMethodInvocation[0],
                                     (Value[]) currentMethodInvocation[2],
                                     (Highlight) currentMethodInvocation[5]);
 

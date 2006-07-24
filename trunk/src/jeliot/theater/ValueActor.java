@@ -33,7 +33,7 @@ public class ValueActor extends Actor {
     /**
 	 *
 	 */
-	String valstr;
+	private String valstr;
 
     /**
 	 *
@@ -194,4 +194,16 @@ public class ValueActor extends Actor {
 	public void setType(String type) {
 		this.type = type;
 	}
+    
+    public String toString() {
+        return "(" + type + ") " + valstr;
+    }
+
+    public String getValstr() {
+        return valstr;
+    }
+
+    public void setValstr(String valstr) {
+        this.valstr = valstr;
+    }
 }

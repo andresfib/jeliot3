@@ -145,6 +145,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     //private boolean askQuestions = false;
     /* Should the messages during the program visualization be shown as message dialogs. */
     //private boolean showMessagesInDialogs = false;
+    
     /**
      * The version information about Jeliot from name and version from the
      * resource bundle.
@@ -1653,6 +1654,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     public void enterEditTrue() {
         jeliot.stopThreads();
         changeCodePane(editor);
+        editor.requestFocusInWindow();
         enableWidgets(editWidgets.elements(), true);
         enableWidgets(animWidgets.elements(), false);
     }

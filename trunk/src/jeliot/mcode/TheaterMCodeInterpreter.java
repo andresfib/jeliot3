@@ -1303,13 +1303,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 if (currentMethodInvocation[1] != null
                         && ((String) currentMethodInvocation[1]).equals("")) {
                     //System.out.println("CI: " + "new " +
-                    // ((String) currentMethodInvocation[0]));
-                    args = director.animateOMInvocation("new "
-                            + ((String) currentMethodInvocation[0]),
+                    //((String) currentMethodInvocation[0]));
+                    args = director.animateConstructorInvocation(
+                            (String) currentMethodInvocation[0],
                             (Value[]) currentMethodInvocation[2],
                             (Highlight) currentMethodInvocation[5]);
 
-                    //This works for not primitive classes.
+                    //This works for non-primitive classes.
                     //There needs to be a check whether invoked
                     //class is primitive or not.
                     if (!MCodeUtilities
