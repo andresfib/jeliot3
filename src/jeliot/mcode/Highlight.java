@@ -75,4 +75,18 @@ public class Highlight {
 	public int getEndColumn() {
         return this.endColumn;
     }
+    
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("{");
+        stringBuilder.append(this.beginLine);
+        stringBuilder.append(",");
+        stringBuilder.append(this.beginColumn);
+        stringBuilder.append(",");
+        stringBuilder.append(this.endLine);
+        stringBuilder.append(",");
+        stringBuilder.append(this.endColumn);
+        stringBuilder.append("}");
+        return stringBuilder.toString();
+    }
 }

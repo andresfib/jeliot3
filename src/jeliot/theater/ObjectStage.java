@@ -97,7 +97,7 @@ public class ObjectStage extends InstanceActor {
         Enumeration enumeration = variables.elements();
         while (enumeration.hasMoreElements()) {
             VariableActor va = (VariableActor) enumeration.nextElement();
-            if (va.getName().equals(name)) {
+            if (va.getName().equals(name) || va.getLabel().equals(name)) {
                 return va;
             }
         }
@@ -352,5 +352,9 @@ public class ObjectStage extends InstanceActor {
                 this.removeActor(ObjectStage.this);
             }
         };
+    }
+    
+    public String toString() {
+        return this.name;
     }
 }

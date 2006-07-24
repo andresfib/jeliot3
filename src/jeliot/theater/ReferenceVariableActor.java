@@ -61,7 +61,7 @@ public class ReferenceVariableActor extends VariableActor {
         g.setColor((light == HIGHLIGHT) ?
                 lightColor :
                 fgcolor);
-        g.drawString(name, namex, namey);
+        g.drawString(getLabel(), namex, namey);
 
         // draw border
         ActorContainer parent = getParent();
@@ -140,7 +140,7 @@ public class ReferenceVariableActor extends VariableActor {
 	 */
 	public void calculateSize() {
         FontMetrics fm = getFontMetrics();
-        int sw = fm.stringWidth(name);
+        int sw = fm.stringWidth(getLabel());
         int sh = fm.getHeight();
 
         setSize(2 * borderWidth + insets.right + insets.left +

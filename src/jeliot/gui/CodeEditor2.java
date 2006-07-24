@@ -1009,4 +1009,9 @@ public class CodeEditor2 extends JComponent {
         propertiesBundle.setFontProperty("font.code_editor", font);
 
     }
+    
+    public boolean requestFocusInWindow() {
+        //requestFocusInWindow();
+        return this.area.requestFocusInWindow();
+    }
 }

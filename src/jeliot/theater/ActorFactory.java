@@ -91,6 +91,12 @@ public class ActorFactory {
     /**
      *  
      */
+    private Font CIFont = new Font(propertiesBundle.getStringProperty("font.CI.family"),
+            Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.CI.size")));
+
+    /**
+     *  
+     */
     private Font SMIFont = new Font(propertiesBundle.getStringProperty("font.SMI.family"),
             Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.SMI.size")));
 
@@ -199,6 +205,12 @@ public class ActorFactory {
      */
     private Color OMIColor = new Color(Integer.decode(
             propertiesBundle.getStringProperty("color.OMI.background")).intValue());
+
+    /**
+     *  
+     */
+    private Color CIColor = new Color(Integer.decode(
+            propertiesBundle.getStringProperty("color.CI.background")).intValue());
 
     /**
      *  
@@ -544,12 +556,14 @@ public class ActorFactory {
                 resolvedType = resolvedType.substring(dotIndex + 1);
             }
             if (v.getName().equals(v.getType())
-                    || (v.getName().equals("java.lang.Object") && v.getType().equals(
-                            "java.lang.String"))) {
-
-                actor.setName(resolvedType);
+                    || (v.getName().equals("java.lang.Object") && v.getType().equals("java.lang.String"))) {
+                actor.setName("");
+                actor.setType(resolvedType);
+                //actor.setName(resolvedType);
             } else {
-                actor.setName(resolvedType + " " + v.getName());
+                actor.setName(v.getName());
+                actor.setType(resolvedType);
+                //actor.setName(resolvedType + " " + v.getName());
             }
             //actor.setName(resolvedType + " " + v.getName());
             actor.setFont(variableFont);
@@ -562,7 +576,7 @@ public class ActorFactory {
             actor.reserve(vact);
             actor.bind();
             //Tracking purposes
-            actor.setDescription("local variable: " + actor.getName());
+            actor.setDescription("local variable: " + actor.getLabel());
             return actor;
         } else if (typeInfo == MCodeUtilities.REFERENCE) {
             ReferenceVariableActor refAct = new ReferenceVariableActor();
@@ -586,9 +600,13 @@ public class ActorFactory {
                     arrayString += "[ ]";
                 }
                 if (v.getName().equals(v.getType())) {
-                    refAct.setName(resolvedType + arrayString);
+                    refAct.setName("");
+                    refAct.setType(resolvedType + arrayString);
+                    //refAct.setName(resolvedType + arrayString);
                 } else {
-                    refAct.setName(resolvedType + arrayString + " " + v.getName());
+                    refAct.setName(v.getName());
+                    refAct.setType(resolvedType + arrayString);
+                    //refAct.setName(resolvedType + arrayString + " " + v.getName());
                 }
                 //refAct.setName(resolvedType + arrayString + " " + v.getName());
                 //Tracking purposes
@@ -602,10 +620,13 @@ public class ActorFactory {
                 if (v.getName().equals(v.getType())
                         || (v.getName().equals("java.lang.Object") && v.getType().equals(
                                 "java.lang.String"))) {
-
-                    refAct.setName(resolvedType);
+                    refAct.setName("");
+                    refAct.setType(resolvedType);
+                    //refAct.setName(resolvedType);
                 } else {
-                    refAct.setName(resolvedType + " " + v.getName());
+                    refAct.setName(v.getName());
+                    refAct.setType(resolvedType);
+                    //refAct.setName(resolvedType + " " + v.getName());
                 }
                 //refAct.setName(resolvedType + " " + v.getName());
                 refAct.setBackground(varColor[typeInfo]);
@@ -622,7 +643,7 @@ public class ActorFactory {
             ra.calculateSize();
             refAct.setValue(ra);
             actor = refAct;
-            actor.setDescription("local variable: " + actor.getName());
+            actor.setDescription("local variable: " + actor.getLabel());
         }
         return actor;
     }
@@ -645,6 +666,8 @@ public class ActorFactory {
                 resolvedType = resolvedType.substring(dotIndex + 1);
             }
             actor.setName(resolvedType + " " + v.getName());
+            actor.setName(v.getName());
+            actor.setType(resolvedType);
             actor.setFont(variableFont);
             actor.setForeground(variableForegroundColor);
             actor.setInsets(variableInsets);
@@ -655,7 +678,7 @@ public class ActorFactory {
             actor.reserve(vact);
             actor.bind();
             //Tracking purposes
-            actor.setDescription("object variable: " + actor.getName());
+            actor.setDescription("object variable: " + actor.getLabel());
 
             return actor;
         } else if (typeInfo == MCodeUtilities.REFERENCE) {
@@ -679,14 +702,18 @@ public class ActorFactory {
                 for (int i = 0; i < dims; i++) {
                     arrayString += "[ ]";
                 }
-                refAct.setName(resolvedType + arrayString + " " + v.getName());
+                refAct.setName(v.getName());
+                refAct.setType(resolvedType + arrayString);
+                //refAct.setName(resolvedType + arrayString + " " + v.getName());
             } else {
                 String resolvedType = type;
                 int dotIndex = resolvedType.lastIndexOf(".");
                 if (dotIndex > -1) {
                     resolvedType = resolvedType.substring(dotIndex + 1);
                 }
-                refAct.setName(resolvedType + " " + v.getName());
+                refAct.setName(v.getName());
+                refAct.setType(resolvedType);
+                //refAct.setName(resolvedType + " " + v.getName());
                 refAct.setBackground(varColor[typeInfo]);
             }
             refAct.setForeground(variableForegroundColor);
@@ -700,7 +727,7 @@ public class ActorFactory {
             refAct.setValue(ra);
             actor = refAct;
             //Tracking purposes
-            actor.setDescription("object variable " + actor.getName());
+            actor.setDescription("object variable " + actor.getLabel());
 
         }
         return actor;
@@ -807,7 +834,7 @@ public class ActorFactory {
         actor.calculateSize();
         actor.setForeground(valueForegroundColor);
         
-        actor.setDescription("reference: (" + cloneActor.getType() + ") " + cloneActor.valstr + "");
+        actor.setDescription("reference: (" + cloneActor.getType() + ") " + cloneActor.getValstr() + "");
 
         return actor;
     }
@@ -826,7 +853,7 @@ public class ActorFactory {
         actor.setLocation(new Point(p.x, p.y));
         actor.setParent(cloneActor.getParent());
         
-        actor.setDescription("value: (" + cloneActor.getType() + ") " + cloneActor.valstr + "");
+        actor.setDescription("value: (" + cloneActor.getType() + ") " + cloneActor.getValstr() + "");
 
         return actor;
     }
@@ -837,7 +864,7 @@ public class ActorFactory {
      */
     public OperatorActor produceBinOpActor(int op) {
         Image image = iLoad.getImage(binOpImageName[op][0]);
-        return produceOperatorActor(image, "equals");
+        return produceOperatorActor(image, getBinOpDescription(op));
     }
 
     /**
@@ -864,7 +891,7 @@ public class ActorFactory {
      */
     public OperatorActor produceUnaOpActor(int op) {
         Image image = iLoad.getImage(unaOpImageName[op][0]);
-        return produceOperatorActor(image, getBinOpDescription(op));
+        return produceOperatorActor(image, getUnOpDescription(op));
     }
 
     /**
@@ -873,7 +900,7 @@ public class ActorFactory {
      */
     public OperatorActor produceUnaOpResActor(int op) {
         Image image = iLoad.getImage(unaOpImageName[op][1]);
-        return produceOperatorActor(image, getUnOpDescription(op));
+        return produceOperatorActor(image, "equals");
     }
 
     /**
@@ -1178,5 +1205,14 @@ public class ActorFactory {
             default:
                 return "other";
         }
+    }
+
+    public CIActor produceCIActor(String name, int paramCount) {
+        CIActor actor = new CIActor(name, paramCount);
+        actor.setFont(CIFont);
+        actor.setBackground(CIColor);
+        actor.setInsets(new Insets(6, 6, 6, 6));
+        actor.calculateSize();
+        return actor;
     }
 }

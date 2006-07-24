@@ -236,6 +236,9 @@ public class ExpressionActor extends Actor implements ActorContainer {
         }
     }
 
+    /**
+     * 
+     */
     public Animation disappear() {
         for (int i = 0; i < next; i++) {
             if (actors[i] != null) {
@@ -248,6 +251,16 @@ public class ExpressionActor extends Actor implements ActorContainer {
                 Tracker.RECTANGLE, new int[] { p.x}, new int[] { p.y}, getWidth(), getHeight(), 0,
                 -1, getDescription());
         return null;
+    }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Expression evaluated: ");
+        for (int i = 0; i < actors.length && actors[i] != null; i++) {
+            sb.append(actors[i].toString());
+            sb.append(" ");
+        }
+        return sb.toString();
     }
     
 }

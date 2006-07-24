@@ -95,4 +95,8 @@ public class OperatorActor extends Actor {
             }
         };
     }
+    
+    public String toString() {
+        return getDescription();
+    }
 }

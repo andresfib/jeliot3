@@ -17,37 +17,30 @@ import java.awt.Graphics;
  */
 public class VariableInArrayActor extends VariableActor {
 
-//  DOC: Document!
+    //  DOC: Document!
 
     /**
-	 *
-	 */
-	private int indexw;
+     *
+     */
+    private int indexw;
 
     /**
-	 * 
-	 */
-	public VariableInArrayActor() { }
-
-    /**
-	 * @param arrayActor
-	 * @param name
-	 */
-	public VariableInArrayActor(ArrayActor arrayActor, String name) {
+     * @param arrayActor
+     * @param name
+     */
+    public VariableInArrayActor(ArrayActor arrayActor, String name) {
         setParent(arrayActor);
-        this.name = name;
+        setName(name);
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
-	 */
-	public void paintActor(Graphics g) {
-        ArrayActor array = (ArrayActor)getParent();
+     * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+     */
+    public void paintActor(Graphics g) {
+        ArrayActor array = (ArrayActor) getParent();
 
         // fill background
-        g.setColor( (light == HIGHLIGHT) ?
-                array.darkColor :
-                array.bgcolor);
+        g.setColor((light == HIGHLIGHT) ? array.darkColor : array.bgcolor);
         g.fillRect(0, 0, indexw, height);
         g.setColor(valueColor);
         g.fillRect(indexw + 2, 0, width - 2 - indexw, height);
@@ -61,27 +54,25 @@ public class VariableInArrayActor extends VariableActor {
 
         // draw indices
         g.setFont(array.getFont());
-        g.setColor( (light == HIGHLIGHT) ?
-                Color.white :
-                array.darkColor);
-        g.drawString(name, namex, namey);
+        g.setColor((light == HIGHLIGHT) ? Color.white : array.darkColor);
+        g.drawString(getLabel(), namex, namey);
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.VariableActor#calcLabelPosition()
-	 */
-	protected void calcLabelPosition() { }
+     * @see jeliot.theater.VariableActor#calcLabelPosition()
+     */
+    protected void calcLabelPosition() { }
 
     /**
-	 * @param indexw
-	 * @param valuew
-	 * @param h
-	 */
-	public void calculateSize(int indexw, int valuew, int h) {
+     * @param indexw
+     * @param valuew
+     * @param h
+     */
+    public void calculateSize(int indexw, int valuew, int h) {
         setSize(indexw + 2 + valuew, valueh);
 
-        FontMetrics fm = ((ArrayActor)getParent()).getFontMetrics();
-        int namew = fm.stringWidth(name);
+        FontMetrics fm = ((ArrayActor) getParent()).getFontMetrics();
+        int namew = fm.stringWidth(getLabel());
 
         this.indexw = indexw;
         this.namex = indexw - namew;
@@ -97,8 +88,8 @@ public class VariableInArrayActor extends VariableActor {
 
         setValue(value);
     }
-	
-	public int getIndexWidth() {
-		return indexw;
-	}
+
+    public int getIndexWidth() {
+        return indexw;
+    }
 }

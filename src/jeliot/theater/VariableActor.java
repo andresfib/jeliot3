@@ -62,8 +62,13 @@ public class VariableActor extends Actor implements ActorContainer {
     /**
      * Variable's name.
      */
-    protected String name;
+    protected String name = "";
 
+    /**
+     * Variable's type.
+     */
+    protected String type = "";
+    
     /**
      * Value actor assigned to this variable actor.
      */
@@ -101,7 +106,7 @@ public class VariableActor extends Actor implements ActorContainer {
         g.setColor((light == HIGHLIGHT)   ?
                    lightColor             :
                    fgcolor);
-        g.drawString(name, namex, namey);
+        g.drawString(getLabel(), namex, namey);
 
         // draw value box
         g.drawRect(valuex-1, valuey-1, valuew+1, valueh+1);
@@ -148,7 +153,7 @@ public class VariableActor extends Actor implements ActorContainer {
 	 */
 	public void setFont(Font font) {
         super.setFont(font);
-        if (name != null) {
+        if (getLabel() != null) {
             calcLabelPosition();
         }
     }
@@ -266,7 +271,7 @@ public class VariableActor extends Actor implements ActorContainer {
 	 */
 	public void calculateSize() {
         FontMetrics fm = getFontMetrics();
-        int sw = fm.stringWidth(name);
+        int sw = fm.stringWidth(getLabel());
         int sh = fm.getHeight();
         setSize(4*borderWidth + insets.right + insets.left +
                 valuew + sw,
@@ -283,5 +288,21 @@ public class VariableActor extends Actor implements ActorContainer {
         Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
         return null;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+        calcLabelPosition();
+    }
     
+    public String getLabel() {
+        return getType() + " " + getName();
+    }
+    
+    public String toString() {
+        return "variable " + getName() + " of type " + getType();
+    }
 }

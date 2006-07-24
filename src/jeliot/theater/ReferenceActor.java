@@ -505,4 +505,11 @@ public class ReferenceActor extends ValueActor {
         return new Dimension(w, h);
     }
 
+    public String toString() {
+        if (this.instance == null) {
+            return "null";
+        }
+        return "Reference to " + instance.toString();
+    }
+    
 }

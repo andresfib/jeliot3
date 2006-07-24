@@ -245,5 +245,8 @@ public class ArrayActor extends InstanceActor {
 
         }
     }
-
+    
+    public String toString() {
+        return "Array of type " + componentType;
+    }
 }
