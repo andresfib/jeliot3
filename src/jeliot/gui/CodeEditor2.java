@@ -11,12 +11,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
@@ -69,6 +74,11 @@ public class CodeEditor2 extends JComponent {
      */
     static private ResourceBundle messageBundle = ResourceBundles
             .getGuiMessageResourceBundle();
+
+    /**
+     * 
+     */
+    private UserProperties jeliotUserProperties = ResourceBundles.getJeliotUserProperties();    
 
     /**
      * The String for the basic code template that is shown to the user in the
@@ -127,11 +137,6 @@ public class CodeEditor2 extends JComponent {
      * A component showing line numbers.
      */
     private LineNumbers ln;
-
-    /**
-     * 
-     */
-    private boolean saveAutomatically = false;
 
     /**
      * 
@@ -692,10 +697,15 @@ public class CodeEditor2 extends JComponent {
             }
             l += h.getBeginColumn();
 
+            int nextLineStart = -1;
             if (h.getEndLine() > 0) {
                 r = area.getLineStartOffset(h.getEndLine() - 1);
+                nextLineStart = area.getLineStartOffset(h.getEndLine());
             }
             r += h.getEndColumn();
+            if (nextLineStart > 0) {
+                r = Math.min(r, nextLineStart);
+            }
         } catch (Exception e) {
         }
 
@@ -846,13 +856,27 @@ public class CodeEditor2 extends JComponent {
      */
     private boolean writeProgram(File file) {
         try {
-            FileWriter w = new FileWriter(file);
-
             //Replacing \t characters with spaces
             String code = replaceTabs(area.getText());
+            
+            BufferedWriter w = null;
+            if (this.jeliotUserProperties.getBooleanProperty("save_unicode")) {
+                w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8")));
+            } else {
+                w = new BufferedWriter(new FileWriter(file));
+            }
+            
             w.write(code);
+            w.flush();
             w.close();
-
+            
+            /*
+            FileWriter w = new FileWriter(file);
+            w.write(code);
+            w.flush();
+            w.close();
+            */
+            
             area.setText(code);
             
             currentFile = file; // Jeliot 3
@@ -890,8 +914,12 @@ public class CodeEditor2 extends JComponent {
      */
     String readProgram(File file) {
         try {
-            Reader fr = new FileReader(file);
-            BufferedReader r = new BufferedReader(fr);
+            BufferedReader r = null;
+            if (this.jeliotUserProperties.getBooleanProperty("save_unicode")) {
+                r = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8")));
+            } else {
+                r = new BufferedReader(new FileReader(file));
+            }
 
             StringBuffer buff = new StringBuffer();
             String line;
@@ -984,20 +1012,6 @@ public class CodeEditor2 extends JComponent {
      */
     public JEditTextArea getTextArea() {
         return area;
-    }
-
-    /**
-     * @return Returns the saveAutomatically.
-     */
-    public boolean isSaveAutomatically() {
-        return saveAutomatically;
-    }
-
-    /**
-     * @param saveAutomatically The saveAutomatically to set.
-     */
-    public void setSaveAutomatically(boolean saveAutomatically) {
-        this.saveAutomatically = saveAutomatically;
     }
 
     /**
