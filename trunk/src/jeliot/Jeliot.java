@@ -56,6 +56,9 @@ import jeliot.theater.ThreadController;
 import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
+import jeliot.util.ResourceBundles;
+import jeliot.util.SourceCodeUtilities;
+import jeliot.util.UserProperties;
 
 /**
  * This is the application class of Jeliot 3 that binds
@@ -104,47 +107,47 @@ public class Jeliot {
     /**
      *
      */
-    Launcher launcher = null;
+    private Launcher launcher = null;
 
     /**
      *
      */
-    BufferedReader ecodeReader = null;
+    private BufferedReader ecodeReader = null;
 
     /**
      *
      */
-    PrintWriter inputWriter = null;
+    private PrintWriter inputWriter = null;
 
     /**
      *
      */
-    MCodeInterpreter mCodeInterpreterForTheater = null;
+    private MCodeInterpreter mCodeInterpreterForTheater = null;
 
     /**
      * 
      */
-    MCodeInterpreter mCodeInterpreterForCallTree = null;
+    private MCodeInterpreter mCodeInterpreterForCallTree = null;
 
     /**
      *
      */
-    String sourceCode = "";
+    private String sourceCode = "";
 
     /**
      *
      */
-    String methodCall = "";
+    private String methodCall = "";
 
     /**
      * 
      */
-    Thread callTreeThread;
+    private Thread callTreeThread;
 
     /**
      *
      */
-    boolean compiled = false;
+    private boolean compiled = false;
 
     /**
      * The graphical user inteface.
@@ -194,10 +197,22 @@ public class Jeliot {
      */
     private ImageLoader iLoad = new ImageLoader();
 
+    /**
+     * 
+     */
     private AVInteractionMCodeInterpreter mCodeInterpreterForAVInteraction;
 
+    /**
+     * 
+     */
     private Thread avInteractionThread;
 
+    /**
+     * 
+     */
+    private UserProperties jeliotUserProperties = ResourceBundles
+    .getJeliotUserProperties();
+    
     /**
      * 
      */
@@ -288,13 +303,16 @@ public class Jeliot {
                 }
                 launcher = null;
             }
-
+            
+            String source = this.sourceCode;
+            if (jeliotUserProperties.getBooleanProperty("save_unicode")) {
+                source = SourceCodeUtilities.convertNative2Ascii(source);
+            }
+            
             launcher = new Launcher(new BufferedReader(new StringReader(
-                    this.sourceCode)));
+                    source)));
             launcher.setMethodCall(this.methodCall);
-
             launcher.setCompiling(true);
-
             launcher.start();
 
             ecodeReader = launcher.getReader();

@@ -4,8 +4,13 @@
 package jeliot.util;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
@@ -45,7 +50,8 @@ public class SourceCodeUtilities {
      * @return
      */
     public static String findMainMethodCall(String programCode,
-            boolean askForMainMethodParameters, JFrame frame, boolean useNullInMainMethodCall) {
+            boolean askForMainMethodParameters, JFrame frame,
+            boolean useNullInMainMethodCall) {
 
         String commentsRemoved = removeComments(programCode);
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\n", " ");
@@ -85,11 +91,13 @@ public class SourceCodeUtilities {
                             parameters += (st.hasMoreTokens() ? "," : "");
                         }
                     }
-                    return methodCallStart + arrayStart + parameters + arrayEnd + methodCallEnd;
+                    return methodCallStart + arrayStart + parameters + arrayEnd
+                            + methodCallEnd;
                 } else if (useNullInMainMethodCall) {
-                    return methodCallStart + "null" + methodCallEnd;                                        
+                    return methodCallStart + "null" + methodCallEnd;
                 } else {
-                    return methodCallStart + arrayStart + arrayEnd + methodCallEnd;                    
+                    return methodCallStart + arrayStart + arrayEnd
+                            + methodCallEnd;
                 }
             }
         }
@@ -145,7 +153,6 @@ public class SourceCodeUtilities {
                     break;
                 }
 
-
                 boolean lineCanStillContainComments = true;
                 while (lineCanStillContainComments) {
 
@@ -158,7 +165,7 @@ public class SourceCodeUtilities {
                             line = line.substring(0, cstart);
                         }
                     }
-                    
+
                     if (!inMultiLine) {
 
                         // We are not in a multi-line comment, check for a start
@@ -232,5 +239,76 @@ public class SourceCodeUtilities {
 
          return programCode;
          */
+    }
+
+    public static String convertNative2Ascii(String nativeString) {
+        if (DebugUtil.DEBUGGING) {
+            System.out.println("Converting Native to Ascii");
+        }
+        File tempDir = new File(Util.createUserPath(), "temp" + File.separator);
+        if (!tempDir.exists()) {
+            tempDir.mkdir();
+        }
+        
+        File tempFile = null;
+        File tempFileAscii = null;
+        do {
+            tempFile = new File(tempDir, "tempFile"
+                    + (int) (Math.random() * 10000) + ".txt");
+        } while (tempFile == null && tempFile.exists());
+        OutputStreamWriter w = null;
+        try {
+            w = new OutputStreamWriter(new FileOutputStream(
+                    tempFile), Charset.forName("UTF-8"));
+            w.write(nativeString);
+            w.flush();
+            w.close();
+            
+            Process process = Runtime.getRuntime().exec("native2ascii -encoding UTF-8 \"" + tempFile.getAbsolutePath() + "\" \"" + tempFile.getAbsolutePath() + ".asc\"");
+            int returnValue = process.waitFor();
+            tempFileAscii = new File(tempFile.getAbsolutePath() + ".asc");
+            if (DebugUtil.DEBUGGING) {
+                System.out.println("return value " + returnValue);
+            }
+            if (DebugUtil.DEBUGGING) {
+                System.out.println("Ascii temp file exists: " + tempFileAscii.exists());
+            }
+
+            if (returnValue == 0 && tempFileAscii.exists()) {
+                BufferedReader in = new BufferedReader(new FileReader(tempFileAscii));
+                String str = null;
+                StringBuffer sb = new StringBuffer();
+                while ((str = in.readLine()) != null) {
+                    sb.append(str);
+                    sb.append("\n");
+                }                    
+                in.close();
+                
+                if (DebugUtil.DEBUGGING) {
+                    System.out.println("Converted Native to Ascii");
+                }
+                
+                return sb.toString().trim();
+            }
+        } catch (IOException e) {
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
+        } catch (InterruptedException e) {
+            if (DebugUtil.DEBUGGING) {
+                e.printStackTrace();
+            }
+        } finally {
+            if (tempFile != null && tempFile.exists()) {
+                tempFile.delete();
+            }
+            if (tempFileAscii != null && tempFileAscii.exists()) {
+                tempFileAscii.delete();
+            }
+        }
+        if (DebugUtil.DEBUGGING) {
+            System.out.println("Error in convertion from Native to Ascii");
+        }
+        return nativeString;
     }
 }

@@ -39,8 +39,9 @@ The screen is divided into a source frame on the left and a tabbed pane on the
 right. The default for the right pane is the animation frame called the 
 Theater. Call Tree shows a tree of the current methods that have been called; 
 it is useful for studying recursive programs. History enables display of the 
-last ten frames of the animation; use the arrow buttons and sliders to go 
-backwards or forwards in the sequence of frames.
+snapshots of the previous animation; use the arrow buttons and sliders to go 
+backwards or forwards in the sequence of frames. Note that the generation of
+the history images takes some time and might slow down the visualization.
 
 <div class="p"><!----></div>
  <h2><a name="tth_sEc3">
@@ -105,6 +106,12 @@ with a null parameter; this avoids animating the creation of an empty array.
 <div class="p"><!----></div>
 Pause On Message: Automatically pauses the animation to display messages
 explaining its progress.
+
+<div class="p"><!----></div>
+Show History View: Enables or disables the generation of the history view that
+shows snapshots of the previous animation in the theater. Note that the generation of
+the history images takes some time and might slow down the visualization. If the animation
+is too slow disable this option.
 
 <div class="p"><!----></div>
 Ask Questions During Animation: Whenever an expression is to be evaluated, a 

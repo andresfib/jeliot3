@@ -45,8 +45,10 @@ public class CodePane2 extends JComponent {
     /**
      * Font for the code view area.
      */
-    private Font font = new Font(propertiesBundle.getStringProperty("font.code_pane.family"), Font.PLAIN, Integer
-            .parseInt(propertiesBundle.getStringProperty("font.code_pane.size")));
+    private Font font = new Font(propertiesBundle
+            .getStringProperty("font.code_pane.family"), Font.PLAIN,
+            Integer.parseInt(propertiesBundle
+                    .getStringProperty("font.code_pane.size")));
 
     /**
      * Constructs the CodePane -object, sets the layout and
@@ -59,18 +61,25 @@ public class CodePane2 extends JComponent {
         area = new JEditTextArea(false);
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(font);
-        area.getDocument().getDocumentProperties().put(PlainDocument.tabSizeAttribute, new Integer(3));
+        area.getDocument().getDocumentProperties().put(
+                PlainDocument.tabSizeAttribute, new Integer(3));
         area.setHorizontalOffsetForScrollBar(5);
         area.setHorizontalOffset(5);
         ln = new LineNumbers(font, new Insets(1, 0, 0, 0));
         area.addToLeft(ln);
-        LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(area, ln);
+        LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(
+                area, ln);
         area.addAdjustListernerForVertical(lnah);
         add("Center", area);
-        area.getPainter()
+        area
+                .getPainter()
                 .setBackground(
-                        new Color(Integer.decode(propertiesBundle.getStringProperty("color.code_pane.background"))
-                                .intValue()));
+                        new Color(
+                                Integer
+                                        .decode(
+                                                propertiesBundle
+                                                        .getStringProperty("color.code_pane.background"))
+                                        .intValue()));
         area.getPainter().setLineHighlightEnabled(false);
         /*
          area.getPainter().setSelectionColor(
@@ -136,11 +145,17 @@ public class CodePane2 extends JComponent {
             }
             l += h.getBeginColumn();
 
+            int nextLineStart = -1;
             if (h.getEndLine() > 0) {
                 r = area.getLineStartOffset(h.getEndLine() - 1);
+                nextLineStart = area.getLineStartOffset(h.getEndLine());
             }
             r += h.getEndColumn();
-        } catch (Exception e) {}
+            if (nextLineStart > 0) {
+                r = Math.min(r, nextLineStart);
+            }
+        } catch (Exception e) {
+        }
 
         final int left = l - 1;
         final int right = r;
@@ -177,7 +192,7 @@ public class CodePane2 extends JComponent {
     public void highlightLineNumber(int line) {
         ln.setHighlightedLine(line);
     }
-    
+
     public void setFont(Font font) {
         super.setFont(font);
         ln.setFont(font);
@@ -190,6 +205,12 @@ public class CodePane2 extends JComponent {
      * 
      */
     public void clearHighlights() {
-        highlightStatement(new Highlight(0,0,0,0));
+        highlightStatement(new Highlight(0, 0, 0, 0));
     }
+
+    public boolean requestFocusInWindow() {
+        //requestFocusInWindow();
+        return this.area.requestFocusInWindow();
+    }
+
 }
