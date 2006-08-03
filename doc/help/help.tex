@@ -1,6 +1,6 @@
 \documentclass{article}
 
-\title{Jeliot Program Animation System\\Version 3.6}
+\title{Jeliot Program Animation System\\Version 3.6.1}
 \author{Niko Myller, Andr{\'{e}}s Moreno Garc{\'{i}}a, Moti Ben-Ari, Erkki Sutinen}
 
 \begin{document}
@@ -19,8 +19,9 @@ The screen is divided into a source frame on the left and a tabbed pane on the
 right. The default for the right pane is the animation frame called the 
 Theater. Call Tree shows a tree of the current methods that have been called; 
 it is useful for studying recursive programs. History enables display of the 
-last ten frames of the animation; use the arrow buttons and sliders to go 
-backwards or forwards in the sequence of frames.
+snapshots of the previous animation; use the arrow buttons and sliders to go 
+backwards or forwards in the sequence of frames. Note that the generation of
+the history images takes some time and might slow down the visualization.
 
 \section{User interface}
 Commands may be issued from the menus or from two sets of buttons: one at the 
@@ -55,6 +56,9 @@ print a screen shot of the current display.
 
 \section{Options}
 
+Save Files In Unicode: If you experience problems with native characters
+either when saving and loading files or during visualization, set this option on.
+
 Save On Compilation: Save the source file automatically before compilation.
 
 Ask For Method: When the animation starts, you will be asked for a method name
@@ -66,13 +70,18 @@ for parameters for the method called.
 Use Null Parameter To Call Main: If checked, the main method will be called 
 with a null parameter; this avoids animating the creation of an empty array.
 
-Pause On Message: Automatically pauses the animation to display messages
-explaining its progress.
-
 Ask Questions During Animation: Whenever an expression is to be evaluated, a 
 popup window will ask for the result. However, currently questions are generated only for assignment statements.
 
-Select Font: Select the font for the editor.
+Pause On Message: Automatically pauses the animation to display messages
+explaining its progress.
+
+Show History View: Enables or disables the generation of the history view that
+shows snapshots of the previous animation in the theater. Note that the generation of
+the history images takes some time and might slow down the visualization. If the animation
+is too slow disable this option.
+
+Select Font Of Code: Select the font for the code editor.
 
 \section{I/O}
 
