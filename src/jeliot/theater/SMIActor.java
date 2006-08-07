@@ -27,7 +27,7 @@ public class SMIActor extends MIActor {
 
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         sb.append("Static method ");
         sb.append(getName());
         sb.append(" is called ");

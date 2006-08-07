@@ -369,7 +369,7 @@ public abstract class MIActor extends Actor implements ActorContainer {
     public abstract String toString();
 
     public String parametersToString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         if (this.getParameterCount() == 0) {
             sb.append("without parameters.");
         } if (this.getParameterCount() > 0) {

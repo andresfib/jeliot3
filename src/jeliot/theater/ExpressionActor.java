@@ -254,7 +254,7 @@ public class ExpressionActor extends Actor implements ActorContainer {
     }
     
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         sb.append("Expression evaluated: ");
         for (int i = 0; i < actors.length && actors[i] != null; i++) {
             sb.append(actors[i].toString());
