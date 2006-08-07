@@ -23,7 +23,7 @@ public class CIActor extends MIActor {
      * @see jeliot.theater.MIActor#toString()
      */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         sb.append("Constructor of the object of the class ");
         sb.append(getName());
         sb.append(" is called ");

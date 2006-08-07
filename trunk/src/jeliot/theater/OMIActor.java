@@ -261,7 +261,7 @@ public class OMIActor extends MIActor {
     }
     
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         sb.append("Method of ");
         if (thisActorBound) {
             sb.append(((ReferenceActor) this.thisActor).getInstanceActor().toString());

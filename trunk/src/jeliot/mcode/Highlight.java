@@ -77,7 +77,7 @@ public class Highlight {
     }
     
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuffer stringBuilder = new StringBuffer();
         stringBuilder.append("{");
         stringBuilder.append(this.beginLine);
         stringBuilder.append(",");
