@@ -82,9 +82,29 @@ public class MCQuestion extends Question implements MCQuestionInterface {
      * 		  none.
      */
     public MCQuestion(String id, String group) {
-        this(id, group, false);
+        this(id, group, false, new Integer[0]);
     }
 
+    /**
+     * 
+     * @param id
+     * @param group
+     * @param concepts
+     */
+    public MCQuestion(String id, String group, Integer[] concepts) {
+        this(id, group, false, concepts);
+    }
+
+    /**
+     * 
+     * @param id
+     * @param group
+     * @param tf
+     */
+    public MCQuestion(String id, String group, boolean tf) {
+        this(id, group, tf, new Integer[0]);
+    }
+            
     /**
      * The constructor of a multiple-choice-question, setting
      * debugging to tf.
@@ -94,8 +114,8 @@ public class MCQuestion extends Question implements MCQuestionInterface {
      * 		  none.
      * @param tf The debugging level to use.
      */
-    public MCQuestion(String id, String group, boolean tf) {
-        super();
+    public MCQuestion(String id, String group, boolean tf, Integer[] concepts) {
+        super(concepts);
         this.objectID = id;
         this.groupID = group;
         possibleAnswers = new Vector();

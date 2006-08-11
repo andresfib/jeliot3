@@ -31,7 +31,7 @@ public interface BackendInterface
 	 * 		   question.
 	 */
 	public boolean submitAnswer(String questionID,
-		boolean correct, int points, int achieved);
+		boolean correct, int points, int achieved, Integer[] conceptIdentifier);
 
 	/**
 	 * Tells the interaction module whether to re-enable the

@@ -211,8 +211,8 @@ public class Jeliot {
      * 
      */
     private UserProperties jeliotUserProperties = ResourceBundles
-    .getJeliotUserProperties();
-    
+            .getJeliotUserProperties();
+
     /**
      * 
      */
@@ -303,14 +303,14 @@ public class Jeliot {
                 }
                 launcher = null;
             }
-            
+
             String source = this.sourceCode;
             if (jeliotUserProperties.getBooleanProperty("save_unicode")) {
                 source = SourceCodeUtilities.convertNative2Ascii(source);
             }
-            
-            launcher = new Launcher(new BufferedReader(new StringReader(
-                    source)));
+
+            launcher = new Launcher(
+                    new BufferedReader(new StringReader(source)));
             launcher.setMethodCall(this.methodCall);
             launcher.setCompiling(true);
             launcher.start();
@@ -462,19 +462,19 @@ public class Jeliot {
 
         //a new thread for AVInteraction interpreter
         if (this.gui.isAskingQuestions()) {
-        avInteractionThread = new Thread(new Runnable() {
+            avInteractionThread = new Thread(new Runnable() {
 
-            public void run() {
-                try {
-                    mCodeInterpreterForAVInteraction.execute();
-                } catch (Exception e) {
-                    if (DebugUtil.DEBUGGING) {
-                        e.printStackTrace();
+                public void run() {
+                    try {
+                        mCodeInterpreterForAVInteraction.execute();
+                    } catch (Exception e) {
+                        if (DebugUtil.DEBUGGING) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-        });
-        avInteractionThread.start();
+            });
+            avInteractionThread.start();
         }
 
         engine.setController(controller);

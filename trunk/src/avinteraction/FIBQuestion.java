@@ -63,9 +63,30 @@ public class FIBQuestion extends Question implements FIBQuestionInterface {
      * @param group The group id of the interaction, if any.
      */
     public FIBQuestion(String id, String group) {
-        this(id, group, false);
+        this(id, group, false, new Integer[0]);
     }
 
+    /**
+     * Creates a new instance of FIBQuestion with debugging
+     * disabled.
+     *
+     * @param id The unique id identifying the interaction.
+     * @param group The group id of the interaction, if any.
+     */
+    public FIBQuestion(String id, String group, Integer[] concepts) {
+        this(id, group, false, concepts);
+    }
+
+    /**
+     * 
+     * @param id
+     * @param group
+     * @param tf
+     */
+    public FIBQuestion(String id, String group, boolean tf) {
+        this(id, group, tf, new Integer[0]);
+    }
+    
     /**
      * Creates a new instance of FIBQuestion with debugging
      * disabled with debugging set to tf.
@@ -74,8 +95,8 @@ public class FIBQuestion extends Question implements FIBQuestionInterface {
      * @param group The group id of the interaction, if any.
      * @param tf The debug level.
      */
-    public FIBQuestion(String id, String group, boolean tf) {
-        super();
+    public FIBQuestion(String id, String group, boolean tf, Integer[] concepts) {
+        super(concepts);
         this.objectID = id;
         this.groupID = group;
         correctAnswers = new Vector();

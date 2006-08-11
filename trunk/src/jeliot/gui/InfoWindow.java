@@ -92,10 +92,7 @@ public class InfoWindow extends JFrame implements HyperlinkListener {
     public void reload() {
         try {
             File f = new File(udir, fileName);
-            if (!showURL(f.toURI().toURL())) {
-                f = new File(fileName);
-                showURL(f.toURI().toURL());
-            }
+            showURL(f.toURI().toURL());
         } catch (Exception e) {
             if (DebugUtil.DEBUGGING) {
                 e.printStackTrace();

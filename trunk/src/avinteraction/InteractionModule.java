@@ -359,7 +359,7 @@ public class InteractionModule implements InteractionInterface {
 
         displayAnswer = backend.submitAnswer(interactionID, aQuestion
                 .isCorrect(), aQuestion.getPoints(), aQuestion
-                .getAchievedPoints());
+                .getAchievedPoints(), aQuestion.getConceptIdentifiers());
 
         // If question is part of an existing group
         // and question was answered correct, then

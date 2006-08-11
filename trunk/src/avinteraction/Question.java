@@ -48,6 +48,11 @@ public abstract class Question extends JPanel implements QuestionInterface {
     protected int achievedPoints;
 
     /**
+     * Concept identifiers that are related to the question.
+     */
+    protected Integer[] conceptIdentifiers;
+    
+    /**
      * HTMLComponent used for displaying feedback concerning the
      * interactions state to the user
      */
@@ -92,7 +97,8 @@ public abstract class Question extends JPanel implements QuestionInterface {
      * Standard constructor. Assigns a number to the question
      * and increments the number of the questions.
      */
-    Question() {
+    Question(Integer[] concepts) {
+        this.conceptIdentifiers = concepts;
         questionNumber = questionCounter;
         questionCounter++;
         feedbackView = new JEditorPane("text/html", "");
@@ -281,5 +287,22 @@ public abstract class Question extends JPanel implements QuestionInterface {
         for (Iterator i = listeners.iterator(); i.hasNext();) {
             ((InteractionModule) i.next()).submitPressed(this);
         }
+    }
+
+    
+    /**
+     * Records the concepts that the question concerns.
+     * @return
+     */
+    public Integer[] getConceptIdentifiers() {
+        return conceptIdentifiers;
+    }
+
+    /**
+     * Records the concepts that the question concerns. 
+     * @param conceptIdentifiers
+     */
+    public void setConceptIdentifiers(Integer[] conceptIdentifiers) {
+        this.conceptIdentifiers = conceptIdentifiers;
     }
 }

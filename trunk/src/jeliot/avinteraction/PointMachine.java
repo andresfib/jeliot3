@@ -62,13 +62,20 @@ public class PointMachine implements BackendInterface {
      * @return Whether to show the answer or not.
      */
     public boolean submitAnswer(String questionID, boolean correct, int points,
-            int achieved) {
+            int achieved, Integer[] conceptIdentifier) {
+        
+        //TODO: add here the recording of the conceptIdentifiers
+        
         System.out.print("\t\tBackend received answer to \"" + questionID
                 + "\": ... ");
         if (correct) {
             System.out.println("correct.");
         } else {
             System.out.println("wrong.");
+        }
+        
+        for (int i = 0; i < conceptIdentifier.length; i++) {
+            System.out.println(conceptIdentifier[i]);
         }
 
         allPoints += points;
