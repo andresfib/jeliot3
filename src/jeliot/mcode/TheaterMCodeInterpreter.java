@@ -324,6 +324,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void endRunning() {
         removeInstances();
+        
         //TODO fix this hack!
         if (avInteractionEngine != null) {
             this.director.getTheatre().requestFocus();

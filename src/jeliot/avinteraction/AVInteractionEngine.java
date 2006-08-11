@@ -82,9 +82,9 @@ public class AVInteractionEngine {
      * @param comment
      */
     public void addTFQuestion(String id, String groupId, String questionText,
-            boolean answer, int points, String comment) {
+            boolean answer, int points, String comment, Integer[] concept) {
         // create a TFQuestion object
-        TFQuestion question = new TFQuestion(id, groupId, DebugUtil.DEBUGGING);
+        TFQuestion question = new TFQuestion(id, groupId, DebugUtil.DEBUGGING, concept);
         question.setQuestion(questionText);
         question.setAnswer(answer);
         question.setPoints(points);
@@ -95,8 +95,8 @@ public class AVInteractionEngine {
     }
 
     public void addFIBQuestion(String id, String groupId, String questionText,
-            String answer, int points, String comment) {
-        FIBQuestion question = new FIBQuestion(id, groupId, DebugUtil.DEBUGGING);
+            String answer, int points, String comment, Integer[] concepts) {
+        FIBQuestion question = new FIBQuestion(id, groupId, DebugUtil.DEBUGGING, concepts);
         question.setQuestion(questionText);
         question.addAnswer(answer);
         question.setPoints(points);
@@ -157,9 +157,9 @@ public class AVInteractionEngine {
      * @param comments
      * @param correctAnswers
      */
-    public void addMCQuestion(String id, String groupId, String questionText, String[] answer, int[] subpoints, int overallPoints, String[] comments, int[] correctAnswers) {
+    public void addMCQuestion(String id, String groupId, String questionText, String[] answer, int[] subpoints, int overallPoints, String[] comments, int[] correctAnswers, Integer[] concepts) {
         boolean severalAnswers = correctAnswers.length > 1;
-        MCQuestion question = new MCQuestion(id, groupId, DebugUtil.DEBUGGING);
+        MCQuestion question = new MCQuestion(id, groupId, DebugUtil.DEBUGGING, concepts);
         question.setQuestion(questionText);
 
         for (int i = 0; i < answer.length; i++) {

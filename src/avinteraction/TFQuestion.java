@@ -71,10 +71,20 @@ public class TFQuestion extends Question implements TFQuestionInterface {
      * @param group The group id of the question. Leave blank if
      * 		  none.
      */
-    public TFQuestion(String id, String group) {
-        this(id, group, false);
+    public TFQuestion(String id, String group, Integer[] concept) {
+        this(id, group, false, concept);
     }
 
+    /**
+     * 
+     * @param id
+     * @param group
+     * @param tf
+     */
+    public TFQuestion(String id, String group, boolean tf) {
+        this(id, group, tf, new Integer[0]);
+    }
+    
     /**
      * The constructor of a true-false-question. Sets debugging
      * to the value of tf.
@@ -84,8 +94,8 @@ public class TFQuestion extends Question implements TFQuestionInterface {
      * 		  none.
      * @param tf The debug level.
      */
-    public TFQuestion(String id, String group, boolean tf) {
-        super();
+    public TFQuestion(String id, String group, boolean tf, Integer[] concepts) {
+        super(concepts);
         this.objectID = id;
         this.groupID = group;
         questionText = "";

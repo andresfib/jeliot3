@@ -54,7 +54,7 @@ public class GenericBackend
 	 * @return DOCUMENT ME!
 	 */
 	public boolean submitAnswer(String questionID,
-		boolean correct, int points, int achieved)
+		boolean correct, int points, int achieved, Integer[] conceptIdentifier)
 	{
 		System.out.print("\t\tBackend received answer to \"" +
 			questionID + "\": ... ");

@@ -6,7 +6,11 @@ package jeliot.mcode;
 import java.io.BufferedReader;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.util.ResourceBundles;
@@ -22,6 +26,12 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     private AVInteractionEngine engine;
 
     /**
+     * Contains Vector objects that keep the record of used concepts.
+     * Concepts are currently recorded and int values from the Code class.
+     */
+    private Map conceptVectors = new HashMap();
+
+    /**
      * 
      */
     public AVInteractionMCodeInterpreter(BufferedReader bf,
@@ -29,6 +39,28 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
         super(bf);
         //this.mcode = bf;
         this.engine = engine;
+    }
+
+    /**
+     * 
+     * @param concept
+     */
+    public void addConcept(int concept) {
+        for (Iterator i = this.conceptVectors.entrySet().iterator(); i
+                .hasNext();) {
+            Map.Entry e = (Map.Entry) i.next();
+            if (e.getValue() != null) {
+                ((Vector) e.getValue()).add(new Integer(concept));
+            }
+        }
+    }
+
+    public Integer[] removeConceptVector(long expressionId) {
+        Vector v = (Vector) this.conceptVectors.remove(new Long(expressionId));
+        if (v != null) {
+            return (Integer[]) v.toArray(new Integer[0]);
+        }
+        return new Integer[0];
     }
 
     /* (non-Javadoc)
@@ -88,10 +120,26 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     private static final DecimalFormat decimalFormat = new DecimalFormat();
 
     /* (non-Javadoc)
+     * @see jeliot.mcode.MCodeInterpreter#handleCodeBEGIN(long, long, java.lang.String)
+     */
+    protected void handleCodeBEGIN(long expressionType,
+            long expressionReference, String location) {
+        //Initialize the concept vector if necessary.
+        if (expressionType == Code.A) {
+            this.conceptVectors
+                    .put(new Long(expressionReference), new Vector());
+        }
+    }
+
+    /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeA(long, long, long, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
     protected void handleCodeA(long expressionCounter, long fromExpression,
             long toExpression, String value, String type, Highlight h) {
+
+        //add concept to all concept vectors that are currently in the conceptVectors Map.
+        addConcept(Code.A);
+
         if (MCodeUtilities.isPrimitive(type)) {
             String question = questionsResources
                     .getString("avinteraction.assignment.question");
@@ -99,9 +147,12 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
             String[] answers = new String[4];
             String[] comments = new String[4];
             int[] correctAnswers = new int[1];
+
+            //Depending on the type of the variable generate different kinds of questions and answers.
             if (type.equals(boolean.class.getName())
                     || type.equals(Boolean.class.getName())) {
                 boolean correct = Boolean.valueOf(value).booleanValue();
+                Integer[] concepts = removeConceptVector(expressionCounter);
                 engine
                         .addTFQuestion(
                                 id,
@@ -113,7 +164,8 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
                                         .format(
                                                 questionsResources
                                                         .getString("avinteraction.assignment.boolean.general_reply"),
-                                                new Object[] { value }));
+                                                new Object[] { value }),
+                                concepts);
                 return;
             } else if (type.equals(byte.class.getName())
                     || type.equals(Byte.class.getName())) {
@@ -255,17 +307,45 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
 
             } else if (type.equals(String.class.getName())
                     || type.equals("L" + String.class.getName() + ";")) {
-                engine.addFIBQuestion(id, id, question, value, 1,
-                        MessageFormat
-                        .format(
-                                questionsResources
-                                        .getString("avinteraction.assignment.boolean.general_reply"),
-                                new Object[] { value }));
+                Integer[] concepts = removeConceptVector(expressionCounter);
+                engine
+                        .addFIBQuestion(
+                                id,
+                                id,
+                                question,
+                                value,
+                                1,
+                                MessageFormat
+                                        .format(
+                                                questionsResources
+                                                        .getString("avinteraction.assignment.boolean.general_reply"),
+                                                new Object[] { value }),
+                                concepts);
                 return;
             }
+            Integer[] concepts = removeConceptVector(expressionCounter);
             engine.addMCQuestion(id, id, question, answers, new int[0], 1,
-                    comments, correctAnswers);
+                    comments, correctAnswers, concepts);
         }
+
+        //Remove concept vector for the current expression identifier if it is found.
+        removeConceptVector(expressionCounter);
+    }
+
+    /* (non-Javadoc)
+     * @see jeliot.mcode.MCodeInterpreter#handleCodeQN(long, java.lang.String, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
+     */
+    protected void handleCodeQN(long expressionCounter, String variableName,
+            String value, String type, Highlight highlight) {
+        addConcept(Code.QN);
+    }
+
+    /* (non-Javadoc)
+     * @see jeliot.mcode.MCodeInterpreter#handleCodeL(long, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
+     */
+    protected void handleCodeL(long expressionCounter, String value,
+            String type, Highlight highlight) {
+        addConcept(Code.L);
     }
 
     /* (non-Javadoc)
@@ -682,24 +762,6 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     }
 
     /* (non-Javadoc)
-     * @see jeliot.mcode.MCodeInterpreter#handleCodeL(long, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
-     */
-    protected void handleCodeL(long expressionCounter, String value,
-            String type, Highlight highlight) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see jeliot.mcode.MCodeInterpreter#handleCodeQN(long, java.lang.String, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
-     */
-    protected void handleCodeQN(long expressionCounter, String variableName,
-            String value, String type, Highlight highlight) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeVD(java.lang.String, long, java.lang.String, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
     protected void handleCodeVD(String variableName,
@@ -959,15 +1021,6 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeTO(long)
      */
     protected void handleCodeTO(long expressionReference) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see jeliot.mcode.MCodeInterpreter#handleCodeBEGIN(long, long, java.lang.String)
-     */
-    protected void handleCodeBEGIN(long expressionType,
-            long expressionReference, String location) {
         // TODO Auto-generated method stub
 
     }
