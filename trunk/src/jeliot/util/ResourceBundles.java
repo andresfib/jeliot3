@@ -61,6 +61,12 @@ public class ResourceBundles {
     private static ResourceBundle avInteractionMessages;
     
     /**
+     * User Modelling Resources
+     */
+    
+    private static UserProperties internalUM;
+    
+    /**
      * @return
      */
     public static UserProperties getJeliotUserProperties() {
@@ -200,7 +206,14 @@ public class ResourceBundles {
             theaterProperties.save();
         }
     }
-
+    /**
+     * 
+     */
+    public static void saveProgrammingConceptsProperties() {
+        if (internalUM != null) {
+            internalUM.save();
+        }
+    }
     /**
      * 
      */
@@ -210,6 +223,7 @@ public class ResourceBundles {
         saveMCodeUserProperties();
         saveTheaterUserProperties();
         saveJeliotUserProperties();
+        saveProgrammingConceptsProperties();
     }
 
     public static ResourceBundle getAvInteractionResourceBundle() {
@@ -219,5 +233,14 @@ public class ResourceBundles {
         }
 
         return avInteractionMessages;
+    }
+    
+    public static UserProperties getUserModelConceptsProperties() {
+        if (internalUM == null) {
+        	internalUM = new UserProperties("internalUM",
+                    "jeliot.adapt.internalUM.properties");
+        }
+
+        return internalUM;
     }
 }
