@@ -1,7 +1,7 @@
 package jeliot.adapt;
 
 import jeliot.networking.*;
-public class Adapt2Interaction implements UMInteraction {
+public class Adapt2Interaction extends BasicInternalUM {
 
 	String adapt2UMServer = "http://kt1.exp.sis.pitt.edu:8080/cbum/um";
 	String adapt2ReportServer = "http://kt1.exp.sis.pitt.edu:8080/cbum/ReportManager";
@@ -37,6 +37,7 @@ public class Adapt2Interaction implements UMInteraction {
 	 */
 	public void recordEvent(ModelEvent event) {
 		// TODO Auto-generated method stub
+		super.recordEvent(event);
 		
 	}
 
