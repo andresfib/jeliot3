@@ -2,6 +2,9 @@ package jeliot.avinteraction;
 
 import javax.swing.JOptionPane;
 
+import jeliot.adapt.ModelEvent;
+import jeliot.adapt.UMInteraction;
+
 import avinteraction.backend.BackendInterface;
 
 /**
@@ -26,6 +29,8 @@ public class PointMachine implements BackendInterface {
     /** points available */
     private int allPoints = 0;
 
+	private UMInteraction userModel = null;
+
     //~ Constructors --------------------------------------------
 
     /**
@@ -36,6 +41,12 @@ public class PointMachine implements BackendInterface {
     }
 
     /**
+     * Constructs and enables user modelling
+     */
+    public PointMachine(UMInteraction userModel){
+    	this.userModel = userModel;
+    }	
+    /**	
      * Constructs a PointsMachine object with debugging set to
      * on if tf is true, otherwise to false.
      *
@@ -65,7 +76,8 @@ public class PointMachine implements BackendInterface {
             int achieved, Integer[] conceptIdentifier) {
         
         //TODO: add here the recording of the conceptIdentifiers
-        
+        ModelEvent UMEvent = new ModelEvent();
+        //TODO: set the properties of the event
         System.out.print("\t\tBackend received answer to \"" + questionID
                 + "\": ... ");
         if (correct) {
@@ -80,7 +92,7 @@ public class PointMachine implements BackendInterface {
 
         allPoints += points;
         earnedPoints += achieved;
-
+        userModel.recordEvent(UMEvent);
         // we want the results to be displayed
         return true;
     }

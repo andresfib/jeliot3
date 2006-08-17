@@ -5,6 +5,7 @@ package jeliot.avinteraction;
 
 import javax.swing.JFrame;
 
+import jeliot.adapt.UMInteraction;
 import jeliot.util.DebugUtil;
 import avinteraction.FIBQuestion;
 import avinteraction.HTMLDocumentation;
@@ -30,10 +31,10 @@ public class AVInteractionEngine {
      * 
      * @throws Exception
      */
-    public AVInteractionEngine(JFrame parent) throws Exception {
+    public AVInteractionEngine(JFrame parent, UMInteraction userModel) throws Exception {
         super();
         this.parent = parent;
-        backend = new PointMachine();
+        backend = new PointMachine(userModel);
         testModule = new InteractionModule(backend, parent, DebugUtil.DEBUGGING);
         //testModule.addWindowListener(this);
     }

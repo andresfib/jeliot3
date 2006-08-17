@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import jeliot.adapt.ModelEvent;
+import jeliot.adapt.UMInteraction;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.util.ResourceBundles;
 
@@ -24,6 +26,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
             .getAvInteractionResourceBundle();
 
     private AVInteractionEngine engine;
+
 
     /**
      * Contains Vector objects that keep the record of used concepts.
@@ -39,6 +42,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
         super(bf);
         //this.mcode = bf;
         this.engine = engine;
+
     }
 
     /**
@@ -139,7 +143,6 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
 
         //add concept to all concept vectors that are currently in the conceptVectors Map.
         addConcept(Code.A);
-
         if (MCodeUtilities.isPrimitive(type)) {
             String question = questionsResources
                     .getString("avinteraction.assignment.question");
