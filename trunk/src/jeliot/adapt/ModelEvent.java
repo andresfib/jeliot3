@@ -1,28 +1,29 @@
 package jeliot.adapt;
 
+
 public class ModelEvent {
 
 	String activity;
-	String programmingConcept;
+	Integer[] programmingConcepts;
 	String result;
 	
-	ModelEvent (String activity, String programmingConcept, String result){
+	public ModelEvent (String activity, Integer[] programmingConcepts, String result){
 		this.activity = activity;
 		
 		//TODO check that prog concept is in the list of concepts from the adapt resources
-		this.programmingConcept = programmingConcept;
+		this.programmingConcepts = programmingConcepts;
 		
 		this.result = result;
 	}
 	
-	String getActivity(){
+	public String getActivity(){
 		return activity;
 	}
-	String getProgrammingConcept(){
-		return programmingConcept;
+	public Integer[] getProgrammingConcepts(){
+		return programmingConcepts;
 	}
 	
-	String getResult(){
+	public String getResult(){
 		return result;
 	}
 }
