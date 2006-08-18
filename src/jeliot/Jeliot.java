@@ -33,6 +33,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import jeliot.adapt.BasicInternalUM;
+import jeliot.adapt.UMInteraction;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.calltree.TreeDraw;
 import jeliot.gui.CodePane2;
@@ -212,7 +214,12 @@ public class Jeliot {
      */
     private UserProperties jeliotUserProperties = ResourceBundles
             .getJeliotUserProperties();
-
+    
+    /**
+     * Defines the user model to use
+     * Now either BasicInternal or BasicInternal+Adapt2
+     */
+    private UMInteraction userModel;
     /**
      * 
      */
@@ -241,6 +248,8 @@ public class Jeliot {
         } catch (IllegalAccessException e) { //
         }
 
+        //TODO: let the user or a "smart" alg. to decide what UM to use
+        userModel = new BasicInternalUM();
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
         hv = new HistoryView(codePane, userDirectory);
 
@@ -405,8 +414,9 @@ public class Jeliot {
         if (gui.isAskingQuestions()) {
             //AVInteractionEngine and Interpreter initialization!
             try {
+            	userModel.userLogin("", "");
                 AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
-                        this.gui.getFrame());
+                        this.gui.getFrame(), userModel);
                 //TODO: pass this as a constructor parameter.
                 ((TheaterMCodeInterpreter) mCodeInterpreterForTheater)
                         .setAvInteractionEngine(avinteractionEngine);
@@ -416,7 +426,7 @@ public class Jeliot {
                         .addRegisteredPrePrimaryMCodeConnections(new PrintWriter(
                                 pw));
                 mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
-                        new BufferedReader(pr), avinteractionEngine);
+                        new BufferedReader(pr), avinteractionEngine, userModel);
             } catch (Exception e) {
                 if (DebugUtil.DEBUGGING) {
                     e.printStackTrace();

@@ -28,6 +28,6 @@ public interface UMInteraction {
 	 * Queries the UM for the knowledge of one user in the
 	 * specified concept
 	 */
-	double getConceptKnowledge(String concept);
+	boolean isConceptKnown(int conceptID);
 	
 }

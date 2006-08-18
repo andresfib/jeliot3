@@ -33,15 +33,20 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
      * Concepts are currently recorded and int values from the Code class.
      */
     private Map conceptVectors = new HashMap();
-
+    
+    /**
+     * User Model used for this user
+     */
+    private UMInteraction userModel;
     /**
      * 
      */
     public AVInteractionMCodeInterpreter(BufferedReader bf,
-            AVInteractionEngine engine) {
+            AVInteractionEngine engine, UMInteraction userModel) {
         super(bf);
         //this.mcode = bf;
         this.engine = engine;
+        this.userModel = userModel;
 
     }
 
@@ -141,6 +146,9 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeA(long expressionCounter, long fromExpression,
             long toExpression, String value, String type, Highlight h) {
 
+    	if (userModel.isConceptKnown(Code.A)){
+    		return;
+    	}
         //add concept to all concept vectors that are currently in the conceptVectors Map.
         addConcept(Code.A);
         if (MCodeUtilities.isPrimitive(type)) {

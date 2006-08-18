@@ -76,14 +76,16 @@ public class PointMachine implements BackendInterface {
             int achieved, Integer[] conceptIdentifier) {
         
         //TODO: add here the recording of the conceptIdentifiers
-        ModelEvent UMEvent = new ModelEvent();
+    	ModelEvent UMEvent;
         //TODO: set the properties of the event
         System.out.print("\t\tBackend received answer to \"" + questionID
                 + "\": ... ");
         if (correct) {
+        	UMEvent = new ModelEvent("questions.correct",conceptIdentifier,"1");
             System.out.println("correct.");
         } else {
-            System.out.println("wrong.");
+        	UMEvent = new ModelEvent("questions.wrong",conceptIdentifier,"1");
+        	System.out.println("wrong.");
         }
         
         for (int i = 0; i < conceptIdentifier.length; i++) {
