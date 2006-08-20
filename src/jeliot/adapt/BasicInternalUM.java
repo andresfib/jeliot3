@@ -1,10 +1,7 @@
 package jeliot.adapt;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import jeliot.util.*;
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserProperties;
 public class BasicInternalUM implements UMInteraction{
 
 	//Right now properties are just variables

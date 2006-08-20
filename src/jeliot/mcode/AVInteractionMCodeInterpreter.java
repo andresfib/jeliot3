@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-import jeliot.adapt.ModelEvent;
 import jeliot.adapt.UMInteraction;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.util.ResourceBundles;
