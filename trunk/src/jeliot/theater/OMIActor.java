@@ -255,7 +255,9 @@ public class OMIActor extends MIActor {
     
     
     public Animation disappear() {
-        thisActor.disappear();
+        if (thisActor != null) {
+            thisActor.disappear();
+        }
         Animation a = super.disappear();
         return a;
     }
