@@ -2,6 +2,9 @@ package jeliot.adapt;
 
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
+
+import java.util.HashMap;
+import java.util.Iterator;
 public class BasicInternalUM implements UMInteraction{
 
 	//Right now properties are just variables
@@ -32,19 +35,19 @@ public class BasicInternalUM implements UMInteraction{
 		int result = Integer.parseInt(event.getResult());
 		String activity = event.getActivity();
 		for (int i=0; i < entries.length; i++){
-			if (internalUM.containsKey(entries[i].toString() + activity)){
-				result = result + internalUM.getIntegerProperty(entries[i].toString());
+			String key = entries[i].toString() +"."  + activity;
+			if (internalUM.containsKey(key)){
+				result = result + internalUM.getIntegerProperty(key);
 			} 
-			internalUM.setIntegerProperty(entries[i].toString() + 
-					activity, result);
+			internalUM.setIntegerProperty(key, result);
 		}
 				
 	}
 
 	public boolean isConceptKnown(int concept){
 		String conceptID = Integer.toString(concept);
-		int rightAnswers = (internalUM.containsKey(conceptID+".questions.right"))?
-				internalUM.getIntegerProperty(conceptID+".questions.right"):0;
+		int rightAnswers = (internalUM.containsKey(conceptID+".questions.correct"))?
+				internalUM.getIntegerProperty(conceptID+".questions.correct"):0;
 		int wrongAnswers = (internalUM.containsKey(conceptID+".questions.wrong"))?
 				internalUM.getIntegerProperty(conceptID+".questions.wrong"):0;
 		
@@ -53,9 +56,23 @@ public class BasicInternalUM implements UMInteraction{
 	
 	}
 	public double getConceptKnowledge(String concept, String activity) {
-		String property = concept + ".questions.right";
+		String property = concept + ".questions.correct";
 		double result = Double.valueOf(internalUM.getStringProperty(property)).doubleValue();
 		return result;
 	}
 	
+	/**
+	 * Updates the internal User Model UserProperties. It overwrites previous values stored!!
+	 * 
+	 * @param properties Set of properties to replace internalUM with
+	 */
+	public void updateInternalUM(HashMap properties){
+		
+		Iterator it = properties.keySet().iterator();
+		while (it.hasNext()){
+			String key= (String) it.next();
+			internalUM.setStringProperty(key,  
+					(String) properties.get(key));
+		}
+	}
 }
