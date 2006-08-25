@@ -33,6 +33,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import jeliot.adapt.Adapt2Interaction;
 import jeliot.adapt.BasicInternalUM;
 import jeliot.adapt.UMInteraction;
 import jeliot.avinteraction.AVInteractionEngine;
@@ -220,6 +221,24 @@ public class Jeliot {
      * Now either BasicInternal or BasicInternal+Adapt2
      */
     private UMInteraction userModel;
+    
+    /**
+     * username, useful for adaptation
+     */
+    protected String userName;
+    /**
+     * sessionID useful for adaptation;
+     */
+    protected String sessionID;
+    /**
+     * password useful or NOT for adaptation;
+     */
+    protected String password ="";
+    /**
+     * group the "userNAme" belongs to. Useful or NOT for adaptation;
+     */
+    protected String group = "";
+    
     /**
      * 
      */
@@ -414,7 +433,7 @@ public class Jeliot {
         if (gui.isAskingQuestions()) {
             //AVInteractionEngine and Interpreter initialization!
             try {
-            	userModel.userLogin("", "");
+            	userModel.userLogin(userName, sessionID);
                 AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
                         this.gui.getFrame(), userModel);
                 //TODO: pass this as a constructor parameter.
@@ -929,5 +948,15 @@ public class Jeliot {
      */
     public int getSelectedTabIndex() {
         return gui.getSelectedIndexInTabbedPane();
+    }
+    public void setUserModel(String type){
+    	if (type.equals("none") || type.equals("")){
+    		userModel = null;
+    	} else if (type.equals("basic")){
+    		userModel = new BasicInternalUM();
+    	} else if (type.equals("adapt2")){
+    		userModel = new Adapt2Interaction(userName, password, group, sessionID);
+    	}
+    	return;
     }
 }
