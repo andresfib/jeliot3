@@ -7,21 +7,18 @@ import java.net.*;
 public class NetworkUtils {
 
 	// From Adapt^2 protocols
-	public static String getContent(String urlName) throws Exception
-	{
+	public static String getContent(String urlName) throws Exception{
 		URL url = new URL (urlName);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		String responce = new String();
+		String response = new String();
 		//      receive the responce
-		responce = readFromConnection(connection);
+		response = readFromConnection(connection);
 		connection.disconnect();
-		return responce;
+		return response;
 	}
 
 	// From Adapt^2 protocols
-	public static String readFromConnection(HttpURLConnection con)
-		throws Exception
-	{
+	public static String readFromConnection(HttpURLConnection con) throws Exception{
 		BufferedReader in = new BufferedReader(
 			new InputStreamReader(con.getInputStream()));
 		String inputLine = new String();
@@ -35,5 +32,9 @@ public class NetworkUtils {
 		in.close();
 		return inputLine;
 	}
-
+	public static void postContent(String urlName) throws Exception{
+		URLConnection dbpc = (new URL(urlName)).openConnection();
+		BufferedReader in = new BufferedReader(new InputStreamReader( 
+				dbpc.getInputStream()));
+	}
 }
