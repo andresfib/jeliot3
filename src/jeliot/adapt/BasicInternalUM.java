@@ -33,13 +33,16 @@ public class BasicInternalUM implements UMInteraction{
 		// TODO Auto-generated method stub
 		Integer[] entries = event.getProgrammingConcepts();
 		int result = Integer.parseInt(event.getResult());
+		int value = result;
 		String activity = event.getActivity();
 		for (int i=0; i < entries.length; i++){
 			String key = entries[i].toString() +"."  + activity;
 			if (internalUM.containsKey(key)){
-				result = result + internalUM.getIntegerProperty(key);
+				value = result + internalUM.getIntegerProperty(key);
+
 			} 
-			internalUM.setIntegerProperty(key, result);
+			System.out.println(key + "="+value);
+			internalUM.setIntegerProperty(key, value);
 		}
 				
 	}
