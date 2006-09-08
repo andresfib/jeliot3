@@ -2,8 +2,7 @@ package jeliot.adapt;
 
 import java.util.HashMap;
 
-import jeliot.networking.*;
-import jeliot.util.UserProperties;
+import jeliot.networking.NetworkUtils;
 
 public class Adapt2Interaction extends BasicInternalUM {
 
