@@ -70,7 +70,7 @@ public class Adapt2Interaction extends BasicInternalUM {
 			internalUM.setIntegerProperty(key, result);
 			
 			try{
-				NetworkUtils.postContent(activityURL+ "&res=" + result);
+//				NetworkUtils.postContent(activityURL+ "&res=" + result);
 			
 			} catch (Exception e){
 				System.out.println("Failed to update the ADAPT2 server with activity");
