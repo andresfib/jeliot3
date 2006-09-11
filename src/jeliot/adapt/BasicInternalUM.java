@@ -10,8 +10,7 @@ public class BasicInternalUM implements UMInteraction{
 	//Right now properties are just variables
 	// TODO: To be changed to something more OO
 	
-	// Number represents number of right questions on the topic 
-	public int assignment=0;
+	
 	UserProperties internalUM = null;
 	//HashMap internalUM = new HashMap();
 	public void userLogon(String userName, String password) {
@@ -40,7 +39,9 @@ public class BasicInternalUM implements UMInteraction{
 			if (internalUM.containsKey(key)){
 				value = result + internalUM.getIntegerProperty(key);
 
-			} 
+			} else {
+				value = result;
+			}
 			System.out.println(key + "="+value);
 			internalUM.setIntegerProperty(key, value);
 		}
