@@ -1,0 +1,77 @@
+Related to the "experiment" with Taiyu:
+
+- concept collection for each questions (in AVInteractionMCodeInterpreter)
+- modification and development of BackEndInterface and its implementation in order to connect to database and save all the necessary data into it (in BackEndInterface and In PointMachine (maybe we should change the name))
+- development of web start mechanism and user identification
+- development of other types of questions and concept collection
+
+General:
+- Manual and automatic question location determining
+- Manual question generation
+- Fix the problem of too small windows or textareas.
+- Show variable name or assignment in the question
+
+Moti:
+
+1. This is an entirely new feature: make a separate menu instead of
+adding yet another option.
+
+2. As you noted, this should be extended to expression evaluations and
+jumps.
+
+3. Very important: configurability. I suggest an interface to check the
+variables you want to be quizzed on (default: select all).
+
+>>> 4. The placement needs thought. Perhaps in the "output" area.
+>> What do you mean by this?
+> Displaying the window in the middle of the frame makes it impossible to  view the visualization. In particular, you can't always see the current  values of the variables that are used to compute the expression. You have  to put the window somewhere where it doesn't block. I suggest the output  area.
+So you mean we should switch the output are to become the question asking area or should we have a tabbing pane to allow students to switch between questions and output or should it just be a dialog on top of the output area? I understand that there is an issue with the display of the visualization and the question at the same time. On the one hand, the question dialog is movable so student can move it wherever it is not on the way. On the other hand, this might be then frustrating once you need to do it everytime. We had a discussion with Roman and Andrés about this as well. We can probably try out few options.
+
+5. You don't need both a title "multiple choice question" and a label :-)
+
+>>> 6. You don't need numbers, unless you refer to them. E.g. "you answered
+>>> 1, the correct answer is 3". But you could still say "you answered 25,
+>>> the correct answer is 21".
+>> ok. So this goes to comments? After the question
+>Yes, but again, I'm trying to save screen real estate.
+
+7. You have to display a rounded value of types float/double.
+
+8. I don't understand "You found 0 out of 1 ...". I think it is better
+just to say what I wrote in (6).
+
+>>> 9. I don't understand why you have exactly two chances. We have to think
+>>> about the interface from a pedagogical viewpoint.
+>> What does this mean?
+> Can you explain how the feature operates? Does the student get one chance  to answer? Two? Unlimited?
+The question is popped up everytime when the value of the expression is known before hand so there are no limits for the number of times a question is shown. We have a separate MCode listener that goes through the MCode, before it is going to be visualized and generates the question information. During the visualization, we check if there are any questions for each expression before the expression is visualized. This means, for example, that if the expression contains an input request there won't be a question related to outcome of that expression. As the MCode listener for questions and the visualization run in separate threads, there might be some concurrency issues that in some cases could prevent the initiation of a question because the MCode listener for questions haven't generated the question information before the visualization of that expression starts. This is one thing that needs to be fixed in the future.
+
+10. I'm not sure if "final results" are needed at this stage. If so, you
+should display it even if "rewind" or "edit" is clicked to stop the
+program.
+
+Andrés:
+
+I have just looked to Jeliot interrogative. It is a quite nice proof of  concept, and very well integrated. I guess we could find a good heuristic  algorithm when to automically ask a question (like randomly :)). The other  obvious way to go is to use a User  Model...Brusilovsky one is accesible  via web service if i am right.
+
+How is the implementation? Woven with the TheaterInterpreter, or as a new  one? Maybe a good idea would be to add yet another tab, with the info of  correct answers and so on. I guess there may be plenty of place where to  place questions, or types of questions like which method signature is  going to be used ... Where do you want to go with this? Because it looks  promising. Finally, the ultimate question would be to let the user guess  if Jeliot will crash in the following line ;)
+
+Roman:
+
+It came to my mind that questions in PV can actually distract users.
+It would be quite cool to have some comparison w/wo questions.
+Probably, it would improve the comprehension of the program, it might even improve understanding of some concepts
+(by e.g. by driving users' attention to proper places).
+But it might at time occlude or overlay the visualization.
+People shall know that they can move the dialog (we can think about what design of the dialog, if a dialog at all),
+but they shall also understand what is the question about, how it is related to the current state and so on.
+
+The other idea was that the questions then shall be more related to the visualization
+(and again, it can be that we test control-flow, data-flow and other type of questions).
+So, a question could be answered by (clicking at) the visualization.
+"The following operation will swap two elements in the array "data".
+Click on those elements in Data that will be modified".
+Other (interactive)questions can be targeted to code, that can be perhaps trickier,
+but I think can know the blocks of code, where they are
+(at least in shorter programs we even do not have to scroll there):
+"Click on the part of the code that will be executed after the following statement (sort (a,b,c);)".
