@@ -237,7 +237,7 @@ public class Jeliot {
     /**
      * group the "userNAme" belongs to. Useful or NOT for adaptation;
      */
-    protected String group = "";
+    protected String group = "va2006";
     
     /**
      * 
@@ -442,7 +442,7 @@ public class Jeliot {
                 PipedReader pr = new PipedReader();
                 PipedWriter pw = new PipedWriter(pr);
                 MCodeUtilities
-                        .addRegisteredPrePrimaryMCodeConnections(new PrintWriter(
+                        .addRegisteredSecondaryMCodeConnections(new PrintWriter(
                                 pw));
                 mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
                         new BufferedReader(pr), avinteractionEngine, userModel);
