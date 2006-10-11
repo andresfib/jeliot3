@@ -2,7 +2,9 @@ package jeliot.networking;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.*;
+import java.util.ArrayList;
 
 public class NetworkUtils {
 
@@ -36,5 +38,29 @@ public class NetworkUtils {
 		URLConnection dbpc = (new URL(urlName)).openConnection();
 		BufferedReader in = new BufferedReader(new InputStreamReader( 
 				dbpc.getInputStream()));
+	}
+
+	public static ArrayList getReport(String reportURL) {
+		ArrayList response = null;	
+		ObjectInputStream stream = null;
+		try{
+			URL url = new URL(reportURL);
+			URLConnection conn = url.openConnection();
+			stream = new ObjectInputStream(conn.getInputStream());
+	
+		
+			response = (ArrayList)stream.readObject();
+		}
+		catch (Exception e) {
+			e.printStackTrace(System.err); 
+		}
+		finally{
+			try{
+				stream.close();
+			}catch (Exception e){
+				e.printStackTrace(System.err); 
+			}		
+		}
+		return response;
 	}
 }

@@ -1,8 +1,11 @@
 package jeliot.adapt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import jeliot.networking.NetworkUtils;
+import edu.pitt.sis.paws.cbum.report.ProgressEstimatorReport;
 
 public class Adapt2Interaction extends BasicInternalUM {
 
@@ -19,7 +22,7 @@ public class Adapt2Interaction extends BasicInternalUM {
 		this.userID = userID;
 		this.password = password;
 		this.group = group;
-		this.sessionID = sessionID;
+		this.sessionID = "testAndres";//sessionID;
 		this.eventURL = adapt2UMServer + "?usr=" + userID 
 		+ "&sid=" + sessionID + "&grp=" + group
 		+ "&svc=&app=" + applicationID;
@@ -29,11 +32,13 @@ public class Adapt2Interaction extends BasicInternalUM {
 	/*
 	 * Get the whole "knowledge" report from the ReportManager of adapt2
 	 */
-	private String getReport(){
-		String request_url = "http://kt1.exp.sis.pitt.edu:8080/cbum/ReportManager?typ=act&dir=out& frm=xml&app=2&usr=myudelson";
-		String response=""; 
+	private ArrayList getReport(){
+		
+		String reportURL = adapt2UMServer + "?typ=act&dir=in&frm=dat&app=" + 
+      applicationID + "&usr=" + userID;
+		ArrayList response=null; 
 		try {
-			response = NetworkUtils.getContent(request_url);
+			response = NetworkUtils.getReport(reportURL);
 		} catch (Exception e) {
 			// TODO Retry once if it didn't go well
 			System.out.println("Failed to get the Report from ADAPT2 server");
@@ -45,9 +50,8 @@ public class Adapt2Interaction extends BasicInternalUM {
 	/* (non-Javadoc)
 	 * @see jeliot.adapt.UMInteraction#getConceptKnowledge(java.lang.String)
 	 */
-	public double getConceptKnowledge(String concept) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getConceptKnowledge(String concept, String activity) {
+		return super.getConceptKnowledge(concept, activity);
 	}
 
 	/* (non-Javadoc)
@@ -62,16 +66,17 @@ public class Adapt2Interaction extends BasicInternalUM {
 		for (int i=0; i < entries.length; i++){
 			String key = entries[i].toString() + "." + activity;
 			String activityURL = eventURL + "&act=" + key;
+			int temp = result;
 			if (internalUM.containsKey(key)){
 				int previous = internalUM.getIntegerProperty(key);
-				result += previous; 		
+				temp += previous; 		
 
 			} 
-			internalUM.setIntegerProperty(key, result);
+			internalUM.setIntegerProperty(key, temp);
 			
 			try{
 //				NetworkUtils.postContent(activityURL+ "&res=" + result);
-			
+				System.out.println(activityURL+"&res=" + result);
 			} catch (Exception e){
 				System.out.println("Failed to update the ADAPT2 server with activity");
 				e.printStackTrace();
@@ -88,7 +93,7 @@ public class Adapt2Interaction extends BasicInternalUM {
 		this.password = password;
 		super.userLogin(userID, password);
 		
-		String report = getReport();
+		ArrayList report = getReport();
 		HashMap userModel = reportToMap(report);
 		updateInternalUM(userModel);
 
@@ -96,9 +101,16 @@ public class Adapt2Interaction extends BasicInternalUM {
 
 
 
-	private HashMap reportToMap(String report) {
-		// TODO Auto-generated method stub
-		return null;
+	private HashMap reportToMap (ArrayList report) {
+		
+		Iterator it = report.iterator();
+		HashMap reportMap = new HashMap();
+		while (it.hasNext()){
+			ProgressEstimatorReport conceptReport = (ProgressEstimatorReport)it.next();
+			reportMap.put(conceptReport.id, new Double(conceptReport.progress));
+			
+		}
+		return reportMap;
 	}
 
 	/* (non-Javadoc)

@@ -32,30 +32,29 @@ public class BasicInternalUM implements UMInteraction{
 		// TODO Auto-generated method stub
 		Integer[] entries = event.getProgrammingConcepts();
 		int result = Integer.parseInt(event.getResult());
-		int value = result;
 		String activity = event.getActivity();
 		for (int i=0; i < entries.length; i++){
 			String key = entries[i].toString() +"."  + activity;
+			int temp = result;
 			if (internalUM.containsKey(key)){
-				value = result + internalUM.getIntegerProperty(key);
-
-			} else {
-				value = result;
+				temp += internalUM.getIntegerProperty(key);
 			}
-			System.out.println(key + "="+value);
-			internalUM.setIntegerProperty(key, value);
+			
+			System.out.println(key + "="+temp);
+			internalUM.setIntegerProperty(key, temp);
 		}
 				
 	}
 
 	public boolean isConceptKnown(int concept){
+		int threshold = 2;
 		String conceptID = Integer.toString(concept);
 		int rightAnswers = (internalUM.containsKey(conceptID+".questions.correct"))?
 				internalUM.getIntegerProperty(conceptID+".questions.correct"):0;
 		int wrongAnswers = (internalUM.containsKey(conceptID+".questions.wrong"))?
 				internalUM.getIntegerProperty(conceptID+".questions.wrong"):0;
 		
-		return (rightAnswers > 2) && (rightAnswers - wrongAnswers > 2);
+		return (rightAnswers >= threshold) && (rightAnswers - wrongAnswers >= threshold);
 				
 	
 	}
