@@ -1009,6 +1009,9 @@ public class Director {
      */
     public ValueActor finishMethod(Actor returnAct, long expressionCounter) {
 
+        //To stop the animation before a method is finished if stepping is used.
+        highlightForMessage(null);
+        
         // Get the stage and remove it.
         MethodStage stage = ((MethodFrame) frameStack.pop()).getMethodStage();
         manager.removeMethodStage(stage);

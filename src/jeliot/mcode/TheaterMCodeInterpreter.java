@@ -1197,7 +1197,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeSMCC() {
         if (!returned) {
-
+            
             director.finishMethod(null, 0);
             closeExpressionStack();
 
