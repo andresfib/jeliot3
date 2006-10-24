@@ -3371,4 +3371,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     public void setAvInteractionEngine(AVInteractionEngine avInteractionEngine) {
         this.avInteractionEngine = avInteractionEngine;
     }
+
+    public void afterInterpretation(String line) {        
+    }
 }

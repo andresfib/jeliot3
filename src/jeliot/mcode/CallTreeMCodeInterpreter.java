@@ -643,5 +643,10 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeAI(Highlight highlight) {
     }
 
+    public void afterInterpretation(String line) {
+        // TODO Auto-generated method stub
+        
+    }
+
     
 }

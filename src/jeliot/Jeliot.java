@@ -420,7 +420,7 @@ public class Jeliot {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);
             MCodeUtilities
-                    .addRegisteredSecondaryMCodeConnections(new PrintWriter(pw));
+                    .addRegisteredSecondaryMCodeConnections(new PrintWriter(pw, true));
             mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(
                     new BufferedReader(pr), callTree, gui.getProgram(), this,
                     gui.getTabNumber(bundle2.getString("tab.title.call_tree")));
@@ -436,16 +436,18 @@ public class Jeliot {
             	userModel.userLogin(userName, sessionID);
                 AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
                         this.gui.getFrame(), userModel);
-                //TODO: pass this as a constructor parameter.
+                
+                //maybe we should pass this as a constructor parameter?
                 ((TheaterMCodeInterpreter) mCodeInterpreterForTheater)
                         .setAvInteractionEngine(avinteractionEngine);
+                
                 PipedReader pr = new PipedReader();
                 PipedWriter pw = new PipedWriter(pr);
-                MCodeUtilities
-                        .addRegisteredPrePrimaryMCodeConnections(new PrintWriter(
-                                pw));
                 mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
-                        new BufferedReader(pr), avinteractionEngine, userModel);
+                        new BufferedReader(pr), new PrintWriter(
+                                pw, true), avinteractionEngine, userModel);
+                MCodeUtilities
+                        .addRegisteredPrePrimaryMCodeConnections(mCodeInterpreterForAVInteraction);
             } catch (Exception e) {
                 if (DebugUtil.DEBUGGING) {
                     e.printStackTrace();
@@ -653,7 +655,7 @@ public class Jeliot {
      *
      */
     public void stopThreads() {
-        //This kills the Animation and Call Tree threads.
+        //This kills the Animation and Call Tree and AVInteraction threads.
         if (mCodeInterpreterForTheater != null) {
             mCodeInterpreterForTheater.setRunning(false);
         }

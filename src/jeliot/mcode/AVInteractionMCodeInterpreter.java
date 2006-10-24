@@ -4,6 +4,11 @@
 package jeliot.mcode;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PipedReader;
+import java.io.PipedWriter;
+import java.io.PrintWriter;
+import java.io.Reader;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -14,39 +19,67 @@ import java.util.Vector;
 
 import jeliot.adapt.UMInteraction;
 import jeliot.avinteraction.AVInteractionEngine;
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 
 /**
  * @author nmyller
  */
-public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
+public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
+        MCodePreProcessor {
 
+    /**
+     * 
+     */
     private static ResourceBundle questionsResources = ResourceBundles
             .getAvInteractionResourceBundle();
 
+    /**
+     * 
+     */
     private AVInteractionEngine engine;
-
 
     /**
      * Contains Vector objects that keep the record of used concepts.
      * Concepts are currently recorded and int values from the Code class.
      */
     private Map conceptVectors = new HashMap();
-    
+
     /**
      * User Model used for this user
      */
     private UMInteraction userModel;
+
+    private PrintWriter writerForMCodeOutput;
+
+    private BufferedReader readerForMCodeOutput;
+
+    private PrintWriter writerForMCodeInput;
+
+    private BufferedReader readerForMCodeInput;
+
     /**
      * 
      */
     public AVInteractionMCodeInterpreter(BufferedReader bf,
-            AVInteractionEngine engine, UMInteraction userModel) {
+            PrintWriter mCodeInputWriter, AVInteractionEngine engine,
+            UMInteraction userModel) {
         super(bf);
         //this.mcode = bf;
         this.engine = engine;
         this.userModel = userModel;
+        this.readerForMCodeInput = bf;
+        this.writerForMCodeInput = mCodeInputWriter;
 
+        PipedReader pr = new PipedReader();
+        PipedWriter pw;
+        try {
+            pw = new PipedWriter(pr);
+            this.readerForMCodeOutput = new BufferedReader(pr);
+            this.writerForMCodeOutput = new PrintWriter(pw, true);
+        } catch (IOException e) {
+            DebugUtil.handleThrowable(e);
+        }
     }
 
     /**
@@ -145,9 +178,9 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeA(long expressionCounter, long fromExpression,
             long toExpression, String value, String type, Highlight h) {
 
-    	if (userModel.isConceptKnown(Code.A)){
-    		return;
-    	}
+        if (userModel.isConceptKnown(Code.A)) {
+            return;
+        }
         //add concept to all concept vectors that are currently in the conceptVectors Map.
         addConcept(Code.A);
         if (MCodeUtilities.isPrimitive(type)) {
@@ -1055,16 +1088,48 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#endRunning()
      */
     protected void endRunning() {
-        // TODO Auto-generated method stub
-
+        this.writerForMCodeInput.close();
+        this.writerForMCodeOutput.close();
+        try {
+            this.readerForMCodeInput.close();
+        } catch (IOException e) {
+            DebugUtil.handleThrowable(e);
+        }
+        try {
+            this.readerForMCodeOutput.close();
+        } catch (IOException e) {
+            DebugUtil.handleThrowable(e);
+        }
     }
 
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#emptyScratch()
      */
     public boolean emptyScratch() {
-        // TODO Auto-generated method stub
         return false;
+    }
+
+    public void afterInterpretation(String line) {
+        this.writerForMCodeOutput.println(line);
+        this.writerForMCodeOutput.flush();
+    }
+
+    public void closeMCodeOutputReader() {
+        this.writerForMCodeOutput.flush();
+        this.writerForMCodeOutput.close();
+        try {
+            this.readerForMCodeOutput.close();
+        } catch (IOException e) {
+            DebugUtil.handleThrowable(e);
+        }
+    }
+
+    public PrintWriter getMCodeInputWriter() {
+        return this.writerForMCodeInput;
+    }
+
+    public BufferedReader getMCodeOutputReader() {
+        return this.readerForMCodeOutput;
     }
 
 }
