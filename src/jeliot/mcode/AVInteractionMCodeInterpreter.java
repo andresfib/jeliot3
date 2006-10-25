@@ -178,9 +178,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
     protected void handleCodeA(long expressionCounter, long fromExpression,
             long toExpression, String value, String type, Highlight h) {
 
-        if (userModel.isConceptKnown(Code.A)) {
-            return;
-        }
+      
         //add concept to all concept vectors that are currently in the conceptVectors Map.
         addConcept(Code.A);
         if (MCodeUtilities.isPrimitive(type)) {
