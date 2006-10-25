@@ -220,7 +220,7 @@ public class Jeliot {
      * Defines the user model to use
      * Now either BasicInternal or BasicInternal+Adapt2
      */
-    private UMInteraction userModel;
+    private UMInteraction userModel = null;
     
     /**
      * username, useful for adaptation
@@ -268,7 +268,7 @@ public class Jeliot {
         }
 
         //TODO: let the user or a "smart" alg. to decide what UM to use
-        userModel = new BasicInternalUM();
+        // userModel = new BasicInternalUM();
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
         hv = new HistoryView(codePane, userDirectory);
 
