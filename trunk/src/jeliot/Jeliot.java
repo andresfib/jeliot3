@@ -433,7 +433,9 @@ public class Jeliot {
         if (gui.isAskingQuestions()) {
             //AVInteractionEngine and Interpreter initialization!
             try {
-            	userModel.userLogin(userName, sessionID);
+                if (userModel != null){
+                    userModel.userLogin(userName, sessionID);
+                }
                 AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
                         this.gui.getFrame(), userModel);
                 
@@ -450,7 +452,7 @@ public class Jeliot {
                         .addRegisteredPrePrimaryMCodeConnections(mCodeInterpreterForAVInteraction);
             } catch (Exception e) {
                 if (DebugUtil.DEBUGGING) {
-                    e.printStackTrace();
+                    DebugUtil.handleThrowable(e);
                 }
             }
         }
