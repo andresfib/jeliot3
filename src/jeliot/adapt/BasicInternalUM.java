@@ -5,7 +5,7 @@ import jeliot.util.UserProperties;
 
 import java.util.HashMap;
 import java.util.Iterator;
-public class BasicInternalUM implements UMInteraction{
+public class BasicInternalUM extends UMInteraction{
 
 	//Right now properties are just variables
 	// TODO: To be changed to something more OO
