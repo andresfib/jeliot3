@@ -268,7 +268,7 @@ public class Jeliot {
         }
 
         //TODO: let the user or a "smart" alg. to decide what UM to use
-        // userModel = new BasicInternalUM();
+        userModel = new UMInteraction();
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
         hv = new HistoryView(codePane, userDirectory);
 
@@ -433,9 +433,8 @@ public class Jeliot {
         if (gui.isAskingQuestions()) {
             //AVInteractionEngine and Interpreter initialization!
             try {
-                if (userModel != null){
-                    userModel.userLogin(userName, sessionID);
-                }
+                userModel.userLogin(userName, sessionID);
+                
                 AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
                         this.gui.getFrame(), userModel);
                 
