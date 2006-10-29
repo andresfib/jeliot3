@@ -537,8 +537,4 @@ public class InteractionModule implements InteractionInterface {
     public void addInteractionObject(String id, Question doc) {
         allInteractions.put(id, doc);
     }
-    public JFrame getParent(){
-    	return parent;
-    }
-
 }

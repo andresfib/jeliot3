@@ -1197,7 +1197,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeSMCC() {
         if (!returned) {
-
+            
             director.finishMethod(null, 0);
             closeExpressionStack();
 
@@ -2769,13 +2769,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeA(long expressionCounter, long fromExpression,
             long toExpression, String value, String type, Highlight h) {
-//      if (avInteractionEngine != null) {
-//    	  director.highlightForMessage(h);
-//    	  avInteractionEngine.interaction("" + expressionCounter);
-//      }
-    	if (avInteractionEngine != null) {
-    		avInteractionEngine.isAnswered("" + expressionCounter);
-    	}
+
         Variable toVariable = (Variable) variables.remove(new Long(toExpression));
 
         //just to get rid of extra references
@@ -2856,11 +2850,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             long expressionReference, String location) {
         exprs.push(expressionType + Code.DELIM + expressionReference
                 + Code.DELIM + location);
-//        if (avInteractionEngine != null && expressionType == Code.A) {
-//            Highlight h = MCodeUtilities.makeHighlight(location);
-//            director.highlightForMessage(h);
-//            avInteractionEngine.interaction("" + expressionReference);
-//        }
+        if (avInteractionEngine != null && expressionType == Code.A) {
+            Highlight h = MCodeUtilities.makeHighlight(location);
+            director.highlightForMessage(h);
+            avInteractionEngine.interaction("" + expressionReference);
+        }
     }
 
     /**
@@ -3376,5 +3370,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     public void setAvInteractionEngine(AVInteractionEngine avInteractionEngine) {
         this.avInteractionEngine = avInteractionEngine;
+    }
+
+    public void afterInterpretation(String line) {        
     }
 }

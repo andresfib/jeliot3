@@ -113,9 +113,9 @@ public class Launcher extends Thread {
      */
     public void makePipedStreams() {
         pipedWriter = new PipedWriter();
-        writer = new PrintWriter(pipedWriter);
+        writer = new PrintWriter(pipedWriter, true);
         putInput = new PipedWriter();
-        inputWriter = new PrintWriter(putInput);
+        inputWriter = new PrintWriter(putInput, true);
 
         try {
             pipedReader = new PipedReader(pipedWriter);

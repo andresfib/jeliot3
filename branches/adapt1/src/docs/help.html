@@ -141,12 +141,16 @@ char Input.readChar(), String Input.readString().
 All classes must be in a single source file. 
 
 <div class="p"><!----></div>
+Only static methods that do not return an object can be called from Java API.
+
+<div class="p"><!----></div>
+Constructors cannot ask for users input.
 
 <div class="p"><!----></div>
 Inner classes are not supported.
 
 <div class="p"><!----></div>
-Only static methods that do not return an object can be called from Java API.
+Because of the underlying interpreter no circular dependencies between classes can be resolved and thus they are not supported.
 
 <div class="p"><!----></div>
  <h2><a name="tth_sEc9">

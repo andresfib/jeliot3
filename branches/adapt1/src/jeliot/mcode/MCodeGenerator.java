@@ -11,6 +11,8 @@ import koala.dynamicjava.interpreter.NodeProperties;
 import koala.dynamicjava.tree.Node;
 
 /**
+ * Utility class to generate some MCode commands
+ * 
  * @author nmyller
  */
 public class MCodeGenerator {

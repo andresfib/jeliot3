@@ -5,11 +5,6 @@ package jeliot.avinteraction;
 
 import javax.swing.JFrame;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-
 import jeliot.adapt.UMInteraction;
 import jeliot.util.DebugUtil;
 import avinteraction.FIBQuestion;
@@ -109,7 +104,7 @@ public class AVInteractionEngine {
         question.setComment(comment);
         
         // add it to the interactions
-        testModule.addInteractionObject(id, question);          
+        testModule.addInteractionObject(id, question);        
     }
     
     /**
@@ -185,24 +180,5 @@ public class AVInteractionEngine {
 
         // add it to the interactions
         testModule.addInteractionObject(id, question);
-        this.interaction(id);
     }
-
-	public synchronized void isAnswered(String id) {
-		testModule.addWindowListener(new WindowAdapter(){
-			public void windowClosing(WindowEvent e){
-				InteractionModule object = (InteractionModule) e.getSource();//
-				object.getParent().notify();
-				//.notify();
-			}
-			
-		});
-		try {
-			parent.wait();
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-	}
 }

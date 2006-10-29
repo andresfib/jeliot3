@@ -1599,12 +1599,14 @@ public abstract class MCodeInterpreter {
                 }
                 }
             }
-
+            afterInterpretation(line);
         } else {
             running = false;
             endRunning();
         }
     }
+
+    public abstract void afterInterpretation(String line);
 
     /**
      * @param cells
