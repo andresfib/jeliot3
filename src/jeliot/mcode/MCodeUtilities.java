@@ -1,19 +1,16 @@
 package jeliot.mcode;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-/*import javax.naming.spi.DirStateFactory.Result;
- import javax.swing.JFileChooser;
-
- import jeliot.gui.JavaFileFilter;
- import jeliot.util.ResourceBundles;
- import jeliot.util.UserProperties;*/
+import jeliot.util.DebugUtil;
 
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
@@ -262,7 +259,7 @@ public class MCodeUtilities {
      */
     private static Vector registeredSecondaryMCodeConnections = new Vector();
 
-    private static Vector registeredPrePrimaryMCodeConnections = new Vector();
+    private static Vector registeredMCodePreProcessors = new Vector();
 
     /**
      * Hack flag to get the output into see below
@@ -1224,9 +1221,17 @@ public class MCodeUtilities {
      * @param str
      */
     public static void printlnToRegisteredPrePrimaryMCodeConnections(String str) {
-        Iterator i = registeredPrePrimaryMCodeConnections.iterator();
+        Iterator i = registeredMCodePreProcessors.iterator();
+        MCodePreProcessor pp = null;
         while (i.hasNext()) {
-            ((PrintWriter) i.next()).println(str);
+            pp = (MCodePreProcessor) i.next();
+            pp.getMCodeInputWriter().println(str);
+            try {
+                String st1 = pp.getMCodeOutputReader().readLine();
+                //System.out.println("from preprimary MCode interpreter: " +st1);
+            } catch (IOException e) {
+                DebugUtil.handleThrowable(e);
+            }
         }
     }
 
@@ -1234,9 +1239,9 @@ public class MCodeUtilities {
      * 
      * @param pw
      */
-    public static void addRegisteredPrePrimaryMCodeConnections(PrintWriter pw) {
-        if (!registeredPrePrimaryMCodeConnections.contains(pw)) {
-            registeredPrePrimaryMCodeConnections.add(pw);
+    public static void addRegisteredPrePrimaryMCodeConnections(MCodePreProcessor mCodePreProc) {
+        if (!registeredMCodePreProcessors.contains(mCodePreProc)) {
+            registeredMCodePreProcessors.add(mCodePreProc);
         }
     }
 
@@ -1245,14 +1250,15 @@ public class MCodeUtilities {
      *
      */
     public static void clearRegisteredPrePrimaryMCodeConnections() {
-        Iterator i = registeredPrePrimaryMCodeConnections.iterator();
+        Iterator i = registeredMCodePreProcessors.iterator();
         while (i.hasNext()) {
-            PrintWriter pw = (PrintWriter) i.next();
-            pw.println("" + Code.END);
-            pw.flush();
-            pw.close();
+            MCodePreProcessor pp = (MCodePreProcessor) i.next();
+            pp.getMCodeInputWriter().println("" + Code.END);
+            pp.getMCodeInputWriter().flush();
+            pp.getMCodeInputWriter().close();
+            pp.closeMCodeOutputReader();
         }
-        registeredPrePrimaryMCodeConnections.clear();
+        registeredMCodePreProcessors.clear();
     }
 
     /**
@@ -1503,4 +1509,33 @@ public class MCodeUtilities {
             return c.getName();
         return "[" + getFullQualifiedClassname(c.getComponentType());
     }
+    
+    /**
+     * returns a string with the long name of the Code ints 
+     * e.g. Code.A ->Assignment
+     */
+     public static String getLongName(int code){
+         String result;
+         switch(code){
+         case Code.A: result = "Assignment";break;
+         case Code.L: result = "Literal";break;
+         case Code.QN: result = "QualifiedName";break;
+         case Code.AE: result = "Addition";break;
+         case Code.SE: result = "Substraction";break;
+         case Code.R: result = "MethodReturn";break;
+         case Code.RE: result = "Remainder";break;
+         case Code.PRIE: result = "Preincrement";break;
+         case Code.PIE: result = "Postincrement";break;
+         case Code.PDE: result = "Postdecrement";break;
+         case Code.PRDE: result = "Predecrement";break;
+         case Code.AA: result = "ArrayAllocation";break;
+         case Code.AAC: result = "ArrayAccess";break;
+         case Code.OMC: result = "ObjectMethodCall";break;
+         case Code.SMC: result = "StaticMethodCall";break;
+         case Code.P: result = "Argument"; break;
+         default: result = ""+ code;
+         }
+         
+         return result;
+     }
 }

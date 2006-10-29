@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import jeliot.mcode.MCodeUtilities;
 import jeliot.networking.NetworkUtils;
 import edu.pitt.sis.paws.cbum.report.ProgressEstimatorReport;
 
@@ -64,7 +65,7 @@ public class Adapt2Interaction extends BasicInternalUM {
 		String activity = event.getActivity();
 		
 		for (int i=0; i < entries.length; i++){
-			String key = entries[i].toString() + "." + activity;
+			String key = MCodeUtilities.getLongName(entries[i].intValue()) + "." + activity;
 			String activityURL = eventURL + "&act=" + key;
 			int temp = result;
 			if (internalUM.containsKey(key)){

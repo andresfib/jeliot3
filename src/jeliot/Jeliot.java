@@ -220,24 +220,26 @@ public class Jeliot {
      * Defines the user model to use
      * Now either BasicInternal or BasicInternal+Adapt2
      */
-    private UMInteraction userModel;
+    private UMInteraction userModel = new UMInteraction();
     
     /**
      * username, useful for adaptation
      */
-    protected String userName;
+    protected String userName = "";
     /**
      * sessionID useful for adaptation;
      */
-    protected String sessionID;
+    protected String sessionID = "";
     /**
      * password useful or NOT for adaptation;
      */
-    protected String password ="";
+    protected String password = "";
     /**
      * group the "userNAme" belongs to. Useful or NOT for adaptation;
      */
-    protected String group = "va2006";
+    protected String group = "";
+
+    public String userModelType = "";
     
     /**
      * 
@@ -268,7 +270,7 @@ public class Jeliot {
         }
 
         //TODO: let the user or a "smart" alg. to decide what UM to use
-        userModel = new BasicInternalUM();
+
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
         hv = new HistoryView(codePane, userDirectory);
 
@@ -278,6 +280,7 @@ public class Jeliot {
 
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad,
                 userDirectory, callTree, hv);
+        userModel = userModel.createUserModel(userModelType, userName, password, group, sessionID);
 
     }
 
@@ -420,7 +423,7 @@ public class Jeliot {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);
             MCodeUtilities
-                    .addRegisteredSecondaryMCodeConnections(new PrintWriter(pw));
+                    .addRegisteredSecondaryMCodeConnections(new PrintWriter(pw, true));
             mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(
                     new BufferedReader(pr), callTree, gui.getProgram(), this,
                     gui.getTabNumber(bundle2.getString("tab.title.call_tree")));
@@ -433,22 +436,25 @@ public class Jeliot {
         if (gui.isAskingQuestions()) {
             //AVInteractionEngine and Interpreter initialization!
             try {
-            	userModel.userLogin(userName, sessionID);
+                userModel.userLogin(userName, sessionID);
+                
                 AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
                         this.gui.getFrame(), userModel);
-                //TODO: pass this as a constructor parameter.
+                
+                //maybe we should pass this as a constructor parameter?
                 ((TheaterMCodeInterpreter) mCodeInterpreterForTheater)
                         .setAvInteractionEngine(avinteractionEngine);
+                
                 PipedReader pr = new PipedReader();
                 PipedWriter pw = new PipedWriter(pr);
-                MCodeUtilities
-                        .addRegisteredSecondaryMCodeConnections(new PrintWriter(
-                                pw));
                 mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
-                        new BufferedReader(pr), avinteractionEngine, userModel);
+                        new BufferedReader(pr), new PrintWriter(
+                                pw, true), avinteractionEngine, userModel);
+                MCodeUtilities
+                        .addRegisteredPrePrimaryMCodeConnections(mCodeInterpreterForAVInteraction);
             } catch (Exception e) {
                 if (DebugUtil.DEBUGGING) {
-                    e.printStackTrace();
+                    DebugUtil.handleThrowable(e);
                 }
             }
         }
@@ -653,7 +659,7 @@ public class Jeliot {
      *
      */
     public void stopThreads() {
-        //This kills the Animation and Call Tree threads.
+        //This kills the Animation and Call Tree and AVInteraction threads.
         if (mCodeInterpreterForTheater != null) {
             mCodeInterpreterForTheater.setRunning(false);
         }
@@ -948,15 +954,10 @@ public class Jeliot {
      */
     public int getSelectedTabIndex() {
         return gui.getSelectedIndexInTabbedPane();
+    
     }
-    public void setUserModel(String type){
-    	if (type.equals("none") || type.equals("")){
-    		userModel = null;
-    	} else if (type.equals("basic")){
-    		userModel = new BasicInternalUM();
-    	} else if (type.equals("adapt2")){
-    		userModel = new Adapt2Interaction(userName, password, group, sessionID);
-    	}
-    	return;
+    
+    void setUserModel(){
+        userModel.createUserModel(userModelType, userName, password, group, sessionID);
     }
 }

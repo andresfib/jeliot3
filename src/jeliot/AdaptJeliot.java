@@ -99,7 +99,7 @@ public class AdaptJeliot extends Jeliot {
 
     public void handleArgs(String args[]) {
         try {
-            if (args.length > 1) {
+            if (args.length >= 1) {
                 URL u = null;
                 String cookie="";
                 try {
@@ -110,15 +110,18 @@ public class AdaptJeliot extends Jeliot {
                     e.printStackTrace();
                 }
                 setProgram(u, cookie);
-            }
-            if (args.length > 2) {
+            	}
+            if (args.length >= 2) {
             	super.userName = args[1];
             }
-            if (args.length > 3) {
+            if (args.length >= 3) {
             	super.sessionID = args[2];
             }
-            if (args.length > 4) {
-            	super.setUserModel(args[3]);
+            if (args.length >= 4) {
+                super.group = args[3];
+            }
+            if (args.length >= 5) {
+                super.userModelType = args[4];
             }
         } catch (MalformedURLException e) {
             if (DebugUtil.DEBUGGING) {
@@ -132,6 +135,7 @@ public class AdaptJeliot extends Jeliot {
         final AdaptJeliot jeliot = new AdaptJeliot();
         LoadJeliot.start(jeliot);
         jeliot.handleArgs(args);
+        jeliot.setUserModel();
     }
 
     public boolean hasIOImport(String src) {

@@ -1,11 +1,12 @@
 package jeliot.adapt;
 
+import jeliot.mcode.MCodeUtilities;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
 
 import java.util.HashMap;
 import java.util.Iterator;
-public class BasicInternalUM implements UMInteraction{
+public class BasicInternalUM extends UMInteraction{
 
 	//Right now properties are just variables
 	// TODO: To be changed to something more OO
@@ -34,8 +35,8 @@ public class BasicInternalUM implements UMInteraction{
 		int result = Integer.parseInt(event.getResult());
 		String activity = event.getActivity();
 		for (int i=0; i < entries.length; i++){
-			String key = entries[i].toString() +"."  + activity;
-			int temp = result;
+            String key = MCodeUtilities.getLongName(entries[i].intValue()) + "." + activity;
+            int temp = result;
 			if (internalUM.containsKey(key)){
 				temp += internalUM.getIntegerProperty(key);
 			}
@@ -48,7 +49,7 @@ public class BasicInternalUM implements UMInteraction{
 
 	public boolean isConceptKnown(int concept){
 		int threshold = 2;
-		String conceptID = Integer.toString(concept);
+		String conceptID = MCodeUtilities.getLongName(concept);
 		int rightAnswers = (internalUM.containsKey(conceptID+".questions.correct"))?
 				internalUM.getIntegerProperty(conceptID+".questions.correct"):0;
 		int wrongAnswers = (internalUM.containsKey(conceptID+".questions.wrong"))?
@@ -78,4 +79,7 @@ public class BasicInternalUM implements UMInteraction{
 					(String) properties.get(key));
 		}
 	}
+    public void saveUM(){
+        internalUM.save();
+    }
 }

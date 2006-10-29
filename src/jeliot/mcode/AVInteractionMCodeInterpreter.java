@@ -4,6 +4,11 @@
 package jeliot.mcode;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PipedReader;
+import java.io.PipedWriter;
+import java.io.PrintWriter;
+import java.io.Reader;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -14,62 +19,70 @@ import java.util.Vector;
 
 import jeliot.adapt.UMInteraction;
 import jeliot.avinteraction.AVInteractionEngine;
+import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 
 /**
  * @author nmyller
  */
-public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
+public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
+        MCodePreProcessor {
 
+    /**
+     * 
+     */
     private static ResourceBundle questionsResources = ResourceBundles
             .getAvInteractionResourceBundle();
 
+    /**
+     * 
+     */
     private AVInteractionEngine engine;
-
 
     /**
      * Contains Vector objects that keep the record of used concepts.
      * Concepts are currently recorded and int values from the Code class.
      */
-    private Map conceptVectors = new HashMap();
-    
+    private ConceptVectors conceptVectors = new ConceptVectors();
+
     /**
      * User Model used for this user
      */
     private UMInteraction userModel;
+
+    private PrintWriter writerForMCodeOutput;
+
+    private BufferedReader readerForMCodeOutput;
+
+    private PrintWriter writerForMCodeInput;
+
+    private BufferedReader readerForMCodeInput;
+
     /**
      * 
      */
     public AVInteractionMCodeInterpreter(BufferedReader bf,
-            AVInteractionEngine engine, UMInteraction userModel) {
+            PrintWriter mCodeInputWriter, AVInteractionEngine engine,
+            UMInteraction userModel) {
         super(bf);
         //this.mcode = bf;
         this.engine = engine;
         this.userModel = userModel;
+        this.readerForMCodeInput = bf;
+        this.writerForMCodeInput = mCodeInputWriter;
 
-    }
-
-    /**
-     * 
-     * @param concept
-     */
-    public void addConcept(int concept) {
-        for (Iterator i = this.conceptVectors.entrySet().iterator(); i
-                .hasNext();) {
-            Map.Entry e = (Map.Entry) i.next();
-            if (e.getValue() != null) {
-                ((Vector) e.getValue()).add(new Integer(concept));
-            }
+        PipedReader pr = new PipedReader();
+        PipedWriter pw;
+        try {
+            pw = new PipedWriter(pr);
+            this.readerForMCodeOutput = new BufferedReader(pr);
+            this.writerForMCodeOutput = new PrintWriter(pw, true);
+        } catch (IOException e) {
+            DebugUtil.handleThrowable(e);
         }
     }
 
-    public Integer[] removeConceptVector(long expressionId) {
-        Vector v = (Vector) this.conceptVectors.remove(new Long(expressionId));
-        if (v != null) {
-            return (Integer[]) v.toArray(new Integer[0]);
-        }
-        return new Integer[0];
-    }
+ 
 
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#showErrorMessage(jeliot.mcode.InterpreterError)
@@ -134,8 +147,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
             long expressionReference, String location) {
         //Initialize the concept vector if necessary.
         if (expressionType == Code.A) {
-            this.conceptVectors
-                    .put(new Long(expressionReference), new Vector());
+            this.conceptVectors.newVector(expressionReference);                   
         }
     }
 
@@ -145,11 +157,14 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeA(long expressionCounter, long fromExpression,
             long toExpression, String value, String type, Highlight h) {
 
-    	if (userModel.isConceptKnown(Code.A)){
-    		return;
-    	}
+        //If it is known or it is part of a variable declaration we dont ask
+        if (userModel.isConceptKnown(Code.A) || 
+                conceptVectors.complexity(expressionCounter) < 3){
+            conceptVectors.removeConceptVector(expressionCounter);
+            return;
+        }
         //add concept to all concept vectors that are currently in the conceptVectors Map.
-        addConcept(Code.A);
+        conceptVectors.addConcept(Code.A, 1);
         if (MCodeUtilities.isPrimitive(type)) {
             String question = questionsResources
                     .getString("avinteraction.assignment.question");
@@ -162,7 +177,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
             if (type.equals(boolean.class.getName())
                     || type.equals(Boolean.class.getName())) {
                 boolean correct = Boolean.valueOf(value).booleanValue();
-                Integer[] concepts = removeConceptVector(expressionCounter);
+                Integer[] concepts = conceptVectors.removeConceptVector(expressionCounter);
                 engine
                         .addTFQuestion(
                                 id,
@@ -317,7 +332,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
 
             } else if (type.equals(String.class.getName())
                     || type.equals("L" + String.class.getName() + ";")) {
-                Integer[] concepts = removeConceptVector(expressionCounter);
+                Integer[] concepts = conceptVectors.removeConceptVector(expressionCounter);
                 engine
                         .addFIBQuestion(
                                 id,
@@ -333,13 +348,13 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
                                 concepts);
                 return;
             }
-            Integer[] concepts = removeConceptVector(expressionCounter);
+            Integer[] concepts = conceptVectors.removeConceptVector(expressionCounter);
             engine.addMCQuestion(id, id, question, answers, new int[0], 1,
                     comments, correctAnswers, concepts);
         }
 
         //Remove concept vector for the current expression identifier if it is found.
-        removeConceptVector(expressionCounter);
+        conceptVectors.removeConceptVector(expressionCounter);
     }
 
     /* (non-Javadoc)
@@ -347,7 +362,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeQN(long expressionCounter, String variableName,
             String value, String type, Highlight highlight) {
-        addConcept(Code.QN);
+        conceptVectors.addConcept(Code.QN, 1);
     }
 
     /* (non-Javadoc)
@@ -355,7 +370,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeL(long expressionCounter, String value,
             String type, Highlight highlight) {
-        addConcept(Code.L);
+        conceptVectors.addConcept(Code.L, 1);
     }
 
     /* (non-Javadoc)
@@ -777,7 +792,8 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeVD(String variableName,
             long initializerExpression, String value, String type,
             String modifier, Highlight highlight) {
-        // TODO Auto-generated method stub
+        
+        //conceptVectors.addConcept(Code.VD, 1);
 
     }
 
@@ -787,7 +803,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeAE(long expressionCounter,
             long leftExpressionReference, long rightExpressionReference,
             String value, String type, Highlight h) {
-        // TODO Auto-generated method stub
+        conceptVectors.addConcept(Code.AE, 1);
 
     }
 
@@ -797,7 +813,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeSE(long expressionCounter,
             long leftExpressionReference, long rightExpressionReference,
             String value, String type, Highlight h) {
-        // TODO Auto-generated method stub
+        conceptVectors.addConcept(Code.SE, 1);
 
     }
 
@@ -808,6 +824,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
             long leftExpressionReference, long rightExpressionReference,
             String value, String type, Highlight h) {
         // TODO Auto-generated method stub
+        conceptVectors.addConcept(Code.DE, 1);
 
     }
 
@@ -817,7 +834,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeRE(long expressionCounter,
             long leftExpressionReference, long rightExpressionReference,
             String value, String type, Highlight h) {
-        // TODO Auto-generated method stub
+        conceptVectors.addConcept(Code.RE, 1);
 
     }
 
@@ -827,7 +844,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeME(long expressionCounter,
             long leftExpressionReference, long rightExpressionReference,
             String value, String type, Highlight h) {
-        // TODO Auto-generated method stub
+        conceptVectors.addConcept(Code.ME, 1);
 
     }
 
@@ -1055,16 +1072,48 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#endRunning()
      */
     protected void endRunning() {
-        // TODO Auto-generated method stub
-
+        this.writerForMCodeInput.close();
+        this.writerForMCodeOutput.close();
+        try {
+            this.readerForMCodeInput.close();
+        } catch (IOException e) {
+            DebugUtil.handleThrowable(e);
+        }
+        try {
+            this.readerForMCodeOutput.close();
+        } catch (IOException e) {
+            DebugUtil.handleThrowable(e);
+        }
     }
 
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#emptyScratch()
      */
     public boolean emptyScratch() {
-        // TODO Auto-generated method stub
         return false;
+    }
+
+    public void afterInterpretation(String line) {
+        this.writerForMCodeOutput.println(line);
+        this.writerForMCodeOutput.flush();
+    }
+
+    public void closeMCodeOutputReader() {
+        this.writerForMCodeOutput.flush();
+        this.writerForMCodeOutput.close();
+        try {
+            this.readerForMCodeOutput.close();
+        } catch (IOException e) {
+            DebugUtil.handleThrowable(e);
+        }
+    }
+
+    public PrintWriter getMCodeInputWriter() {
+        return this.writerForMCodeInput;
+    }
+
+    public BufferedReader getMCodeOutputReader() {
+        return this.readerForMCodeOutput;
     }
 
 }
