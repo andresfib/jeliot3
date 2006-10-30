@@ -62,7 +62,7 @@ public class JeliotExtension extends Extension implements PackageListener {
      * version number of the extension
      */
     public String getVersion() {
-        return ("3.5.2");
+        return ("3.6.1");
     }
 
     /**
@@ -89,7 +89,7 @@ public class JeliotExtension extends Extension implements PackageListener {
             return new URL("http://cs.joensuu.fi/jeliot/");
         } catch (Exception eee) {
             // There is no reason at all that this should trow exception...
-            System.out.println("Simple extension: getURL: Exception=" + eee.getMessage());
+            System.out.println("Jeliot extension: getURL: Exception=" + eee.getMessage());
             return null;
         }
     }
