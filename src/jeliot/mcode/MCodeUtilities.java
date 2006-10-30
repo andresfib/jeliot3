@@ -3,7 +3,6 @@ package jeliot.mcode;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Stack;
@@ -11,7 +10,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.util.DebugUtil;
-
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
 import koala.dynamicjava.tree.Node;
