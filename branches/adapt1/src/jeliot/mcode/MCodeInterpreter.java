@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.FeatureNotImplementedException;
+import jeliot.adapt.UMInteraction;
 import jeliot.lang.LocalVariableNotFoundException;
 import jeliot.lang.StaticVariableNotFoundException;
 import jeliot.util.DebugUtil;
@@ -103,6 +104,11 @@ public abstract class MCodeInterpreter {
      *  
      */
     protected long superMethodCallNumber = 0;
+
+    /**
+     * User Model used for this user
+     */
+    protected UMInteraction userModel;
 
     /**
      *  
@@ -1604,6 +1610,10 @@ public abstract class MCodeInterpreter {
             running = false;
             endRunning();
         }
+    }
+    
+    public void setUserModel(UMInteraction userModel){
+        this.userModel = userModel;
     }
 
     public abstract void afterInterpretation(String line);

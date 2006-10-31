@@ -45,11 +45,6 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
      */
     private ConceptVectors conceptVectors = new ConceptVectors();
 
-    /**
-     * User Model used for this user
-     */
-    private UMInteraction userModel;
-
     private PrintWriter writerForMCodeOutput;
 
     private BufferedReader readerForMCodeOutput;
@@ -62,12 +57,10 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
      * 
      */
     public AVInteractionMCodeInterpreter(BufferedReader bf,
-            PrintWriter mCodeInputWriter, AVInteractionEngine engine,
-            UMInteraction userModel) {
+            PrintWriter mCodeInputWriter, AVInteractionEngine engine) {
         super(bf);
         //this.mcode = bf;
         this.engine = engine;
-        this.userModel = userModel;
         this.readerForMCodeInput = bf;
         this.writerForMCodeInput = mCodeInputWriter;
 
@@ -157,9 +150,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
     protected void handleCodeA(long expressionCounter, long fromExpression,
             long toExpression, String value, String type, Highlight h) {
 
-        //If it is known or it is part of a variable declaration we dont ask
-        if (userModel.isConceptKnown(Code.A) || 
-                conceptVectors.complexity(expressionCounter) < 3){
+        if(conceptVectors.complexity(expressionCounter) < 3){
             conceptVectors.removeConceptVector(expressionCounter);
             return;
         }
@@ -1072,6 +1063,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
      * @see jeliot.mcode.MCodeInterpreter#endRunning()
      */
     protected void endRunning() {
+        userModel.saveUM();
         this.writerForMCodeInput.close();
         this.writerForMCodeOutput.close();
         try {

@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.FeatureNotImplementedException;
+import jeliot.adapt.UMInteraction;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.lang.*;
 import jeliot.theater.Actor;
@@ -2851,9 +2852,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         exprs.push(expressionType + Code.DELIM + expressionReference
                 + Code.DELIM + location);
         if (avInteractionEngine != null && expressionType == Code.A) {
-            Highlight h = MCodeUtilities.makeHighlight(location);
-            director.highlightForMessage(h);
-            avInteractionEngine.interaction("" + expressionReference);
+            if (! userModel.isConceptKnown(Code.A)){
+                Highlight h = MCodeUtilities.makeHighlight(location);
+                director.highlightForMessage(h);
+                avInteractionEngine.interaction("" + expressionReference);
+            }
         }
     }
 
@@ -3373,5 +3376,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     }
 
     public void afterInterpretation(String line) {        
+    }
+    public void setUserModel(UMInteraction userModel){
+        this.userModel = userModel;
+        avInteractionEngine.setUserModel(userModel);
     }
 }

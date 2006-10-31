@@ -280,7 +280,7 @@ public class Jeliot {
 
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad,
                 userDirectory, callTree, hv);
-        userModel = userModel.createUserModel(userModelType, userName, password, group, sessionID);
+       
 
     }
 
@@ -449,7 +449,7 @@ public class Jeliot {
                 PipedWriter pw = new PipedWriter(pr);
                 mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
                         new BufferedReader(pr), new PrintWriter(
-                                pw, true), avinteractionEngine, userModel);
+                                pw, true), avinteractionEngine);
                 MCodeUtilities
                         .addRegisteredPrePrimaryMCodeConnections(mCodeInterpreterForAVInteraction);
             } catch (Exception e) {
@@ -458,7 +458,7 @@ public class Jeliot {
                 }
             }
         }
-
+        setUserModel();
         // create the main loop for visualization
         controller = new ThreadController(new Runnable() {
 
@@ -958,6 +958,12 @@ public class Jeliot {
     }
     
     void setUserModel(){
-        userModel.createUserModel(userModelType, userName, password, group, sessionID);
+        userModel.saveUM();
+        userModel = userModel.createUserModel(userModelType, userName, password, group, sessionID);
+        if(mCodeInterpreterForAVInteraction != null)
+            mCodeInterpreterForAVInteraction.setUserModel(userModel);
+        if(mCodeInterpreterForTheater != null)
+            mCodeInterpreterForTheater.setUserModel(userModel);
+        userModel.userLogin(userName, password);
     }
 }
