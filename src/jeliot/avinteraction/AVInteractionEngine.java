@@ -181,4 +181,8 @@ public class AVInteractionEngine {
         // add it to the interactions
         testModule.addInteractionObject(id, question);
     }
+    
+    public void setUserModel(UMInteraction userModel){
+        backend.setUserModel(userModel);
+    }
 }

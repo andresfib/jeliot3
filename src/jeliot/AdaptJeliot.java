@@ -135,7 +135,6 @@ public class AdaptJeliot extends Jeliot {
         final AdaptJeliot jeliot = new AdaptJeliot();
         LoadJeliot.start(jeliot);
         jeliot.handleArgs(args);
-        jeliot.setUserModel();
     }
 
     public boolean hasIOImport(String src) {

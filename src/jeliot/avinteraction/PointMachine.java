@@ -139,4 +139,7 @@ public class PointMachine implements BackendInterface {
     public String toString() {
         return NAME;
     }
+    public void setUserModel(UMInteraction userModel){
+        this.userModel = userModel;
+    }
 }

@@ -125,7 +125,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         /* Whether Jeliot should be asking questions during the animation */
         if (!jeliotUserProperties.containsKey("ask_questions")) {
-            jeliotUserProperties.setBooleanProperty("ask_questions", false);
+            jeliotUserProperties.setBooleanProperty("ask_questions", true);
         }
 
         /* Should the messages during the program visualization be shown as message dialogs. */
@@ -967,6 +967,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         final JCheckBoxMenuItem enableQuestionAskingMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.ask_questions"),
                 jeliotUserProperties.getBooleanProperty("ask_questions"));
+        
         enableQuestionAskingMenuItem.setMnemonic(KeyEvent.VK_Q);
         enableQuestionAskingMenuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_Q, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
