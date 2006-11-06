@@ -179,7 +179,25 @@ public class UserProperties {
     public void setIntegerProperty(String s, int newValue) {
         userProperties.setProperty(s, Integer.toString(newValue));
     }
+    /**
+     * @param s
+     * @return
+     */
+    public double getDoubleProperty(String s) {
+        if (! userProperties.containsKey(s)){
+            DebugUtil.printDebugInfo("Property " + s +" not found");
+            return 0.0;
+        }
+        return Double.valueOf(userProperties.getProperty(s)).doubleValue();
+    }
 
+    /**
+     * @param s
+     * @param newValue
+     */
+    public void setDoubleProperty(String s, double newValue) {
+        userProperties.setProperty(s, Double.toString(newValue));
+    }
     /**
      * @param key
      * @return

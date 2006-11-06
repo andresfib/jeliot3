@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import jeliot.mcode.Code;
+import jeliot.mcode.ConceptVectors;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.networking.NetworkUtils;
 import edu.pitt.sis.paws.cbum.report.ProgressEstimatorReport;
@@ -16,7 +18,7 @@ public class Adapt2Interaction extends BasicInternalUM {
 	String password;
 	String group; //Group identifier for the students like "ViSCoSJava2006"
 	String sessionID;
-	String applicationID = "10"; //Fixed application ID for Jeliot in Adapt2
+	String applicationID = "17"; //Fixed application ID for Jeliot in Adapt2
 	String eventURL; //Personalized url to submit events
 	
 	public Adapt2Interaction(String userID, String password, String group, String sessionID){
@@ -35,11 +37,12 @@ public class Adapt2Interaction extends BasicInternalUM {
 	 */
 	private ArrayList getReport(){
 		
-		String reportURL = adapt2UMServer + "?typ=act&dir=in&frm=dat&app=" + 
-      applicationID + "&usr=" + userID;
+		String reportURL = adapt2ReportServer + "?typ=act&dir=in&frm=dat&app=" + 
+      applicationID + "&usr=" + userID + "&grp=" + group;
+        System.out.println(reportURL);
 		ArrayList response=null; 
 		try {
-			response = NetworkUtils.getReport(reportURL);
+	//		response = NetworkUtils.getReport(reportURL);
 		} catch (Exception e) {
 			// TODO Retry once if it didn't go well
 			System.out.println("Failed to get the Report from ADAPT2 server");
@@ -51,33 +54,32 @@ public class Adapt2Interaction extends BasicInternalUM {
 	/* (non-Javadoc)
 	 * @see jeliot.adapt.UMInteraction#getConceptKnowledge(java.lang.String)
 	 */
-	public double getConceptKnowledge(String concept, String activity) {
-		return super.getConceptKnowledge(concept, activity);
-	}
+//	public double getActivity(String concept, String activity) {
+//		return super.getConceptKnowledge(concept, activity);
+//	}
 
 	/* (non-Javadoc)
 	 * @see jeliot.adapt.UMInteraction#recordEvent(jeliot.adapt.ModelEvent)
 	 */
-	public void recordEvent(ModelEvent event) {
-		// TODO Auto-generated method stub
-		Integer[] entries = event.getProgrammingConcepts();
-		int result = Integer.parseInt(event.getResult());
-		String activity = event.getActivity();
-		
-		for (int i=0; i < entries.length; i++){
-			String key = MCodeUtilities.getLongName(entries[i].intValue()) + "." + activity;
-			String activityURL = eventURL + "&act=" + key;
-			int temp = result;
-			if (internalUM.containsKey(key)){
-				int previous = internalUM.getIntegerProperty(key);
-				temp += previous; 		
-
-			} 
-			internalUM.setIntegerProperty(key, temp);
+       public void recordEvent(ModelEvent event) {
+            // TODO Auto-generated method stub
+            Integer[] entries = event.getProgrammingConcepts();
+            double result = Double.parseDouble(event.getResult());
+            String activity = event.getActivity();
+            for (int i=0; i < entries.length; i++){
+                String key = MCodeUtilities.getLongName(entries[i].intValue()) + "." + activity;
+                double temp = result;
+                if (internalUM.containsKey(key)){
+                    temp += internalUM.getDoubleProperty(key);
+                }
+                
+                System.out.println(key + "="+temp);
+                internalUM.setDoubleProperty(key, temp);
+		    	String activityURL = eventURL + "&act=" + activity +"&sub="+ MCodeUtilities.getLongName(entries[i].intValue());
 			
 			try{
-//				NetworkUtils.postContent(activityURL+ "&res=" + result);
-				System.out.println(activityURL+"&res=" + result);
+                System.out.println(activityURL+"&res=" + result);
+				NetworkUtils.postContent(activityURL+ "&res=" + result);
 			} catch (Exception e){
 				System.out.println("Failed to update the ADAPT2 server with activity");
 				e.printStackTrace();
@@ -94,9 +96,9 @@ public class Adapt2Interaction extends BasicInternalUM {
 		this.password = password;
 		super.userLogin(userID, password);
 		
-		ArrayList report = getReport();
-		HashMap userModel = reportToMap(report);
-		updateInternalUM(userModel);
+		//ArrayList report = getReport();
+		//HashMap userModel = reportToMap(report);
+		//updateInternalUM(userModel);
 
 	}
 
@@ -107,8 +109,15 @@ public class Adapt2Interaction extends BasicInternalUM {
 		Iterator it = report.iterator();
 		HashMap reportMap = new HashMap();
 		while (it.hasNext()){
-			ProgressEstimatorReport conceptReport = (ProgressEstimatorReport)it.next();
-			reportMap.put(conceptReport.id, new Double(conceptReport.progress));
+			ProgressEstimatorReport activityReport = (ProgressEstimatorReport)it.next();
+            String activity = activityReport.id;
+            ArrayList subactivities = activityReport.subs;
+            Iterator itActivities = subactivities.iterator();
+            while(itActivities.hasNext()){
+                ProgressEstimatorReport conceptReport = (ProgressEstimatorReport)itActivities.next();
+                String concept = getCode(conceptReport.id, activity);
+                reportMap.put(concept, new Double(conceptReport.progress));
+            }
 			
 		}
 		return reportMap;
@@ -129,6 +138,67 @@ public class Adapt2Interaction extends BasicInternalUM {
 		// TODO Auto-generated method stub
 		
 	}
+//    assignments                 assign
+//    % operator                  mod
+//    PreIncrement operator           pre_inc
+//    the PostIncrement Operator      post_inc
+//    the predecrement operator       pre_dec
+//    the post decrement operator     post_dec
+//    and array creation          array
+//    an element access of an array       array_elem
+//    an object (non-static) method call  obj_method_call
+//    a static method call            static_method_call
+//    the return statement of method  return
+//    the argument passed to a method arg_pass
+//    an addition                 add
+//    a substraction              sub
+	private String getCode(String id, String activity){
+        activity = activity + ".";
+         if (id.equals("assign")){
+             return activity + Code.A;
+         }
+         if (id.equals("mod")){
+             return activity + Code.ME;
+         }
+         if (id.equals("pre_inc")){
+             return activity + Code.PRIE;
+         }
+         if (id.equals("post_inc")){
+             return activity + Code.PIE;
+         }
+         if (id.equals("pre_dec")){
+             return activity + Code.PRDE;
+         }
+         if (id.equals("post_dec")){
+             return activity + Code.PDE;
+         }
+         if (id.equals("array")){
+             return activity + Code.AA;
+         }
+         if (id.equals("array_elem")){
+             return activity + Code.AAC;
+         }
+         if (id.equals("obj_method_call")){
+             return activity + Code.OMC;
+         }
+         if (id.equals("static_method_call")){
+             return activity + Code.SMC;
+         }
+         if (id.equals("return")){
+             return activity + Code.R;
+         }
+         if (id.equals("arg_pass")){
+             return activity + Code.PARAMETERS;
+         }
+         if (id.equals("add")){
+             return activity + Code.AE;
+         }
+         if (id.equals("sub")){
+             return activity + Code.SE;
+         }
+         else{
+             return activity + "unknownConcept";
+         }
 
-	
+    }
 }

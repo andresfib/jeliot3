@@ -32,17 +32,17 @@ public class BasicInternalUM extends UMInteraction{
 	public void recordEvent(ModelEvent event) {
 		// TODO Auto-generated method stub
 		Integer[] entries = event.getProgrammingConcepts();
-		int result = Integer.parseInt(event.getResult());
+		double result = Double.parseDouble(event.getResult());
 		String activity = event.getActivity();
 		for (int i=0; i < entries.length; i++){
             String key = MCodeUtilities.getLongName(entries[i].intValue()) + "." + activity;
-            int temp = result;
+            double temp = result;
 			if (internalUM.containsKey(key)){
-				temp += internalUM.getIntegerProperty(key);
+				temp += internalUM.getDoubleProperty(key);
 			}
 			
 			System.out.println(key + "="+temp);
-			internalUM.setIntegerProperty(key, temp);
+			internalUM.setDoubleProperty(key, temp);
 		}
 				
 	}
@@ -50,18 +50,13 @@ public class BasicInternalUM extends UMInteraction{
 	public boolean isConceptKnown(int concept){
 		int threshold = 2;
 		String conceptID = MCodeUtilities.getLongName(concept);
-		int rightAnswers = (internalUM.containsKey(conceptID+".questions.correct"))?
-				internalUM.getIntegerProperty(conceptID+".questions.correct"):0;
-		int wrongAnswers = (internalUM.containsKey(conceptID+".questions.wrong"))?
-				internalUM.getIntegerProperty(conceptID+".questions.wrong"):0;
-		
-		return (rightAnswers >= threshold) && (rightAnswers - wrongAnswers >= threshold);
-				
+		double questionPoints = getActivityPoints(conceptID, "question");
+		return questionPoints >= threshold;
 	
 	}
-	public double getConceptKnowledge(String concept, String activity) {
-		String property = concept + ".questions.correct";
-		double result = Double.valueOf(internalUM.getStringProperty(property)).doubleValue();
+	private double getActivityPoints(String concept, String activity) {
+		String property = concept + "." + activity;
+		double result = internalUM.getDoubleProperty(property);
 		return result;
 	}
 	
