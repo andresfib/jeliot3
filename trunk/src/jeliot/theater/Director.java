@@ -1790,7 +1790,7 @@ public class Director {
 
             JOptionPane.showMessageDialog(jeliot.getGUI().getTheaterPane(),
                     msg, messageBundle.getString("dialog.message.title"),
-                    JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.INFORMATION_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
             showMessage(actor, h);
