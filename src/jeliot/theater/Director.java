@@ -1011,7 +1011,7 @@ public class Director {
 
         //To stop the animation before a method is finished if stepping is used.
         highlightForMessage(null);
-        
+
         // Get the stage and remove it.
         MethodStage stage = ((MethodFrame) frameStack.pop()).getMethodStage();
         manager.removeMethodStage(stage);
@@ -1788,8 +1788,8 @@ public class Director {
                 msg += message[i] + "\n";
             }
 
-            JOptionPane.showMessageDialog(null, msg, messageBundle
-                    .getString("dialog.message.title"),
+            JOptionPane.showMessageDialog(jeliot.getGUI().getTheaterPane(),
+                    msg, messageBundle.getString("dialog.message.title"),
                     JOptionPane.PLAIN_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
@@ -2330,6 +2330,7 @@ public class Director {
         if (animator != null) {
             highlightStatement(h);
             animator.animate(this);
+            this.output(animator.getReturnValue().getValue() + "\n");
             return animator.getReturnValue();
         }
         //TODO: Here should be an exception
