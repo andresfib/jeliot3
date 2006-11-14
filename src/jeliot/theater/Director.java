@@ -1788,7 +1788,7 @@ public class Director {
                 msg += message[i] + "\n";
             }
 
-            JOptionPane.showMessageDialog(jeliot.getGUI().getTheaterPane(),
+            JOptionPane.showMessageDialog(theatre,
                     msg, messageBundle.getString("dialog.message.title"),
                     JOptionPane.INFORMATION_MESSAGE);
         } else {
