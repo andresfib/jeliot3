@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004 Roland Küstermann. All Rights Reserved.
+ * Copyright (c) 2004 Roland Kï¿½stermann. All Rights Reserved.
  */
 package jeliot.mcode.input;
 
@@ -33,7 +33,7 @@ public abstract class InputHandler  {
 			StaticMethodCall node, String prompt) {
 		if (prompt != null && prompt.length() > 0) {
 			out(counter, "print", prompt, node);
-			counter ++;
+		//	counter ++;
 		}
 		
 		MCodeUtilities.write("" + Code.INPUT + Code.DELIM + counter +
@@ -45,12 +45,6 @@ public abstract class InputHandler  {
 		
 		
 		Object result = handleInput(aClass);
-		
-		if (prompt != null && prompt.length() > 0) {
-			counter ++;
-			out(counter, "println", result.toString(), node);
-		}
-		
 		
 		return result;
 	}
