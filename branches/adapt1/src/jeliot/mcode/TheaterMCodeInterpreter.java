@@ -726,7 +726,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
 //            String dimensionSizes, int actualDimension, Highlight h) {
 
-
+    	if (avInteractionEngine != null) {
+            if (! userModel.isConceptKnown(Code.AA)){
+                director.highlightForMessage(h);
+                avInteractionEngine.interaction("" + expressionReference);
+            }
+    	}
         StringTokenizer st = new StringTokenizer(dimensionReferences,
                 Code.LOC_DELIM);
 
@@ -2851,9 +2856,17 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             long expressionReference, String location) {
         exprs.push(expressionType + Code.DELIM + expressionReference
                 + Code.DELIM + location);
-        if (avInteractionEngine != null && expressionType == Code.A) {
-            if (! userModel.isConceptKnown(Code.A)){
-                Highlight h = MCodeUtilities.makeHighlight(location);
+//        if (avInteractionEngine != null && expressionType == Code.A) {
+//            if (! userModel.isConceptKnown(Code.A)){
+//                Highlight h = MCodeUtilities.makeHighlight(location);
+//                director.highlightForMessage(h);
+//                avInteractionEngine.interaction("" + expressionReference);
+//            }
+//        }
+
+        if (avInteractionEngine != null && MCodeUtilities.isBinary((int) expressionType)) {
+            if (! userModel.isConceptKnown((int) expressionType)){
+            	Highlight h = MCodeUtilities.makeHighlight(location);
                 director.highlightForMessage(h);
                 avInteractionEngine.interaction("" + expressionReference);
             }
@@ -3297,7 +3310,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
 
         //handle the expression where
-        //the value of just evaluated expression is used.
+        //the value of just evaluated expresspocoion is used.
         handleExpression(expressionValue, expressionCounter);
     }
 
@@ -3379,6 +3392,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     }
     public void setUserModel(UMInteraction userModel){
         this.userModel = userModel;
-        avInteractionEngine.setUserModel(userModel);
+        if (avInteractionEngine != null)
+        	avInteractionEngine.setUserModel(userModel);
     }
 }

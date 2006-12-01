@@ -21,7 +21,7 @@ import koala.dynamicjava.tree.Node;
  * extraction and interpretation. 
  *  
  * @author Niko Myller
- * @author Andrés Moreno
+ * @author Andrï¿½s Moreno
  * 
  * @see koala.dynamicjava.interpreter.TreeInterpreter
  * @see koala.dynamicjava.interpreter.EvaluationVisitor
@@ -683,6 +683,120 @@ public class MCodeUtilities {
      * @param operator
      * @return
      */
+    public static int unresolveBinOperator(int operator) {
+        switch (operator) {
+        //Add expression (+ sign)
+        case ADD: {
+            return Code.AE;
+        }
+
+        //Substract expression (- sign)
+        case SUBSTRACT: {
+            return Code.SE;
+        }
+
+        //Greater than expression (> sign)
+        case GT: {
+            return Code.GT;
+        }
+
+        //Logical AND expression (&& sign)
+        case ANDAND: {
+            return Code.AND;
+        }
+
+        // Logical Xor Expression (^ sign)
+        case LXOR: {
+            return Code.XOR;
+        }
+
+        //Arithmetic multiplication (* sign)
+        case MULT: {
+            return Code.ME;
+        }
+
+        //Arithmetic division (/ sign)
+        case DIV: {
+            return Code.DE;
+        }
+
+        //Arithmetic remainder (% sign)
+        case MOD: {
+            return Code.RE;
+        }
+
+        // Or Expression (|| sign)
+        case OROR: {
+            return Code.OR;
+        }
+
+        // Equal Expression (== sign)
+        case EQEQ: {
+            return Code.EE;
+        }
+
+        // Not Equal Expression (!= sign)
+        case NOTEQ: {
+            return Code.NE;
+        }
+
+        // Less Expression (< sign)
+        case LT: {
+            return Code.LE;
+        }
+
+        // Less or Equal Expression (<= sign)
+        case LTEQ: {
+            return Code.LQE;
+        }
+
+        // Greater or Equal Expression (>= sign)
+        case GTEQ: {
+            return Code.GQT;
+        }
+
+        // Bitwise Or Expression (| sign)
+        case OR: {
+            return Code.BITOR;
+        }
+
+        // Bitwise Xor Expression (^ sign)
+        case XOR: {
+            return Code.BITXOR;
+        }
+
+        // Bitwise And Expression (& sign)
+        case AND: {
+            return Code.BITAND;
+        }
+
+        // Bitwise Left Shift Expression (<< sign)
+        case LSHIFT: {
+            return Code.LSHIFT;
+        }
+
+        // Bitwise Right Shift Expression (>> sign)
+        case RSHIFT: {
+            return Code.RSHIFT;
+        }
+
+        // Bitwise Unsigned Right Shift Expression (>>> sign)
+        case URSHIFT: {
+            return Code.URSHIFT;
+        }
+
+        //This is an error.
+        default: {
+            return -1;
+        }
+        }
+    }
+
+    
+    /**
+     * @param operator
+     * @return
+     */
     public static int resolveUnOperator(int operator) {
         switch (operator) {
 
@@ -1082,7 +1196,7 @@ public class MCodeUtilities {
      * @return string a1,a2,a11,a12,21,a22
      * @author Jerome Lacoste
      * @author www.javapractices.com
-     * @author Andrés Moreno
+     * @author Andrï¿½s Moreno
      */
     public static String getSubArrayHashCodes(Object array) {
 
