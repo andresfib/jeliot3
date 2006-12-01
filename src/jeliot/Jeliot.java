@@ -493,13 +493,16 @@ public class Jeliot {
                 }
             }
         });
+
+        callTreeThread.setName("callTreeThread");
         callTreeThread.start();
 
         //a new thread for AVInteraction interpreter
         if (this.gui.isAskingQuestions()) {
             avInteractionThread = new Thread(new Runnable() {
-
+            	
                 public void run() {
+                	
                     try {
                         mCodeInterpreterForAVInteraction.execute();
                     } catch (Exception e) {
@@ -509,6 +512,7 @@ public class Jeliot {
                     }
                 }
             });
+            avInteractionThread.setName("avInteractionThread");
             avInteractionThread.start();
         }
 

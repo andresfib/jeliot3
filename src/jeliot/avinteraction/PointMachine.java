@@ -81,10 +81,10 @@ public class PointMachine implements BackendInterface {
         System.out.print("\t\tBackend received answer to \"" + questionID
                 + "\": ... ");
         if (correct) {
-        	UMEvent = new ModelEvent("question",conceptIdentifier,"1.0");
+        	UMEvent = new ModelEvent("question",conceptIdentifier,"right");
             System.out.println("correct.");
         } else {
-        	UMEvent = new ModelEvent("question",conceptIdentifier,"-0.3");
+        	UMEvent = new ModelEvent("question",conceptIdentifier,"wrong");
         	System.out.println("wrong.");
         }
         

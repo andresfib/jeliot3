@@ -55,7 +55,7 @@ public class UserProperties {
             defaultPropertiesName = defaultPropertiesName.replace('.', defaultFileSeparator
                     .charAt(0));
             defaultPropertiesName += ".properties";
-            //DebugUtil.printDebugInfo(defaultPropertiesName);
+            DebugUtil.printDebugInfo(defaultPropertiesName);
             InputStream is = this.getClass().getClassLoader().getResourceAsStream(
                     defaultPropertiesName);
             if (is == null) {

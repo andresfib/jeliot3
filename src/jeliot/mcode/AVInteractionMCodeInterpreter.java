@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.adapt.UMInteraction;
@@ -142,6 +143,11 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
         if (expressionType == Code.A) {
             this.conceptVectors.newVector(expressionReference);                   
         }
+        if (MCodeUtilities.isBinary((int) expressionType)){
+        	this.conceptVectors.newVector(expressionReference);
+        	conceptVectors.addConcept((int) expressionType, 1);
+        	
+        }
     }
 
     /* (non-Javadoc)
@@ -150,202 +156,202 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
     protected void handleCodeA(long expressionCounter, long fromExpression,
             long toExpression, String value, String type, Highlight h) {
 
-        if(conceptVectors.complexity(expressionCounter) < 3){
-            conceptVectors.removeConceptVector(expressionCounter);
-            return;
-        }
-        //add concept to all concept vectors that are currently in the conceptVectors Map.
-        conceptVectors.addConcept(Code.A, 1);
-        if (MCodeUtilities.isPrimitive(type)) {
-            String question = questionsResources
-                    .getString("avinteraction.assignment.question");
-            String id = "" + expressionCounter;
-            String[] answers = new String[4];
-            String[] comments = new String[4];
-            int[] correctAnswers = new int[1];
-
-            //Depending on the type of the variable generate different kinds of questions and answers.
-            if (type.equals(boolean.class.getName())
-                    || type.equals(Boolean.class.getName())) {
-                boolean correct = Boolean.valueOf(value).booleanValue();
-                Integer[] concepts = conceptVectors.removeConceptVector(expressionCounter);
-                engine
-                        .addTFQuestion(
-                                id,
-                                id,
-                                question,
-                                correct,
-                                1,
-                                MessageFormat
-                                        .format(
-                                                questionsResources
-                                                        .getString("avinteraction.assignment.boolean.general_reply"),
-                                                new Object[] { value }),
-                                concepts);
-                return;
-            } else if (type.equals(byte.class.getName())
-                    || type.equals(Byte.class.getName())) {
-                int v = Byte.parseByte(value);
-                correctAnswers[0] = 1;
-                answers[0] = "" + v;
-                comments[0] = questionsResources
-                        .getString("avinteraction.assignment.correct_answer_reply");
-                for (int i = 1; i < answers.length;) {
-                    String newAnswer = "" + (v + randomInteger());
-                    if (!isInArray(answers, newAnswer)) {
-                        answers[i] = newAnswer;
-                        comments[i] = MessageFormat
-                                .format(
-                                        questionsResources
-                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
-                                        new Object[] { new Integer(v) });
-                        i++;
-                    }
-                }
-            } else if (type.equals(short.class.getName())
-                    || type.equals(Short.class.getName())) {
-                int v = Short.parseShort(value);
-                correctAnswers[0] = 1;
-                answers[0] = "" + v;
-                comments[0] = questionsResources
-                        .getString("avinteraction.assignment.correct_answer_reply");
-                for (int i = 1; i < answers.length;) {
-                    String newAnswer = "" + (v + randomInteger());
-                    if (!isInArray(answers, newAnswer)) {
-                        answers[i] = newAnswer;
-                        comments[i] = MessageFormat
-                                .format(
-                                        questionsResources
-                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
-                                        new Object[] { new Integer(v) });
-                        i++;
-                    }
-                }
-
-            } else if (type.equals(int.class.getName())
-                    || type.equals(Integer.class.getName())) {
-                int v = Integer.parseInt(value);
-                correctAnswers[0] = 1;
-                answers[0] = "" + v;
-                comments[0] = questionsResources
-                        .getString("avinteraction.assignment.correct_answer_reply");
-                for (int i = 1; i < answers.length;) {
-                    String newAnswer = "" + (v + randomInteger());
-                    if (!isInArray(answers, newAnswer)) {
-                        answers[i] = newAnswer;
-                        comments[i] = MessageFormat
-                                .format(
-                                        questionsResources
-                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
-                                        new Object[] { new Integer(v) });
-                        i++;
-                    }
-                }
-            } else if (type.equals(long.class.getName())
-                    || type.equals(Long.class.getName())) {
-                long v = Long.parseLong(value);
-                correctAnswers[0] = 1;
-                answers[0] = "" + v;
-                comments[0] = questionsResources
-                        .getString("avinteraction.assignment.correct_answer_reply");
-                for (int i = 1; i < answers.length;) {
-                    String newAnswer = "" + (v + randomInteger());
-                    if (!isInArray(answers, newAnswer)) {
-                        answers[i] = newAnswer;
-                        comments[i] = MessageFormat
-                                .format(
-                                        questionsResources
-                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
-                                        new Object[] { new Long(v) });
-                        i++;
-                    }
-                }
-
-            } else if (type.equals(char.class.getName())
-                    || type.equals(Character.class.getName())) {
-                char v = value.charAt(0);
-                correctAnswers[0] = 1;
-                answers[0] = "" + v;
-                comments[0] = questionsResources
-                        .getString("avinteraction.assignment.correct_answer_reply");
-                for (int i = 1; i < answers.length;) {
-                    String newAnswer = "" + (char) (v + randomInteger());
-                    if (!isInArray(answers, newAnswer)) {
-                        answers[i] = newAnswer;
-                        comments[i] = MessageFormat
-                                .format(
-                                        questionsResources
-                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
-                                        new Object[] { new Character(v) });
-                        i++;
-                    }
-                }
-
-            } else if (type.equals(float.class.getName())
-                    || type.equals(Float.class.getName())) {
-                float v = Float.parseFloat(value);
-                correctAnswers[0] = 1;
-                answers[0] = "" + v;
-                comments[0] = questionsResources
-                        .getString("avinteraction.assignment.correct_answer_reply");
-                for (int i = 1; i < answers.length;) {
-                    String newAnswer = "" + (v + randomFloat());
-                    if (!isInArray(answers, newAnswer)) {
-                        answers[i] = newAnswer;
-                        comments[i] = MessageFormat
-                                .format(
-                                        questionsResources
-                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
-                                        new Object[] { new Double(v) });
-                        i++;
-                    }
-                }
-
-            } else if (type.equals(double.class.getName())
-                    || type.equals(Double.class.getName())) {
-                double v = Double.parseDouble(value);
-                correctAnswers[0] = 1;
-                answers[0] = "" + v;
-                comments[0] = questionsResources
-                        .getString("avinteraction.assignment.correct_answer_reply");
-                for (int i = 1; i < answers.length;) {
-                    String newAnswer = "" + (v + randomFloat());
-                    if (!isInArray(answers, newAnswer)) {
-                        answers[i] = newAnswer;
-                        comments[i] = MessageFormat
-                                .format(
-                                        questionsResources
-                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
-                                        new Object[] { new Double(v) });
-                        i++;
-                    }
-                }
-
-            } else if (type.equals(String.class.getName())
-                    || type.equals("L" + String.class.getName() + ";")) {
-                Integer[] concepts = conceptVectors.removeConceptVector(expressionCounter);
-                engine
-                        .addFIBQuestion(
-                                id,
-                                id,
-                                question,
-                                value,
-                                1,
-                                MessageFormat
-                                        .format(
-                                                questionsResources
-                                                        .getString("avinteraction.assignment.boolean.general_reply"),
-                                                new Object[] { value }),
-                                concepts);
-                return;
-            }
-            Integer[] concepts = conceptVectors.removeConceptVector(expressionCounter);
-            engine.addMCQuestion(id, id, question, answers, new int[0], 1,
-                    comments, correctAnswers, concepts);
-        }
-
-        //Remove concept vector for the current expression identifier if it is found.
-        conceptVectors.removeConceptVector(expressionCounter);
+//        if(conceptVectors.complexity(expressionCounter) < 3){
+//            conceptVectors.removeConceptVector(expressionCounter);
+//            return;
+//        }
+//        //add concept to all concept vectors that are currently in the conceptVectors Map.
+//        conceptVectors.addConcept(Code.A, 1);
+//        if (MCodeUtilities.isPrimitive(type)) {
+//            String question = questionsResources
+//                    .getString("avinteraction.assignment.question");
+//            String id = "" + expressionCounter;
+//            String[] answers = new String[4];
+//            String[] comments = new String[4];
+//            int[] correctAnswers = new int[1];
+//
+//            //Depending on the type of the variable generate different kinds of questions and answers.
+//            if (type.equals(boolean.class.getName())
+//                    || type.equals(Boolean.class.getName())) {
+//                boolean correct = Boolean.valueOf(value).booleanValue();
+//                Integer[] concepts = conceptVectors.removeConceptVector(expressionCounter);
+//                engine
+//                        .addTFQuestion(
+//                                id,
+//                                id,
+//                                question,
+//                                correct,
+//                                1,
+//                                MessageFormat
+//                                        .format(
+//                                                questionsResources
+//                                                        .getString("avinteraction.assignment.boolean.general_reply"),
+//                                                new Object[] { value }),
+//                                concepts);
+//                return;
+//            } else if (type.equals(byte.class.getName())
+//                    || type.equals(Byte.class.getName())) {
+//                int v = Byte.parseByte(value);
+//                correctAnswers[0] = 1;
+//                answers[0] = "" + v;
+//                comments[0] = questionsResources
+//                        .getString("avinteraction.assignment.correct_answer_reply");
+//                for (int i = 1; i < answers.length;) {
+//                    String newAnswer = "" + (v + randomInteger());
+//                    if (!isInArray(answers, newAnswer)) {
+//                        answers[i] = newAnswer;
+//                        comments[i] = MessageFormat
+//                                .format(
+//                                        questionsResources
+//                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
+//                                        new Object[] { new Integer(v) });
+//                        i++;
+//                    }
+//                }
+//            } else if (type.equals(short.class.getName())
+//                    || type.equals(Short.class.getName())) {
+//                int v = Short.parseShort(value);
+//                correctAnswers[0] = 1;
+//                answers[0] = "" + v;
+//                comments[0] = questionsResources
+//                        .getString("avinteraction.assignment.correct_answer_reply");
+//                for (int i = 1; i < answers.length;) {
+//                    String newAnswer = "" + (v + randomInteger());
+//                    if (!isInArray(answers, newAnswer)) {
+//                        answers[i] = newAnswer;
+//                        comments[i] = MessageFormat
+//                                .format(
+//                                        questionsResources
+//                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
+//                                        new Object[] { new Integer(v) });
+//                        i++;
+//                    }
+//                }
+//
+//            } else if (type.equals(int.class.getName())
+//                    || type.equals(Integer.class.getName())) {
+//                int v = Integer.parseInt(value);
+//                correctAnswers[0] = 1;
+//                answers[0] = "" + v;
+//                comments[0] = questionsResources
+//                        .getString("avinteraction.assignment.correct_answer_reply");
+//                for (int i = 1; i < answers.length;) {
+//                    String newAnswer = "" + (v + randomInteger());
+//                    if (!isInArray(answers, newAnswer)) {
+//                        answers[i] = newAnswer;
+//                        comments[i] = MessageFormat
+//                                .format(
+//                                        questionsResources
+//                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
+//                                        new Object[] { new Integer(v) });
+//                        i++;
+//                    }
+//                }
+//            } else if (type.equals(long.class.getName())
+//                    || type.equals(Long.class.getName())) {
+//                long v = Long.parseLong(value);
+//                correctAnswers[0] = 1;
+//                answers[0] = "" + v;
+//                comments[0] = questionsResources
+//                        .getString("avinteraction.assignment.correct_answer_reply");
+//                for (int i = 1; i < answers.length;) {
+//                    String newAnswer = "" + (v + randomInteger());
+//                    if (!isInArray(answers, newAnswer)) {
+//                        answers[i] = newAnswer;
+//                        comments[i] = MessageFormat
+//                                .format(
+//                                        questionsResources
+//                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
+//                                        new Object[] { new Long(v) });
+//                        i++;
+//                    }
+//                }
+//
+//            } else if (type.equals(char.class.getName())
+//                    || type.equals(Character.class.getName())) {
+//                char v = value.charAt(0);
+//                correctAnswers[0] = 1;
+//                answers[0] = "" + v;
+//                comments[0] = questionsResources
+//                        .getString("avinteraction.assignment.correct_answer_reply");
+//                for (int i = 1; i < answers.length;) {
+//                    String newAnswer = "" + (char) (v + randomInteger());
+//                    if (!isInArray(answers, newAnswer)) {
+//                        answers[i] = newAnswer;
+//                        comments[i] = MessageFormat
+//                                .format(
+//                                        questionsResources
+//                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
+//                                        new Object[] { new Character(v) });
+//                        i++;
+//                    }
+//                }
+//
+//            } else if (type.equals(float.class.getName())
+//                    || type.equals(Float.class.getName())) {
+//                float v = Float.parseFloat(value);
+//                correctAnswers[0] = 1;
+//                answers[0] = "" + v;
+//                comments[0] = questionsResources
+//                        .getString("avinteraction.assignment.correct_answer_reply");
+//                for (int i = 1; i < answers.length;) {
+//                    String newAnswer = "" + (v + randomFloat());
+//                    if (!isInArray(answers, newAnswer)) {
+//                        answers[i] = newAnswer;
+//                        comments[i] = MessageFormat
+//                                .format(
+//                                        questionsResources
+//                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
+//                                        new Object[] { new Double(v) });
+//                        i++;
+//                    }
+//                }
+//
+//            } else if (type.equals(double.class.getName())
+//                    || type.equals(Double.class.getName())) {
+//                double v = Double.parseDouble(value);
+//                correctAnswers[0] = 1;
+//                answers[0] = "" + v;
+//                comments[0] = questionsResources
+//                        .getString("avinteraction.assignment.correct_answer_reply");
+//                for (int i = 1; i < answers.length;) {
+//                    String newAnswer = "" + (v + randomFloat());
+//                    if (!isInArray(answers, newAnswer)) {
+//                        answers[i] = newAnswer;
+//                        comments[i] = MessageFormat
+//                                .format(
+//                                        questionsResources
+//                                                .getString("avinteraction.assignment.incorrect_answer_reply"),
+//                                        new Object[] { new Double(v) });
+//                        i++;
+//                    }
+//                }
+//
+//            } else if (type.equals(String.class.getName())
+//                    || type.equals("L" + String.class.getName() + ";")) {
+//                Integer[] concepts = conceptVectors.removeConceptVector(expressionCounter);
+//                engine
+//                        .addFIBQuestion(
+//                                id,
+//                                id,
+//                                question,
+//                                value,
+//                                1,
+//                                MessageFormat
+//                                        .format(
+//                                                questionsResources
+//                                                        .getString("avinteraction.assignment.boolean.general_reply"),
+//                                                new Object[] { value }),
+//                                concepts);
+//                return;
+//            }
+//            Integer[] concepts = conceptVectors.removeConceptVector(expressionCounter);
+//            engine.addMCQuestion(id, id, question, answers, new int[0], 1,
+//                    comments, correctAnswers, concepts);
+//        }
+//
+//        //Remove concept vector for the current expression identifier if it is found.
+//        conceptVectors.removeConceptVector(expressionCounter);
     }
 
     /* (non-Javadoc)
@@ -547,7 +553,43 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
             String compType, int dims, String dimensionReferences,
             String dimensionSizes, int actualdimensions,
             String subArraysHashCodes, Highlight h) {
-        // TODO Auto-generated method stub
+        //We dont ask yet about 2D and 3D arrays
+    	if (actualdimensions > 1) return;
+    	else{
+    		conceptVectors.newVector(expressionReference);
+    		conceptVectors.addConcept(Code.AA, 1);
+    		String question = questionsResources
+    		.getString("avinteraction.arrayallocation.question");
+    		String id = "" + expressionReference;
+    		String[] answers = new String[4];
+    		String[] comments = new String[4];
+    		int[] correctAnswers = new int[1];
+    		correctAnswers [0] = 1;
+    		//when arrays is 1D dimesionSizes is just an string containing an integer 
+
+    		//StringTokenizer st = new StringTokenizer(dimensionReferences,
+    		//Code.LOC_DELIM);
+    		int v = (new Integer (dimensionSizes)).intValue(); 
+    		answers[0] = dimensionSizes;
+    		comments[0] = questionsResources
+    		.getString("avinteraction.arrayallocation.correct_answer_reply");
+    		answers[1] = "" + (v + 1);
+    		answers[2] = "" + (v - 2);
+    		answers[3] = "" + (v - 1);
+
+    		for (int i = 1; i < answers.length;) {
+    			comments[i] = MessageFormat
+    			.format(
+    					questionsResources
+    					.getString("avinteraction.arrayallocation.incorrect_answer_reply"),
+    					new Object[] { new Integer (v) });
+    			i++;
+    		}
+
+    		Integer[] concepts = conceptVectors.removeConceptVector(expressionReference);
+    		engine.addMCQuestion(id, id, question, answers, new int[0], 1,
+    				comments, correctAnswers, concepts);   
+    	}
 
     }
 
@@ -794,7 +836,8 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
     protected void handleCodeAE(long expressionCounter,
             long leftExpressionReference, long rightExpressionReference,
             String value, String type, Highlight h) {
-        conceptVectors.addConcept(Code.AE, 1);
+    	addBinayOperationMCQuestion(expressionCounter, value, type, Code.AE);
+        conceptVectors.removeConceptVector(expressionCounter);
 
     }
 
@@ -1107,5 +1150,133 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
     public BufferedReader getMCodeOutputReader() {
         return this.readerForMCodeOutput;
     }
+    private void addBinayOperationMCQuestion(long expressionReference, String value, String type, int conceptID){
+    	conceptVectors.newVector(expressionReference);
+		conceptVectors.addConcept(conceptID, 1);
+		String question = questionsResources
+		.getString("avinteraction.binaryoperation.question");
+		String id = "" + expressionReference;
+		String[] answers;
+		String[] comments = new String[4];
+		int[] correctAnswers = new int[1];
+		correctAnswers [0] = 1;
+		
+		answers = createAnswers(value, conceptID, type);
+
+		comments[0] = questionsResources
+		.getString("avinteraction.binaryoperation.correct_answer_reply");
+	
+		for (int i = 1; i < answers.length;) {
+			comments[i] = MessageFormat
+			.format(
+					questionsResources
+					.getString("avinteraction.binaryoperation.incorrect_answer_reply"),
+					new Object[] { value });
+			i++;
+		}
+
+		Integer[] concepts = conceptVectors.removeConceptVector(expressionReference);
+		engine.addMCQuestion(id, id, question, answers, new int[0], 1,
+				comments, correctAnswers, concepts);   
+	}
+
+
+
+	private String[] createAnswers(String value, int conceptID, String type) {
+        //Depending on the type of the variable generate different kinds of questions and answers.
+		String answers[] = new String[4];
+        if (type.equals(boolean.class.getName())
+                || type.equals(Boolean.class.getName())) {
+            boolean correct = Boolean.valueOf(value).booleanValue();
+            
+            return null;
+        } else if (type.equals(byte.class.getName())
+                || type.equals(Byte.class.getName())) {
+            int v = Byte.parseByte(value);
+            answers[0] = "" + v;
+            for (int i = 1; i < answers.length;) {
+                String newAnswer = "" + (v + randomInteger());
+                if (!isInArray(answers, newAnswer)) {
+                    answers[i] = newAnswer;
+                    i++;
+                }
+            }
+        } else if (type.equals(short.class.getName())
+                || type.equals(Short.class.getName())) {
+            int v = Short.parseShort(value);
+            answers[0] = "" + v;
+            for (int i = 1; i < answers.length;) {
+                String newAnswer = "" + (v + randomInteger());
+                if (!isInArray(answers, newAnswer)) {
+                    answers[i] = newAnswer;
+                    i++;
+                }
+            }
+
+        } else if (type.equals(int.class.getName())
+                || type.equals(Integer.class.getName())) {
+            int v = Integer.parseInt(value);
+            answers[0] = "" + v;
+            for (int i = 1; i < answers.length;) {
+                String newAnswer = "" + (v + randomInteger());
+                if (!isInArray(answers, newAnswer)) {
+                    answers[i] = newAnswer;
+                    i++;
+                }
+            }
+        } else if (type.equals(long.class.getName())
+                || type.equals(Long.class.getName())) {
+            long v = Long.parseLong(value);
+            answers[0] = "" + v;
+            for (int i = 1; i < answers.length;) {
+                String newAnswer = "" + (v + randomInteger());
+                if (!isInArray(answers, newAnswer)) {
+                    answers[i] = newAnswer;
+                    i++;
+                }
+            }
+
+        } else if (type.equals(char.class.getName())
+                || type.equals(Character.class.getName())) {
+            char v = value.charAt(0);
+            answers[0] = "" + v;
+            for (int i = 1; i < answers.length;) {
+                String newAnswer = "" + (char) (v + randomInteger());
+                if (!isInArray(answers, newAnswer)) {
+                    answers[i] = newAnswer;
+                    i++;
+                }
+            }
+
+        } else if (type.equals(float.class.getName())
+                || type.equals(Float.class.getName())) {
+            float v = Float.parseFloat(value);
+            answers[0] = "" + v;
+            for (int i = 1; i < answers.length;) {
+                String newAnswer = "" + (v + randomFloat());
+                if (!isInArray(answers, newAnswer)) {
+                    answers[i] = newAnswer;
+                    i++;
+                }
+            }
+
+        } else if (type.equals(double.class.getName())
+                || type.equals(Double.class.getName())) {
+            double v = Double.parseDouble(value);
+            answers[0] = "" + v;
+            for (int i = 1; i < answers.length;) {
+                String newAnswer = "" + (v + randomFloat());
+                if (!isInArray(answers, newAnswer)) {
+                    answers[i] = newAnswer;
+                    i++;
+                }
+            }
+
+        } else if (type.equals(String.class.getName())
+                || type.equals("L" + String.class.getName() + ";")) {
+        }
+        return answers;
+	}
 
 }
+

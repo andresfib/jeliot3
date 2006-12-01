@@ -238,7 +238,7 @@ public class ResourceBundles {
     public static UserProperties getUserModelConceptsProperties() {
         if (internalUM == null) {
         	internalUM = new UserProperties("internalUM",
-                    "jeliot.adapt.internalUM.properties");
+                    "jeliot.adapt.resources.properties");
         }
 
         return internalUM;

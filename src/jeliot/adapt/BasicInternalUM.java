@@ -1,5 +1,6 @@
 package jeliot.adapt;
 
+import jeliot.mcode.Code;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
@@ -10,7 +11,7 @@ public class BasicInternalUM extends UMInteraction{
 
 	//Right now properties are just variables
 	// TODO: To be changed to something more OO
-	
+	double threshold = 1.5;
 	
 	UserProperties internalUM = null;
 	//HashMap internalUM = new HashMap();
@@ -32,23 +33,26 @@ public class BasicInternalUM extends UMInteraction{
 	public void recordEvent(ModelEvent event) {
 		// TODO Auto-generated method stub
 		Integer[] entries = event.getProgrammingConcepts();
-		double result = Double.parseDouble(event.getResult());
+		String result = event.getResult();
 		String activity = event.getActivity();
 		for (int i=0; i < entries.length; i++){
-            String key = MCodeUtilities.getLongName(entries[i].intValue()) + "." + activity;
-            double temp = result;
-			if (internalUM.containsKey(key)){
-				temp += internalUM.getDoubleProperty(key);
+			String concept = MCodeUtilities.getLongName(entries[i].intValue());
+			if (entries[i].intValue() != (Code.QN)){
+	            String key =  concept + "." + activity;
+	            double temp = modifyKnowledge(activity, key, result);
+				System.out.println(key + "="+temp);
+				internalUM.setDoubleProperty(key, temp);
+				if ((this.getClass()).equals(Adapt2Interaction.class)){
+					((Adapt2Interaction)this).sendEvent(activity, concept, result);
+				}
 			}
-			
-			System.out.println(key + "="+temp);
-			internalUM.setDoubleProperty(key, temp);
 		}
 				
 	}
 
+
 	public boolean isConceptKnown(int concept){
-		int threshold = 2;
+	
 		String conceptID = MCodeUtilities.getLongName(concept);
 		double questionPoints = getActivityPoints(conceptID, "question");
 		return questionPoints >= threshold;
@@ -73,8 +77,35 @@ public class BasicInternalUM extends UMInteraction{
 			internalUM.setStringProperty(key,  
 					(String) properties.get(key));
 		}
+		saveUM();
 	}
     public void saveUM(){
         internalUM.save();
     }
+    
+	protected double modifyKnowledge(String activity, String key, String result) {
+		double temp = 0;
+		if (activity.equals("question")){
+			if (internalUM.containsKey(key)){
+				temp = internalUM.getDoubleProperty(key);
+			}
+
+//			if prob <.5 prob = [ (1-prob)^2 ] / 2
+//			else prob = [ (1-prob)^2 ] * weight * result
+//			 
+//			result - result that you report as "res" parameter
+//			weight - weight between Learning Object and Concept (usually 1)
+			if (temp <0.5){
+				temp = Math.abs(Math.pow(1-temp,2)) / 2;
+			} else{
+				double value = (result.equals("right"))? 1 : 0;
+				temp = Math.abs(Math.pow(1-temp,2)) * value;
+			}
+			temp += (result.equals("right"))? 0.25 : -0.18;
+			if (temp>1.) temp = 1.;
+			else if (temp<-1.) temp = -1.;
+		}
+		return temp;
+	}
+
 }

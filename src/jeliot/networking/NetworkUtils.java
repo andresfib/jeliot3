@@ -40,7 +40,7 @@ public class NetworkUtils {
 				dbpc.getInputStream()));
 	}
 
-	public static ArrayList getReport(String reportURL) {
+	public static ArrayList getReport(String reportURL) throws Exception {
 		ArrayList response = null;	
 		ObjectInputStream stream = null;
 		try{
@@ -52,8 +52,8 @@ public class NetworkUtils {
 			response = (ArrayList)stream.readObject();
 		}
 		catch (Exception e) {
-			e.printStackTrace(System.err); 
-		}
+			throw (e);
+			}
 		finally{
 			try{
 				stream.close();
