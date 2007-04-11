@@ -1286,12 +1286,19 @@ public class TreeInterpreter implements Interpreter {
                 MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
                         + Code.DELIM + auxCounter + Code.DELIM
                         + MCodeGenerator.locationToString(n));
-
+                
                 result[i++] = n.acceptVisitor(v);
-
+                Class typeClass = NodeProperties.getType(n);
+                String type = null;
+                if (typeClass != null) {
+                    type = typeClass.getName();
+                }
+                if (type == null && result[i - 1] != null) {
+                    result[i - 1].getClass().getName();
+                }
                 MCodeUtilities.write("" + Code.P + Code.DELIM + auxCounter
                         + Code.DELIM + MCodeUtilities.getValue(result[i - 1])
-                        + Code.DELIM + result[i - 1].getClass().getName());
+                        + Code.DELIM + type);
 
             }
             MCodeUtilities.setRedirectOutput(false);
