@@ -69,6 +69,8 @@ public class ArrayActor extends InstanceActor {
      */
     private int indexw;
 
+    
+    //TODO: visualize lenght as a field in an array
     /**
      *
      */
@@ -79,6 +81,9 @@ public class ArrayActor extends InstanceActor {
      */
     private boolean primitive;
 
+    /**
+     * 
+     */
     private String componentType;
     
     /**
