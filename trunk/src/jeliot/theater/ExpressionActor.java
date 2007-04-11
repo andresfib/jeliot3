@@ -110,6 +110,7 @@ public class ExpressionActor extends Actor implements ActorContainer {
                 bound[i] = true;
                 actor.setParent(this);
                 actor.setLocation(locs[i]);
+                
                 //Tracker
                 String desc = "Expression: ";
                 for (int j = 0; j < next; j++) {
@@ -118,6 +119,7 @@ public class ExpressionActor extends Actor implements ActorContainer {
                     }
                 }
                 setDescription(desc);
+                
                 Point p = getRootLocation();
                 if (getActorId() == -1) {
                     setActorId(Tracker.trackTheater(TrackerClock.currentTimeMillis(),
@@ -168,7 +170,6 @@ public class ExpressionActor extends Actor implements ActorContainer {
                 actors[i].paintActor(g);
                 g.translate(-locs[i].x, -locs[i].y);
             }
-
         }
     }
 

@@ -591,7 +591,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     .addAdjustmentListener(scrollPaneListener);
             this.theaterScrollPane.getVerticalScrollBar()
                     .addAdjustmentListener(scrollPaneListener);
-
+            this.theater.setScrollPane(this.theaterScrollPane);
+            
             this.tabbedPane.addTab(
                     messageBundle.getString("tab.title.theater"),
                     theaterScrollPane);

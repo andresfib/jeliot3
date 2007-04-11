@@ -354,6 +354,7 @@ public class Director {
             if (!scratchStack.empty()) {
                 currentScratch = (Scratch) scratchStack.pop();
             }
+            theatre.getManager().validateTheater();
         }
     }
 
@@ -437,6 +438,8 @@ public class Director {
         // Re-activate the theatre after animation.
         release();
 
+        theatre.getManager().validateTheater();        
+        
         return expr;
     }
 
@@ -474,6 +477,9 @@ public class Director {
 
             // De-activate the theatre.
             release();
+            
+            theatre.getManager().validateTheater();
+            
         }
     }
 
@@ -527,6 +533,8 @@ public class Director {
 
         // De-activate the theatre.
         release();
+        
+        theatre.getManager().validateTheater();        
 
         Value val = (Value) result.clone();
         ValueActor rAct = factory.produceValueActor(val);
@@ -646,6 +654,8 @@ public class Director {
         // De-activate the theatre.
         release();
 
+        theatre.getManager().validateTheater();
+        
         ExplanationGenerator eg = ExplanationGenerator.getInstance();
         if (eg != null) {
             eg.addExplanation(actor.toString(), h);
@@ -681,6 +691,9 @@ public class Director {
             n = args.length;
         }
         SMIActor actor = factory.produceSMIActor(methodName, n);
+        
+        theatre.getManager().validateTheater();
+        
         return animateMInvocation(methodName, args, h, actor);
     }
 
@@ -735,6 +748,8 @@ public class Director {
 
         // De-activate the theatre.
         release();
+        
+        theatre.getManager().validateTheater();
 
         ExplanationGenerator eg = ExplanationGenerator.getInstance();
         if (eg != null) {
@@ -787,6 +802,7 @@ public class Director {
         thisVariable.setActor(thisVariableActor);
         stage.reserve(thisVariableActor);
         stage.bind();
+        theatre.getManager().validateTheater();
 
         if (args != null && args.length > 0) {
             n = args.length;
@@ -866,6 +882,8 @@ public class Director {
             }
         }
 
+        theatre.getManager().validateTheater();
+        
         updateCapture();
 
         if (currentScratch != null) {
@@ -943,6 +961,7 @@ public class Director {
                 stage.reserve(varact[i]);
                 //stage.extend();
                 stage.bind();
+                theatre.getManager().validateTheater();
             }
 
             Animation a = stage.extend();
@@ -1111,6 +1130,7 @@ public class Director {
         bubble.reserve(castAct);
 
         Point bubbleLoc = stage.reserve(bubble);
+        theatre.getManager().validateTheater();
         Animation a = stage.extend();
         if (a != null) {
             engine.showAnimation(a);
@@ -1163,7 +1183,7 @@ public class Director {
         Animation a = null;
         Point loc = fromActor.getRootLocation();
         if (loc.y == TheaterManager.getConstantBoxPositionY()
-                && loc.x == TheaterManager.constantBoxPositionX) {
+                && loc.x == TheaterManager.CONSTANT_BOX_POSITION_X) {
 
             a = fromActor.appear(loc);
         }
@@ -1294,6 +1314,7 @@ public class Director {
         MethodStage stage = currentMethodFrame.getMethodStage();
 
         Point loc = stage.reserve(actor);
+        theatre.getManager().validateTheater();
         Animation a = stage.extend();
         if (a != null) {
             engine.showAnimation(a);
@@ -1303,6 +1324,7 @@ public class Director {
 
         engine.showAnimation(actor.appear(loc));
         stage.bind();
+        theatre.getManager().validateTheater();
 
         release();
 
@@ -1329,10 +1351,12 @@ public class Director {
         ObjectStage stage = of.getObjectStage();
 
         Point loc = stage.reserve(actor);
+        theatre.getManager().validateTheater();
         capture();
 
         engine.showAnimation(actor.appear(loc));
         stage.bind();
+        theatre.getManager().validateTheater();
 
         release();
 
@@ -1788,8 +1812,8 @@ public class Director {
                 msg += message[i] + "\n";
             }
 
-            JOptionPane.showMessageDialog(theatre,
-                    msg, messageBundle.getString("dialog.message.title"),
+            JOptionPane.showMessageDialog(theatre, msg, messageBundle
+                    .getString("dialog.message.title"),
                     JOptionPane.INFORMATION_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
@@ -2598,6 +2622,9 @@ public class Director {
         for (int i = 0; i < n; ++i) {
             actor.bind(argact[i]);
         }
+        
+        theatre.getManager().validateTheater();
+        
         release();
 
         highlightExpression(h);
@@ -2623,8 +2650,10 @@ public class Director {
                 Point level1Location = manager.reserve(level1ArrayActor);
                 capture();
                 engine.showAnimation(level1ArrayActor.appear(level1Location));
+                theatre.getManager().validateTheater();
                 release();
                 manager.bind(level1ArrayActor);
+                theatre.getManager().validateTheater();
 
                 //Create reference
                 Reference level1Ref = new Reference(level1[i]);
@@ -2892,7 +2921,14 @@ public class Director {
      * @param actor
      */
     public void removeInstance(InstanceActor actor) {
+        Animation a = actor.disappear();
+        if (a != null) {
+            capture();
+            engine.showAnimation(a);
+            release();
+        }
         manager.removeInstance(actor);
+        theatre.getManager().validateTheater();
     }
 
     /*
@@ -2944,8 +2980,10 @@ public class Director {
         Point loc = manager.reserve(ca);
         capture();
         engine.showAnimation(ca.appear(loc));
+        theatre.getManager().validateTheater();
         release();
         manager.bind(ca);
+        theatre.getManager().validateTheater();
 
         ListIterator li = c.getVariables();
 
@@ -2953,6 +2991,7 @@ public class Director {
             Variable v = (Variable) li.next();
             declareClassVariable(c, v, v.getValue());
         }
+        theatre.getManager().validateTheater();
     }
 
     /**
@@ -2970,6 +3009,7 @@ public class Director {
         var.setActor(actor);
 
         Point loc2 = ca.reserve(actor);
+        theatre.getManager().validateTheater();
 
         Animation a = ca.extend();
         if (a != null) {
@@ -2980,8 +3020,8 @@ public class Director {
 
         engine.showAnimation(actor.appear(loc2));
         ca.bind();
-
         release();
+        theatre.getManager().validateTheater();
 
         if (val != null && var.isFinal()) {
             introduceLiteral(val);
