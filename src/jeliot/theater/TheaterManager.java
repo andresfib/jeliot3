@@ -481,7 +481,7 @@ public class TheaterManager implements ComponentListener {
      */
     public static int getMinInstanceX() {
         //return 250 + 20;
-        return maxLeftSideX + 20;
+        return maxLeftSideX + 25;
         //return minInstanceX;
     }
 
