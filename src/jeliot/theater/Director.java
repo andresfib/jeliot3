@@ -2637,7 +2637,7 @@ public class Director {
         engine.showAnimation(arrayAct.appear(loc));
         release();
         manager.bind(arrayAct);
-
+        
         if (level1 != null) {
             for (int i = 0; i < level1.length; i++) {
                 //Create array actor
@@ -2894,7 +2894,7 @@ public class Director {
      */
     public void introduceArrayLength(Value length, ArrayInstance ai) {
         ValueActor lengthAct = factory.produceValueActor(length);
-        lengthAct.setLocation(ai.getActor().getRootLocation());
+        lengthAct.setLocation(((ArrayActor) ai.getActor()).getArrayLength().getValue().getRootLocation());
         length.setActor(lengthAct);
     }
 

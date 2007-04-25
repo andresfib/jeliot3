@@ -1060,7 +1060,14 @@ public class ActorFactory {
         String ctype = array.getComponentType();
         int finalComponentTypeInfo = MCodeUtilities.resolveType(MCodeUtilities.resolveComponentType(ctype));
         int typeInfo = MCodeUtilities.resolveType(ctype);
-        ArrayActor aactor = new ArrayActor(valueActors, length, MCodeUtilities.isPrimitive(ctype), ctype);
+        
+        VariableActor arLengthVarAct = produceVariableActor(array.getArrayLenghtVariable());
+        array.getArrayLenghtVariable().setActor(arLengthVarAct);
+        ValueActor arLenghtValAct = produceValueActor(array.getArrayLenghtVariable().getValue());
+        arLengthVarAct.setValue(arLenghtValAct);
+        array.getArrayLenghtVariable().getValue().setActor(arLenghtValAct);
+        
+        ArrayActor aactor = new ArrayActor(valueActors, length, MCodeUtilities.isPrimitive(ctype), ctype, arLengthVarAct);
         
         if (MCodeUtilities.isPrimitive(MCodeUtilities.resolveComponentType(ctype))) {
             aactor.setFont(indexFont);
@@ -1076,7 +1083,7 @@ public class ActorFactory {
         
         for (int i = 0; i < length; i++) {
             VariableActor va = aactor.getVariableActor(i);
-            va.setValueDimension(typeValWidth[typeInfo], valueHeight);
+            //va.setValueDimension(typeValWidth[typeInfo], valueHeight);
             array.getVariableAt(i).setActor(va);
         }
         array.setActor(aactor);

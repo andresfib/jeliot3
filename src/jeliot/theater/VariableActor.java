@@ -28,7 +28,7 @@ public class VariableActor extends Actor implements ActorContainer {
      * Location of the variable's name.
      */
     protected int namex;
-    
+
     /**
      * Location of the variable's name.
      */
@@ -38,17 +38,17 @@ public class VariableActor extends Actor implements ActorContainer {
      * x-coordinate of the location of the value slot.
      */
     protected int valuex;
-    
+
     /**
      * y-coordinate of the location of the value slot.
      */
     protected int valuey;
-    
+
     /**
      * the width of the value slot.
      */
     protected int valuew;
-    
+
     /**
      * the height of the value slot.
      */
@@ -68,7 +68,7 @@ public class VariableActor extends Actor implements ActorContainer {
      * Variable's type.
      */
     protected String type = "";
-    
+
     /**
      * Value actor assigned to this variable actor.
      */
@@ -79,39 +79,35 @@ public class VariableActor extends Actor implements ActorContainer {
      */
     protected Color valueColor;
 
-//  DOC: Document!
+    //  DOC: Document!
 
     /**
-	 *
-	 */
-	protected ValueActor reserved;
+     *
+     */
+    protected ValueActor reserved;
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
-	 */
-	public void paintActor(Graphics g) {
+     * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
+     */
+    public void paintActor(Graphics g) {
 
         int w = width;
         int h = height;
         int bw = borderWidth;
 
         // fill background
-        g.setColor((light == HIGHLIGHT)   ?
-                   darkColor              :
-                   bgcolor);
+        g.setColor((light == HIGHLIGHT) ? darkColor : bgcolor);
         g.fillRect(bw, bw, w - 2 * bw, h - 2 * bw);
 
         // draw the name
         g.setFont(font);
-        g.setColor((light == HIGHLIGHT)   ?
-                   lightColor             :
-                   fgcolor);
+        g.setColor((light == HIGHLIGHT) ? lightColor : fgcolor);
         g.drawString(getLabel(), namex, namey);
 
         // draw value box
-        g.drawRect(valuex-1, valuey-1, valuew+1, valueh+1);
+        g.drawRect(valuex - 1, valuey - 1, valuew + 1, valueh + 1);
         g.setColor(darkColor);
-        g.drawRect(valuex-2, valuey-2, valuew+3, valueh+3);
+        g.drawRect(valuex - 2, valuey - 2, valuew + 3, valueh + 3);
         g.setColor(valueColor);
         g.fillRect(valuex, valuey, valuew, valueh);
 
@@ -126,32 +122,30 @@ public class VariableActor extends Actor implements ActorContainer {
 
         // draw border
         ActorContainer parent = getParent();
-        g.setColor((parent instanceof Actor)    ?
-                  ((Actor)parent).darkColor     :
-                  fgcolor);
-        g.drawLine(0, 0, w-1, 0);
-        g.drawLine(0, 0, 0, h-1);
-        g.setColor((parent instanceof Actor)    ?
-                  ((Actor) parent).lightColor   :
-                  fgcolor);
-        g.drawLine(1, h-1, w-1, h-1);
-        g.drawLine(w-1, 1, w-1, h-1);
+        g.setColor((parent instanceof Actor) ? ((Actor) parent).darkColor
+                : fgcolor);
+        g.drawLine(0, 0, w - 1, 0);
+        g.drawLine(0, 0, 0, h - 1);
+        g.setColor((parent instanceof Actor) ? ((Actor) parent).lightColor
+                : fgcolor);
+        g.drawLine(1, h - 1, w - 1, h - 1);
+        g.drawLine(w - 1, 1, w - 1, h - 1);
 
         g.setColor(fgcolor);
-        g.drawRect(1, 1, w-3, h-3);
+        g.drawRect(1, 1, w - 3, h - 3);
         g.setColor(darkColor);
-        g.drawLine(2, h-3, w-3, h-3);
-        g.drawLine(w-3, 2, w-3, h-3);
+        g.drawLine(2, h - 3, w - 3, h - 3);
+        g.drawLine(w - 3, 2, w - 3, h - 3);
         g.setColor(lightColor);
-        g.drawLine(2, 2, w-3, 2);
-        g.drawLine(2, 2, 2, h-3);
+        g.drawLine(2, 2, w - 3, 2);
+        g.drawLine(2, 2, 2, h - 3);
 
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.Actor#setFont(java.awt.Font)
-	 */
-	public void setFont(Font font) {
+     * @see jeliot.theater.Actor#setFont(java.awt.Font)
+     */
+    public void setFont(Font font) {
         super.setFont(font);
         if (getLabel() != null) {
             calcLabelPosition();
@@ -159,96 +153,96 @@ public class VariableActor extends Actor implements ActorContainer {
     }
 
     /**
-	 * @param actor
-	 * @return
-	 */
-	public Point reserve(ValueActor actor) {
+     * @param actor
+     * @return
+     */
+    public Point reserve(ValueActor actor) {
         this.reserved = actor;
         Point rp = getRootLocation();
         int w = actor.width;
         int h = actor.height;
-        rp.translate(valuex + (valuew-w)/2, valuey + (valueh-h)/2);
+        rp.translate(valuex + (valuew - w) / 2, valuey + (valueh - h) / 2);
         return rp;
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
-	 */
-	public void removeActor(Actor actor) { }
-
-    /**
-	 * 
-	 */
-	public void bind() {
-        this.value = this.reserved;
-        value.setParent(this);
-
-        value.setLocation(
-                valuex + (valuew - value.width)/ 2,
-                valuey + (valueh - value.height)/ 2);
+     * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
+     */
+    public void removeActor(Actor actor) {
     }
 
     /**
-	 * @param actor
-	 */
-	public void setValue(ValueActor actor) {
+     * 
+     */
+    public void bind() {
+        this.value = this.reserved;
+        value.setParent(this);
+
+        value.setLocation(valuex + (valuew - value.width) / 2, valuey
+                + (valueh - value.height) / 2);
+    }
+
+    /**
+     * @param actor
+     */
+    public void setValue(ValueActor actor) {
         this.reserved = actor;
         bind();
     }
 
     /**
-	 * @return
-	 */
-	public ValueActor getValue() {
-        ValueActor act = (ValueActor)this.value.clone();
+     * @return
+     */
+    public ValueActor getValue() {
+        ValueActor act = (ValueActor) this.value.clone();
         return act;
     }
 
     /**
-	 * @param valuec
-	 */
-	public void setValueColor(Color valuec) {
+     * @param valuec
+     */
+    public void setValueColor(Color valuec) {
         this.valueColor = valuec;
     }
 
     /**
-	 * @param name
-	 */
-	public void setName(String name) {
+     * @param name
+     */
+    public void setName(String name) {
         this.name = name;
         calcLabelPosition();
     }
 
     /**
-	 * @return
-	 */
-	//Added for Jeliot 3 to find the variables.
+     * @return
+     */
+    //Added for Jeliot 3 to find the variables.
     public String getName() {
         return this.name;
     }
 
     /**
-	 * @param w
-	 * @param h
-	 */
-	public void setValueDimension(int w, int h) {
+     * @param w
+     * @param h
+     */
+    public void setValueDimension(int w, int h) {
         this.valuew = w;
         this.valueh = h;
         calcLabelPosition();
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.Actor#setSize(int, int)
-	 */
-	public void setSize(int w, int h) {
+     * @see jeliot.theater.Actor#setSize(int, int)
+     */
+    public void setSize(int w, int h) {
         super.setSize(w, h);
         calcLabelPosition();
     }
 
     /**
-	 * 
-	 */
-	protected void calcLabelPosition() {
+     * 
+     */
+    protected void calcLabelPosition() {
         int w = getWidth();
         int h = getHeight();
 
@@ -260,23 +254,22 @@ public class VariableActor extends Actor implements ActorContainer {
         int sh = fm.getHeight();
 
         valuex = w - insets.right - 4 - valuew;
-        valuey = (h-valueh)/2;
+        valuey = (h - valueh) / 2;
 
         namex = insets.left;
-        namey = (h+sh)/2;
+        namey = (h + sh) / 2;
     }
 
     /* (non-Javadoc)
-	 * @see jeliot.theater.Actor#calculateSize()
-	 */
-	public void calculateSize() {
+     * @see jeliot.theater.Actor#calculateSize()
+     */
+    public void calculateSize() {
         FontMetrics fm = getFontMetrics();
         int sw = fm.stringWidth(getLabel());
         int sh = fm.getHeight();
-        setSize(4*borderWidth + insets.right + insets.left +
-                valuew + sw,
-                insets.top + insets.bottom + 4*borderWidth +
-                Math.max(valueh, sh));
+        setSize(4 * borderWidth + insets.right + insets.left + valuew + sw,
+                insets.top + insets.bottom + 4 * borderWidth
+                        + Math.max(valueh, sh));
         calcLabelPosition();
     }
 
@@ -285,7 +278,10 @@ public class VariableActor extends Actor implements ActorContainer {
             value.disappear();
         }
         Point p = getRootLocation();
-        Tracker.trackTheater(TrackerClock.currentTimeMillis(), Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE, new int[] {p.x}, new int[] {p.y}, getWidth(), getHeight(), 0, -1, getDescription());
+        Tracker.trackTheater(TrackerClock.currentTimeMillis(),
+                Tracker.DISAPPEAR, getActorId(), Tracker.RECTANGLE,
+                new int[] { p.x }, new int[] { p.y }, getWidth(), getHeight(),
+                0, -1, getDescription());
         return null;
     }
 
@@ -297,11 +293,11 @@ public class VariableActor extends Actor implements ActorContainer {
         this.type = type;
         calcLabelPosition();
     }
-    
+
     public String getLabel() {
         return getType() + " " + getName();
     }
-    
+
     public String toString() {
         return "variable " + getName() + " of type " + getType();
     }
