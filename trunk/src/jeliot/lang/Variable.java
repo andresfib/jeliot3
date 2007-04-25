@@ -42,6 +42,9 @@ public class Variable {
      */
     String modifier;
 
+    /**
+     * 
+     */
     int modifierCodes;
 
     /**

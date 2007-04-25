@@ -149,9 +149,8 @@ public class ReferenceVariableInArrayActor extends VariableInArrayActor {
         Point rp = getRootLocation();
         int w = actor.width;
         int h = actor.height;
-        rp.translate(width - borderWidth - refWidth - 3,
-                (height - actor.height) / 2 + borderWidth);
-        rp.translate(valuex + (valuew - w) / 2, valuey + (valueh - h) / 2);
+        rp.translate(width - borderWidth - refWidth - 3, (height - actor.height) / 2 /*+ borderWidth / 2*/);
+        //rp.translate(valuex + (valuew - w) / 2, valuey + (valueh - h) / 2);
         return rp;
     }
 
@@ -162,9 +161,8 @@ public class ReferenceVariableInArrayActor extends VariableInArrayActor {
         this.refActor = this.reservedRefActor;
         refActor.setParent(this);
 
-        //refActor.setLocation(width - borderWidth - refWidth - 3, (height - refActor.height)/2 + borderWidth);
-        refActor.setLocation(valuex + (valuew - refActor.width) / 2, valuey
-                + (valueh - refActor.height) / 2);
+        refActor.setLocation(width - borderWidth - refWidth - 3, (height - refActor.height) / 2 /*+ borderWidth / 2 */);
+        //refActor.setLocation(valuex + (valuew - refActor.width) / 2, valuey + (valueh - refActor.height) / 2);
     }
 
     /**

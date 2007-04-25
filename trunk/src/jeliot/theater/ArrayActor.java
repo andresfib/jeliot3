@@ -24,7 +24,8 @@ public class ArrayActor extends InstanceActor {
     /**
      * The resource bundle for theater package
      */
-    static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
+    static private ResourceBundle messageBundle = ResourceBundles
+            .getTheaterMessageResourceBundle();
 
     //DOC: Document!
 
@@ -42,6 +43,11 @@ public class ArrayActor extends InstanceActor {
      *
      */
     private VariableInArrayActor[] variableActors;
+
+    /**
+     * 
+     */
+    private VariableActor arrayLength;
 
     /**
      *
@@ -69,7 +75,6 @@ public class ArrayActor extends InstanceActor {
      */
     private int indexw;
 
-    
     //TODO: visualize lenght as a field in an array
     /**
      *
@@ -85,14 +90,17 @@ public class ArrayActor extends InstanceActor {
      * 
      */
     private String componentType;
-    
+
     /**
      * @param valueActors
      * @param dimensions
      */
-    public ArrayActor(ValueActor[] valueActors, int length, boolean primitive, String compType) {
+    public ArrayActor(ValueActor[] valueActors, int length, boolean primitive,
+            String compType, VariableActor lengthVariable) {
 
         this.length = length;
+        this.arrayLength = lengthVariable;
+        this.arrayLength.setParent(this);
         this.primitive = primitive;
         this.componentType = compType;
         if (primitive) {
@@ -103,14 +111,15 @@ public class ArrayActor extends InstanceActor {
 
         for (int i = 0; i < length; i++) {
             if (primitive) {
-                VariableInArrayActor viaa = new VariableInArrayActor(this, "[" + i + "]");
+                VariableInArrayActor viaa = new VariableInArrayActor(this, "["
+                        + i + "]");
                 ValueActor va = (ValueActor) valueActors[i];
                 viaa.setValue(va);
                 viaa.setParent(this);
                 variableActors[i] = viaa;
             } else {
-                ReferenceVariableInArrayActor viaa = new ReferenceVariableInArrayActor(this, "["
-                        + i + "]");
+                ReferenceVariableInArrayActor viaa = new ReferenceVariableInArrayActor(
+                        this, "[" + i + "]");
                 ValueActor va = (ValueActor) valueActors[i];
                 if (va instanceof ReferenceActor) {
                     viaa.setValue((ReferenceActor) va);
@@ -120,8 +129,7 @@ public class ArrayActor extends InstanceActor {
                 }
                 viaa.setParent(this);
                 variableActors[i] = viaa;
-
-            }            
+            }
         }
         setDescription("array: type: " + compType);
     }
@@ -153,20 +161,26 @@ public class ArrayActor extends InstanceActor {
         FontMetrics fm = getFontMetrics();
         this.valuew = valuew;
         this.valueh = valueh;
-        this.indexw = fm.stringWidth(messageBundle.getString("string.array_index"));
+        this.indexw = fm.stringWidth(messageBundle
+                .getString("string.array_index"));
 
         if (length == 0) {
-            int w = indexw + Math.max(fm.stringWidth(emptyArray1), fm.stringWidth(emptyArray2));
-            int h = 10 + 2 * (fm.getHeight());
+            int w = Math.max(4 + this.arrayLength.getWidth(), indexw
+                    + Math.max(fm.stringWidth(emptyArray1), fm
+                            .stringWidth(emptyArray2)));
+            int h = this.arrayLength.getHeight() + 10 + 2 * (fm.getHeight());
             setSize(w, h);
         } else {
             int n = length;
-            int w = 6 + valuew + indexw;
-            int h = 3 + (valueh + 1) * n;
+            int w = Math.max(4 + this.arrayLength.getWidth(), 6 + valuew
+                    + indexw);
+            int h = this.arrayLength.getHeight() + 3 + (valueh + 1) * n;
             setSize(w, h);
-
+            
+            this.valuew = valuew = w - 6 - indexw;
+            
             int x = 2;
-            int y = 2;
+            int y = 2 + this.arrayLength.getHeight();
             for (int i = 0; i < n; ++i) {
                 VariableInArrayActor viaa = (VariableInArrayActor) variableActors[i];
                 viaa.setSize(valuew, valueh);
@@ -175,6 +189,7 @@ public class ArrayActor extends InstanceActor {
                 y += 1 + valueh;
             }
         }
+        this.arrayLength.setLocation(2, 2);
     }
 
     /* (non-Javadoc)
@@ -189,6 +204,8 @@ public class ArrayActor extends InstanceActor {
         int fonth = fm.getHeight();
         int word1w = fm.stringWidth(emptyArray1);
         int word2w = fm.stringWidth(emptyArray2);
+        int lengthActW = this.arrayLength.getWidth();
+        int lengthActH = this.arrayLength.getHeight();
 
         int n = length;
 
@@ -197,8 +214,8 @@ public class ArrayActor extends InstanceActor {
             int word1x = (w - word1w) / 2;
             int word2x = (w - word2w) / 2;
 
-            int word1y = h / 2 - fonth / 2;
-            int word2y = h / 2 + fonth / 2;
+            int word1y = (h - lengthActH) / 2 - fonth / 2 + lengthActH + 5;
+            int word2y = (h - lengthActH) / 2 + fonth / 2 + lengthActH + 5;
 
             // fill the area
             g.setColor(lightColor);
@@ -209,6 +226,12 @@ public class ArrayActor extends InstanceActor {
             g.drawRect(0, 0, w - 1, h - 1);
             g.setColor(darkColor);
             g.drawRect(1, 1, w - 3, h - 3);
+
+            int actX = this.arrayLength.getX();
+            int actY = this.arrayLength.getY();
+            g.translate(actX, actY);
+            this.arrayLength.paintActor(g);
+            g.translate(-actX, -actY);
 
             g.setColor(fgcolor);
             g.setFont(font);
@@ -225,16 +248,22 @@ public class ArrayActor extends InstanceActor {
 
             // draw vertical line
             int vlinex = 2 + indexw;
-            g.drawLine(vlinex, bw, vlinex, h - 2);
-            g.drawLine(vlinex + 1, bw, vlinex + 1, h - 2);
+            g.drawLine(vlinex, bw + lengthActH, vlinex, h - 2);
+            g.drawLine(vlinex + 1, bw + lengthActH, vlinex + 1, h - 2);
 
             // draw horizontal lines
             int x1 = bw, x2 = w - 2 * bw;
-            int yc = bw - 1;
+            int yc = bw - 1 + lengthActH;
             for (int i = 1; i < n; ++i) {
                 yc += 1 + valueh;
                 g.drawLine(x1, yc, x2, yc);
             }
+
+            int actX = this.arrayLength.getX();
+            int actY = this.arrayLength.getY();
+            g.translate(actX, actY);
+            this.arrayLength.paintActor(g);
+            g.translate(-actX, -actY);
 
             // draw cells
             for (int i = 0; i < n; ++i) {
@@ -250,8 +279,16 @@ public class ArrayActor extends InstanceActor {
 
         }
     }
-    
+
     public String toString() {
         return "Array of type " + componentType;
+    }
+
+    public VariableActor getArrayLength() {
+        return arrayLength;
+    }
+
+    public void setArrayLength(VariableActor arrayLength) {
+        this.arrayLength = arrayLength;
     }
 }

@@ -10,6 +10,8 @@ import jeliot.theater.ArrayActor;
   */
 public class ArrayInstance extends Instance {
 
+    private Variable arrayLenghtVariable;
+    
     /**
      * The array object.
      */
@@ -59,6 +61,8 @@ public class ArrayInstance extends Instance {
 
         setType(type);
 
+        this.arrayLenghtVariable = new Variable("lenght", "int");
+        arrayLenghtVariable.assign(new Value("" + length, "int"));
         
         this.componentType = componentType;
         this.array = new VariableInArray[length];
@@ -135,6 +139,14 @@ public class ArrayInstance extends Instance {
      */
     public String getComponentType() {
         return componentType;
+    }
+
+    public Variable getArrayLenghtVariable() {
+        return arrayLenghtVariable;
+    }
+
+    public void setArrayLenghtVariable(Variable arrayLenght) {
+        this.arrayLenghtVariable = arrayLenght;
     }
 
 }
