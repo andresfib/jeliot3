@@ -24,6 +24,9 @@ public class InputHandlerFactory {
         if (aClass.getName().equals("jeliot.io.Lue")) {
             return new LueInputHandlerImpl();
         }
+        if (aClass.getName().equals(java.util.Scanner.class.getName())) {
+            return new JavaScannerHandler();
+        }
         return null;
     }
 }

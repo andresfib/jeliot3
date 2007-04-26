@@ -2976,62 +2976,72 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @return
      */
     public ObjectFrame createNewInstance(ClassInfo ci, Highlight h) {
-        ObjectFrame of = new ObjectFrame("-1", ci.getName(), ci
-                .getNonStaticFieldsAmount());
+    	
+    	ObjectFrame of = null;
+    	//TODO: Hack for Scanner
+    	if (ci.getName().equals("java.util.Scanner")){
+    		of = new ObjectFrame("-1", ci.getName(), 0);
 
-        //director: create object
-        director.showObjectCreation(of, h);
-
-        //director: create variables and initialize them
-        Hashtable fields = ci.getFields();
-        ListIterator i = ci.getFieldNamesInDeclarationOrder().listIterator();
-
-        //for (Enumeration keyEnum = fields.keys(); keyEnum.hasMoreElements();)
-        // {
-        while (i.hasNext()) {
-            //String name = (String) keyEnum.nextElement();
-            String name = (String) i.next();
-            String info = (String) fields.get(name);
-            boolean extended = info.endsWith("<E>");
-            StringTokenizer st = new StringTokenizer(info, Code.DELIM);
-            String mods = st.nextToken();
-            String type = st.nextToken();
-            String value = "";
-            if ((st.countTokens() >= 2 && extended == false)
-                    || (st.countTokens() >= 3 && extended == true)) {
-                value = st.nextToken();
-            }
-            Highlight highlight = MCodeUtilities.makeHighlight(st.nextToken());
-
-            if (!Modifier.isStatic(Integer.parseInt(mods))
-                    && name.indexOf("$") < 0) {
-
-                Variable var = director.declareObjectVariable(of, name, type,
-                        highlight);
-            }
-            /*
-             * if (!value.equals(Code.UNKNOWN)) {
-             * 
-             * Value casted = null; Value val = null; if
-             * (ECodeUtilities.isPrimitive(type)) { casted = new Value(value,
-             * type); val = new Value(value, type);
-             * director.introduceLiteral(val); } else { if
-             * (value.equals("null")) { casted = new Reference(); val = new
-             * Reference(); director.introduceLiteral(val); } else { //This
-             * should be done differently! //This does not work here if some
-             * things //are not changed when the initial values of //each field
-             * in the class are collected in DJ. Instance inst = (Instance)
-             * instances.get( ECodeUtilities.getHashCode(value));
-             * 
-             * if (inst != null) { casted = new Reference(inst); val = new
-             * Reference(inst); } else { casted = new Reference(); val = new
-             * Reference(); director.introduceLiteral(val); } }
-             * casted.setActor(var.getActor().getValue()); }
-             * 
-             * director.animateAssignment(var, val, casted, null, null); }
-             */
-        }
-
+            //director: create object
+            director.showObjectCreation(of, h);
+    		
+    	} else{
+	        of = new ObjectFrame("-1", ci.getName(), ci
+	                .getNonStaticFieldsAmount());
+	
+	        //director: create object
+	        director.showObjectCreation(of, h);
+	
+	        //director: create variables and initialize them
+	        Hashtable fields = ci.getFields();
+	        ListIterator i = ci.getFieldNamesInDeclarationOrder().listIterator();
+	
+	        //for (Enumeration keyEnum = fields.keys(); keyEnum.hasMoreElements();)
+	        // {
+	        while (i.hasNext()) {
+	            //String name = (String) keyEnum.nextElement();
+	            String name = (String) i.next();
+	            String info = (String) fields.get(name);
+	            boolean extended = info.endsWith("<E>");
+	            StringTokenizer st = new StringTokenizer(info, Code.DELIM);
+	            String mods = st.nextToken();
+	            String type = st.nextToken();
+	            String value = "";
+	            if ((st.countTokens() >= 2 && extended == false)
+	                    || (st.countTokens() >= 3 && extended == true)) {
+	                value = st.nextToken();
+	            }
+	            Highlight highlight = MCodeUtilities.makeHighlight(st.nextToken());
+	
+	            if (!Modifier.isStatic(Integer.parseInt(mods))
+	                    && name.indexOf("$") < 0) {
+	
+	                Variable var = director.declareObjectVariable(of, name, type,
+	                        highlight);
+	            }
+	            /*
+	             * if (!value.equals(Code.UNKNOWN)) {
+	             * 
+	             * Value casted = null; Value val = null; if
+	             * (ECodeUtilities.isPrimitive(type)) { casted = new Value(value,
+	             * type); val = new Value(value, type);
+	             * director.introduceLiteral(val); } else { if
+	             * (value.equals("null")) { casted = new Reference(); val = new
+	             * Reference(); director.introduceLiteral(val); } else { //This
+	             * should be done differently! //This does not work here if some
+	             * things //are not changed when the initial values of //each field
+	             * in the class are collected in DJ. Instance inst = (Instance)
+	             * instances.get( ECodeUtilities.getHashCode(value));
+	             * 
+	             * if (inst != null) { casted = new Reference(inst); val = new
+	             * Reference(inst); } else { casted = new Reference(); val = new
+	             * Reference(); director.introduceLiteral(val); } }
+	             * casted.setActor(var.getActor().getValue()); }
+	             * 
+	             * director.animateAssignment(var, val, casted, null, null); }
+	             */
+	        }
+    	}
         return of;
     }
 
