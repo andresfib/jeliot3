@@ -2058,7 +2058,18 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             // fixed by rku: store modifiers in var
             var.setModifierCodes(modifiers);
             ca.declareVariable(var);
-            Value val = new Value(value, type);
+            Value val = null;
+            if (MCodeUtilities.isPrimitive(type)) {
+                val = new Value(value, type);
+            } else {
+                val = new Reference(type);
+                Instance inst = (Instance) this.instances.get(value);
+                if (inst != null) {
+                    ((Reference) val).setInstance(inst);
+                } else {
+                    ((Reference) val).setInstance(Instance.OUTSIDE_OBJECT);
+                }
+            }
             director.declareClassVariable(ca, var, val);
         }
 

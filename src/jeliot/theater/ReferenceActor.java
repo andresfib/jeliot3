@@ -156,7 +156,52 @@ public class ReferenceActor extends ValueActor {
         int h = height;
         //Point p = getRootLocation();
 
-        if (instance != null) {
+        if (instance == ObjectStage.OUTSIDE_OBJECT) {
+            // draw reference area
+            g.setColor(darkColor);
+            g.fillRect(0, 0, refWidth, h);
+            //g.setColor(bc);
+            //g.fillRect(p.x+1, p.y+1, refWidth-2, h-2);
+            g.setColor(fc);
+            g.drawRect(0, 0, refWidth, h);
+
+            g.setColor(fgcolor);
+
+            int a = refWidth - 3;
+            int b = a + refLen;
+ 
+            //Borders
+            g.drawLine(a, h/2 - 1,
+                       b, h/2 - 1);
+            g.drawLine(a, h/2 + 1,
+                       b, h/2 + 1);
+
+            g.fillRect(b + 3, h/2 - 1, 3, 3);
+            g.fillRect(b + 7, h/2 - 1, 3, 3);
+            g.fillRect(b + 11, h/2 - 1, 3, 3);
+            g.fillRect(b + 15, h/2 - 1, 3, 3);
+            g.fillRect(b + 15, h/2 + 3, 3, 3);
+            g.fillRect(b + 15, h/2 + 7, 3, 3);
+            
+            //Insides
+            g.setColor(bgcolor);
+            g.drawLine(a, h/2,
+                       b, h/2);
+            
+            g.drawLine(b + 4, h/2,
+                       b + 4, h/2);
+            g.drawLine(b + 8, h/2,
+                       b + 8, h/2);
+            g.drawLine(b + 12, h/2,
+                       b + 12, h/2);            
+            g.drawLine(b + 16, h/2,
+                       b + 16, h/2);
+            g.drawLine(b + 16, h/2 + 4,
+                       b + 16, h/2 + 4);            
+            g.drawLine(b + 16, h/2 + 8,
+                       b + 16, h/2 + 8);            
+            
+        } else if (instance != null) {
 
             bc = instance.bgcolor;
             fc = instance.fgcolor;
@@ -223,13 +268,12 @@ public class ReferenceActor extends ValueActor {
             int b = a + refLen;
             //System.out.println("h = " +h);
 
-
             /*
-            * There reference that is drawn below
-            *        | .
-            *  ------| | |
-            *        | '
-            */
+             * There reference that is drawn below
+             *        | .
+             *  ------| | |
+             *        | '
+             */
             //Borders
             g.drawLine(a, h/2 - 1,
                        b, h/2 - 1);
@@ -254,8 +298,7 @@ public class ReferenceActor extends ValueActor {
 
             //Insides
             g.setColor(bgcolor);
-            g.drawLine(a, h/2,
-                       b, h/2);
+            g.drawLine(a, h/2, b, h/2);
 
             g.drawLine(b+1, h/2 - 8,
                        b+1, h/2 + 8);

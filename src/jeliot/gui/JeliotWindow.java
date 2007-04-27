@@ -919,6 +919,28 @@ public class JeliotWindow implements PauseListener, MouseListener {
         menu.addSeparator();
         
         //Ask for main method/command line parameters
+        final JCheckBoxMenuItem showStringsAsObjects = new JCheckBoxMenuItem(
+                messageBundle
+                        .getString("menu.options.show_strings_as_objects"),
+                jeliotUserProperties
+                        .getBooleanProperty("show_strings_as_objects"));
+        showStringsAsObjects.setMnemonic(KeyEvent.VK_O);
+        showStringsAsObjects.setAccelerator(KeyStroke
+                .getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK
+                        + ActionEvent.ALT_MASK));
+        showStringsAsObjects
+                .addActionListener(new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        jeliotUserProperties.setBooleanProperty(
+                                "show_strings_as_objects",
+                                showStringsAsObjects.getState());
+                    }
+                });
+        menu.add(showStringsAsObjects);
+
+        
+        //Ask for main method/command line parameters
         final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(
                 messageBundle
                         .getString("menu.options.ask_for_main_method_parameters"),

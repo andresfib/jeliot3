@@ -10,6 +10,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
 
+import jeliot.lang.Instance;
 import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
 
@@ -26,6 +27,8 @@ import jeliot.tracker.TrackerClock;
  */
 public class ObjectStage extends InstanceActor {
 
+    public static final ObjectStage OUTSIDE_OBJECT = new ObjectStage("", 0);
+    
     /** Variable actors in this stage. */
     private Vector variables = new Vector();
 
