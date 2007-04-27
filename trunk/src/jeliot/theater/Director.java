@@ -15,6 +15,7 @@ import jeliot.lang.ArrayInstance;
 import jeliot.lang.MethodFrame;
 import jeliot.lang.ObjectFrame;
 import jeliot.lang.Reference;
+import jeliot.lang.StringInstance;
 import jeliot.lang.Value;
 import jeliot.lang.Variable;
 import jeliot.lang.VariableInArray;
@@ -182,7 +183,15 @@ public class Director {
         LinesAndText lat = factory.produceLinesAndText();
         manager.setLinesAndText(lat);
         theatre.addPassive(lat);
-
+        
+        /*
+        StringInstance si = new StringInstance(""+System.identityHashCode(new String("TeStI")), "java.lang.String");
+        si.setStringValue(new Value(new String("TeStI"), "java.lang.String"));
+        StringObjectActor soa =  factory.produceStringActor(si);  
+        manager.reserve(soa);
+        manager.bind(soa);
+        */
+        
         /*
          * Excecution of the program code takes place here.
          * If animation is finished because of edit button or
@@ -2989,6 +2998,7 @@ public class Director {
 
         while (li.hasNext()) {
             Variable v = (Variable) li.next();
+            System.out.println("!!!" + v.getName());
             declareClassVariable(c, v, v.getValue());
         }
         theatre.getManager().validateTheater();
