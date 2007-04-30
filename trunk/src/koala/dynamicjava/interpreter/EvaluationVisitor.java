@@ -1420,8 +1420,12 @@ public class EvaluationVisitor extends VisitorObject {
                     i++;
                 }
             }
-
-            result = inputHandler.handleInput(m.getReturnType(), inputCounter,
+            // Hack to get right class for next() method in Java 1.5
+            Class returnType = m.getReturnType();
+            if (m.getName().equals("next") && returnType.equals(Object.class)){
+            	returnType = String.class;
+            }
+            result = inputHandler.handleInput(returnType, inputCounter,
                     m, node, prompt);
 
             MCodeUtilities.write("" + Code.INPUTTED + Code.DELIM + inputCounter
