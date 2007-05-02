@@ -1270,7 +1270,7 @@ public class EvaluationVisitor extends VisitorObject {
                 // Invoke the method
                 try {
                     Object o = null;
-                	//TODO: Scanner Hack
+                
                     o= m.invoke(obj, args);
             		                	
                     if (!isSetInside()) {
@@ -1283,14 +1283,8 @@ public class EvaluationVisitor extends VisitorObject {
                         MCodeUtilities.write(Code.MD + Code.DELIM
                                 + MCodeGenerator.locationToString(node));
                         
-/*                     	if (m.getDeclaringClass().getName().
-                     			equals(java.util.Scanner.class.getName())){
-                     		o = handleScanner(node, m, larg);
-
-                     	} else */if (!m.getReturnType().getName().equals(
+                        if (!m.getReturnType().getName().equals(
                                 Void.TYPE.getName())) {
-
-                       		
                         
                             long auxcounter = counter;
                             MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
@@ -2056,7 +2050,7 @@ public class EvaluationVisitor extends VisitorObject {
         		
         	}
         	
-        } else {
+        } //else {
     		//To handle "super" recursive calls
     		MCodeUtilities.superClassesStack.push(new Integer(0));
     		
@@ -2067,7 +2061,7 @@ public class EvaluationVisitor extends VisitorObject {
     		
     		//Hack to avoid problems when jeliot is started with a constructor
     		returnExpressionCounterStack.push(new Long(0));
-    	}
+    	//}
     	try { // Jeliot 3
     		Object result = context.invokeConstructor(node, args);
     		MCodeUtilities.write("" + Code.SAC + Code.DELIM
