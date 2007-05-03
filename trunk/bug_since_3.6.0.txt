@@ -2,4 +2,3 @@
 - After clicking on edit the text area was not granted focus. (fixed)
 - Component rendering artefact was shown in the history image when an input panel was shown in it. (fixed)
 - Find & Replace didn't work correctly in all situations when all the occurences were tried to be replaced. (fixed)
-- When a syntax error is shown the mode is not automatically changed into editing.
