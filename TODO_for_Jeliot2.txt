@@ -36,6 +36,10 @@ Things to do for Jeliot:
 
 - Extend the method area if the method over runs the space where it should fit. For example more than 7 variables will be too much.
 
+- highlight the reference once mouse is on top of it.
+
+- visualize the actual parameters in the call tree
+
 "Difficult" or laborous:
 
 - All the static accesses should be changed to use a singleton pattern for each instance of Jeliot even inside one VM. This would permit several instances of Jeliot to be run in BlueJ and EJE. This will require at least changes in Classes: MCodeUtilities, EvaluationVisitor, Jeliot, Tracker, TrackerClock etc.
