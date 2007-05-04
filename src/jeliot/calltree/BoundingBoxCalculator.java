@@ -12,12 +12,14 @@ import jeliot.util.UserProperties;
  */
 public class BoundingBoxCalculator extends EulerTour {
 
-	protected static final UserProperties propertiesBundle = ResourceBundles.getCallTreeUserProperties();
-	
+    protected static final UserProperties propertiesBundle = ResourceBundles
+            .getCallTreeUserProperties();
+
     /**
      * size of the grid squares (default 50)
      */
-    protected int offset = Integer.parseInt(propertiesBundle.getStringProperty("offset")); 
+    protected int offset = Integer.parseInt(propertiesBundle
+            .getStringProperty("offset"));
 
     /**
      * a running total width of the explored tree drawing
@@ -42,7 +44,8 @@ public class BoundingBoxCalculator extends EulerTour {
     /**
      * the distance to separate bounding boxes (default 15)
      */
-    protected int pad = Integer.parseInt(propertiesBundle.getStringProperty("pad"));
+    protected int pad = Integer.parseInt(propertiesBundle
+            .getStringProperty("pad"));
 
     /**
      * Comment for <code>maxWidth</code>
@@ -133,6 +136,13 @@ public class BoundingBoxCalculator extends EulerTour {
         width += textWidth;
         pos.setProperty("width", new Integer(textWidth));
         pos.setProperty("shift", new Integer(0));
+
+        if (maxHeight < depth) {
+            maxHeight = depth;
+        }
+        if (maxWidth < width) {
+            maxWidth = width;
+        }
     }
 
     /**
@@ -171,8 +181,8 @@ public class BoundingBoxCalculator extends EulerTour {
 
         Rectangle2D bounds = fm.getStringBounds(str, g);
         Rectangle2D bounds2 = fm.getStringBounds(str2, g);
-        bounds.setRect(bounds.getX(), bounds.getY(), Math
-                .max(bounds.getWidth(), bounds2.getWidth()), bounds.getHeight()
+        bounds.setRect(bounds.getX(), bounds.getY(), Math.max(
+                bounds.getWidth(), bounds2.getWidth()), bounds.getHeight()
                 + bounds2.getHeight());
         pos.setProperty("bounds", bounds);
         pos.setProperty("ascent", new Integer(fm.getMaxAscent()));
