@@ -938,6 +938,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     }
                 });
         menu.add(showStringsAsObjects);
+        this.editWidgets.add(showStringsAsObjects);
         
         //Ask for main method/command line parameters
         final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(

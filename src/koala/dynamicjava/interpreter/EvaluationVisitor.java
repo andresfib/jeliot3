@@ -1423,7 +1423,7 @@ public class EvaluationVisitor extends VisitorObject {
                     m, node, prompt);
 
             MCodeUtilities.write("" + Code.INPUTTED + Code.DELIM + inputCounter
-                    + Code.DELIM + result + Code.DELIM
+                    + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                     + m.getReturnType().getName() + Code.DELIM
                     + MCodeGenerator.locationToString(node));
 
