@@ -601,9 +601,7 @@ public abstract class Actor implements Cloneable {
         return new Animation() {
 
             int x = loc.x;
-
             int y = loc.y;
-
             long id = -1;
 
             public void init() {

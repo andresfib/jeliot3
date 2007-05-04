@@ -87,6 +87,9 @@ public class ReferenceActor extends ValueActor {
 	public ReferenceActor(InstanceActor inst) {
         this();
         this.instance = inst;
+        if (inst != null) {
+            inst.addReference(this);
+        }
     }
 
     /**
@@ -548,6 +551,9 @@ public class ReferenceActor extends ValueActor {
         return new Dimension(w, h);
     }
 
+    /**
+     * 
+     */
     public String toString() {
         if (this.instance == null) {
             return "null";
@@ -555,4 +561,23 @@ public class ReferenceActor extends ValueActor {
         return "Reference to " + instance.toString();
     }
     
+    /**
+     * 
+     */
+    public Animation disappear() {
+        if (instance != null) {
+            instance.removeReference(this);
+        }
+        return super.disappear();
+    }
+    
+    /**
+     * 
+     */
+    protected void finalize() throws Throwable {
+        if (instance != null) {
+            instance.removeReference(this);
+        }
+        super.finalize();
+    }
 }

@@ -50,16 +50,14 @@ public class Reference extends Value {
 	 * @see java.lang.Object#finalize()
 	 */
 	protected void finalize() {
-	    if (referenced && instance != null) {
-	        instance.dereference();
-        }
+	    unmakeReference();
     }
 
     /**
 	 * 
 	 */
 	public void makeReference() {
-	    if (instance != null) {
+	    if (instance != null && !referenced) {
 		    instance.reference();
 		    referenced = true;
 	    }
@@ -69,7 +67,7 @@ public class Reference extends Value {
 	 * 
 	 */
 	public void unmakeReference() {
-	 	if (instance != null) {
+	 	if (instance != null && referenced) {
 		 	instance.dereference();
 		 	referenced = false;
 	 	}   

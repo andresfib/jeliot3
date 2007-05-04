@@ -224,7 +224,7 @@ public class MethodStage extends Actor implements ActorContainer {
         // draw name
         g.setFont(font);
         g.setColor(fgcolor);
-        g.drawString(name, insets.left, insets.top + nheight);
+        g.drawString(name, insets.left, insets.top + (nheight * 4 / 5)); //insets.top + nheight);
 
         if (paintVars) {
             paintActors(g, variables);

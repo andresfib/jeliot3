@@ -19,6 +19,7 @@ import jeliot.lang.Instance;
 import jeliot.lang.ObjectFrame;
 import jeliot.lang.Reference;
 import jeliot.lang.StaticVariableNotFoundException;
+import jeliot.lang.StringInstance;
 import jeliot.lang.Value;
 import jeliot.lang.Variable;
 import jeliot.lang.VariableInArray;
@@ -27,6 +28,7 @@ import jeliot.theater.Director;
 import jeliot.theater.ExpressionActor;
 import jeliot.theater.ValueActor;
 import jeliot.util.DebugUtil;
+import jeliot.util.Util;
 
 /**
  * @author Niko Myller
@@ -236,7 +238,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         } else {
             firstLineRead = true;
         }
-
     }
 
     public String readLine() {
@@ -257,7 +258,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 return readLine();
             }
         }
-
+        //System.out.println(values.size());
         if (readLine == null) {
             readLine = "" + Code.ERROR + Code.DELIM
                     + messageBundle.getString("unknown.exception") + Code.DELIM
@@ -434,14 +435,22 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 classesWithStaticVariables.addLast(ca);
                 director.showClassCreation(ca);
             }
+            Variable v = null;
 
-            Value val = new Value(value, type);
-            Variable var = new Variable(name, type);
-            var.assign(val);
-            var.setModifierCodes(modifiers);
-            ca.declareVariable(var);
-            var.setLocationInCode(MCodeUtilities.makeHighlight(h));
-            director.declareClassVariable(ca, var, val);
+            try {
+                v = ca.getVariable(name);
+            } catch (Exception e) {
+            }
+
+            if (v == null) {
+                Value val = new Value(value, type);
+                Variable var = new Variable(name, type);
+                var.assign(val);
+                var.setModifierCodes(modifiers);
+                ca.declareVariable(var);
+                var.setLocationInCode(MCodeUtilities.makeHighlight(h));
+                director.declareClassVariable(ca, var, val);
+            }
         }
     }
 
@@ -580,6 +589,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                         .getHashCode(value));
                 if (inst != null) {
                     val = new Reference(inst);
+                    ((Reference) val).makeReference();
                 } else {
                     val = new Reference(type);
                 }
@@ -1216,8 +1226,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             if (returnValue instanceof Reference) {
                 rv = (Value) ((Reference) returnValue).clone();
+                //((Reference) rv).makeReference();
             } else {
-
                 rv = (Value) returnValue.clone();
             }
 
@@ -1263,13 +1273,19 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                         .getHashCode(value));
                 if (inst != null) {
                     casted = new Reference(inst);
+                    ((Reference) casted).makeReference();
                 } else {
                     casted = new Reference(type);
                 }
             }
 
             returnActor = director.animateReturn(ret, casted, h);
-            returnValue = (Value) casted.clone();
+            if (casted instanceof Reference) {
+                returnValue = (Value) ((Reference) casted).clone();
+                ((Reference) returnValue).makeReference();
+            } else {
+                returnValue = (Value) casted.clone();
+            }
             returnExpressionCounter = expressionCounter;
             returned = true;
 
@@ -1330,6 +1346,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                                 (Highlight) currentMethodInvocation[5]);
 
                         Reference ref = new Reference(of);
+                        ref.makeReference();
                         currentMethodInvocation[8] = ref;
                         objectCreation.push(new Reference(of));
                     } else {
@@ -1519,6 +1536,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             if (returnValue instanceof Reference) {
                 rv = (Value) ((Reference) returnValue).clone();
+                ((Reference) rv).makeReference();
             } else {
 
                 rv = (Value) returnValue.clone();
@@ -1997,6 +2015,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             String type, Highlight highlight) {
 
         Value lit = new Value(value, type);
+        if (Util.visualizeStringsAsObjects()
+                && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
+            lit = createStringReference(value, type);
+        }
+
         director.introduceLiteral(lit);
 
         handleExpression(lit, expressionCounter);
@@ -2062,12 +2085,21 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             if (MCodeUtilities.isPrimitive(type)) {
                 val = new Value(value, type);
             } else {
-                val = new Reference(type);
-                Instance inst = (Instance) this.instances.get(value);
-                if (inst != null) {
-                    ((Reference) val).setInstance(inst);
+                if (Util.visualizeStringsAsObjects()
+                        && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
+                    val = createStringReference(value, type);
                 } else {
-                    ((Reference) val).setInstance(Instance.OUTSIDE_OBJECT);
+                    val = new Reference(type);
+                    if (!value.equals("null")) {
+                        Instance inst = (Instance) this.instances.get(value);
+                        if (inst != null) {
+                            ((Reference) val).setInstance(inst);
+                            ((Reference) val).makeReference();
+                        } else {
+                            ((Reference) val)
+                                    .setInstance(Instance.OUTSIDE_OBJECT);
+                        }
+                    }
                 }
             }
             director.declareClassVariable(ca, var, val);
@@ -2264,6 +2296,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                         .getHashCode(value));
                 if (inst != null) {
                     val = new Reference(inst);
+                    ((Reference) val).makeReference();
                 } else {
                     val = new Reference(type);
                 }
@@ -2361,6 +2394,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
                 if (inst != null) {
                     casted = new Reference(inst);
+                    ((Reference) casted).makeReference();
                 } else {
                     casted = new Reference(type);
                 }
@@ -2987,72 +3021,74 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @return
      */
     public ObjectFrame createNewInstance(ClassInfo ci, Highlight h) {
-    	
-    	ObjectFrame of = null;
-    	//TODO: Hack for Scanner
-    	if (ci.getName().equals("java.util.Scanner")){
-    		of = new ObjectFrame("-1", ci.getName(), 0);
+
+        ObjectFrame of = null;
+        //TODO: Hack for Scanner
+        if (ci.getName().equals("java.util.Scanner")) {
+            of = new ObjectFrame("-1", ci.getName(), 0);
 
             //director: create object
             director.showObjectCreation(of, h);
-    		
-    	} else{
-	        of = new ObjectFrame("-1", ci.getName(), ci
-	                .getNonStaticFieldsAmount());
-	
-	        //director: create object
-	        director.showObjectCreation(of, h);
-	
-	        //director: create variables and initialize them
-	        Hashtable fields = ci.getFields();
-	        ListIterator i = ci.getFieldNamesInDeclarationOrder().listIterator();
-	
-	        //for (Enumeration keyEnum = fields.keys(); keyEnum.hasMoreElements();)
-	        // {
-	        while (i.hasNext()) {
-	            //String name = (String) keyEnum.nextElement();
-	            String name = (String) i.next();
-	            String info = (String) fields.get(name);
-	            boolean extended = info.endsWith("<E>");
-	            StringTokenizer st = new StringTokenizer(info, Code.DELIM);
-	            String mods = st.nextToken();
-	            String type = st.nextToken();
-	            String value = "";
-	            if ((st.countTokens() >= 2 && extended == false)
-	                    || (st.countTokens() >= 3 && extended == true)) {
-	                value = st.nextToken();
-	            }
-	            Highlight highlight = MCodeUtilities.makeHighlight(st.nextToken());
-	
-	            if (!Modifier.isStatic(Integer.parseInt(mods))
-	                    && name.indexOf("$") < 0) {
-	
-	                Variable var = director.declareObjectVariable(of, name, type,
-	                        highlight);
-	            }
-	            /*
-	             * if (!value.equals(Code.UNKNOWN)) {
-	             * 
-	             * Value casted = null; Value val = null; if
-	             * (ECodeUtilities.isPrimitive(type)) { casted = new Value(value,
-	             * type); val = new Value(value, type);
-	             * director.introduceLiteral(val); } else { if
-	             * (value.equals("null")) { casted = new Reference(); val = new
-	             * Reference(); director.introduceLiteral(val); } else { //This
-	             * should be done differently! //This does not work here if some
-	             * things //are not changed when the initial values of //each field
-	             * in the class are collected in DJ. Instance inst = (Instance)
-	             * instances.get( ECodeUtilities.getHashCode(value));
-	             * 
-	             * if (inst != null) { casted = new Reference(inst); val = new
-	             * Reference(inst); } else { casted = new Reference(); val = new
-	             * Reference(); director.introduceLiteral(val); } }
-	             * casted.setActor(var.getActor().getValue()); }
-	             * 
-	             * director.animateAssignment(var, val, casted, null, null); }
-	             */
-	        }
-    	}
+
+        } else {
+            of = new ObjectFrame("-1", ci.getName(), ci
+                    .getNonStaticFieldsAmount());
+
+            //director: create object
+            director.showObjectCreation(of, h);
+
+            //director: create variables and initialize them
+            Hashtable fields = ci.getFields();
+            ListIterator i = ci.getFieldNamesInDeclarationOrder()
+                    .listIterator();
+
+            //for (Enumeration keyEnum = fields.keys(); keyEnum.hasMoreElements();)
+            // {
+            while (i.hasNext()) {
+                //String name = (String) keyEnum.nextElement();
+                String name = (String) i.next();
+                String info = (String) fields.get(name);
+                boolean extended = info.endsWith("<E>");
+                StringTokenizer st = new StringTokenizer(info, Code.DELIM);
+                String mods = st.nextToken();
+                String type = st.nextToken();
+                String value = "";
+                if ((st.countTokens() >= 2 && extended == false)
+                        || (st.countTokens() >= 3 && extended == true)) {
+                    value = st.nextToken();
+                }
+                Highlight highlight = MCodeUtilities.makeHighlight(st
+                        .nextToken());
+
+                if (!Modifier.isStatic(Integer.parseInt(mods))
+                        && name.indexOf("$") < 0) {
+
+                    Variable var = director.declareObjectVariable(of, name,
+                            type, highlight);
+                }
+                /*
+                 * if (!value.equals(Code.UNKNOWN)) {
+                 * 
+                 * Value casted = null; Value val = null; if
+                 * (ECodeUtilities.isPrimitive(type)) { casted = new Value(value,
+                 * type); val = new Value(value, type);
+                 * director.introduceLiteral(val); } else { if
+                 * (value.equals("null")) { casted = new Reference(); val = new
+                 * Reference(); director.introduceLiteral(val); } else { //This
+                 * should be done differently! //This does not work here if some
+                 * things //are not changed when the initial values of //each field
+                 * in the class are collected in DJ. Instance inst = (Instance)
+                 * instances.get( ECodeUtilities.getHashCode(value));
+                 * 
+                 * if (inst != null) { casted = new Reference(inst); val = new
+                 * Reference(inst); } else { casted = new Reference(); val = new
+                 * Reference(); director.introduceLiteral(val); } }
+                 * casted.setActor(var.getActor().getValue()); }
+                 * 
+                 * director.animateAssignment(var, val, casted, null, null); }
+                 */
+            }
+        }
         return of;
     }
 
@@ -3062,15 +3098,16 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     public void checkInstancesForRemoval() {
         //Enumeration enumeration = instances.keys();
         //while (enumeration.hasMoreElements()) {
-            for (Iterator i = instances.keySet().iterator(); i.hasNext();) {
+        for (Iterator i = instances.keySet().iterator(); i.hasNext();) {
             Object obj = i.next(); //enumeration.nextElement();
             Instance inst = (Instance) instances.get(obj);
             if (inst != null) {
                 //For testing
+                //System.out.println(inst.getType() + "@" + inst.getHashCode());
                 //System.out.println("number of references1: " + inst.getNumberOfReferences());
                 //System.out.println("number of references2: " + inst.getActor().getNumberOfReferences());
                 if (inst.getNumberOfReferences() == 0
-                        && inst.getActor().getNumberOfReferences() == 0) {
+                        || inst.getActor().getNumberOfReferences() == 0) {
                     //instances.remove(obj);
                     i.remove();
                     director.removeInstance(inst.getActor());
@@ -3082,7 +3119,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     }
 
     /**
-     * Not in use at the moment
+     * 
      */
     public void removeInstances() {
         for (Iterator i = instances.keySet().iterator(); i.hasNext();) {
@@ -3097,6 +3134,30 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 //System.out.println("instance removed!");
             }
         }
+    }
+
+    /**
+     * 
+     * @param value
+     * @param type
+     * @return
+     */
+    private Reference createStringReference(String value, String type) {
+        String[] values = MCodeUtilities.getStringValues(value);
+        Reference val = new Reference(type);
+        if (values != null) {
+            Instance inst = (Instance) this.instances.get(values[1]);
+            if (inst != null) {
+                ((Reference) val).setInstance(inst);
+            } else {
+                StringInstance si = new StringInstance(values[1], type,
+                        new Value(values[0], type));
+                ((Reference) val).setInstance(si);
+                ((Reference) val).makeReference();
+                this.instances.put(si.getHashCode(), si);
+            }
+        }
+        return val;
     }
 
     /**
@@ -3241,8 +3302,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     public void handleBinaryExpression(long expressionCounter,
             long leftExpressionReference, long rightExpressionReference,
             String value, String type, Highlight h, int operator) {
-
-        Value result = new Value(value, type);
+        Value result;
+        
+        if (Util.visualizeStringsAsObjects()
+                && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
+            result = createStringReference(value, type);
+        } else {
+            result = new Value(value, type);
+        }
 
         ExpressionActor expr = director.getCurrentScratch().findActor(
                 expressionCounter);

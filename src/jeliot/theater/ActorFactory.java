@@ -21,6 +21,7 @@ import jeliot.lang.Variable;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
+import jeliot.util.Util;
 
 /**
  * This class handles the centralized creation of the actors. This enables the centralized
@@ -720,7 +721,8 @@ public class ActorFactory {
         String type = v.getType();
         VariableActor actor = null;
         int typeInfo = MCodeUtilities.resolveType(type);
-        if (typeInfo != MCodeUtilities.REFERENCE) {
+        if (typeInfo != MCodeUtilities.REFERENCE
+                && !(Util.visualizeStringsAsObjects() && typeInfo == MCodeUtilities.STRING)) {
             actor = new VariableActor();
             ValueActor vact = null;
             ImageValueActor valueActor = new ImageValueActor(iLoad
@@ -758,7 +760,8 @@ public class ActorFactory {
             //Tracking purposes
             actor.setDescription("local variable: " + actor.getLabel());
             return actor;
-        } else if (typeInfo == MCodeUtilities.REFERENCE) {
+        } else if (typeInfo == MCodeUtilities.REFERENCE
+                || (Util.visualizeStringsAsObjects() && typeInfo == MCodeUtilities.STRING)) {
             ReferenceVariableActor refAct = new ReferenceVariableActor();
             if (MCodeUtilities.isArray(type)) {
                 String ct = MCodeUtilities.resolveComponentType(type);
@@ -915,15 +918,20 @@ public class ActorFactory {
         return actor;
     }
 
+    public ValueActor produceValueActor(Value val) {
+        return produceValueActor(val, false);
+    }
+
     /**
      * @param val
      * @return
      */
-    public ValueActor produceValueActor(Value val) {
+    public ValueActor produceValueActor(Value val, boolean primitiveString) {
         String type = val.getType();
         int typeInfo = MCodeUtilities.resolveType(type);
         //System.out.println(type);
-        if (MCodeUtilities.isPrimitive(type)) {
+        if (MCodeUtilities.isPrimitive(type)
+                || (primitiveString && typeInfo == MCodeUtilities.STRING)) {
             ValueActor actor = new ValueActor();
             actor.setForeground(valueForegroundColor);
             if (typeInfo == MCodeUtilities.BOOLEAN) {
@@ -933,7 +941,7 @@ public class ActorFactory {
             }
             actor.setBackground(valColor[typeInfo]);
             String label = val.getValue();
-            //          String label = valObj instanceof Exception ?
+            //String label = valObj instanceof Exception ?
             //                                    "ERROR" :
             //                                    valObj.toString();
             if (typeInfo == MCodeUtilities.DOUBLE) {
@@ -1450,7 +1458,7 @@ public class ActorFactory {
      * @return
      */
     public StringObjectActor produceStringActor(StringInstance si) {
-        ValueActor va = produceValueActor(si.getStringValue());
+        ValueActor va = produceValueActor(si.getStringValue(), true);
         StringObjectActor stage = new StringObjectActor(objectStageTitle
                 .format(new String[] { si.getType().substring(
                         si.getType().lastIndexOf(".") + 1) }), va);

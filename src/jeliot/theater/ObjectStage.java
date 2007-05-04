@@ -201,7 +201,7 @@ public class ObjectStage extends InstanceActor {
         // draw name
         g.setFont(font);
         g.setColor(fgcolor);
-        g.drawString(name, insets.left, insets.top + nheight);
+        g.drawString(name, insets.left, insets.top + (nheight * 4 / 5)); //insets.top + nheight);
 
         if (paintVars) {
             paintActors(g, variables);
@@ -351,7 +351,7 @@ public class ObjectStage extends InstanceActor {
             }
 
             public void finalFinish() {
-                //this.passivate(ObjectStage.this);
+                this.passivate(ObjectStage.this);
             }
         };
     }

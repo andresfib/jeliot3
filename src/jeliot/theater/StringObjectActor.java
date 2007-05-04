@@ -99,7 +99,7 @@ public class StringObjectActor extends InstanceActor {
         // draw name
         g.setFont(font);
         g.setColor(fgcolor);
-        g.drawString(name, insets.left, insets.top + nheight);
+        g.drawString(name, insets.left, insets.top + (nheight * 4 / 5));
 
         int x = this.value.getX();
         int y = this.value.getY();
