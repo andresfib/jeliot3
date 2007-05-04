@@ -23,6 +23,7 @@ import jeliot.mcode.Highlight;
 import jeliot.mcode.InterpreterError;
 import jeliot.mcode.MCodeInterpreter;
 import jeliot.mcode.MCodeUtilities;
+import jeliot.mcode.TheaterMCodeInterpreter;
 import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
@@ -511,7 +512,7 @@ public class Director {
 
         // Prepare the actors.
         ValueActor resultAct;
-        
+
         OperatorActor operatorAct = factory.produceBinOpResActor(operator);
 
         // Prepare the theatre for animation.
@@ -2603,20 +2604,53 @@ public class Director {
         }
 
         Value val = validator.getValue();
-        ValueActor act = factory.produceValueActor(val);
-        act.setLocation(p);
-        val.setActor(act);
-        currentScratch.registerCrap(act);
-        //theatre.addActor(act);
-        ea.cut();
 
-        capture();
-        engine.showAnimation(act.appear(ea.reserve(act)));
-        release();
+        if (Util.visualizeStringsAsObjects()
+                && MCodeUtilities.resolveType(val.getType()) == MCodeUtilities.STRING) {
+            val = ((TheaterMCodeInterpreter) this.mCodeInterpreter)
+                    .createStringReference(val.getValue(), val.getType());
+            Reference ref = (Reference) val;
+            StringInstance si = (StringInstance) ref.getInstance();
+            StringObjectActor soa = factory.produceStringActor(si);
+            Point loc = manager.reserve(soa);
+            soa.setLocation(loc);
+            si.setActor(soa);
+            capture();
+            engine.showAnimation(soa.appear(loc));
+            manager.bind(soa);
+            theatre.getManager().validateTheater();
+            updateCapture();
+            ValueActor resultAct = factory.produceReferenceActor(ref);
+            resultAct.setLocation(soa.getRootLocation());
 
-        ea.bind(act);
+            ref.setActor(resultAct);
+            currentScratch.registerCrap(resultAct);
+            ea.cut();
 
-        return val;
+            capture();
+            engine.showAnimation(resultAct.fly(ea.reserve(resultAct)));
+            release();
+
+            ea.bind(resultAct);
+
+            return val;
+        } else {
+
+            ValueActor act = factory.produceValueActor(val);
+            act.setLocation(p);
+            val.setActor(act);
+            currentScratch.registerCrap(act);
+            //theatre.addActor(act);
+            ea.cut();
+
+            capture();
+            engine.showAnimation(act.appear(ea.reserve(act)));
+            release();
+
+            ea.bind(act);
+
+            return val;
+        }
     }
 
     /**

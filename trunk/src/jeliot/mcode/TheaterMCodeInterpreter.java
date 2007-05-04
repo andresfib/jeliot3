@@ -927,8 +927,18 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             String type, Highlight h) {
 
         Value in = (Value) values.remove(new Long(expressionCounter));
+
         if (in == null) {
             in = new Value(value, type);
+        }
+
+        if (Util.visualizeStringsAsObjects()
+                && MCodeUtilities.resolveType(in.getType()) == MCodeUtilities.STRING) {
+            String[] values = MCodeUtilities.getStringValues(value);
+            ((Reference) in).getInstance().setHashCode(values[1]);
+            this.instances.remove(INPUT_STRING_HASHCODE);
+            this.instances.put(((Reference) in).getInstance().getHashCode(),
+                    ((Reference) in).getInstance());
         }
 
         handleExpression(in, expressionCounter);
@@ -943,7 +953,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             String methodName, String type, String prompt, Highlight h) {
         Value in = director.animateInputHandling(type, prompt, h);
 
-        input.println(in.getValue());
+        if (Util.visualizeStringsAsObjects() && in instanceof Reference
+                && MCodeUtilities.resolveType(in.getType()) == MCodeUtilities.STRING) {
+            input.println(((StringInstance) ((Reference) in).getInstance()).getStringValue().getValue());
+        } else {
+            input.println(in.getValue());
+        }
         values.put(new Long(expressionCounter), in);
     }
 
@@ -3142,7 +3157,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param type
      * @return
      */
-    private Reference createStringReference(String value, String type) {
+    public Reference createStringReference(String value, String type) {
         String[] values = MCodeUtilities.getStringValues(value);
         Reference val = new Reference(type);
         if (values != null) {
@@ -3156,9 +3171,17 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 ((Reference) val).makeReference();
                 this.instances.put(si.getHashCode(), si);
             }
+        } else if (values == null) {
+            StringInstance si = new StringInstance(INPUT_STRING_HASHCODE, type,
+                    new Value(value, type));
+            ((Reference) val).setInstance(si);
+            ((Reference) val).makeReference();
+            this.instances.put(si.getHashCode(), si);
         }
         return val;
     }
+
+    public static final String INPUT_STRING_HASHCODE = "-12345";
 
     /**
      * @param val
@@ -3303,7 +3326,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             long leftExpressionReference, long rightExpressionReference,
             String value, String type, Highlight h, int operator) {
         Value result;
-        
+
         if (Util.visualizeStringsAsObjects()
                 && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
             result = createStringReference(value, type);
