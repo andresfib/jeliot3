@@ -393,7 +393,7 @@ public class Jeliot {
     public void cleanUp() {
         //clear the remnants of previous animation
         theatre.cleanUp();
-        callTree.initialize();
+        callTree.cleanUp();
         hv.initialize();
     }
 

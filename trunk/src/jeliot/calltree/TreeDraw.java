@@ -3,6 +3,8 @@ package jeliot.calltree;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.Iterator;
+import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -18,18 +20,24 @@ public class TreeDraw extends JComponent {
     /**
      * 
      */
-	protected static final UserProperties propertiesBundle = ResourceBundles.getCallTreeUserProperties();
+    protected static final UserProperties propertiesBundle = ResourceBundles
+            .getCallTreeUserProperties();
 
     /**
      * 
      */
     private TreeBuilder builder = new TreeBuilder();
-    
+
+    /**
+     * 
+     */
+    private Vector trees = new Vector();
+
     /**
      * 
      */
     private Tree tree;
-    
+
     /**
      * 
      */
@@ -38,8 +46,10 @@ public class TreeDraw extends JComponent {
     /**
      * Font to be used in the call tree
      */
-    private static final Font FONT = new Font(propertiesBundle.getStringProperty("font.calltree"), Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.calltree.size")));
-    
+    private static final Font FONT = new Font(propertiesBundle
+            .getStringProperty("font.calltree"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.calltree.size")));
+
     /**
      * 
      *
@@ -49,7 +59,8 @@ public class TreeDraw extends JComponent {
         initialize();
         jsp = new JScrollPane(TreeDraw.this);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp
+                .setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
     }
 
@@ -58,9 +69,10 @@ public class TreeDraw extends JComponent {
      */
     public void initialize() {
         tree = builder.buildTree();
+        this.trees.add(tree);
         repaint();
     }
-    
+
     /**
      * 
      * @return
@@ -78,17 +90,23 @@ public class TreeDraw extends JComponent {
      * </UL>
      */
     public void paint(Graphics g) {
-    	g.setFont(FONT);
-        BoundingBoxCalculator calc = new BoundingBoxCalculator(g /*getGraphics()*/ );
-        calc.execute(tree);
-        TreeDrawer drawer = new TreeDrawer(g);
-
-        Dimension area = new Dimension(calc.getMaxWidth() + drawer.getXoffset() + 10,
-                                       calc.getMaxHeight() + drawer.getYoffset() + 30);
-        setPreferredSize(area);
-        revalidate();
-
-        drawer.execute(tree);
+        int xOffset = 0;
+        for (Iterator i = trees.iterator(); i.hasNext();) {
+            Tree tre = (Tree) i.next();
+            g.setFont(FONT);
+            BoundingBoxCalculator calc = new BoundingBoxCalculator(g /*getGraphics()*/);
+            calc.execute(tre);
+            TreeDrawer drawer = new TreeDrawer(g);
+            drawer.setXOffset(drawer.getXOffset() + xOffset);
+            xOffset += calc.getMaxWidth() + 10;
+            //System.out.println(xOffset);
+            Dimension area = new Dimension(calc.getMaxWidth()
+                    + drawer.getXOffset() + 10, calc.getMaxHeight()
+                    + drawer.getYOffset() + 30);
+            setPreferredSize(area);
+            revalidate();
+            drawer.execute(tre);
+        }
     }
 
     /**
@@ -96,9 +114,12 @@ public class TreeDraw extends JComponent {
      * @param call
      */
     public void insertMethodCall(String call) {
+        if (this.tree == null) {
+            initialize();
+        }
         builder.insertNode(call);
         repaint();
-        
+
     }
 
     /**
@@ -107,6 +128,16 @@ public class TreeDraw extends JComponent {
      */
     public void returnMethodCall(String returnValue) {
         builder.returnNode(returnValue);
+        if (builder.currentPosition == null) {
+            this.tree = null;
+        }
+        repaint();
+    }
+
+    public void cleanUp() {
+        this.trees.clear();
+        tree = builder.buildTree();
+        this.trees.add(tree);
         repaint();
     }
 }

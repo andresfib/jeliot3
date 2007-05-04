@@ -17,12 +17,12 @@ public class TreeDrawer extends EulerTour {
     /**
      * Y offset from (0,0) (default 40)
      */
-    protected int Yoffset = Integer.parseInt(propertiesBundle.getStringProperty("y_offset"));
+    protected int yOffset = Integer.parseInt(propertiesBundle.getStringProperty("y_offset"));
 
     /**
      * X offset from (0,0) (default 20)
      */
-    protected int Xoffset = Integer.parseInt(propertiesBundle.getStringProperty("x_offset"));
+    protected int xOffset = Integer.parseInt(propertiesBundle.getStringProperty("x_offset"));
 
     /**
      * where to draw the tree
@@ -73,16 +73,16 @@ public class TreeDrawer extends EulerTour {
      * 
      * @return
      */
-    public int getYoffset() {
-        return Yoffset;
+    public int getYOffset() {
+        return yOffset;
     }
 
     /**
      * 
      * @return
      */
-    public int getXoffset() {
-        return Xoffset;
+    public int getXOffset() {
+        return xOffset;
     }
 
     /**
@@ -190,7 +190,7 @@ public class TreeDrawer extends EulerTour {
     private int xPos(TreeNode p) {
         int x = ((Integer) p.getProperty("x")).intValue();
         int width = ((Integer) p.getProperty("width")).intValue();
-        return x + width / 2 + Xoffset;
+        return x + width / 2 + xOffset;
     }
 
     /**
@@ -199,7 +199,7 @@ public class TreeDrawer extends EulerTour {
      * @return
      */
     private int yPos(TreeNode p) {
-        return ((Integer) p.getProperty("y")).intValue() + Yoffset;
+        return ((Integer) p.getProperty("y")).intValue() + yOffset;
     }
 
     /**
@@ -213,5 +213,13 @@ public class TreeDrawer extends EulerTour {
         p.destroyProperty("ascent");
         p.destroyProperty("descent");
         p.destroyProperty("bounds");
+    }
+
+    public void setXOffset(int xoffset) {
+        xOffset = xoffset;
+    }
+
+    public void setYOffset(int yoffset) {
+        yOffset = yoffset;
     }
 }
