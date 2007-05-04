@@ -464,4 +464,12 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     public void setScrollPane(JScrollPane scrollPane) {
         this.scrollPane = scrollPane;
     }
+
+    public Vector getActAct() {
+        return actAct;
+    }
+
+    public Vector getPasAct() {
+        return pasAct;
+    }
 }

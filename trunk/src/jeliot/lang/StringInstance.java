@@ -29,6 +29,11 @@ public class StringInstance extends Instance {
     public StringInstance(String hashCode, String type) {
         super(hashCode, type);
     }
+    
+    public StringInstance(String hashCode, String type, Value value) {
+        super(hashCode, type);
+        setStringValue(value);
+    }
 
     public StringObjectActor getStringObjectActor() {
         return actor;
@@ -37,7 +42,7 @@ public class StringInstance extends Instance {
     public InstanceActor getActor() {
         return actor;
     }
-
+    
     public void setActor(StringObjectActor actor) {
         this.actor = actor;
     }

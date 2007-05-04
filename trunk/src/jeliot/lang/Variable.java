@@ -72,6 +72,9 @@ public class Variable {
      * @param value
      */
     public void assign(Value value) {
+        if (this.value instanceof Reference) {
+            ((Reference) this.value).unmakeReference(); 
+        }
         this.value = value;
     }
 

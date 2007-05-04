@@ -918,7 +918,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         
         menu.addSeparator();
         
-        //Ask for main method/command line parameters
+        //Show strings as objects
         final JCheckBoxMenuItem showStringsAsObjects = new JCheckBoxMenuItem(
                 messageBundle
                         .getString("menu.options.show_strings_as_objects"),
@@ -938,7 +938,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     }
                 });
         menu.add(showStringsAsObjects);
-
         
         //Ask for main method/command line parameters
         final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(

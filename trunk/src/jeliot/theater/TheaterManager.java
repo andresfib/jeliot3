@@ -176,7 +176,9 @@ public class TheaterManager implements ComponentListener {
         Point loc = (Point) reservations.remove(stage);
         methods.push(stage);
         stage.setLocation(loc);
-        theatre.passivate(stage);
+        if (!theatre.getPasAct().contains(stage)) {
+            theatre.passivate(stage);
+        }
 
         /*
          maxMethodStageX = 0;
@@ -227,7 +229,9 @@ public class TheaterManager implements ComponentListener {
     public void bind(InstanceActor actor) {
         Point loc = (Point) reservations.remove(actor);
         objects.addElement(actor);
-        theatre.passivate(actor);
+        if (!theatre.getPasAct().contains(actor)) {
+            theatre.passivate(actor);
+        }
         actor.setLocation(loc);
         /*
          if (loc.y < minInstanceY) {
@@ -296,7 +300,9 @@ public class TheaterManager implements ComponentListener {
     public void bind(ClassActor actor) {
         Point loc = (Point) reservations.remove(actor);
         classes.addElement(actor);
-        theatre.passivate(actor);
+        if (!theatre.getPasAct().contains(actor)) {
+            theatre.passivate(actor);
+        }
         actor.setLocation(loc);
 
         Dimension d = theatre.getSize();

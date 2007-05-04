@@ -22,7 +22,7 @@ public class Util {
     private Util() {
     }
 
-    public static boolean visualizationStringsAsObjects() {
+    public static boolean visualizeStringsAsObjects() {
         return ResourceBundles.getJeliotUserProperties().getBooleanProperty(
                 "show_strings_as_objects");
     }

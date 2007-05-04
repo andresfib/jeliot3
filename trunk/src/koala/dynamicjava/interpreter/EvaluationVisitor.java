@@ -935,12 +935,12 @@ public class EvaluationVisitor extends VisitorObject {
 
         if (node.getType() == null) {
             MCodeUtilities.write("" + Code.L + Code.DELIM + (counter++)
-                    + Code.DELIM + node.getValue() + Code.DELIM
+                    + Code.DELIM + MCodeUtilities.getValue(node.getValue()) + Code.DELIM
                     + Code.REFERENCE + Code.DELIM
                     + MCodeGenerator.locationToString(node));
         } else {
             MCodeUtilities.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
-                    + node.getValue() + Code.DELIM + node.getType().getName()
+                    + MCodeUtilities.getValue(node.getValue()) + Code.DELIM + node.getType().getName()
                     + Code.DELIM + MCodeGenerator.locationToString(node));
         }
 
@@ -1846,10 +1846,10 @@ public class EvaluationVisitor extends VisitorObject {
 
         val = performCast(NodeProperties.getType(node), val);
         mod.modify(context, val);
-        String value = MCodeUtilities.getValue(val);
+        //String value = MCodeUtilities.getValue(val);
 
         MCodeGenerator.generateCodeA(assigncounter, auxcounter, auxcounter2,
-                value, node);
+                val, node);
 
         /*
          MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
@@ -2648,11 +2648,11 @@ public class EvaluationVisitor extends VisitorObject {
         Object o = InterpreterUtilities.add(c, str1, str2);
         MCodeUtilities.write("" + Code.AE + Code.DELIM + addcounter
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
-                + Code.DELIM + o.toString() + Code.DELIM
+                + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeGenerator.locationToString(node));
+        //System.out.println(o.toString());
         return o;
-
     }
 
     /**
