@@ -65,9 +65,9 @@ public class MCodeGenerator {
 
         MCodeUtilities.write("" + Code.OMC + Code.DELIM + "toString"
                 + Code.DELIM + "0" + Code.DELIM + counter + Code.DELIM
-                + String.class.getName() + Code.DELIM + "0,0,0,0");
+                + (obj != null ? obj.getClass().getName() : Object.class.toString()) + Code.DELIM + "0,0,0,0");
 
-        String result = obj.toString();
+        String result = String.valueOf(obj);
 
         if (!MCodeUtilities.isToStringOverloaded()) {
             //fake everything

@@ -2607,9 +2607,11 @@ public class Director {
 
         if (Util.visualizeStringsAsObjects()
                 && MCodeUtilities.resolveType(val.getType()) == MCodeUtilities.STRING) {
+            String value = val.getValue();
             val = ((TheaterMCodeInterpreter) this.mCodeInterpreter)
                     .createStringReference(val.getValue(), val.getType());
             Reference ref = (Reference) val;
+            ref.setValue(value);
             StringInstance si = (StringInstance) ref.getInstance();
             StringObjectActor soa = factory.produceStringActor(si);
             Point loc = manager.reserve(soa);

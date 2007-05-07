@@ -1,10 +1,10 @@
 package jeliot.mcode;
 
-import jeliot.Jeliot;
-import jeliot.calltree.TreeDraw;
-
 import java.io.BufferedReader;
 import java.util.Stack;
+
+import jeliot.Jeliot;
+import jeliot.calltree.TreeDraw;
 
 
 /**
@@ -96,6 +96,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeINPUTTED(long, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
     protected void handleCodeINPUTTED(long expressionCounter, String value, String type, Highlight h) {
+        value = MCodeUtilities.getValue(value, type);
         callTree.returnMethodCall(value);
         jeliot.highlightTabTitle(true, tabNumber);
     }
@@ -116,6 +117,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeOUTPUT(long, java.lang.String, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
     protected void handleCodeOUTPUT(long expressionReference, String className, String methodName, String value, String type, boolean breakLine, Highlight highlight) {
+        value = MCodeUtilities.getValue(value, ("java.lang.Object".equals(type) ? String.class.getName() : type));
         callTree.insertMethodCall(className + "." + methodName + "(" + value + ")");
         callTree.returnMethodCall(null);
         jeliot.highlightTabTitle(true, tabNumber);
@@ -134,6 +136,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeR(long, long, java.lang.String, java.lang.String, jeliot.mcode.Highlight)
      */
     protected void handleCodeR(long expressionCounter, long expressionReference, String value, String type, Highlight h) {
+        value = MCodeUtilities.getValue(value, type);
         currentReturnValue = value;
     }
 
@@ -166,6 +169,7 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#handleCodeP(long, java.lang.String, java.lang.String)
      */
     protected void handleCodeP(long expressionReference, String value, String argType) {
+        value = MCodeUtilities.getValue(value, argType);
         currentMethodCall += value + ", ";
     }
 
