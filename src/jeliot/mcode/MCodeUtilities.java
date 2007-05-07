@@ -1533,4 +1533,20 @@ public class MCodeUtilities {
             return c.getName();
         return "[" + getFullQualifiedClassname(c.getComponentType());
     }
+    
+    /**
+     * 
+     * @param value
+     * @param type
+     * @return
+     */
+    public static String getValue(String value, String type) {
+        if (Util.visualizeStringsAsObjects() && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
+            String[] strs = MCodeUtilities.getStringValues(value);
+            if (strs != null) {
+                return strs[0];
+            }            
+        }
+        return value;
+    }
 }

@@ -276,7 +276,13 @@ public class EvaluationVisitor extends VisitorObject {
         return (String) constructorCallNames.peek();
     }
 
-    //DOC NIKO
+
+    /**
+     * 
+     * @param name
+     * @param superClassesNames
+     * @param consCallNumber
+     */
     public static void newConstructorCall(String name,
             Vector superClassesNames, long consCallNumber) {
         Long ccn = new Long(consCallNumber);
@@ -285,6 +291,10 @@ public class EvaluationVisitor extends VisitorObject {
         superClasses.push(superClassesNames);
     }
 
+    /**
+     * 
+     *
+     */
     public static void constructorCallFinished() {
         constructorCallNumbers.pop();
         constructorCallNames.pop();
@@ -1300,7 +1310,6 @@ public class EvaluationVisitor extends VisitorObject {
 
                             // Don't try this with objects, foreign method calls
                             // don't provide enough info to handle them
-                            //
                             String value = MCodeUtilities.getValue(o);
                             String className = (o == null) ? Code.REFERENCE : o
                                     .getClass().getName();
@@ -2057,6 +2066,7 @@ public class EvaluationVisitor extends VisitorObject {
                 .getDeclaringClass()), simpleAllocationCounter);
         MCodeUtilities.write("" + Code.CONSCN + Code.DELIM
                 + EvaluationVisitor.getConstructorCallNumber());
+        
         //If Scanner constructor we hack a simple Scanner constructor that also 
         //skips the special stacks (superClassesStack and so handling)
         //otherwise we do nothing special b
@@ -2068,14 +2078,12 @@ public class EvaluationVisitor extends VisitorObject {
                         + EvaluationVisitor.getConstructorCallNumber());
                 MCodeUtilities.write(Code.PARAMETERS + Code.DELIM + "source");
                 MCodeUtilities.write(Code.MD + Code.DELIM + "0,0,0,0");
-
             }
-
         } //else {
         //To handle "super" recursive calls
         MCodeUtilities.superClassesStack.push(new Integer(0));
 
-        //To handle "this" method calls we store the constructor name, and it parameters list
+        //To handle "this" method calls we store the constructor name, and its parameters list
         pushConstructorInfo(consName, types);
         MCodeUtilities.previousClassStack.push(consName);
         MCodeUtilities.previousClassParametersStack.push(types);
@@ -2099,6 +2107,13 @@ public class EvaluationVisitor extends VisitorObject {
 
                 //This is now done for all the simple allocations but once Java API allocations are allowed this should be changed.
                 unsetInside();
+            } else {
+                EvaluationVisitor.constructorCallFinished();
+                MCodeUtilities.popConstructorInfo();
+                MCodeUtilities.previousClassStack.pop();
+                MCodeUtilities.previousClassParametersStack.pop();
+                MCodeUtilities.superClassesStack.pop();
+                returnExpressionCounterStack.pop();
             }
             return result;
 

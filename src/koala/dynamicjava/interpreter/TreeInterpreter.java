@@ -1269,7 +1269,6 @@ public class TreeInterpreter implements Interpreter {
             Vector redirectBuffer = (Vector) MCodeUtilities.redirectBufferStack
                     .pop();
             MCodeUtilities.writeRedirectBuffer(redirectBuffer);
-
         }
         if (cpd.arguments != null) {
             Visitor v = new EvaluationVisitor(ctx);

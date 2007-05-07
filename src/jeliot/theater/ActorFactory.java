@@ -840,7 +840,8 @@ public class ActorFactory {
         String type = v.getType();
         VariableActor actor = null;
         int typeInfo = MCodeUtilities.resolveType(type);
-        if (typeInfo != MCodeUtilities.REFERENCE) {
+        if (typeInfo != MCodeUtilities.REFERENCE
+                && !(Util.visualizeStringsAsObjects() && typeInfo == MCodeUtilities.STRING)) {
             actor = new VariableActor();
             ValueActor vact = produceValueActor(new Value(MCodeUtilities
                     .getDefaultValue(type), type));
@@ -865,7 +866,8 @@ public class ActorFactory {
             actor.setDescription("object variable: " + actor.getLabel());
 
             return actor;
-        } else if (typeInfo == MCodeUtilities.REFERENCE) {
+        } else if (typeInfo == MCodeUtilities.REFERENCE
+                || (Util.visualizeStringsAsObjects() && typeInfo == MCodeUtilities.STRING)) {
             ReferenceVariableActor refAct = new ReferenceVariableActor();
             if (MCodeUtilities.isArray(type)) {
                 String ct = MCodeUtilities.resolveComponentType(type);

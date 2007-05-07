@@ -953,9 +953,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             String methodName, String type, String prompt, Highlight h) {
         Value in = director.animateInputHandling(type, prompt, h);
 
-        if (Util.visualizeStringsAsObjects() && in instanceof Reference
+        if (Util.visualizeStringsAsObjects()
+                && in instanceof Reference
                 && MCodeUtilities.resolveType(in.getType()) == MCodeUtilities.STRING) {
-            input.println(((StringInstance) ((Reference) in).getInstance()).getStringValue().getValue());
+            input.println(((StringInstance) ((Reference) in).getInstance())
+                    .getStringValue().getValue());
         } else {
             input.println(in.getValue());
         }
@@ -973,10 +975,20 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             String methodName, String value, String type, boolean breakLine,
             Highlight highlight) {
         Value output = (Value) values.remove(new Long(expressionReference));
-
+        type = "java.lang.Object".equals(type) ? String.class.getName() : type;
         if (output == null) {
-            output = new Value(value, type);
+            if (Util.visualizeStringsAsObjects()
+                    && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
+                output = createStringReference(value, type);
+            } else {
+                output = new Value(value, type);
+            }
             director.introduceLiteral(output);
+        }
+
+        if (Util.visualizeStringsAsObjects()
+                && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
+            output.setValue(MCodeUtilities.getValue(value, type));
         }
 
         if (breakLine) {
@@ -1592,11 +1604,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         Value val = (Value) values.remove(new Long(objectCounter));
         Variable var = (Variable) variables.remove(new Long(objectCounter));
 
+        boolean objCreationInProgress = false;
         if (val == null && !objectCreation.empty()) {
             val = (Reference) objectCreation.peek();
+            objCreationInProgress = true;
         } else if (val != null && val.getValue().equals("null")
                 && !objectCreation.empty()) {
             val = (Reference) objectCreation.peek();
+            objCreationInProgress = true;
         }
 
         // fixed by rku: check if instance is really an ObjectFrame
@@ -1608,6 +1623,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             if (obj == null && !objectCreation.empty()) {
                 val = (Reference) objectCreation.peek();
                 obj = (ObjectFrame) ((Reference) val).getInstance();
+                objCreationInProgress = true;
             }
         }
 
@@ -1632,8 +1648,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             currentMethodInvocation[1] = var.getName();
         } else {
             if (val instanceof Reference) {
-                currentMethodInvocation[1] = "new "
-                        + ((Reference) val).getInstance().getType();
+                if (objCreationInProgress) {
+                    currentMethodInvocation[1] = "new "
+                            + ((Reference) val).getInstance().getType();
+                } else {
+                    currentMethodInvocation[1] = ((Reference) val).getInstance().getType();                    
+                }
             } else {
                 currentMethodInvocation[1] = val.getValue();
             }
