@@ -3,14 +3,13 @@
  */
 package jeliot.mcode.input;
 
+import java.io.BufferedReader;
+import java.lang.reflect.Method;
+
 import jeliot.mcode.Code;
 import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodeUtilities;
 import koala.dynamicjava.tree.MethodCall;
-import koala.dynamicjava.tree.StaticMethodCall;
-
-import java.io.BufferedReader;
-import java.lang.reflect.Method;
 
 /**
  * Created by IntelliJ IDEA.

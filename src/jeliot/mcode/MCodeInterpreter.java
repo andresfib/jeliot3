@@ -286,14 +286,14 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Gives a reference to the right hand side of the expression
+                    //Gives a reference to the right hand side of the expression
                 case Code.RIGHT: {
                     long token1 = Long.parseLong(tokenizer.nextToken());
                     handleCodeRIGHT(token1);
                     break;
                 }
 
-                //Begins an expression
+                    //Begins an expression
                 case Code.BEGIN: {
                     //first token
                     long expressionType = Long.parseLong(tokenizer.nextToken());
@@ -305,7 +305,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Indicates where the value is assigned
+                    //Indicates where the value is assigned
                 case Code.TO: {
                     long expressionReference = Long.parseLong(tokenizer
                             .nextToken());
@@ -313,7 +313,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Assignment
+                    //Assignment
                 case Code.A: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -333,10 +333,10 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                /*
-                 * Unary Expressions
-                 */
-                // Complement
+                    /*
+                     * Unary Expressions
+                     */
+                    // Complement
                 case Code.COMP: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -352,7 +352,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Plus operator
+                    // Plus operator
                 case Code.PLUS: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -368,7 +368,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Minus operator
+                    // Minus operator
                 case Code.MINUS: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -384,7 +384,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Boolean Not
+                    // Boolean Not
                 case Code.NO: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -400,8 +400,8 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Unary Expression
-                // PostIncrement
+                    // Unary Expression
+                    // PostIncrement
                 case Code.PIE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -418,7 +418,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // PostDecrement
+                    // PostDecrement
                 case Code.PDE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -435,8 +435,8 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Unary Expression
-                // PreIncrement
+                    // Unary Expression
+                    // PreIncrement
                 case Code.PRIE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -452,7 +452,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // PreDecrement
+                    // PreDecrement
                 case Code.PRDE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -468,11 +468,11 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                /*
-                 * Binary Expressions
-                 */
+                    /*
+                     * Binary Expressions
+                     */
 
-                // Bitwise Or
+                    // Bitwise Or
                 case Code.BITOR: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -493,7 +493,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Bitwise Xor
+                    // Bitwise Xor
                 case Code.BITXOR: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -515,7 +515,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Bitwise And
+                    // Bitwise And
                 case Code.BITAND: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -537,7 +537,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Bitwise Left Shift
+                    // Bitwise Left Shift
                 case Code.LSHIFT: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -559,7 +559,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Bitwise Right Shift
+                    // Bitwise Right Shift
                 case Code.RSHIFT: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -581,7 +581,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Unsigned Right Shift
+                    // Unsigned Right Shift
                 case Code.URSHIFT: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -603,7 +603,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Xor Expression
+                    // Xor Expression
                 case Code.XOR: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -624,7 +624,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // And Expression
+                    // And Expression
                 case Code.AND: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -646,7 +646,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Or Expression
+                    // Or Expression
                 case Code.OR: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -667,7 +667,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Equal Expression
+                    // Equal Expression
                 case Code.EE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -688,7 +688,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Not Equal Expression
+                    // Not Equal Expression
                 case Code.NE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -728,7 +728,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Less Expression
+                    // Less Expression
                 case Code.LE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -749,7 +749,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Less or Equal Expression
+                    // Less or Equal Expression
                 case Code.LQE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -770,7 +770,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Greater Than
+                    // Greater Than
                 case Code.GT: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -791,7 +791,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Greater or Equal Expression
+                    // Greater or Equal Expression
                 case Code.GQT: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -812,7 +812,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Multiplication Expression
+                    // Multiplication Expression
                 case Code.ME: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -833,7 +833,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Remainder (mod) Expression
+                    // Remainder (mod) Expression
                 case Code.RE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -854,7 +854,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Division Expression
+                    // Division Expression
                 case Code.DE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -875,7 +875,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Substract Expression
+                    // Substract Expression
                 case Code.SE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -896,7 +896,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Add Expression
+                    // Add Expression
                 case Code.AE: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -917,7 +917,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Variable Declaration
+                    //Variable Declaration
                 case Code.VD: {
                     String variableName = tokenizer.nextToken();
                     long initializerExpression = Long.parseLong(tokenizer
@@ -937,7 +937,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Qualified Name (variable)
+                    //Qualified Name (variable)
                 case Code.QN: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -960,7 +960,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Static field access
+                    //Static field access
                 case Code.SFA: {
 
                     //Second token is the expression counter
@@ -1000,20 +1000,21 @@ public abstract class MCodeInterpreter {
                             variableName, value, type, modifiers, highlight);
                     break;
                 }
-                //Parameter
+                    //Parameter
                 case Code.P: {
-                    long expressionReference = Long.parseLong(tokenizer.nextToken());
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
                     String value = "";
-                    
-                    if (tokenizer.countTokens()>1){
-                    	value=tokenizer.nextToken();
+
+                    if (tokenizer.countTokens() > 1) {
+                        value = tokenizer.nextToken();
                     }
                     String argType = tokenizer.nextToken();
-                    
+
                     handleCodeP(expressionReference, value, argType);
                     break;
                 }
-                //Literal
+                    //Literal
                 case Code.L: {
                     //Second token is the expression counter
                     long expressionCounter = Long.parseLong(tokenizer
@@ -1043,7 +1044,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Simple Allocation (Object Allocation)
+                    //Simple Allocation (Object Allocation)
                 case Code.SA: {
                     //simpleAllocationCounter
                     long expressionCounter = Long.parseLong(tokenizer
@@ -1067,7 +1068,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Simple class allocation close
+                    // Simple class allocation close
                 case Code.SAC: {
                     //simpleAllocationCounter
                     long expressionCounter = Long.parseLong(tokenizer
@@ -1080,7 +1081,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Object field access
+                    // Object field access
                 case Code.OFA: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -1103,7 +1104,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Object method call
+                    // Object method call
                 case Code.OMC: {
 
                     String methodName = tokenizer.nextToken();
@@ -1121,13 +1122,13 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Object method call close
+                    // Object method call close
                 case Code.OMCC: {
                     handleCodeOMCC();
                     break;
                 }
 
-                //Static Method Call
+                    //Static Method Call
                 case Code.SMC: {
                     String methodName = tokenizer.nextToken();
                     String className = tokenizer.nextToken();
@@ -1140,8 +1141,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-
-                //Method declaration
+                    //Method declaration
                 case Code.MD: {
                     Highlight h = MCodeUtilities.makeHighlight(tokenizer
                             .nextToken());
@@ -1150,7 +1150,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Parameters list
+                    //Parameters list
                 case Code.PARAMETERS: {
                     String parameters = "";
                     if (tokenizer.hasMoreTokens()) {
@@ -1161,7 +1161,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Return Statement
+                    // Return Statement
                 case Code.R: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -1180,13 +1180,13 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                // Static method call closed
+                    // Static method call closed
                 case Code.SMCC: {
                     handleCodeSMCC();
                     break;
                 }
 
-                //If Then Statement
+                    //If Then Statement
                 case Code.IFT: {
                     long expressionReference = Long.parseLong(tokenizer
                             .nextToken());
@@ -1202,7 +1202,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //IF Then Else Statement
+                    //IF Then Else Statement
                 case Code.IFTE: {
                     long expressionReference = Long.parseLong(tokenizer
                             .nextToken());
@@ -1215,7 +1215,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //While Statement
+                    //While Statement
                 case Code.WHI: {
                     long expressionReference = Long.parseLong(tokenizer
                             .nextToken());
@@ -1228,7 +1228,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //For Statement
+                    //For Statement
                 case Code.FOR: {
                     long expressionReference = Long.parseLong(tokenizer
                             .nextToken());
@@ -1241,7 +1241,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Do-While Statement
+                    //Do-While Statement
                 case Code.DO: {
                     long expressionReference = Long.parseLong(tokenizer
                             .nextToken());
@@ -1283,7 +1283,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Break Statement
+                    //Break Statement
                 case Code.BR: {
                     int statementName = Integer.parseInt(tokenizer.nextToken());
                     Highlight h = MCodeUtilities.makeHighlight(tokenizer
@@ -1294,7 +1294,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Continue Statement
+                    //Continue Statement
                 case Code.CONT: {
                     int statementName = Integer.parseInt(tokenizer.nextToken());
                     Highlight h = MCodeUtilities.makeHighlight(tokenizer
@@ -1305,7 +1305,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Outputting an expression
+                    //Outputting an expression
                 case Code.OUTPUT: {
                     long expressionReference = Long.parseLong(tokenizer
                             .nextToken());
@@ -1329,7 +1329,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Input needs to be read
+                    //Input needs to be read
                 case Code.INPUT: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -1344,32 +1344,32 @@ public abstract class MCodeInterpreter {
 
                     handleCodeINPUT(expressionCounter, className, methodName,
                             type, ((prompt.equals("null")) ? null : prompt), h);
-                    
-                    break;
-                    }	
-/*
-                    //Array Access
-                    case Code.AAC: {
-                        long expressionCounter = Long.parseLong(tokenizer.nextToken());
-                        long expressionReference = Long.parseLong(tokenizer.nextToken());
-                        int dims = Integer.parseInt(tokenizer.nextToken());
-                        String cellNumberReferences = tokenizer.nextToken();
 
-                        //int values of the dimension sizes
-                        String cellNumbers = tokenizer.nextToken();
-                        String value = "";
-                        if (tokenizer.countTokens() >= 3) {
-                            value = tokenizer.nextToken();
-                        }
-                        String type = tokenizer.nextToken();
-                        Highlight h = null;
-                        if (tokenizer.hasMoreElements()) {
-                            h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
-                        }
                     break;
-                }*/
+                }
+                    /*
+                     //Array Access
+                     case Code.AAC: {
+                     long expressionCounter = Long.parseLong(tokenizer.nextToken());
+                     long expressionReference = Long.parseLong(tokenizer.nextToken());
+                     int dims = Integer.parseInt(tokenizer.nextToken());
+                     String cellNumberReferences = tokenizer.nextToken();
 
-                //Inputted value is returned
+                     //int values of the dimension sizes
+                     String cellNumbers = tokenizer.nextToken();
+                     String value = "";
+                     if (tokenizer.countTokens() >= 3) {
+                     value = tokenizer.nextToken();
+                     }
+                     String type = tokenizer.nextToken();
+                     Highlight h = null;
+                     if (tokenizer.hasMoreElements()) {
+                     h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                     }
+                     break;
+                     }*/
+
+                    //Inputted value is returned
                 case Code.INPUTTED: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -1386,7 +1386,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Opening and closing scopes
+                    //Opening and closing scopes
                 case Code.SCOPE: {
                     int scope = Integer.parseInt(tokenizer.nextToken());
 
@@ -1394,7 +1394,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Array Allocation
+                    //Array Allocation
                 case Code.AA: {
                     long expressionReference = Long.parseLong(tokenizer
                             .nextToken());
@@ -1409,38 +1409,44 @@ public abstract class MCodeInterpreter {
                     //int values of the dimension sizes
                     String dimensionSizes = tokenizer.nextToken();
                     //number of real dimensions the array has, even if they are not yet allocated	
-                    int actualDimension = Integer.parseInt(tokenizer.nextToken());
-                    //Hashcodes of the sub arrays
-                    String subArraysHashCodes = tokenizer.nextToken();
+                    int actualDimension = Integer.parseInt(tokenizer
+                            .nextToken());
+                    String subArraysHashCodes = "";
+                    if (tokenizer.countTokens() >= 2) {
+                        //Hashcodes of the sub arrays
+                        subArraysHashCodes = tokenizer.nextToken();
+                    }
                     Highlight h = null;
                     if (tokenizer.hasMoreElements()) {
                         h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
                     }
                     handleCodeAA(expressionReference, hashCode, compType, dims,
-                            dimensionReferences, dimensionSizes,actualDimension, 
-                            subArraysHashCodes, h);
+                            dimensionReferences, dimensionSizes,
+                            actualDimension, subArraysHashCodes, h);
                     break;
                 }
                     //Array Initializer's element
-                    case Code.AIE: {
-                        String arrayReference = tokenizer.nextToken();
-                        long cellNumber = Long.parseLong(tokenizer.nextToken());
-                        long expressionReference = Long.parseLong(tokenizer.nextToken());
-                        String value="";
-                        if (tokenizer.countTokens()>3){
-                        	value=tokenizer.nextToken();
-                        }
-                        String type = tokenizer.nextToken();
-                        long literal = Long.parseLong(tokenizer.nextToken());
-                        Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());                        
-                        handleCodeAIE(arrayReference, cellNumber,
-                                expressionReference, value, type, literal,
-                                highlight);
-
-                        break;
-                        
+                case Code.AIE: {
+                    String arrayReference = tokenizer.nextToken();
+                    long cellNumber = Long.parseLong(tokenizer.nextToken());
+                    long expressionReference = Long.parseLong(tokenizer
+                            .nextToken());
+                    String value = "";
+                    if (tokenizer.countTokens() > 3) {
+                        value = tokenizer.nextToken();
                     }
-                //Array Access
+                    String type = tokenizer.nextToken();
+                    long literal = Long.parseLong(tokenizer.nextToken());
+                    Highlight highlight = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
+                    handleCodeAIE(arrayReference, cellNumber,
+                            expressionReference, value, type, literal,
+                            highlight);
+
+                    break;
+
+                }
+                    //Array Access
                 case Code.AAC: {
                     long expressionCounter = Long.parseLong(tokenizer
                             .nextToken());
@@ -1466,8 +1472,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-
-                //Array Length
+                    //Array Length
                 case Code.AL: {
                     //Second token is the expression counter
                     long expressionCounter = Long.parseLong(tokenizer
@@ -1488,13 +1493,13 @@ public abstract class MCodeInterpreter {
                     // highlighted.
                     Highlight highlight = MCodeUtilities
                             .makeHighlight(tokenizer.nextToken());
-				  	handleCodeAL(expressionCounter, arrayCounter, name, value,
+                    handleCodeAL(expressionCounter, arrayCounter, name, value,
                             type, highlight);
                     break;
 
                 }
 
-                //Beginning of the Array Initializer
+                    //Beginning of the Array Initializer
                 case Code.AIBEGIN: {
                     long cells = Long.parseLong(tokenizer.nextToken());
                     Highlight highlight = MCodeUtilities
@@ -1505,7 +1510,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                 case Code.AI: {
+                case Code.AI: {
                     Highlight highlight = MCodeUtilities
                             .makeHighlight(tokenizer.nextToken());
 
@@ -1514,7 +1519,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Class information starts for a class
+                    //Class information starts for a class
                 case Code.CLASS: {
                     String name = tokenizer.nextToken();
                     String extendedClass = "";
@@ -1526,13 +1531,13 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Class information ends for a class
+                    //Class information ends for a class
                 case Code.END_CLASS: {
                     handleCodeEND_CLASS();
                     break;
                 }
 
-                //Class information for constructor
+                    //Class information for constructor
                 case Code.CONSTRUCTOR: {
                     String listOfParameters = "";
                     if (tokenizer.hasMoreTokens()) {
@@ -1543,7 +1548,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Class information for method
+                    //Class information for method
                 case Code.METHOD: {
                     String name = tokenizer.nextToken();
                     String returnType = tokenizer.nextToken();
@@ -1561,7 +1566,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Class information for field
+                    //Class information for field
                 case Code.FIELD: {
                     String name = tokenizer.nextToken();
                     String type = tokenizer.nextToken();
@@ -1576,7 +1581,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //Error has occured during the execution
+                    //Error has occured during the execution
                 case Code.ERROR: {
                     String message = tokenizer.nextToken();
                     Highlight h = MCodeUtilities.makeHighlight(tokenizer
@@ -1587,7 +1592,7 @@ public abstract class MCodeInterpreter {
                     break;
                 }
 
-                //There is an error if the execution comes here.
+                    //There is an error if the execution comes here.
                 default: {
                     //director.showErrorMessage(new InterpreterError(bundle
                     //        .getString("notImplemented.exception"), null));
@@ -1773,8 +1778,9 @@ public abstract class MCodeInterpreter {
      * @param actualdimensions
      * @param h
      */
-    protected abstract void handleCodeAA(long expressionReference, String hashCode,
-            String compType, int dims, String dimensionReferences, String dimensionSizes,
+    protected abstract void handleCodeAA(long expressionReference,
+            String hashCode, String compType, int dims,
+            String dimensionReferences, String dimensionSizes,
             int actualdimensions, String subArraysHashCodes, Highlight h);
 
     /**
