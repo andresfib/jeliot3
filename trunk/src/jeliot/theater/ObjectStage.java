@@ -10,7 +10,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
 
-import jeliot.lang.Instance;
 import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
 

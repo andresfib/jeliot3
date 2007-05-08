@@ -249,7 +249,6 @@ public class Director {
      */
     public void highlightExpression(Highlight h) {
         if (h != null) {
-
             if (runUntilLine >= h.getBeginLine()
                     && runUntilLine <= h.getEndLine()) {
                 runUntilLine = -1;
@@ -1400,10 +1399,16 @@ public class Director {
         return v;
     }
 
+    public void introduceLiteral(Value literal) {
+        introduceLiteral(literal, null);
+    }
     /**
      * @param literal
      */
-    public void introduceLiteral(Value literal) {
+    public void introduceLiteral(Value literal, Highlight h) {
+        if (h != null) {
+            highlightExpression(h);
+        }
         if (literal instanceof Reference
                 && Util.visualizeStringsAsObjects()
                 && MCodeUtilities.resolveType(literal.getType()) == MCodeUtilities.STRING

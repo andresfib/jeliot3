@@ -724,7 +724,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 doPostIncDec(postIncDec);
             }
         }
-
     }
 
     /**
@@ -980,10 +979,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             if (Util.visualizeStringsAsObjects()
                     && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
                 output = createStringReference(value, type);
+                director.introduceLiteral(output, highlight);
             } else {
                 output = new Value(value, type);
+                director.introduceLiteral(output);
             }
-            director.introduceLiteral(output);
         }
 
         if (Util.visualizeStringsAsObjects()
@@ -1652,7 +1652,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     currentMethodInvocation[1] = "new "
                             + ((Reference) val).getInstance().getType();
                 } else {
-                    currentMethodInvocation[1] = ((Reference) val).getInstance().getType();                    
+                    currentMethodInvocation[1] = ((Reference) val)
+                            .getInstance().getType();
                 }
             } else {
                 currentMethodInvocation[1] = val.getValue();
