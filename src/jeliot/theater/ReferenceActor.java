@@ -300,7 +300,7 @@ public class ReferenceActor extends ValueActor {
         Point ip = instance.getRootLocation();
         Point vp = this.getRootLocation();
 
-        int position = instance.getPosition();
+        int position = instance.getReferencePosition();
 
         int iy1 = ip.y;
         int iy2 = iy1 + instance.getHeight();

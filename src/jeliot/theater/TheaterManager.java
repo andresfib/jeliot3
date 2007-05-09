@@ -105,8 +105,14 @@ public class TheaterManager implements ComponentListener {
      */
     private static int maxMethodStageY = 288;
 
+    /**
+     * 
+     */
     private int maxY = 0;
 
+    /**
+     * 
+     */
     private int maxX = 0;
 
     /**
@@ -202,13 +208,22 @@ public class TheaterManager implements ComponentListener {
         //int w = actor.getWidth();
         //int h = actor.getHeight();
 
-        int x = objects.isEmpty() ? getMinInstanceX() : ((Actor) objects
-                .lastElement()).getX()
-                + ((Actor) objects.lastElement()).getWidth()
-                + DISTANCE_BETWEEN_INSTANCES;
+        // this places new objects in the beginning
+        // see also: bind(InstanceActor) -> objects.add(0, actor);
+        int x = getMinInstanceX();
         int y = getMinInstanceY();
 
         /*
+         //this places new objects in the end
+        // see also: bind(InstanceActor) -> objects.add(actor);
+         int x = objects.isEmpty() ? getMinInstanceX() : ((Actor) objects
+         .lastElement()).getX()
+         + ((Actor) objects.lastElement()).getWidth()
+         + DISTANCE_BETWEEN_INSTANCES;
+         int y = getMinInstanceY();
+         */
+
+        /* very old
          int x = objects.isEmpty() ?
          theatre.getWidth() - w - 45 :
          ((Actor)objects.lastElement()).getX() - w - 45;
@@ -218,9 +233,28 @@ public class TheaterManager implements ComponentListener {
         Point loc = new Point(x, y);
         reservations.put(actor, loc);
 
-        actor.setPosition(objects.size());
+        actor.setReferencePosition(getFirstFreeReferencePosition());
 
         return loc;
+    }
+
+    private int getFirstFreeReferencePosition() {
+        for (int i = 0; i <= objects.size(); i++) {
+            if (!containsPosition(i)) {
+                return i;
+            }
+        }
+        return objects.size() + 2;
+    }
+
+    private boolean containsPosition(int i) {
+        for (Iterator iter = objects.iterator(); iter.hasNext();) {
+            InstanceActor ia = (InstanceActor) iter.next();
+            if (ia.getReferencePosition() == i) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -228,11 +262,13 @@ public class TheaterManager implements ComponentListener {
      */
     public void bind(InstanceActor actor) {
         Point loc = (Point) reservations.remove(actor);
-        objects.addElement(actor);
+        //objects.add(actor); //places the object in the end of the row
+        objects.add(0, actor); //places the object in the beginning of the row
         if (!theatre.getPasAct().contains(actor)) {
             theatre.passivate(actor);
         }
         actor.setLocation(loc);
+        repositionInstanceActors();
         /*
          if (loc.y < minInstanceY) {
          minInstanceY = loc.y;
@@ -333,7 +369,7 @@ public class TheaterManager implements ComponentListener {
         validateScratches();
         repositionInstanceActors();
         validateObjects();
-        theatre.setPreferredSize(new Dimension(maxX,maxY));
+        theatre.setPreferredSize(new Dimension(maxX, maxY));
         theatre.revalidate();
         theatre.repaint();
     }

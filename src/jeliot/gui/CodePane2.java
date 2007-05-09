@@ -159,7 +159,7 @@ public class CodePane2 extends JComponent {
 
         final int left = l - 1;
         final int right = r;
-
+        
         //Tracker.writeToFileFromCodeView("Highlight", left, right, TrackerClock.currentTimeMillis(), -1);
 
         Runnable updateAComponent = new Runnable() {
