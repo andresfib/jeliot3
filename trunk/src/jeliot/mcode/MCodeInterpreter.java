@@ -131,7 +131,8 @@ public abstract class MCodeInterpreter {
      * @return
      */
     public boolean starting() {
-        return start;
+        //return start;
+        return false;
     }
 
     /**
@@ -141,13 +142,14 @@ public abstract class MCodeInterpreter {
         return constructorCalls.empty();
     }
 
+    /**
+     * 
+     * @param running
+     */
     public void setRunning(boolean running) {
         this.running = running;
     }
 
-    /**
-     * @return
-     */
     public abstract String readLine();
 
     public abstract void openScratch();

@@ -419,4 +419,8 @@ public class ObjectStage extends InstanceActor {
     public String toString() {
         return this.name;
     }
+
+    public int getVarCount() {
+        return varCount;
+    }
 }

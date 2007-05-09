@@ -36,6 +36,9 @@ import jeliot.util.Util;
 public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     //DOC: document!
+    /**
+     * 
+     */
     protected AVInteractionEngine avInteractionEngine = null;
 
     /**
@@ -808,6 +811,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             }
         }
 
+        if (start && h.getBeginLine() < 2 && h.getEndLine() < 2) {
+            h = null;
+        }
         director.showArrayCreation(ai, ref, level1, level2, dimensionValues,
                 expressionReference, actualDimension, h);
 
@@ -1315,9 +1321,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             }
             returnExpressionCounter = expressionCounter;
             returned = true;
-
         }
-
         exprs.pop();
     }
 
@@ -1346,7 +1350,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             //Object method call or constructor
             if (currentMethodInvocation.length >= 9) {
 
-                if (start) {
+                if (start && "main".equals(currentMethodInvocation[0])) {
                     start = false;
                     currentMethodInvocation[5] = null;
                 }
@@ -2054,9 +2058,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (Util.visualizeStringsAsObjects()
                 && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
             lit = createStringReference(value, type);
+            director.introduceLiteral(lit, highlight);
+        } else {
+            director.introduceLiteral(lit);
         }
-
-        director.introduceLiteral(lit);
 
         handleExpression(lit, expressionCounter);
     }
@@ -2116,6 +2121,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             var = new Variable(variableName, type);
             // fixed by rku: store modifiers in var
             var.setModifierCodes(modifiers);
+            var.setLocationInCode(highlight);
             ca.declareVariable(var);
             Value val = null;
             if (MCodeUtilities.isPrimitive(type)) {
@@ -2993,6 +2999,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeAIBEGIN(long cells, Highlight highlight) {
         arrayInitialization.push(new Integer(arrayInitialization.size()));
+        if (start && highlight.getBeginLine() < 2 && highlight.getEndLine() < 2) {
+            highlight = null;
+        }
         director.openArrayInitializer(highlight);
     }
 
@@ -3003,6 +3012,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             long expressionReference, String value, String type, long l,
             Highlight highlight) {
 
+        if (start && highlight.getBeginLine() < 2 && highlight.getEndLine() < 2) {
+            highlight = null;
+        }
         ArrayInstance ai = (ArrayInstance) instances.get(arrayReference);
         VariableInArray v = ai.getVariableAt((int) cellNumber);
 
@@ -3028,7 +3040,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             } else {
                 casted = new Reference(type);
             }
-
         }
 
         director.initializeArrayVariable(v, fromValue, casted, literal,
@@ -3047,6 +3058,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * 
      */
     protected void handleCodeAI(Highlight highlight) {
+        if (start && highlight.getBeginLine() < 2 && highlight.getEndLine() < 2) {
+            highlight = null;
+        }
         arrayInitialization.pop();
         director.closeArrayInitializer(highlight);
     }
@@ -3139,16 +3153,16 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             Instance inst = (Instance) instances.get(obj);
             if (inst != null) {
                 //For testing
-                //System.out.println(inst.getType() + "@" + inst.getHashCode());
-                //System.out.println("number of references1: " + inst.getNumberOfReferences());
-                //System.out.println("number of references2: " + inst.getActor().getNumberOfReferences());
+                System.out.println(inst.getType() + "@" + inst.getHashCode());
+                System.out.println("number of references1: " + inst.getNumberOfReferences());
+                System.out.println("number of references2: " + inst.getActor().getNumberOfReferences());
                 if (inst.getNumberOfReferences() == 0
                         || inst.getActor().getNumberOfReferences() == 0) {
                     //instances.remove(obj);
                     i.remove();
                     director.removeInstance(inst.getActor());
                     inst = null;
-                    //System.out.println("instance removed!");
+                    System.out.println("instance removed!");
                 }
             }
         }

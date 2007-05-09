@@ -19,7 +19,7 @@ public class DebugUtil {
     * 
     */
    //TODO: Change this to false for released versions.
-   public static boolean DEBUGGING = true; 
+   public static boolean DEBUGGING = false; 
    
    /**
     * 

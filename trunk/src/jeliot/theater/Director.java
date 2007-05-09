@@ -536,6 +536,7 @@ public class Director {
             Point loc = manager.reserve(soa);
             soa.setLocation(loc);
             si.setActor(soa);
+            manager.bind(soa);
             capture();
             engine.showAnimation(soa.appear(loc));
             updateCapture();
@@ -544,7 +545,6 @@ public class Director {
             Point resultLoc = expr.reserve(resultAct);
             engine.showAnimation(resultAct.fly(resultLoc));
             ref.setActor(resultAct);
-            manager.bind(soa);
             theatre.getManager().validateTheater();
         } else {
             resultAct = factory.produceValueActor(result);
@@ -1422,8 +1422,10 @@ public class Director {
             engine.showAnimation(soa.appear(cbox.getRootLocation()));
             updateCapture();
             Point loc = manager.reserve(soa);
-            engine.showAnimation(soa.fly(loc));
+            Point oldLoc = soa.getRootLocation();
             manager.bind(soa);
+            soa.setLocation(oldLoc);
+            engine.showAnimation(soa.fly(loc));
             theatre.getManager().validateTheater();
             ReferenceActor ra = factory.produceReferenceActor(ref);
             ra.setLocation(soa.getRootLocation());
@@ -2168,13 +2170,13 @@ public class Director {
     }
 
     public void openArrayInitializer(Highlight h) {
-        highlightDeclaration(h);
+        highlightForMessage(h);
         showMessage(messageBundle.getString("message.open_array_initializer"),
                 h);
     }
 
     public void closeArrayInitializer(Highlight h) {
-        highlightDeclaration(h);
+        //highlightForMessage(h);
         showMessage(messageBundle.getString("message.close_array_initializer"),
                 h);
     }
@@ -2622,9 +2624,9 @@ public class Director {
             Point loc = manager.reserve(soa);
             soa.setLocation(loc);
             si.setActor(soa);
+            manager.bind(soa);
             capture();
             engine.showAnimation(soa.appear(loc));
-            manager.bind(soa);
             theatre.getManager().validateTheater();
             updateCapture();
             ValueActor resultAct = factory.produceReferenceActor(ref);
@@ -2733,9 +2735,9 @@ public class Director {
 
         Point loc = manager.reserve(arrayAct);
         capture();
+        manager.bind(arrayAct);
         engine.showAnimation(arrayAct.appear(loc));
         release();
-        manager.bind(arrayAct);
 
         if (level1 != null) {
             for (int i = 0; i < level1.length; i++) {
@@ -3003,7 +3005,6 @@ public class Director {
      * @param h
      */
     public void showObjectCreation(ObjectFrame of, Highlight h) {
-
         highlightExpression(h);
 
         ObjectStage os = factory.produceObjectStage(of);
@@ -3011,10 +3012,9 @@ public class Director {
 
         Point loc = manager.reserve(os);
         capture();
+        manager.bind(os);
         engine.showAnimation(os.appear(loc));
         release();
-        manager.bind(os);
-
     }
 
     /**

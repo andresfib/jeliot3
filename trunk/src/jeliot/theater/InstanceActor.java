@@ -24,7 +24,7 @@ public abstract class InstanceActor extends Actor implements ActorContainer {
     /**
      * Comment for <code>position</code>
      */
-    private int position;
+    private int referencePosition;
 
     /**
      * 
@@ -76,14 +76,14 @@ public abstract class InstanceActor extends Actor implements ActorContainer {
     /**
      * @return Returns the position.
      */
-    public int getPosition() {
-        return position;
+    public int getReferencePosition() {
+        return referencePosition;
     }
 
     /**
      * @param position The position to set.
      */
-    public void setPosition(int position) {
-        this.position = position;
+    public void setReferencePosition(int position) {
+        this.referencePosition = position;
     }
 }

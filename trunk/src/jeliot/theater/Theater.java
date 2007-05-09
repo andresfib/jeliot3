@@ -295,7 +295,9 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         if (actAct.contains(actor)) {
             actAct.removeElement(actor);
         }
-        pasAct.addElement(actor);
+        if (!pasAct.contains(actor)) {
+            pasAct.addElement(actor);
+        }
     }
 
     /*
