@@ -68,7 +68,7 @@ public class TheaterManager implements ComponentListener {
      */
     private Theater theatre;
 
-    //  DOC: Document!
+    //DOC: Document!
 
     /**
      *
