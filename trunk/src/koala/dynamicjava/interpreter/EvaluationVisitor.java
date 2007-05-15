@@ -1980,7 +1980,6 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(SimpleAllocation node) {
         List larg = node.getArguments();
         Object[] args = Constants.EMPTY_OBJECT_ARRAY;
-        long simpleAllocationCounter = counter++;
         Constructor cons = (Constructor) node
                 .getProperty(NodeProperties.CONSTRUCTOR);
         Class[] paramTypes = cons.getParameterTypes();
@@ -1993,6 +1992,11 @@ public class EvaluationVisitor extends VisitorObject {
         String consName = cons.getName();
         String declaringClass = cons.getDeclaringClass().getName();
         // Fill the arguments
+        if (declaringClass.equals(String.class.getName())){
+        	return handleStringConstructor(node, larg);
+        }
+        long simpleAllocationCounter = counter++;
+        
         if (larg != null) {
 
             MCodeUtilities.write("" + Code.SA + Code.DELIM
@@ -2147,7 +2151,27 @@ public class EvaluationVisitor extends VisitorObject {
         /* Jeliot 3 addition ends */
     }
 
-    /**
+    private Object handleStringConstructor(SimpleAllocation node, List larg) {
+		// TODO Auto-generated method stub
+    	String result;
+    	Object[] args = Constants.EMPTY_OBJECT_ARRAY;
+    	if (larg != null && larg.size()==1) {
+    		args = new Object[larg.size()];
+            Iterator it = larg.iterator();
+            result = (String) ((Expression) it.next()).acceptVisitor(this);
+            
+        } else {
+        	 result = (String) context.invokeConstructor(node, args);
+        	 MCodeUtilities.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
+                     + MCodeUtilities.getValue(result) + Code.DELIM
+                     + String.class.getName() + Code.DELIM
+                     + MCodeGenerator.locationToString(node));
+        }
+    	//Object result = context.invokeConstructor(node, args);
+		return result;
+	}
+
+	/**
      * Visits an ArrayAllocation
      *
      * @param node the node to visit
