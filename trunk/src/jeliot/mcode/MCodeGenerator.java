@@ -65,9 +65,10 @@ public class MCodeGenerator {
 
         MCodeUtilities.write("" + Code.OMC + Code.DELIM + "toString"
                 + Code.DELIM + "0" + Code.DELIM + counter + Code.DELIM
-                + (obj != null ? obj.getClass().getName() : Object.class.toString()) + Code.DELIM + "0,0,0,0");
+                + (obj != null ? obj.getClass().getName() : Object.class.getName()) + Code.DELIM + "0,0,0,0");
 
-        String result = String.valueOf(obj);
+        
+        String result = String.valueOf(obj); 
 
         if (!MCodeUtilities.isToStringOverloaded()) {
             //fake everything
@@ -81,14 +82,17 @@ public class MCodeGenerator {
                     + locationToString(expression));
 
             MCodeUtilities.write(Code.L + Code.DELIM + auxCounter + Code.DELIM
-                    + result + Code.DELIM + String.class.getName() + Code.DELIM
+                    + MCodeUtilities.getValue(result) + Code.DELIM + String.class.getName() + Code.DELIM
                     + "0,0,0,0");
             EvaluationVisitor.incrementCounter();
             MCodeUtilities.write("" + Code.R + Code.DELIM
                     + EvaluationVisitor.returnExpressionCounterStack.pop()
-                    + Code.DELIM + auxCounter + Code.DELIM + result
+                    + Code.DELIM + auxCounter + Code.DELIM + MCodeUtilities.getValue(result)
                     + Code.DELIM + String.class.getName() + Code.DELIM
                     + "0,0,0,0");
+        } else {
+            EvaluationVisitor.returnExpressionCounterStack.pop();
+            EvaluationVisitor.unsetInside();
         }
 
         MCodeUtilities.endToString();

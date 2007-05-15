@@ -1402,6 +1402,7 @@ public class Director {
     public void introduceLiteral(Value literal) {
         introduceLiteral(literal, null);
     }
+
     /**
      * @param literal
      */
@@ -3021,14 +3022,32 @@ public class Director {
      * @param actor
      */
     public void removeInstance(InstanceActor actor) {
+        showDisappearing(actor);
+        manager.removeInstance(actor);
+        theatre.getManager().validateTheater();
+    }
+
+    /**
+     * 
+     * @param actor
+     */
+    public void removeClass(ClassActor actor) {
+        showDisappearing(actor);
+        manager.removeClass(actor);
+        theatre.getManager().validateTheater();
+    }
+
+    /**
+     * 
+     * @param actor
+     */
+    public void showDisappearing(Actor actor) {
         Animation a = actor.disappear();
         if (a != null) {
             capture();
             engine.showAnimation(a);
             release();
         }
-        manager.removeInstance(actor);
-        theatre.getManager().validateTheater();
     }
 
     /*

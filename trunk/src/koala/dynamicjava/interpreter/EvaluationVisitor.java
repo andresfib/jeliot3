@@ -2152,7 +2152,6 @@ public class EvaluationVisitor extends VisitorObject {
     }
 
     private Object handleStringConstructor(SimpleAllocation node, List larg) {
-		// TODO Auto-generated method stub
     	String result;
     	Object[] args = Constants.EMPTY_OBJECT_ARRAY;
     	if (larg != null && larg.size()==1) {
