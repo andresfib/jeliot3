@@ -14,6 +14,7 @@ import java.util.Vector;
 import jeliot.FeatureNotImplementedException;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.lang.ArrayInstance;
+import jeliot.lang.Class;
 import jeliot.lang.ClassInfo;
 import jeliot.lang.Instance;
 import jeliot.lang.ObjectFrame;
@@ -335,7 +336,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#endRunning()
      */
     protected void endRunning() {
-        //removeInstances();
+        removeClasses();
+        removeInstances();
 
         //TODO fix this hack!
         if (avInteractionEngine != null) {
@@ -1302,8 +1304,19 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             if (MCodeUtilities.isPrimitive(type)) {
                 casted = new Value(value, type);
             } else {
-                Instance inst = (Instance) instances.get(MCodeUtilities
-                        .getHashCode(value));
+                Instance inst = null;
+                if (Util.visualizeStringsAsObjects()
+                        && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
+                    String[] strs = MCodeUtilities.getStringValues(value);
+                    if (strs != null) {
+                        inst = (Instance) instances.get(MCodeUtilities
+                                .getHashCode(strs[1]));
+                    }
+                }
+                if (inst == null) {
+                    inst = (Instance) instances.get(MCodeUtilities
+                            .getHashCode(value));
+                }
                 if (inst != null) {
                     casted = new Reference(inst);
                     ((Reference) casted).makeReference();
@@ -1630,7 +1643,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 objCreationInProgress = true;
             }
         }
-
+        if (val instanceof Reference) {
+            ((Reference) val).makeReference();
+        }
         invokingMethod = true;
 
         if (currentMethodInvocation != null) {
@@ -3143,7 +3158,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     }
 
     /**
-     * Not in use at the moment.
+     * Used at the moment.
      */
     public void checkInstancesForRemoval() {
         //Enumeration enumeration = instances.keys();
@@ -3154,8 +3169,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             if (inst != null) {
                 //For testing
                 System.out.println(inst.getType() + "@" + inst.getHashCode());
-                System.out.println("number of references1: " + inst.getNumberOfReferences());
-                System.out.println("number of references2: " + inst.getActor().getNumberOfReferences());
+                System.out.println("number of references1: "
+                        + inst.getNumberOfReferences());
+                System.out.println("number of references2: "
+                        + inst.getActor().getNumberOfReferences());
                 if (inst.getNumberOfReferences() == 0
                         || inst.getActor().getNumberOfReferences() == 0) {
                     //instances.remove(obj);
@@ -3180,6 +3197,22 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 i.remove();
                 director.removeInstance(inst.getActor());
                 inst.setActor(null);
+                inst = null;
+                //System.out.println("instance removed!");
+            }
+        }
+        this.instances.clear();
+    }
+
+    public void removeClasses() {
+        for (Iterator i = this.classesWithStaticVariables.iterator(); i
+                .hasNext();) {
+            Class inst = (Class) i.next();
+            if (inst != null) {
+                //instances.remove(obj);
+                i.remove();
+                director.removeClass(inst.getClassActor());
+                inst.setClassActor(null);
                 inst = null;
                 //System.out.println("instance removed!");
             }

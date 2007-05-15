@@ -970,7 +970,7 @@ public class TreeInterpreter implements Interpreter {
             i++;
         }
 
-        // Hack for providing e-code for "outside" classes
+        // Hack for providing m-code for "outside" classes
         // EvaluationVisitor will display PARAMETERS and MD just before SMCC
         EvaluationVisitor.setInside();
 
