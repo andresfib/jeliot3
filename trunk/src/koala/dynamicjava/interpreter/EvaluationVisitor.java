@@ -1411,7 +1411,8 @@ public class EvaluationVisitor extends VisitorObject {
     }
     
     private Object handleInput(MethodCall node, Method m, List larg) {
-        return handleInput(node, m, larg, counter++);
+    	
+        return handleInput(node, m, larg, counter+1);
     }
 
     private Object handleInput(MethodCall node, Method m, List larg, long inputCounter) {
@@ -1657,6 +1658,7 @@ public class EvaluationVisitor extends VisitorObject {
         // Hardcoded!!! TO BE CHANGED
         Object result = handleInput(node, m, larg);
         if (result != null) {
+        	counter++;
             return result;
         }
 
@@ -2154,17 +2156,23 @@ public class EvaluationVisitor extends VisitorObject {
     private Object handleStringConstructor(SimpleAllocation node, List larg) {
     	String result;
     	Object[] args = Constants.EMPTY_OBJECT_ARRAY;
+    	
     	if (larg != null && larg.size()==1) {
     		args = new Object[larg.size()];
             Iterator it = larg.iterator();
             result = (String) ((Expression) it.next()).acceptVisitor(this);
             
-        } else {
+        } else if (larg == null) {
         	 result = (String) context.invokeConstructor(node, args);
         	 MCodeUtilities.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
                      + MCodeUtilities.getValue(result) + Code.DELIM
                      + String.class.getName() + Code.DELIM
                      + MCodeGenerator.locationToString(node));
+        } else {
+        	//We don't suppport anything else
+        	node.setProperty(NodeProperties.ERROR_STRINGS, new String[] {
+        	          "String" , "String" }); 
+        	throw new ExecutionError("j3.no.such.constructor", node);
         }
     	//Object result = context.invokeConstructor(node, args);
 		return result;
