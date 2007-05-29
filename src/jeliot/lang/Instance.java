@@ -10,106 +10,113 @@ import jeliot.theater.*;
  */
 public class Instance {
 
-//  DOC: document!
+    //DOC: document!
 
     /**
-	 *
-	 */
-	private String type;
-    
-    /**
-	 *
-	 */
-	private InstanceActor actor;
+     * 
+     */
+    public static final Instance OUTSIDE_OBJECT = new Instance(null,
+            "java.lang.Object");
+    static {
+        OUTSIDE_OBJECT.setActor(ObjectStage.OUTSIDE_OBJECT);
+    }
 
     /**
-	 *
-	 */
-	private String hashCode;
+     *
+     */
+    private String type;
 
     /**
-	 *
-	 */
-	private int references = 0;
+     *
+     */
+    private InstanceActor actor;
 
     /**
-	 * @param hashCode
-	 */
-	protected Instance(String hashCode) {
+     *
+     */
+    private String hashCode;
+
+    /**
+     *
+     */
+    private int references = 0;
+
+    /**
+     * @param hashCode
+     */
+    protected Instance(String hashCode) {
         this.hashCode = hashCode;
     }
 
     /**
-	 * @param hashCode
-	 * @param type
-	 */
-	protected Instance(String hashCode, String type) {
+     * @param hashCode
+     * @param type
+     */
+    protected Instance(String hashCode, String type) {
         this.hashCode = hashCode;
         this.type = type;
     }
 
     /**
-	 * @param type
-	 */
-	public void setType(String type) {
+     * @param type
+     */
+    public void setType(String type) {
         this.type = type;
     }
 
     /**
-	 * @return
-	 */
-	public String getType() {
+     * @return
+     */
+    public String getType() {
         return type;
     }
 
     /**
-	 * @param actor
-	 */
-	public void setActor(InstanceActor actor) {
+     * @param actor
+     */
+    public void setActor(InstanceActor actor) {
         this.actor = actor;
     }
 
     /**
-	 * @return
-	 */
-	public InstanceActor getActor() {
+     * @return
+     */
+    public InstanceActor getActor() {
         return actor;
     }
 
     /**
-	 * @param hashCode
-	 */
-	public void setHashCode(String hashCode) {
+     * @param hashCode
+     */
+    public void setHashCode(String hashCode) {
         this.hashCode = hashCode;
     }
 
     /**
-	 * @return
-	 */
-	public String getHashCode() {
+     * @return
+     */
+    public String getHashCode() {
         return hashCode;
     }
 
     /**
-	 * 
-	 */
-	public void reference() {
+     * 
+     */
+    public void reference() {
         references++;
     }
 
     /**
-	 * 
-	 */
-	public void dereference() {
+     * 
+     */
+    public void dereference() {
         references--;
     }
 
     /**
-	 * @return
-	 */
-	public int getNumberOfReferences() {
+     * @return
+     */
+    public int getNumberOfReferences() {
         return references;
     }
 }
-
-

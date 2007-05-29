@@ -52,6 +52,7 @@ public class Class {
         Iterator i = vars.iterator();
         while (i.hasNext()) {
             Variable var = (Variable) i.next();
+            
             if (var.getName().equals(varName)) {
                 return var;
             }

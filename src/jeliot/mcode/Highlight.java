@@ -76,6 +76,20 @@ public class Highlight {
         return this.endColumn;
     }
     
+    public boolean equals(Object o) {
+        if (!(o instanceof Highlight)) {
+            return false;
+        }
+        Highlight h = (Highlight) o;
+        if (h.beginColumn == this.beginColumn &&
+            h.endColumn == this.endColumn &&
+            h.beginLine == this.beginLine &&
+            h.endLine == this.endLine) {
+            return true;
+        }
+        return false;
+    }
+    
     public String toString() {
         StringBuffer stringBuilder = new StringBuffer();
         stringBuilder.append("{");

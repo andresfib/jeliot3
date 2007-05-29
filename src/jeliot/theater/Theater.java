@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Vector;
 
+import javax.swing.JScrollPane;
+
 /**
  * This is the <code>Theatre</code> component that is added in the left pane
  * of the user interface and on which the program animation produced in the
@@ -293,7 +295,9 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         if (actAct.contains(actor)) {
             actAct.removeElement(actor);
         }
-        pasAct.addElement(actor);
+        if (!pasAct.contains(actor)) {
+            pasAct.addElement(actor);
+        }
     }
 
     /*
@@ -302,13 +306,16 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
      */
     public void removeActor(Actor actor) {
+        boolean removed = false;
         if (actAct.contains(actor)) {
-            actAct.removeElement(actor);
+            removed = actAct.removeElement(actor);
         } else {
-            pasAct.removeElement(actor);
+            removed = pasAct.removeElement(actor);
         }
-        //For tracking
-        actor.disappear();
+        if (removed) {
+            //For tracking
+            actor.disappear();
+        }
     }
 
     /*
@@ -448,5 +455,23 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
 
     public Rectangle getClipRect() {
         return clipRect;
+    }
+
+    private JScrollPane scrollPane;
+
+    public JScrollPane getScrollPane() {
+        return this.scrollPane;
+    }
+
+    public void setScrollPane(JScrollPane scrollPane) {
+        this.scrollPane = scrollPane;
+    }
+
+    public Vector getActAct() {
+        return actAct;
+    }
+
+    public Vector getPasAct() {
+        return pasAct;
     }
 }

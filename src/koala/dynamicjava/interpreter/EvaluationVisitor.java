@@ -72,6 +72,7 @@ import koala.dynamicjava.tree.LabeledStatement;
 import koala.dynamicjava.tree.LessExpression;
 import koala.dynamicjava.tree.LessOrEqualExpression;
 import koala.dynamicjava.tree.Literal;
+import koala.dynamicjava.tree.MethodCall;
 import koala.dynamicjava.tree.MethodDeclaration;
 import koala.dynamicjava.tree.MinusExpression;
 import koala.dynamicjava.tree.MultiplyAssignExpression;
@@ -275,7 +276,13 @@ public class EvaluationVisitor extends VisitorObject {
         return (String) constructorCallNames.peek();
     }
 
-    //DOC NIKO
+
+    /**
+     * 
+     * @param name
+     * @param superClassesNames
+     * @param consCallNumber
+     */
     public static void newConstructorCall(String name,
             Vector superClassesNames, long consCallNumber) {
         Long ccn = new Long(consCallNumber);
@@ -284,6 +291,10 @@ public class EvaluationVisitor extends VisitorObject {
         superClasses.push(superClassesNames);
     }
 
+    /**
+     * 
+     *
+     */
     public static void constructorCallFinished() {
         constructorCallNumbers.pop();
         constructorCallNames.pop();
@@ -328,8 +339,14 @@ public class EvaluationVisitor extends VisitorObject {
      * Returns preparing value
      */
     public static boolean isSetInside() {
-        return ((Long) returnExpressionCounterStack.peek())
-                .equals((Long) domesticStack.peek());
+
+        boolean emptyStacks = (returnExpressionCounterStack.isEmpty() || (domesticStack
+                .isEmpty()));
+        boolean inside = false;
+        if (!emptyStacks)
+            inside = ((Long) returnExpressionCounterStack.peek())
+                    .equals((Long) domesticStack.peek());
+        return inside;
     }
 
     /**
@@ -928,13 +945,14 @@ public class EvaluationVisitor extends VisitorObject {
 
         if (node.getType() == null) {
             MCodeUtilities.write("" + Code.L + Code.DELIM + (counter++)
-                    + Code.DELIM + node.getValue() + Code.DELIM
-                    + Code.REFERENCE + Code.DELIM
+                    + Code.DELIM + MCodeUtilities.getValue(node.getValue())
+                    + Code.DELIM + Code.REFERENCE + Code.DELIM
                     + MCodeGenerator.locationToString(node));
         } else {
             MCodeUtilities.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
-                    + node.getValue() + Code.DELIM + node.getType().getName()
-                    + Code.DELIM + MCodeGenerator.locationToString(node));
+                    + MCodeUtilities.getValue(node.getValue()) + Code.DELIM
+                    + node.getType().getName() + Code.DELIM
+                    + MCodeGenerator.locationToString(node));
         }
 
         return node.getValue();
@@ -1169,7 +1187,8 @@ public class EvaluationVisitor extends VisitorObject {
                         MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
                                 + Code.NO_REFERENCE + Code.DELIM + "System.out"
                                 + Code.DELIM + m.getName() + Code.DELIM + ""
-                                + Code.DELIM + String.class.getName()
+                                + Code.DELIM
+                                + String.class.getName()
                                 + Code.DELIM
                                 //To indicate newline or not
                                 + (m.getName().equals("println") ? "1" : "0")
@@ -1179,13 +1198,24 @@ public class EvaluationVisitor extends VisitorObject {
                 }
                 return null;
             }
+        } else if ((node.hasProperty(NodeProperties.METHOD))
+                && ((Method) node.getProperty(NodeProperties.METHOD))
+                        .getDeclaringClass().getName().equals(
+                                "java.util.Scanner")) {
+            Method m = (Method) node.getProperty(NodeProperties.METHOD);
+            List larg = node.getArguments();
+            Expression exp = node.getExpression();
+            long inputCounter = counter++;
+            Object obj = exp.acceptVisitor(this);
+            return handleScanner(node, m, larg, inputCounter);
         } else {
             Long l = new Long(counter);
             returnExpressionCounterStack.push(l);
             counter++;
             Class[] typs;
-            Expression exp = node.getExpression();
+            
 
+            Expression exp = node.getExpression();
             long objectCounter = counter;
             // Evaluate the receiver first
             Object obj = exp.acceptVisitor(this);
@@ -1255,7 +1285,9 @@ public class EvaluationVisitor extends VisitorObject {
 
                 // Invoke the method
                 try {
-                    Object o = m.invoke(obj, args);
+                    Object o = null;
+
+                    o = m.invoke(obj, args);
 
                     if (!isSetInside()) {
                         //visit(o)
@@ -1278,7 +1310,6 @@ public class EvaluationVisitor extends VisitorObject {
 
                             // Don't try this with objects, foreign method calls
                             // don't provide enough info to handle them
-
                             String value = MCodeUtilities.getValue(o);
                             String className = (o == null) ? Code.REFERENCE : o
                                     .getClass().getName();
@@ -1346,6 +1377,87 @@ public class EvaluationVisitor extends VisitorObject {
                 }
             }
         }
+    }
+
+    private Object handleScanner(MethodCall node, Method m, List largs, long inputCounter) {
+        Object o = null;
+        o = handleInput(node, m, largs, inputCounter);
+        return o;
+    }
+    
+    private Object handleScanner(MethodCall node, Method m, List largs) {
+
+        Object o = null;
+
+        o = handleInput(node, m, largs);
+        /*if (!m.getReturnType().getName().equals(Void.TYPE.getName())) {
+
+         long auxcounter = counter;
+         String value = MCodeUtilities.getValue(o);
+         String className = (o == null) ? Code.REFERENCE : o
+         .getClass().getName();
+         MCodeUtilities.write("" + Code.L + Code.DELIM + (counter++)
+         + Code.DELIM + value + Code.DELIM + className
+         + Code.DELIM
+         + MCodeGenerator.locationToString(node));
+
+         MCodeUtilities.write("" + Code.R + Code.DELIM
+         + l.toString() + Code.DELIM + auxcounter
+         + Code.DELIM + value + Code.DELIM + className
+         + Code.DELIM
+         + MCodeGenerator.locationToString(node));
+         }*/
+        return o;
+    }
+    
+    private Object handleInput(MethodCall node, Method m, List larg) {
+        return handleInput(node, m, larg, counter++);
+    }
+
+    private Object handleInput(MethodCall node, Method m, List larg, long inputCounter) {
+
+        Object result = null;
+
+        Object[] args = Constants.EMPTY_OBJECT_ARRAY;
+
+        final InputHandler inputHandler = InputHandlerFactory
+                .createInputHandler(m.getDeclaringClass());
+
+        if (inputHandler != null) {
+            inputHandler.setInputReader(MCodeUtilities.getReader());
+            //long inputCounter = counter++;
+            String prompt = (larg != null) ? "" : null;
+
+            if (prompt != null) {
+                // Fill the arguments
+                args = new Object[larg.size()];
+                Iterator it = larg.iterator();
+                int i = 0;
+                while (it.hasNext()) {
+                    args[i] = ((Expression) it.next()).acceptVisitor(this);
+                    prompt += MCodeUtilities.getValue(args[i]);
+                    i++;
+                }
+            }
+            // Hack to get right class for next() method in Java 1.5
+            Class returnType = m.getReturnType();
+            if (m.getName().equals("next") && returnType.equals(Object.class)) {
+                returnType = String.class;
+            }
+            result = inputHandler.handleInput(returnType, inputCounter, m,
+                    node, prompt);
+
+            MCodeUtilities.write("" + Code.INPUTTED + Code.DELIM + inputCounter
+                    + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
+                    + m.getReturnType().getName() + Code.DELIM
+                    + MCodeGenerator.locationToString(node));
+
+            if (prompt != null && prompt.length() > 0) {
+                inputHandler.out(counter, "println", result.toString(), node);
+            }
+        }
+        return result;
+
     }
 
     /**
@@ -1423,7 +1535,10 @@ public class EvaluationVisitor extends VisitorObject {
 
         if (larg != null) {
 
-            MCodeUtilities.write("" + Code.OMC + Code.DELIM + "super,"
+            MCodeUtilities.write(""
+                    + Code.OMC
+                    + Code.DELIM
+                    + "super,"
                     + m.getName() //.substring(m.getName().lastIndexOf("$") + 1)
                     + Code.DELIM + larg.size() + Code.DELIM + objectCounter
                     + Code.DELIM
@@ -1540,43 +1655,12 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Check if the static method call is one of our Input methods
         // Hardcoded!!! TO BE CHANGED
-        Object result = null;
-
-        // If true Input Class, if false Lue class
-        final InputHandler inputHandler = InputHandlerFactory
-                .createInputHandler(m.getDeclaringClass());
-
-        if (inputHandler != null) {
-            inputHandler.setInputReader(MCodeUtilities.getReader());
-            long inputCounter = counter++;
-            String prompt = (larg != null) ? "" : null;
-
-            if (prompt != null) {
-                // Fill the arguments
-                args = new Object[larg.size()];
-                Iterator it = larg.iterator();
-                int i = 0;
-                while (it.hasNext()) {
-                    args[i] = ((Expression) it.next()).acceptVisitor(this);
-                    prompt += MCodeUtilities.getValue(args[i]);
-                    i++;
-                }
-            }
-
-            result = inputHandler.handleInput(m.getReturnType(), inputCounter,
-                    m, node, prompt);
-
-            MCodeUtilities.write("" + Code.INPUTTED + Code.DELIM + inputCounter
-                    + Code.DELIM + result + Code.DELIM
-                    + m.getReturnType().getName() + Code.DELIM
-                    + MCodeGenerator.locationToString(node));
-
-            if (prompt != null && prompt.length() > 0) {
-                inputHandler.out(counter, "println", result.toString(), node);
-            }
-
+        Object result = handleInput(node, m, larg);
+        if (result != null) {
             return result;
-        } else if (m.getDeclaringClass().getName().equals("jeliot.io.Output")) {
+        }
+
+        if (m.getDeclaringClass().getName().equals("jeliot.io.Output")) {
             if (m.getName().equals("println")) {
                 args = new Object[larg.size()];
                 Iterator it = larg.iterator();
@@ -1598,7 +1682,8 @@ public class EvaluationVisitor extends VisitorObject {
                             + m.getDeclaringClass().getName() + Code.DELIM
                             + m.getName() + Code.DELIM
                             + MCodeUtilities.getValue(args[i]) + Code.DELIM
-                            + typs[i].getName() + Code.DELIM + "1" //BREAKLINE
+                            + typs[i].getName() + Code.DELIM
+                            + "1" //BREAKLINE
                             + Code.DELIM
                             + MCodeGenerator.locationToString(node));
                     i++;
@@ -1701,8 +1786,8 @@ public class EvaluationVisitor extends VisitorObject {
                             + Code.DELIM + value + Code.DELIM + className
                             + Code.DELIM
                             + MCodeGenerator.locationToString(node));
-                }
 
+                }
             } else {
                 unsetInside();
             }
@@ -1791,10 +1876,10 @@ public class EvaluationVisitor extends VisitorObject {
 
         val = performCast(NodeProperties.getType(node), val);
         mod.modify(context, val);
-        String value = MCodeUtilities.getValue(val);
+        //String value = MCodeUtilities.getValue(val);
 
         MCodeGenerator.generateCodeA(assigncounter, auxcounter, auxcounter2,
-                value, node);
+                val, node);
 
         /*
          MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
@@ -1895,7 +1980,6 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(SimpleAllocation node) {
         List larg = node.getArguments();
         Object[] args = Constants.EMPTY_OBJECT_ARRAY;
-        long simpleAllocationCounter = counter++;
         Constructor cons = (Constructor) node
                 .getProperty(NodeProperties.CONSTRUCTOR);
         Class[] paramTypes = cons.getParameterTypes();
@@ -1908,6 +1992,11 @@ public class EvaluationVisitor extends VisitorObject {
         String consName = cons.getName();
         String declaringClass = cons.getDeclaringClass().getName();
         // Fill the arguments
+        if (declaringClass.equals(String.class.getName())){
+        	return handleStringConstructor(node, larg);
+        }
+        long simpleAllocationCounter = counter++;
+        
         if (larg != null) {
 
             MCodeUtilities.write("" + Code.SA + Code.DELIM
@@ -1981,11 +2070,24 @@ public class EvaluationVisitor extends VisitorObject {
                 .getDeclaringClass()), simpleAllocationCounter);
         MCodeUtilities.write("" + Code.CONSCN + Code.DELIM
                 + EvaluationVisitor.getConstructorCallNumber());
-
+        
+        //If Scanner constructor we hack a simple Scanner constructor that also 
+        //skips the special stacks (superClassesStack and so handling)
+        //otherwise we do nothing special b
+        if (consName.equals("java.util.Scanner")) {
+            if (args.length > 1)
+                throw new ExecutionError("j3.no.such.Scanner.implemented", node);
+            else {
+                MCodeUtilities.write("" + Code.CONSCN + Code.DELIM
+                        + EvaluationVisitor.getConstructorCallNumber());
+                MCodeUtilities.write(Code.PARAMETERS + Code.DELIM + "source");
+                MCodeUtilities.write(Code.MD + Code.DELIM + "0,0,0,0");
+            }
+        } //else {
         //To handle "super" recursive calls
         MCodeUtilities.superClassesStack.push(new Integer(0));
 
-        //To handle "this" method calls we store the constructor name, and it parameters list
+        //To handle "this" method calls we store the constructor name, and its parameters list
         pushConstructorInfo(consName, types);
         MCodeUtilities.previousClassStack.push(consName);
         MCodeUtilities.previousClassParametersStack.push(types);
@@ -2000,14 +2102,23 @@ public class EvaluationVisitor extends VisitorObject {
                     + MCodeUtilities.getValue(result) + Code.DELIM
                     + MCodeGenerator.locationToString(node));
             //0 arguments
-            MCodeUtilities.popConstructorInfo();
-            MCodeUtilities.previousClassStack.pop();
-            MCodeUtilities.previousClassParametersStack.pop();
-            //MCodeUtilities.superClassesStack.pop();
-            returnExpressionCounterStack.pop();
+            if (!consName.equals("java.util.Scanner")) {
+                MCodeUtilities.popConstructorInfo();
+                MCodeUtilities.previousClassStack.pop();
+                MCodeUtilities.previousClassParametersStack.pop();
+                //MCodeUtilities.superClassesStack.pop();
+                returnExpressionCounterStack.pop();
 
-            //This is now done for all the simple allocations but once Java API allocations are allowed this should be changed.
-            unsetInside();
+                //This is now done for all the simple allocations but once Java API allocations are allowed this should be changed.
+                unsetInside();
+            } else {
+                EvaluationVisitor.constructorCallFinished();
+                MCodeUtilities.popConstructorInfo();
+                MCodeUtilities.previousClassStack.pop();
+                MCodeUtilities.previousClassParametersStack.pop();
+                MCodeUtilities.superClassesStack.pop();
+                returnExpressionCounterStack.pop();
+            }
             return result;
 
             /* Jeliot 3 addition begins */
@@ -2040,7 +2151,26 @@ public class EvaluationVisitor extends VisitorObject {
         /* Jeliot 3 addition ends */
     }
 
-    /**
+    private Object handleStringConstructor(SimpleAllocation node, List larg) {
+    	String result;
+    	Object[] args = Constants.EMPTY_OBJECT_ARRAY;
+    	if (larg != null && larg.size()==1) {
+    		args = new Object[larg.size()];
+            Iterator it = larg.iterator();
+            result = (String) ((Expression) it.next()).acceptVisitor(this);
+            
+        } else {
+        	 result = (String) context.invokeConstructor(node, args);
+        	 MCodeUtilities.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
+                     + MCodeUtilities.getValue(result) + Code.DELIM
+                     + String.class.getName() + Code.DELIM
+                     + MCodeGenerator.locationToString(node));
+        }
+    	//Object result = context.invokeConstructor(node, args);
+		return result;
+	}
+
+	/**
      * Visits an ArrayAllocation
      *
      * @param node the node to visit
@@ -2577,11 +2707,11 @@ public class EvaluationVisitor extends VisitorObject {
         Object o = InterpreterUtilities.add(c, str1, str2);
         MCodeUtilities.write("" + Code.AE + Code.DELIM + addcounter
                 + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
-                + Code.DELIM + o.toString() + Code.DELIM
+                + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
                 + NodeProperties.getType(node).getName() + Code.DELIM
                 + MCodeGenerator.locationToString(node));
+        //System.out.println(o.toString());
         return o;
-
     }
 
     /**

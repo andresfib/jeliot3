@@ -75,8 +75,8 @@ public class VariableInArrayActor extends VariableActor {
         int namew = fm.stringWidth(getLabel());
 
         this.indexw = indexw;
-        this.namex = indexw - namew;
-        this.namey = h - 1;
+        this.namex = (indexw - namew) /2 ;
+        this.namey = h / 2 + 5;
 
         this.valuex = indexw + 2;
         this.valuey = 0;

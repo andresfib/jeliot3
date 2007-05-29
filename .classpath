@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="examples/|.classpath|.project|jeliot.bat|jeliot.ico|jeliot.mf" kind="src" path="src"/>
-	<classpathentry kind="src" path="resources"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry sourcepath="src" kind="lib" path="Jeliot3/jeliot.jar"/>
-	<classpathentry sourcepath="lib/src.jar" kind="lib" path="lib/junit.jar"/>
-	<classpathentry kind="src" path="tests"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry excluding="examples/|.classpath|.project|jeliot.bat|jeliot.ico|jeliot.mf" path="src" kind="src"/>
+	<classpathentry path="resources" kind="src"/>
+	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true" kind="con"/>
+	<classpathentry sourcepath="lib/src.jar" path="lib/junit.jar" kind="lib"/>
+	<classpathentry path="tests" kind="src"/>
+	<classpathentry path="lib/paws-cbum.jar" kind="lib"/>
+	<classpathentry path="bin" kind="output"/>
 </classpath>

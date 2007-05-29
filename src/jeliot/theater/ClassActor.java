@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 import jeliot.tracker.Tracker;
@@ -103,6 +104,32 @@ public class ClassActor extends Actor implements ActorContainer {
     }
 
     /**
+     * 
+     */
+    public void calculateSize() {
+        for (Iterator i = variables.iterator(); i.hasNext();) {
+            Actor a = (Actor) i.next();
+            if (this.actHeight < a.getHeight()) {
+                this.actHeight = a.getHeight();
+            }
+            if (this.actWidth < a.getWidth()) {
+                this.actWidth = a.getWidth();
+            }
+        }
+        if (reserved != null) {
+            if (this.actHeight < reserved.getHeight()) {
+                this.actHeight = reserved.getHeight();
+            }
+            if (this.actWidth < reserved.getWidth()) {
+                this.actWidth = reserved.getWidth();
+            }
+        }
+        Dimension d = calculateSizeDimensions();
+        setSize(d.width, d.height);
+        repositionVariableActors();
+    }
+
+    /**
      * @param maxActWidth
      * @param actHeight
      */
@@ -110,9 +137,7 @@ public class ClassActor extends Actor implements ActorContainer {
 
         this.actWidth = maxActWidth;
         this.actHeight = actHeight;
-
         Dimension d = calculateSizeDimensions();
-
         setSize(d.width, d.height);
     }
 
@@ -169,7 +194,7 @@ public class ClassActor extends Actor implements ActorContainer {
         // draw name
         g.setFont(font);
         g.setColor(fgcolor);
-        g.drawString(name, insets.left, insets.top + nheight);
+        g.drawString(name, insets.left, insets.top + (nheight * 4 / 5)); //insets.top + nheight);
 
         if (paintVars) {
             paintActors(g, variables);
@@ -191,6 +216,9 @@ public class ClassActor extends Actor implements ActorContainer {
      * @return
      */
     public Point reserve(Actor actor) {
+        reserved = actor;
+        calculateSize();
+        
         Actor prev = (variables.isEmpty()) ? null : (Actor) variables
                 .lastElement();
 
@@ -200,7 +228,6 @@ public class ClassActor extends Actor implements ActorContainer {
 
         int x = getWidth() - insets.right - actor.getWidth();
 
-        reserved = actor;
         resLoc = new Point(x, y);
         Point rp = getRootLocation();
         rp.translate(x, y);
@@ -215,6 +242,20 @@ public class ClassActor extends Actor implements ActorContainer {
         variables.addElement(reserved);
         reserved.setParent(this);
         totalVarCount++;
+        calculateSize();
+    }
+
+    public void repositionVariableActors() {
+        for (int i = 0; i < variables.size(); i++) {
+            Actor prev = i == 0 ? null : (Actor) variables.get(i - 1);
+            Actor actor = (Actor) variables.get(i);
+            int y = ((prev == null) ? insets.top + nheight + margin * 2
+                    + borderWidth : prev.getHeight() + prev.getY())
+                    + actorMargin;
+
+            int x = getWidth() - insets.right - actor.getWidth();
+            actor.setLocation(x, y);
+        }
     }
 
     /* (non-Javadoc)

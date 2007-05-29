@@ -4,17 +4,8 @@ public class UMInteraction {
 	
     public UMInteraction(){}
     
-    public UMInteraction createUserModel(String type,String userName,String password, String
-            group, String sessionID){
-        UMInteraction userModel;
-        if (type.equals("basic")){
-            userModel = new BasicInternalUM();
-        } else if (type.equals("adapt2")){
-            userModel = new Adapt2Interaction(userName, password, group, sessionID);
-        } else {
-            userModel = new DummyUM();
-        }
-        return userModel;
+    UMInteraction createUM(){
+        return new DummyUM();
     }
 	/*
 	 * Register user for the first time in the UM system
@@ -45,9 +36,5 @@ public class UMInteraction {
      public boolean isConceptKnown(int conceptID){
         return false;
     }
-
-     public void saveUM(){
-      
-     }
- 
+	
 }

@@ -274,7 +274,6 @@ public class TreeInterpreter implements Interpreter {
                         + ie.getSourceInformation().getColumn();
 
             } else {
-
                 code += "" + 0 + Code.LOC_DELIM + 0 + Code.LOC_DELIM + 0
                         + Code.LOC_DELIM + 0;
             }
@@ -285,33 +284,34 @@ public class TreeInterpreter implements Interpreter {
         } catch (Error e) {
             DebugUtil.handleThrowable(e);
 
-            String code = "" + Code.ERROR + Code.DELIM + "<H1>Error</H1><BR>";
+            String code = "" + Code.ERROR + Code.DELIM + "<h1>Error</h1><p>";
 
             if (e instanceof NoClassDefFoundError) {
                 code += bundle.getString("j3.no.class.def.found");
             }
 
             if (e.getCause() != null) {
-                code += removeBrackets(e.getCause().toString()) + "<BR>";
+                code += removeBrackets(e.getCause().toString()) + "<br>";
                 //String cause = MCodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
                 //cause = MCodeUtilities.replace(cause, ">", "&gt;");
-                //code += cause + "<BR>";
+                //code += cause + "<br>";
             }
             if (e.getMessage() != null && !e.getMessage().equals("")) {
-                code += removeBrackets(e.getMessage()) + "<BR>";
+                code += removeBrackets(e.getMessage()) + "<br>";
                 //String message = MCodeUtilities.replace(e.getMessage(), "<", "&lt;");
                 //message = MCodeUtilities.replace(message, ">", "&gt;");
                 //code += message;
 
             }
-            code = MCodeUtilities.replace(code, "\n", "<BR>");
+            code = MCodeUtilities.replace(code, "\n", "<br>");
             code = MCodeUtilities.replace(code, "\r", "");
 
             if (code
-                    .equals("" + Code.ERROR + Code.DELIM + "<H1>Error</H1><BR>")) {
+                    .equals("" + Code.ERROR + Code.DELIM + "<h1>Error</h1><p>")) {
                 code += internalError(e);
+            } else {
+                code += "</p>";
             }
-
             code += "" + Code.DELIM;
             code += "" + 0 + Code.LOC_DELIM + 0 + Code.LOC_DELIM + 0
                     + Code.LOC_DELIM + 0;
@@ -324,31 +324,33 @@ public class TreeInterpreter implements Interpreter {
             DebugUtil.handleThrowable(e);
 
             String code = "" + Code.ERROR + Code.DELIM
-                    + "<H1>Exception</H1><BR>";
+                    + "<h1>Exception</h1><p>";
 
             if (e instanceof ClassNotFoundException) {
                 code += "Class is not found: ";
             }
 
             if (e.getCause() != null) {
-                code += removeBrackets(e.getCause().toString()) + "<BR>";
+                code += removeBrackets(e.getCause().toString()) + "<br>";
                 //String cause = MCodeUtilities.replace(e.getCause().toString(), "<", "&lt;");
                 //cause = MCodeUtilities.replace(cause, ">", "&gt;");
-                //code += cause + "<BR>";
+                //code += cause + "<br>";
             }
             if (e.getMessage() != null && !e.getMessage().equals("")) {
-                code += removeBrackets(e.getMessage()) + "<BR>";
+                code += removeBrackets(e.getMessage()) + "<br>";
                 //String message = MCodeUtilities.replace(e.getMessage(), "<", "&lt;");
                 //message = MCodeUtilities.replace(message, ">", "&gt;");
                 //code += message;
             }
 
-            code = MCodeUtilities.replace(code, "\n", "<BR>");
+            code = MCodeUtilities.replace(code, "\n", "<br>");
             code = MCodeUtilities.replace(code, "\r", "");
 
             if (code.equals("" + Code.ERROR + Code.DELIM
-                    + "<H1>Exception</H1><BR>")) {
+                    + "<h1>Exception</h1><p>")) {
                 code += internalError(e);
+            } else {
+                code += "</p>";
             }
 
             code += "" + Code.DELIM;
@@ -370,14 +372,14 @@ public class TreeInterpreter implements Interpreter {
 
     public String internalError(Throwable e) {
         String code = "";
-        code += "<P>" + bundle.getString("j3.internal_error") + "</P>";
-        code += "<P>";
+        code += bundle.getString("j3.internal_error") + "</p>";
+        code += "<p>";
         StackTraceElement[] st = e.getStackTrace();
         int n = st.length;
         for (int i = 0; i < n; i++) {
-            code += st[i].toString() + "<BR>";
+            code += st[i].toString() + "<br>";
         }
-        code += "</P>";
+        code += "</p>";
         return code;
     }
 
@@ -968,7 +970,7 @@ public class TreeInterpreter implements Interpreter {
             i++;
         }
 
-        // Hack for providing e-code for "outside" classes
+        // Hack for providing m-code for "outside" classes
         // EvaluationVisitor will display PARAMETERS and MD just before SMCC
         EvaluationVisitor.setInside();
 
@@ -990,6 +992,7 @@ public class TreeInterpreter implements Interpreter {
                 }
             }
         }
+        
         //TODO: if one of the parameters is null this won't work! Moved above
         /*
          Class[] typesAux = new Class[params.length];
@@ -1266,7 +1269,6 @@ public class TreeInterpreter implements Interpreter {
             Vector redirectBuffer = (Vector) MCodeUtilities.redirectBufferStack
                     .pop();
             MCodeUtilities.writeRedirectBuffer(redirectBuffer);
-
         }
         if (cpd.arguments != null) {
             Visitor v = new EvaluationVisitor(ctx);
@@ -1286,12 +1288,19 @@ public class TreeInterpreter implements Interpreter {
                 MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
                         + Code.DELIM + auxCounter + Code.DELIM
                         + MCodeGenerator.locationToString(n));
-
+                
                 result[i++] = n.acceptVisitor(v);
-
+                Class typeClass = NodeProperties.getType(n);
+                String type = null;
+                if (typeClass != null) {
+                    type = typeClass.getName();
+                }
+                if (type == null && result[i - 1] != null) {
+                    result[i - 1].getClass().getName();
+                }
                 MCodeUtilities.write("" + Code.P + Code.DELIM + auxCounter
                         + Code.DELIM + MCodeUtilities.getValue(result[i - 1])
-                        + Code.DELIM + result[i - 1].getClass().getName());
+                        + Code.DELIM + type);
 
             }
             MCodeUtilities.setRedirectOutput(false);
