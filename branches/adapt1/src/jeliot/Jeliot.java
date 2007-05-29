@@ -220,20 +220,20 @@ public class Jeliot {
      * Defines the user model to use
      * Now either BasicInternal or BasicInternal+Adapt2
      */
-    private UMInteraction userModel = new UMInteraction();
+    private static UMInteraction userModel = new UMInteraction();
     
     /**
      * username, useful for adaptation
      */
-    protected String userName = "";
+    protected String userName;
     /**
      * sessionID useful for adaptation;
      */
-    protected String sessionID = "";
+    protected String sessionID;
     /**
      * password useful or NOT for adaptation;
      */
-    protected String password = "";
+    protected String password ="";
     /**
      * group the "userNAme" belongs to. Useful or NOT for adaptation;
      */
@@ -270,7 +270,7 @@ public class Jeliot {
         }
 
         //TODO: let the user or a "smart" alg. to decide what UM to use
-
+        userModel = new UMInteraction();
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
         hv = new HistoryView(codePane, userDirectory);
 
@@ -280,7 +280,6 @@ public class Jeliot {
 
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad,
                 userDirectory, callTree, hv);
-       
 
     }
 
@@ -396,7 +395,7 @@ public class Jeliot {
     public void cleanUp() {
         //clear the remnants of previous animation
         theatre.cleanUp();
-        callTree.initialize();
+        callTree.cleanUp();
         hv.initialize();
     }
 
@@ -449,7 +448,7 @@ public class Jeliot {
                 PipedWriter pw = new PipedWriter(pr);
                 mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
                         new BufferedReader(pr), new PrintWriter(
-                                pw, true), avinteractionEngine);
+                                pw, true), avinteractionEngine, userModel);
                 MCodeUtilities
                         .addRegisteredPrePrimaryMCodeConnections(mCodeInterpreterForAVInteraction);
             } catch (Exception e) {
@@ -458,7 +457,7 @@ public class Jeliot {
                 }
             }
         }
-        setUserModel();
+
         // create the main loop for visualization
         controller = new ThreadController(new Runnable() {
 
@@ -493,16 +492,13 @@ public class Jeliot {
                 }
             }
         });
-
-        callTreeThread.setName("callTreeThread");
         callTreeThread.start();
 
         //a new thread for AVInteraction interpreter
         if (this.gui.isAskingQuestions()) {
             avInteractionThread = new Thread(new Runnable() {
-            	
+
                 public void run() {
-                	
                     try {
                         mCodeInterpreterForAVInteraction.execute();
                     } catch (Exception e) {
@@ -512,7 +508,6 @@ public class Jeliot {
                     }
                 }
             });
-            avInteractionThread.setName("avInteractionThread");
             avInteractionThread.start();
         }
 
@@ -958,16 +953,23 @@ public class Jeliot {
      */
     public int getSelectedTabIndex() {
         return gui.getSelectedIndexInTabbedPane();
-    
     }
     
-    void setUserModel(){
-        userModel.saveUM();
-        userModel = userModel.createUserModel(userModelType, userName, password, group, sessionID);
-        if(mCodeInterpreterForAVInteraction != null)
-            mCodeInterpreterForAVInteraction.setUserModel(userModel);
-        if(mCodeInterpreterForTheater != null)
-            mCodeInterpreterForTheater.setUserModel(userModel);
-        userModel.userLogin(userName, password);
+    public void setUserModel(String type){
+    	if (type.equals("none") || type.equals("")){
+    		userModel = null;
+    	} else if (type.equals("basic")){
+    		userModel = new BasicInternalUM();
+    	} else if (type.equals("adapt2")){
+    		userModel = new Adapt2Interaction(userName, password, group, sessionID);
+    	}
+    	return;
     }
+    
+	public static synchronized UMInteraction getUMInstance(){
+		if (userModel == null){
+			throw new RuntimeException("User model is not initialized!");
+		}
+		return userModel; 
+	}
 }

@@ -5,11 +5,17 @@ import jeliot.theater.ArrayActor;
 
  /**
   * The objects of this class represents an array of n-dimensions.
+  * 
   * @author Pekka Uronen
   * @author Niko Myller
   */
 public class ArrayInstance extends Instance {
 
+    /**
+     * 
+     */
+    private Variable arrayLenghtVariable;
+    
     /**
      * The array object.
      */
@@ -59,6 +65,8 @@ public class ArrayInstance extends Instance {
 
         setType(type);
 
+        this.arrayLenghtVariable = new Variable("length", "int");
+        arrayLenghtVariable.assign(new Value("" + length, "int"));
         
         this.componentType = componentType;
         this.array = new VariableInArray[length];
@@ -135,6 +143,14 @@ public class ArrayInstance extends Instance {
      */
     public String getComponentType() {
         return componentType;
+    }
+
+    public Variable getArrayLenghtVariable() {
+        return arrayLenghtVariable;
+    }
+
+    public void setArrayLenghtVariable(Variable arrayLenght) {
+        this.arrayLenghtVariable = arrayLenght;
     }
 
 }

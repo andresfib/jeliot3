@@ -2,6 +2,12 @@ package jeliot.adapt;
 
 public class DummyUM extends UMInteraction {
 
+	private static UMInteraction userModel;
+	
+	protected DummyUM(){
+		
+	}
+	
     public boolean isConceptKnown(int conceptID) {
         // TODO Auto-generated method stub
         return false;

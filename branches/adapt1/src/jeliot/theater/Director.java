@@ -15,6 +15,7 @@ import jeliot.lang.ArrayInstance;
 import jeliot.lang.MethodFrame;
 import jeliot.lang.ObjectFrame;
 import jeliot.lang.Reference;
+import jeliot.lang.StringInstance;
 import jeliot.lang.Value;
 import jeliot.lang.Variable;
 import jeliot.lang.VariableInArray;
@@ -22,10 +23,12 @@ import jeliot.mcode.Highlight;
 import jeliot.mcode.InterpreterError;
 import jeliot.mcode.MCodeInterpreter;
 import jeliot.mcode.MCodeUtilities;
+import jeliot.mcode.TheaterMCodeInterpreter;
 import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
+import jeliot.util.Util;
 
 /**
  * Directs the program animation. Contains the commands to visualize
@@ -184,6 +187,14 @@ public class Director {
         theatre.addPassive(lat);
 
         /*
+         StringInstance si = new StringInstance(""+System.identityHashCode(new String("TeStI")), "java.lang.String");
+         si.setStringValue(new Value(new String("TeStI"), "java.lang.String"));
+         StringObjectActor soa =  factory.produceStringActor(si);  
+         manager.reserve(soa);
+         manager.bind(soa);
+         */
+
+        /*
          * Excecution of the program code takes place here.
          * If animation is finished because of edit button or
          * rewind button is pushed before the animation is finished
@@ -238,7 +249,6 @@ public class Director {
      */
     public void highlightExpression(Highlight h) {
         if (h != null) {
-
             if (runUntilLine >= h.getBeginLine()
                     && runUntilLine <= h.getEndLine()) {
                 runUntilLine = -1;
@@ -313,8 +323,10 @@ public class Director {
                 controller.checkPoint();
             }
 
-            if (h != null && jeliot.getSelectedTabIndex() != 2)
+            if (h != null && jeliot.getSelectedTabIndex() != 2
+                    && !h.equals(new Highlight(0, 0, 0, 0))) {
                 jeliot.highlightStatement(h);
+            }
         }
     }
 
@@ -354,6 +366,7 @@ public class Director {
             if (!scratchStack.empty()) {
                 currentScratch = (Scratch) scratchStack.pop();
             }
+            theatre.getManager().validateTheater();
         }
     }
 
@@ -437,6 +450,8 @@ public class Director {
         // Re-activate the theatre after animation.
         release();
 
+        theatre.getManager().validateTheater();
+
         return expr;
     }
 
@@ -474,6 +489,9 @@ public class Director {
 
             // De-activate the theatre.
             release();
+
+            theatre.getManager().validateTheater();
+
         }
     }
 
@@ -492,7 +510,8 @@ public class Director {
         highlightExpression(h);
 
         // Prepare the actors.
-        ValueActor resultAct = factory.produceValueActor(result);
+        ValueActor resultAct;
+
         OperatorActor operatorAct = factory.produceBinOpResActor(operator);
 
         // Prepare the theatre for animation.
@@ -500,7 +519,6 @@ public class Director {
 
         // Reserve places for the equals sign and the result.
         Point operatorLoc = expr.reserve(operatorAct);
-        Point resultLoc = expr.reserve(resultAct);
 
         // Make the equals sign (operator) appear.
         engine.showAnimation(operatorAct.appear(operatorLoc));
@@ -508,9 +526,33 @@ public class Director {
 
         updateCapture();
 
-        // Make the result appear.
-        engine.showAnimation(resultAct.appear(resultLoc));
+        if (result instanceof Reference
+                && Util.visualizeStringsAsObjects()
+                && MCodeUtilities.resolveType(result.getType()) == MCodeUtilities.STRING
+                && ((Reference) result).getInstance() != null) {
+            Reference ref = (Reference) result;
+            StringInstance si = (StringInstance) ref.getInstance();
+            StringObjectActor soa = factory.produceStringActor(si);
+            Point loc = manager.reserve(soa);
+            soa.setLocation(loc);
+            si.setActor(soa);
+            manager.bind(soa);
+            capture();
+            engine.showAnimation(soa.appear(loc));
+            updateCapture();
+            resultAct = factory.produceReferenceActor(ref);
+            resultAct.setLocation(soa.getRootLocation());
+            Point resultLoc = expr.reserve(resultAct);
+            engine.showAnimation(resultAct.fly(resultLoc));
+            ref.setActor(resultAct);
+            theatre.getManager().validateTheater();
+        } else {
+            resultAct = factory.produceValueActor(result);
+            Point resultLoc = expr.reserve(resultAct);
+            engine.showAnimation(resultAct.appear(resultLoc));
+        }
         expr.bind(resultAct);
+        // Make the result appear.
 
         updateCapture();
 
@@ -527,6 +569,8 @@ public class Director {
 
         // De-activate the theatre.
         release();
+
+        theatre.getManager().validateTheater();
 
         Value val = (Value) result.clone();
         ValueActor rAct = factory.produceValueActor(val);
@@ -646,6 +690,8 @@ public class Director {
         // De-activate the theatre.
         release();
 
+        theatre.getManager().validateTheater();
+
         ExplanationGenerator eg = ExplanationGenerator.getInstance();
         if (eg != null) {
             eg.addExplanation(actor.toString(), h);
@@ -681,6 +727,9 @@ public class Director {
             n = args.length;
         }
         SMIActor actor = factory.produceSMIActor(methodName, n);
+
+        theatre.getManager().validateTheater();
+
         return animateMInvocation(methodName, args, h, actor);
     }
 
@@ -736,6 +785,8 @@ public class Director {
         // De-activate the theatre.
         release();
 
+        theatre.getManager().validateTheater();
+
         ExplanationGenerator eg = ExplanationGenerator.getInstance();
         if (eg != null) {
             eg.addExplanation(actor.toString(), h);
@@ -787,6 +838,7 @@ public class Director {
         thisVariable.setActor(thisVariableActor);
         stage.reserve(thisVariableActor);
         stage.bind();
+        theatre.getManager().validateTheater();
 
         if (args != null && args.length > 0) {
             n = args.length;
@@ -866,6 +918,8 @@ public class Director {
             }
         }
 
+        theatre.getManager().validateTheater();
+
         updateCapture();
 
         if (currentScratch != null) {
@@ -943,6 +997,7 @@ public class Director {
                 stage.reserve(varact[i]);
                 //stage.extend();
                 stage.bind();
+                theatre.getManager().validateTheater();
             }
 
             Animation a = stage.extend();
@@ -1011,7 +1066,7 @@ public class Director {
 
         //To stop the animation before a method is finished if stepping is used.
         highlightForMessage(null);
-        
+
         // Get the stage and remove it.
         MethodStage stage = ((MethodFrame) frameStack.pop()).getMethodStage();
         manager.removeMethodStage(stage);
@@ -1111,6 +1166,7 @@ public class Director {
         bubble.reserve(castAct);
 
         Point bubbleLoc = stage.reserve(bubble);
+        theatre.getManager().validateTheater();
         Animation a = stage.extend();
         if (a != null) {
             engine.showAnimation(a);
@@ -1163,7 +1219,7 @@ public class Director {
         Animation a = null;
         Point loc = fromActor.getRootLocation();
         if (loc.y == TheaterManager.getConstantBoxPositionY()
-                && loc.x == TheaterManager.constantBoxPositionX) {
+                && loc.x == TheaterManager.CONSTANT_BOX_POSITION_X) {
 
             a = fromActor.appear(loc);
         }
@@ -1294,6 +1350,7 @@ public class Director {
         MethodStage stage = currentMethodFrame.getMethodStage();
 
         Point loc = stage.reserve(actor);
+        theatre.getManager().validateTheater();
         Animation a = stage.extend();
         if (a != null) {
             engine.showAnimation(a);
@@ -1303,6 +1360,7 @@ public class Director {
 
         engine.showAnimation(actor.appear(loc));
         stage.bind();
+        theatre.getManager().validateTheater();
 
         release();
 
@@ -1329,23 +1387,56 @@ public class Director {
         ObjectStage stage = of.getObjectStage();
 
         Point loc = stage.reserve(actor);
+        theatre.getManager().validateTheater();
         capture();
 
         engine.showAnimation(actor.appear(loc));
         stage.bind();
+        theatre.getManager().validateTheater();
 
         release();
 
         return v;
     }
 
+    public void introduceLiteral(Value literal) {
+        introduceLiteral(literal, null);
+    }
+
     /**
      * @param literal
      */
-    public void introduceLiteral(Value literal) {
-        ValueActor valact = factory.produceValueActor(literal);
-        valact.setLocation(cbox.getRootLocation());
-        literal.setActor(valact);
+    public void introduceLiteral(Value literal, Highlight h) {
+        if (h != null) {
+            highlightExpression(h);
+        }
+        if (literal instanceof Reference
+                && Util.visualizeStringsAsObjects()
+                && MCodeUtilities.resolveType(literal.getType()) == MCodeUtilities.STRING
+                && ((Reference) literal).getInstance() != null) {
+            Reference ref = (Reference) literal;
+            StringInstance si = (StringInstance) ref.getInstance();
+            StringObjectActor soa = factory.produceStringActor(si);
+            soa.setLocation(cbox.getRootLocation());
+            si.setActor(soa);
+            capture();
+            engine.showAnimation(soa.appear(cbox.getRootLocation()));
+            updateCapture();
+            Point loc = manager.reserve(soa);
+            Point oldLoc = soa.getRootLocation();
+            manager.bind(soa);
+            soa.setLocation(oldLoc);
+            engine.showAnimation(soa.fly(loc));
+            theatre.getManager().validateTheater();
+            ReferenceActor ra = factory.produceReferenceActor(ref);
+            ra.setLocation(soa.getRootLocation());
+            release();
+            ref.setActor(ra);
+        } else {
+            ValueActor valact = factory.produceValueActor(literal);
+            valact.setLocation(cbox.getRootLocation());
+            literal.setActor(valact);
+        }
     }
 
     /**
@@ -1788,9 +1879,9 @@ public class Director {
                 msg += message[i] + "\n";
             }
 
-            JOptionPane.showMessageDialog(null, msg, messageBundle
+            JOptionPane.showMessageDialog(theatre, msg, messageBundle
                     .getString("dialog.message.title"),
-                    JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.INFORMATION_MESSAGE);
         } else {
             MessageActor actor = factory.produceMessageActor(message);
             showMessage(actor, h);
@@ -2080,13 +2171,13 @@ public class Director {
     }
 
     public void openArrayInitializer(Highlight h) {
-        highlightDeclaration(h);
+        highlightForMessage(h);
         showMessage(messageBundle.getString("message.open_array_initializer"),
                 h);
     }
 
     public void closeArrayInitializer(Highlight h) {
-        highlightDeclaration(h);
+        //highlightForMessage(h);
         showMessage(messageBundle.getString("message.close_array_initializer"),
                 h);
     }
@@ -2330,6 +2421,7 @@ public class Director {
         if (animator != null) {
             highlightStatement(h);
             animator.animate(this);
+            this.output(animator.getReturnValue().getValue() + "\n");
             return animator.getReturnValue();
         }
         //TODO: Here should be an exception
@@ -2520,20 +2612,55 @@ public class Director {
         }
 
         Value val = validator.getValue();
-        ValueActor act = factory.produceValueActor(val);
-        act.setLocation(p);
-        val.setActor(act);
-        currentScratch.registerCrap(act);
-        //theatre.addActor(act);
-        ea.cut();
 
-        capture();
-        engine.showAnimation(act.appear(ea.reserve(act)));
-        release();
+        if (Util.visualizeStringsAsObjects()
+                && MCodeUtilities.resolveType(val.getType()) == MCodeUtilities.STRING) {
+            String value = val.getValue();
+            val = ((TheaterMCodeInterpreter) this.mCodeInterpreter)
+                    .createStringReference(val.getValue(), val.getType());
+            Reference ref = (Reference) val;
+            ref.setValue(value);
+            StringInstance si = (StringInstance) ref.getInstance();
+            StringObjectActor soa = factory.produceStringActor(si);
+            Point loc = manager.reserve(soa);
+            soa.setLocation(loc);
+            si.setActor(soa);
+            manager.bind(soa);
+            capture();
+            engine.showAnimation(soa.appear(loc));
+            theatre.getManager().validateTheater();
+            updateCapture();
+            ValueActor resultAct = factory.produceReferenceActor(ref);
+            resultAct.setLocation(soa.getRootLocation());
 
-        ea.bind(act);
+            ref.setActor(resultAct);
+            currentScratch.registerCrap(resultAct);
+            ea.cut();
 
-        return val;
+            capture();
+            engine.showAnimation(resultAct.fly(ea.reserve(resultAct)));
+            release();
+
+            ea.bind(resultAct);
+
+            return val;
+        } else {
+
+            ValueActor act = factory.produceValueActor(val);
+            act.setLocation(p);
+            val.setActor(act);
+            currentScratch.registerCrap(act);
+            //theatre.addActor(act);
+            ea.cut();
+
+            capture();
+            engine.showAnimation(act.appear(ea.reserve(act)));
+            release();
+
+            ea.bind(act);
+
+            return val;
+        }
     }
 
     /**
@@ -2597,6 +2724,9 @@ public class Director {
         for (int i = 0; i < n; ++i) {
             actor.bind(argact[i]);
         }
+
+        theatre.getManager().validateTheater();
+
         release();
 
         highlightExpression(h);
@@ -2606,9 +2736,9 @@ public class Director {
 
         Point loc = manager.reserve(arrayAct);
         capture();
+        manager.bind(arrayAct);
         engine.showAnimation(arrayAct.appear(loc));
         release();
-        manager.bind(arrayAct);
 
         if (level1 != null) {
             for (int i = 0; i < level1.length; i++) {
@@ -2622,8 +2752,10 @@ public class Director {
                 Point level1Location = manager.reserve(level1ArrayActor);
                 capture();
                 engine.showAnimation(level1ArrayActor.appear(level1Location));
+                theatre.getManager().validateTheater();
                 release();
                 manager.bind(level1ArrayActor);
+                theatre.getManager().validateTheater();
 
                 //Create reference
                 Reference level1Ref = new Reference(level1[i]);
@@ -2864,7 +2996,8 @@ public class Director {
      */
     public void introduceArrayLength(Value length, ArrayInstance ai) {
         ValueActor lengthAct = factory.produceValueActor(length);
-        lengthAct.setLocation(ai.getActor().getRootLocation());
+        lengthAct.setLocation(((ArrayActor) ai.getActor()).getArrayLength()
+                .getValue().getRootLocation());
         length.setActor(lengthAct);
     }
 
@@ -2873,7 +3006,6 @@ public class Director {
      * @param h
      */
     public void showObjectCreation(ObjectFrame of, Highlight h) {
-
         highlightExpression(h);
 
         ObjectStage os = factory.produceObjectStage(of);
@@ -2881,17 +3013,41 @@ public class Director {
 
         Point loc = manager.reserve(os);
         capture();
+        manager.bind(os);
         engine.showAnimation(os.appear(loc));
         release();
-        manager.bind(os);
-
     }
 
     /**
      * @param actor
      */
     public void removeInstance(InstanceActor actor) {
+        showDisappearing(actor);
         manager.removeInstance(actor);
+        theatre.getManager().validateTheater();
+    }
+
+    /**
+     * 
+     * @param actor
+     */
+    public void removeClass(ClassActor actor) {
+        showDisappearing(actor);
+        manager.removeClass(actor);
+        theatre.getManager().validateTheater();
+    }
+
+    /**
+     * 
+     * @param actor
+     */
+    public void showDisappearing(Actor actor) {
+        Animation a = actor.disappear();
+        if (a != null) {
+            capture();
+            engine.showAnimation(a);
+            release();
+        }
     }
 
     /*
@@ -2943,15 +3099,19 @@ public class Director {
         Point loc = manager.reserve(ca);
         capture();
         engine.showAnimation(ca.appear(loc));
+        theatre.getManager().validateTheater();
         release();
         manager.bind(ca);
+        theatre.getManager().validateTheater();
 
         ListIterator li = c.getVariables();
 
         while (li.hasNext()) {
             Variable v = (Variable) li.next();
+            System.out.println("!!!" + v.getName());
             declareClassVariable(c, v, v.getValue());
         }
+        theatre.getManager().validateTheater();
     }
 
     /**
@@ -2969,6 +3129,7 @@ public class Director {
         var.setActor(actor);
 
         Point loc2 = ca.reserve(actor);
+        theatre.getManager().validateTheater();
 
         Animation a = ca.extend();
         if (a != null) {
@@ -2979,8 +3140,8 @@ public class Director {
 
         engine.showAnimation(actor.appear(loc2));
         ca.bind();
-
         release();
+        theatre.getManager().validateTheater();
 
         if (val != null && var.isFinal()) {
             introduceLiteral(val);

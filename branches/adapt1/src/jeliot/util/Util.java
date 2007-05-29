@@ -22,6 +22,11 @@ public class Util {
     private Util() {
     }
 
+    public static boolean visualizeStringsAsObjects() {
+        return ResourceBundles.getJeliotUserProperties().getBooleanProperty(
+                "show_strings_as_objects");
+    }
+
     /**
      * @return
      */
@@ -45,11 +50,12 @@ public class Util {
     }
 
     public static URL getResourceURL(String resource, Class loader) {
-        URL imageURL = Thread.currentThread().getContextClassLoader().getResource(resource);
+        URL imageURL = Thread.currentThread().getContextClassLoader()
+                .getResource(resource);
         if (imageURL == null) {
             imageURL = (loader.getClassLoader().getResource(resource));
         }
         return imageURL;
     }
-    
+
 }

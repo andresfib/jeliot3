@@ -3,7 +3,6 @@ package jeliot.mcode;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Stack;
@@ -11,7 +10,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.util.DebugUtil;
-
+import jeliot.util.Util;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
 import koala.dynamicjava.tree.Node;
@@ -21,7 +20,7 @@ import koala.dynamicjava.tree.Node;
  * extraction and interpretation. 
  *  
  * @author Niko Myller
- * @author Andrï¿½s Moreno
+ * @author Andrés Moreno
  * 
  * @see koala.dynamicjava.interpreter.TreeInterpreter
  * @see koala.dynamicjava.interpreter.EvaluationVisitor
@@ -259,6 +258,9 @@ public class MCodeUtilities {
      */
     private static Vector registeredSecondaryMCodeConnections = new Vector();
 
+    /**
+     * 
+     */
     private static Vector registeredMCodePreProcessors = new Vector();
 
     /**
@@ -444,6 +446,10 @@ public class MCodeUtilities {
      * @return
      */
     public static boolean isPrimitive(String type) {
+        if (Util.visualizeStringsAsObjects()
+                && resolveType(type) == MCodeUtilities.STRING) {
+            return false;
+        }
         if (resolveType(type) != MCodeUtilities.REFERENCE
                 && resolveType(type) != MCodeUtilities.VOID) {
             return true;
@@ -577,222 +583,108 @@ public class MCodeUtilities {
             return ADD;
         }
 
-        //Substract expression (- sign)
+            //Substract expression (- sign)
         case Code.SE: {
             return SUBSTRACT;
         }
 
-        //Greater than expression (> sign)
+            //Greater than expression (> sign)
         case Code.GT: {
             return GT;
         }
 
-        //Logical AND expression (&& sign)
+            //Logical AND expression (&& sign)
         case Code.AND: {
             return ANDAND;
         }
 
-        // Logical Xor Expression (^ sign)
+            // Logical Xor Expression (^ sign)
         case Code.XOR: {
             return LXOR;
         }
 
-        //Arithmetic multiplication (* sign)
+            //Arithmetic multiplication (* sign)
         case Code.ME: {
             return MULT;
         }
 
-        //Arithmetic division (/ sign)
+            //Arithmetic division (/ sign)
         case Code.DE: {
             return DIV;
         }
 
-        //Arithmetic remainder (% sign)
+            //Arithmetic remainder (% sign)
         case Code.RE: {
             return MOD;
         }
 
-        // Or Expression (|| sign)
+            // Or Expression (|| sign)
         case Code.OR: {
             return OROR;
         }
 
-        // Equal Expression (== sign)
+            // Equal Expression (== sign)
         case Code.EE: {
             return EQEQ;
         }
 
-        // Not Equal Expression (!= sign)
+            // Not Equal Expression (!= sign)
         case Code.NE: {
             return NOTEQ;
         }
 
-        // Less Expression (< sign)
+            // Less Expression (< sign)
         case Code.LE: {
             return LT;
         }
 
-        // Less or Equal Expression (<= sign)
+            // Less or Equal Expression (<= sign)
         case Code.LQE: {
             return LTEQ;
         }
 
-        // Greater or Equal Expression (>= sign)
+            // Greater or Equal Expression (>= sign)
         case Code.GQT: {
             return GTEQ;
         }
 
-        // Bitwise Or Expression (| sign)
+            // Bitwise Or Expression (| sign)
         case Code.BITOR: {
             return OR;
         }
 
-        // Bitwise Xor Expression (^ sign)
+            // Bitwise Xor Expression (^ sign)
         case Code.BITXOR: {
             return XOR;
         }
 
-        // Bitwise And Expression (& sign)
+            // Bitwise And Expression (& sign)
         case Code.BITAND: {
             return AND;
         }
 
-        // Bitwise Left Shift Expression (<< sign)
+            // Bitwise Left Shift Expression (<< sign)
         case Code.LSHIFT: {
             return LSHIFT;
         }
 
-        // Bitwise Right Shift Expression (>> sign)
+            // Bitwise Right Shift Expression (>> sign)
         case Code.RSHIFT: {
             return RSHIFT;
         }
 
-        // Bitwise Unsigned Right Shift Expression (>>> sign)
+            // Bitwise Unsigned Right Shift Expression (>>> sign)
         case Code.URSHIFT: {
             return URSHIFT;
         }
 
-        //This is an error.
+            //This is an error.
         default: {
             return -1;
         }
         }
     }
 
-    /**
-     * @param operator
-     * @return
-     */
-    public static int unresolveBinOperator(int operator) {
-        switch (operator) {
-        //Add expression (+ sign)
-        case ADD: {
-            return Code.AE;
-        }
-
-        //Substract expression (- sign)
-        case SUBSTRACT: {
-            return Code.SE;
-        }
-
-        //Greater than expression (> sign)
-        case GT: {
-            return Code.GT;
-        }
-
-        //Logical AND expression (&& sign)
-        case ANDAND: {
-            return Code.AND;
-        }
-
-        // Logical Xor Expression (^ sign)
-        case LXOR: {
-            return Code.XOR;
-        }
-
-        //Arithmetic multiplication (* sign)
-        case MULT: {
-            return Code.ME;
-        }
-
-        //Arithmetic division (/ sign)
-        case DIV: {
-            return Code.DE;
-        }
-
-        //Arithmetic remainder (% sign)
-        case MOD: {
-            return Code.RE;
-        }
-
-        // Or Expression (|| sign)
-        case OROR: {
-            return Code.OR;
-        }
-
-        // Equal Expression (== sign)
-        case EQEQ: {
-            return Code.EE;
-        }
-
-        // Not Equal Expression (!= sign)
-        case NOTEQ: {
-            return Code.NE;
-        }
-
-        // Less Expression (< sign)
-        case LT: {
-            return Code.LE;
-        }
-
-        // Less or Equal Expression (<= sign)
-        case LTEQ: {
-            return Code.LQE;
-        }
-
-        // Greater or Equal Expression (>= sign)
-        case GTEQ: {
-            return Code.GQT;
-        }
-
-        // Bitwise Or Expression (| sign)
-        case OR: {
-            return Code.BITOR;
-        }
-
-        // Bitwise Xor Expression (^ sign)
-        case XOR: {
-            return Code.BITXOR;
-        }
-
-        // Bitwise And Expression (& sign)
-        case AND: {
-            return Code.BITAND;
-        }
-
-        // Bitwise Left Shift Expression (<< sign)
-        case LSHIFT: {
-            return Code.LSHIFT;
-        }
-
-        // Bitwise Right Shift Expression (>> sign)
-        case RSHIFT: {
-            return Code.RSHIFT;
-        }
-
-        // Bitwise Unsigned Right Shift Expression (>>> sign)
-        case URSHIFT: {
-            return Code.URSHIFT;
-        }
-
-        //This is an error.
-        default: {
-            return -1;
-        }
-        }
-    }
-
-    
     /**
      * @param operator
      * @return
@@ -805,42 +697,42 @@ public class MCodeUtilities {
             return NOT;
         }
 
-        //Aritmetic minus expression (- sign)
+            //Aritmetic minus expression (- sign)
         case Code.MINUS: {
             return MINUS;
         }
 
-        //Aritmetic plus expression (+ sign)
+            //Aritmetic plus expression (+ sign)
         case Code.PLUS: {
             return PLUS;
         }
 
-        //PostIncrement expression (++ sign)
+            //PostIncrement expression (++ sign)
         case Code.PIE: {
             return POSTPLUSPLUS;
         }
 
-        //PreIncrement expression (sign ++)
+            //PreIncrement expression (sign ++)
         case Code.PRIE: {
             return PLUSPLUS;
         }
 
-        //PostDecrement expression (-- sign)
+            //PostDecrement expression (-- sign)
         case Code.PDE: {
             return POSTMINUSMINUS;
         }
 
-        //PreDecrement expression (sign --)
+            //PreDecrement expression (sign --)
         case Code.PRDE: {
             return MINUSMINUS;
         }
 
-        //Complement expression (~ sign)
+            //Complement expression (~ sign)
         case Code.COMP: {
             return COMP;
         }
 
-        //This is an error.
+            //This is an error.
         default: {
             return -1;
         }
@@ -854,19 +746,19 @@ public class MCodeUtilities {
     public static boolean isUnary(int operator) {
         switch (operator) {
         case Code.COMP:
-        //Complement expression
+            //Complement expression
         case Code.MINUS:
-        //Unary minus expression
+            //Unary minus expression
         case Code.PLUS:
-        //Unary plus expression
+            //Unary plus expression
         case Code.NO:
-        //Unary not expression
+            //Unary not expression
         case Code.PIE:
-        //PostIncrement expression (++ sign)
+            //PostIncrement expression (++ sign)
         case Code.PRIE:
-        //PreIncrement expression (sign ++)
+            //PreIncrement expression (sign ++)
         case Code.PDE:
-        //PostDecrement expression (-- sign)
+            //PostDecrement expression (-- sign)
         case Code.PRDE: { //PreDecrement expression (sign --)
             return true;
         }
@@ -885,49 +777,49 @@ public class MCodeUtilities {
         switch (operator) {
 
         case Code.BITOR:
-        // Bitwise Or Expression
+            // Bitwise Or Expression
         case Code.BITXOR:
-        // Bitwise Xor Expression
+            // Bitwise Xor Expression
         case Code.BITAND:
-        // Bitwise And Expression
+            // Bitwise And Expression
         case Code.LSHIFT:
-        // Bitwise Left Shift Expression
+            // Bitwise Left Shift Expression
         case Code.RSHIFT:
-        // Bitwise Right Shift Expression
+            // Bitwise Right Shift Expression
         case Code.URSHIFT:
-        // Bitwise Unsigned Right Shift Expression
+            // Bitwise Unsigned Right Shift Expression
 
         case Code.EE:
-        // Equal Expression
+            // Equal Expression
         case Code.NE:
-        // Not Equal Expression
+            // Not Equal Expression
         case Code.LE:
-        // Less Expression
+            // Less Expression
         case Code.GT:
-        // Greater Than
+            // Greater Than
         case Code.LQE:
-        // Less or Equal Expression
+            // Less or Equal Expression
         case Code.GQT:
-        // Greater or Equal Expression
+            // Greater or Equal Expression
 
         case Code.A:
-        // Assignment Expression
+            // Assignment Expression
 
         case Code.OR:
-        // Or Expression
+            // Or Expression
         case Code.XOR:
-        // Xor Expression
+            // Xor Expression
         case Code.AND:
-        // And Expression
+            // And Expression
 
         case Code.ME:
-        // Multiplication Expression
+            // Multiplication Expression
         case Code.RE:
-        // Remainder (mod) Expression
+            // Remainder (mod) Expression
         case Code.DE:
-        // Division Expression
+            // Division Expression
         case Code.SE:
-        // Substract Expression
+            // Substract Expression
         case Code.AE: { // Add Expression
             return true;
         }
@@ -1196,7 +1088,7 @@ public class MCodeUtilities {
      * @return string a1,a2,a11,a12,21,a22
      * @author Jerome Lacoste
      * @author www.javapractices.com
-     * @author Andrï¿½s Moreno
+     * @author Andrés Moreno
      */
     public static String getSubArrayHashCodes(Object array) {
 
@@ -1353,7 +1245,8 @@ public class MCodeUtilities {
      * 
      * @param pw
      */
-    public static void addRegisteredPrePrimaryMCodeConnections(MCodePreProcessor mCodePreProc) {
+    public static void addRegisteredPrePrimaryMCodeConnections(
+            MCodePreProcessor mCodePreProc) {
         if (!registeredMCodePreProcessors.contains(mCodePreProc)) {
             registeredMCodePreProcessors.add(mCodePreProc);
         }
@@ -1389,12 +1282,29 @@ public class MCodeUtilities {
                 || Byte.class.isInstance(o) || Long.class.isInstance(o)
                 || Short.class.isInstance(o) || Boolean.class.isInstance(o)
                 || Float.class.isInstance(o) || Character.class.isInstance(o)) {
-
+            if (Util.visualizeStringsAsObjects() && String.class.isInstance(o)) {
+                return o.toString() + "@"
+                        + Integer.toHexString(System.identityHashCode(o));
+            }
             return o.toString();
         }
-
         return Integer.toHexString(System.identityHashCode(o));
+    }
 
+    /**
+     * 
+     * @param str
+     * @return
+     */
+    public static String[] getStringValues(String str) {
+        if (str.lastIndexOf("@") >= 0) {
+            String[] strs = new String[2];
+            strs[0] = str.substring(0, str.lastIndexOf("@"));
+            strs[1] = str.substring(str.lastIndexOf("@") + 1);
+            return strs;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -1624,7 +1534,7 @@ public class MCodeUtilities {
         return "[" + getFullQualifiedClassname(c.getComponentType());
     }
     
-    /**
+        /**
      * returns a string with the long name of the Code ints 
      * e.g. Code.A ->Assignment
      */
@@ -1652,4 +1562,19 @@ public class MCodeUtilities {
          
          return result;
      }
+    /**
+     * 
+     * @param value
+     * @param type
+     * @return
+     */
+    public static String getValue(String value, String type) {
+        if (Util.visualizeStringsAsObjects() && MCodeUtilities.resolveType(type) == MCodeUtilities.STRING) {
+            String[] strs = MCodeUtilities.getStringValues(value);
+            if (strs != null) {
+                return strs[0];
+            }            
+        }
+        return value;
+    }
 }

@@ -12,7 +12,7 @@ import jeliot.theater.*;
  */
 public class ObjectFrame extends Instance {
 
-//  DOC: document!
+    //DOC: document!
 
     /**
 	 *

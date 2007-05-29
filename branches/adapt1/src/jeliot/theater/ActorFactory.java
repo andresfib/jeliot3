@@ -15,11 +15,13 @@ import jeliot.lang.ArrayInstance;
 import jeliot.lang.Instance;
 import jeliot.lang.MethodFrame;
 import jeliot.lang.ObjectFrame;
+import jeliot.lang.StringInstance;
 import jeliot.lang.Value;
 import jeliot.lang.Variable;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
+import jeliot.util.Util;
 
 /**
  * This class handles the centralized creation of the actors. This enables the centralized
@@ -33,12 +35,14 @@ public class ActorFactory {
     /**
      * The resource bundle for theater package
      */
-    static private UserProperties propertiesBundle = ResourceBundles.getTheaterUserProperties();
+    static private UserProperties propertiesBundle = ResourceBundles
+            .getTheaterUserProperties();
 
     /**
      * The resource bundle for theater package
      */
-    static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
+    static private ResourceBundle messageBundle = ResourceBundles
+            .getTheaterMessageResourceBundle();
 
     //  DOC: document!
     /**
@@ -79,44 +83,51 @@ public class ActorFactory {
     /**
      *  
      */
-    private Font messageFont = new Font(propertiesBundle.getStringProperty("font.message.family"),
-            Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.message.size")));
+    private Font messageFont = new Font(propertiesBundle
+            .getStringProperty("font.message.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.message.size")));
 
     /**
      *  
      */
-    private Font indexFont = new Font(propertiesBundle.getStringProperty("font.index.family"),
-            Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.index.size")));
+    private Font indexFont = new Font(propertiesBundle
+            .getStringProperty("font.index.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.index.size")));
 
     /**
      *  
      */
-    private Font CIFont = new Font(propertiesBundle.getStringProperty("font.CI.family"),
-            Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.CI.size")));
+    private Font CIFont = new Font(propertiesBundle
+            .getStringProperty("font.CI.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.CI.size")));
 
     /**
      *  
      */
-    private Font SMIFont = new Font(propertiesBundle.getStringProperty("font.SMI.family"),
-            Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.SMI.size")));
+    private Font SMIFont = new Font(propertiesBundle
+            .getStringProperty("font.SMI.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.SMI.size")));
 
     /**
      *  
      */
-    private Font OMIFont = new Font(propertiesBundle.getStringProperty("font.OMI.family"),
-            Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.OMI.size")));
+    private Font OMIFont = new Font(propertiesBundle
+            .getStringProperty("font.OMI.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.OMI.size")));
 
     /**
      *  
      */
-    private Font ACFont = new Font(propertiesBundle.getStringProperty("font.AC.family"), Font.BOLD,
-            Integer.parseInt(propertiesBundle.getStringProperty("font.AC.size")));
+    private Font ACFont = new Font(propertiesBundle
+            .getStringProperty("font.AC.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.AC.size")));
 
     /**
      *  
      */
-    private Font LATFont = new Font(propertiesBundle.getStringProperty("font.LAT.family"),
-            Font.BOLD, Integer.parseInt(propertiesBundle.getStringProperty("font.LAT.size")));
+    private Font LATFont = new Font(propertiesBundle
+            .getStringProperty("font.LAT.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.LAT.size")));
 
     /**
      *  
@@ -138,13 +149,15 @@ public class ActorFactory {
      *  
      */
     private Color messagebc = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.message.background")).intValue());
+            propertiesBundle.getStringProperty("color.message.background"))
+            .intValue());
 
     /**
      *  
      */
     private Color messagefc = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.message.foreground")).intValue());
+            propertiesBundle.getStringProperty("color.message.foreground"))
+            .intValue());
 
     /**
      *  
@@ -167,243 +180,394 @@ public class ActorFactory {
     /**
      *  
      */
-    private Color methodStageColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.method_stage.background")).intValue());
+    private Color methodStageColor = new Color(
+            Integer
+                    .decode(
+                            propertiesBundle
+                                    .getStringProperty("color.method_stage.background"))
+                    .intValue());
 
     /**
      *  
      */
-    private Color objectStageColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.object_stage.background")).intValue());
+    private Color objectStageColor = new Color(
+            Integer
+                    .decode(
+                            propertiesBundle
+                                    .getStringProperty("color.object_stage.background"))
+                    .intValue());
 
     /**
      *  
      */
     private Color classColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.class.background")).intValue());
+            propertiesBundle.getStringProperty("color.class.background"))
+            .intValue());
 
     /**
      *  
      */
     private Color SMIColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.SMI.background")).intValue());
+            propertiesBundle.getStringProperty("color.SMI.background"))
+            .intValue());
 
     /**
      *  
      */
     private Color variableForegroundColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.variable.foreground")).intValue());
+            propertiesBundle.getStringProperty("color.variable.foreground"))
+            .intValue());
 
     /**
      *  
      */
     private Color valueForegroundColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.value.foreground")).intValue());
+            propertiesBundle.getStringProperty("color.value.foreground"))
+            .intValue());
 
     /**
      *  
      */
     private Color OMIColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.OMI.background")).intValue());
+            propertiesBundle.getStringProperty("color.OMI.background"))
+            .intValue());
 
     /**
      *  
      */
     private Color CIColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.CI.background")).intValue());
+            propertiesBundle.getStringProperty("color.CI.background"))
+            .intValue());
 
     /**
      *  
      */
     private Color ACColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.AC.background")).intValue());
+            propertiesBundle.getStringProperty("color.AC.background"))
+            .intValue());
 
     /**
      *  
      */
     private Color bubbleColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.bubble.background")).intValue());
+            propertiesBundle.getStringProperty("color.bubble.background"))
+            .intValue());
 
     /**
      *  
      */
     private Color LATForegroundColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.LAT.foreground")).intValue());
+            propertiesBundle.getStringProperty("color.LAT.foreground"))
+            .intValue());
 
     /**
      *  
      */
     private Color LATBackgroundColor = new Color(Integer.decode(
-            propertiesBundle.getStringProperty("color.LAT.background")).intValue());
+            propertiesBundle.getStringProperty("color.LAT.background"))
+            .intValue());
 
     /**
      *  
      */
     private Color[] valColor = {
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.value.background.boolean"))
+                            .intValue()),
             new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.boolean"))
+                    propertiesBundle
+                            .getStringProperty("color.value.background.byte"))
                     .intValue()),
             new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.byte")).intValue()),
+                    propertiesBundle
+                            .getStringProperty("color.value.background.short"))
+                    .intValue()),
             new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.short")).intValue()),
+                    propertiesBundle
+                            .getStringProperty("color.value.background.int"))
+                    .intValue()),
             new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.int")).intValue()),
+                    propertiesBundle
+                            .getStringProperty("color.value.background.long"))
+                    .intValue()),
             new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.long")).intValue()),
+                    propertiesBundle
+                            .getStringProperty("color.value.background.char"))
+                    .intValue()),
             new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.char")).intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.float")).intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.double")).intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.string")).intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.value.background.reference"))
-                    .intValue())};
+                    propertiesBundle
+                            .getStringProperty("color.value.background.float"))
+                    .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.value.background.double"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.value.background.string"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.value.background.reference"))
+                            .intValue()) };
 
     /**
      *  
      */
     private Color[] varColor = {
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.boolean"))
-                    .intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.byte"))
-                    .intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.short"))
-                    .intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.int")).intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.long"))
-                    .intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.char"))
-                    .intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.float"))
-                    .intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.double"))
-                    .intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.string"))
-                    .intValue()),
-            new Color(Integer.decode(
-                    propertiesBundle.getStringProperty("color.variable.background.reference"))
-                    .intValue())};
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.boolean"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.byte"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.short"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.int"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.long"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.char"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.float"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.double"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.string"))
+                            .intValue()),
+            new Color(
+                    Integer
+                            .decode(
+                                    propertiesBundle
+                                            .getStringProperty("color.variable.background.reference"))
+                            .intValue()) };
 
     /**
      *  
      */
     private String[][] binOpImageName = {
             {
-                    propertiesBundle.getStringProperty("image.binary_operator.multiplication"),
                     propertiesBundle
-                            .getStringProperty("image.binary_operator.result.multiplication")},
+                            .getStringProperty("image.binary_operator.multiplication"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.multiplication") },
             //multiplication
-            { propertiesBundle.getStringProperty("image.binary_operator.division"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.division")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.division"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.division") },
             //division
-            { propertiesBundle.getStringProperty("image.binary_operator.remaider"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.remaider")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.remaider"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.remaider") },
             //remaider
-            { propertiesBundle.getStringProperty("image.binary_operator.addition"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.addition")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.addition"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.addition") },
             //addition
-            { propertiesBundle.getStringProperty("image.binary_operator.subtraction"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.subtraction")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.subtraction"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.subtraction") },
             //subtraction
-            { propertiesBundle.getStringProperty("image.binary_operator.left_shift"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.left_shift")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.left_shift"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.left_shift") },
             //left shift
-            { propertiesBundle.getStringProperty("image.binary_operator.right_shift"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.right_shift")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.right_shift"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.right_shift") },
             //right shift
             {
                     propertiesBundle
                             .getStringProperty("image.binary_operator.unsigned_right_shift"),
                     propertiesBundle
-                            .getStringProperty("image.binary_operator.result.unsigned_right_shift")},
+                            .getStringProperty("image.binary_operator.result.unsigned_right_shift") },
             //unsigned right shift
-            { propertiesBundle.getStringProperty("image.binary_operator.lesser_than"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.lesser_than")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.lesser_than"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.lesser_than") },
             //lesser than
-            { propertiesBundle.getStringProperty("image.binary_operator.greater_than"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.greater_than")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.greater_than"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.greater_than") },
             //greater than
             {
                     propertiesBundle
                             .getStringProperty("image.binary_operator.lesser_than_or_equals"),
                     propertiesBundle
-                            .getStringProperty("image.binary_operator.result.lesser_than_or_equals")},
+                            .getStringProperty("image.binary_operator.result.lesser_than_or_equals") },
             //lesser than or equals
             {
                     propertiesBundle
                             .getStringProperty("image.binary_operator.greater_than_or_equals"),
                     propertiesBundle
-                            .getStringProperty("image.binary_operator.result.greater_than_or_equals")},
+                            .getStringProperty("image.binary_operator.result.greater_than_or_equals") },
             //greater than or equals
-            { propertiesBundle.getStringProperty("image.binary_operator.instanceof"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.instanceof")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.instanceof"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.instanceof") },
             //instanceof not yet implemented
-            { propertiesBundle.getStringProperty("image.binary_operator.equals"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.equals")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.equals"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.equals") },
             //equals
-            { propertiesBundle.getStringProperty("image.binary_operator.not_equals"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.not_equals")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.not_equals"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.not_equals") },
             //not equals
-            { propertiesBundle.getStringProperty("image.binary_operator.bitwise_and"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.bitwise_and")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.bitwise_and"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.bitwise_and") },
             //bitwise and
-            { propertiesBundle.getStringProperty("image.binary_operator.bitwise_xor"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.bitwise_xor")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.bitwise_xor"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.bitwise_xor") },
             //bitwise xor
-            { propertiesBundle.getStringProperty("image.binary_operator.bitwise_or"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.bitwise_or")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.bitwise_or"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.bitwise_or") },
             //bitwise or
-            { propertiesBundle.getStringProperty("image.binary_operator.logical_and"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.logical_and")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.logical_and"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.logical_and") },
             //logical and
-            { propertiesBundle.getStringProperty("image.binary_operator.logical_or"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.logical_or")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.logical_or"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.logical_or") },
             //logical or
-            { propertiesBundle.getStringProperty("image.binary_operator.logical_xor"),
-                    propertiesBundle.getStringProperty("image.binary_operator.result.logical_xor")}
-            //logical xor
+            {
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.logical_xor"),
+                    propertiesBundle
+                            .getStringProperty("image.binary_operator.result.logical_xor") }
+    //logical xor
     };
 
     /**
      *  
      */
     private String[][] unaOpImageName = {
-            { propertiesBundle.getStringProperty("image.unary_operator.plus"),
-                    propertiesBundle.getStringProperty("image.unary_operator.result.plus")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.plus"),
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.result.plus") },
             //plus
-            { propertiesBundle.getStringProperty("image.unary_operator.minus"),
-                    propertiesBundle.getStringProperty("image.unary_operator.result.minus")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.minus"),
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.result.minus") },
             //minus
-            { propertiesBundle.getStringProperty("image.unary_operator.preinc"),
-                    propertiesBundle.getStringProperty("image.unary_operator.result.preinc")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.preinc"),
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.result.preinc") },
             //preinc
-            { propertiesBundle.getStringProperty("image.unary_operator.predec"),
-                    propertiesBundle.getStringProperty("image.unary_operator.result.predec")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.predec"),
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.result.predec") },
             //predec
-            { propertiesBundle.getStringProperty("image.unary_operator.complement"),
-                    propertiesBundle.getStringProperty("image.unary_operator.result.complement")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.complement"),
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.result.complement") },
             //complement
-            { propertiesBundle.getStringProperty("image.unary_operator.not"),
-                    propertiesBundle.getStringProperty("image.unary_operator.result.not")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.not"),
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.result.not") },
             //not
-            { propertiesBundle.getStringProperty("image.unary_operator.postinc"),
-                    propertiesBundle.getStringProperty("image.unary_operator.result.postinc")},
+            {
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.postinc"),
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.result.postinc") },
             //postinc
-            { propertiesBundle.getStringProperty("image.unary_operator.postdec"),
-                    propertiesBundle.getStringProperty("image.unary_operator.result.postdec")}
+            {
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.postdec"),
+                    propertiesBundle
+                            .getStringProperty("image.unary_operator.result.postdec") }
     //postdec
     };
 
@@ -422,17 +586,23 @@ public class ActorFactory {
      */
     public ActorFactory(ImageLoader iLoad) {
         this.iLoad = iLoad;
-        this.shadowImage = iLoad.getImage(propertiesBundle.getStringProperty("image.shadow"));
+        this.shadowImage = iLoad.getImage(propertiesBundle
+                .getStringProperty("image.shadow"));
         Actor.setShadowImage(this.shadowImage);
         this.messageImage = iLoad.getImage(propertiesBundle
                 .getStringProperty("image.message.background"));
-        setValueFont(new Font(propertiesBundle.getStringProperty("font.value.family"), Font.BOLD,
-                Integer.parseInt(propertiesBundle.getStringProperty("font.value.size"))));
-        setVariableFont(new Font(propertiesBundle.getStringProperty("font.variable.family"),
-                Font.BOLD, Integer.parseInt(propertiesBundle
+        setValueFont(new Font(propertiesBundle
+                .getStringProperty("font.value.family"), Font.BOLD,
+                Integer.parseInt(propertiesBundle
+                        .getStringProperty("font.value.size"))));
+        setVariableFont(new Font(propertiesBundle
+                .getStringProperty("font.variable.family"), Font.BOLD, Integer
+                .parseInt(propertiesBundle
                         .getStringProperty("font.variable.size"))));
-        setStageFont(new Font(propertiesBundle.getStringProperty("font.stage.family"), Font.PLAIN,
-                Integer.parseInt(propertiesBundle.getStringProperty("font.stage.size"))));
+        setStageFont(new Font(propertiesBundle
+                .getStringProperty("font.stage.family"), Font.PLAIN,
+                Integer.parseInt(propertiesBundle
+                        .getStringProperty("font.stage.size"))));
     }
 
     /**
@@ -443,11 +613,13 @@ public class ActorFactory {
         FontMetrics fm = dummy.getFontMetrics(font);
         valueHeight = fm.getHeight() + margin;
         int m = 4;
-        typeValWidth = new int[] { m + Math.max(fm.stringWidth("true"), fm.stringWidth("false")),
+        typeValWidth = new int[] {
+                m + Math.max(fm.stringWidth("true"), fm.stringWidth("false")),
                 m + fm.stringWidth("888"), m + fm.stringWidth("88888"),
                 m + fm.stringWidth("8888888"), m + fm.stringWidth("888888888"),
                 m + fm.stringWidth("xm"), m + fm.stringWidth("0.00E10"),
-                m + fm.stringWidth("0.0000E10"), m + fm.stringWidth("Normal string"), 6};
+                m + fm.stringWidth("0.0000E10"),
+                m + fm.stringWidth("Normal string"), 6 };
     }
 
     /**
@@ -456,10 +628,11 @@ public class ActorFactory {
     public void setVariableFont(Font font) {
         this.variableFont = font;
         FontMetrics fm = dummy.getFontMetrics(font);
-        typeWidth = new int[] { fm.stringWidth("boolean"), fm.stringWidth("byte"),
-                fm.stringWidth("short"), fm.stringWidth("int"), fm.stringWidth("long"),
-                fm.stringWidth("char"), fm.stringWidth("float"), fm.stringWidth("double"),
-                fm.stringWidth("String")};
+        typeWidth = new int[] { fm.stringWidth("boolean"),
+                fm.stringWidth("byte"), fm.stringWidth("short"),
+                fm.stringWidth("int"), fm.stringWidth("long"),
+                fm.stringWidth("char"), fm.stringWidth("float"),
+                fm.stringWidth("double"), fm.stringWidth("String") };
     }
 
     /**
@@ -474,7 +647,9 @@ public class ActorFactory {
      * @return
      */
     public static int getTypeValueWidth(int n) {
-        if (n >= 0 && n < typeValWidth.length) { return typeValWidth[n]; }
+        if (n >= 0 && n < typeValWidth.length) {
+            return typeValWidth[n];
+        }
         return 0;
     }
 
@@ -483,7 +658,9 @@ public class ActorFactory {
      * @return
      */
     public static int getTypeWidth(int n) {
-        if (n >= 0 && n < typeWidth.length) { return typeWidth[n]; }
+        if (n >= 0 && n < typeWidth.length) {
+            return typeWidth[n];
+        }
         return 0;
     }
 
@@ -508,8 +685,10 @@ public class ActorFactory {
      * @return
      */
     public static int getMaxMethodStageWidth() {
-        if (typeValWidth != null) { return getMaxTypeWidth() + typeValWidth[8]
-                + TheaterManager.getMaxMethodInset(); }
+        if (typeValWidth != null) {
+            return getMaxTypeWidth() + typeValWidth[8]
+                    + TheaterManager.getMaxMethodInset();
+        }
         return 0;
     }
 
@@ -527,8 +706,8 @@ public class ActorFactory {
     public MethodStage produceMethodStage(MethodFrame m) {
         MethodStage stage = new MethodStage(m.getMethodName());
         stage.setFont(stageFont);
-        stage.calculateSize(getMaxMethodStageWidth(), valueHeight + 8 + variableInsets.top
-                + variableInsets.bottom);
+        stage.calculateSize(getMaxMethodStageWidth(), valueHeight + 8
+                + variableInsets.top + variableInsets.bottom);
         stage.setBackground(methodStageColor);
         stage.setShadow(6);
         return stage;
@@ -542,12 +721,14 @@ public class ActorFactory {
         String type = v.getType();
         VariableActor actor = null;
         int typeInfo = MCodeUtilities.resolveType(type);
-        if (typeInfo != MCodeUtilities.REFERENCE) {
+        if (typeInfo != MCodeUtilities.REFERENCE
+                && !(Util.visualizeStringsAsObjects() && typeInfo == MCodeUtilities.STRING)) {
             actor = new VariableActor();
             ValueActor vact = null;
-            ImageValueActor valueActor = new ImageValueActor(iLoad.getImage(propertiesBundle
-                    .getStringProperty("image.mystery")));
-            
+            ImageValueActor valueActor = new ImageValueActor(iLoad
+                    .getImage(propertiesBundle
+                            .getStringProperty("image.mystery")));
+
             valueActor.calculateSize();
             vact = valueActor;
             int dotIndex = type.lastIndexOf(".");
@@ -556,7 +737,8 @@ public class ActorFactory {
                 resolvedType = resolvedType.substring(dotIndex + 1);
             }
             if (v.getName().equals(v.getType())
-                    || (v.getName().equals("java.lang.Object") && v.getType().equals("java.lang.String"))) {
+                    || (v.getName().equals("java.lang.Object") && v.getType()
+                            .equals("java.lang.String"))) {
                 actor.setName("");
                 actor.setType(resolvedType);
                 //actor.setName(resolvedType);
@@ -578,7 +760,8 @@ public class ActorFactory {
             //Tracking purposes
             actor.setDescription("local variable: " + actor.getLabel());
             return actor;
-        } else if (typeInfo == MCodeUtilities.REFERENCE) {
+        } else if (typeInfo == MCodeUtilities.REFERENCE
+                || (Util.visualizeStringsAsObjects() && typeInfo == MCodeUtilities.STRING)) {
             ReferenceVariableActor refAct = new ReferenceVariableActor();
             if (MCodeUtilities.isArray(type)) {
                 String ct = MCodeUtilities.resolveComponentType(type);
@@ -589,7 +772,8 @@ public class ActorFactory {
                     //This is not implemented properly
                     refAct.setBackground(varColor[typeInfo]);
                 }
-                String resolvedType = MCodeUtilities.changeComponentTypeToPrintableForm(ct);
+                String resolvedType = MCodeUtilities
+                        .changeComponentTypeToPrintableForm(ct);
                 int dotIndex = resolvedType.lastIndexOf(".");
                 if (dotIndex > -1) {
                     resolvedType = resolvedType.substring(dotIndex + 1);
@@ -610,7 +794,7 @@ public class ActorFactory {
                 }
                 //refAct.setName(resolvedType + arrayString + " " + v.getName());
                 //Tracking purposes
-                
+
             } else {
                 String resolvedType = type;
                 int dotIndex = resolvedType.lastIndexOf(".");
@@ -618,8 +802,8 @@ public class ActorFactory {
                     resolvedType = resolvedType.substring(dotIndex + 1);
                 }
                 if (v.getName().equals(v.getType())
-                        || (v.getName().equals("java.lang.Object") && v.getType().equals(
-                                "java.lang.String"))) {
+                        || (v.getName().equals("java.lang.Object") && v
+                                .getType().equals("java.lang.String"))) {
                     refAct.setName("");
                     refAct.setType(resolvedType);
                     //refAct.setName(resolvedType);
@@ -656,10 +840,11 @@ public class ActorFactory {
         String type = v.getType();
         VariableActor actor = null;
         int typeInfo = MCodeUtilities.resolveType(type);
-        if (typeInfo != MCodeUtilities.REFERENCE) {
+        if (typeInfo != MCodeUtilities.REFERENCE
+                && !(Util.visualizeStringsAsObjects() && typeInfo == MCodeUtilities.STRING)) {
             actor = new VariableActor();
-            ValueActor vact = produceValueActor(new Value(MCodeUtilities.getDefaultValue(type),
-                    type));
+            ValueActor vact = produceValueActor(new Value(MCodeUtilities
+                    .getDefaultValue(type), type));
             int dotIndex = type.lastIndexOf(".");
             String resolvedType = type;
             if (dotIndex > -1) {
@@ -681,7 +866,8 @@ public class ActorFactory {
             actor.setDescription("object variable: " + actor.getLabel());
 
             return actor;
-        } else if (typeInfo == MCodeUtilities.REFERENCE) {
+        } else if (typeInfo == MCodeUtilities.REFERENCE
+                || (Util.visualizeStringsAsObjects() && typeInfo == MCodeUtilities.STRING)) {
             ReferenceVariableActor refAct = new ReferenceVariableActor();
             if (MCodeUtilities.isArray(type)) {
                 String ct = MCodeUtilities.resolveComponentType(type);
@@ -692,7 +878,8 @@ public class ActorFactory {
                     //This is not implemented properly
                     refAct.setBackground(varColor[typeInfo]);
                 }
-                String resolvedType = MCodeUtilities.changeComponentTypeToPrintableForm(ct);
+                String resolvedType = MCodeUtilities
+                        .changeComponentTypeToPrintableForm(ct);
                 int dotIndex = resolvedType.lastIndexOf(".");
                 if (dotIndex > -1) {
                     resolvedType = resolvedType.substring(dotIndex + 1);
@@ -733,15 +920,20 @@ public class ActorFactory {
         return actor;
     }
 
+    public ValueActor produceValueActor(Value val) {
+        return produceValueActor(val, false);
+    }
+
     /**
      * @param val
      * @return
      */
-    public ValueActor produceValueActor(Value val) {
+    public ValueActor produceValueActor(Value val, boolean primitiveString) {
         String type = val.getType();
         int typeInfo = MCodeUtilities.resolveType(type);
         //System.out.println(type);
-        if (MCodeUtilities.isPrimitive(type)) {
+        if (MCodeUtilities.isPrimitive(type)
+                || (primitiveString && typeInfo == MCodeUtilities.STRING)) {
             ValueActor actor = new ValueActor();
             actor.setForeground(valueForegroundColor);
             if (typeInfo == MCodeUtilities.BOOLEAN) {
@@ -751,7 +943,7 @@ public class ActorFactory {
             }
             actor.setBackground(valColor[typeInfo]);
             String label = val.getValue();
-            //          String label = valObj instanceof Exception ?
+            //String label = valObj instanceof Exception ?
             //                                    "ERROR" :
             //                                    valObj.toString();
             if (typeInfo == MCodeUtilities.DOUBLE) {
@@ -764,14 +956,16 @@ public class ActorFactory {
                 }
             }
             //Stylistic change, not to show the line break char in the animation
-            if (label.lastIndexOf("\\n") != -1 && label.lastIndexOf("\\n") == (label.length() - 2)) {
+            if (label.lastIndexOf("\\n") != -1
+                    && label.lastIndexOf("\\n") == (label.length() - 2)) {
                 label = label.substring(0, label.length() - 2);
             }
 
             actor.setLabel(label);
             //Tracking porpuses
             actor.setType(type);
-            actor.setDescription("value: (" + val.getType() + ") " + val.getValue() + "");
+            actor.setDescription("value: (" + val.getType() + ") "
+                    + val.getValue() + "");
             //actor.setActor(val.getActor());
             actor.calculateSize();
             return actor;
@@ -787,8 +981,9 @@ public class ActorFactory {
                 actor.calculateSize();
             }
             actor.setForeground(valueForegroundColor);
-            
-            actor.setDescription("reference: (" + val.getType() + ") " + val.getValue() + "");
+
+            actor.setDescription("reference: (" + val.getType() + ") "
+                    + val.getValue() + "");
 
             return actor;
         }
@@ -815,8 +1010,9 @@ public class ActorFactory {
         actor.setBackground(valColor[typeInfo]);
         actor.calculateSize();
         actor.setForeground(valueForegroundColor);
-        
-        actor.setDescription("reference: (" + rf.getType() + ") " + rf.getValue() + "");
+
+        actor.setDescription("reference: (" + rf.getType() + ") "
+                + rf.getValue() + "");
 
         return actor;
     }
@@ -833,8 +1029,9 @@ public class ActorFactory {
         actor.setParent(cloneActor.getParent());
         actor.calculateSize();
         actor.setForeground(valueForegroundColor);
-        
-        actor.setDescription("reference: (" + cloneActor.getType() + ") " + cloneActor.getValstr() + "");
+
+        actor.setDescription("reference: (" + cloneActor.getType() + ") "
+                + cloneActor.getValstr() + "");
 
         return actor;
     }
@@ -852,8 +1049,9 @@ public class ActorFactory {
         Point p = cloneActor.getLocation();
         actor.setLocation(new Point(p.x, p.y));
         actor.setParent(cloneActor.getParent());
-        
-        actor.setDescription("value: (" + cloneActor.getType() + ") " + cloneActor.getValstr() + "");
+
+        actor.setDescription("value: (" + cloneActor.getType() + ") "
+                + cloneActor.getValstr() + "");
 
         return actor;
     }
@@ -880,7 +1078,8 @@ public class ActorFactory {
      * @return
      */
     public OperatorActor produceEllipsis() {
-        Image image = iLoad.getImage(propertiesBundle.getStringProperty("image.dots"));
+        Image image = iLoad.getImage(propertiesBundle
+                .getStringProperty("image.dots"));
         OperatorActor actor = produceOperatorActor(image, "ellipsis");
         return actor;
     }
@@ -908,7 +1107,8 @@ public class ActorFactory {
      * @return
      */
     public OperatorActor produceOperatorActor(Image image, String description) {
-        OperatorActor actor = new OperatorActor(image, iLoad.darken(image), description);
+        OperatorActor actor = new OperatorActor(image, iLoad.darken(image),
+                description);
         actor.calculateSize();
         int hh = valueHeight - actor.getHeight();
         if (hh > 0) {
@@ -957,7 +1157,8 @@ public class ActorFactory {
      * @param paramCount
      * @return
      */
-    public ACActor produceACActor(String name, int paramCount, int emptyBracketsCount) {
+    public ACActor produceACActor(String name, int paramCount,
+            int emptyBracketsCount) {
         ACActor actor = new ACActor(name, paramCount, emptyBracketsCount);
         actor.setFont(ACFont);
         actor.setBackground(ACColor);
@@ -1029,7 +1230,8 @@ public class ActorFactory {
      * @return
      */
     public AnimatingActor produceHand() {
-        AnimatingActor hand = new AnimatingActor(produceImage("image.hand1"), "Output");
+        AnimatingActor hand = new AnimatingActor(produceImage("image.hand1"),
+                "Output");
         hand.calculateSize();
         return hand;
     }
@@ -1058,11 +1260,23 @@ public class ActorFactory {
         }
 
         String ctype = array.getComponentType();
-        int finalComponentTypeInfo = MCodeUtilities.resolveType(MCodeUtilities.resolveComponentType(ctype));
+        int finalComponentTypeInfo = MCodeUtilities.resolveType(MCodeUtilities
+                .resolveComponentType(ctype));
         int typeInfo = MCodeUtilities.resolveType(ctype);
-        ArrayActor aactor = new ArrayActor(valueActors, length, MCodeUtilities.isPrimitive(ctype), ctype);
-        
-        if (MCodeUtilities.isPrimitive(MCodeUtilities.resolveComponentType(ctype))) {
+
+        VariableActor arLengthVarAct = produceVariableActor(array
+                .getArrayLenghtVariable());
+        array.getArrayLenghtVariable().setActor(arLengthVarAct);
+        ValueActor arLenghtValAct = produceValueActor(array
+                .getArrayLenghtVariable().getValue());
+        arLengthVarAct.setValue(arLenghtValAct);
+        array.getArrayLenghtVariable().getValue().setActor(arLenghtValAct);
+
+        ArrayActor aactor = new ArrayActor(valueActors, length, MCodeUtilities
+                .isPrimitive(ctype), ctype, arLengthVarAct);
+
+        if (MCodeUtilities.isPrimitive(MCodeUtilities
+                .resolveComponentType(ctype))) {
             aactor.setFont(indexFont);
             aactor.setBackground(varColor[finalComponentTypeInfo]);
             aactor.setValueColor(valColor[finalComponentTypeInfo]);
@@ -1073,10 +1287,10 @@ public class ActorFactory {
             aactor.setValueColor(valColor[finalComponentTypeInfo]);
             aactor.calculateSize(typeValWidth[typeInfo], valueHeight);
         }
-        
+
         for (int i = 0; i < length; i++) {
             VariableActor va = aactor.getVariableActor(i);
-            va.setValueDimension(typeValWidth[typeInfo], valueHeight);
+            //va.setValueDimension(typeValWidth[typeInfo], valueHeight);
             array.getVariableAt(i).setActor(va);
         }
         array.setActor(aactor);
@@ -1095,13 +1309,15 @@ public class ActorFactory {
      * @return
      */
     public ObjectStage produceObjectStage(ObjectFrame m) {
-        ObjectStage stage = new ObjectStage(objectStageTitle.format(new String[] { m
-                .getObjectName()}), m.getVarCount());
+        ObjectStage stage = new ObjectStage(objectStageTitle
+                .format(new String[] { m.getObjectName().substring(
+                        m.getObjectName().lastIndexOf(".") + 1) }), m
+                .getVarCount());
         stage.setFont(stageFont);
         //The width of the object stage is not correct but we have not found
         // any better.
-        stage.calculateSize(getMaxObjectStageWidth(), valueHeight + 8 + variableInsets.top
-                + variableInsets.bottom);
+        stage.calculateSize(getMaxObjectStageWidth(), valueHeight + 8
+                + variableInsets.top + variableInsets.bottom);
         stage.setBackground(objectStageColor);
         stage.setShadow(6);
         return stage;
@@ -1121,92 +1337,114 @@ public class ActorFactory {
     /**
      *  
      */
-    private MessageFormat classTitle = new MessageFormat(messageBundle.getString("title.class"));
+    private MessageFormat classTitle = new MessageFormat(messageBundle
+            .getString("title.class"));
 
+    /**
+     * 
+     * @param c
+     * @return
+     */
     public ClassActor produceClassActor(jeliot.lang.Class c) {
-        ClassActor ca = new ClassActor(classTitle.format(new String[] { c.getName()}), c
+        ClassActor ca = new ClassActor(classTitle.format(new String[] { c
+                .getName().substring(c.getName().lastIndexOf(".") + 1) }), c
                 .getVariableCount());
         ca.setFont(stageFont);
-        //The width of the object stage is not correct but we have not found
-        // any better.
-        ca.calculateSize(getMaxObjectStageWidth(), valueHeight + 8 + variableInsets.top
-                + variableInsets.bottom);
+        //The width of the object stage is not correct but
+        //we have not found any better.
+        ca.calculateSize(getMaxObjectStageWidth(), valueHeight + 8
+                + variableInsets.top + variableInsets.bottom);
         ca.setBackground(classColor);
         ca.setShadow(6);
         return ca;
     }
-    
 
+    /**
+     * 
+     * @param op
+     * @return
+     */
     public String getBinOpDescription(int op) {
-        switch(op) {
-            case 0:
-                return "multiplication";
-            case 1:
-                return "division";
-            case 2:
-                return "remainder";
-            case 3:
-                return "addition";
-            case 4:
-                return "substration";
-            case 5:
-                return "left shift";
-            case 6:
-                return "right shift";
-            case 7:
-                return "unsigned right shift";
-            case 8:
-                return "lesser than"; 
-            case 9:
-                return "greater than"; 
-            case 10:
-                return "lesser than or equals"; 
-            case 11:
-                return "greater than or equals"; 
-            case 12:
-                return "instanceof"; 
-            case 13:
-                return "equals"; 
-            case 14:
-                return "not equals"; 
-            case 15:
-                return "bitwise and"; 
-            case 16:
-                return "bitwise xor"; 
-            case 17:
-                return "bitwise or"; 
-            case 18:
-                return "logical and"; 
-            case 19:
-                return "logical or"; 
-            case 20:
-                return "logical xor";
-            default:
-                return "other";
+        switch (op) {
+        case 0:
+            return "multiplication";
+        case 1:
+            return "division";
+        case 2:
+            return "remainder";
+        case 3:
+            return "addition";
+        case 4:
+            return "substration";
+        case 5:
+            return "left shift";
+        case 6:
+            return "right shift";
+        case 7:
+            return "unsigned right shift";
+        case 8:
+            return "lesser than";
+        case 9:
+            return "greater than";
+        case 10:
+            return "lesser than or equals";
+        case 11:
+            return "greater than or equals";
+        case 12:
+            return "instanceof";
+        case 13:
+            return "equals";
+        case 14:
+            return "not equals";
+        case 15:
+            return "bitwise and";
+        case 16:
+            return "bitwise xor";
+        case 17:
+            return "bitwise or";
+        case 18:
+            return "logical and";
+        case 19:
+            return "logical or";
+        case 20:
+            return "logical xor";
+        default:
+            return "other";
         }
     }
 
+    /**
+     * 
+     * @param op
+     * @return
+     */
     public String getUnOpDescription(int op) {
-        switch(op) {
-            case 0:
-                return "plus";
-            case 1:
-                return "minus";
-            case 2:
-                return "preinc";
-            case 3:
-                return "predec";
-            case 4:
-                return "complement";
-            case 5:
-                return "postinc";
-            case 6:
-                return "postdec";
-            default:
-                return "other";
+        switch (op) {
+        case 0:
+            return "plus";
+        case 1:
+            return "minus";
+        case 2:
+            return "preinc";
+        case 3:
+            return "predec";
+        case 4:
+            return "complement";
+        case 5:
+            return "postinc";
+        case 6:
+            return "postdec";
+        default:
+            return "other";
         }
     }
 
+    /**
+     * 
+     * @param name
+     * @param paramCount
+     * @return
+     */
     public CIActor produceCIActor(String name, int paramCount) {
         CIActor actor = new CIActor(name, paramCount);
         actor.setFont(CIFont);
@@ -1214,5 +1452,22 @@ public class ActorFactory {
         actor.setInsets(new Insets(6, 6, 6, 6));
         actor.calculateSize();
         return actor;
+    }
+
+    /**
+     * 
+     * @param si
+     * @return
+     */
+    public StringObjectActor produceStringActor(StringInstance si) {
+        ValueActor va = produceValueActor(si.getStringValue(), true);
+        StringObjectActor stage = new StringObjectActor(objectStageTitle
+                .format(new String[] { si.getType().substring(
+                        si.getType().lastIndexOf(".") + 1) }), va);
+        stage.setFont(stageFont);
+        stage.setBackground(varColor[MCodeUtilities.resolveType(si.getType())]);
+        stage.setShadow(6);
+        stage.calculateSize();
+        return stage;
     }
 }

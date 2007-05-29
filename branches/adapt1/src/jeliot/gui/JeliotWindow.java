@@ -591,7 +591,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     .addAdjustmentListener(scrollPaneListener);
             this.theaterScrollPane.getVerticalScrollBar()
                     .addAdjustmentListener(scrollPaneListener);
-
+            this.theater.setScrollPane(this.theaterScrollPane);
+            
             this.tabbedPane.addTab(
                     messageBundle.getString("tab.title.theater"),
                     theaterScrollPane);
@@ -917,6 +918,28 @@ public class JeliotWindow implements PauseListener, MouseListener {
         
         menu.addSeparator();
         
+        //Show strings as objects
+        final JCheckBoxMenuItem showStringsAsObjects = new JCheckBoxMenuItem(
+                messageBundle
+                        .getString("menu.options.show_strings_as_objects"),
+                jeliotUserProperties
+                        .getBooleanProperty("show_strings_as_objects"));
+        showStringsAsObjects.setMnemonic(KeyEvent.VK_O);
+        showStringsAsObjects.setAccelerator(KeyStroke
+                .getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK
+                        + ActionEvent.ALT_MASK));
+        showStringsAsObjects
+                .addActionListener(new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        jeliotUserProperties.setBooleanProperty(
+                                "show_strings_as_objects",
+                                showStringsAsObjects.getState());
+                    }
+                });
+        menu.add(showStringsAsObjects);
+        this.editWidgets.add(showStringsAsObjects);
+        
         //Ask for main method/command line parameters
         final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(
                 messageBundle
@@ -967,7 +990,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
         final JCheckBoxMenuItem enableQuestionAskingMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.ask_questions"),
                 jeliotUserProperties.getBooleanProperty("ask_questions"));
-        
         enableQuestionAskingMenuItem.setMnemonic(KeyEvent.VK_Q);
         enableQuestionAskingMenuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_Q, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
