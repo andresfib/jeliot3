@@ -1385,35 +1385,6 @@ public class EvaluationVisitor extends VisitorObject {
         return o;
     }
     
-    private Object handleScanner(MethodCall node, Method m, List largs) {
-
-        Object o = null;
-
-        o = handleInput(node, m, largs);
-        /*if (!m.getReturnType().getName().equals(Void.TYPE.getName())) {
-
-         long auxcounter = counter;
-         String value = MCodeUtilities.getValue(o);
-         String className = (o == null) ? Code.REFERENCE : o
-         .getClass().getName();
-         MCodeUtilities.write("" + Code.L + Code.DELIM + (counter++)
-         + Code.DELIM + value + Code.DELIM + className
-         + Code.DELIM
-         + MCodeGenerator.locationToString(node));
-
-         MCodeUtilities.write("" + Code.R + Code.DELIM
-         + l.toString() + Code.DELIM + auxcounter
-         + Code.DELIM + value + Code.DELIM + className
-         + Code.DELIM
-         + MCodeGenerator.locationToString(node));
-         }*/
-        return o;
-    }
-    
-    private Object handleInput(MethodCall node, Method m, List larg) {
-    	
-        return handleInput(node, m, larg, counter+1);
-    }
 
     private Object handleInput(MethodCall node, Method m, List larg, long inputCounter) {
 
@@ -1656,7 +1627,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         // Check if the static method call is one of our Input methods
         // Hardcoded!!! TO BE CHANGED
-        Object result = handleInput(node, m, larg);
+        Object result = handleInput(node, m, larg, counter);
         if (result != null) {
         	counter++;
             return result;
