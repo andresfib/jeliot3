@@ -51,7 +51,7 @@ To display the available targets type:
 
 		<!-- This properties modify the output of the build process-->
 		<property name="versionJ" value="3" />
-		<property name="minor" value=".7.0 beta" />
+		<property name="minor" value=".7.0" />
 
 		<!-- dist: Used to create the folder where to place the binary distribuition, jar files and images-->
 		<property name="dist" value="Jeliot${versionJ}" />
