@@ -39,7 +39,7 @@ public class Pile {
     public double value;
 
     public Pile (String ct, double cv) {
-        coins = new Coin[100];
+        coins = new Coin[10];
         n_coins = 0;
         type = ct;
     }
