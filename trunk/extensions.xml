@@ -1,8 +1,8 @@
 <extension>
 <name>Jeliot 3</name>
 <class>JeliotExtension</class>
-<version>3.5.2</version>
-<size>1045600</size>
+<version>3.7.0</version>
+<size>1143655</size>
 <jarUrl>downloads/jeliotExtension.jar</jarUrl>
 <description>Jeliot 3 is a Program Visualization application. Animate your project!!</description>
 </extension>

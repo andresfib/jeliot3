@@ -4,7 +4,7 @@
 
 [Setup]
 AppName=Jeliot 3
-AppVerName=Jeliot 3.5.2
+AppVerName=Jeliot 3.7.0
 DefaultDirName={pf}\Jeliot3
 DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe
@@ -24,7 +24,7 @@ Check: GetJavaPath; Source: "Jeliot3\*"; DestDir: "{app}"
 [Tasks]
 Name: "desktopicon"; Description: "Create a &Desktop Icon shortcut"; GroupDescription: "Shortcuts"; Flags: unchecked
 Name: "starticon"; Description: "Create a shortcut in the &Start Menu"; GroupDescription: "Shortcuts"; Flags: unchecked
-;Name: "addJavaPath"; Description:"Add Java executble to Path variable (useful when Java is not properly installed)"; GroupDescription: "System Configuration"; Flags: unchecked
+Name: "addJavaPath"; Description:"Add Java executble to Path variable (useful when Java is not properly installed)"; GroupDescription: "System Configuration"; Flags: unchecked
 
 [Icons]
 Name: "{group}\Jeliot 3";  Filename: "{app}\jeliot.bat"; IconFilename: "{app}\logo3d.ico"; WorkingDir: "{app}"; Tasks:starticon
