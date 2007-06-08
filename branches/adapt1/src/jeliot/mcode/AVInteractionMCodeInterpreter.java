@@ -45,6 +45,10 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
     private Map conceptVectors = new HashMap();
 
     /**
+     * Contains the values of initialized arrays in vectors
+     */
+    private Map arrayValues = new HashMap();
+    /**
      * User Model used for this user
      */
     private UMInteraction userModel;
@@ -416,8 +420,7 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
      * @see jeliot.mcode.MCodeInterpreter#handleCodeAIBEGIN(long, jeliot.mcode.Highlight)
      */
     protected void handleCodeAIBEGIN(long cells, Highlight highlight) {
-        // TODO Auto-generated method stub
-
+    	
     }
 
     /* (non-Javadoc)
@@ -427,6 +430,11 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
             long expressionReference, String value, String type, long literal,
             Highlight highlight) {
         // TODO Auto-generated method stub
+    	Vector values = (Vector)arrayValues.get(arrayReference);
+    	if (values != null){
+    		values.add(value);
+    	}
+    	
 
     }
 
@@ -572,6 +580,11 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
             String dimensionSizes, int actualdimensions,
             String subArraysHashCodes, Highlight h) {
         // TODO Auto-generated method stub
+    	//We only deal with 1 dimension arrays
+    	if(dims == 1){
+    		Vector arrayContent = new Vector();
+    		arrayValues.put(hashCode, arrayContent);
+    	}
 
     }
 

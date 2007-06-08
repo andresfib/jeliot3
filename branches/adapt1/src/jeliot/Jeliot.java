@@ -35,6 +35,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import jeliot.adapt.Adapt2Interaction;
 import jeliot.adapt.BasicInternalUM;
+import jeliot.adapt.DummyUM;
 import jeliot.adapt.UMInteraction;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.calltree.TreeDraw;
@@ -270,7 +271,9 @@ public class Jeliot {
         }
 
         //TODO: let the user or a "smart" alg. to decide what UM to use
-        userModel = new UMInteraction();
+        //userModel = new UMInteraction();
+        //We rather use the singleton ...
+ 
         theatre.setBackground(iLoad.getLogicalImage("image.panel"));
         hv = new HistoryView(codePane, userDirectory);
 
@@ -957,7 +960,7 @@ public class Jeliot {
     
     public void setUserModel(String type){
     	if (type.equals("none") || type.equals("")){
-    		userModel = null;
+    		userModel = new DummyUM();
     	} else if (type.equals("basic")){
     		userModel = new BasicInternalUM();
     	} else if (type.equals("adapt2")){
