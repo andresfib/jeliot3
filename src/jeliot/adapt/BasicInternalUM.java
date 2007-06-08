@@ -9,10 +9,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 public class BasicInternalUM extends UMInteraction{
 
-	//Right now properties are just variables
-	// TODO: To be changed to something more OO
-	double threshold = 1.5;
 	
+	double threshold = 0.4;
+	String userName;
 	UserProperties internalUM = null;
 	//HashMap internalUM = new HashMap();
 	public void userLogon(String userName, String password) {
@@ -21,7 +20,8 @@ public class BasicInternalUM extends UMInteraction{
 	}
 
 	public void userLogin(String userName, String password) {
-		internalUM = ResourceBundles.getUserModelConceptsProperties();
+		this.userName = userName;
+		internalUM = ResourceBundles.getUserModelConceptsProperties(userName);
 	}
 
 	public void userLogout(String userName) {

@@ -99,30 +99,38 @@ public class AdaptJeliot extends Jeliot {
 
     public void handleArgs(String args[]) {
         try {
-            if (args.length >= 1) {
-                URL u = null;
-                String cookie="";
-                try {
-                    u = new URL(URLDecoder.decode(args[0], "UTF-8"));
-                    cookie = URLDecoder.decode(args[1], "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    if (DebugUtil.DEBUGGING)
-                    e.printStackTrace();
-                }
-                setProgram(u, cookie);
-            	}
-            if (args.length >= 2) {
-            	super.userName = args[1];
+        	if (args.length >= 1) {
+                super.userModelType = args[0];
             }
-            if (args.length >= 3) {
-            	super.sessionID = args[2];
-            }
-            if (args.length >= 4) {
-                super.group = args[3];
-            }
-            if (args.length >= 5) {
-                super.userModelType = args[4];
-            }
+        	if (super.userModelType.equals("adapt2")){
+        		//It interacts with Moodle files, we get cookies infoestuve 
+	            if (args.length >= 3) {
+	                URL u = null;
+	                String cookie="";
+	                try {
+	                    u = new URL(URLDecoder.decode(args[1], "UTF-8"));
+	                    cookie = URLDecoder.decode(args[2], "UTF-8");
+	                } catch (UnsupportedEncodingException e) {
+	                    if (DebugUtil.DEBUGGING)
+	                    e.printStackTrace();
+	                }
+	                setProgram(u, cookie);
+	            	}
+	            if (args.length >= 4) {
+	            	super.userName = args[3];
+	            }
+	            if (args.length >= 5) {
+	            	super.sessionID = args[4];
+	            }
+	            if (args.length >= 6) {
+	                super.group = args[5];
+	            }
+        	}
+        	else if (super.userModelType.equals("basic")){
+        		if (args.length >= 2)
+        		super.userName = args[1];
+        	}
+            setUserModel(userModelType);
         } catch (MalformedURLException e) {
             if (DebugUtil.DEBUGGING) {
                 e.printStackTrace();
@@ -133,8 +141,8 @@ public class AdaptJeliot extends Jeliot {
 
     public static void main(String[] args) {
         final AdaptJeliot jeliot = new AdaptJeliot();
-        LoadJeliot.start(jeliot);
         jeliot.handleArgs(args);
+        LoadJeliot.start(jeliot);
     }
 
     public boolean hasIOImport(String src) {

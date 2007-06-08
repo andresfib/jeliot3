@@ -235,9 +235,12 @@ public class ResourceBundles {
         return avInteractionMessages;
     }
     
-    public static UserProperties getUserModelConceptsProperties() {
+    public static UserProperties getUserModelConceptsProperties(String userName) {
+    	
         if (internalUM == null) {
-        	internalUM = new UserProperties("internalUM",
+        	//We add the username in case there are more than one users of Jeliot
+        	// in the same computer
+        	internalUM = new UserProperties(userName+".internalUM",
                     "jeliot.adapt.resources.properties");
         }
 
