@@ -2759,6 +2759,7 @@ public class Director {
 
                 //Create reference
                 Reference level1Ref = new Reference(level1[i]);
+                level1Ref.makeReference();
                 ReferenceActor level1RefAct = factory
                         .produceReferenceActor(level1Ref);
                 level1Ref.setActor(level1RefAct);
@@ -2798,6 +2799,7 @@ public class Director {
 
                     //Create reference
                     Reference level2Ref = new Reference(level2[i][j]);
+                    level2Ref.makeReference();
                     ReferenceActor level2RefAct = factory
                             .produceReferenceActor(level2Ref);
                     level2Ref.setActor(level2RefAct);
