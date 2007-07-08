@@ -73,8 +73,6 @@ import jeliot.util.UserProperties;
  */
 public class Jeliot {
 
-    //  DOC: Document!
-
     /**
      * The resource bundle for gui package
      */
@@ -96,6 +94,8 @@ public class Jeliot {
      * Default I/O package 
      */
     private String IOPackage;
+
+    //  DOC: Document!
 
     /**
      * 

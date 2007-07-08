@@ -142,6 +142,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
             jeliotUserProperties.setBooleanProperty("save_automatically", false);
             
         }
+        
+        if (!jeliotUserProperties.containsKey("CG")) {
+            jeliotUserProperties.setBooleanProperty("CG", false);
+            
+        }
     }
 
     /* If a method call should be asked from the user */
@@ -939,6 +944,28 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 });
         menu.add(showStringsAsObjects);
         this.editWidgets.add(showStringsAsObjects);
+
+        //Do CG
+        final JCheckBoxMenuItem garbageCollection = new JCheckBoxMenuItem(
+                messageBundle
+                        .getString("menu.options.CG"),
+                jeliotUserProperties
+                        .getBooleanProperty("CG"));
+        garbageCollection.setMnemonic(KeyEvent.VK_G);
+        garbageCollection.setAccelerator(KeyStroke
+                .getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK
+                        + ActionEvent.ALT_MASK));
+        garbageCollection
+                .addActionListener(new ActionListener() {
+
+                    public void actionPerformed(ActionEvent e) {
+                        jeliotUserProperties.setBooleanProperty(
+                                "CG",
+                                garbageCollection.getState());
+                    }
+                });
+        menu.add(garbageCollection);
+        //this.editWidgets.add(garbageCollection);
         
         //Ask for main method/command line parameters
         final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(
