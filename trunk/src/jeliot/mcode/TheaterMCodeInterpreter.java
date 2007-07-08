@@ -29,6 +29,7 @@ import jeliot.theater.Director;
 import jeliot.theater.ExpressionActor;
 import jeliot.theater.ValueActor;
 import jeliot.util.DebugUtil;
+import jeliot.util.ResourceBundles;
 import jeliot.util.Util;
 
 /**
@@ -336,8 +337,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#endRunning()
      */
     protected void endRunning() {
-        removeClasses();
-        removeInstances();
+        if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG")) {
+            removeClasses();
+            removeInstances();
+        }
 
         //TODO fix this hack!
         if (avInteractionEngine != null) {
@@ -3161,25 +3164,28 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * Used at the moment.
      */
     public void checkInstancesForRemoval() {
-        //Enumeration enumeration = instances.keys();
-        //while (enumeration.hasMoreElements()) {
-        for (Iterator i = instances.keySet().iterator(); i.hasNext();) {
-            Object obj = i.next(); //enumeration.nextElement();
-            Instance inst = (Instance) instances.get(obj);
-            if (inst != null) {
-                //For testing
-                System.out.println(inst.getType() + "@" + inst.getHashCode());
-                System.out.println("number of references1: "
-                        + inst.getNumberOfReferences());
-                System.out.println("number of references2: "
-                        + inst.getActor().getNumberOfReferences());
-                if (inst.getNumberOfReferences() == 0
-                        || inst.getActor().getNumberOfReferences() == 0) {
-                    //instances.remove(obj);
-                    i.remove();
-                    director.removeInstance(inst.getActor());
-                    inst = null;
-                    System.out.println("instance removed!");
+        if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG")) {
+            //Enumeration enumeration = instances.keys();
+            //while (enumeration.hasMoreElements()) {
+            for (Iterator i = instances.keySet().iterator(); i.hasNext();) {
+                Object obj = i.next(); //enumeration.nextElement();
+                Instance inst = (Instance) instances.get(obj);
+                if (inst != null) {
+                    //For testing
+                    System.out.println(inst.getType() + "@"
+                            + inst.getHashCode());
+                    System.out.println("number of references1: "
+                            + inst.getNumberOfReferences());
+                    System.out.println("number of references2: "
+                            + inst.getActor().getNumberOfReferences());
+                    if (inst.getNumberOfReferences() == 0
+                            || inst.getActor().getNumberOfReferences() == 0) {
+                        //instances.remove(obj);
+                        i.remove();
+                        director.removeInstance(inst.getActor());
+                        inst = null;
+                        System.out.println("instance removed!");
+                    }
                 }
             }
         }
