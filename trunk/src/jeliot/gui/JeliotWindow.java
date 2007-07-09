@@ -144,7 +144,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         }
         
         if (!jeliotUserProperties.containsKey("CG")) {
-            jeliotUserProperties.setBooleanProperty("CG", false);
+            jeliotUserProperties.setBooleanProperty("CG", true);
             
         }
     }
