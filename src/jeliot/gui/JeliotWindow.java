@@ -25,6 +25,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -135,17 +136,17 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         if (!jeliotUserProperties.containsKey("save_unicode")) {
             jeliotUserProperties.setBooleanProperty("save_unicode", false);
-            
         }
-        
+
         if (!jeliotUserProperties.containsKey("save_automatically")) {
-            jeliotUserProperties.setBooleanProperty("save_automatically", false);
-            
+            jeliotUserProperties
+                    .setBooleanProperty("save_automatically", false);
+
         }
-        
+
         if (!jeliotUserProperties.containsKey("CG")) {
             jeliotUserProperties.setBooleanProperty("CG", true);
-            
+
         }
     }
 
@@ -430,10 +431,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
     };
     {
-        saveUnicodeAction.putValue(Action.MNEMONIC_KEY,
-                new Integer(KeyEvent.VK_C));
-        saveUnicodeAction.putValue(Action.ACCELERATOR_KEY,
-                KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK
+        saveUnicodeAction.putValue(Action.MNEMONIC_KEY, new Integer(
+                KeyEvent.VK_C));
+        saveUnicodeAction.putValue(Action.ACCELERATOR_KEY, KeyStroke
+                .getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK
                         + ActionEvent.ALT_MASK));
     }
 
@@ -597,7 +598,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
             this.theaterScrollPane.getVerticalScrollBar()
                     .addAdjustmentListener(scrollPaneListener);
             this.theater.setScrollPane(this.theaterScrollPane);
-            
+
             this.tabbedPane.addTab(
                     messageBundle.getString("tab.title.theater"),
                     theaterScrollPane);
@@ -892,20 +893,19 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         //Save Automatically on compilation.
         /*
-        if (jeliotUserProperties.containsKey("save_automatically")) {
-            editor.setSaveAutomatically(Boolean.valueOf(
-                    jeliotUserProperties
-                            .getStringProperty("save_automatically"))
-                    .booleanValue());
-        } else {
-            jeliotUserProperties.setStringProperty("save_automatically",
-                    Boolean.toString(editor.isSaveAutomatically()));
-        }
-        */
+         if (jeliotUserProperties.containsKey("save_automatically")) {
+         editor.setSaveAutomatically(Boolean.valueOf(
+         jeliotUserProperties
+         .getStringProperty("save_automatically"))
+         .booleanValue());
+         } else {
+         jeliotUserProperties.setStringProperty("save_automatically",
+         Boolean.toString(editor.isSaveAutomatically()));
+         }
+         */
         final JCheckBoxMenuItem saveAutomaticallyOnCompilationMenuItem = new JCheckBoxMenuItem(
                 messageBundle.getString("menu.options.save_automatically"),
-                jeliotUserProperties.getBooleanProperty(
-                        "save_automatically"));
+                jeliotUserProperties.getBooleanProperty("save_automatically"));
         saveAutomaticallyOnCompilationMenuItem.setMnemonic(KeyEvent.VK_S);
         saveAutomaticallyOnCompilationMenuItem.setAccelerator(KeyStroke
                 .getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK
@@ -915,58 +915,51 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 .addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         jeliotUserProperties.setBooleanProperty(
-                                "save_automatically", saveAutomaticallyOnCompilationMenuItem
-                                .getState());
+                                "save_automatically",
+                                saveAutomaticallyOnCompilationMenuItem
+                                        .getState());
                     }
                 });
         menu.add(saveAutomaticallyOnCompilationMenuItem);
-        
+
         menu.addSeparator();
-        
+
         //Show strings as objects
         final JCheckBoxMenuItem showStringsAsObjects = new JCheckBoxMenuItem(
-                messageBundle
-                        .getString("menu.options.show_strings_as_objects"),
+                messageBundle.getString("menu.options.show_strings_as_objects"),
                 jeliotUserProperties
                         .getBooleanProperty("show_strings_as_objects"));
         showStringsAsObjects.setMnemonic(KeyEvent.VK_O);
-        showStringsAsObjects.setAccelerator(KeyStroke
-                .getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK
-                        + ActionEvent.ALT_MASK));
-        showStringsAsObjects
-                .addActionListener(new ActionListener() {
+        showStringsAsObjects.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_O, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        showStringsAsObjects.addActionListener(new ActionListener() {
 
-                    public void actionPerformed(ActionEvent e) {
-                        jeliotUserProperties.setBooleanProperty(
-                                "show_strings_as_objects",
-                                showStringsAsObjects.getState());
-                    }
-                });
+            public void actionPerformed(ActionEvent e) {
+                jeliotUserProperties.setBooleanProperty(
+                        "show_strings_as_objects", showStringsAsObjects
+                                .getState());
+            }
+        });
         menu.add(showStringsAsObjects);
         this.editWidgets.add(showStringsAsObjects);
 
         //Do CG
         final JCheckBoxMenuItem garbageCollection = new JCheckBoxMenuItem(
-                messageBundle
-                        .getString("menu.options.CG"),
-                jeliotUserProperties
-                        .getBooleanProperty("CG"));
+                messageBundle.getString("menu.options.CG"),
+                jeliotUserProperties.getBooleanProperty("CG"));
         garbageCollection.setMnemonic(KeyEvent.VK_G);
-        garbageCollection.setAccelerator(KeyStroke
-                .getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK
-                        + ActionEvent.ALT_MASK));
-        garbageCollection
-                .addActionListener(new ActionListener() {
+        garbageCollection.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
+                ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        garbageCollection.addActionListener(new ActionListener() {
 
-                    public void actionPerformed(ActionEvent e) {
-                        jeliotUserProperties.setBooleanProperty(
-                                "CG",
-                                garbageCollection.getState());
-                    }
-                });
+            public void actionPerformed(ActionEvent e) {
+                jeliotUserProperties.setBooleanProperty("CG", garbageCollection
+                        .getState());
+            }
+        });
         menu.add(garbageCollection);
         //this.editWidgets.add(garbageCollection);
-        
+
         //Ask for main method/command line parameters
         final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(
                 messageBundle
@@ -1263,7 +1256,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         menuItem = new JMenuItem(messageBundle
                 .getString("menu.animation.faster"));
         menuItem.setMnemonic(KeyEvent.VK_F);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS,
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
@@ -1276,7 +1269,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         menuItem = new JMenuItem(messageBundle
                 .getString("menu.animation.slower"));
         menuItem.setMnemonic(KeyEvent.VK_O);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 ActionEvent.CTRL_MASK));
         menuItem.addActionListener(new ActionListener() {
 
@@ -1725,7 +1718,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
     public void tryToEnterAnimate(String methodCall) {
 
         // Jeliot 3
-        if (editor.isChanged() && this.jeliotUserProperties.getBooleanProperty("save_automatically")) {
+        if (editor.isChanged()
+                && this.jeliotUserProperties
+                        .getBooleanProperty("save_automatically")) {
             editor.saveProgram();
         }
 
@@ -2260,11 +2255,17 @@ public class JeliotWindow implements PauseListener, MouseListener {
      */
     public void runUntilDone() {
         runUntilFinished();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                pauseButton.doClick();
-            }
-        });
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    pauseButton.doClick();
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -234,6 +234,15 @@ public class Director {
         }
     }
 
+    private void stopRunUntilIfInEndOfProgram() {
+        if (this.frameStack.size() == 1) {
+            runUntilLine = -1;
+            setRunUntilEnabled(false);
+            jeliot.runUntilDone();
+            theatre.repaint();
+        }
+    }
+    
     /**
      * 
      * @param b
@@ -1065,8 +1074,20 @@ public class Director {
     public ValueActor finishMethod(Actor returnAct, long expressionCounter) {
 
         //To stop the animation before a method is finished if stepping is used.
+        stopRunUntilIfInEndOfProgram();
         highlightForMessage(null);
-
+        
+        Animation dummy = new Animation() {
+            public void animate(double p) {
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+        dummy.setDuration(50);
+        engine.showAnimation(dummy);
+        
         // Get the stage and remove it.
         MethodStage stage = ((MethodFrame) frameStack.pop()).getMethodStage();
         manager.removeMethodStage(stage);
