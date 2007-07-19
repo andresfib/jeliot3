@@ -1727,7 +1727,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
         try {
             enableWidgets(editWidgets.elements(), false);
             String programCode = editor.getProgram();
-
+            
+            final int line = editor.getTextArea().getVerticalScrollBar().getValue();
+            //System.out.println(line);
+            
             if (methodCall == null) {
                 methodCall = SourceCodeUtilities
                         .findMainMethodCall(
@@ -1780,7 +1783,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
                             public void run() {
 
-                                enterAnimate();
+                                enterAnimate(line);
                                 //Buttons are enables just after the animation mode is not before
                                 enableWidgets(animWidgets.elements(), true);
                                 pauseButton.setEnabled(false);
@@ -1933,11 +1936,22 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * Changes the user interface when the "Compile" button is pressed. Rewinds
      * the animation.
      */
-    public void enterAnimate() {
+    public void enterAnimate(final int line) {
         //enableWidgets(editWidgets.elements(), false);
         //enableWidgets(animWidgets.elements(), true);
         changeCodePane(codePane);
         outputConsole.setText("");
+        new Thread() {
+            public void run() {
+                while (!codePane.getTextArea().isScrollBarsInitialized()) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
+                }
+                codePane.getTextArea().getVerticalScrollBar().setValue(line);
+            }
+        }.start();
         rewindAnimation();
     }
 
