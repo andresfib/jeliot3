@@ -3761,11 +3761,11 @@ public class EvaluationVisitor extends VisitorObject {
      * @param node the node to visit
      */
     public Object visit(CastExpression node) {
-        long expCounter = counter++;
-        long auxCounter = counter;
         Object o = performCast(NodeProperties.getType(node), node
                 .getExpression().acceptVisitor(this));
         if (MCodeUtilities.isPrimitive(o.getClass().getName())) {
+            long expCounter = counter++;
+            long auxCounter = counter;
             MCodeUtilities.write("" + Code.CAST + Code.DELIM + expCounter
                     + Code.DELIM + auxCounter + Code.DELIM
                     + MCodeUtilities.getValue(o) + Code.DELIM

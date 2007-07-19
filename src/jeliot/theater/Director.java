@@ -235,11 +235,11 @@ public class Director {
     }
 
     private void stopRunUntilIfInEndOfProgram() {
-        if (this.frameStack.size() == 1) {
-            runUntilLine = -1;
+        if (this.frameStack.size() == 1 && runUntilLine > 0) {
+            runUntilLine = 0;
             setRunUntilEnabled(false);
             jeliot.runUntilDone();
-            theatre.repaint();
+            theatre.flush();
         }
     }
     

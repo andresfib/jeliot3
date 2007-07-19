@@ -51,6 +51,11 @@ public class CodePane2 extends JComponent {
                     .getStringProperty("font.code_pane.size")));
 
     /**
+     * 
+     */
+    private LineNumbersAdjustmentHandler lnah;
+
+    /**
      * Constructs the CodePane -object, sets the layout and
      * adds the JScrollPane with JTextArea in the layout.
      */
@@ -67,8 +72,7 @@ public class CodePane2 extends JComponent {
         area.setHorizontalOffset(5);
         ln = new LineNumbers(font, new Insets(1, 0, 0, 0));
         area.addToLeft(ln);
-        LineNumbersAdjustmentHandler lnah = new LineNumbersAdjustmentHandler(
-                area, ln);
+        lnah = new LineNumbersAdjustmentHandler(area, ln);
         area.addAdjustListernerForVertical(lnah);
         add("Center", area);
         area
@@ -98,15 +102,14 @@ public class CodePane2 extends JComponent {
         area.setEditable(false);
         area.setCaretReallyVisible(false);
         area.getPainter().setBracketHighlightEnabled(false);
-        //area.revalidate();
+        area.revalidate();
     }
 
     /**
      * Sets the given program code <code>String text</code> into
      * the JTextArea area.
      *
-     * @param text The program code to be set in the
-     * JTextArea area.
+     * @param text The program code to be set in the JTextArea area.
      */
     public void installProgram(String text) {
         area.setText(text);
@@ -159,7 +162,7 @@ public class CodePane2 extends JComponent {
 
         final int left = l - 1;
         final int right = r;
-        
+
         //Tracker.writeToFileFromCodeView("Highlight", left, right, TrackerClock.currentTimeMillis(), -1);
 
         Runnable updateAComponent = new Runnable() {
@@ -193,6 +196,9 @@ public class CodePane2 extends JComponent {
         ln.setHighlightedLine(line);
     }
 
+    /**
+     * 
+     */
     public void setFont(Font font) {
         super.setFont(font);
         ln.setFont(font);
@@ -208,9 +214,11 @@ public class CodePane2 extends JComponent {
         highlightStatement(new Highlight(0, 0, 0, 0));
     }
 
+    /**
+     * 
+     */
     public boolean requestFocusInWindow() {
         //requestFocusInWindow();
         return this.area.requestFocusInWindow();
     }
-
 }
