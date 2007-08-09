@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.io.BufferedReader;
 
 /**
- * @author Roland Küstermann
+ * @author Roland Kï¿½stermann
  */
 public class JeliotInputHandlerImpl extends InputHandler  {
     public boolean isByteInputMethod(Method m) {
@@ -22,7 +22,7 @@ public class JeliotInputHandlerImpl extends InputHandler  {
     }
 
     public boolean isDoubleInputMethod(Method m) {
-      return m.getName().equals("readDouble");
+      return (m.getName().equals("readDouble") || m.getName().equals("nextDouble"));
     }
 
     public boolean isFloatInputMethod(Method m) {
@@ -30,7 +30,7 @@ public class JeliotInputHandlerImpl extends InputHandler  {
     }
 
     public boolean isIntegerInputMethod(Method m) {
-        return m.getName().equals("readInt");
+        return (m.getName().equals("readInt") || m.getName().equals("nextInt"));
     }
 
     public boolean isLongInputMethod(Method m) {
@@ -38,7 +38,7 @@ public class JeliotInputHandlerImpl extends InputHandler  {
     }
 
     public boolean isStringInputMethod(Method m) {
-        return m.getName().equals("readString");
+        return (m.getName().equals("readString") || m.getName().equals("next"));
     }
 
     public void setInputReader(BufferedReader in) {
