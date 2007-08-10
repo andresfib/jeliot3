@@ -346,7 +346,7 @@ public class ClassInfoCompiler {
 
         MethodDeclaration md = new MethodDeclaration(cd.getAccessFlags(),
                 new VoidType(), "<init>", cd.getParameters(), new LinkedList(),
-                new BlockStatement(cd.getStatements()));
+                new BlockStatement(cd.getStatements()), cd.getFilename(), cd.getBeginLine(), cd.getBeginColumn(), cd.getEndLine(), cd.getEndColumn());
         interpreter.registerMethod(sig, md, importationManager);
 
         // Add the instance initialization statement to the constructor statement
