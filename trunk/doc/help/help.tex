@@ -51,7 +51,8 @@ or Step again. Rewind restarts the animation from the beginning. The slider cont
 the speed of the animation.
 
 The Animation menu includes selections: Run Until to interpret the program
-without animation until a line is reached, and Print current visualization to
+without animation until a line is reached (if the line is never reached the
+visualization will stop in the end of program), and Print current visualization to
 print a screen shot of the current display.
 
 \section{Options}
@@ -61,17 +62,23 @@ either when saving and loading files or during visualization, set this option on
 
 Save On Compilation: Save the source file automatically before compilation.
 
-Ask For Method: When the animation starts, you will be asked for a method name
-to call instead of the main method.
+Show Strings as Objects: Changes the visualization of a String value to be an object.
+
+Do Garbage Collection: Enables garbage collection during the program visualization.
+This is very useful when Strings are showns as objects because otherwise screen can be cluttered.
 
 Ask For Command Line Parameters: When the animation starts, you will be asked
 for parameters for the method called.
+
+Ask For Method: When the animation starts, you will be asked for a method name
+to call instead of the main method.
 
 Use Null Parameter To Call Main: If checked, the main method will be called 
 with a null parameter; this avoids animating the creation of an empty array.
 
 Ask Questions During Animation: Whenever an expression is to be evaluated, a 
-popup window will ask for the result. However, currently questions are generated only for assignment statements.
+popup window will ask for the result. However, currently questions are generated
+only for assignment statements.
 
 Pause On Message: Automatically pauses the animation to display messages
 explaining its progress.
@@ -93,11 +100,17 @@ char Input.readChar(), String Input.readString().
 
 All classes must be in a single source file. 
 
-%Arrays with components of reference type except String are not supported.
+Only static methods that do not return an object can be called from Java API.
+
+Constructors cannot ask for user input.
 
 Inner classes are not supported.
 
-Only static methods that do not return an object can be called from Java API.
+Because of the underlying interpreter no circular dependencies between classes can be resolved and thus they are not supported.
+
+The run until -feature cannot be set on lines with this- or super-method calls.
+
+In some (hopefully, very few) occasions, a reference/value is shown in a expression evaluation area longer than it should be due to the design of Jeliot and DynamicJava because we cannot make sure if those references/values are still needed.
 
 \section{References}
 
