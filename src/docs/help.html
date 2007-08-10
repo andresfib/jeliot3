@@ -81,7 +81,8 @@ the speed of the animation.
 
 <div class="p"><!----></div>
 The Animation menu includes selections: Run Until to interpret the program
-without animation until a line is reached, and Print current visualization to
+without animation until a line is reached (if the line is never reached the
+visualization will stop in the end of program), and Print current visualization to
 print a screen shot of the current display.
 
 <div class="p"><!----></div>
@@ -96,12 +97,19 @@ either when saving and loading files or during visualization, set this option on
 Save On Compilation: Save the source file automatically before compilation.
 
 <div class="p"><!----></div>
-Ask For Method: When the animation starts, you will be asked for a method name
-to call instead of the main method.
+Show Strings as Objects: Changes the visualization of a String value to be an object.
+
+<div class="p"><!----></div>
+Do Garbage Collection: Enables garbage collection during the program visualization.
+This is very useful when Strings are showns as objects because otherwise screen can be cluttered.
 
 <div class="p"><!----></div>
 Ask For Command Line Parameters: When the animation starts, you will be asked
 for parameters for the method called.
+
+<div class="p"><!----></div>
+Ask For Method: When the animation starts, you will be asked for a method name
+to call instead of the main method.
 
 <div class="p"><!----></div>
 Use Null Parameter To Call Main: If checked, the main method will be called 
@@ -109,7 +117,8 @@ with a null parameter; this avoids animating the creation of an empty array.
 
 <div class="p"><!----></div>
 Ask Questions During Animation: Whenever an expression is to be evaluated, a 
-popup window will ask for the result. However, currently questions are generated only for assignment statements.
+popup window will ask for the result. However, currently questions are generated
+only for assignment statements.
 
 <div class="p"><!----></div>
 Pause On Message: Automatically pauses the animation to display messages
@@ -144,13 +153,19 @@ All classes must be in a single source file.
 Only static methods that do not return an object can be called from Java API.
 
 <div class="p"><!----></div>
-Constructors cannot ask for users input.
+Constructors cannot ask for user input.
 
 <div class="p"><!----></div>
 Inner classes are not supported.
 
 <div class="p"><!----></div>
 Because of the underlying interpreter no circular dependencies between classes can be resolved and thus they are not supported.
+
+<div class="p"><!----></div>
+The run until -feature cannot be set on lines with this- or super-method calls.
+
+<div class="p"><!----></div>
+In some (hopefully, very few) occasions, a reference/value is shown in a expression evaluation area longer than it should be due to the design of Jeliot and DynamicJava because we cannot make sure if those references/values are still needed.
 
 <div class="p"><!----></div>
  <h2><a name="tth_sEc9">
