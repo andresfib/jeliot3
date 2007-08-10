@@ -2043,7 +2043,7 @@ public class EvaluationVisitor extends VisitorObject {
                 .getDeclaringClass()), simpleAllocationCounter);
         MCodeUtilities.write("" + Code.CONSCN + Code.DELIM
                 + EvaluationVisitor.getConstructorCallNumber());
-        
+
         //If Scanner constructor we hack a simple Scanner constructor that also 
         //skips the special stacks (superClassesStack and so handling)
         //otherwise we do nothing special b

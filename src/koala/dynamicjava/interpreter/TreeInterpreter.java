@@ -306,8 +306,7 @@ public class TreeInterpreter implements Interpreter {
             code = MCodeUtilities.replace(code, "\n", "<br>");
             code = MCodeUtilities.replace(code, "\r", "");
 
-            if (code
-                    .equals("" + Code.ERROR + Code.DELIM + "<h1>Error</h1><p>")) {
+            if (code.equals("" + Code.ERROR + Code.DELIM + "<h1>Error</h1><p>")) {
                 code += internalError(e);
             } else {
                 code += "</p>";
@@ -320,7 +319,7 @@ public class TreeInterpreter implements Interpreter {
             //e.printStackTrace();
             return e;
         } catch (Exception e) {
-            
+
             DebugUtil.handleThrowable(e);
 
             String code = "" + Code.ERROR + Code.DELIM
@@ -992,9 +991,9 @@ public class TreeInterpreter implements Interpreter {
                 }
             }
         }
-        
-        //TODO: if one of the parameters is null this won't work! Moved above
+
         /*
+         //if one of the parameters is null this won't work! Moved above
          Class[] typesAux = new Class[params.length];
          int j = 0;
          while (j<params.length){
@@ -1019,17 +1018,14 @@ public class TreeInterpreter implements Interpreter {
                 && name.equals("<init>");
 
         if (inConstructorCall) {
-
             Long callNumber = new Long(EvaluationVisitor
                     .getConstructorCallNumber());
             MCodeUtilities.write("" + Code.CONSCN + Code.DELIM + callNumber);
-
         }
 
         if (!name.equals("<clinit>")
                 && (!EvaluationVisitor.isSetConstructorCall()
                         || inConstructorCall || !name.equals("<init>"))) {
-
             MCodeUtilities.write(Code.PARAMETERS + Code.DELIM
                     + MCodeGenerator.argToString(argnames));
             MCodeUtilities.write(Code.MD + Code.DELIM
@@ -1047,7 +1043,6 @@ public class TreeInterpreter implements Interpreter {
                 ((Node) it.next()).acceptVisitor(v);
             }
         } catch (ReturnException e) {
-
             return e.getValue();
         }
 
@@ -1288,7 +1283,7 @@ public class TreeInterpreter implements Interpreter {
                 MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.P
                         + Code.DELIM + auxCounter + Code.DELIM
                         + MCodeGenerator.locationToString(n));
-                
+
                 result[i++] = n.acceptVisitor(v);
                 Class typeClass = NodeProperties.getType(n);
                 String type = null;
