@@ -658,7 +658,7 @@ public class CodeEditor2 extends JComponent {
     /**
      * Method returns the program code inside the JTextArea as String -object
      * Tabulators are changed to spaces for uniform handling of white spaces.
-     * One tabulator corresponds four ASCII white spaces.
+     * One tabulator corresponds four ASCII white spaces (this is changable from resources/properties).
      * 
      * @return The program code inside the JTextArea area.
      */
@@ -680,7 +680,8 @@ public class CodeEditor2 extends JComponent {
         for (int i = 0; i < n; i++) {
             spaces += " ";
         }
-        return MCodeUtilities.replace(code, "\t", spaces);
+        return code.replaceAll("\\t", spaces);
+        //return MCodeUtilities.replace(code, "\t", spaces);
     }
 
     /**
@@ -823,7 +824,6 @@ public class CodeEditor2 extends JComponent {
             area.setCaretPosition(caretPosition);
         }
         area.requestFocusInWindow();
-
     }
 
     /**
@@ -858,6 +858,8 @@ public class CodeEditor2 extends JComponent {
         try {
             //Replacing \t characters with spaces
             String code = replaceTabs(area.getText());
+            //Replacing \n or \r\n characters with spaces
+            //code = replaceEndOfLines(code);
             
             BufferedWriter w = null;
             if (this.jeliotUserProperties.getBooleanProperty("save_unicode")) {
@@ -866,7 +868,7 @@ public class CodeEditor2 extends JComponent {
                 w = new BufferedWriter(new FileWriter(file));
             }
             
-            w.write(code);
+            w.write(replaceEndOfLines(code));
             w.flush();
             w.close();
             
@@ -882,7 +884,6 @@ public class CodeEditor2 extends JComponent {
             currentFile = file; // Jeliot 3
             setChanged(false); //Jeliot 3
             setTitle(file.getName()); // Jeliot 3
-
             return true;
         } catch (IOException e) {
             //e.printStackTrace();
@@ -892,6 +893,13 @@ public class CodeEditor2 extends JComponent {
         return false;
     }
 
+    private static String EOL = System.getProperty("line.separator");
+    
+    private String replaceEndOfLines(String text) {
+        text = text.replaceAll("\\r?\\n", EOL);
+        return text;
+    }
+
     /**
      * 
      * @param position
@@ -899,7 +907,9 @@ public class CodeEditor2 extends JComponent {
      */
     public int getCorrectTextPosition(String code, int position, int tabSize) {
         int tabs = code.substring(0, position).split("\t", -1).length - 1;
-        return position + (tabs * tabSize) - tabs;
+        //int ns = code.substring(0, position).split("\n", -1).length - 1;
+        //int rns = code.substring(0, position).split("\r\n", -1).length - 1;
+        return position + (tabs * tabSize) - tabs /* + ((EOL.length() - 1) * ns + (EOL.length() - 2) * rns) */;
     }
 
     /**
@@ -930,7 +940,9 @@ public class CodeEditor2 extends JComponent {
             r.close();
             return buff.toString();
         } catch (IOException e) {
-            //TODO: report to user that something went wrong!
+            //report to user that something went wrong!
+            JOptionPane.showMessageDialog(masterFrame, messageBundle
+                    .getString("code_editor.read_failed"));
             if (DebugUtil.DEBUGGING) {
                 e.printStackTrace();
             }
