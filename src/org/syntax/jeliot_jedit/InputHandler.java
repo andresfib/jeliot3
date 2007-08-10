@@ -740,15 +740,18 @@ public abstract class InputHandler extends KeyAdapter
 			int i = 0;
 			int n = currentLine.length();
 			String tabs = "";
-			while (i < n) { 
+			while (i < n) {
 			    if (currentLine.substring(i,i+1).equals("\t")) {
 			        tabs += "\t";
 			        i++;
-			    } else {
+			    } else if (currentLine.substring(i,i+1).equals(" ")) {
+                    tabs += " ";
+                    i++;
+                } else {
 			        break;
 			    }
 			}
-			//Addtion for Jeliot 3 ends.
+			//Addition for Jeliot 3 ends.
 			
 			textArea.setSelectedText("\n" /* <Jeliot 3> */ + tabs /* </Jeliot 3> */);
 		}
