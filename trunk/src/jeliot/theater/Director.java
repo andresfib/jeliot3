@@ -2418,7 +2418,9 @@ public class Director {
     public Value animateInputHandling(String type, String prompt, Highlight h) {
 
         Animator animator = null;
-
+        if (Util.visualizeStringsAsObjects() && (prompt != null)){
+        	prompt = prompt.substring(0, prompt.lastIndexOf("@"));
+        }
         if (MCodeUtilities.resolveType(type) == MCodeUtilities.DOUBLE) {
             animator = readDouble(prompt);
         } else if (MCodeUtilities.resolveType(type) == MCodeUtilities.INT) {

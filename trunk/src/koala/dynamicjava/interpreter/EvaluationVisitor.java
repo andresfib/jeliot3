@@ -1423,10 +1423,10 @@ public class EvaluationVisitor extends VisitorObject {
                     + Code.DELIM + MCodeUtilities.getValue(result) + Code.DELIM
                     + m.getReturnType().getName() + Code.DELIM
                     + MCodeGenerator.locationToString(node));
-
-            if (prompt != null && prompt.length() > 0) {
-                inputHandler.out(counter, "println", result.toString(), node);
-            }
+            /* Taken care of somewhere else, and not needed anymore */
+            //if (prompt != null && prompt.length() > 0) {
+            //    inputHandler.out(counter, "println", result.toString(), node);
+            //}
         }
         return result;
 
