@@ -3133,7 +3133,7 @@ public class Director {
 
         while (li.hasNext()) {
             Variable v = (Variable) li.next();
-            System.out.println("!!!" + v.getName());
+            DebugUtil.printDebugInfo("!!!" + v.getName());
             declareClassVariable(c, v, v.getValue());
         }
         theatre.getManager().validateTheater();

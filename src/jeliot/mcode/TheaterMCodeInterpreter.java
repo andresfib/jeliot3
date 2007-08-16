@@ -11,6 +11,8 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import sun.security.jgss.LoginUtility;
+
 import jeliot.FeatureNotImplementedException;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.lang.ArrayInstance;
@@ -327,7 +329,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 && token != Code.SMC && token != Code.SA) {
             closeScratch();
             openScratch();
-            checkInstancesForRemoval();
+            checkInstancesForRemoval(false);
         }
     }
 
@@ -337,10 +339,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @see jeliot.mcode.MCodeInterpreter#endRunning()
      */
     protected void endRunning() {
-        if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG")) {
-            removeClasses();
-            removeInstances();
-        }
+        //if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG")) {
+        removeClasses();
+        removeInstances();
+        //}
 
         //TODO fix this hack!
         if (avInteractionEngine != null) {
@@ -3163,8 +3165,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     /**
      * Used at the moment.
      */
-    public void checkInstancesForRemoval() {
-        if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG")) {
+    public void checkInstancesForRemoval(boolean override) {
+        if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG") || override) {
             //Enumeration enumeration = instances.keys();
             //while (enumeration.hasMoreElements()) {
             for (Iterator i = instances.keySet().iterator(); i.hasNext();) {
@@ -3172,11 +3174,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 Instance inst = (Instance) instances.get(obj);
                 if (inst != null) {
                     //For testing
-                    System.out.println(inst.getType() + "@"
-                            + inst.getHashCode());
-                    System.out.println("number of references1: "
+                    DebugUtil.printDebugInfo(inst.getType() + "@" + inst.getHashCode());
+                    DebugUtil.printDebugInfo("number of references1: "
                             + inst.getNumberOfReferences());
-                    System.out.println("number of references2: "
+                    DebugUtil.printDebugInfo("number of references2: "
                             + inst.getActor().getNumberOfReferences());
                     if (inst.getNumberOfReferences() == 0
                             || inst.getActor().getNumberOfReferences() == 0) {
@@ -3184,7 +3185,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                         i.remove();
                         director.removeInstance(inst.getActor());
                         inst = null;
-                        System.out.println("instance removed!");
+                        DebugUtil.printDebugInfo("instance removed!");
                     }
                 }
             }

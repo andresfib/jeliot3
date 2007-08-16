@@ -23,6 +23,7 @@ import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.mcode.input.InputHandler;
 import jeliot.mcode.input.InputHandlerFactory;
+import jeliot.util.DebugUtil;
 import koala.dynamicjava.interpreter.context.Context;
 import koala.dynamicjava.interpreter.context.GlobalContext;
 import koala.dynamicjava.interpreter.error.CatchedExceptionError;
@@ -1801,7 +1802,7 @@ public class EvaluationVisitor extends VisitorObject {
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         } catch (Throwable e1) {
-            System.out.print(e1);
+            DebugUtil.handleThrowable(e1);
             throw new CatchedExceptionError(
                     "Throwable in static method invocation", e1, node);
         }

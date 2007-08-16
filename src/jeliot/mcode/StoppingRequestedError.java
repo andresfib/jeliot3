@@ -45,10 +45,9 @@ public class StoppingRequestedError extends Error {
 
     public void printRequestStop() {
         //For Debugging
-        if (DebugUtil.DEBUGGING) {
-            System.out.println("Stopping Requested: " + Thread.currentThread().getName());
-            //Thread.dumpStack();
-        }
+        DebugUtil.printDebugInfo("Stopping Requested: "
+                + Thread.currentThread().getName());
+        //Thread.dumpStack();
     }
 
 }
