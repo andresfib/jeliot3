@@ -11,8 +11,6 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import sun.security.jgss.LoginUtility;
-
 import jeliot.FeatureNotImplementedException;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.lang.ArrayInstance;
