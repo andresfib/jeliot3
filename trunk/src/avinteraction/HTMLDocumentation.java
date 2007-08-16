@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import jeliot.util.DebugUtil;
 import jeliot.util.Util;
 
 /**
@@ -80,8 +81,8 @@ public class HTMLDocumentation extends Documentation {
             htmlView = new JEditorPane(docURL);
             htmlView.setEditable(false);
         } catch (Exception exception) {
-            exception.printStackTrace();
-            System.out.println("IOException in Documentation.makeGUI()");
+            DebugUtil.handleThrowable(exception);
+            DebugUtil.printDebugInfo("IOException in Documentation.makeGUI()");
         }
 
         // sets the layout manager of the object

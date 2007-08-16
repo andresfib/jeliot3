@@ -215,30 +215,33 @@ public class Jeliot {
      */
     private UserProperties jeliotUserProperties = ResourceBundles
             .getJeliotUserProperties();
-    
+
     /**
      * Defines the user model to use
      * Now either BasicInternal or BasicInternal+Adapt2
      */
     private UMInteraction userModel = null;
-    
+
     /**
      * username, useful for adaptation
      */
     protected String userName;
+
     /**
      * sessionID useful for adaptation;
      */
     protected String sessionID;
+
     /**
      * password useful or NOT for adaptation;
      */
-    protected String password ="";
+    protected String password = "";
+
     /**
      * group the "userNAme" belongs to. Useful or NOT for adaptation;
      */
     protected String group = "";
-    
+
     /**
      * 
      */
@@ -420,7 +423,8 @@ public class Jeliot {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);
             MCodeUtilities
-                    .addRegisteredSecondaryMCodeConnections(new PrintWriter(pw, true));
+                    .addRegisteredSecondaryMCodeConnections(new PrintWriter(pw,
+                            true));
             mCodeInterpreterForCallTree = new CallTreeMCodeInterpreter(
                     new BufferedReader(pr), callTree, gui.getProgram(), this,
                     gui.getTabNumber(bundle2.getString("tab.title.call_tree")));
@@ -434,19 +438,19 @@ public class Jeliot {
             //AVInteractionEngine and Interpreter initialization!
             try {
                 userModel.userLogin(userName, sessionID);
-                
+
                 AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
                         this.gui.getFrame(), userModel);
-                
+
                 //maybe we should pass this as a constructor parameter?
                 ((TheaterMCodeInterpreter) mCodeInterpreterForTheater)
                         .setAvInteractionEngine(avinteractionEngine);
-                
+
                 PipedReader pr = new PipedReader();
                 PipedWriter pw = new PipedWriter(pr);
                 mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
-                        new BufferedReader(pr), new PrintWriter(
-                                pw, true), avinteractionEngine, userModel);
+                        new BufferedReader(pr), new PrintWriter(pw, true),
+                        avinteractionEngine, userModel);
                 MCodeUtilities
                         .addRegisteredPrePrimaryMCodeConnections(mCodeInterpreterForAVInteraction);
             } catch (Exception e) {
@@ -952,14 +956,23 @@ public class Jeliot {
     public int getSelectedTabIndex() {
         return gui.getSelectedIndexInTabbedPane();
     }
-    public void setUserModel(String type){
-    	if (type.equals("none") || type.equals("")){
-    		userModel = null;
-    	} else if (type.equals("basic")){
-    		userModel = new BasicInternalUM();
-    	} else if (type.equals("adapt2")){
-    		userModel = new Adapt2Interaction(userName, password, group, sessionID);
-    	}
-    	return;
+
+    public void setUserModel(String type) {
+        if (type.equals("none") || type.equals("")) {
+            userModel = null;
+        } else if (type.equals("basic")) {
+            userModel = new BasicInternalUM();
+        } else if (type.equals("adapt2")) {
+            userModel = new Adapt2Interaction(userName, password, group,
+                    sessionID);
+        }
+        return;
+    }
+
+    public void collectGarbage() {
+        if (mCodeInterpreterForTheater instanceof TheaterMCodeInterpreter) {
+            ((TheaterMCodeInterpreter) mCodeInterpreterForTheater).checkInstancesForRemoval(true);
+            DebugUtil.printDebugInfo("garbage collected1");
+        }
     }
 }

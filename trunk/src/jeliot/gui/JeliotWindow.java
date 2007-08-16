@@ -186,6 +186,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
     private JComponent conPan;
 
     /**
+     * 
+     */
+    private int runUntilLine = -1;
+
+    /**
      * True if an error has occured during the execution and false if no error
      * was encountered.
      */
@@ -958,7 +963,21 @@ public class JeliotWindow implements PauseListener, MouseListener {
             }
         });
         menu.add(garbageCollection);
-        //this.editWidgets.add(garbageCollection);
+
+        //Do CG
+        final JMenuItem garbageCollectionNow = new JMenuItem(messageBundle
+                .getString("menu.options.CG_now"));
+        garbageCollectionNow.setMnemonic(KeyEvent.VK_G);
+        garbageCollectionNow.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_G, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        garbageCollectionNow.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jeliot.collectGarbage();
+                DebugUtil.printDebugInfo("garbage collected");
+            }
+        });
+        menu.add(garbageCollectionNow);
+        this.animWidgets.add(garbageCollectionNow);
 
         //Ask for main method/command line parameters
         final JCheckBoxMenuItem askForMainMethodParametersMenuItem = new JCheckBoxMenuItem(
@@ -1664,10 +1683,13 @@ public class JeliotWindow implements PauseListener, MouseListener {
         for (int i = 1; i < n; i++) {
             tabbedPane.setEnabledAt(i, false);
         }
+        
+        this.runUntilLine = -1;
         if (runningUntil) {
             jeliot.runUntil(0);
             runUntilFinished();
         }
+        
         panelController.slide(false, new Runnable() {
 
             public void run() {
@@ -1727,10 +1749,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
         try {
             enableWidgets(editWidgets.elements(), false);
             String programCode = editor.getProgram();
-            
-            final int line = editor.getTextArea().getVerticalScrollBar().getValue();
+
+            final int line = editor.getTextArea().getVerticalScrollBar()
+                    .getValue();
             //System.out.println(line);
-            
+
             if (methodCall == null) {
                 methodCall = SourceCodeUtilities
                         .findMainMethodCall(
@@ -2110,12 +2133,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
         theater.repaint();
         outputConsole.setText("");
 
-        if (runningUntil) {
-            //TODO: Here ask if the user wants to continue with run until.
-            jeliot.runUntil(0);
-            runUntilFinished();
-        }
-
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
@@ -2137,6 +2154,37 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 pauseButton.setEnabled(false);
                 rewindButton.setEnabled(false);
 
+                if (runningUntil) {
+                    //TODO: Here ask if the user wants to continue with run until.
+                    jeliot.runUntil(0);
+                    runUntilFinished();
+                    new Thread() {
+                        public void run() {
+                            while (!codePane.getTextArea().isScrollBarsInitialized()) {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (InterruptedException e) {
+                                }
+                            }
+                            codePane.getTextArea().getVerticalScrollBar().setValue(runUntilLine);
+                            runUntil();
+                        }
+                    }.start();
+                } else if (runUntilLine > 0) {
+                    new Thread() {
+                        public void run() {
+                            while (!codePane.getTextArea().isScrollBarsInitialized()) {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (InterruptedException e) {
+                                }
+                            }
+                            codePane.getTextArea().getVerticalScrollBar().setValue(runUntilLine);
+                            runUntil();
+                        }
+                    }.start();
+                }
+                
                 String[] s2 = { messageBundle.getString("menu.animation.step"),
                         messageBundle.getString("menu.animation.play"),
                         messageBundle.getString("menu.control.edit"),
@@ -2216,7 +2264,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
      */
     public void runUntil() {
         String inputValue = JOptionPane.showInputDialog(this.frame,
-                messageBundle.getString("dialog.run_until"), new Integer(0));
+                messageBundle.getString("dialog.run_until"),
+                runUntilLine > 0 ? new Integer(runUntilLine) : new Integer(0));
         int lineNumber = 0;
 
         try {
@@ -2225,6 +2274,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         }
 
         if (lineNumber > 0) {
+            this.runUntilLine = lineNumber;
             jeliot.runUntil(lineNumber);
             previousSpeed = speedSlider.getValue();
             speedSlider.setValue(speedSlider.getMaximum());
@@ -2242,6 +2292,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 }
             });
         } else {
+            runUntilLine = -1;
             if (runningUntil) {
                 jeliot.runUntil(0);
                 runUntilFinished();
