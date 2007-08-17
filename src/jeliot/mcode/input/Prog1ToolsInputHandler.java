@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.lang.reflect.Method;
 
 /**
- * @author Roland Küstermann
+ * @author Roland Kï¿½stermann
  */
 public class Prog1ToolsInputHandler extends InputHandler  {
 
@@ -29,7 +29,7 @@ public class Prog1ToolsInputHandler extends InputHandler  {
     }
 
     public boolean isIntegerInputMethod(Method m) {
-        return m.getName().equals("readInteger");
+        return (m.getName().equals("readInteger") || m.getName().equals("readInt"));
     }
 
     public boolean isLongInputMethod(Method m) {

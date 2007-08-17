@@ -106,6 +106,26 @@ public class IOTools {
         }
     }
 
+    /** Liest eine <CODE>Int</CODE>egerzahl von der Tastatur ein. Soll vorher eine
+ Eingabeaufforderung gemacht werden, geschieht dies durch den Parameter.
+ Dieser kann jedoch auch wegfallen.
+@param prompt eine eventuelle Eingabeaufforderung
+@return die eingelesene Zahl.
+ */
+    public static int readInt(String prompt){
+        int erg;
+        System.out.print(prompt);
+        init();
+        while(true){
+            try{
+                erg=Integer.parseInt(eingabe.nextToken());
+            } catch (NumberFormatException e) {
+              error(e,prompt);init();continue;
+            }
+            return erg;
+        }
+    }
+
 /** Liest eine <CODE>Long</CODE>zahl von der Tastatur ein. Soll vorher eine
  Eingabeaufforderung gemacht werden, geschieht dies durch den Parameter.
  Dieser kann jedoch auch wegfallen.
@@ -231,6 +251,10 @@ public class IOTools {
  */
     public static int readInteger(){
             return readInteger("");
+    }
+
+    public static int readInt(){
+            return readInt("");
     }
 
 /** Liest eine <CODE>Long</CODE>zahl von der Tastatur ein.
