@@ -14,6 +14,8 @@ import avinteraction.MCQuestion;
 import avinteraction.TFQuestion;
 import avinteraction.UnknownInteractionException;
 
+import java.awt.*;
+
 public class AVInteractionEngine {
 
     /** Backend to use */
@@ -39,12 +41,8 @@ public class AVInteractionEngine {
         //testModule.addWindowListener(this);
     }
 
-    /**
-     * 
-     *
-     */
-    public void getResults() {
-        backend.getResults();
+    public void showResults(Component component) {
+        backend.showResults(component);
     }
 
     /**

@@ -1,11 +1,13 @@
 package jeliot.avinteraction;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import jeliot.adapt.ModelEvent;
 import jeliot.adapt.UMInteraction;
 
 import avinteraction.backend.BackendInterface;
+
+import java.awt.*;
 
 /**
  *
@@ -104,9 +106,9 @@ public class PointMachine implements BackendInterface {
      * points, calculates the percentage of correct answers and
      * shows it as well.
      */
-    public void getResults() {
-        int percentage = 0;
 
+    public void showResults(Component component) {
+        int percentage = 0;
         if (allPoints > 0) {
             percentage = (earnedPoints * 100) / allPoints;
 
@@ -114,8 +116,8 @@ public class PointMachine implements BackendInterface {
                 System.out.println("\nFinal results: " + earnedPoints + " out of "
                         + allPoints + " points, that means " + percentage + "%");
             }
-            
-            JOptionPane.showMessageDialog(null, "Final results: " + earnedPoints + " out of "
+
+            JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(component), "Final results: " + earnedPoints + " out of "
                     + allPoints + " points, that means " + percentage + "%", "Final Results", JOptionPane.PLAIN_MESSAGE);
         }
     }
