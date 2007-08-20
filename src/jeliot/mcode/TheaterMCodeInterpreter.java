@@ -345,7 +345,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         //TODO fix this hack!
         if (avInteractionEngine != null) {
             this.director.getTheatre().requestFocus();
-            avInteractionEngine.getResults();
+            avInteractionEngine.showResults(director.getTheatre());
         }
     }
 
