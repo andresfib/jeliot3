@@ -91,9 +91,9 @@ comment: ``use jeliot in the classroom to show things, no matter what language y
 % as the same basic animations are valid for learning any language! Teacher can use ready made examples for demonstrations, as understanding the syntax of Java in such basic level should be easy for anyone knowing how to program.
 
 % ### HISTORY ###
-\section{History (?)}
+%\section{History}
 % ### RELEASE NOTES ###
-\section{Release Notes (?)}
+%\section{Release Notes}
 
 % ### INSTALLATION ###
 \section{Installation}
@@ -291,6 +291,43 @@ In addition to the commands that are also located in the toolbar, the \menu{anim
 
 Note that \menu{Animation} menu is disabled while you are in editing state. In the same way \menu{Program} and \menu{Edit} menus will be disabled in animation state. 
 
+\menu{Options} holds different options that are created for special situations:
+\begin{itemize}
+\item \menu{Save Files In Unicode}: If you experience problems with native characters
+either when saving and loading files or during visualization, set this option on.
+
+\item \menu{Save On Compilation}: Save the source file automatically before compilation.
+
+\item \menu{Show Strings as Objects}: Changes the visualization of a String value to be an object.
+
+\item \menu{Do Garbage Collection}: Enables garbage collection during the program visualization.
+This is very useful when Strings are showns as objects because otherwise screen can be cluttered.
+
+\item \menu{Ask For Command Line Parameters}: When the animation starts, you will be asked
+for parameters for the method called.
+
+\item \menu{Ask For Method}: When the animation starts, you will be asked for a method name
+to call instead of the main method.
+
+\item \menu{Use Null Parameter To Call Main}: If checked, the main method will be called 
+with a null parameter; this avoids animating the creation of an empty array.
+
+\item \menu{Ask Questions During Animation}: Whenever an expression is to be evaluated, a 
+popup window will ask for the result. However, currently questions are generated
+only for assignment statements.
+
+\item \menu{Pause On Message}: Automatically pauses the animation to display messages
+explaining its progress.
+
+\item \menu{Show History View}: Enables or disables the generation of the history view that
+shows snapshots of the previous animation in the theater. Note that the generation of
+the history images takes some time and might slow down the visualization. If the animation
+is too slow disable this option.
+
+\item \menu{Select Font Of Code}: Select the font for the code editor.
+
+\end{itemize}
+
 Last menu is \menu{Help}. There you can find information on \jel{} (\menu{About}) and the \menu{Help} document. Help document is opened on its own window when you select it from the menu, or press \bu{F1} on your keyboard.
 
 \subsection{Toolbar Buttons}
@@ -426,6 +463,6 @@ The {Jeliot} 2000 program animation system.
 % ### LICENSE ###
 \addcontentsline{toc}{section}{GNU Free Documentation License (?)}
 \section*{GNU Free Documentation License (?)}
-\input{FDL}
+\input{../FDL}
 
 \end{document}
