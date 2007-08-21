@@ -436,28 +436,7 @@ public class Jeliot {
 
         if (gui.isAskingQuestions()) {
             //AVInteractionEngine and Interpreter initialization!
-            try {
-                userModel.userLogin(userName, sessionID);
-
-                AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
-                        this.gui.getFrame(), userModel);
-
-                //maybe we should pass this as a constructor parameter?
-                ((TheaterMCodeInterpreter) mCodeInterpreterForTheater)
-                        .setAvInteractionEngine(avinteractionEngine);
-
-                PipedReader pr = new PipedReader();
-                PipedWriter pw = new PipedWriter(pr);
-                mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
-                        new BufferedReader(pr), new PrintWriter(pw, true),
-                        avinteractionEngine, userModel);
-                MCodeUtilities
-                        .addRegisteredPrePrimaryMCodeConnections(mCodeInterpreterForAVInteraction);
-            } catch (Exception e) {
-                if (DebugUtil.DEBUGGING) {
-                    DebugUtil.handleThrowable(e);
-                }
-            }
+            mCodeInterpreterForAVInteraction = initializeInteractionEngine((TheaterMCodeInterpreter) mCodeInterpreterForTheater);
         }
 
         // create the main loop for visualization
@@ -498,23 +477,56 @@ public class Jeliot {
 
         //a new thread for AVInteraction interpreter
         if (this.gui.isAskingQuestions()) {
-            avInteractionThread = new Thread(new Runnable() {
-
-                public void run() {
-                    try {
-                        mCodeInterpreterForAVInteraction.execute();
-                    } catch (Exception e) {
-                        if (DebugUtil.DEBUGGING) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-            avInteractionThread.start();
+            avInteractionThread = startInteractionEngine(mCodeInterpreterForAVInteraction);
         }
 
         engine.setController(controller);
         director.setController(controller);
+    }
+
+    protected AVInteractionMCodeInterpreter initializeInteractionEngine(TheaterMCodeInterpreter mCodeInterpreterForTheater) {
+        try {
+            userModel.userLogin(userName, sessionID);
+
+            AVInteractionEngine avinteractionEngine = new AVInteractionEngine(
+                    this.gui.getFrame(), userModel);
+
+            //maybe we should pass this as a constructor parameter?
+            ((TheaterMCodeInterpreter) mCodeInterpreterForTheater)
+                    .setAvInteractionEngine(avinteractionEngine);
+
+            PipedReader pr = new PipedReader();
+            PipedWriter pw = new PipedWriter(pr);
+            AVInteractionMCodeInterpreter mCodeInterpreterForAVInteraction = new AVInteractionMCodeInterpreter(
+                    new BufferedReader(pr), new PrintWriter(
+                            pw, true), avinteractionEngine, userModel);
+            MCodeUtilities
+                    .addRegisteredPrePrimaryMCodeConnections(mCodeInterpreterForAVInteraction);
+            return mCodeInterpreterForAVInteraction;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (DebugUtil.DEBUGGING) {
+                DebugUtil.handleThrowable(e);
+            }
+        }
+        return null;
+    }
+
+    protected Thread startInteractionEngine(final AVInteractionMCodeInterpreter mCodeInterpreterForAVInteraction) {
+        Thread avInteractionThread = new Thread(new Runnable() {
+
+            public void run() {
+                try {
+                    mCodeInterpreterForAVInteraction.execute();
+                } catch (Exception e) {
+                    if (DebugUtil.DEBUGGING) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        avInteractionThread.start();
+        return avInteractionThread;
     }
 
     /**
