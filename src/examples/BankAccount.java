@@ -4,7 +4,7 @@
 import java.util.Scanner;
 
 //This class defines a basic bank account
-public class BankAccount{
+class BankAccount{
   String ownerName;
   long accountID;
   double balance;
