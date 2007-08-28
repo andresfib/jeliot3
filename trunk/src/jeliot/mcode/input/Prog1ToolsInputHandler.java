@@ -44,6 +44,9 @@ public class Prog1ToolsInputHandler extends InputHandler  {
         return m.getName().equals("readShort");
     }
 
+	public boolean isBooleanInputMethod(Method m) {
+		return m.getName().equals("readBoolean");
+	}   
 
 
     public Object handleInput(Class aClass) {
@@ -66,6 +69,5 @@ public class Prog1ToolsInputHandler extends InputHandler  {
 
         throw new NoSuchMethodError("Input Method for class '"+aClass+"' not supported!");
     }
-
 
 }

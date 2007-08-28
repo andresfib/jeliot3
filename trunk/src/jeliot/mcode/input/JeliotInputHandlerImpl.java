@@ -40,6 +40,10 @@ public class JeliotInputHandlerImpl extends InputHandler  {
     public boolean isStringInputMethod(Method m) {
         return (m.getName().equals("readString") || m.getName().equals("next"));
     }
+    
+	public boolean isBooleanInputMethod(Method m) {
+		return false;
+	}
 
     public void setInputReader(BufferedReader in) {
         //To change body of implemented methods use File | Settings | File Templates.

@@ -75,6 +75,10 @@ public class LueInputHandlerImpl extends InputHandler {
 		return false;
 	}
 	
+	public boolean isBooleanInputMethod(Method m) {
+		return false;
+	}
+
 	   protected Object handleInput(Class aClass) {
         if (aClass.equals(int.class))
             return MCodeUtilities.readInt();

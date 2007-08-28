@@ -38,6 +38,10 @@ public class JavaScannerHandler extends InputHandler {
     public boolean isStringInputMethod(Method m) {
         return methodName.equals("next") || methodName.equals("nextLine");
     }
+    
+    public boolean isBooleanInputMethod(Method m) {
+    	return methodName.equals("nextBoolean");
+	}
 
     public void setInputReader(BufferedReader in) {
         //To change body of implemented methods use File | Settings | File Templates.
@@ -64,5 +68,7 @@ public class JavaScannerHandler extends InputHandler {
             return MCodeUtilities.readString();
         throw new NoSuchMethodError("Input Method for class '"+aClass+"' not supported!");
     }
+
+	
 
 }
