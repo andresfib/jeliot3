@@ -43,7 +43,9 @@ public class EasyInInputHandler extends InputHandler {
         return m.getName().equals("getShort");
     }
 
-
+	public boolean isBooleanInputMethod(Method m) {
+		return false;
+	}
 
     public Object handleInput(Class aClass) {
         if (aClass.equals(int.class))
@@ -67,6 +69,7 @@ public class EasyInInputHandler extends InputHandler {
         
         throw new NoSuchMethodError("Input Method for class '"+aClass+"' not supported!");
     }
+
 
 
 	
