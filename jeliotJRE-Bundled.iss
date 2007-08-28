@@ -4,12 +4,13 @@
 
 [Setup]
 AppName=Jeliot 3
-AppVerName=Jeliot 3.7.0+ Java Runtime Environment
+AppVerName=Jeliot 3.7.1 + Java Runtime Environment
 DefaultDirName={pf}\Jeliot3
 DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe
 OutputDir=Release
 SetupIconFile=src/logo3d.ico
+PrivilegesRequired=none
 [Dirs]
 Name: "{app}\examples"
 Name: "{app}\docs"
@@ -99,7 +100,7 @@ function GetPathFromKey(subkey: String; var path: String) : Boolean;
 begin
   key := 'SOFTWARE\JavaSoft\';
   Insert(subkey,key,Length(key)+1);
-  SaveStringToFile('c:\javainstalls.txt', key, true);
+  SaveStringToFile('c:\temp\javainstalls.txt', key, true);
   if RegKeyExists(HKLM, key) then
   begin
      RegQueryStringValue(HKLM, key, 'CurrentVersion', version);
