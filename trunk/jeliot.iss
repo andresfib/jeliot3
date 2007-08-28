@@ -4,12 +4,13 @@
 
 [Setup]
 AppName=Jeliot 3
-AppVerName=Jeliot 3.7.0
+AppVerName=Jeliot 3.7.1
 DefaultDirName={pf}\Jeliot3
 DefaultGroupName=Jeliot3
 ;UninstallDisplayIcon={app}\MyProg.exe
 OutputDir=Release
 SetupIconFile=src/logo3d.ico
+PrivilegesRequired=none
 [Dirs]
 Name: "{app}\examples"
 Name: "{app}\docs"
