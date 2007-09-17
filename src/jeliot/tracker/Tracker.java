@@ -292,9 +292,9 @@ public class Tracker {
 
             Point p = area.getLocationOnScreen();
             Rectangle r = area.getPainter().getClipRect();
-            int areaFirstY = Math.abs(area.lineToY(area.getFirstLine()));
-            int areaFirstX = Math.abs(area.getHorizontalOffset());
             
+            //int areaFirstY = Math.abs(area.lineToY(area.getFirstLine()));
+            //int areaFirstX = Math.abs(area.getHorizontalOffset());
             //System.out.println("Code loc on screen");
             //System.out.println(p);
             //System.out.println("Code cliprect");

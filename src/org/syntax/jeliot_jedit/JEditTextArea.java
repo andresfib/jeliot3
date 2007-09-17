@@ -296,7 +296,7 @@ public class JEditTextArea extends JComponent {
     public void setFirstLine(int firstLine) {
         if (firstLine == this.firstLine)
             return;
-        int oldFirstLine = this.firstLine;
+        //int oldFirstLine = this.firstLine;
         this.firstLine = firstLine;
         if (firstLine != vertical.getValue())
             updateScrollBars();
@@ -319,7 +319,7 @@ public class JEditTextArea extends JComponent {
             return;
         int height = painter.getHeight();
         int lineHeight = painter.getFontMetrics().getHeight();
-        int oldVisibleLines = visibleLines;
+        //int oldVisibleLines = visibleLines;
         visibleLines = height / lineHeight;
         updateScrollBars();
     }
@@ -354,7 +354,7 @@ public class JEditTextArea extends JComponent {
      */
     public boolean setOrigin(int firstLine, int horizontalOffset) {
         boolean changed = false;
-        int oldFirstLine = this.firstLine;
+        //int oldFirstLine = this.firstLine;
 
         if (horizontalOffset != this.horizontalOffset) {
             this.horizontalOffset = horizontalOffset;

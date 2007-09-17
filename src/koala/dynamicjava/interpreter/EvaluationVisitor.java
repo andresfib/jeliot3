@@ -1142,8 +1142,8 @@ public class EvaluationVisitor extends VisitorObject {
                         Class[] typs;
                         Iterator it = larg.iterator();
                         int i = 0;
-                        long auxcounter; //Records the previous counter value
-                        Object auxarg; //Stores the current argument
+                        //long auxcounter; //Records the previous counter value
+                        //Object auxarg; //Stores the current argument
 
                         typs = m.getParameterTypes();
 
@@ -1255,7 +1255,7 @@ public class EvaluationVisitor extends VisitorObject {
                     Iterator it = larg.iterator();
                     int i = 0;
                     long auxcounter; //Records the previous counter value
-                    Object auxarg; //Stores the current argument
+                    //Object auxarg; //Stores the current argument
                     String argType; // Stores the type of the current argument
                     while (it.hasNext()) {
 
@@ -1639,8 +1639,8 @@ public class EvaluationVisitor extends VisitorObject {
                 args = new Object[larg.size()];
                 Iterator it = larg.iterator();
                 int i = 0;
-                long auxcounter; //Records the previous counter value
-                Object auxarg; //Stores the current argument
+                //long auxcounter; //Records the previous counter value
+                //Object auxarg; //Stores the current argument
                 Class[] typs = m.getParameterTypes();
 
                 //It should only get once in the while loop!!!
@@ -1695,7 +1695,7 @@ public class EvaluationVisitor extends VisitorObject {
             Iterator it = larg.iterator();
             int i = 0;
             long auxcounter; //Records the previous counter value
-            Object auxarg; //Stores the current argument
+            //Object auxarg; //Stores the current argument
             Class[] typs = m.getParameterTypes();
 
             while (it.hasNext()) {
@@ -1993,7 +1993,7 @@ public class EvaluationVisitor extends VisitorObject {
             Iterator it = larg.iterator();
             int i = 0;
             long auxcounter; //Records the previous counter value
-            Object auxarg; //Stores the current argument
+            //Object auxarg; //Stores the current argument
 
             Class[] params = null;
             Constructor constructor = (Constructor) node
@@ -2397,7 +2397,7 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(InnerAllocation node) {
         Constructor cons = (Constructor) node
                 .getProperty(NodeProperties.CONSTRUCTOR);
-        Class c = NodeProperties.getType(node);
+        //Class c = NodeProperties.getType(node);
 
         List larg = node.getArguments();
         Object[] args = null;

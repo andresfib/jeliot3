@@ -146,8 +146,10 @@ public class HistoryView extends JComponent implements ActionListener {
         buttonR.setEnabled(false);
         buttonL.addActionListener(this);
         buttonR.addActionListener(this);
-        buttonR.setMnemonic(KeyEvent.VK_GREATER);
-        buttonL.setMnemonic(KeyEvent.VK_LESS);
+        buttonR.setMnemonic(KeyEvent.VK_RIGHT);
+        buttonL.setMnemonic(KeyEvent.VK_LEFT);
+        //buttonR.setMnemonic(KeyEvent.VK_GREATER);
+        //buttonL.setMnemonic(KeyEvent.VK_LESS);
 
         slider.addChangeListener(new ChangeListener() {
 
