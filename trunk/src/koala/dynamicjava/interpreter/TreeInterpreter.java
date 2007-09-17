@@ -1138,7 +1138,7 @@ public class TreeInterpreter implements Interpreter {
             // Check the parameters
             if (cpd.parameters != null) {
                 ListIterator it = cpd.parameters.listIterator();
-                Node aux;
+                //Node aux;
                 while (it.hasNext()) {
                     ((Node) it.next()).acceptVisitor(tc);
                 }
