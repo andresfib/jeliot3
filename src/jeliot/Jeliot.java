@@ -588,6 +588,17 @@ public class Jeliot {
     }
 
     /**
+     * Called by the director when user's program inputs a string.
+     *
+     * @param str String that is outputted.
+     */
+    public void input(String str) {
+        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
+                -1, "Input: " + str);
+        gui.input(str);
+    }
+    
+    /**
      * @param e
      */
     public void showErrorMessage(InterpreterError e) {

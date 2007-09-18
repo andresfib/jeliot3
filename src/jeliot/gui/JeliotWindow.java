@@ -52,7 +52,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -292,7 +291,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     private JSlider speedSlider;
 
     /** In this text area will come the output of the user-made programs. */
-    private JTextArea outputConsole;
+    private OutputConsole outputConsole;
 
     /**
      * Menu items that should be either enabled or disabled when the animation
@@ -2248,17 +2247,31 @@ public class JeliotWindow implements PauseListener, MouseListener {
     }
 
     /**
-     * Writes the outputted string to the output console.
+     * Writes the outputted string to the console.
      * 
      * @param str
      *            String for output.
      */
     public void output(String str) {
         //System.out.println("This is output: " + str);
-        outputConsole.append(str);
-        outputConsole.setCaretPosition(outputConsole.getText().length());
+        //outputConsole.append(str);
+        //outputConsole.setCaretPosition(outputConsole.getText().length());
+        outputConsole.output(str);
     }
 
+    /**
+     * Writes the inputted string to the console.
+     * 
+     * @param str
+     *            String for output.
+     */
+    public void input(String str) {
+        //System.out.println("This is input: " + str);
+        //outputConsole.append(str);
+        //outputConsole.setCaretPosition(outputConsole.getText().length());
+        outputConsole.input(str);
+    }
+    
     /**
      * Method is used to implement the run until feature.
      */
