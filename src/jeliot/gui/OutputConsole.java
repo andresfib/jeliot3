@@ -212,8 +212,8 @@ public class OutputConsole extends JTextPane {
         s = doc.addStyle("bold", regular);
         StyleConstants.setBold(s, true);
 
-        System.out.println(StyleConstants.getFontFamily(s));
-        System.out.println(StyleConstants.getFontSize(s));
+        //System.out.println(StyleConstants.getFontFamily(s));
+        //System.out.println(StyleConstants.getFontSize(s));
 
         s = doc.addStyle("small", regular);
         StyleConstants.setFontSize(s, this.font.getSize() - 2);
