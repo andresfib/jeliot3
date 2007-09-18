@@ -2286,6 +2286,11 @@ public class Director {
         jeliot.output(str);
     }
 
+    public void input(String str) {
+        str = MCodeUtilities.replace(str, "\\n", "\n");
+        jeliot.input(str);
+    }
+    
     /**
      * @return
      */
@@ -2444,7 +2449,7 @@ public class Director {
         if (animator != null) {
             highlightStatement(h);
             animator.animate(this);
-            this.output(animator.getReturnValue().getValue() + "\n");
+            this.input(animator.getReturnValue().getValue() + "\n");
             return animator.getReturnValue();
         }
         //TODO: Here should be an exception
