@@ -843,7 +843,7 @@ public class Director {
 
         thisVariable = frame.declareVariable(new Variable("this", thisValue
                 .getType()));
-        thisVariableActor = factory.produceVariableActor(thisVariable);
+        thisVariableActor = factory.produceVariableActor(thisVariable, true);
         thisVariable.setActor(thisVariableActor);
         stage.reserve(thisVariableActor);
         stage.bind();
@@ -1365,7 +1365,7 @@ public class Director {
         // Create a new variable and its actor.
         Variable v = currentMethodFrame
                 .declareVariable(new Variable(name, type));
-        VariableActor actor = factory.produceVariableActor(v);
+        VariableActor actor = factory.produceVariableActor(v, true);
         v.setActor(actor);
 
         MethodStage stage = currentMethodFrame.getMethodStage();
