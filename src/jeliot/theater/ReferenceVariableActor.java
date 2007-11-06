@@ -99,6 +99,7 @@ public class ReferenceVariableActor extends VariableActor {
             g.setColor(bgcolor);
             g.drawLine(w - 2, valueh / 2, a, valueh / 2);
             g.drawLine(a + 1, valueh / 2 - 6, a + 1, valueh / 2 + 6);
+            
         } else {
 
             int actx = refActor.getX();
@@ -138,7 +139,7 @@ public class ReferenceVariableActor extends VariableActor {
         int sw = fm.stringWidth(getLabel());
         int sh = fm.getHeight();
 
-        setSize(2 * borderWidth + insets.right + insets.left + refWidth + sw,
+        setSize(2 * borderWidth + insets.right + insets.left + refWidth + sw + 4,
                 insets.top + insets.bottom + 4 * borderWidth
                         + Math.max(valueh, sh));
     }
@@ -169,7 +170,7 @@ public class ReferenceVariableActor extends VariableActor {
         Point rp = getRootLocation();
         //int w = actor.width;
         //int h = actor.height;
-        rp.translate(width - borderWidth - refWidth - 3,
+        rp.translate(width - borderWidth - refWidth - 4,
                 (height - actor.height) / 2 + borderWidth);
         return rp;
     }
@@ -181,7 +182,7 @@ public class ReferenceVariableActor extends VariableActor {
         this.refActor = this.reservedRefActor;
         refActor.setParent(this);
 
-        refActor.setLocation(width - borderWidth - refWidth - 3,
+        refActor.setLocation(width - borderWidth - refWidth - 4,
                 (height - refActor.height) / 2 + borderWidth);
     }
 
