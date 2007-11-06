@@ -619,7 +619,7 @@ public class ActorFactory {
                 m + fm.stringWidth("8888888"), m + fm.stringWidth("888888888"),
                 m + fm.stringWidth("xm"), m + fm.stringWidth("0.00E10"),
                 m + fm.stringWidth("0.0000E10"),
-                m + fm.stringWidth("Normal string"), 6 };
+                m + fm.stringWidth("Normal string"), 11};
     }
 
     /**
@@ -838,7 +838,9 @@ public class ActorFactory {
                 ra.calculateSize();
                 refAct.setValue(ra);
             } else {
-                QuestionMarkReferenceActor ra = new QuestionMarkReferenceActor();
+                QuestionMarkReferenceActor ra = new QuestionMarkReferenceActor(iLoad
+                        .getImage(propertiesBundle
+                                .getStringProperty("image.mystery")));
                 ra.setBackground(refAct.getBackground());
                 ra.calculateSize();
                 refAct.setValue(ra);
