@@ -1574,18 +1574,15 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeOMCC() {
         if (!returned) {
-
             director.finishMethod(null, 0);
             closeExpressionStack();
         } else {
-
             Value rv = null;
 
             if (returnValue instanceof Reference) {
                 rv = (Value) ((Reference) returnValue).clone();
                 ((Reference) rv).makeReference();
             } else {
-
                 rv = (Value) returnValue.clone();
             }
 
@@ -1598,7 +1595,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (currentMethodInvocation != null) {
             invokingMethod = true;
         }
-
         returned = false;
     }
 
@@ -1941,7 +1937,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             Reference ref = (Reference) objectCreation.pop();
             Instance inst = ref.getInstance();
             inst.setHashCode(hashCode);
-            //The instance is putted in the hashtable that
+            //The instance is put into the hashtable that
             //keeps the instances
             instances.put(hashCode, inst);
             //Then we handle the possible expressions
@@ -2016,9 +2012,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             classes.put(ci.getName(), ci);
         }
 
-        //This works for not primitive classes.
-        //There needs to be a check whether invoked
-        //class is primitive or not.
+        //This works for non-primitive classes.
+        //There needs to be a check whether invoked class is primitive or not.
         //ObjectFrame of = createNewInstance(ci, highlight);
         //Reference ref = new Reference(of);
 
@@ -2056,9 +2051,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         currentMethodInvocation[7] = parameterExpressionReferences;
         //Here we put the ClassInfo of the class in the array
         //just to wait for the Method Declaration to be read
-        // and the
-        //object can be created from this method info.
-        currentMethodInvocation[8] = ci /* ref */;
+        //and the object can be created from this method info.
+        currentMethodInvocation[8] = ci /*ref*/;
 
         /* objectCreation.push(new Reference(of)); */
     }
@@ -3164,7 +3158,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * Used at the moment.
      */
     public void checkInstancesForRemoval(boolean override) {
-        if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG") || override) {
+        if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG")
+                || override) {
             //Enumeration enumeration = instances.keys();
             //while (enumeration.hasMoreElements()) {
             for (Iterator i = instances.keySet().iterator(); i.hasNext();) {
@@ -3172,7 +3167,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 Instance inst = (Instance) instances.get(obj);
                 if (inst != null) {
                     //For testing
-                    DebugUtil.printDebugInfo(inst.getType() + "@" + inst.getHashCode());
+                    DebugUtil.printDebugInfo(inst.getType() + "@"
+                            + inst.getHashCode());
                     DebugUtil.printDebugInfo("number of references1: "
                             + inst.getNumberOfReferences());
                     DebugUtil.printDebugInfo("number of references2: "
