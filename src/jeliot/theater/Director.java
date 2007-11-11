@@ -236,13 +236,31 @@ public class Director {
 
     private void stopRunUntilIfInEndOfProgram() {
         if (this.frameStack.size() == 1 && runUntilLine > 0) {
-            runUntilLine = 0;
-            setRunUntilEnabled(false);
-            jeliot.runUntilDone();
-            theatre.flush();
+            if (this.frameStack.get(0) instanceof MethodFrame) {
+                if (((MethodFrame) this.frameStack.get(0)).getMethodName()
+                        .endsWith(".main")) {
+                    runUntilLine = 0;
+                    setRunUntilEnabled(false);
+                    jeliot.runUntilDone();
+                    theatre.flush();
+                }
+                if (!(((MethodFrame) this.frameStack.get(0)).getMethodName()
+                        .startsWith("java.lang") || ((MethodFrame) this.frameStack
+                        .get(0)).getMethodName().startsWith("java.util"))) {
+                    runUntilLine = 0;
+                    setRunUntilEnabled(false);
+                    jeliot.runUntilDone();
+                    theatre.flush();
+                }
+            } else {
+                runUntilLine = 0;
+                setRunUntilEnabled(false);
+                jeliot.runUntilDone();
+                theatre.flush();
+            }
         }
     }
-    
+
     /**
      * 
      * @param b
@@ -1073,10 +1091,10 @@ public class Director {
      */
     public ValueActor finishMethod(Actor returnAct, long expressionCounter) {
 
-        //To stop the animation before a method is finished if stepping is used.
+        //To stop the animation before the last method is finished if stepping is used.
         stopRunUntilIfInEndOfProgram();
         highlightForMessage(null);
-        
+
         Animation dummy = new Animation() {
             public void animate(double p) {
                 try {
@@ -1087,7 +1105,7 @@ public class Director {
         };
         dummy.setDuration(50);
         engine.showAnimation(dummy);
-        
+
         // Get the stage and remove it.
         MethodStage stage = ((MethodFrame) frameStack.pop()).getMethodStage();
         manager.removeMethodStage(stage);
@@ -2290,7 +2308,7 @@ public class Director {
         str = MCodeUtilities.replace(str, "\\n", "\n");
         jeliot.input(str);
     }
-    
+
     /**
      * @return
      */
@@ -2423,8 +2441,8 @@ public class Director {
     public Value animateInputHandling(String type, String prompt, Highlight h) {
 
         Animator animator = null;
-        if (Util.visualizeStringsAsObjects() && (prompt != null)){
-        	prompt = prompt.substring(0, prompt.lastIndexOf("@"));
+        if (Util.visualizeStringsAsObjects() && (prompt != null)) {
+            prompt = prompt.substring(0, prompt.lastIndexOf("@"));
         }
         if (MCodeUtilities.resolveType(type) == MCodeUtilities.DOUBLE) {
             animator = readDouble(prompt);
