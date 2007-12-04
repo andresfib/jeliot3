@@ -177,7 +177,7 @@ public class Director {
      */
     public boolean direct() throws Exception {
         errorOccured = false;
-        doHighlight(new Highlight(0, 0, 0, 0));
+        doHighlight(new Highlight(0, 0, 0, 0), false);
         cbox = factory.produceConstantBox();
         theatre.addPassive(cbox);
         manager.setConstantBox(cbox);
@@ -337,15 +337,19 @@ public class Director {
         doHighlight(h);
     }
 
+    private void doHighlight(Highlight h) {
+        doHighlight(h, true);
+    }
+
     /**
      * @param h
      */
-    private void doHighlight(Highlight h) {
+    private void doHighlight(Highlight h, boolean stop) {
         //requestHistoryImage();
         this.hPrev = h;
         if (!mCodeInterpreter.starting()) {
 
-            if (stepByStep) {
+            if (stepByStep && stop) {
                 jeliot.directorPaused();
                 controller.checkPoint();
             }
