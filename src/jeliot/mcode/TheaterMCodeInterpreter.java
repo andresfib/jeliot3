@@ -424,10 +424,12 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         currentClass.declareField(name, "" + modifiers + Code.DELIM + type
                 + Code.DELIM + value + Code.DELIM + h);
 
-        //We create static variable if it deosn't exist already
+        //We create static variable if it doesn't exist already
+        /*
         if (Modifier.isStatic(modifiers) && name.indexOf("$") < 0) {
             //find class and add the static field
             String className = currentClass.getName();
+            
             ListIterator li = classesWithStaticVariables.listIterator();
             jeliot.lang.Class ca = null;
             while (li.hasNext()) {
@@ -437,7 +439,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     break;
                 }
             }
-
             if (ca == null) {
                 ca = new jeliot.lang.Class(className);
                 classesWithStaticVariables.addLast(ca);
@@ -460,6 +461,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 director.declareClassVariable(ca, var, val);
             }
         }
+        */
     }
 
     /**
@@ -2161,6 +2163,24 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         handleExpression(lit, expressionCounter);
     }
 
+    
+    /*
+     * Add somewhere here code for static field allocation in correct place of execution for all the static fields of a class (JLS §12.4.1):
+     * 
+     * Initialization of a class consists of executing its static initializers and the initializers for static fields declared in the class. Initialization of an interface consists of executing the initializers for fields declared in the interface.
+     * Before a class is initialized, its direct superclass must be initialized, but interfaces implemented by the class need not be initialized. Similarly, the superinterfaces of an interface need not be initialized before the interface is initialized.
+     * 
+     * A class or interface type T will be initialized immediately before the first occurrence of any one of the following:
+     * 
+     *        * T is a class and an instance of T is created.
+     *        * T is a class and a static method declared by T is invoked.
+     *        * A static field declared by T is assigned.
+     *        * A static field declared by T is used and the field is not a constant variable (§4.12.4).
+     *        * T is a top-level class, and an assert statement (§14.10) lexically nested within T is executed. 
+     *        
+     * Invocation of certain reflective methods in class Class and in package java.lang.reflect also causes class or interface initialization. A class or interface will not be initialized under any other circumstance.
+     *  
+     */
     /**
      * @param expressionCounter
      * @param declaringClass
@@ -2176,7 +2196,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         jeliot.lang.Class ca = null;
         boolean notFound = true;
-        //This is not the rigth procedure to do the static variable lookup but
+        //This is not the right procedure to do the static variable lookup but
         //DynamicJava is mixing static and object field access and this is to clean up the mess.
         //Other possibility is to do it in OFA handling but this seems more logical.
         //OFA handling just delegates the work here.
@@ -2190,7 +2210,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 }
             }
             ClassInfo ci = (ClassInfo) classes.get(declaringClass);
-            if (ci != null) {
+            if (ci != null && ci.getExtendedClassName() != null) {
                 declaringClass = ci.getExtendedClassName();
             } else {
                 break;
