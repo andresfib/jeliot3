@@ -166,8 +166,10 @@ public class EvaluationVisitor extends VisitorObject {
     private boolean evaluating = true;
 
     /**
-     * Indicates when ArrayModifier is preparing the array, and and thus we
-     * don't want info
+     * Indicates when ArrayModifier is preparing the array, and thus we
+     * don't want info. Also used in StaticMethodCall for 
+     * jeliot.io.Output.print(String s), where we dont want evaluation of s to 
+     * be animated.
      */
     private static Stack preparing = new Stack();
 
@@ -1633,9 +1635,9 @@ public class EvaluationVisitor extends VisitorObject {
         	counter++;
             return result;
         }
-
+	String methodName = m.getName();
         if (m.getDeclaringClass().getName().equals("jeliot.io.Output")) {
-            if (m.getName().equals("println")) {
+            if ((methodName.equals("print") || (methodName.equals("println")))) {
                 args = new Object[larg.size()];
                 Iterator it = larg.iterator();
                 int i = 0;
@@ -1650,14 +1652,25 @@ public class EvaluationVisitor extends VisitorObject {
                             + Code.OUTPUT + Code.DELIM + outputCounter
                             + Code.DELIM
                             + MCodeGenerator.locationToString(node));
+		    //Quirks mode: Output.print defined not to visualize args expression
+		    String newLine = "";
+		    if (methodName.equals("print")){
+			newLine="0";
+			setPreparing();
+		    } else {
+			newLine="1";
+		    }
                     args[i] = ((Expression) it.next()).acceptVisitor(this);
+		    if(methodName.equals("print")){
+			unsetPreparing();
+		    }
                     MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
                             + outputCounter + Code.DELIM
                             + m.getDeclaringClass().getName() + Code.DELIM
                             + m.getName() + Code.DELIM
                             + MCodeUtilities.getValue(args[i]) + Code.DELIM
                             + typs[i].getName() + Code.DELIM
-                            + "1" //BREAKLINE
+                            + newLine //BREAKLINE
                             + Code.DELIM
                             + MCodeGenerator.locationToString(node));
                     i++;

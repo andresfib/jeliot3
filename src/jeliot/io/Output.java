@@ -79,6 +79,68 @@ public class Output {
         out.println(c);    
     }
     
+	/**
+	 * Prints out the given integer value.
+	 *
+	 * @param	i	The integer to be printed.
+	 */
+    public static void print(int i) {
+        out.print(i);    
+    }
+
+	/**
+	 * Prints out the given double value.
+	 *
+	 * @param	d	The double to be printed.
+	 */
+    public static void print(double d) {
+        out.print(d);    
+    }
+    
+	/**
+	 * Prints out the given float value.
+	 *
+	 * @param	f	The float to be printed.
+	 */
+    public static void print(float f) {
+        out.print(f);    
+    }
+    
+	/**
+	 * Prints out the given long value.
+	 *
+	 * @param	l	The long to be printed.
+	 */
+    public static void print(long l) {
+        out.print(l);    
+    }
+    
+	/**
+	 * Prints out the given boolean value.
+	 *
+	 * @param	b	The boolean to be printed.
+	 */
+    public static void print(boolean b) {
+        out.print(b);    
+    }
+    
+    /**
+     * Prints out the given String value.
+     * 
+     * @param s The String to be printed.
+     */
+    public static void print(String s) {
+        out.print(s);    
+    }
+    
+    /**
+     * Prints out the given character.
+     * 
+     * @param c The character to be printed.
+     */
+    public static void print(char c) {
+        out.print(c);    
+    }
 	/*
 	 * Empty function.
      */
