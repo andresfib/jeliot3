@@ -1,0 +1,2 @@
+This is a CVS repository of Jeliot 3. Here you can find all the files 
+related to Jeliot 3.
