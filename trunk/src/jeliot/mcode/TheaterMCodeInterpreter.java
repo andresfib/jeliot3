@@ -158,6 +158,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected LinkedList classesWithStaticVariables = new LinkedList();
 
+    private boolean stopBeforeClearingScratch = false;
+
     /**
      *  
      */
@@ -211,6 +213,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         arrayInitialization = new Stack();
         //expressionStack = new Stack();
         avInteractionEngine = null;
+        stopBeforeClearingScratch = false;
 
         super.initialize();
 
@@ -325,10 +328,15 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 && token != Code.OUTPUT && token != Code.INPUT
                 && token != Code.INPUTTED && token != Code.OMC
                 && token != Code.SMC && token != Code.SA) {
+            //Hack to get a stop before return value is erased when it is not used.
+            if (this.stopBeforeClearingScratch) {
+                this.director.highlightForMessage(new Highlight(0, 0, 0, 0));
+            }
             closeScratch();
             openScratch();
             checkInstancesForRemoval(false);
         }
+        this.stopBeforeClearingScratch = false;
     }
 
     /*
@@ -2163,7 +2171,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         handleExpression(lit, expressionCounter);
     }
 
-    
     /*
      * Add somewhere here code for static field allocation in correct place of execution for all the static fields of a class (JLS §12.4.1):
      * 
@@ -3785,5 +3792,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     }
 
     public void afterInterpretation(String line) {
+    }
+
+    public void setStopBeforeClearingScratch(boolean b) {
+        this.stopBeforeClearingScratch = b;
     }
 }

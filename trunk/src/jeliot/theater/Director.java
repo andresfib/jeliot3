@@ -1179,6 +1179,7 @@ public class Director {
         release();
 
         if (returnAct != null) {
+            ((TheaterMCodeInterpreter) this.mCodeInterpreter).setStopBeforeClearingScratch(true);
             return (ValueActor) ((BubbleActor) returnAct).getActor();
         }
         return null;
