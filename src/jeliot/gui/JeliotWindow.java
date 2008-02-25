@@ -59,6 +59,7 @@ import javax.swing.event.ChangeListener;
 
 import jeliot.Jeliot;
 import jeliot.calltree.TreeDraw;
+import jeliot.conan.ConAnUtilities;
 import jeliot.historyview.HistoryView;
 import jeliot.mcode.InterpreterError;
 import jeliot.printing.PrintingUtil;
@@ -272,9 +273,12 @@ public class JeliotWindow implements PauseListener, MouseListener {
     /** The step button. */
     private JButton stepButton;
 
-    /** The play button. */
-    private JButton playButton;
+    /** The conflict button. */
+    private JButton conflictButton;
 
+    /** The play button. */
+    //private JButton playButton;
+    
     /** The pause button. */
     private JButton pauseButton;
 
@@ -470,6 +474,19 @@ public class JeliotWindow implements PauseListener, MouseListener {
         }
     };
 
+    /**
+     * Action listeners for the conflict- button.
+     */
+    private ActionListener conflictAction = new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(),
+                    Tracker.BUTTON, -1, -1, "ConflictButton");
+            checkConflict();
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER,
+                    -1, -1, "ConflictChecked");
+        }
+    };
     /**
      * Action listeners for the pause- button.
      */
@@ -1240,7 +1257,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         menuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                playButton.doClick();
+                conflictButton.doClick();
             }
         });
         menu.add(menuItem);
@@ -1487,9 +1504,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
         stepButton = makeControlButton(messageBundle.getString("button.step"),
                 propertiesBundle.getStringProperty("image.step_icon"));
         stepButton.setMnemonic(KeyEvent.VK_S);
-        playButton = makeControlButton(messageBundle.getString("button.play"),
-                propertiesBundle.getStringProperty("image.play_icon"));
-        playButton.setMnemonic(KeyEvent.VK_P);
+        conflictButton = makeControlButton(messageBundle.getString("button.conflict"),
+                propertiesBundle.getStringProperty("image.conflict_icon"));
+        conflictButton.setMnemonic(KeyEvent.VK_F);
         pauseButton = makeControlButton(
                 messageBundle.getString("button.pause"), propertiesBundle
                         .getStringProperty("image.pause_icon"));
@@ -1500,12 +1517,12 @@ public class JeliotWindow implements PauseListener, MouseListener {
         rewindButton.setMnemonic(KeyEvent.VK_R);
 
         stepButton.addActionListener(stepAction);
-        playButton.addActionListener(playAction);
+        conflictButton.addActionListener(conflictAction);
         pauseButton.addActionListener(pauseAction);
         rewindButton.addActionListener(rewindAction);
 
         animWidgets.addElement(stepButton);
-        animWidgets.addElement(playButton);
+        animWidgets.addElement(conflictButton);
         animWidgets.addElement(pauseButton);
         animWidgets.addElement(rewindButton);
 
@@ -1531,7 +1548,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         JPanel bp = new JPanel();
         bp.setLayout(new GridLayout(1, 4));
         bp.add(stepButton);
-        bp.add(playButton);
+        bp.add(conflictButton);
         bp.add(pauseButton);
         bp.add(rewindButton);
 
@@ -1868,7 +1885,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         pauseButton.setEnabled(false);
         editButton.setEnabled(true);
         stepButton.setEnabled(false);
-        playButton.setEnabled(false);
+        conflictButton.setEnabled(false);
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(true);
 
@@ -1876,7 +1893,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 messageBundle.getString("menu.animation.rewind") };
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
-                messageBundle.getString("menu.animation.play"),
+                messageBundle.getString("menu.animation.conflict"),
                 messageBundle.getString("menu.animation.run_until"),
                 messageBundle.getString("menu.animation.pause") };
         setEnabledMenuItems(false, s2);
@@ -1987,19 +2004,19 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
-        playButton.setEnabled(false);
+        conflictButton.setEnabled(false);
         stepButton.setEnabled(false);
         pauseButton.setEnabled(true);
 
         String[] s1 = { messageBundle.getString("menu.animation.pause") };
         setEnabledMenuItems(true, s1);
         String[] s2 = { messageBundle.getString("menu.animation.step"),
-                messageBundle.getString("menu.animation.play"),
+                messageBundle.getString("menu.animation.conflict"),
                 messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.control.edit"),
                 messageBundle.getString("menu.animation.run_until") };
         setEnabledMenuItems(false, s2);
-
+        ConAnUtilities.decreaseAnswerCounter();
         try {
             jeliot.step();
         } catch (Exception e) {
@@ -2015,7 +2032,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     void playAnimation() {
 
         stepButton.setEnabled(false);
-        playButton.setEnabled(false);
+        conflictButton.setEnabled(false);
         pauseButton.setEnabled(true);
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
@@ -2035,6 +2052,25 @@ public class JeliotWindow implements PauseListener, MouseListener {
         }
     }
 
+    /**
+     * when the "Fault" button is pressed checks the 
+     * answer and informs the user
+     * 
+     */
+    void checkConflict() {
+    	boolean result = ConAnUtilities.isAnswerRight();
+    	String msg = "";
+    	if (result){
+            msg = "Right! You found the conflictive animation";
+    	} else {
+    		msg = "Wrong! There is not conflictive animation, or you have been too slow";
+    	}
+            JOptionPane.showMessageDialog(JeliotWindow.this.getTheaterPane()
+            		, msg, "Fault detection result",
+            		//messageBundle.getString("conflict.message.title"),
+                    JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     /**
      * Changes the user interface when the "Pause" button is pressed. Calls
      * jeliot.pause() method.
@@ -2062,7 +2098,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     public void resumeAnimation() {
 
         stepButton.setEnabled(false);
-        playButton.setEnabled(false);
+        conflictButton.setEnabled(false);
         pauseButton.setEnabled(true);
         rewindButton.setEnabled(false);
         editButton.setEnabled(false);
@@ -2083,7 +2119,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     public void freezeAnimation() {
 
         stepButton.setEnabled(false);
-        playButton.setEnabled(false);
+        conflictButton.setEnabled(false);
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(false);
         editButton.setEnabled(true);
@@ -2111,7 +2147,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         changeTheatrePane(tabbedPane);
 
         String[] s1 = { messageBundle.getString("menu.animation.step"),
-                messageBundle.getString("menu.animation.play"),
+                messageBundle.getString("menu.animation.conflict"),
                 messageBundle.getString("menu.animation.run_until"),
                 messageBundle.getString("menu.animation.rewind"),
                 messageBundle.getString("menu.control.edit"),
@@ -2120,7 +2156,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         editButton.setEnabled(false);
         stepButton.setEnabled(false);
-        playButton.setEnabled(false);
+        conflictButton.setEnabled(false);
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(false);
 
@@ -2131,6 +2167,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         jeliot.cleanUp();
         theater.repaint();
         outputConsole.setText("");
+        ConAnUtilities.initialize();
 
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -2149,7 +2186,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
                 editButton.setEnabled(true);
                 stepButton.setEnabled(true);
-                playButton.setEnabled(true);
+                conflictButton.setEnabled(true);
                 pauseButton.setEnabled(false);
                 rewindButton.setEnabled(false);
 
@@ -2185,7 +2222,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 }
                 
                 String[] s2 = { messageBundle.getString("menu.animation.step"),
-                        messageBundle.getString("menu.animation.play"),
+                        messageBundle.getString("menu.animation.conflict"),
                         messageBundle.getString("menu.control.edit"),
                         messageBundle.getString("menu.animation.run_until") };
                 setEnabledMenuItems(true, s2);
@@ -2204,7 +2241,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         if (!errorOccured) {
 
             stepButton.setEnabled(false);
-            playButton.setEnabled(false);
+            conflictButton.setEnabled(false);
             pauseButton.setEnabled(false);
             rewindButton.setEnabled(true);
             editButton.setEnabled(true);
@@ -2213,7 +2250,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     messageBundle.getString("menu.animation.rewind") };
             setEnabledMenuItems(true, s1);
             String[] s2 = { messageBundle.getString("menu.animation.step"),
-                    messageBundle.getString("menu.animation.play"),
+                    messageBundle.getString("menu.animation.conflict"),
                     messageBundle.getString("menu.animation.run_until"),
                     messageBundle.getString("menu.animation.pause") };
             setEnabledMenuItems(false, s2);
@@ -2222,7 +2259,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
             editButton.setEnabled(true);
             stepButton.setEnabled(false);
-            playButton.setEnabled(false);
+            conflictButton.setEnabled(false);
             pauseButton.setEnabled(false);
             rewindButton.setEnabled(true);
 
@@ -2230,7 +2267,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     messageBundle.getString("menu.animation.rewind") };
             setEnabledMenuItems(true, s1);
             String[] s2 = { messageBundle.getString("menu.animation.step"),
-                    messageBundle.getString("menu.animation.play"),
+                    messageBundle.getString("menu.animation.conflict"),
                     messageBundle.getString("menu.animation.run_until"),
                     messageBundle.getString("menu.animation.pause") };
             setEnabledMenuItems(false, s2);
@@ -2301,7 +2338,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
             codePane.highlightLineNumber(lineNumber);
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    playButton.doClick();
+                    conflictButton.doClick();
                 }
             });
         } else {
@@ -2418,7 +2455,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
     public void paused() {
         stepButton.setEnabled(true);
-        playButton.setEnabled(true);
+        conflictButton.setEnabled(true);
         pauseButton.setEnabled(false);
         rewindButton.setEnabled(true);
         editButton.setEnabled(true);
@@ -2442,7 +2479,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     }
 
     public JButton getPlayButton() {
-        return playButton;
+        return conflictButton;
     }
 
     public JButton getRewindButton() {

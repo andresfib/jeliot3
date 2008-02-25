@@ -168,5 +168,11 @@ public class TreeConstructorInfo implements ConstructorInfo {
             throw new NoClassDefFoundError(e.getMessage());
         }
     }
+    /**
+	 * Whether this particular constructor has an implicit super method call
+	 */
+    public boolean hasImplicitSuperCall(){
+    	return constructorTree.isImplicitSuper();
+    }
 
 }

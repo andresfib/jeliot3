@@ -309,5 +309,11 @@ public class Code {
     /** Static field access */
     public static final int SFA = 74;
 
-    //Last int used = 77
+    /** Start Concept for Conflictive Animation **/
+    public static final int CONAN = 78;
+    
+
+    /** End Concept for Conflictive Animation **/
+    public static final int CONAN_END = 79;
+    //Last int used = 79
 }

@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.FeatureNotImplementedException;
+import jeliot.conan.ConflictiveInheritance;
 import jeliot.lang.LocalVariableNotFoundException;
 import jeliot.lang.StaticVariableNotFoundException;
 import jeliot.util.DebugUtil;
@@ -104,6 +105,8 @@ public abstract class MCodeInterpreter {
      */
     protected long superMethodCallNumber = 0;
 
+	protected boolean inConAn;
+
     /**
      *  
      */
@@ -163,97 +166,112 @@ public abstract class MCodeInterpreter {
      */
     public boolean execute() {
 
-        try {
+    	try {
 
-            beforeExecution();
+    		beforeExecution();
 
-            openScratch();
+    		openScratch();
 
-            while (running) {
+    		while (running) {
 
-                if (!constructorCall) {
-                    if (!firstLineRead) {
-                        line = readLine();
-                        interpret(line);
-                    } else {
-                        firstLineRead = false;
-                        interpret(line);
-                    }
-                    //Constructor call is going in super method calls.
-                } else {
-                    String storedLine = readLine();
+    			if (!constructorCall) {
+    				if (!firstLineRead) {
+    					if(!inConAn){
+    						line = readLine();
+    						interpret(line);
+    					} else { // inConAn read until CONAN_END
+    						String storedLine = readLine();
+    	    				StringTokenizer tokenizer = new StringTokenizer(storedLine,
+    	    						Code.DELIM);
+    	    				int token = Integer.parseInt(tokenizer.nextToken());
+    						while (token != Code.CONAN_END) {
+    							storedLine = readLine();
+    							tokenizer = new StringTokenizer(storedLine,
+    									Code.DELIM);
+    							token = Integer.parseInt(tokenizer.nextToken());
+    						}
+    						interpret(storedLine);
+    					}
+    				} else {
+    					firstLineRead = false;
+    					interpret(line);
+    				}
+    				//Constructor call is going in super method calls.
+    			} else {
+    				String storedLine = readLine();
+    				StringTokenizer tokenizer = new StringTokenizer(storedLine,
+    						Code.DELIM);
+    				int token = Integer.parseInt(tokenizer.nextToken());
 
-                    StringTokenizer tokenizer = new StringTokenizer(storedLine,
-                            Code.DELIM);
-                    int token = Integer.parseInt(tokenizer.nextToken());
-                    if (token == Code.INPUT) {
-                        interpret(""
-                                + Code.ERROR
-                                + Code.DELIM
-                                + messageBundle
-                                        .getString("inputInConstructor.exception")
-                                // + "<H1>Feature not implemented</H1> " + "<P>Super classes' constructors cannot "
-                                + Code.DELIM + "0" + Code.LOC_DELIM + "0"
-                                + Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0");
-                    }
-                    if (token == Code.ERROR) {
-                        interpret(storedLine);
-                    }
-                    if (token == Code.CONSCN) {
-                        long number = Long.parseLong(tokenizer.nextToken());
-                        if (number == superMethodCallNumber) {
-                            //Interpret the rest of the constructor call
-                            interpret(readLine());
-                            interpret(readLine());
+    				if (token == Code.INPUT) {
+    					interpret(""
+    							+ Code.ERROR
+    							+ Code.DELIM
+    							+ messageBundle
+    							.getString("inputInConstructor.exception")
+    							// + "<H1>Feature not implemented</H1> " + "<P>Super classes' constructors cannot "
+    							+ Code.DELIM + "0" + Code.LOC_DELIM + "0"
+    							+ Code.LOC_DELIM + "0" + Code.LOC_DELIM + "0");
+    				}
+    				if (token == Code.ERROR) {
+    					interpret(storedLine);
+    				}
+    				if (token == Code.CONSCN) {
+    					long number = Long.parseLong(tokenizer.nextToken());
+    					if (number == superMethodCallNumber) {
+    						//Interpret the rest of the constructor call
+    						interpret(readLine());
+    						interpret(readLine());
 
-                            //Then start using the collected statements
-                            constructorCalls.push(superMethodsReading);
-                            superMethods = superMethodsReading;
-                            superMethodsReading = null;
-                            constructorCall = false;
-                            continue;
-                        }
-                    }
-                    superMethodsReading.add(storedLine);
-                }
+    						//Then start using the collected statements
+    						constructorCalls.push(superMethodsReading);
+    						superMethods = superMethodsReading;
+    						superMethodsReading = null;
+    						constructorCall = false;
+    						continue;
+    					}
+    				}
+    				superMethodsReading.add(storedLine);
+    			} 
 
-            }
-            closeScratch();
 
-        } catch (StoppingRequestedError e) {
-            return false;
-        } catch (FeatureNotImplementedException e) {
-            MessageFormat notImplemented = new MessageFormat(messageBundle
-                    .getString("notImplemented.exception"));
-            handleCodeERROR(notImplemented
-                    .format(new String[] { e.getMessage() }), null);
-        } catch (StaticVariableNotFoundException e) {
-            handleCodeERROR("<H1> Runtime Exception </H1> <P> "
-                    + e.getMessage() + " </P> ", null);
-            return true;
-        } catch (LocalVariableNotFoundException e) {
-            handleCodeERROR("<H1> Runtime Exception </H1> <P> "
-                    + e.getMessage() + " </P> ", null);
-            return true;
-        } catch (Exception e) {
-            if (DebugUtil.DEBUGGING) {
-                e.printStackTrace();
-            }
-            if (e.getMessage() != null) {
-                handleCodeERROR("<H1> Runtime Exception </H1> <P> "
-                        + e.getMessage()
-                        + " or the feature is not yet implemented. </P> ", null);
-            } else {
-                handleCodeERROR("<H1> Runtime Exception </H1> <P> "
-                        + "Feature is not yet implemented. </P> ", null);
+    		}
+    closeScratch();
 
-            }
-            return true;
-        }
-        return true;
+    } catch (StoppingRequestedError e) {
+    	return false;
+    } catch (FeatureNotImplementedException e) {
+    	MessageFormat notImplemented = new MessageFormat(messageBundle
+    			.getString("notImplemented.exception"));
+    	handleCodeERROR(notImplemented
+    			.format(new String[] { e.getMessage() }), null);
+    } catch (StaticVariableNotFoundException e) {
+    	handleCodeERROR("<H1> Runtime Exception </H1> <P> "
+    			+ e.getMessage() + " </P> ", null);
+    	return true;
+    } catch (LocalVariableNotFoundException e) {
+    	handleCodeERROR("<H1> Runtime Exception </H1> <P> "
+    			+ e.getMessage() + " </P> ", null);
+    	return true;
+    } catch (Exception e) {
+    	if (DebugUtil.DEBUGGING) {
+    		e.printStackTrace();
+    	}
+    	if (e.getMessage() != null) {
+    		handleCodeERROR("<H1> Runtime Exception </H1> <P> "
+    				+ e.getMessage()
+    				+ " or the feature is not yet implemented. </P> ", null);
+    	} else {
+    		handleCodeERROR("<H1> Runtime Exception </H1> <P> "
+    				+ "Feature is not yet implemented. </P> ", null);
+
+    	}
+    	return true;
     }
+    return true;
+}
 
-    public void cleanEvaluationArea(int token) {
+public void cleanEvaluationArea(int token) {
     }
 
     /**
@@ -1542,11 +1560,14 @@ public abstract class MCodeInterpreter {
                     //Class information for constructor
                 case Code.CONSTRUCTOR: {
                     String listOfParameters = "";
-                    if (tokenizer.hasMoreTokens()) {
+                    String hasImplicitSuperCall = "false";
+                    if (tokenizer.hasMoreTokens()) {                    	
                         listOfParameters = tokenizer.nextToken();
                     }
-
-                    handleCodeCONSTRUCTOR(listOfParameters);
+                    if (tokenizer.hasMoreTokens()){
+                    	hasImplicitSuperCall = tokenizer.nextToken();
+                    }
+                    handleCodeCONSTRUCTOR(listOfParameters, hasImplicitSuperCall);
                     break;
                 }
 
@@ -1593,6 +1614,15 @@ public abstract class MCodeInterpreter {
 
                     break;
                 }
+                case Code.CONAN: {
+                	handleCodeCONAN("");
+                	break;
+                }
+                case Code.CONAN_END: {
+                	handleCodeCONAN_END("");
+                	break;
+                }
+                
 
                     //There is an error if the execution comes here.
                 default: {
@@ -1613,7 +1643,12 @@ public abstract class MCodeInterpreter {
         }
     }
 
-    public abstract void afterInterpretation(String line);
+
+    protected abstract void handleCodeCONAN_END(String string); 
+
+    protected abstract void handleCodeCONAN(String string);
+	
+    	public abstract void afterInterpretation(String line);
 
     /**
      * @param cells
@@ -1730,8 +1765,9 @@ public abstract class MCodeInterpreter {
 
     /**
      * @param listOfParameters
+     * @param hasImplicitSuperCall 
      */
-    protected abstract void handleCodeCONSTRUCTOR(String listOfParameters);
+    protected abstract void handleCodeCONSTRUCTOR(String listOfParameters, String hasImplicitSuperCall);
 
     /**
      * 

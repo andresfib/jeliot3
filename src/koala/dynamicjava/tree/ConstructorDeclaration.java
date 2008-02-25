@@ -67,6 +67,13 @@ public class ConstructorDeclaration extends Node {
     public final static String STATEMENTS = "statements";
 
     /**
+     * Jeliot 3
+     * It specifies wether the super method call in the statements is implicit
+     * or explicit, i.e., in user's code or not.
+     * Added for conflictive animations. 
+     */
+    public final static String IMPLICIT_SUPER = "implicitSuper";
+    /**
      * The access flags
      */
     private int accessFlags;
@@ -96,6 +103,11 @@ public class ConstructorDeclaration extends Node {
      */
     private List statements;
 
+    /**
+     * Implicit super call flag
+     * JELIOT 3
+     */
+    private boolean implicitSuper = false;
     /**
      * Creates a new method declaration
      * @param flags   the access flags
@@ -255,4 +267,12 @@ public class ConstructorDeclaration extends Node {
     public Object acceptVisitor(Visitor visitor) {
 	return visitor.visit(this);
     }
+
+	public boolean isImplicitSuper() {
+		return implicitSuper;
+	}
+
+	public void setImplicitSuper(boolean implicitSuper) {
+		firePropertyChange(IMPLICIT_SUPER, implicitSuper, this.implicitSuper=  implicitSuper);
+	}
 }
