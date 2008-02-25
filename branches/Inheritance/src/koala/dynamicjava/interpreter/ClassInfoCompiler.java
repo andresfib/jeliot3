@@ -274,9 +274,10 @@ public class ClassInfoCompiler {
                 for (int j = 0; j < cia.length; j++) {
                     params[j] = cia[j].getName();
                 }
-
+                
                 MCodeUtilities.write("" + Code.CONSTRUCTOR + Code.DELIM
-                        + MCodeGenerator.arrayToString(params));
+                        + MCodeGenerator.arrayToString(params) + Code.DELIM +
+                        ((TreeConstructorInfo) cons[i]).hasImplicitSuperCall());
                 addConstructor((TreeConstructorInfo) cons[i]);
             }
         }

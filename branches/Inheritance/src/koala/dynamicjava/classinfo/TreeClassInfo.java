@@ -571,10 +571,17 @@ public class TreeClassInfo implements ClassInfo {
          * @param node the node to visit
          */
         public Object visit(ConstructorDeclaration node) {
+        	
+        	//Adds implicit super method invocation
             if (node.getConstructorInvocation() == null) {
                 ConstructorInvocation ci;
                 ci = new ConstructorInvocation(null, null, true);
                 node.setConstructorInvocation(ci);
+                //We start a new COnAn unless the superclass is 
+                //java.lang.Object
+                if (!getSuperclass().getJavaClass().equals(java.lang.Object.class)){
+                	node.setImplicitSuper(true);
+            	}
             }
 
             // Add the outer parameter if needed

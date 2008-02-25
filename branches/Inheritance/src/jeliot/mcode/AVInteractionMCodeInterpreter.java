@@ -524,7 +524,8 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeCONSTRUCTOR(java.lang.String)
      */
-    protected void handleCodeCONSTRUCTOR(String listOfParameters) {
+    protected void handleCodeCONSTRUCTOR(String listOfParameters, 
+    		String hasImplicitSuperCall) {	
         // TODO Auto-generated method stub
 
     }
@@ -1128,5 +1129,15 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
     public BufferedReader getMCodeOutputReader() {
         return this.readerForMCodeOutput;
     }
+
+	protected void handleCodeCONAN(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void handleCodeCONAN_END(String string) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

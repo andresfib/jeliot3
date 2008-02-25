@@ -11,8 +11,12 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import jeliot.FeatureNotImplementedException;
 import jeliot.avinteraction.AVInteractionEngine;
+import jeliot.conan.ConAnUtilities;
+import jeliot.conan.ConflictiveInheritance;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.Class;
 import jeliot.lang.ClassInfo;
@@ -479,9 +483,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     /**
      * @param listOfParameters
      */
-    protected void handleCodeCONSTRUCTOR(String listOfParameters) {
+    protected void handleCodeCONSTRUCTOR(String listOfParameters, String hasImplicitSuperCall) {
+    	
         currentClass.declareConstructor(currentClass.getName() + Code.DELIM
-                + listOfParameters, "");
+                + listOfParameters, hasImplicitSuperCall);
     }
 
     /**
@@ -1457,7 +1462,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 }
 
                 String call;
-
+                
                 if (currentMethodInvocation[1] != null
                         && ((String) currentMethodInvocation[1]).equals("")) {
                     call = (String) currentMethodInvocation[0];
@@ -3786,4 +3791,17 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     public void afterInterpretation(String line) {
     }
+
+	protected void handleCodeCONAN(String string) {
+		//director.skipAnimation();
+		inConAn = true;
+		
+	}
+
+	protected void handleCodeCONAN_END(String string) {
+		//director.resumeAnimation();
+		inConAn = false;
+		//We give user 2 steps to realize a conan has happen.
+		ConAnUtilities.setAnswerCounter(3);
+	}
 }

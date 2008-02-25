@@ -554,7 +554,8 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
     /* (non-Javadoc)
      * @see jeliot.mcode.MCodeInterpreter#handleCodeCONSTRUCTOR(java.lang.String)
      */
-    protected void handleCodeCONSTRUCTOR(String listOfParameters) {
+    protected void handleCodeCONSTRUCTOR(String listOfParameters,
+    		String hasImplicitSuperCall) {
     }
 
     /* (non-Javadoc)
@@ -651,6 +652,16 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
         // TODO Auto-generated method stub
         
     }
+
+	protected void handleCodeCONAN(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void handleCodeCONAN_END(String string) {
+		// TODO Auto-generated method stub
+		
+	}
 
     
 }

@@ -50,6 +50,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
 
+import jeliot.conan.ConAnUtilities;
+import jeliot.conan.ConflictiveInheritance;
 import jeliot.mcode.Code;
 import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodeUtilities;
@@ -1048,6 +1050,13 @@ public class TreeInterpreter implements Interpreter {
 
         if (inThisCall || inSuperCall) {
             MCodeUtilities.write("" + Code.OMCC); //the method call is closed
+            //We only close the CONAN when the OMCC corresponds to the implicit
+            //super method call
+            if (ConflictiveInheritance.isInConflictiveImplicit() &&
+            		ConflictiveInheritance.getClassName().equals(c.getName())) {
+        		MCodeUtilities.write(""+Code.CONAN_END);
+        		ConflictiveInheritance.setInConflictiveImplicit(false);
+        	}
             MCodeUtilities.previousClassStack.pop();
             MCodeUtilities.previousClassParametersStack.pop();
         }
@@ -1218,6 +1227,7 @@ public class TreeInterpreter implements Interpreter {
                 int depth = ((Integer) MCodeUtilities.superClassesStack.pop())
                         .intValue();
                 MCodeUtilities.superClassesStack.push(new Integer(++depth));
+
                 /*
                  for (int k = 0; k < depth - 1; k++) {
                  methodName += "super.";
@@ -1229,11 +1239,12 @@ public class TreeInterpreter implements Interpreter {
 
             EvaluationVisitor.incrementCounter();
 
+        	
             if (numParameters == 0) {
-
+ 	
                 // Fake OMC with this.this when
                 // so to describe a this call,
-
+            	
                 MCodeUtilities.write("" + Code.QN + Code.DELIM + counter
                         + Code.DELIM + "this" + Code.DELIM + Code.UNKNOWN
                         + Code.DELIM
@@ -1247,8 +1258,7 @@ public class TreeInterpreter implements Interpreter {
                 //+ MCodeUtilities.locationToString(meth));
 
             } else {
-
-                MCodeUtilities.write("" + Code.QN + Code.DELIM + counter
+            	MCodeUtilities.write("" + Code.QN + Code.DELIM + counter
                         + Code.DELIM + "this" + Code.DELIM + Code.UNKNOWN
                         + Code.DELIM + c.getName() + Code.DELIM + "0,0,0,0");
 
@@ -1298,6 +1308,7 @@ public class TreeInterpreter implements Interpreter {
                         + Code.DELIM + type);
 
             }
+            
             MCodeUtilities.setRedirectOutput(false);
             MCodeUtilities.redirectBufferStack.push(new Vector(MCodeUtilities
                     .getRedirectBuffer()));
@@ -1311,7 +1322,17 @@ public class TreeInterpreter implements Interpreter {
                     + MCodeGenerator.argToString(argnames));
             MCodeUtilities.write(Code.MD + Code.DELIM
                     + MCodeGenerator.locationToString(cpd.cd));
+            
 
+        }
+        //We open the CONAN if not previous conflictive animation and 
+        //and the current constructor contains an implicit super method call
+        //which will be executed just next.
+        if (!ConflictiveInheritance.isInConflictiveImplicit() &&
+        		cpd.cd.isImplicitSuper()){
+        		ConflictiveInheritance.setClassName(c.getSuperclass().getName());
+        		ConflictiveInheritance.setInConflictiveImplicit(true);
+        		MCodeUtilities.write(""+Code.CONAN);
         }
         return result;
     }
