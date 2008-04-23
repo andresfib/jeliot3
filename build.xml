@@ -87,7 +87,7 @@ To display the available targets type:
 
 	<!-- Compilation ==================================================== -->
 	<target name="compile" depends="init">
-		<javac target="1.4" source="1.4" sourcepath="" destdir="${dest}" deprecation="on" srcdir="${src}">
+		<javac target="1.5" source="1.5" sourcepath="" destdir="${dest}" deprecation="on" srcdir="${src}">
 			<classpath>
 				<fileset dir="lib">
 					<include name="*.jar" />
@@ -96,10 +96,7 @@ To display the available targets type:
 			<include name="**/*.java" />
 			<exclude name="**/examples/*.java" />
 		</javac>
-		<delete>
-			<!-- Example classes are compiled too, delete them -->
-			<fileset dir="${dest}/examples" includes="*.class" />
-		</delete>
+		
         <copy todir="${dest}/docs"><fileset dir="${src}/docs" id="id">
             </fileset>
         </copy>
@@ -312,5 +309,9 @@ To display the available targets type:
 
 		<signjar jar="${release}/ws/jeliot.jar" keystore="jeliotKeystore" alias="JeliotTeam" storepass="jeliotsigned" verbose="true" />
 	</target>
-
+        <target name="run" depends="compile,jars">
+            <exec executable="java">
+                <arg line="-jar ${dist}/jeliot.jar"/>
+            </exec>
+        </target>
 </project>
