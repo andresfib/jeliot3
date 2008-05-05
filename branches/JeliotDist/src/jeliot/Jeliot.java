@@ -62,7 +62,8 @@ import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.SourceCodeUtilities;
 import jeliot.util.UserProperties;
-
+import jeliot.broadcast.server.Server;
+import jeliot.broadcast.client.Client;
 /**
  * This is the application class of Jeliot 3 that binds
  * together the theatre, the GUI and the DynamicJava Java source
@@ -246,7 +247,19 @@ public class Jeliot {
      * 
      */
     private static boolean experiment = false;
-
+    
+    /**
+     * Flags to reconize if Jeliot if Server or Client
+     */
+    private boolean server = false;
+    private boolean client = false;
+    
+    /**
+     * Constructors serverJeliot and clientJeliot
+     */
+    Server serverJeliot = null;
+    Client clientJeliot = null;
+    
     /**
      * The only constructor of the Jeliot 3.
      * Loads Theatre theatre -object's background.
@@ -760,6 +773,23 @@ public class Jeliot {
         inputWriter = null;
         ecodeReader = null;
     }
+    
+     /**
+     * 
+     * setServer
+     */
+    public void setServer() {
+        serverJeliot = new Server();
+    }
+    
+    /**
+     * 
+     * setClient
+     */
+    public void setClient() {
+        clientJeliot = new Client();
+    }
+    
 
     /**
      * @param args is a String array that contains parameter values for Jeliot.
@@ -771,20 +801,33 @@ public class Jeliot {
         Properties prop = System.getProperties();
         userDirectory = prop.getProperty("user.dir");
 
-        if (args.length >= 4) {
-            TrackerClock.setNativeTracking(Boolean.valueOf(args[3])
-                    .booleanValue());
-        }
+//        if (args.length >= 4) {
+//            TrackerClock.setNativeTracking(Boolean.valueOf(args[3])
+//                    .booleanValue());
+//        }
+//
+//        if (args.length >= 2) {
+//            if (args[1] != null) {
+//                Tracker.setTrack(Boolean.valueOf(args[1]).booleanValue());
+//                File f = new File(userDirectory);
+//                Tracker.openFile(f);
+//            }
+//        }
 
         if (args.length >= 2) {
-            if (args[1] != null) {
-                Tracker.setTrack(Boolean.valueOf(args[1]).booleanValue());
-                File f = new File(userDirectory);
-                Tracker.openFile(f);
+            if ((args[1] != null) && (args[1].equalsIgnoreCase("server") == true )) {
+                System.out.println("Server started in Jeliot");
+                server = true;
+                setServer();
+            }
+            else if ((args[1] != null) && (args[1].equalsIgnoreCase("client") == true )){
+                System.out.println("Client started in Jeliot");
+                client = true;
+                setClient();
             }
         }
-
-        if (args.length >= 1) {
+        
+        if (args.length >= 1){
             if (args[0] != null) {
                 File userDir = new File(userDirectory);
                 File file = new File(userDir, "examples");
@@ -803,13 +846,13 @@ public class Jeliot {
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
                                 setProgram(programFile);
+
                             }
                         });
                     }
                 }
             }
         }
-
     }
 
     /**
