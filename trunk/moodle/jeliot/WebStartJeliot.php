@@ -24,7 +24,7 @@
    <j2se version="1.4+"/>
    <jar href="jeliot.jar"/>
   </resources>
-   <application-desc main-class="jeliot.AdaptJeliot">
+   <application-desc main-class="jeliot.MoodleJeliot">
 <?php 
 
 	 echo  "<argument>".$sourcefile."</argument>\n";
