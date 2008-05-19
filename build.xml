@@ -52,6 +52,7 @@ To display the available targets type:
 		<!-- This properties modify the output of the build process-->
 		<property name="versionJ" value="3" />
 		<property name="minor" value=".7.1" />
+		<property name="versionMoodle" value="0.1" />
 
 		<!-- dist: Used to create the folder where to place the binary distribuition, jar files and images-->
 		<property name="dist" value="Jeliot${versionJ}" />
@@ -70,7 +71,7 @@ To display the available targets type:
 
 		<mkdir dir="${release}" />
 		<mkdir dir="${release}/ws" />
-
+		<mkdir dir="${release}/moodle" />
 	</target>
 
 	<!-- Help ==================================================== -->
@@ -96,10 +97,6 @@ To display the available targets type:
 			<include name="**/*.java" />
 			<exclude name="**/examples/*.java" />
 		</javac>
-		<delete>
-			<!-- Example classes are compiled too, delete them -->
-			<fileset dir="${dest}/examples" includes="*.class" />
-		</delete>
         <copy todir="${dest}/docs"><fileset dir="${src}/docs" id="id">
             </fileset>
         </copy>
@@ -311,6 +308,14 @@ To display the available targets type:
 		<copy todir="${release}/ws" file="${dist}/jeliot.jar" />
 
 		<signjar jar="${release}/ws/jeliot.jar" keystore="jeliotKeystore" alias="JeliotTeam" storepass="jeliotsigned" verbose="true" />
+	</target>
+	
+	
+	<target name="moodleModule" depends="init">
+		<copy todir="moodle/jeliot" file="${release}/ws/jeliot.jar" />
+		<zip destfile="${release}/moodle/jeliot-${versionMoodle}.zip">
+		    <zipfileset dir="moodle" includes="**/*"/>
+		</zip>		
 	</target>
 
 </project>
