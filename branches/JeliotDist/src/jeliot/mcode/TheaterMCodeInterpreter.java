@@ -254,6 +254,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     public String readLine() {
         String readLine = null;
+        //if we are client then
+        // readline from buffer created at client
+        // else
         if (readNew()) {
             try {
                 readLine = mcode.readLine();
