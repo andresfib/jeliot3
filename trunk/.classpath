@@ -3,7 +3,7 @@
 	<classpathentry excluding="examples/|.classpath|.project|jeliot.bat|jeliot.ico|jeliot.mf" kind="src" path="src"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/junit.jar" sourcepath="lib/src.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/junit.jar" sourcepath="lib/src.jar"/>
 	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

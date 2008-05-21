@@ -35,7 +35,7 @@ import com.incors.plaf.kunststoff.KunststoffLookAndFeel;
 public class MoodleJeliot extends Jeliot {
 
     public MoodleJeliot() {
-        super("jeliot.io");
+        super("jeliot.io.*");
         Policy.setPolicy(new Policy() {
             public PermissionCollection getPermissions(CodeSource codesource) {
                 Permissions perms = new Permissions();
@@ -99,7 +99,7 @@ public class MoodleJeliot extends Jeliot {
 
     public void handleArgs(String args[]) {
         try {
-            if (args.length > 1) {
+            if (args.length >= 2) {
                 URL u = null;
                 String cookie="";
                 try {
@@ -112,17 +112,14 @@ public class MoodleJeliot extends Jeliot {
                 setProgram(u, cookie);
             }
             if (args.length > 2) {
-            	super.userName = args[1];
+            	super.userName = args[2];
             }
             if (args.length > 3) {
-            	super.sessionID = args[2];
-            }
-            if (args.length > 4) {
             	if(args[3].equals("1")){
             		super.setAskingQuestions(true);
             	} else {
             		super.setAskingQuestions(false);
-            	}
+            	}	
             }
         } catch (MalformedURLException e) {
             if (DebugUtil.DEBUGGING) {
@@ -139,7 +136,7 @@ public class MoodleJeliot extends Jeliot {
     }
 
     public boolean hasIOImport(String src) {
-        Pattern p = Pattern.compile("import\\s+Prog1Tools\\.(\\*|IOTools);");
+        Pattern p = Pattern.compile("import\\s+jeliot\\.(\\*|io\\.\\*);");
         return p.matcher(src).find();
     }
 }
