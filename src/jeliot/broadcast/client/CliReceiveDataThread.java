@@ -39,9 +39,12 @@ public class CliReceiveDataThread extends Thread{
                 if((text[0].indexOf("PRIACK") != -1) || (text[0].indexOf("PRINACK") != -1)){
                     c.priority = Priority(text[0]);
                 }
-
+                
+                //if header says start then we have to put Jeliot Client in play mode 
+                
                 //Intruction from Server
                 if((text[0].indexOf("INST") != -1)){
+                	//Send the rest of the line to buffer that connects with readline in TheaterMCodeInterpreter
                     System.out.println("Instruction from " + text[1] + " --> " + text[3]);
                     c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
                 }    

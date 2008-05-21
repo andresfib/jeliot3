@@ -1746,6 +1746,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
         }
 
         try {
+        	//if we are client we don't need to do many complicated stuff, just 
+        	//open the curtains, set the buttons, and get the 
+        	//MCodeTHeaterInterepreter ready
+        	//else ....
             enableWidgets(editWidgets.elements(), false);
             String programCode = editor.getProgram();
 
