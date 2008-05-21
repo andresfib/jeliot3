@@ -220,6 +220,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         try {
             line = readLine();
             MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
+            //Add an extended PrintWriter class to server so it prints out header+line
+            //or implement properly the next line
+            //server.send(line);(pseudo-code)
+            
             //This is for debugging purposes.
             DebugUtil.printDebugInfo(line);
         } catch (Exception e) {
