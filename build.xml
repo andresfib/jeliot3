@@ -311,10 +311,13 @@ To display the available targets type:
 	</target>
 	
 	
-	<target name="moodleModule" depends="init">
-		<copy todir="moodle/jeliot" file="${release}/ws/jeliot.jar" />
-		<zip destfile="${release}/moodle/jeliot-${versionMoodle}.zip">
-		    <zipfileset dir="moodle" includes="**/*"/>
+	<target name="moodleModule" depends="signedjar">
+		<copy todir="${release}/moodle/jeliot" file="${release}/ws/jeliot.jar" />
+		<copy todir="${release}/moodle/jeliot">
+			<fileset dir="moodle/jeliot"/>
+		</copy>
+		<zip destfile="${release}/moodle/jeliot-activity-moodle-${versionMoodle}.zip">
+		    <zipfileset dir="${release}/moodle/jeliot" includes="**/*"/>
 		</zip>		
 	</target>
 
