@@ -1,8 +1,12 @@
 package jeliot.broadcast.server;
-
+/**
+ *
+ * @author Carlos Menéndez
+ */
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import jeliot.mcode.*;
 
 public class ServSendDataThread extends Thread{
     
@@ -13,26 +17,25 @@ public class ServSendDataThread extends Thread{
     private ServMessages message = null;
     public boolean flagExit = false;
     public boolean priorityConceded = false;
-
+    public TestForm window = null;
+    public String text = null;
+     
     /* Creates a new instance of ServSendDataThread */
     public ServSendDataThread(Server server, ConnectionTable connectionTable, ServMessages message) {
-        this.inputline = new BufferedReader(new InputStreamReader(System.in));
-        this.connectionTable = connectionTable;
-        this.server = server;
-        this.message = message;
-
+            this.connectionTable = connectionTable;
+            this.server = server;
+            this.message = message;
+            this.window = new TestForm();
     }
     
     public void run(){
-        String text = null;
-
+        //String text = window.getMessage();
+        
+        
         while(true){
             //Read line from input
-            try {
-                text = inputline.readLine();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+
+            //text = window.getMessage();
         
             if(text != null){
                 if((text.indexOf("Exit") != -1)){
@@ -41,7 +44,7 @@ public class ServSendDataThread extends Thread{
                         break; 
                     }
                 }
-
+                //System.out.println("Data -->" +  text + "\n");
                 //Broadcasting sendToClient to every client
                 if(text.length() != 0){
                     Broadcast(text);
@@ -69,5 +72,10 @@ public class ServSendDataThread extends Thread{
         }
     }
     
+    public void setMCode(String str){
+        text = new String(str);
+        System.out.println("Codigo " + str);
+    }
+
 }//End Thread
 
