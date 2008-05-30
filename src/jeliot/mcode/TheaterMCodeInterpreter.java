@@ -31,6 +31,7 @@ import jeliot.theater.ValueActor;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.Util;
+import jeliot.broadcast.server.Server;
 
 /**
  * @author Niko Myller
@@ -127,6 +128,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      *  
      */
     protected Hashtable classes = new Hashtable();
+    
+    /**
+     *  
+     */
+    private Server server = null;
 
     /**
      * currentMethodInvocation keeps track of all the information that is
@@ -159,7 +165,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected LinkedList classesWithStaticVariables = new LinkedList();
 
     private boolean stopBeforeClearingScratch = false;
-
+    
     /**
      *  
      */
@@ -175,12 +181,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param pr
      */
     public TheaterMCodeInterpreter(BufferedReader r, Director d,
-            String programCode, PrintWriter pr) {
+            String programCode, PrintWriter pr, Server server) {
         super(r);
         //this.mcode = r;
         this.director = d;
         this.programCode = programCode;
         this.input = pr;
+        this.server = server;
         initialize();
     }
 
@@ -292,6 +299,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void beforeInterpretation(String line) {
         MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
+        server.serverSendData.setMCode(line);
     }
 
     /*
@@ -2179,7 +2187,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     }
 
     /*
-     * Add somewhere here code for static field allocation in correct place of execution for all the static fields of a class (JLS §12.4.1):
+     * Add somewhere here code for static field allocation in correct place of execution for all the static fields of a class (JLS ï¿½12.4.1):
      * 
      * Initialization of a class consists of executing its static initializers and the initializers for static fields declared in the class. Initialization of an interface consists of executing the initializers for fields declared in the interface.
      * Before a class is initialized, its direct superclass must be initialized, but interfaces implemented by the class need not be initialized. Similarly, the superinterfaces of an interface need not be initialized before the interface is initialized.
@@ -2189,8 +2197,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      *        * T is a class and an instance of T is created.
      *        * T is a class and a static method declared by T is invoked.
      *        * A static field declared by T is assigned.
-     *        * A static field declared by T is used and the field is not a constant variable (§4.12.4).
-     *        * T is a top-level class, and an assert statement (§14.10) lexically nested within T is executed. 
+     *        * A static field declared by T is used and the field is not a constant variable (ï¿½4.12.4).
+     *        * T is a top-level class, and an assert statement (ï¿½14.10) lexically nested within T is executed. 
      *        
      * Invocation of certain reflective methods in class Class and in package java.lang.reflect also causes class or interface initialization. A class or interface will not be initialized under any other circumstance.
      *  
