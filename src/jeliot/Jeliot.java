@@ -257,8 +257,8 @@ public class Jeliot {
     /**
      * Constructors serverJeliot and clientJeliot
      */
-    Server serverJeliot = null;
-    Client clientJeliot = null;
+    public Server serverJeliot = null;
+    public Client clientJeliot = null;
     
     /**
      * The only constructor of the Jeliot 3.
@@ -429,7 +429,7 @@ public class Jeliot {
         director.setActorFactory(af);
 
         mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader,
-                director, gui.getProgram(), inputWriter);
+                director, gui.getProgram(), inputWriter, serverJeliot);
         director.setInterpreter(mCodeInterpreterForTheater);
 
         try {
