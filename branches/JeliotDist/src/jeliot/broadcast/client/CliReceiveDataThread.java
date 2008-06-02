@@ -1,5 +1,8 @@
 package jeliot.broadcast.client;
-
+/**
+ *
+ * @author Carlos Menéndez
+ */
 import java.io.*;
 import java.net.*;
 
@@ -26,7 +29,7 @@ public class CliReceiveDataThread extends Thread{
             //Read from Server
                 if (c!=null)
                     str = c.printFromServer(); 
-                    text = str.split("�");
+                    text = str.split("§");
                 //Exit condition Client
                 if((text[0].indexOf("EXIT") != -1)){
                     System.out.println("Type -Exit- to exit the application");
@@ -44,10 +47,10 @@ public class CliReceiveDataThread extends Thread{
                 
                 //Intruction from Server
                 if((text[0].indexOf("INST") != -1)){
-                	//Send the rest of the line to buffer that connects with readline in TheaterMCodeInterpreter
+                    //Send the rest of the line to buffer that connects with readline in TheaterMCodeInterpreter
                     System.out.println("Instruction from " + text[1] + " --> " + text[3]);
-                    c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
-                }    
+                    //c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
+                } 
         }//End While
         if((text[0].indexOf("CLOSE") != -1)){
             System.out.println("Closing cliReceiveDataThread\n");
@@ -70,6 +73,18 @@ public class CliReceiveDataThread extends Thread{
             var = true;
         }
         return var;
+    }
+     
+    public String sendMCode(){
+        String str = null;
+        if(text[3].indexOf(null) != -1){
+            return "";
+        }
+        else{
+            str = new String(text[3]);
+            System.out.println(str);
+            return str;
+        }
     }
     
 }//End Thread
