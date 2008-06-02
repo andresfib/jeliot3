@@ -429,7 +429,7 @@ public class Jeliot {
         director.setActorFactory(af);
 
         mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader,
-                director, gui.getProgram(), inputWriter, serverJeliot);
+                director, gui.getProgram(), inputWriter, serverJeliot, clientJeliot, client);
         director.setInterpreter(mCodeInterpreterForTheater);
 
         try {
