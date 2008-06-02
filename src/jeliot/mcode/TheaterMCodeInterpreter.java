@@ -32,6 +32,7 @@ import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.Util;
 import jeliot.broadcast.server.Server;
+import jeliot.broadcast.client.Client;
 
 /**
  * @author Niko Myller
@@ -132,7 +133,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     /**
      *  
      */
-    private Server server = null;
+    private Server serverMCode = null;
+    private Client clientMCode = null;
+    
+    /**
+     *  
+     */
+    private boolean clientFlag = false;
 
     /**
      * currentMethodInvocation keeps track of all the information that is
@@ -181,13 +188,15 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * @param pr
      */
     public TheaterMCodeInterpreter(BufferedReader r, Director d,
-            String programCode, PrintWriter pr, Server server) {
+            String programCode, PrintWriter pr, Server server, Client client, boolean clientFlag) {
         super(r);
         //this.mcode = r;
         this.director = d;
         this.programCode = programCode;
         this.input = pr;
-        this.server = server;
+        this.serverMCode = server;
+        this.clientMCode = client;
+        this.clientFlag = clientFlag;
         initialize();
     }
 
@@ -227,9 +236,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         try {
             line = readLine();
             MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
-            //Add an extended PrintWriter class to server so it prints out header+line
-            //or implement properly the next line
-            //server.send(line);(pseudo-code)
             
             //This is for debugging purposes.
             DebugUtil.printDebugInfo(line);
@@ -264,6 +270,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         //if we are client then
         // readline from buffer created at client
         // else
+        if(clientFlag == true){
+            readLine = clientMCode.clientReceiveData.sendMCode();
+            return readLine();
+        }
+        else{
         if (readNew()) {
             try {
                 readLine = mcode.readLine();
@@ -290,6 +301,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         DebugUtil.printDebugInfo(readLine);
 
         return readLine;
+        }
     }
 
     /*
@@ -299,7 +311,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void beforeInterpretation(String line) {
         MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
-        server.serverSendData.setMCode(line);
+        serverMCode.serverSendData.setMCode(line);
     }
 
     /*
