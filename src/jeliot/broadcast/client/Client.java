@@ -1,5 +1,8 @@
 package jeliot.broadcast.client;
-
+/**
+ *
+ * @author Carlos Menéndez
+ */
 
 public class Client {
     
@@ -14,11 +17,15 @@ public class Client {
     //CliMessages
     public CliMessages message = null;
     
+    //private TestWindow window = null;
+    
     public void initializeClient() {
         this.message = new CliMessages();
         this.c = new ClientServ(this);
         this.clientSendData = new CliSendDataThread(this, this.c, this.message);
         this.clientReceiveData = new CliReceiveDataThread(this, this.c, this.message);
+        
+        //this.window = new TestWindow();
 
         clientSendData.start();
         clientReceiveData.start();
