@@ -20,7 +20,7 @@ import koala.dynamicjava.tree.Node;
  * extraction and interpretation. 
  *  
  * @author Niko Myller
- * @author Andrés Moreno
+ * @author Andrï¿½s Moreno
  * 
  * @see koala.dynamicjava.interpreter.TreeInterpreter
  * @see koala.dynamicjava.interpreter.EvaluationVisitor
@@ -1088,7 +1088,7 @@ public class MCodeUtilities {
      * @return string a1,a2,a11,a12,21,a22
      * @author Jerome Lacoste
      * @author www.javapractices.com
-     * @author Andrés Moreno
+     * @author Andrï¿½s Moreno
      */
     public static String getSubArrayHashCodes(Object array) {
 
