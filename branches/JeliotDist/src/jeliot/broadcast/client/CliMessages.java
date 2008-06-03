@@ -1,5 +1,8 @@
 package jeliot.broadcast.client;
-
+/**
+ *
+ * @author Carlos Menéndez
+ */
 import java.io.*;
 import java.net.*;
 
