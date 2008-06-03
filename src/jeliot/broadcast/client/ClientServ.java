@@ -1,5 +1,8 @@
 package jeliot.broadcast.client;
-
+/**
+ *
+ * @author Carlos Menéndez
+ */
 import java.io.*;
 import java.net.*;
 import java.util.StringTokenizer;
@@ -81,6 +84,7 @@ public class ClientServ {
 
             try {
                     textFromServer = is.readUTF();
+                    //System.out.println("MCode: " + textFromServer);
                 }
              catch (IOException ex) {
                 ex.printStackTrace();
