@@ -43,9 +43,9 @@ public class ServSendDataThread extends Thread{
                 }
 
                 //Broadcasting sendToClient to every client
-                if(text.length() != 0){
+                /*if(text.length() != 0){
                     Broadcast(text);
-                }
+                }*/
             }
         }//End While
         
@@ -70,8 +70,13 @@ public class ServSendDataThread extends Thread{
     }
     
     public void setMCode(String str){
-        text = new String(str);
-        System.out.println("Codigo " + str);
+        //if((text.indexOf(str) != -1)){
+            text = new String(str);
+            System.out.println("Codigo " + str);
+            if(text.length() != 0){
+                Broadcast(text);
+            }
+        //}
     }
     
 }//End Thread
