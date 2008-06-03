@@ -314,4 +314,17 @@ To display the available targets type:
                 <arg line="-jar ${dist}/jeliot.jar"/>
             </exec>
         </target>
+                
+                <target name="runServer" depends="compile,jars">
+            <exec executable="java">
+                <arg line="-jar ${dist}/jeliot.jar as.java server"/>
+            </exec>
+        </target>
+        
+                <target name="runClient" depends="compile,jars">
+            <exec executable="java">
+                <arg line="-jar ${dist}/jeliot.jar as.java client"/>
+            </exec>
+        </target>
+        
 </project>
