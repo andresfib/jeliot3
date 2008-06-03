@@ -1,5 +1,8 @@
 package jeliot.broadcast.client;
-
+/**
+ *
+ * @author Carlos Menéndez
+ */
 import java.io.*;
 import java.net.*;
 
@@ -24,7 +27,7 @@ public class CliSendDataThread extends Thread{
         
         while(flagExit){
             
-            System.out.println("Introduce Data-->");
+            //System.out.println("Introduce Data-->");
             //Read line from input
             try {
                 text = inputline.readLine();
