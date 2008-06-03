@@ -1,5 +1,11 @@
 package jeliot.broadcast.server;
 
+import java.io.*;
+
+/**
+ *
+ * @author Carlos Menéndez
+ */
 public class Server {
     
     // attributes
@@ -17,6 +23,8 @@ public class Server {
     //ServMessages
     private ServMessages message = null;
     
+    //private TestWindow window = null;
+    
     // method to initializate server
     public void initializeServer(){
         this.message = new ServMessages();
@@ -24,9 +32,10 @@ public class Server {
         this.serverConnection = new ServConnectionThread(this, this.connectionTable, this.message);
         this.serverSendData = new ServSendDataThread(this, this.connectionTable, this.message);
 
+        //this.window = new TestWindow();
+        
         serverSendData.start();
         serverConnection.start();
-
         
     }
     
