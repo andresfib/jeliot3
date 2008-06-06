@@ -134,9 +134,14 @@ public class Jeliot {
     private MCodeInterpreter mCodeInterpreterForCallTree = null;
 
     /**
-     *
+     * Server Source Code
      */
-    private String sourceCode = "";
+    private String sourceCodeServer = "";
+    
+    /**
+     * Client Source Code
+     */
+    private String sourceCodeClient = "";
 
     /**
      *
@@ -293,7 +298,7 @@ public class Jeliot {
         //Tracker.setCodePane2(codePane);
 
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad,
-                userDirectory, callTree, hv);
+                userDirectory, callTree, hv, client);
 
     }
 
@@ -317,17 +322,30 @@ public class Jeliot {
      * @param methodCall The main method call as a String.
      */
     public void setSourceCode(String srcCode, String methodCall) {
+        //If we are server, we follow the normal sequence for source code
+        //If we are client, we take the sourceCodeServer
+        if(server == true){
+            
+            if (hasIOImport(srcCode)) {
+                this.sourceCodeServer = srcCode;
+            } else {
+                this.sourceCodeServer = getImportIOStatement() + "\n\n" + srcCode;
+                gui.getCodePane().getTextArea().setText(this.sourceCodeServer);
+            }
 
-        if (hasIOImport(srcCode)) {
-            this.sourceCode = srcCode;
-        } else {
-            this.sourceCode = getImportIOStatement() + "\n\n" + srcCode;
-            gui.getCodePane().getTextArea().setText(this.sourceCode);
+            this.methodCall = methodCall;
+            codePane.installProgram(this.sourceCodeServer);
         }
-
-        this.methodCall = methodCall;
-        codePane.installProgram(this.sourceCode);
-        compiled = false;
+        else if(client == true){
+            this.sourceCodeClient = this.sourceCodeServer;
+        }
+        //If Jeliot is started as a Client, we don't compile the source code
+        if(client == true){ 
+            compiled = true;
+        }
+        else{
+            compiled = false;
+        }
     }
 
     /**
@@ -347,8 +365,8 @@ public class Jeliot {
                 }
                 launcher = null;
             }
-
-            String source = this.sourceCode;
+            //We get only the Server Source Code
+            String source = this.sourceCodeServer;
             if (jeliotUserProperties.getBooleanProperty("save_unicode")) {
                 source = SourceCodeUtilities.convertNative2Ascii(source);
             }
