@@ -465,6 +465,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
             Tracker.trackEvent(TrackerClock.currentTimeMillis(),
                     Tracker.BUTTON, -1, -1, "PlayButton");
             playAnimation();
+            //jeliot.
             Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER,
                     -1, -1, "AnimationStarted");
         }
@@ -549,9 +550,16 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * @param udir
      *            The user directory
      */
+    
+     /**
+     *  Parameter to know if Jeliot is set as a client
+     */
+    private boolean clientFlag = false;
+    
+    
     public JeliotWindow(Jeliot jeliot, CodePane2 codePane, Theater theatre,
             AnimationEngine engine, ImageLoader iLoad, String udir,
-            TreeDraw td, HistoryView hv) {
+            TreeDraw td, HistoryView hv, boolean clientFlag) {
 
         this.jeliot = jeliot;
         this.codePane = codePane;
@@ -569,6 +577,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         this.editor = new CodeEditor2(this.udir, jeliot.getImportIOStatement());
         editor.setMasterFrame(frame);
         /*        this.mCodeSaver = new MCodeSaver();*/
+        this.clientFlag = clientFlag;
     }
 
     public URL getURL(String filename) {
@@ -1731,6 +1740,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
         tryToEnterAnimate(null);
     }
 
+    //Read --> Very important this
+ 
     /**
      * Called when the user pushes the "Compile" button.
      * Gets the code from the CodeEditor2 -object.
@@ -1962,6 +1973,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * Changes the user interface when the "Compile" button is pressed. Rewinds
      * the animation.
      */
+    
+    //Important
     public void enterAnimate(final int line) {
         //enableWidgets(editWidgets.elements(), false);
         //enableWidgets(animWidgets.elements(), true);
@@ -2146,7 +2159,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     e.printStackTrace();
                 }
 
-                jeliot.compile();
+                if(clientFlag != true){
+                    jeliot.compile();
+                }
 
                 jeliot.rewind();
                 theater.repaint();
