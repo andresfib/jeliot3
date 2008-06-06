@@ -313,4 +313,10 @@ To display the available targets type:
 		<signjar jar="${release}/ws/jeliot.jar" keystore="jeliotKeystore" alias="JeliotTeam" storepass="jeliotsigned" verbose="true" />
 	</target>
 
+        <target name="runJeliot" depends="compile,jars">
+            <exec executable="java">
+                <arg line="-jar ${dist}/jeliot.jar"/>
+            </exec>
+        </target>
+        
 </project>
