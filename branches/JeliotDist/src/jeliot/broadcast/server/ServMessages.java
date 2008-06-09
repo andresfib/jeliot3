@@ -13,6 +13,7 @@ public class ServMessages {
     private final static String ack = "ACK";
     private final static String nack = "NACK";
     private final static String instruction = "INST";
+    private final static String program = "PROG";
     private final static String priorityAck = "PRIACK";
     private final static String priorityNack = "PRINACK";
     private final static String close = "CLOSE";
@@ -37,6 +38,10 @@ public class ServMessages {
     }
     public String getInstruction(int to, String text){
         String str = new String(instruction + "§" + server + "§"+ to + "§" + text + "§");
+        return str;
+    }
+    public String getProgram(int to, String text){
+        String str = new String(program + "§" + server + "§"+ to + "§" + text + "§");
         return str;
     }
     public String getPriorityAck(int to, String text){
