@@ -135,13 +135,10 @@ public class Jeliot {
 
     /**
      * Server Source Code
-     */
-    private String sourceCodeServer = "";
-    
-    /**
      * Client Source Code
      */
-    private String sourceCodeClient = "";
+    private static String sourceCodeServer = "";
+    private static String sourceCodeClient = "";
 
     /**
      *
@@ -256,14 +253,14 @@ public class Jeliot {
     /**
      * Flags to reconize if Jeliot if Server or Client
      */
-    private boolean server = false;
-    private boolean client = false;
+    private static boolean server = false;
+    private static boolean client = false;
     
     /**
      * Constructors serverJeliot and clientJeliot
      */
-    public Server serverJeliot = null;
-    public Client clientJeliot = null;
+    public static Server serverJeliot = null;
+    public static Client clientJeliot = null;
     
     /**
      * The only constructor of the Jeliot 3.
@@ -905,12 +902,12 @@ public class Jeliot {
      * @return instance of Jeliot
      */
     public static Jeliot start(String args[]) {
-
+        
         //Should experimental settings be used
         if (args.length >= 4) {
             experiment = Boolean.valueOf(args[3]).booleanValue();
         }
-
+        
         final Jeliot jeliot = new Jeliot("jeliot.io.*");
 
         //Do the mapping to other resources.
@@ -937,9 +934,9 @@ public class Jeliot {
                 arguments[0] = null;
             }
         }
-
+        
         jeliot.handleArgs(arguments);
-
+        
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
@@ -950,13 +947,18 @@ public class Jeliot {
 
         if (args.length >= 1) {
             if (args[0] != null && args[0].trim().length() != 0) {
-                final String sourceCode = args[0];
-                SwingUtilities.invokeLater(new Runnable() {
+                if(server == true){
+                    final String sourceCode = args[0];
+                    sourceCodeServer = new String(sourceCode);
+                    SwingUtilities.invokeLater(new Runnable() {
 
-                    public void run() {
-                        jeliot.setProgram(sourceCode);
-                    }
-                });
+                        public void run() {
+                            jeliot.setProgram(sourceCode);
+                        }
+                    });
+                    Server.serverSendData.Broadcast(sourceCode);
+                    System.out.println("SourceCode: " + sourceCode);
+                }
             }
         }
         return jeliot;
