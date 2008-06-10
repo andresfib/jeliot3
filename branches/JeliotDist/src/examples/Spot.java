@@ -37,7 +37,7 @@ public class Spot {
         }        
     } 
     
-    public int getRadius() {
+    public double getRadius() {
         return radius;
     }
     
