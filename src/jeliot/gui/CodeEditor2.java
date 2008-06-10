@@ -283,7 +283,7 @@ public class CodeEditor2 extends JComponent {
 
         public void actionPerformed(ActionEvent e) {
             Tracker.trackEvent(TrackerClock.currentTimeMillis(),
-                    Tracker.BUTTON, -1, -1, "ÅasteButton");
+                    Tracker.BUTTON, -1, -1, "ï¿½asteButton");
             area.paste();
         }
     };
