@@ -79,6 +79,8 @@ import jeliot.util.UserProperties;
 import org.syntax.jeliot_jedit.JEditTextArea;
 
 import edu.unika.aifb.components.JFontChooser;
+import jeliot.broadcast.client.Client;
+import jeliot.broadcast.server.Server;
 
 /**
  * The main window of the Jeliot 3.
@@ -532,6 +534,19 @@ public class JeliotWindow implements PauseListener, MouseListener {
              */
         }
     };
+    
+     /**
+     *  Flags to know if Jeliot is set as a client or server
+     */
+    public boolean clientFlag = false;
+    public boolean serverFlag = false;
+    
+    /**
+     * Constructors serverJeliot and clientJeliot
+     */
+    public Server serverJeliot = null;
+    public Client clientJeliot = null;
+    
 
     /**
      * Assigns the values of the parameters in the object values. Constructs the
@@ -551,15 +566,12 @@ public class JeliotWindow implements PauseListener, MouseListener {
      *            The user directory
      */
     
-     /**
-     *  Parameter to know if Jeliot is set as a client
-     */
-    private boolean clientFlag = false;
     
     
     public JeliotWindow(Jeliot jeliot, CodePane2 codePane, Theater theatre,
             AnimationEngine engine, ImageLoader iLoad, String udir,
-            TreeDraw td, HistoryView hv, boolean clientFlag) {
+            TreeDraw td, HistoryView hv, 
+            boolean serverFlag, boolean clientFlag, Server server, Client client) {
 
         this.jeliot = jeliot;
         this.codePane = codePane;
@@ -577,7 +589,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
         this.editor = new CodeEditor2(this.udir, jeliot.getImportIOStatement());
         editor.setMasterFrame(frame);
         /*        this.mCodeSaver = new MCodeSaver();*/
+        this.serverFlag = serverFlag;
         this.clientFlag = clientFlag;
+        
+        this.serverJeliot = server;
+        this.clientJeliot = client;
     }
 
     public URL getURL(String filename) {
@@ -1762,7 +1778,15 @@ public class JeliotWindow implements PauseListener, MouseListener {
         	//MCodeTHeaterInterepreter ready
         	//else ....
             enableWidgets(editWidgets.elements(), false);
-            String programCode = editor.getProgram();
+            
+            String programCode = null;
+            if(serverFlag){
+                programCode = editor.getProgram();
+                serverJeliot.serverSendData.getProgramCode(programCode);
+            }
+            else if(clientFlag){
+                programCode = clientJeliot.clientReceiveData.programCode;
+            }
 
             final int line = editor.getTextArea().getVerticalScrollBar()
                     .getValue();
