@@ -75,7 +75,12 @@ public class ClientServ {
                 this.idClient = id;
                 sendToServer(client.message.getHello(idClient, "SERVER", "Hello Server!! I'm Client " + idClient));
                 flag = false;
-            }     
+            } 
+            if((text[0].indexOf("PROG") != -1)){
+                System.out.println("Instruction from " + text[1] + " --> " + text[3]);
+                //c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
+                client.clientReceiveData.programCode = new String(text[3]);
+            } 
         }
         return id;
     }
