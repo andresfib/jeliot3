@@ -14,6 +14,7 @@ public class CliReceiveDataThread extends Thread{
     private CliMessages message = null;
     private String [] text = null;
     public boolean flagExit = true;
+    public String programCode = null;
     
     public CliReceiveDataThread(Client client, ClientServ c, CliMessages message) {
         this.c = c;
@@ -50,6 +51,12 @@ public class CliReceiveDataThread extends Thread{
                     //Send the rest of the line to buffer that connects with readline in TheaterMCodeInterpreter
                     System.out.println("Instruction from " + text[1] + " --> " + text[3]);
                     //c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
+                } 
+                //Intruction from Server
+                if((text[0].indexOf("PROG") != -1)){
+                    System.out.println("Instruction from " + text[1] + " --> " + text[3]);
+                    //c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
+                    programCode = new String(text[3]);
                 } 
         }//End While
         if((text[0].indexOf("CLOSE") != -1)){
