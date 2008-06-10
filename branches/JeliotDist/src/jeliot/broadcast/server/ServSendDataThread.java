@@ -14,6 +14,7 @@ public class ServSendDataThread extends Thread{
     public boolean flagExit = false;
     public boolean priorityConceded = false;
     public String text = null;
+    public String programCode = null;
 
     /* Creates a new instance of ServSendDataThread */
     public ServSendDataThread(Server server, ConnectionTable connectionTable, ServMessages message) {
@@ -70,13 +71,25 @@ public class ServSendDataThread extends Thread{
     }
     
     public void setMCode(String str){
-        //if((text.indexOf(str) != -1)){
+        
             text = new String(str);
             System.out.println("Codigo " + str);
             if(text.length() != 0){
                 Broadcast(text);
             }
-        //}
+    }
+    
+    public void getProgramCode(String str){
+        
+        programCode = new String(str);
+        Iterator it = connectionTable.connectionIds.iterator();
+        while(it.hasNext()){
+            ServClient client = (ServClient) connectionTable.connections.get((Integer) it.next());
+            client.sendToClient(message.getProgram(client.idClient, text));
+            System.out.println("Data sent--> " + text + "\n");
+        }
+        
+        
     }
     
 }//End Thread
