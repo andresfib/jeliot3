@@ -137,8 +137,7 @@ public class Jeliot {
      * Server Source Code
      * Client Source Code
      */
-    private static String sourceCodeServer = "";
-    private static String sourceCodeClient = "";
+    private static String sourceCode = "";
 
     /**
      *
@@ -253,14 +252,14 @@ public class Jeliot {
     /**
      * Flags to reconize if Jeliot if Server or Client
      */
-    private static boolean server = false;
-    private static boolean client = false;
+    private boolean serverFlag = false;
+    private boolean clientFlag = false;
     
     /**
      * Constructors serverJeliot and clientJeliot
      */
-    public static Server serverJeliot = null;
-    public static Client clientJeliot = null;
+    public Server serverJeliot = null;
+    public Client clientJeliot = null;
     
     /**
      * The only constructor of the Jeliot 3.
@@ -293,9 +292,9 @@ public class Jeliot {
         //Just to track the animation happenings
         Tracker.setTheater(theatre);
         //Tracker.setCodePane2(codePane);
-
+        
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad,
-                userDirectory, callTree, hv, client);
+                userDirectory, callTree, hv, serverFlag, clientFlag, serverJeliot, clientJeliot);
 
     }
 
@@ -319,30 +318,19 @@ public class Jeliot {
      * @param methodCall The main method call as a String.
      */
     public void setSourceCode(String srcCode, String methodCall) {
-        //If we are server, we follow the normal sequence for source code
-        //If we are client, we take the sourceCodeServer
-        if(server == true){
             
-            if (hasIOImport(srcCode)) {
-                this.sourceCodeServer = srcCode;
-            } else {
-                this.sourceCodeServer = getImportIOStatement() + "\n\n" + srcCode;
-                gui.getCodePane().getTextArea().setText(this.sourceCodeServer);
-            }
+        if (hasIOImport(srcCode)) {
+            this.sourceCode = srcCode;
+        } else {
+            this.sourceCode = getImportIOStatement() + "\n\n" + srcCode;
+            gui.getCodePane().getTextArea().setText(this.sourceCode);
+        }
 
-            this.methodCall = methodCall;
-            codePane.installProgram(this.sourceCodeServer);
-        }
-        else if(client == true){
-            this.sourceCodeClient = this.sourceCodeServer;
-        }
-        //If Jeliot is started as a Client, we don't compile the source code
-        if(client == true){ 
-            compiled = true;
-        }
-        else{
-            compiled = false;
-        }
+        this.methodCall = methodCall;
+        codePane.installProgram(this.sourceCode);
+
+        compiled = false;
+
     }
 
     /**
@@ -363,7 +351,7 @@ public class Jeliot {
                 launcher = null;
             }
             //We get only the Server Source Code
-            String source = this.sourceCodeServer;
+            String source = this.sourceCode;
             if (jeliotUserProperties.getBooleanProperty("save_unicode")) {
                 source = SourceCodeUtilities.convertNative2Ascii(source);
             }
@@ -444,9 +432,9 @@ public class Jeliot {
         director.setActorFactory(af);
 
         mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader,
-                director, gui.getProgram(), inputWriter, serverJeliot, clientJeliot, client);
+                director, gui.getProgram(), inputWriter, serverJeliot, clientJeliot, clientFlag);
         director.setInterpreter(mCodeInterpreterForTheater);
-
+//Go to MCodeInterpreter and change method "interpret" and put MCode from client
         try {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);
@@ -832,13 +820,15 @@ public class Jeliot {
         if (args.length >= 2) {
             if ((args[1] != null) && (args[1].equalsIgnoreCase("server") == true )) {
                 System.out.println("Server started in Jeliot");
-                server = true;
+                serverFlag = true;
                 setServer();
+                gui.serverFlag = true; //Set serverFlag = true in jeliotWindow
             }
             else if ((args[1] != null) && (args[1].equalsIgnoreCase("client") == true )){
                 System.out.println("Client started in Jeliot");
-                client = true;
+                clientFlag = true;
                 setClient();
+                gui.clientFlag = true; //Set clientFlag = true in jeliotWindow
             }
         }
         
@@ -947,18 +937,13 @@ public class Jeliot {
 
         if (args.length >= 1) {
             if (args[0] != null && args[0].trim().length() != 0) {
-                if(server == true){
                     final String sourceCode = args[0];
-                    sourceCodeServer = new String(sourceCode);
                     SwingUtilities.invokeLater(new Runnable() {
 
                         public void run() {
                             jeliot.setProgram(sourceCode);
                         }
                     });
-                    Server.serverSendData.Broadcast(sourceCode);
-                    System.out.println("SourceCode: " + sourceCode);
-                }
             }
         }
         return jeliot;
