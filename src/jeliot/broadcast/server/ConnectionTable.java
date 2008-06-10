@@ -30,6 +30,7 @@ public class ConnectionTable {
         ServClient client = (ServClient) connections.get(connectionId);
         client.idClient = connectionId;
         client.sendToClient(message.getHello(connectionId, String.valueOf(connectionId)));
+        client.sendToClient(message.getProgram(client.idClient, server.serverSendData.programCode));
         return connectionId;
     }
     
