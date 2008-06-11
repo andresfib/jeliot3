@@ -92,6 +92,7 @@ public class ACActor extends Actor implements ActorContainer{
         for (int i = 0; i < emptyBracketsCount; i++) {
             this.emptyBrackets += "[ ]";
         }
+        setDescription("ACAtor");
     }
 
     /**

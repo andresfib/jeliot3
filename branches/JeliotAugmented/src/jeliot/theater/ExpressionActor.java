@@ -65,6 +65,7 @@ public class ExpressionActor extends Actor implements ActorContainer {
     public ExpressionActor(int n, long i) {
         this(n);
         id = i;
+        setDescription("Expression: ");
     }
 
     /**

@@ -30,7 +30,7 @@ public class AnimatingActor extends Actor {
         this.image = image;
         setShadow(0);
         
-        setDescription(description);
+        setDescription(description+" "+ "AnimationActor");
 	}
 
     /* (non-Javadoc)

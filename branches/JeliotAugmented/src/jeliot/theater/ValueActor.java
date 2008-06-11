@@ -62,6 +62,7 @@ public class ValueActor extends Actor {
         setFont(new Font(propertiesBundle.getStringProperty("font.value_actor.family"),
         Font.BOLD,
         Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size"))));
+        setDescription("ValueActor");
     }
 
     /**

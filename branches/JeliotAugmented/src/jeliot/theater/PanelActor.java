@@ -87,6 +87,7 @@ public class PanelActor extends Actor {
 		this.biw = panelImage.getWidth(dummy);
 		this.lbiw = leftImage.getWidth(dummy);
 		this.rbiw = rightImage.getWidth(dummy);
+                setDescription("PanelActor");
 	}
 
 	/* (non-Javadoc)

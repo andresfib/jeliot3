@@ -78,6 +78,7 @@ public class LinesAndText extends Actor {
         methodAreaWidth = fm.stringWidth(methodArea);
         instanceAreaWidth = fm.stringWidth(instanceArea);
         evaluationAreaWidth = fm.stringWidth(evaluationArea);
+        setDescription("LinesAndText");
     }
 
     /**
@@ -87,6 +88,7 @@ public class LinesAndText extends Actor {
     public LinesAndText(Theater t) {
         super();
         this.theatre = t;
+        setDescription("LinesAndText");
     }
 
     /**

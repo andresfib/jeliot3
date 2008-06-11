@@ -94,6 +94,7 @@ public abstract class MIActor extends Actor implements ActorContainer {
         bound = new boolean[n];
         FontMetrics fm = getFontMetrics();
         setCommaMargin(fm.stringWidth(","));
+        setDescription("MIActor");
     }
 
     public int getCommaMargin() {

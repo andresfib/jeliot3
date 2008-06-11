@@ -31,6 +31,7 @@ public class VariableInArrayActor extends VariableActor {
     public VariableInArrayActor(ArrayActor arrayActor, String name) {
         setParent(arrayActor);
         setName(name);
+        setDescription("VariableInArrayActor");
     }
 
     /* (non-Javadoc)

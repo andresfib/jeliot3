@@ -79,6 +79,7 @@ public class ReferenceActor extends ValueActor {
      */
     public ReferenceActor() {
         refWidthRandom += (int) (Math.random() * 15);
+        setDescription("ReferenceActor");
     }
 
     /**
@@ -90,6 +91,7 @@ public class ReferenceActor extends ValueActor {
         if (inst != null) {
             inst.addReference(this);
         }
+        setDescription("ReferenceActor");
     }
 
     /**
@@ -99,6 +101,7 @@ public class ReferenceActor extends ValueActor {
     public ReferenceActor(InstanceActor inst, boolean instVarConnect) {
         this(inst);
         this.instVarConnect = instVarConnect;
+        setDescription("ReferenceActor");
     }
 
     /**
@@ -108,6 +111,7 @@ public class ReferenceActor extends ValueActor {
     public ReferenceActor(InstanceActor inst, VariableActor var) {
         this(inst);
         this.variable = var;
+        setDescription("ReferenceActor");
     }
 
     /**
@@ -119,6 +123,7 @@ public class ReferenceActor extends ValueActor {
             boolean instVarConnect) {
         this(inst, var);
         this.instVarConnect = instVarConnect;
+        setDescription("ReferenceActor");
     }
 
     /**
@@ -558,4 +563,135 @@ public class ReferenceActor extends ValueActor {
         }
         super.finalize();
     }
+    
+    /**
+    * @param x
+    * @param y
+    * @return
+    */
+   public Actor getActorAt(int x, int y) {
+       int h = height;
+       if (x >= 0 && x < refWidth && y >= 0 && y < h) {
+           return this;
+       }
+       else {
+           if (instance == ObjectStage.OUTSIDE_OBJECT) {
+               int a = refWidth - 3;
+               int b = a + refLen;
+               if (x >= a && x <= b && y >= h / 2 - 1 && y <= h / 2 + 1) {
+                   return this;
+               }
+
+               if (x >= b + 3 && x <= b + 5 && y >= h / 2 - 1
+                       && y <= h / 2 + 1) {
+                   return this;
+               }
+               if (x >= b + 7 && x <= b + 9 && y >= h / 2 - 1
+                       && y <= h / 2 + 1) {
+                   return this;
+               }
+               if (x >= b + 11 && x <= b + 13 && y >= h / 2 - 1
+                       && y <= h / 2 + 1) {
+                   return this;
+               }
+               if (x >= b + 15 && x <= b + 17 && y >= h / 2 - 1
+                       && y <= h / 2 + 1) {
+                   return this;
+               }
+               if (x >= b + 15 && x <= b + 17 && y >= h / 2 + 3
+                       && y <= h / 2 + 5) {
+                   return this;
+               }
+               if (x >= b + 15 && x <= b + 17 && y >= h / 2 + 7
+                       && y <= h / 2 + 9) {
+                   return this;
+               }
+           } 
+           else if (instance != null) {
+
+               Point vp = this.getRootLocation();
+
+               x += vp.x;
+               y += vp.y;
+
+               if (bend != null) {
+                   int n = bend.length;
+                   for (int i = 1; i < n; ++i) {
+                       Point p1 = bend[i - 1];
+                       Point p2 = bend[i];
+                       if (p1.y == p2.y) {
+                           if (x >= p1.x && x <= p2.x && y >= p1.y - 1
+                                   && y <= p1.y + 1) {
+                               return this;
+                           }
+                       } else if (p2.x == p1.x) {
+                           if (x >= p1.x - 1 && x <= p1.x + 1 && y >= p1.y
+                                   && y <= p2.y) {
+                               return this;
+                           }
+                       }
+                   }
+               }
+
+               if (arrowheadPolygon1.contains(x, y)) {
+                   return this;
+               }
+
+               x -= vp.x;
+               y -= vp.y;
+
+           }
+           else {
+               int a = refWidth - 3;
+               int b = a + refLen;
+
+               if (x >= a && x <= b && y >= h / 2 - 1 && y <= h / 2 + 1) {
+                   return this;
+               }
+
+               if (x >= b && x <= b + 2 && y >= h / 2 - 8 && y <= h / 2 + 8) {
+                   return this;
+               }
+
+               if (x >= b + 5 && x <= b + 7 && y >= h / 2 - 5
+                       && y <= h / 2 + 5) {
+                   return this;
+               }
+
+               if (x >= b + 10 && x <= b + 12 && y >= h / 2 - 2
+                       && y <= h / 2 + 2) {
+                   return this;
+               }
+           }
+       }
+       return null;
+   }
+   
+   /**
+     * 
+     */
+   public Point[] getBend(){
+       return this.bend;
+   }
+   
+   /**
+     * 
+     */
+   public Point[] getArrowhead(){
+       return this.arrowhead;
+   }
+   
+   /**
+     * 
+     */
+   public Polygon getArrowPolygon1(){
+       return this.arrowheadPolygon1;
+   }
+   
+   /**
+     * 
+     */
+   public Polygon getArrowPolygon2(){
+       return this.arrowheadPolygon2;
+   }
 }

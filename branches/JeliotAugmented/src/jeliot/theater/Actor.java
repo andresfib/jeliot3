@@ -167,8 +167,18 @@ public abstract class Actor implements Cloneable {
      */
     private long actorId = -1;
 
+    /**
+     * Variable that indicate if the actor is currently resized or not.
+     * true -> yes,
+     * false -> no.
+     */
+    private boolean resized = false;
+    
+    private static final int RESIZE_SCALE = 2;
+    
     public Actor() {
         super();
+        setDescription("Actor");
     }
 
     /**
@@ -667,4 +677,19 @@ public abstract class Actor implements Cloneable {
         this.description = description;
     }
     
+    public boolean isResized(){
+        return resized;
+    }
+    
+    public void resize(){
+        width = width * RESIZE_SCALE;
+        height = height * RESIZE_SCALE;
+        resized = true;
+    }
+    
+    public void setNormalSize(){
+        width = width/RESIZE_SCALE;
+        height = height/RESIZE_SCALE;
+        resized = false;
+    }
 }

@@ -56,6 +56,11 @@ public class ResourceBundles {
     private static ResourceBundle theaterMessages;
 
     /**
+     * Comment for <code>theaterMessages</code>
+     */
+    private static ResourceBundle theaterDescriptions;
+    
+    /**
      * 
      */
     private static ResourceBundle avInteractionMessages;
@@ -160,6 +165,18 @@ public class ResourceBundles {
         }
 
         return theaterMessages;
+    }
+    
+    /**
+     * @return
+     */
+    public static ResourceBundle getTheaterDescriptionResourceBundle() {
+        if (theaterDescriptions == null) {
+            theaterDescriptions = ResourceBundle.getBundle(
+                    "jeliot.theater.resources.descriptions", Locale.getDefault());
+        }
+
+        return theaterDescriptions;
     }
 
     /**

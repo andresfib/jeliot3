@@ -30,6 +30,7 @@ public abstract class InstanceActor extends Actor implements ActorContainer {
      * 
      */
     protected InstanceActor() {
+        setDescription("InstanceActor");
     }
 
     /**
