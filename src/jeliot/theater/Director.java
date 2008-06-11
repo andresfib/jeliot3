@@ -2049,6 +2049,10 @@ public class Director {
     private MessageFormat arrayCreationDimensions = new MessageFormat(
             messageBundle.getString("message.array_creation.dimensions"));
 
+
+    private MessageFormat catchBlock= new MessageFormat(
+            messageBundle.getString("message.catch"));
+
     //message.open_scope = Opening new scope for variables.
     //message.close_scope = Closing a scope and erasing the scope variables.
     //message.break_switch = Exiting the switch statement because of break.
@@ -2225,7 +2229,14 @@ public class Director {
         showMessage(messageBundle.getString("message.close_array_initializer"),
                 h);
     }
-
+    public void tryBlock(Highlight h) {
+        highlightDeclaration(h);
+        showMessage(messageBundle.getString("message.try"), h);
+    }
+    public void caughtExceptions(String message, Highlight h) {
+        highlightDeclaration(h);
+        showMessage(catchBlock.format(new String[] { message }), h);        
+    }
     /**
      * @param dims
      * @param h

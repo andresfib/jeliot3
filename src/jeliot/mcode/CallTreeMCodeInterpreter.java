@@ -652,5 +652,17 @@ public class CallTreeMCodeInterpreter extends MCodeInterpreter {
         
     }
 
+	@Override
+	protected void handleCodeCATCH(long expressionCounter, String message, Highlight h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void handleCodeTRY(long expressionCounter, Highlight h) {
+		// TODO Auto-generated method stub
+		
+	}
+
     
 }

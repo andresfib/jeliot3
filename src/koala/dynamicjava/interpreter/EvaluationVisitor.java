@@ -752,7 +752,16 @@ public class EvaluationVisitor extends VisitorObject {
 
         boolean handled = false;
         try {
+            long tryCounter = counter++;
+
+            MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.TRY
+                    + Code.DELIM + tryCounter + Code.DELIM
+                    + MCodeGenerator.locationToString(node));
             node.getTryBlock().acceptVisitor(this);
+            MCodeUtilities.write("" + Code.TRY
+                    + Code.DELIM + tryCounter + Code.DELIM
+                    + MCodeGenerator.locationToString(node));
+            
         } catch (Throwable e) {
             Throwable t = e;
             if (e instanceof ThrownException) {
@@ -774,6 +783,11 @@ public class EvaluationVisitor extends VisitorObject {
                     context.define(cs.getException().getName(), t);
 
                     // Interpret the handler
+                    MCodeUtilities.write("" + Code.CATCH
+                            + Code.DELIM + (counter++) + Code.DELIM 
+                            + e.toString() + Code.DELIM
+                            + MCodeGenerator.locationToString(cs.getBlock()));
+
                     cs.getBlock().acceptVisitor(this);
                     break;
                 }

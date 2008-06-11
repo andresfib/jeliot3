@@ -2172,7 +2172,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     }
 
     /*
-     * Add somewhere here code for static field allocation in correct place of execution for all the static fields of a class (JLS §12.4.1):
+     * Add somewhere here code for static field allocation in correct place of execution for all the static fields of a class (JLS ï¿½12.4.1):
      * 
      * Initialization of a class consists of executing its static initializers and the initializers for static fields declared in the class. Initialization of an interface consists of executing the initializers for fields declared in the interface.
      * Before a class is initialized, its direct superclass must be initialized, but interfaces implemented by the class need not be initialized. Similarly, the superinterfaces of an interface need not be initialized before the interface is initialized.
@@ -2182,8 +2182,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      *        * T is a class and an instance of T is created.
      *        * T is a class and a static method declared by T is invoked.
      *        * A static field declared by T is assigned.
-     *        * A static field declared by T is used and the field is not a constant variable (§4.12.4).
-     *        * T is a top-level class, and an assert statement (§14.10) lexically nested within T is executed. 
+     *        * A static field declared by T is used and the field is not a constant variable (ï¿½4.12.4).
+     *        * T is a top-level class, and an assert statement (ï¿½14.10) lexically nested within T is executed. 
      *        
      * Invocation of certain reflective methods in class Class and in package java.lang.reflect also causes class or interface initialization. A class or interface will not be initialized under any other circumstance.
      *  
@@ -3162,6 +3162,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             director.highlightForMessage(h);
             avInteractionEngine.interaction("" + expressionReference);
         }
+        if(expressionType == Code.TRY){
+            director.tryBlock(MCodeUtilities.makeHighlight(location));       	
+        }
     }
 
     /**
@@ -3797,4 +3800,15 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     public void setStopBeforeClearingScratch(boolean b) {
         this.stopBeforeClearingScratch = b;
     }
+
+	@Override
+	protected void handleCodeCATCH(long expressionCounter, String message, Highlight h) {
+        director.caughtExceptions(message, h);
+		
+	}
+
+	@Override
+	protected void handleCodeTRY(long expressionCounter, Highlight h) {
+		exprs.pop();
+	}
 }

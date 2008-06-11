@@ -10,7 +10,7 @@ import jeliot.util.UserProperties;
  * MCode in MCodeinterpreter.
  * 
  * @author Niko Myller
- * @author Andrés Moreno
+ * @author Andrï¿½s Moreno
  * 
  * @see koala.dynamicjava.interpreter.TreeInterpreter
  * @see koala.dynamicjava.interpreter.EvaluationVisitor
@@ -309,5 +309,9 @@ public class Code {
     /** Static field access */
     public static final int SFA = 74;
 
-    //Last int used = 77
+	public static final int TRY = 78;
+
+	public static final int CATCH = 79;
+
+    //Last int used = 79
 }
