@@ -2625,29 +2625,46 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeVD(String variableName,
             long initializerExpression, String value, String type,
             String modifier, Highlight highlight) {
-        Variable var = director.declareVariable(variableName, type, highlight);
+    	Variable var = director.declareVariable(variableName, type, highlight);
 
         Value casted = null;
 
         if (MCodeUtilities.isPrimitive(type)) {
-            casted = new Value(value, type);
+        	casted = new Value(value, type);
         } else {
-            if (value.equals("null")) {
-                casted = new Reference(type);
-            } else {
-                Instance inst = (Instance) instances.get(MCodeUtilities
-                        .getHashCode(value));
+        	if (value.equals("null")) {
+        		casted = new Reference(type);
+        	} else {
+        		Instance inst;
+        		//Hack to avoid displaying Exception objects
+        		if (isException(type)){
+        			//inst = Instance.OUTSIDE_OBJECT;	
+        			Value val = new Reference(type);
+        			((Reference) val)
+                    .setInstance(Instance.OUTSIDE_OBJECT);
+        			director.introduceLiteral(val);
+        			casted = (Value) val.clone();
+                    Value copiedValue = director.prepareForAssignment(var, val);
+                    director.animateAssignment(var, val, copiedValue, casted, null,
+                            highlight);
+                    var.assign(casted);
+        			
+        		} else {
+        			inst = (Instance) instances.get(MCodeUtilities
+        					.getHashCode(value));
 
-                if (inst != null) {
-                    casted = new Reference(inst);
-                    ((Reference) casted).makeReference();
-                } else {
-                    casted = new Reference(type);
-                }
-            }
-            casted.setActor(var.getActor().getValue());
+        			if (inst != null) {
+        				casted = new Reference(inst);
+        				((Reference) casted).makeReference();
+        			} else {
+        				casted = new Reference(type);
+        			}
+        			casted.setActor(var.getActor().getValue());
+        		}
+        	}
+        	
         }
-
+    	
         if (initializerExpression > 0) {
 
             Value val = (Value) values.remove(new Long(initializerExpression));
@@ -2667,7 +2684,19 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         director.openScratch();
     }
 
-    /**
+    private boolean isException(String type) {
+    	boolean result = false;
+		try {
+			java.lang.Class cl = java.lang.Class.forName(type);
+			result = java.lang.Throwable.class.isAssignableFrom(cl);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
      * @param expressionCounter
      * @param leftExpressionReference
      * @param rightExpressionReference

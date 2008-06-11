@@ -780,8 +780,14 @@ public class EvaluationVisitor extends VisitorObject {
 
                     // Define the exception in a new scope
                     context.enterScope();
+                    MCodeUtilities.write(Code.SCOPE + Code.DELIM + "1");
                     context.define(cs.getException().getName(), t);
-
+                    String type = cs.getException().getProperty("type").toString().substring(6);
+                    MCodeUtilities.write("" + Code.VD + Code.DELIM + cs.getException().getName()
+                            + Code.DELIM + Code.NO_REFERENCE + Code.DELIM + t.hashCode()
+                            + Code.DELIM + type + Code.DELIM 
+                            + Code.NOT_FINAL + Code.DELIM
+                            + MCodeGenerator.locationToString(node));
                     // Interpret the handler
                     MCodeUtilities.write("" + Code.CATCH
                             + Code.DELIM + (counter++) + Code.DELIM 
@@ -806,6 +812,7 @@ public class EvaluationVisitor extends VisitorObject {
             // Leave the current scope if entered
             if (handled) {
                 context.leaveScope();
+                MCodeUtilities.write(Code.SCOPE + Code.DELIM + "0");
             }
 
             // Interpret the 'finally' block
