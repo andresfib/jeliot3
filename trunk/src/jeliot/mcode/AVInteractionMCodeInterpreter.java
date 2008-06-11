@@ -1129,4 +1129,16 @@ public class AVInteractionMCodeInterpreter extends MCodeInterpreter implements
         return this.readerForMCodeOutput;
     }
 
+	@Override
+	protected void handleCodeCATCH(long expressionCounter, String message, Highlight h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void handleCodeTRY(long expressionCounter, Highlight h) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

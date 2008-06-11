@@ -20,7 +20,7 @@ import jeliot.util.UserProperties;
  * during the intepretation in DynamicJava.
  * 
  * @author Niko Myller
- * @author Andrés Moreno
+ * @author Andrï¿½s Moreno
  */
 public abstract class MCodeInterpreter {
 
@@ -1582,8 +1582,29 @@ public abstract class MCodeInterpreter {
                     handleCodeFIELD(name, type, modifiers, value, h);
                     break;
                 }
+                case Code.TRY: {
+                	 long expressionCounter = Long.parseLong(tokenizer
+                             .nextToken());
+                     Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                             .nextToken());
 
-                    //Error has occured during the execution
+                     handleCodeTRY(expressionCounter, h);
+                     
+                     break;
+                }
+                case Code.CATCH: {
+               	 long expressionCounter = Long.parseLong(tokenizer
+                         .nextToken());
+               	 String message = tokenizer.nextToken();
+                 Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                         .nextToken());
+
+                 handleCodeCATCH(expressionCounter, message, h);
+                 
+                 break;
+            }
+
+                    //Error has occurred during the execution
                 case Code.ERROR: {
                     String message = tokenizer.nextToken();
                     Highlight h = MCodeUtilities.makeHighlight(tokenizer
@@ -1613,7 +1634,7 @@ public abstract class MCodeInterpreter {
         }
     }
 
-    public abstract void afterInterpretation(String line);
+	public abstract void afterInterpretation(String line);
 
     /**
      * @param cells
@@ -2356,6 +2377,9 @@ public abstract class MCodeInterpreter {
      */
     protected abstract void handleCodeLEFT(long token1);
 
+    protected abstract void handleCodeCATCH(long expressionCounter, String message, Highlight h);
+    protected abstract void handleCodeTRY(long expressionCounter, Highlight h);
+    
     /**
      * 
      */
