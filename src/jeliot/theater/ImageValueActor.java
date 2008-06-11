@@ -26,6 +26,7 @@ public class ImageValueActor extends ValueActor {
 	 */
 	public ImageValueActor(Image image) {
         this.image = image;
+        setDescription("ImageValueActor");
 	}
 
     /* (non-Javadoc)

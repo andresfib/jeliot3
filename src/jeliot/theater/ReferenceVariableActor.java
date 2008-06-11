@@ -210,4 +210,21 @@ public class ReferenceVariableActor extends VariableActor {
             refActor.calculateBends();
         }
     }
+    
+    /**
+    * @param x
+    * @param y
+    * @return
+    */
+   public Actor getActorAt(int x, int y) {
+       Actor a = null;
+       if (refActor != null) {  
+           a = refActor.getActorAt(x - refActor.getX(), y - refActor.getY());
+       }
+       if (a == null) {
+           a = super.getActorAt(x, y);
+       }
+      
+       return a;
+   }
 }
