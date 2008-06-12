@@ -3,22 +3,25 @@ package jeliot.broadcast.server;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServSendDataThread extends Thread{
     
     //Attributes
     private ConnectionTable connectionTable = null;
-    private BufferedReader inputline = null;
+    public DataInputStream inputline = null;
     private Server server = null;
     private ServMessages message = null;
-    public boolean flagExit = false;
+    public boolean flagExit = true;
     public boolean priorityConceded = false;
     public String text = null;
     public String programCode = null;
+    public Object ob = null;
 
     /* Creates a new instance of ServSendDataThread */
     public ServSendDataThread(Server server, ConnectionTable connectionTable, ServMessages message) {
-        this.inputline = new BufferedReader(new InputStreamReader(System.in));
+        this.inputline = new DataInputStream(System.in);
         this.connectionTable = connectionTable;
         this.server = server;
         this.message = message;
@@ -27,30 +30,21 @@ public class ServSendDataThread extends Thread{
     
     public void run(){
 
-        while(true){
-            //Read line from input
-            /*try {
-                text = inputline.readLine();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }*/
-        
-            if(text != null){
-                if((text.indexOf("Exit") != -1)){
-                    Boolean var = connectionTable.closeAllConnections();
-                    if(var == true){
-                        break; 
-                    }
-                }
+        while(flagExit){
 
-                //Broadcasting sendToClient to every client
-                /*if(text.length() != 0){
-                    Broadcast(text);
-                }*/
+            if(text == null){
+                flagExit = sleepThread();
+            }
+            
+            if((text.indexOf("Exit") != -1)){
+                Boolean var = connectionTable.closeAllConnections();
+                if(var == true){
+                    break; 
+                }
             }
         }//End While
         
-        try {
+       try {
         System.out.println("Closing servSendDataThread");
         inputline.close();
         server.closeConnection();
@@ -88,9 +82,23 @@ public class ServSendDataThread extends Thread{
             client.sendToClient(message.getProgram(client.idClient, text));
             System.out.println("Data sent--> " + text + "\n");
         }
-        
-        
     }
+    
+       public synchronized void wakeupThread()
+       {
+          this.notify();
+       }
+
+       public synchronized Boolean sleepThread(){
+            if (flagExit) {
+                try {
+                    this.wait();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ServSendDataThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            return false;
+       }
     
 }//End Thread
 
