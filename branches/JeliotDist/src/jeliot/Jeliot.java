@@ -1011,14 +1011,32 @@ public class Jeliot {
      * Clean up.
      */
     public void close() {
-        hv.close();
-        stopThreads();
-        director = null;
-        gui = null;
-        theatre = null;
-        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
-                -1, "JeliotClose");
-        Tracker.closeFile();
+        if(serverFlag){
+            serverJeliot.serverSendData.text = "Exit";
+            serverJeliot.serverSendData.wakeupThreat();
+            
+            hv.close();
+            stopThreads();
+            director = null;
+            gui = null;
+            theatre = null;
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
+                    -1, "JeliotClose");
+            Tracker.closeFile();
+        }
+        else if (clientFlag){
+            clientJeliot.clientSendData.text = "Close";
+            
+            hv.close();
+            stopThreads();
+            director = null;
+            gui = null;
+            theatre = null;
+            Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
+                    -1, "JeliotClose");
+            Tracker.closeFile();
+            
+        }
     }
 
     /**
