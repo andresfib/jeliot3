@@ -5,6 +5,8 @@ package jeliot.broadcast.client;
  */
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CliSendDataThread extends Thread{
 
@@ -27,37 +29,27 @@ public class CliSendDataThread extends Thread{
         
         while(flagExit){
             
-            //System.out.println("Introduce Data-->");
-            //Read line from input
-            try {
-                text = inputline.readLine();
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            if(text == null){
+                flagExit = sleepThread();
             }
-            if(text != null){
-                //Exit condition Clients
-                if((text.indexOf("Exit") != -1)){
-                    flagExit = false;    
-                    break;
-                }
-
-                //Close condition for one Client
-                if((text.indexOf("Close") != -1)){
-                    c.sendToServer(message.getClose(c.idClient, "SERVER", text));
-                    flagExit = false;    
-                    break;
-                }
-
-                //Priority condition for one Client
-                if((text.indexOf("Priority") != -1)){
-                    c.sendToServer(message.getPriority(c.idClient, "SERVER", text));
-                }
-
-                if(text.length() != 0){
-                    c.sendToServer(message.getInstruction(c.idClient, "SERVER", text, c.priority));
-                    System.out.println("Data sent to Server--> " + text);
-                }
+            //Exit condition Clients
+            if((text.indexOf("Exit") != -1)){
+                flagExit = false;    
+                break;
             }
+
+            //Close condition for one Client
+            if((text.indexOf("Close") != -1)){
+                c.sendToServer(message.getClose(c.idClient, "SERVER", text));
+                flagExit = false;    
+                break;
+            }
+
+            //Priority condition for one Client
+            if((text.indexOf("Priority") != -1)){
+                c.sendToServer(message.getPriority(c.idClient, "SERVER", text));
+            }
+
             
         }//End While
 
@@ -80,5 +72,29 @@ public class CliSendDataThread extends Thread{
         }
          
     }//End Run
+    
+    public void sendServer(String str){
+        if(str.length() != 0){
+            c.sendToServer(message.getInstruction(c.idClient, "SERVER", str, c.priority));
+            System.out.println("Data sent to Server--> " + str);
+        }
+    }
+    
+   public synchronized void wakeupThread()
+   {
+      this.notify();
+   }
+
+   public synchronized Boolean sleepThread(){
+        if (flagExit) {
+            try {
+                this.wait();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CliSendDataThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        return false;
+   }
     
 }//End Thread
