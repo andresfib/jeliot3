@@ -34,9 +34,11 @@ public class CliReceiveDataThread extends Thread{
                 //Exit condition Client
                 if((text[0].indexOf("EXIT") != -1)){
                     System.out.println("Type -Exit- to exit the application");
+                    client.clientSendData.wakeupThread();
                     flagExit = false;
                 }
                 if((text[0].indexOf("CLOSE") != -1)){
+                    client.clientSendData.wakeupThread();
                     flagExit = false;
                 }
                 
