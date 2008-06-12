@@ -1013,7 +1013,7 @@ public class Jeliot {
     public void close() {
         if(serverFlag){
             serverJeliot.serverSendData.text = "Exit";
-            serverJeliot.serverSendData.wakeupThreat();
+            serverJeliot.serverSendData.wakeupThread();
             
             hv.close();
             stopThreads();

@@ -273,7 +273,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if(clientFlag == true){
             readLine = Client.clientReceiveData.sendMCode();
             System.out.println("Code: " + readLine);
-            return readLine();
+            return readLine;
         }
         else{
         if (readNew()) {
