@@ -13,9 +13,29 @@ package jeliot.theater;
 public interface ActorContainer {
     
     /**
+     * Variable that indicates if the actor is currently resized or not.
+     * true -> yes,
+     * false -> no.
+     */
+    public boolean contentResized = false;
+    
+    /**
+     * Return true if the contained actors are resized, false if not.
+     */
+    public abstract boolean isContentResized();
+    
+    /**
+     * Resizes up, or resizes down the actors contained in the given
+     * ActorContainer.
+     */
+    public abstract void resizeContainedActors();
+    
+    /**
      * Remove the the given actor from the ActorContainer. 
      * 
      * @param actor The actor to be removed.
      */
     public abstract void removeActor(Actor actor);
+    
+    
 }

@@ -104,6 +104,13 @@ public class MethodStage extends Actor implements ActorContainer {
      * The location where reserved actor is reserved.
      */
     private Point resLoc;
+    
+    /**
+     * Variable that indicates if the actor is currently resized or not.
+     * true -> yes,
+     * false -> no.
+     */
+    public boolean contentResized = false;
 
     /**
      * @param name
@@ -319,6 +326,23 @@ public class MethodStage extends Actor implements ActorContainer {
     public void removeActor(Actor actor) {
         variables.removeElement(actor);
     }
+    
+    public boolean isContentResized() {
+        return contentResized;
+    }
+
+    public void resizeContainedActors() {
+        Iterator iter = variables.iterator();
+        while(iter.hasNext()){
+            Actor act = (Actor) iter.next();
+            act.resize();
+        }
+        
+        if(contentResized == true)
+            contentResized = false;
+        else
+            contentResized = true;
+    }
 
     /* (non-Javadoc)
      * @see jeliot.theater.Actor#getActorAt(int, int)
@@ -395,7 +419,7 @@ public class MethodStage extends Actor implements ActorContainer {
                 setSize(size);
                 paintVars = true;
             }
-
+            
             public void finalFinish() {
                 this.passivate(MethodStage.this);
             }

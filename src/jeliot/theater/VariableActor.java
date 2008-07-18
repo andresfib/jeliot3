@@ -85,6 +85,13 @@ public class VariableActor extends Actor implements ActorContainer {
      *
      */
     protected ValueActor reserved;
+    
+    /**
+     * Variable that indicates if the actor is currently resized or not.
+     * true -> yes,
+     * false -> no.
+     */
+    public boolean contentResized = false;
 
     /* (non-Javadoc)
      * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
@@ -170,6 +177,21 @@ public class VariableActor extends Actor implements ActorContainer {
      */
     public void removeActor(Actor actor) {
     }
+    
+    public boolean isContentResized() {
+        return contentResized;
+    }
+
+    public void resizeContainedActors() {
+        //TODO
+        Actor act = (Actor) value;
+        act.resize();
+        
+        if(contentResized == true)
+            contentResized = false;
+        else
+            contentResized = true;
+    }
 
     /**
      * 
@@ -194,8 +216,7 @@ public class VariableActor extends Actor implements ActorContainer {
      * @return
      */
     public ValueActor getValue() {
-        ValueActor act = (ValueActor) this.value.clone();
-        return act;
+        return value;
     }
 
     /**
