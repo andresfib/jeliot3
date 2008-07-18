@@ -448,4 +448,20 @@ public class ClassActor extends Actor implements ActorContainer {
         }
         return null;
     }
+    
+    public void sizeUpVariableActors(){
+        Iterator iter = variables.iterator();
+        while(iter.hasNext()){
+            Actor act = (Actor) iter.next();
+            act.setDoubleSize();
+        }
+    }
+    
+    public void sizeDownVariableActors(){
+        Iterator iter = variables.iterator();
+        while(iter.hasNext()){
+            Actor act = (Actor) iter.next();
+            act.setNormalSize();
+        }
+    }
 }

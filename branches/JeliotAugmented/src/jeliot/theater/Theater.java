@@ -135,6 +135,26 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     private JPopupMenu methodMenu;
     
     /**
+     * Popup menu for the handling of the constant.
+     */
+    private JPopupMenu constantMenu;
+    
+    /**
+     * Popup menu for the handling of the bubbles.
+     */
+    private JPopupMenu bubbleMenu;
+    
+    /**
+     * Popup menu for the handling of the objects.
+     */
+    private JPopupMenu objectMenu;
+    
+    /**
+     * Popup menu for the handling of the classes.
+     */
+    private JPopupMenu classMenu;
+    
+    /**
      * Popup menu for the handling of the references.
      */
     private JPopupMenu referenceMenu;
@@ -143,6 +163,13 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * ScrollPane for control the view in the theater
      */
     private JScrollPane scrollPane;
+    
+    /**
+     * Variable that indicates if the actor is currently resized or not.
+     * true -> yes,
+     * false -> no.
+     */
+    public boolean contentResized = false;
     
     /*
      * ResourceBundle for the messages related with the theater and
@@ -426,6 +453,13 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             actor.disappear();
         }
     }
+    
+    public boolean isContentResized() {
+        return contentResized;
+    }
+
+    public void resizeContainedActors() {
+    }
 
     /*
      * (non-Javadoc)
@@ -486,6 +520,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         removeAll();
         actAct.removeAllElements();
         pasAct.removeAllElements();
+        highActor = null;
         manager.cleanUp();
     }
 
@@ -584,30 +619,94 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     
     private void initAditionalComponents(){
         
-        //optionPane = new JOptionPane();
-
+        // Menu for the VariableActors
         variableMenu = new JPopupMenu(); {
             JPopupMenu menu = variableMenu;
             JMenuItem menuItem;
-            menuItem = new JMenuItem("Variable");
-            menu.add(menuItem);
+
             menuItem = new JMenuItem("Show declaration");
+            menu.add(menuItem);
+            
+            menuItem = new JMenuItem("Actor Info");
+            menuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    showActorContext();
+                }
+            });
+            menu.add(menuItem);
+            
+            menuItem = new JMenuItem("Zoom in");
+            menuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    zoomIn(aevt);
+                }
+            }); 
+            menu.add(menuItem);
+
+            menuItem = new JMenuItem("Zoom out");
+            menuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    zoomOut(aevt);
+                }
+            });
+            menu.add(menuItem);
+        }
+
+        // Menu for the ConstantBox
+        constantMenu = new JPopupMenu(); {
+            JPopupMenu menu = constantMenu;
+            JMenuItem menuItem;
+            
+            menuItem = new JMenuItem("Show declaration");
+            menu.add(menuItem);
+            
+            menuItem = new JMenuItem("Actor Info");
+            menuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    showActorContext();
+                }
+            });
+            menu.add(menuItem);
+            
+            menuItem = new JMenuItem("Zoom in");
+            menuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    zoomIn(aevt);
+                }
+            }); 
+            menu.add(menuItem);
+
+            menuItem = new JMenuItem("Zoom out");
+            menuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    zoomOut(aevt);
+                }
+            });
+            menu.add(menuItem);
+        }
+        
+        // Menu for the MethodStage actors
+        methodMenu = new JPopupMenu(); {
+            JPopupMenu menu = methodMenu;
+            JMenuItem menuItem;
+            
+            menuItem = new JMenuItem("Show declaration");
+            menu.add(menuItem);
+            
+            menuItem = new JMenuItem("Actor Info");
+            menuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    showActorContext();
+                }
+            });
             menu.add(menuItem);
             
             menuItem = new JMenuItem("Resize Actor");
             menuItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent aevt) {
-                    resizeActor(aevt);
+                    resizeMethodStage(aevt);
                 }
-            });
-            menu.add(menuItem);
-            
-            menuItem = new JMenuItem("Actor Info");
-            menuItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent aevt) {
-                    showActorContext();
-                }
-            });
+            }); 
             menu.add(menuItem);
             
             menuItem = new JMenuItem("Zoom in");
@@ -627,70 +726,43 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             menu.add(menuItem);
         }
 
-        methodMenu = new JPopupMenu(); {
-            JPopupMenu menu = methodMenu;
-            JMenuItem menuItem;
-            menuItem = new JMenuItem("Method");
-            menu.add(menuItem);
-            menuItem = new JMenuItem("Show declaration");
-            menu.add(menuItem);
-
-            menuItem = new JMenuItem("Zoom in");
-            menuItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent aevt) {
-                    zoomIn(aevt);
-                }
-            }); 
-            menu.add(menuItem);
-
-            menuItem = new JMenuItem("Zoom out");
-            menuItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent aevt) {
-                    zoomOut(aevt);
-                }
-            });
-            menu.add(menuItem);
-            menuItem = new JMenuItem("Actor Info");
-            menuItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent aevt) {
-                    showActorContext();
-                }
-            });
-            menu.add(menuItem);
-        }
-
+        // Menu for the ReferenceActor actors
         referenceMenu = new JPopupMenu(); {
             JPopupMenu menu = referenceMenu;
             JMenuItem menuItem;
-            menuItem = new JMenuItem("Reference");
+
+            menuItem = new JMenuItem("Show declaration");
             menu.add(menuItem);
+            
+            menuItem = new JMenuItem("Actor Info");
+            menuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    showActorContext();
+                }
+            });
+            menu.add(menuItem);
+            
             menuItem = new JMenuItem("Show Origin");
             menu.add(menuItem);
             menuItem = new JMenuItem("Show Destiny");
             menu.add(menuItem);
-            menuItem = new JMenuItem("Actor Info");
-            menuItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent aevt) {
-                    showActorContext();
-                }
-            });
-            menu.add(menuItem);
         }
     }
     
-    private void resizeActor(ActionEvent aevt){
+    /*
+     * This method is destined to resize only the MethodStage
+     * actors and their subcomponents.
+     */
+    private void resizeMethodStage(ActionEvent aevt){
         Actor act = highActor;
         
-        if(act != null){
-            if(act.isResized() == true)
-                act.setNormalSize();
-            else
-                act.resize();
+        if(act != null && act instanceof MethodStage){
+            act.resize();
+            MethodStage msact = (MethodStage) act;
+            msact.repositionVariableActors();
+            manager.validateTheater();
+            flush();
         }
-        
-        repaint();
-        manager.validateTheater();
-        flush();
     }
     
     private void showActorContext(){
@@ -728,17 +800,9 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     
     private void zoomIn(ActionEvent aevt){
         if(zoomOut == true){
-
             setSize(getWidth()*ZOOMED_SCALE,getHeight()*ZOOMED_SCALE);
-            
             sizeUpActors();
-            
             zoomOut = false;
-
-            //rellocateActors();
-            //manager.positionConstantBox();
-            
-            repaint();
             manager.validateTheater();
             flush();
         }
@@ -746,36 +810,12 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     
     private void zoomOut(ActionEvent aevt){
         if(zoomOut == false){
-            
             setSize(getWidth()/ZOOMED_SCALE,getHeight()/ZOOMED_SCALE);
-            
             sizeDownActors();
-            
             zoomOut = true;
-            
-            repaint();
             manager.validateTheater();
             flush();
         }
-    }
-    
-    private void rellocateActors(){
-        int i=0;
-        for(i=0;i<pasAct.size();i++){
-            Actor pact = (Actor) pasAct.get(i);
-            pact.setLocation(100+pact.getX(),100+pact.getY());
-            /*System.out.println("actor: "+pact.getDescription());
-            System.out.println("actorX "+pact.getX());
-            System.out.println("actorY "+pact.getY());*/
-        }
-        
-        for(i=0;i<actAct.size();i++){
-            Actor aact = (Actor) actAct.get(i);
-            aact.setLocation(100+aact.getX(),100+aact.getY());
-            /*System.out.println("actor: "+aact.getDescription());
-            System.out.println("actorX "+aact.getX());
-            System.out.println("actorY "+aact.getY());*/
-        }  
     }
     
     private void sizeUpActors() {
@@ -788,7 +828,15 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         
         for(i=0;i<avector.size();i++){
             actor = (Actor)avector.get(i);
-            actor.resize();
+//TODO            actor.setDoubleSize();
+            if(actor instanceof MethodStage){
+                MethodStage mst = (MethodStage) actor;
+//TODO                mst.sizeUpVariableActors();
+            }
+            else if(actor instanceof ClassActor){
+                ClassActor cla = (ClassActor) actor;
+                cla.sizeUpVariableActors();
+            }
         }
     }
 
@@ -802,7 +850,15 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         
         for(i=0;i<avector.size();i++){
             actor = (Actor)avector.get(i);
-            actor.setNormalSize();
+//TODO            actor.setNormalSize();
+            if(actor instanceof MethodStage){
+                MethodStage mst = (MethodStage) actor;
+//TODO                mst.sizeDownVariableActors();
+            }
+            else if(actor instanceof ClassActor){
+                ClassActor cla = (ClassActor) actor;
+                cla.sizeDownVariableActors();
+            }
         }
     }
     
@@ -816,13 +872,6 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
                 handleMouseEvent(evt);
             }
         });
-        
-        /*this.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                
-            }
-        });*/
-        
     }
     
     /**
@@ -920,22 +969,21 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             if (actor instanceof VariableActor) {
                 menu = variableMenu;
             } else if (actor instanceof MethodStage) {
-                menu = variableMenu;
+                menu = methodMenu;
             } else if (actor instanceof ReferenceVariableActor){
-                menu = variableMenu;
+                menu = referenceMenu;
             } else if (actor instanceof ConstantBox){
-                menu = variableMenu;
+                menu = constantMenu;
             } else if (actor instanceof BubbleActor){
-                menu = variableMenu;
+                menu = bubbleMenu;
             } else if (actor instanceof ReferenceActor){
                 menu = referenceMenu;
             } else if (actor instanceof ObjectStage){
-                menu = variableMenu;
+                menu = objectMenu;
             } else if (actor instanceof ClassActor){
-                menu = variableMenu;
+                menu = classMenu;
             }
             
-
             if (menu != null) {
                 menu.show(evt.getComponent(), evt.getX(), evt.getY());
             }

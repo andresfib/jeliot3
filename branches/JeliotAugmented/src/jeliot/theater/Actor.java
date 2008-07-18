@@ -682,8 +682,33 @@ public abstract class Actor implements Cloneable {
     }
     
     public void resize(){
+        if(resized == true){
+            width = width/RESIZE_SCALE;
+            height = height/RESIZE_SCALE;
+            if(this instanceof ActorContainer){
+                ActorContainer ac = (ActorContainer) this;
+                ac.resizeContainedActors();
+            }
+            resized = false;
+        }
+        else{
+            width = width * RESIZE_SCALE;
+            height = height * RESIZE_SCALE;
+            if(this instanceof ActorContainer){
+                ActorContainer ac = (ActorContainer) this;
+                ac.resizeContainedActors();
+            }
+            resized = true;
+        }
+    }
+    
+    /*public void setDoubleSize(){
         width = width * RESIZE_SCALE;
         height = height * RESIZE_SCALE;
+        if(this instanceof ActorContainer){
+            ActorContainer act = (ActorContainer) this;
+            act.resizeContainedActors();
+        }
         resized = true;
     }
     
@@ -691,5 +716,5 @@ public abstract class Actor implements Cloneable {
         width = width/RESIZE_SCALE;
         height = height/RESIZE_SCALE;
         resized = false;
-    }
+    }*/
 }
