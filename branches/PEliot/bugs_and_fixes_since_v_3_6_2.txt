@@ -1,0 +1,8 @@
+- Using long variable names in methods, objects and classes made the variable names go beyond the visible area (fixed)
+- Using several variables increased the methods, objects and classes out side the visible area. (fixed)
+- Using several variables increased the methods, objects and classes out side their dedicated areas. (fixed)
+- Unreferenced objects were not garbage collected. (fixed)
+- Array length is not visualized as a field of the array. (fixed)
+
+- When a syntax error is shown the mode is not automatically changed into editing.
+- Strings are not visualized as objects.
