@@ -619,7 +619,7 @@ public class ActorFactory {
                 m + fm.stringWidth("8888888"), m + fm.stringWidth("888888888"),
                 m + fm.stringWidth("xm"), m + fm.stringWidth("0.00E10"),
                 m + fm.stringWidth("0.0000E10"),
-                m + fm.stringWidth("Normal string"), 11};
+                m + fm.stringWidth("Normal string"), 6 };
     }
 
     /**
@@ -718,15 +718,6 @@ public class ActorFactory {
      * @return
      */
     public VariableActor produceVariableActor(Variable v) {
-        return produceVariableActor(v, false);
-    }
-
-    /**
-     * @param v
-     * @return
-     */
-    public VariableActor produceVariableActor(Variable v,
-            boolean showQuestionMark) {
         String type = v.getType();
         VariableActor actor = null;
         int typeInfo = MCodeUtilities.resolveType(type);
@@ -831,20 +822,10 @@ public class ActorFactory {
             refAct.setFont(variableFont);
             refAct.setValueDimension(6 + 6, valueHeight);
             refAct.calculateSize();
-            
-            if (!showQuestionMark) {
-                ReferenceActor ra = new ReferenceActor();
-                ra.setBackground(refAct.getBackground());
-                ra.calculateSize();
-                refAct.setValue(ra);
-            } else {
-                QuestionMarkReferenceActor ra = new QuestionMarkReferenceActor(iLoad
-                        .getImage(propertiesBundle
-                                .getStringProperty("image.mystery")));
-                ra.setBackground(refAct.getBackground());
-                ra.calculateSize();
-                refAct.setValue(ra);
-            }
+            ReferenceActor ra = new ReferenceActor();
+            ra.setBackground(refAct.getBackground());
+            ra.calculateSize();
+            refAct.setValue(ra);
             actor = refAct;
             actor.setDescription("local variable: " + actor.getLabel());
         }

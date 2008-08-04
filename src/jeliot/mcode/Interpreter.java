@@ -2536,7 +2536,8 @@ public class Interpreter {
 
                     String value = tokenizer.nextToken();
                     String type = tokenizer.nextToken();
-                    Highlight h = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                    Highlight h = MCodeUtilities.makeHighlight(tokenizer
+                            .nextToken());
 
                     Value in = (Value) values
                             .remove(new Long(expressionCounter));
@@ -2976,7 +2977,8 @@ public class Interpreter {
                     //Fifth token is the highlight information.
                     //Not used because the whole expression is
                     // highlighted.
-                    Highlight highlight = MCodeUtilities.makeHighlight(tokenizer.nextToken());
+                    Highlight highlight = MCodeUtilities
+                            .makeHighlight(tokenizer.nextToken());
 
                     Reference ref = (Reference) values.remove(new Long(
                             arrayCounter));

@@ -17,7 +17,7 @@ import koala.dynamicjava.tree.Node;
  */
 public class MCodeGenerator {
 
-    private MCodeGenerator() {
+    protected MCodeGenerator() {
     }
 
     public static void generateCodeA(long assigncounter, long from, long to,

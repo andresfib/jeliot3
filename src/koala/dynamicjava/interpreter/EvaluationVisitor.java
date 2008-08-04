@@ -166,10 +166,8 @@ public class EvaluationVisitor extends VisitorObject {
     private boolean evaluating = true;
 
     /**
-     * Indicates when ArrayModifier is preparing the array, and thus we
-     * don't want info. Also used in StaticMethodCall for 
-     * jeliot.io.Output.print(String s), where we dont want evaluation of s to 
-     * be animated.
+     * Indicates when ArrayModifier is preparing the array, and and thus we
+     * don't want info
      */
     private static Stack preparing = new Stack();
 
@@ -752,16 +750,7 @@ public class EvaluationVisitor extends VisitorObject {
 
         boolean handled = false;
         try {
-            long tryCounter = counter++;
-
-            MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.TRY
-                    + Code.DELIM + tryCounter + Code.DELIM
-                    + MCodeGenerator.locationToString(node));
             node.getTryBlock().acceptVisitor(this);
-            MCodeUtilities.write("" + Code.TRY
-                    + Code.DELIM + tryCounter + Code.DELIM
-                    + MCodeGenerator.locationToString(node));
-            
         } catch (Throwable e) {
             Throwable t = e;
             if (e instanceof ThrownException) {
@@ -780,20 +769,9 @@ public class EvaluationVisitor extends VisitorObject {
 
                     // Define the exception in a new scope
                     context.enterScope();
-                    MCodeUtilities.write(Code.SCOPE + Code.DELIM + "1");
                     context.define(cs.getException().getName(), t);
-                    String type = cs.getException().getProperty("type").toString().substring(6);
-                    MCodeUtilities.write("" + Code.VD + Code.DELIM + cs.getException().getName()
-                            + Code.DELIM + Code.NO_REFERENCE + Code.DELIM + t.hashCode()
-                            + Code.DELIM + type + Code.DELIM 
-                            + Code.NOT_FINAL + Code.DELIM
-                            + MCodeGenerator.locationToString(node));
-                    // Interpret the handler
-                    MCodeUtilities.write("" + Code.CATCH
-                            + Code.DELIM + (counter++) + Code.DELIM 
-                            + e.toString() + Code.DELIM
-                            + MCodeGenerator.locationToString(cs.getBlock()));
 
+                    // Interpret the handler
                     cs.getBlock().acceptVisitor(this);
                     break;
                 }
@@ -812,7 +790,6 @@ public class EvaluationVisitor extends VisitorObject {
             // Leave the current scope if entered
             if (handled) {
                 context.leaveScope();
-                MCodeUtilities.write(Code.SCOPE + Code.DELIM + "0");
             }
 
             // Interpret the 'finally' block
@@ -1165,8 +1142,8 @@ public class EvaluationVisitor extends VisitorObject {
                         Class[] typs;
                         Iterator it = larg.iterator();
                         int i = 0;
-                        //long auxcounter; //Records the previous counter value
-                        //Object auxarg; //Stores the current argument
+                        long auxcounter; //Records the previous counter value
+                        Object auxarg; //Stores the current argument
 
                         typs = m.getParameterTypes();
 
@@ -1278,7 +1255,7 @@ public class EvaluationVisitor extends VisitorObject {
                     Iterator it = larg.iterator();
                     int i = 0;
                     long auxcounter; //Records the previous counter value
-                    //Object auxarg; //Stores the current argument
+                    Object auxarg; //Stores the current argument
                     String argType; // Stores the type of the current argument
                     while (it.hasNext()) {
 
@@ -1656,14 +1633,14 @@ public class EvaluationVisitor extends VisitorObject {
         	counter++;
             return result;
         }
-	String methodName = m.getName();
+
         if (m.getDeclaringClass().getName().equals("jeliot.io.Output")) {
-            if ((methodName.equals("print") || (methodName.equals("println")))) {
+            if (m.getName().equals("println")) {
                 args = new Object[larg.size()];
                 Iterator it = larg.iterator();
                 int i = 0;
-                //long auxcounter; //Records the previous counter value
-                //Object auxarg; //Stores the current argument
+                long auxcounter; //Records the previous counter value
+                Object auxarg; //Stores the current argument
                 Class[] typs = m.getParameterTypes();
 
                 //It should only get once in the while loop!!!
@@ -1673,25 +1650,14 @@ public class EvaluationVisitor extends VisitorObject {
                             + Code.OUTPUT + Code.DELIM + outputCounter
                             + Code.DELIM
                             + MCodeGenerator.locationToString(node));
-		    //Quirks mode: Output.print defined not to visualize args expression
-		    String newLine = "";
-		    if (methodName.equals("print")){
-			newLine="0";
-			setPreparing();
-		    } else {
-			newLine="1";
-		    }
                     args[i] = ((Expression) it.next()).acceptVisitor(this);
-		    if(methodName.equals("print")){
-			unsetPreparing();
-		    }
                     MCodeUtilities.write("" + Code.OUTPUT + Code.DELIM
                             + outputCounter + Code.DELIM
                             + m.getDeclaringClass().getName() + Code.DELIM
                             + m.getName() + Code.DELIM
                             + MCodeUtilities.getValue(args[i]) + Code.DELIM
                             + typs[i].getName() + Code.DELIM
-                            + newLine //BREAKLINE
+                            + "1" //BREAKLINE
                             + Code.DELIM
                             + MCodeGenerator.locationToString(node));
                     i++;
@@ -1729,7 +1695,7 @@ public class EvaluationVisitor extends VisitorObject {
             Iterator it = larg.iterator();
             int i = 0;
             long auxcounter; //Records the previous counter value
-            //Object auxarg; //Stores the current argument
+            Object auxarg; //Stores the current argument
             Class[] typs = m.getParameterTypes();
 
             while (it.hasNext()) {
@@ -2027,7 +1993,7 @@ public class EvaluationVisitor extends VisitorObject {
             Iterator it = larg.iterator();
             int i = 0;
             long auxcounter; //Records the previous counter value
-            //Object auxarg; //Stores the current argument
+            Object auxarg; //Stores the current argument
 
             Class[] params = null;
             Constructor constructor = (Constructor) node
@@ -2431,7 +2397,7 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(InnerAllocation node) {
         Constructor cons = (Constructor) node
                 .getProperty(NodeProperties.CONSTRUCTOR);
-        //Class c = NodeProperties.getType(node);
+        Class c = NodeProperties.getType(node);
 
         List larg = node.getArguments();
         Object[] args = null;

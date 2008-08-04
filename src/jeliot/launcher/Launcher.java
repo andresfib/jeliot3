@@ -1,7 +1,10 @@
 package jeliot.launcher;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PipedReader;
 import java.io.PipedWriter;
 import java.io.PrintWriter;
@@ -9,9 +12,8 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import jeliot.mcode.*;
-import koala.dynamicjava.interpreter.Interpreter;
-import koala.dynamicjava.interpreter.TreeInterpreter;
-import koala.dynamicjava.parser.wrapper.JavaCCParserFactory;
+import jeliot.util.ResourceBundles;
+import generic.Interpreter;
 
 /**
  * Launcher creates a new thread to handle the DynamicJava Interpreter's
@@ -77,7 +79,7 @@ public class Launcher extends Thread {
     /**
      *
      */
-    private Reader r = null;
+    private InputStream r = null;
 
     /**
      *
@@ -93,19 +95,50 @@ public class Launcher extends Thread {
      * @return
      */
     protected Interpreter createInterpreter() {
-        Interpreter result = new TreeInterpreter(new JavaCCParserFactory());
+    	// TODO: create Factory, handle exception
+    	try{
+    	String interpreterClass = ResourceBundles.getInterpreterInfo().getString("interpreter.class");
+        Interpreter result =  (Interpreter)Class.forName(interpreterClass).newInstance();
+        	//new TreeInterpreter(new JavaCCParserFactory());
+               
         return result;
+    	}catch(Exception e)
+    	{
+    		System.out.println("Error");
+    		return null;
+    	}
     }
-
-    /**
-     * @param input
-     */
-    public Launcher(Reader input) {
-        this.r = input;
+    
+    // TODO: added
+    private void init(InputStream input)
+    {
+    	this.r = input;
 
         makePipedStreams();
         
-        MCodeUtilities.initialize();
+        // TODO: change
+        //MCodeUtilities.initialize();
+        MCodeUtilitiesB.initialize();
+
+    }
+    
+    /**
+     * @param input
+     */
+   /* public Launcher(Reader input) {
+    	init(input);
+    }*/
+    // TODO: added
+    public Launcher(InputStream input)
+    {
+    	init(input);
+    }
+    
+    // TODO: added    
+    public Launcher(String input)
+    {
+    	//init(new BufferedReader(new InputStreamReader(new ByteArrayInputStream(input.getBytes() )))); 
+    	init(new ByteArrayInputStream(input.getBytes() ));
     }
 
     /**
@@ -126,9 +159,12 @@ public class Launcher extends Thread {
         reader = new BufferedReader(pipedReader);
         inputReader = new BufferedReader(getInput);
 
-        MCodeUtilities.setWriter(writer);
+        /*MCodeUtilities.setWriter(writer);
         MCodeUtilities.setReader(inputReader);
-        MCodeUtilities.setAccessingThread(this);
+        MCodeUtilities.setAccessingThread(this);*/
+        MCodeUtilitiesB.setWriter(writer);
+        MCodeUtilitiesB.setReader(inputReader);
+        MCodeUtilitiesB.setAccessingThread(this);
     }
 
     /**
@@ -155,15 +191,16 @@ public class Launcher extends Thread {
                 if (compiling) {
                     compile();
 
-                    o = interpreter.interpret(new BufferedReader(new StringReader(methodCall)),
-                            "buffer");
+       //             o = interpreter.interpret(new BufferedReader(new StringReader(methodCall)),
+       //                     "buffer");
 
                     if (!(o instanceof StoppingRequestedError)) {
                         /*
                          * TODO: If we are allowing open scope execution of statements
                          * we should not send Code.END statements.
                          */
-                        MCodeUtilities.write("" + Code.END);
+                        //MCodeUtilities.write("" + Code.END);
+                    	MCodeUtilitiesB.write("" + Code.END);
                     }
                     compiling = false;
                 }

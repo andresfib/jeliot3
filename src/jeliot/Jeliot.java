@@ -85,6 +85,7 @@ public class Jeliot {
     static private ResourceBundle bundle2 = ResourceBundle.getBundle(
             "jeliot.gui.resources.messages", Locale.getDefault());
 
+    static private ResourceBundle langBundle = ResourceBundles.getInterpreterInfo();
     /**
      * user home directory
      */
@@ -304,8 +305,9 @@ public class Jeliot {
      * @param methodCall The main method call as a String.
      */
     public void setSourceCode(String srcCode, String methodCall) {
-
-        if (hasIOImport(srcCode)) {
+    	// TODO: added
+    	boolean bUseIOImport = Boolean.getBoolean(langBundle.getString("jeliot.window.useIOImport"));
+        if (!bUseIOImport || hasIOImport(srcCode)) {
             this.sourceCode = srcCode;
         } else {
             this.sourceCode = getImportIOStatement() + "\n\n" + srcCode;
@@ -339,9 +341,9 @@ public class Jeliot {
             if (jeliotUserProperties.getBooleanProperty("save_unicode")) {
                 source = SourceCodeUtilities.convertNative2Ascii(source);
             }
-
-            launcher = new Launcher(
-                    new BufferedReader(new StringReader(source)));
+            // TODO: added
+            launcher = new Launcher(source);
+                    //new BufferedReader(new StringReader(source)));
             launcher.setMethodCall(this.methodCall);
             launcher.setCompiling(true);
             launcher.start();
@@ -587,17 +589,6 @@ public class Jeliot {
         gui.output(str);
     }
 
-    /**
-     * Called by the director when user's program inputs a string.
-     *
-     * @param str String that is outputted.
-     */
-    public void input(String str) {
-        Tracker.trackEvent(TrackerClock.currentTimeMillis(), Tracker.OTHER, -1,
-                -1, "Input: " + str);
-        gui.input(str);
-    }
-    
     /**
      * @param e
      */
@@ -998,9 +989,4 @@ public class Jeliot {
             DebugUtil.printDebugInfo("garbage collected1");
         }
     }
-
-	public void setAskingQuestions(boolean value) {
-		// TODO Auto-generated method stub
-		gui.setAskingQuestions(value);
-	}
 }

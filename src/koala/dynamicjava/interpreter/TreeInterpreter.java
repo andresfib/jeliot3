@@ -55,6 +55,7 @@ import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.mcode.StoppingRequestedError;
 import jeliot.util.DebugUtil;
+import jeliot.util.ResourceBundles;
 import koala.dynamicjava.interpreter.context.Context;
 import koala.dynamicjava.interpreter.context.GlobalContext;
 import koala.dynamicjava.interpreter.context.MethodContext;
@@ -134,6 +135,17 @@ public class TreeInterpreter implements Interpreter {
      */
     protected boolean accessible;
 
+    // TODO: added, add factory, handle exception
+    public TreeInterpreter() {
+    	try{
+    	String parserName = ResourceBundles.getInterpreterInfo().getString("interpreter.internal.compiler");
+    	ParserFactory result =  (ParserFactory)Class.forName(parserName).newInstance();
+    	init(result, Thread.currentThread().getContextClassLoader());
+    	}catch(Exception e)
+    	{
+    		System.out.println("Error");
+    	}
+    }
     /**
      * Creates a new interpreter
      * @param pf the parser factory
@@ -147,7 +159,13 @@ public class TreeInterpreter implements Interpreter {
      * @param pf the parser factory
      * @param cl the auxiliary class loader used to load external classes
      */
+    // TODO: added
     public TreeInterpreter(ParserFactory pf, ClassLoader cl) {
+    	init(pf, cl); 
+    }
+    
+    private void init(ParserFactory pf, ClassLoader cl)
+    {
         parserFactory = pf;
         classLoader = new TreeClassLoader(this, cl);
         nameVisitorContext = new GlobalContext(this);
@@ -1138,7 +1156,7 @@ public class TreeInterpreter implements Interpreter {
             // Check the parameters
             if (cpd.parameters != null) {
                 ListIterator it = cpd.parameters.listIterator();
-                //Node aux;
+                Node aux;
                 while (it.hasNext()) {
                     ((Node) it.next()).acceptVisitor(tc);
                 }

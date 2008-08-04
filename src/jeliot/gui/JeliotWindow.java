@@ -52,6 +52,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -100,6 +101,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
     static private ResourceBundle messageBundle = ResourceBundles
             .getGuiMessageResourceBundle();
 
+    // TODO: added 
+    static private ResourceBundle interpreterProperties = ResourceBundles.getInterpreterInfo();
     /**
      * User properties that were saved from previous run.
      */
@@ -291,7 +294,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     private JSlider speedSlider;
 
     /** In this text area will come the output of the user-made programs. */
-    private OutputConsole outputConsole;
+    private JTextArea outputConsole;
 
     /**
      * Menu items that should be either enabled or disabled when the animation
@@ -1753,6 +1756,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     .getValue();
             //System.out.println(line);
 
+            // TODO: added parameter - lookForMain
+            boolean bLookForMain = Boolean.getBoolean(interpreterProperties.getString("jeliot.window.lookForMain"));
+            
             if (methodCall == null) {
                 methodCall = SourceCodeUtilities
                         .findMainMethodCall(
@@ -1763,7 +1769,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                                 jeliotUserProperties
                                         .getBooleanProperty("use_null_to_call_main"));
                 if (jeliotUserProperties.getBooleanProperty("ask_for_method")
-                        || methodCall == null) {
+                        || (bLookForMain && (methodCall == null))) {
                     methodCall = ((methodCall != null) ? methodCall : null);
                     String inputValue = JOptionPane
                             .showInputDialog(
@@ -1786,8 +1792,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     }
                 }
             }
-
-            if (methodCall != null) {
+            
+            // TODO: added !bLook..
+            if (!bLookForMain || methodCall != null) {
 
                 //Reader r = new BufferedReader(new
                 // StringReader(programCode));
@@ -2247,31 +2254,17 @@ public class JeliotWindow implements PauseListener, MouseListener {
     }
 
     /**
-     * Writes the outputted string to the console.
+     * Writes the outputted string to the output console.
      * 
      * @param str
      *            String for output.
      */
     public void output(String str) {
         //System.out.println("This is output: " + str);
-        //outputConsole.append(str);
-        //outputConsole.setCaretPosition(outputConsole.getText().length());
-        outputConsole.output(str);
+        outputConsole.append(str);
+        outputConsole.setCaretPosition(outputConsole.getText().length());
     }
 
-    /**
-     * Writes the inputted string to the console.
-     * 
-     * @param str
-     *            String for output.
-     */
-    public void input(String str) {
-        //System.out.println("This is input: " + str);
-        //outputConsole.append(str);
-        //outputConsole.setCaretPosition(outputConsole.getText().length());
-        outputConsole.input(str);
-    }
-    
     /**
      * Method is used to implement the run until feature.
      */
@@ -2440,10 +2433,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     public boolean isAskingQuestions() {
         return jeliotUserProperties.getBooleanProperty("ask_questions");
     }
-    public void setAskingQuestions(boolean value) {
-        jeliotUserProperties.setBooleanProperty("ask_questions", value);
-    }
-    
+
     public JButton getPlayButton() {
         return playButton;
     }

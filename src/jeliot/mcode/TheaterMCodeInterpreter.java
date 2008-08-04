@@ -158,8 +158,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected LinkedList classesWithStaticVariables = new LinkedList();
 
-    private boolean stopBeforeClearingScratch = false;
-
     /**
      *  
      */
@@ -213,7 +211,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         arrayInitialization = new Stack();
         //expressionStack = new Stack();
         avInteractionEngine = null;
-        stopBeforeClearingScratch = false;
 
         super.initialize();
 
@@ -262,7 +259,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 constructorCalls.pop();
                 if (!constructorCalls.empty()) {
                     superMethods = (Vector) constructorCalls.peek();
-                }
+                }                
                 return readLine();
             }
         }
@@ -274,7 +271,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     + Code.LOC_DELIM + "0";
         }
         DebugUtil.printDebugInfo(readLine);
-
+System.out.println("MCODE INTERPRETER:" + readLine);
         return readLine;
     }
 
@@ -328,15 +325,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 && token != Code.OUTPUT && token != Code.INPUT
                 && token != Code.INPUTTED && token != Code.OMC
                 && token != Code.SMC && token != Code.SA) {
-            //Hack to get a stop before return value is erased when it is not used.
-            if (this.stopBeforeClearingScratch) {
-                this.director.highlightForMessage(new Highlight(0, 0, 0, 0));
-            }
             closeScratch();
             openScratch();
             checkInstancesForRemoval(false);
         }
-        this.stopBeforeClearingScratch = false;
     }
 
     /*
@@ -432,12 +424,10 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         currentClass.declareField(name, "" + modifiers + Code.DELIM + type
                 + Code.DELIM + value + Code.DELIM + h);
 
-        //We create static variable if it doesn't exist already
-        /*
+        //We create static variable if it deosn't exist already
         if (Modifier.isStatic(modifiers) && name.indexOf("$") < 0) {
             //find class and add the static field
             String className = currentClass.getName();
-            
             ListIterator li = classesWithStaticVariables.listIterator();
             jeliot.lang.Class ca = null;
             while (li.hasNext()) {
@@ -447,6 +437,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     break;
                 }
             }
+
             if (ca == null) {
                 ca = new jeliot.lang.Class(className);
                 classesWithStaticVariables.addLast(ca);
@@ -469,7 +460,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 director.declareClassVariable(ca, var, val);
             }
         }
-        */
     }
 
     /**
@@ -710,49 +700,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 values.put(new Long(expressionCounter), val);
 
             } else if (oper == Code.PIE || oper == Code.PDE) {
-
-                if (exprs.size() > 1) {
-
-                    StringTokenizer expressionTokenizer = new StringTokenizer(
-                            (String) exprs.get(exprs.size() - 2), Code.DELIM);
-
-                    int oper2 = Integer.parseInt(expressionTokenizer
-                            .nextToken());
-                    long expressionReference2 = Long
-                            .parseLong(expressionTokenizer.nextToken());
-
-                    if (MCodeUtilities.isBinary(oper2)) {
-                        int command2 = 0;
-                        int j = 0;
-                        for (int i = commands.size() - 1; i >= 0; i--) {
-                            StringTokenizer commandTokenizer = new StringTokenizer(
-                                    (String) commands.elementAt(i), Code.DELIM);
-                            int comm = Integer.parseInt(commandTokenizer
-                                    .nextToken());
-                            long cid = Long.parseLong(commandTokenizer
-                                    .nextToken());
-
-                            if (expressionReference == cid) {
-                                command2 = comm;
-                                j = i;
-                                break;
-                            }
-                        }
-                        if (command2 == Code.LEFT) {
-
-                            //commands.removeElementAt(j);
-                            int operator2 = MCodeUtilities
-                                    .resolveBinOperator(oper2);
-                            //This is for compound assignments
-                            if (vars[n - 1] != null) {
-                                variables.put(new Long(expressionCounter),
-                                        vars[n - 1]);
-                            }
-                            director.beginBinaryExpression(val, operator2,
-                                    expressionReference2, highlight);
-                        }
-                    }
-                }
 
                 variables.put(new Long(expressionCounter), vars[n - 1]);
                 values.put(new Long(expressionReference), val);
@@ -1627,15 +1574,18 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeOMCC() {
         if (!returned) {
+
             director.finishMethod(null, 0);
             closeExpressionStack();
         } else {
+
             Value rv = null;
 
             if (returnValue instanceof Reference) {
                 rv = (Value) ((Reference) returnValue).clone();
                 ((Reference) rv).makeReference();
             } else {
+
                 rv = (Value) returnValue.clone();
             }
 
@@ -1648,6 +1598,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (currentMethodInvocation != null) {
             invokingMethod = true;
         }
+
         returned = false;
     }
 
@@ -1953,47 +1904,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 values.put(new Long(expressionCounter), val);
 
             } else if (oper == Code.PIE || oper == Code.PDE) {
-                if (exprs.size() > 1) {
-                    StringTokenizer expressionTokenizer = new StringTokenizer(
-                            (String) exprs.get(exprs.size() - 2), Code.DELIM);
 
-                    int oper2 = Integer.parseInt(expressionTokenizer
-                            .nextToken());
-                    long expressionReference2 = Long
-                            .parseLong(expressionTokenizer.nextToken());
-
-                    if (MCodeUtilities.isBinary(oper2)) {
-                        int command2 = 0;
-                        int j = 0;
-                        for (int i = commands.size() - 1; i >= 0; i--) {
-                            StringTokenizer commandTokenizer = new StringTokenizer(
-                                    (String) commands.elementAt(i), Code.DELIM);
-                            int comm = Integer.parseInt(commandTokenizer
-                                    .nextToken());
-                            long cid = Long.parseLong(commandTokenizer
-                                    .nextToken());
-
-                            if (expressionReference == cid) {
-                                command2 = comm;
-                                j = i;
-                                break;
-                            }
-                        }
-                        if (command2 == Code.LEFT) {
-
-                            //commands.removeElementAt(j);
-                            int operator2 = MCodeUtilities
-                                    .resolveBinOperator(oper2);
-                            //This is for compound assignments
-                            if (var != null) {
-                                variables.put(new Long(expressionCounter), var);
-                            }
-                            director.beginBinaryExpression(val, operator2,
-                                    expressionReference2, highlight);
-                            return;
-                        }
-                    }
-                }
                 variables.put(new Long(expressionCounter), var);
                 values.put(new Long(expressionReference), val);
                 values.put(new Long(expressionCounter), val);
@@ -2030,7 +1941,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             Reference ref = (Reference) objectCreation.pop();
             Instance inst = ref.getInstance();
             inst.setHashCode(hashCode);
-            //The instance is put into the hashtable that
+            //The instance is putted in the hashtable that
             //keeps the instances
             instances.put(hashCode, inst);
             //Then we handle the possible expressions
@@ -2105,8 +2016,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             classes.put(ci.getName(), ci);
         }
 
-        //This works for non-primitive classes.
-        //There needs to be a check whether invoked class is primitive or not.
+        //This works for not primitive classes.
+        //There needs to be a check whether invoked
+        //class is primitive or not.
         //ObjectFrame of = createNewInstance(ci, highlight);
         //Reference ref = new Reference(of);
 
@@ -2144,8 +2056,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         currentMethodInvocation[7] = parameterExpressionReferences;
         //Here we put the ClassInfo of the class in the array
         //just to wait for the Method Declaration to be read
-        //and the object can be created from this method info.
-        currentMethodInvocation[8] = ci /*ref*/;
+        // and the
+        //object can be created from this method info.
+        currentMethodInvocation[8] = ci /* ref */;
 
         /* objectCreation.push(new Reference(of)); */
     }
@@ -2171,23 +2084,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         handleExpression(lit, expressionCounter);
     }
 
-    /*
-     * Add somewhere here code for static field allocation in correct place of execution for all the static fields of a class (JLS �12.4.1):
-     * 
-     * Initialization of a class consists of executing its static initializers and the initializers for static fields declared in the class. Initialization of an interface consists of executing the initializers for fields declared in the interface.
-     * Before a class is initialized, its direct superclass must be initialized, but interfaces implemented by the class need not be initialized. Similarly, the superinterfaces of an interface need not be initialized before the interface is initialized.
-     * 
-     * A class or interface type T will be initialized immediately before the first occurrence of any one of the following:
-     * 
-     *        * T is a class and an instance of T is created.
-     *        * T is a class and a static method declared by T is invoked.
-     *        * A static field declared by T is assigned.
-     *        * A static field declared by T is used and the field is not a constant variable (�4.12.4).
-     *        * T is a top-level class, and an assert statement (�14.10) lexically nested within T is executed. 
-     *        
-     * Invocation of certain reflective methods in class Class and in package java.lang.reflect also causes class or interface initialization. A class or interface will not be initialized under any other circumstance.
-     *  
-     */
     /**
      * @param expressionCounter
      * @param declaringClass
@@ -2203,7 +2099,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         jeliot.lang.Class ca = null;
         boolean notFound = true;
-        //This is not the right procedure to do the static variable lookup but
+        //This is not the rigth procedure to do the static variable lookup but
         //DynamicJava is mixing static and object field access and this is to clean up the mess.
         //Other possibility is to do it in OFA handling but this seems more logical.
         //OFA handling just delegates the work here.
@@ -2217,7 +2113,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 }
             }
             ClassInfo ci = (ClassInfo) classes.get(declaringClass);
-            if (ci != null && ci.getExtendedClassName() != null) {
+            if (ci != null) {
                 declaringClass = ci.getExtendedClassName();
             } else {
                 break;
@@ -2374,50 +2270,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 variables.put(new Long(expressionCounter), var);
                 values.put(new Long(expressionCounter), val);
             } else if (oper == Code.PIE || oper == Code.PDE) {
-
-                if (exprs.size() > 1) {
-
-                    StringTokenizer expressionTokenizer = new StringTokenizer(
-                            (String) exprs.get(exprs.size() - 2), Code.DELIM);
-
-                    int oper2 = Integer.parseInt(expressionTokenizer
-                            .nextToken());
-                    long expressionReference2 = Long
-                            .parseLong(expressionTokenizer.nextToken());
-
-                    if (MCodeUtilities.isBinary(oper2)) {
-                        int command2 = 0;
-                        int j = 0;
-                        for (int i = commands.size() - 1; i >= 0; i--) {
-                            StringTokenizer commandTokenizer = new StringTokenizer(
-                                    (String) commands.elementAt(i), Code.DELIM);
-                            int comm = Integer.parseInt(commandTokenizer
-                                    .nextToken());
-                            long cid = Long.parseLong(commandTokenizer
-                                    .nextToken());
-
-                            if (expressionReference == cid) {
-                                command2 = comm;
-                                j = i;
-                                break;
-                            }
-                        }
-                        if (command2 == Code.LEFT) {
-
-                            //commands.removeElementAt(j);
-                            int operator2 = MCodeUtilities
-                                    .resolveBinOperator(oper2);
-                            //This is for compound assignments
-                            if (var != null) {
-                                variables.put(new Long(expressionCounter), var);
-                            }
-                            director.beginBinaryExpression(val, operator2,
-                                    expressionReference2, highlight);
-                            return;
-                        }
-                    }
-                }
-
                 variables.put(new Long(expressionCounter), var);
                 values.put(new Long(expressionReference), val);
                 values.put(new Long(expressionCounter), val);
@@ -2472,6 +2324,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         /*
          * Look from the expression stack what expression should be shown next
          */
+
         long expressionReference = 0;
         //We do not show just the qualified name highlighted but the whole
         // expression that it is connected.
@@ -2513,7 +2366,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
 
         /*
-         * Do different kinds of things depending on in what expression the
+         * Do different kind of things depending on in what expression the
          * variable is used.
          */
 
@@ -2524,7 +2377,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             } else {
                 values.put(new Long(expressionCounter), val);
             }
-            //If oper is other binary operator we will show it on the screen with operator
+            //If oper is other binary operator we will show it
+            //on the screen with operator
         } else if (MCodeUtilities.isBinary(oper)) {
             int operator = MCodeUtilities.resolveBinOperator(oper);
             if (command == Code.LEFT) {
@@ -2532,6 +2386,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 if (var != null) {
                     variables.put(new Long(expressionCounter), var);
                 }
+
                 director.beginBinaryExpression(val, operator,
                         expressionReference, highlight);
             } else if (command == Code.RIGHT) {
@@ -2546,59 +2401,17 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 values.put(new Long(expressionCounter), val);
             }
 
-            //If oper is a unary operator we will show it on the screen with operator
+            //If oper is a unary operator we will show it
+            //on the screen with operator
         } else if (MCodeUtilities.isUnary(oper)) {
             if (oper == Code.PRIE || oper == Code.PRDE) {
                 variables.put(new Long(expressionCounter), var);
                 values.put(new Long(expressionCounter), val);
             } else if (oper == Code.PIE || oper == Code.PDE) {
-                if (exprs.size() > 1) {
-
-                    StringTokenizer expressionTokenizer = new StringTokenizer(
-                            (String) exprs.get(exprs.size() - 2), Code.DELIM);
-
-                    int oper2 = Integer.parseInt(expressionTokenizer
-                            .nextToken());
-                    long expressionReference2 = Long
-                            .parseLong(expressionTokenizer.nextToken());
-
-                    if (MCodeUtilities.isBinary(oper2)) {
-                        int command2 = 0;
-                        int j = 0;
-                        for (int i = commands.size() - 1; i >= 0; i--) {
-                            StringTokenizer commandTokenizer = new StringTokenizer(
-                                    (String) commands.elementAt(i), Code.DELIM);
-                            int comm = Integer.parseInt(commandTokenizer
-                                    .nextToken());
-                            long cid = Long.parseLong(commandTokenizer
-                                    .nextToken());
-
-                            if (expressionReference == cid) {
-                                command2 = comm;
-                                j = i;
-                                break;
-                            }
-                        }
-                        if (command2 == Code.LEFT) {
-
-                            //commands.removeElementAt(j);
-                            int operator2 = MCodeUtilities
-                                    .resolveBinOperator(oper2);
-                            //This is for compound assignments
-                            if (var != null) {
-                                variables.put(new Long(expressionCounter), var);
-                            }
-                            director.beginBinaryExpression(val, operator2,
-                                    expressionReference2, highlight);
-                            return;
-                        }
-                    }
-                }
                 variables.put(new Long(expressionCounter), var);
                 variables.put(new Long(expressionReference), var);
                 values.put(new Long(expressionReference), val);
                 values.put(new Long(expressionCounter), val);
-
             } else {
                 values.put(new Long(expressionCounter), val);
                 int operator = MCodeUtilities.resolveUnOperator(oper);
@@ -2607,7 +2420,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                             expressionReference, highlight);
                 }
             }
-            //If it is something else we will store it for later use.
+            //If it is something else we will store it for
+            // later use.
         } else {
             values.put(new Long(expressionCounter), val);
             variables.put(new Long(expressionCounter), var);
@@ -2625,46 +2439,29 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void handleCodeVD(String variableName,
             long initializerExpression, String value, String type,
             String modifier, Highlight highlight) {
-    	Variable var = director.declareVariable(variableName, type, highlight);
+        Variable var = director.declareVariable(variableName, type, highlight);
 
         Value casted = null;
 
         if (MCodeUtilities.isPrimitive(type)) {
-        	casted = new Value(value, type);
+            casted = new Value(value, type);
         } else {
-        	if (value.equals("null")) {
-        		casted = new Reference(type);
-        	} else {
-        		Instance inst;
-        		//Hack to avoid displaying Exception objects
-        		if (isException(type)){
-        			//inst = Instance.OUTSIDE_OBJECT;	
-        			Value val = new Reference(type);
-        			((Reference) val)
-                    .setInstance(Instance.OUTSIDE_OBJECT);
-        			director.introduceLiteral(val);
-        			casted = (Value) val.clone();
-                    Value copiedValue = director.prepareForAssignment(var, val);
-                    director.animateAssignment(var, val, copiedValue, casted, null,
-                            highlight);
-                    var.assign(casted);
-        			
-        		} else {
-        			inst = (Instance) instances.get(MCodeUtilities
-        					.getHashCode(value));
+            if (value.equals("null")) {
+                casted = new Reference(type);
+            } else {
+                Instance inst = (Instance) instances.get(MCodeUtilities
+                        .getHashCode(value));
 
-        			if (inst != null) {
-        				casted = new Reference(inst);
-        				((Reference) casted).makeReference();
-        			} else {
-        				casted = new Reference(type);
-        			}
-        			casted.setActor(var.getActor().getValue());
-        		}
-        	}
-        	
+                if (inst != null) {
+                    casted = new Reference(inst);
+                    ((Reference) casted).makeReference();
+                } else {
+                    casted = new Reference(type);
+                }
+            }
+            casted.setActor(var.getActor().getValue());
         }
-    	
+
         if (initializerExpression > 0) {
 
             Value val = (Value) values.remove(new Long(initializerExpression));
@@ -2684,19 +2481,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         director.openScratch();
     }
 
-    private boolean isException(String type) {
-    	boolean result = false;
-		try {
-			java.lang.Class cl = java.lang.Class.forName(type);
-			result = java.lang.Throwable.class.isAssignableFrom(cl);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	/**
+    /**
      * @param expressionCounter
      * @param leftExpressionReference
      * @param rightExpressionReference
@@ -3191,9 +2976,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             director.highlightForMessage(h);
             avInteractionEngine.interaction("" + expressionReference);
         }
-        if(expressionType == Code.TRY){
-            director.tryBlock(MCodeUtilities.makeHighlight(location));       	
-        }
     }
 
     /**
@@ -3382,8 +3164,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      * Used at the moment.
      */
     public void checkInstancesForRemoval(boolean override) {
-        if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG")
-                || override) {
+        if (ResourceBundles.getJeliotUserProperties().getBooleanProperty("CG") || override) {
             //Enumeration enumeration = instances.keys();
             //while (enumeration.hasMoreElements()) {
             for (Iterator i = instances.keySet().iterator(); i.hasNext();) {
@@ -3391,8 +3172,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 Instance inst = (Instance) instances.get(obj);
                 if (inst != null) {
                     //For testing
-                    DebugUtil.printDebugInfo(inst.getType() + "@"
-                            + inst.getHashCode());
+                    DebugUtil.printDebugInfo(inst.getType() + "@" + inst.getHashCode());
                     DebugUtil.printDebugInfo("number of references1: "
                             + inst.getNumberOfReferences());
                     DebugUtil.printDebugInfo("number of references2: "
@@ -3754,38 +3534,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         } else {
 
-            StringTokenizer expressionTokenizer = new StringTokenizer(
-                    (String) exprs.peek(), Code.DELIM);
-
-            int oper2 = Integer.parseInt(expressionTokenizer.nextToken());
-            long expressionReference2 = Long.parseLong(expressionTokenizer
-                    .nextToken());
-
-            if (MCodeUtilities.isBinary(oper2)) {
-                int command2 = 0;
-                int j = 0;
-                for (int i = commands.size() - 1; i >= 0; i--) {
-                    StringTokenizer commandTokenizer = new StringTokenizer(
-                            (String) commands.elementAt(i), Code.DELIM);
-                    int comm = Integer.parseInt(commandTokenizer.nextToken());
-                    long cid = Long.parseLong(commandTokenizer.nextToken());
-
-                    if (expressionCounter == cid) {
-                        command2 = comm;
-                        j = i;
-                        break;
-                    }
-                }
-                Variable var = (Variable) variables.get(new Long(
-                        expressionReference));
-                if (command2 == Code.LEFT && var != null) {
-                    variables.remove(new Long(expressionReference));
-                    //This is for compound assignments
-                    director.animateIncDec(operator, var, result, h);
-                    return;
-                }
-            }
-
             Object[] postIncDec = { new Long(operator),
                     new Long(expressionReference), result, h };
             postIncsDecs.put(new Long(expressionCounter), postIncDec);
@@ -3825,19 +3573,4 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     public void afterInterpretation(String line) {
     }
-
-    public void setStopBeforeClearingScratch(boolean b) {
-        this.stopBeforeClearingScratch = b;
-    }
-
-	@Override
-	protected void handleCodeCATCH(long expressionCounter, String message, Highlight h) {
-        director.caughtExceptions(message, h);
-		
-	}
-
-	@Override
-	protected void handleCodeTRY(long expressionCounter, Highlight h) {
-		exprs.pop();
-	}
 }

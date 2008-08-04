@@ -66,6 +66,9 @@ public class ResourceBundles {
     
     private static UserProperties internalUM;
     
+    // TODO:added
+    private static ResourceBundle interpreterInfo;
+    
     /**
      * @return
      */
@@ -78,6 +81,14 @@ public class ResourceBundles {
         return jeliotUserProperties;
     }
     
+    // TODO:added 
+    public static ResourceBundle getInterpreterInfo()
+    {
+    	if (interpreterInfo == null)
+    		interpreterInfo = ResourceBundle.getBundle("jeliot.interpreter.resources.properties", Locale.getDefault());
+    	
+    	return interpreterInfo;
+    }
     /**
      * @return
      */
