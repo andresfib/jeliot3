@@ -47,7 +47,7 @@ public class TrackerClock {
     /**
      * @return
      */
-    public synchronized Date getCurrentTime() {
+    public Date getCurrentTime() {
         if (TrackerClock.nativeTracking) {
             System.loadLibrary("JeliotJNI");
             String trackerTimeStamp = getTrackerTimeStamp();

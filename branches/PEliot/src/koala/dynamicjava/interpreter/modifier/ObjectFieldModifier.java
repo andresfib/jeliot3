@@ -90,7 +90,7 @@ public class ObjectFieldModifier extends LeftHandSideModifier {
         if (v instanceof EvaluationVisitor) {
             EvaluationVisitor ve = (EvaluationVisitor) v;
 
-            //Class c = NodeProperties.getType(node.getExpression());
+            Class c = NodeProperties.getType(node.getExpression());
 
             long fieldCounter = EvaluationVisitor.getCounter();
             EvaluationVisitor.incrementCounter();

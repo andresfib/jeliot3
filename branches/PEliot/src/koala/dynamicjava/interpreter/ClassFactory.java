@@ -1267,7 +1267,7 @@ public class ClassFactory extends ClassFile {
         DataOutputStream      data      = new DataOutputStream(bytes);
         short                 maxStack  = (short)6;
         short                 maxLocals = (short)((mi.isStatic()) ? 1 : 2);
-        //MethodIdentifier      mid;
+        MethodIdentifier      mid;
 
         // Compute the max locals
         for (int i = 0; i < pt.length; i++) {

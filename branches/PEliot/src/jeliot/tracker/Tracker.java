@@ -211,7 +211,7 @@ public class Tracker {
         return idCounter++;
     }
 
-    public static synchronized void trackEvent(long millis, int action,
+    public static void trackEvent(long millis, int action,
             int x, int y, int w, int h, String description) {
         if (out != null && track) {
             //Do the conversions and validation of the data
@@ -230,7 +230,7 @@ public class Tracker {
         }
     }
 
-    public static synchronized void trackEvent(long millis, int action, int x, int y,
+    public static void trackEvent(long millis, int action, int x, int y,
             String description) {
         if (out != null && track) {
             //Do the conversions and validation of the data
@@ -250,7 +250,7 @@ public class Tracker {
         }
     }
 
-    public static synchronized long trackTheater(long millis, int action, long id, int type,
+    public static long trackTheater(long millis, int action, long id, int type,
             int[] x, int[] y, int w, int h, double angle, long lifeTime,
             String description) {
         if (out != null && track && theater.isShowing()) {
@@ -285,16 +285,16 @@ public class Tracker {
         return -1;
     }
 
-    public static synchronized long trackCode(long millis, int action, long id, int type,
+    public static long trackCode(long millis, int action, long id, int type,
             int[] x, int[] y, int w, int h, double angle, long lifeTime,
             String description, JEditTextArea area) {
         if (out != null && track) {
 
             Point p = area.getLocationOnScreen();
             Rectangle r = area.getPainter().getClipRect();
+            int areaFirstY = Math.abs(area.lineToY(area.getFirstLine()));
+            int areaFirstX = Math.abs(area.getHorizontalOffset());
             
-            //int areaFirstY = Math.abs(area.lineToY(area.getFirstLine()));
-            //int areaFirstX = Math.abs(area.getHorizontalOffset());
             //System.out.println("Code loc on screen");
             //System.out.println(p);
             //System.out.println("Code cliprect");
@@ -325,7 +325,7 @@ public class Tracker {
 
     }
 
-    public static synchronized long track(long millis, int action, long id, int type,
+    public static long track(long millis, int action, long id, int type,
             String locations, int w, int h, double angle, long lifeTime,
             String description) {
         if (out != null && track) {

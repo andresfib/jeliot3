@@ -221,7 +221,7 @@ public class InteractionModule implements InteractionInterface {
      */
     public void interaction(String interactionID)
             throws UnknownInteractionException {
-        //boolean displayAnswer;
+        boolean displayAnswer;
         boolean guiBuilded;
         String groupID;
         GroupInfo group;

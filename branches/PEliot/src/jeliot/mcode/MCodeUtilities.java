@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.util.DebugUtil;
+import jeliot.util.ResourceBundles;
 import jeliot.util.Util;
 import koala.dynamicjava.interpreter.EvaluationVisitor;
 import koala.dynamicjava.interpreter.NodeProperties;
@@ -30,10 +31,30 @@ import koala.dynamicjava.tree.Node;
  */
 public class MCodeUtilities {
 
+	private static MCodeUtilities langUtil = createLangUtils();
+	
+	public static MCodeUtilities getLangUtils()
+	{
+		return langUtil;
+	}
+	
+	private static MCodeUtilities createLangUtils()
+	{
+		try{
+	    	String utilClass = ResourceBundles.getInterpreterInfo().getString("MCodeUtilities.class");
+	        MCodeUtilities result =  (MCodeUtilities)Class.forName(utilClass).newInstance();	               
+	        return result;
+    	}catch(Exception e)
+    	{
+    		System.out.println("Error");
+    		return null;
+    	}
+	}
+		
     /**
      * Should be never used. 
      */
-    private MCodeUtilities() {
+    protected MCodeUtilities() {
     }
 
     //Unary expressions in Jeliot 3 visualization engine
@@ -244,35 +265,36 @@ public class MCodeUtilities {
     /**
      *
      */
-    private static PrintWriter writer = null;
+    // TODO: added
+    protected static PrintWriter writer = null;
 
     // private static PrintWriter writer=Launcher.getWriter();
 
     /**
      *
      */
-    private static BufferedReader reader = null;
+    protected static BufferedReader reader = null;
 
     /**
      * 
      */
-    private static Vector registeredSecondaryMCodeConnections = new Vector();
+    protected static Vector registeredSecondaryMCodeConnections = new Vector();
 
     /**
      * 
      */
-    private static Vector registeredMCodePreProcessors = new Vector();
+    protected static Vector registeredMCodePreProcessors = new Vector();
 
     /**
      * Hack flag to get the output into see below
      */
-    private static boolean redirectOutput = false;
+    protected static boolean redirectOutput = false;
 
     /**
      * Buffer to store the redirection orders
      * from parameters collected in TreeInterpreter
      */
-    private static Vector redirectBuffer = new Vector();
+    protected static Vector redirectBuffer = new Vector();
 
     /**
      * Stack with the redirect buffers
@@ -330,7 +352,7 @@ public class MCodeUtilities {
     /**
      * 
      */
-    private static int numParameters = 0;
+    protected static int numParameters = 0;
 
     /**
      * @param type
@@ -942,7 +964,7 @@ public class MCodeUtilities {
     /**
      * Comment for <code>accessingThread</code>
      */
-    private static Thread accessingThread = null;
+    protected static Thread accessingThread = null;
 
     /**
      * @param thread
@@ -951,17 +973,22 @@ public class MCodeUtilities {
         accessingThread = thread;
     }
 
+    public static boolean isSetPreparing()
+    {
+    	return (EvaluationVisitor.isSetPreparing());
+    }
     /**
      * @param str
      */
     public static void write(String str) {
         if (writer == null || accessingThread != Thread.currentThread()) {
+ System.out.println(writer);
             throw new StoppingRequestedError();
         }
         StringTokenizer tokenizer = new StringTokenizer(str, Code.DELIM);
 
         int token = Integer.parseInt(tokenizer.nextToken());
-        if (!EvaluationVisitor.isSetPreparing() || token == Code.ERROR) {
+        if (!langUtil.isSetPreparing() || token == Code.ERROR) {
             str = MCodeUtilities.replace(str, "\n", "\\n");
             str = MCodeUtilities.replace(str, "\r", "");
             if (!redirectOutput || token == Code.ERROR) {
@@ -1002,6 +1029,7 @@ public class MCodeUtilities {
              e.printStackTrace(System.out);    
              }
              */
+System.out.println("MCODE WRITE:" + str);            
         }
     }
 
@@ -1268,13 +1296,9 @@ public class MCodeUtilities {
         registeredMCodePreProcessors.clear();
     }
 
-    /**
-     * 
-     * @param o
-     * @return
-     */
-    public static String getValue(Object o) {
-        if (o == null) {
+    public static String getLangValue(Object o)
+    {
+    	if (o == null) {
             return "null";
         }
         if (o.getClass().isPrimitive() || String.class.isInstance(o)
@@ -1289,6 +1313,15 @@ public class MCodeUtilities {
             return o.toString();
         }
         return Integer.toHexString(System.identityHashCode(o));
+
+    }
+    /**
+     * 
+     * @param o
+     * @return
+     */
+    public static String getValue(Object o) {
+    	return langUtil.getLangValue(o);
     }
 
     /**
@@ -1443,12 +1476,12 @@ public class MCodeUtilities {
     /**
      * Set to true when visiting overloaded toString method
      */
-    private static Boolean toStringOverloaded;
+    protected static Boolean toStringOverloaded;
 
     /**
      * Comment for <code>toStringOverLoadedStack</code>
      */
-    private static Stack toStringOverLoadedStack = new Stack();
+    protected static Stack toStringOverLoadedStack = new Stack();
 
     /**
      * @return

@@ -191,7 +191,7 @@ public class MCQuestion extends Question implements MCQuestionInterface {
         JTextArea answerArea;
         JScrollPane answerScroller;
         JToggleButton choice;
-        //JToggleButton nullbox;
+        JToggleButton nullbox;
 
         int i;
 

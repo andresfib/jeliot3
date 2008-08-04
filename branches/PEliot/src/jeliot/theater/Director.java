@@ -177,7 +177,7 @@ public class Director {
      */
     public boolean direct() throws Exception {
         errorOccured = false;
-        doHighlight(new Highlight(0, 0, 0, 0), false);
+        doHighlight(new Highlight(0, 0, 0, 0));
         cbox = factory.produceConstantBox();
         theatre.addPassive(cbox);
         manager.setConstantBox(cbox);
@@ -236,31 +236,13 @@ public class Director {
 
     private void stopRunUntilIfInEndOfProgram() {
         if (this.frameStack.size() == 1 && runUntilLine > 0) {
-            if (this.frameStack.get(0) instanceof MethodFrame) {
-                if (((MethodFrame) this.frameStack.get(0)).getMethodName()
-                        .endsWith(".main")) {
-                    runUntilLine = 0;
-                    setRunUntilEnabled(false);
-                    jeliot.runUntilDone();
-                    theatre.flush();
-                }
-                if (!(((MethodFrame) this.frameStack.get(0)).getMethodName()
-                        .startsWith("java.lang") || ((MethodFrame) this.frameStack
-                        .get(0)).getMethodName().startsWith("java.util"))) {
-                    runUntilLine = 0;
-                    setRunUntilEnabled(false);
-                    jeliot.runUntilDone();
-                    theatre.flush();
-                }
-            } else {
-                runUntilLine = 0;
-                setRunUntilEnabled(false);
-                jeliot.runUntilDone();
-                theatre.flush();
-            }
+            runUntilLine = 0;
+            setRunUntilEnabled(false);
+            jeliot.runUntilDone();
+            theatre.flush();
         }
     }
-
+    
     /**
      * 
      * @param b
@@ -337,19 +319,15 @@ public class Director {
         doHighlight(h);
     }
 
-    private void doHighlight(Highlight h) {
-        doHighlight(h, true);
-    }
-
     /**
      * @param h
      */
-    private void doHighlight(Highlight h, boolean stop) {
+    private void doHighlight(Highlight h) {
         //requestHistoryImage();
         this.hPrev = h;
         if (!mCodeInterpreter.starting()) {
 
-            if (stepByStep && stop) {
+            if (stepByStep) {
                 jeliot.directorPaused();
                 controller.checkPoint();
             }
@@ -865,7 +843,7 @@ public class Director {
 
         thisVariable = frame.declareVariable(new Variable("this", thisValue
                 .getType()));
-        thisVariableActor = factory.produceVariableActor(thisVariable, true);
+        thisVariableActor = factory.produceVariableActor(thisVariable);
         thisVariable.setActor(thisVariableActor);
         stage.reserve(thisVariableActor);
         stage.bind();
@@ -1095,10 +1073,10 @@ public class Director {
      */
     public ValueActor finishMethod(Actor returnAct, long expressionCounter) {
 
-        //To stop the animation before the last method is finished if stepping is used.
+        //To stop the animation before a method is finished if stepping is used.
         stopRunUntilIfInEndOfProgram();
         highlightForMessage(null);
-
+        
         Animation dummy = new Animation() {
             public void animate(double p) {
                 try {
@@ -1109,7 +1087,7 @@ public class Director {
         };
         dummy.setDuration(50);
         engine.showAnimation(dummy);
-
+        
         // Get the stage and remove it.
         MethodStage stage = ((MethodFrame) frameStack.pop()).getMethodStage();
         manager.removeMethodStage(stage);
@@ -1179,7 +1157,6 @@ public class Director {
         release();
 
         if (returnAct != null) {
-            ((TheaterMCodeInterpreter) this.mCodeInterpreter).setStopBeforeClearingScratch(true);
             return (ValueActor) ((BubbleActor) returnAct).getActor();
         }
         return null;
@@ -1388,7 +1365,7 @@ public class Director {
         // Create a new variable and its actor.
         Variable v = currentMethodFrame
                 .declareVariable(new Variable(name, type));
-        VariableActor actor = factory.produceVariableActor(v, true);
+        VariableActor actor = factory.produceVariableActor(v);
         v.setActor(actor);
 
         MethodStage stage = currentMethodFrame.getMethodStage();
@@ -2049,10 +2026,6 @@ public class Director {
     private MessageFormat arrayCreationDimensions = new MessageFormat(
             messageBundle.getString("message.array_creation.dimensions"));
 
-
-    private MessageFormat catchBlock= new MessageFormat(
-            messageBundle.getString("message.catch"));
-
     //message.open_scope = Opening new scope for variables.
     //message.close_scope = Closing a scope and erasing the scope variables.
     //message.break_switch = Exiting the switch statement because of break.
@@ -2229,14 +2202,7 @@ public class Director {
         showMessage(messageBundle.getString("message.close_array_initializer"),
                 h);
     }
-    public void tryBlock(Highlight h) {
-        highlightDeclaration(h);
-        showMessage(messageBundle.getString("message.try"), h);
-    }
-    public void caughtExceptions(String message, Highlight h) {
-        highlightDeclaration(h);
-        showMessage(catchBlock.format(new String[] { message }), h);        
-    }
+
     /**
      * @param dims
      * @param h
@@ -2318,11 +2284,6 @@ public class Director {
     public void output(String str) {
         str = MCodeUtilities.replace(str, "\\n", "\n");
         jeliot.output(str);
-    }
-
-    public void input(String str) {
-        str = MCodeUtilities.replace(str, "\\n", "\n");
-        jeliot.input(str);
     }
 
     /**
@@ -2457,8 +2418,8 @@ public class Director {
     public Value animateInputHandling(String type, String prompt, Highlight h) {
 
         Animator animator = null;
-        if (Util.visualizeStringsAsObjects() && (prompt != null)) {
-            prompt = prompt.substring(0, prompt.lastIndexOf("@"));
+        if (Util.visualizeStringsAsObjects() && (prompt != null)){
+        	prompt = prompt.substring(0, prompt.lastIndexOf("@"));
         }
         if (MCodeUtilities.resolveType(type) == MCodeUtilities.DOUBLE) {
             animator = readDouble(prompt);
@@ -2483,7 +2444,7 @@ public class Director {
         if (animator != null) {
             highlightStatement(h);
             animator.animate(this);
-            this.input(animator.getReturnValue().getValue() + "\n");
+            this.output(animator.getReturnValue().getValue() + "\n");
             return animator.getReturnValue();
         }
         //TODO: Here should be an exception

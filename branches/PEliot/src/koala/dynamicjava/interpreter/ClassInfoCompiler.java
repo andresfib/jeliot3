@@ -496,7 +496,7 @@ public class ClassInfoCompiler {
             if (superConstructor == null) {
                 //Jeliot 3
                 //Changed to fix a bug in DJava
-                //ConstructorInfo cons = null;
+                ConstructorInfo cons = null;
                 if (node.isSuper()) {
                     ClassInfo sc = classInfo.getSuperclass();
                     superConstructor = sc.getName();
