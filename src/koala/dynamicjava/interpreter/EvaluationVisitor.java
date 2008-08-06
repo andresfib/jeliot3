@@ -1156,9 +1156,12 @@ public class EvaluationVisitor extends VisitorObject {
                                     + MCodeGenerator.locationToString(node));
                             Expression exp = (Expression) it.next();
 
-                            args[i] = MCodeUtilities
-                                    .stringConversion(exp, this);
-
+                            if (MCodeUtilities.stringConversion(NodeProperties.getType(exp))) { //ask for type implements tree.Literal
+                                args[i] =  String.valueOf(exp.acceptVisitor(this));
+                            } else {
+                                args[i] =  MCodeGenerator.toStringCall(exp, this);
+                            }
+                           
                             //args[i] = ((Expression) it.next()).acceptVisitor(this);
                             MCodeUtilities.write(""
                                     + Code.OUTPUT
@@ -2674,7 +2677,11 @@ public class EvaluationVisitor extends VisitorObject {
         long auxcounter = counter;
         MCodeUtilities.write("" + Code.LEFT + Code.DELIM + auxcounter);
 
-        str1 = MCodeUtilities.stringConversion(exp, this);
+        if (MCodeUtilities.stringConversion(NodeProperties.getType(exp))) { //ask for type implements tree.Literal
+            str1 =  String.valueOf(exp.acceptVisitor(this));
+        } else {
+            str1 =  MCodeGenerator.toStringCall(exp, this);
+        }                
 
         String str2 = "";
         exp = node.getRightExpression();
@@ -2682,7 +2689,11 @@ public class EvaluationVisitor extends VisitorObject {
 
         MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + auxcounter2);
 
-        str2 = MCodeUtilities.stringConversion(node.getRightExpression(), this);
+        if (MCodeUtilities.stringConversion(NodeProperties.getType(node.getRightExpression()))) { //ask for type implements tree.Literal
+            str2 =  String.valueOf(exp.acceptVisitor(this));
+        } else {
+            str2 =  MCodeGenerator.toStringCall(exp, this);
+        }                
 
         Object o = InterpreterUtilities.add(c, str1, str2);
         MCodeUtilities.write("" + Code.AE + Code.DELIM + addcounter
