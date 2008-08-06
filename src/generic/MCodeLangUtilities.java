@@ -15,6 +15,11 @@ public abstract class MCodeLangUtilities {
     }
 	
 	public Boolean isConvertedToString(Object expType) {
-		return true;
+		return null;
+	}
+	
+	public Boolean getBoolValue(Object toBool)
+	{
+		return null;
 	}
 }
