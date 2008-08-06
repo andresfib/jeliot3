@@ -8,7 +8,6 @@ import java.util.Stack;
 import java.util.Vector;
 
 import jeliot.mcode.Code;
-import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodePythonGenerator;
 import jeliot.mcode.MCodeUtilities;
 
@@ -70,6 +69,7 @@ import org.python.parser.ast.UnaryOp;
 import org.python.parser.ast.Unicode;
 import org.python.parser.ast.While;
 import org.python.parser.ast.Yield;
+import org.python.parser.ast.cmpopType;
 import org.python.parser.ast.excepthandlerType;
 import org.python.parser.ast.exprType;
 import org.python.parser.ast.expr_contextType;
@@ -1474,7 +1474,7 @@ System.out.println("In print");
     }
     
     public Object visitBoolOp(BoolOp node) throws Exception {
-        Label end = code.getLabel();
+        Label end = code.getLabel();        
         visit(node.values[0]);
         for (int i = 1; i < node.values.length; i++) {
             code.dup();
@@ -1510,33 +1510,94 @@ System.out.println("In print");
         }
 
         Label end = code.getLabel();
-
-        visit(node.left);
-
-        int n = node.ops.length;
-        for(int i = 0; i < n - 1; i++) {
-            visit(node.comparators[i]);
-            code.dup();
-            code.astore(tmp1);
-            code.invokevirtual(make_cmpop(node.ops[i]));
-            code.dup();
-            code.astore(tmp2);
-            code.invokevirtual(mrefs.nonzero);
-            code.ifeq(end);
-            code.aload(tmp1);
+        int mcodeOpCode = -1;
+        
+        switch(node.ops[0])
+        {
+        case (cmpopType.Gt):
+        	mcodeOpCode = Code.GT;
+        	break;
+        case (cmpopType.GtE):
+        	mcodeOpCode = Code.GQT;
+        	break;
+        case (cmpopType.Eq):
+        	mcodeOpCode = Code.EE;
+        	break;
+        case (cmpopType.Lt):
+        	mcodeOpCode = Code.LE;
+        	break;
+        case (cmpopType.LtE):
+        	mcodeOpCode = Code.LQE;
+        	break;
+        default:
+        		//TODO: added. Raise exception! bool op not supported
+        		System.out.println("Error");
         }
+        
+	       long opcounter = counter++;
+	       long auxcounter = counter;
+	
+	       MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + mcodeOpCode
+	               + Code.DELIM + opcounter + Code.DELIM
+	               + MCodePythonGenerator.locationToString(node));
+	       MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
+	
+	       PyObject lobj = (PyObject)visit(node.left); 
+	       long auxcounter2 = counter;
+	
+	       MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
+	       
+	       int n = node.ops.length;
+	        for(int i = 0; i < n - 1; i++) {
+	            visit(node.comparators[i]);
+	             code.dup();
+	            code.astore(tmp1);
+	            code.invokevirtual(make_cmpop(node.ops[i]));
+	            code.dup();
+	            code.astore(tmp2);
+	            code.invokevirtual(mrefs.nonzero);
+	            code.ifeq(end);
+	            code.aload(tmp1);
+	        }
+	        
+	       PyObject robj = (PyObject)visit(node.comparators[n-1]);
+	       code.invokevirtual(make_cmpop(node.ops[n-1]));
+	       Boolean compareResult = null; 
+	       switch(mcodeOpCode)
+	        {
+	        case (Code.GT):
+	        	compareResult = (lobj.__cmp__(robj) == 1 ? true : false); 	
+	        	break;
+	        case (Code.GQT):
+	        	compareResult = (lobj.__cmp__(robj) > -1 ? true : false); 	
+	        	break;
+	        case (Code.EE):
+	        	compareResult = (lobj.__cmp__(robj) == 0 ? true : false); 	
+	        	break;
+	        case (Code.LE):
+	        	compareResult = (lobj.__cmp__(robj) == -1 ? true : false); 	
+	        	break;
+	        case (Code.LQE):
+	        	compareResult = (lobj.__cmp__(robj) < 1 ? true : false); 	
+	        	break;	
+	        	
+	        }
+	       
+	       MCodeUtilities.write("" + Code.GT + Code.DELIM + opcounter + Code.DELIM
+	               + auxcounter + Code.DELIM + auxcounter2 + Code.DELIM
+	               + compareResult + Code.DELIM
+	               + "boolean" + Code.DELIM
+	               + MCodePythonGenerator.locationToString(node));
 
-        visit(node.comparators[n-1]);
-        code.invokevirtual(make_cmpop(node.ops[n-1]));
-
-        if (n > 1) {
+	    if (n > 1) {
             code.astore(tmp2);
             end.setPosition();
             code.aload(tmp2);
         }
         code.freeLocal(tmp1);
         code.freeLocal(tmp2);
-        return null;
+        
+        return compareResult;
     }
 
     int[] compare_ops = new int[11];
@@ -1618,7 +1679,7 @@ System.out.println("In print");
             code.invokevirtual(make_binop(node.op));
             /*PyInteger one = new PyInteger(3); 
              o = one.__add__(new PyInteger(2)); */
-            o = lobj.__add__(robj);
+            o = lobj.__add__(robj);            
 
             MCodeUtilities.write("" + Code.AE + Code.DELIM + addcounter
                     + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
