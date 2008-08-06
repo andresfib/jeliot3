@@ -8,6 +8,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 import jeliot.mcode.Code;
+import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodePythonGenerator;
 import jeliot.mcode.MCodeUtilities;
 
@@ -1094,28 +1095,53 @@ System.out.println("In print");
         throws Exception
     {
         Label end_of_suite = code.getLabel();
-
+    
         setline(node.test);
-        visit(node.test);
-        if (mrefs.nonzero == 0) {
+    	long condcounter = counter;
+    	
+        if (node.orelse == null)
+        {
+        	// TODO: added. should raise an exeption that the condition must be boolean 
+        	Object condResult = visit(node.test);
+            if (MCodeUtilities.getBoolValue(condResult).booleanValue()) {
+
+                MCodeUtilities.write("" + Code.IFT + Code.DELIM + condcounter
+                        + Code.DELIM + Code.TRUE + Code.DELIM
+                        + MCodePythonGenerator.locationToString(node.body[0]));
+
+                Object exit = suite(node.body);
+
+                if (end_of_if != null && exit == null)
+                    code.goto_(end_of_if);
+
+                end_of_suite.setPosition();
+
+            } else {
+                MCodeUtilities.write("" + Code.IFT + Code.DELIM + condcounter
+                        + Code.DELIM + Code.FALSE);
+            }
+            return null;
+
+        }
+        else
+        {
+        	
+        }
+        return null;
+        
+/*        if (mrefs.nonzero == 0) {
             mrefs.nonzero = code.pool.Methodref("org/python/core/PyObject",
                                                 "__nonzero__", "()Z");
         }
         code.invokevirtual(mrefs.nonzero);
         code.ifeq(end_of_suite);
 
-        Object exit = suite(node.body);
-
-        if (end_of_if != null && exit == null)
-            code.goto_(end_of_if);
-
-        end_of_suite.setPosition();
-
+        
         if (node.orelse != null) {
             return suite(node.orelse) != null ? exit : null;
         } else {
             return null;
-        }
+        }*/
     }
 
     public Object visitIf(If node) throws Exception {
@@ -1500,14 +1526,14 @@ System.out.println("In print");
 
 
     public Object visitCompare(Compare node) throws Exception {
-        int tmp1 = code.getLocal("org/python/core/PyObject");
-        int tmp2 = code.getLocal("org/python/core/PyObject");
+//        int tmp1 = code.getLocal("org/python/core/PyObject");
+//        int tmp2 = code.getLocal("org/python/core/PyObject");
         int op;
 
-        if (mrefs.nonzero == 0) {
+    /*    if (mrefs.nonzero == 0) {
             mrefs.nonzero = code.pool.Methodref("org/python/core/PyObject",
                                                 "__nonzero__", "()Z");
-        }
+        }*/
 
         Label end = code.getLabel();
         int mcodeOpCode = -1;
@@ -1550,18 +1576,18 @@ System.out.println("In print");
 	       int n = node.ops.length;
 	        for(int i = 0; i < n - 1; i++) {
 	            visit(node.comparators[i]);
-	             code.dup();
+	       /*      code.dup();
 	            code.astore(tmp1);
 	            code.invokevirtual(make_cmpop(node.ops[i]));
 	            code.dup();
 	            code.astore(tmp2);
 	            code.invokevirtual(mrefs.nonzero);
 	            code.ifeq(end);
-	            code.aload(tmp1);
+	            code.aload(tmp1);*/
 	        }
 	        
 	       PyObject robj = (PyObject)visit(node.comparators[n-1]);
-	       code.invokevirtual(make_cmpop(node.ops[n-1]));
+	       //code.invokevirtual(make_cmpop(node.ops[n-1]));
 	       Boolean compareResult = null; 
 	       switch(mcodeOpCode)
 	        {
@@ -1589,13 +1615,13 @@ System.out.println("In print");
 	               + "boolean" + Code.DELIM
 	               + MCodePythonGenerator.locationToString(node));
 
-	    if (n > 1) {
+	    /*if (n > 1) {
             code.astore(tmp2);
             end.setPosition();
             code.aload(tmp2);
         }
         code.freeLocal(tmp1);
-        code.freeLocal(tmp2);
+        code.freeLocal(tmp2);*/
         
         return compareResult;
     }
