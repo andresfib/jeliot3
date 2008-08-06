@@ -2433,7 +2433,9 @@ public class JeliotWindow implements PauseListener, MouseListener {
     public boolean isAskingQuestions() {
         return jeliotUserProperties.getBooleanProperty("ask_questions");
     }
-
+    public void setAskingQuestions(boolean value) {
+        jeliotUserProperties.setBooleanProperty("ask_questions", value);
+    }
     public JButton getPlayButton() {
         return playButton;
     }
