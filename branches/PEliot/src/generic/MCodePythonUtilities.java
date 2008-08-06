@@ -43,4 +43,10 @@ public class MCodePythonUtilities extends MCodeLangUtilities {
 				(getValue(expType) != null));
 	}
 
+	public Boolean getBoolValue(Object toBool)
+	{
+		if (toBool instanceof PyInteger)
+			return (((PyInteger)toBool).getValue() != 0);
+		return null;
+	}
 }
