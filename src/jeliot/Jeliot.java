@@ -989,4 +989,8 @@ public class Jeliot {
             DebugUtil.printDebugInfo("garbage collected1");
         }
     }
+    
+	public void setAskingQuestions(boolean value) {
+		gui.setAskingQuestions(value);
+	}
 }
