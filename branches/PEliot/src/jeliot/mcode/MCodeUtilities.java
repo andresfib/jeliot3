@@ -1569,4 +1569,16 @@ System.out.println("MCODE WRITE:" + str);
         }
         return value;
     }
+    
+    public static Boolean getBoolValue(Object toBool)
+    {    	
+    	if (toBool instanceof Integer)
+    	{    		
+    		return (((Integer)toBool).intValue() != 0);  			
+    	}
+    	else if (toBool instanceof Boolean)
+			return ((Boolean)toBool);
+					    	    
+    	return (langUtil.getBoolValue(toBool));    
+    }
 }
