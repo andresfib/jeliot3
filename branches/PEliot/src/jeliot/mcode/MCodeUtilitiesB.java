@@ -1287,23 +1287,7 @@ System.out.println("MCODE WRITE:" + str);
      * @return
      */
     public static String getValue(Object o) {
-        if (o == null) {
-            return "null";
-        }
-        Object value = null;
-        
-    	if (o instanceof PyInteger) {
-            value = ((PyInteger) o).getValue();            
-        } else if (o instanceof PyLong) {
-            value = ((PyObject)o).__str__().toString();            
-        } else if (o instanceof PyFloat) {
-            value = ((PyFloat) o).getValue();
-        } else if (o instanceof PyComplex) {
-            value = ((PyComplex) o).imag;
-        }
-    	if (value != null)
-    		return value.toString();
-    	
+            	
         if (o.getClass().isPrimitive() || String.class.isInstance(o)
                 || Integer.class.isInstance(o) || Double.class.isInstance(o)
                 || Byte.class.isInstance(o) || Long.class.isInstance(o)

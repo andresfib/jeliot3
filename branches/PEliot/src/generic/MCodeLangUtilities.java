@@ -1,13 +1,20 @@
 package generic;
 
+import jeliot.util.Util;
+
+
 public abstract class MCodeLangUtilities {
-	public static String getValue(Object o)
+	public String getValue(Object o)
 	{
-		return o.toString();
+		return null;
 	}
 	
-    public static String getValue(String value, String type)
-    {
-    	return value;
+	public boolean isSetPreparing()
+    {	
+		return true;
     }
+	
+	public Boolean isConvertedToString(Object expType) {
+		return true;
+	}
 }
