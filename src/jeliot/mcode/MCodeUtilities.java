@@ -1,5 +1,7 @@
 package jeliot.mcode;
 
+import generic.MCodeLangUtilities;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,9 +14,7 @@ import java.util.Vector;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.Util;
-import koala.dynamicjava.interpreter.EvaluationVisitor;
-import koala.dynamicjava.interpreter.NodeProperties;
-import koala.dynamicjava.tree.Node;
+
 
 /**
  * This class contains helper methods for the MCode language
@@ -29,24 +29,23 @@ import koala.dynamicjava.tree.Node;
  * @see jeliot.mcode.TheaterMCodeInterpreter
  * @see jeliot.mcode.CallTreeMCodeInterpreter
  */
-public class MCodeUtilities {
+public abstract class MCodeUtilities {
 
-	private static MCodeUtilities langUtil = createLangUtils();
+	private static MCodeLangUtilities langUtil = createLangUtils();
 	
-	public static MCodeUtilities getLangUtils()
+	public static MCodeLangUtilities getLangUtils()
 	{
 		return langUtil;
 	}
 	
-	private static MCodeUtilities createLangUtils()
+	private static MCodeLangUtilities createLangUtils()
 	{
 		try{
 	    	String utilClass = ResourceBundles.getInterpreterInfo().getString("MCodeUtilities.class");
-	        MCodeUtilities result =  (MCodeUtilities)Class.forName(utilClass).newInstance();	               
+	        MCodeLangUtilities result =  (MCodeLangUtilities)Class.forName(utilClass).newInstance();	               
 	        return result;
     	}catch(Exception e)
     	{
-    		System.out.println("Error");
     		return null;
     	}
 	}
@@ -973,22 +972,17 @@ public class MCodeUtilities {
         accessingThread = thread;
     }
 
-    public static boolean isSetPreparing()
-    {
-    	return (EvaluationVisitor.isSetPreparing());
-    }
     /**
      * @param str
      */
-    public static void write(String str) {
+    public static void write(String str) {    	
         if (writer == null || accessingThread != Thread.currentThread()) {
- System.out.println(writer);
             throw new StoppingRequestedError();
         }
         StringTokenizer tokenizer = new StringTokenizer(str, Code.DELIM);
-
         int token = Integer.parseInt(tokenizer.nextToken());
-        if (!langUtil.isSetPreparing() || token == Code.ERROR) {
+        
+        if (!langUtil.isSetPreparing() || token == Code.ERROR) {        	
             str = MCodeUtilities.replace(str, "\n", "\\n");
             str = MCodeUtilities.replace(str, "\r", "");
             if (!redirectOutput || token == Code.ERROR) {
@@ -1296,8 +1290,16 @@ System.out.println("MCODE WRITE:" + str);
         registeredMCodePreProcessors.clear();
     }
 
-    public static String getLangValue(Object o)
-    {
+        /**
+     * 
+     * @param o
+     * @return
+     */
+    public static String getValue(Object o) {
+    	String result = langUtil.getValue(o);
+    	if (result != null)
+    		return result;
+    	
     	if (o == null) {
             return "null";
         }
@@ -1313,15 +1315,6 @@ System.out.println("MCODE WRITE:" + str);
             return o.toString();
         }
         return Integer.toHexString(System.identityHashCode(o));
-
-    }
-    /**
-     * 
-     * @param o
-     * @return
-     */
-    public static String getValue(Object o) {
-    	return langUtil.getLangValue(o);
     }
 
     /**
@@ -1525,12 +1518,8 @@ System.out.println("MCODE WRITE:" + str);
      * @param visitor
      * @return
      */
-    public static String stringConversion(Node exp, EvaluationVisitor visitor) {
-        if (MCodeUtilities.isConvertedToString(exp)) { //ask for type implements tree.Literal
-            return String.valueOf(exp.acceptVisitor(visitor));
-        } else {
-            return MCodeGenerator.toStringCall(exp, visitor);
-        }
+    public static Boolean stringConversion(Object expType) {
+        return isConvertedToString(expType) || langUtil.isConvertedToString(expType);
     }
 
     /**
@@ -1538,9 +1527,8 @@ System.out.println("MCODE WRITE:" + str);
      * @param exp
      * @return
      */
-    public static boolean isConvertedToString(Node exp) {
-
-        Class c = (Class) NodeProperties.getType(exp);
+    public static boolean isConvertedToString(Object obj) {
+        Class c = obj.getClass();
         boolean automaticStringConversion = (c.isPrimitive()
                 || String.class.getName().equals(c.getName())
                 || Integer.class.getName().equals(c.getName())
@@ -1552,8 +1540,7 @@ System.out.println("MCODE WRITE:" + str);
                 || Float.class.getName().equals(c.getName()) || Character.class
                 .getName().equals(c.getName()));
 
-        return automaticStringConversion
-                || (exp instanceof koala.dynamicjava.tree.Literal);
+        return automaticStringConversion;                
     }
 
     /**

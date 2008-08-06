@@ -118,7 +118,7 @@ public class Launcher extends Thread {
         
         // TODO: change
         //MCodeUtilities.initialize();
-        MCodeUtilitiesB.initialize();
+        MCodeUtilities.initialize();
 
     }
     
@@ -162,9 +162,9 @@ public class Launcher extends Thread {
         /*MCodeUtilities.setWriter(writer);
         MCodeUtilities.setReader(inputReader);
         MCodeUtilities.setAccessingThread(this);*/
-        MCodeUtilitiesB.setWriter(writer);
-        MCodeUtilitiesB.setReader(inputReader);
-        MCodeUtilitiesB.setAccessingThread(this);
+        MCodeUtilities.setWriter(writer);
+        MCodeUtilities.setReader(inputReader);
+        MCodeUtilities.setAccessingThread(this);
     }
 
     /**
@@ -200,7 +200,7 @@ public class Launcher extends Thread {
                          * we should not send Code.END statements.
                          */
                         //MCodeUtilities.write("" + Code.END);
-                    	MCodeUtilitiesB.write("" + Code.END);
+                    	MCodeUtilities.write("" + Code.END);
                     }
                     compiling = false;
                 }

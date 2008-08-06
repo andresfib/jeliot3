@@ -9,12 +9,9 @@ import java.util.Vector;
 
 import jeliot.mcode.Code;
 import jeliot.mcode.MCodeGenerator;
-import jeliot.mcode.MCodeGeneratorB;
+import jeliot.mcode.MCodePythonGenerator;
 import jeliot.mcode.MCodeUtilities;
-import jeliot.mcode.MCodeUtilitiesB;
-import jeliot.mcode.MCodeUtilitiesBOld;
-import koala.dynamicjava.interpreter.InterpreterUtilities;
-import koala.dynamicjava.interpreter.NodeProperties;
+
 
 import org.python.core.CompilerFlags;
 import org.python.core.PyComplex;
@@ -22,7 +19,6 @@ import org.python.core.PyFloat;
 import org.python.core.PyInteger;
 import org.python.core.PyLong;
 import org.python.core.PyObject;
-import org.python.core.PyType;
 
 import org.python.parser.ParseException;
 import org.python.parser.SimpleNode;
@@ -329,13 +325,13 @@ public class CodeEvaluator extends Visitor
     	
     	// TODO: added for the variable definitions - had to fake a main method
     	// TODO: added
-    	/*MCodeUtilitiesB.write("58§MyClass§java.lang.Object");
-    	MCodeUtilitiesB.write("61§main§void§9§");
-    	MCodeUtilitiesB.write("60§");
-    	MCodeUtilitiesB.write("59§MyClass");*/
-    	MCodeUtilitiesB.write("29§main§ §0§1,1,1,1");
-    	MCodeUtilitiesB.write("31§");
-    	MCodeUtilitiesB.write("37§1,1,1,1");
+    	/*MCodeUtilities.write("58§MyClass§java.lang.Object");
+    	MCodeUtilities.write("61§main§void§9§");
+    	MCodeUtilities.write("60§");
+    	MCodeUtilities.write("59§MyClass");*/
+    	MCodeUtilities.write("29§main§ §0§1,1,1,1");
+    	MCodeUtilities.write("31§");
+    	MCodeUtilities.write("37§1,1,1,1");
     	
     	
         if (mrefs.setglobal == 0) {
@@ -362,7 +358,7 @@ public class CodeEvaluator extends Visitor
         traverse(suite);
         
         //TODO: added
-        MCodeUtilitiesB.write("38");
+        MCodeUtilities.write("38");
         return null;
     }
 
@@ -534,22 +530,22 @@ public class CodeEvaluator extends Visitor
         long auxcounter = Code.NO_REFERENCE;
         
         
-        MCodeUtilitiesB.write("" + Code.BEGIN + Code.DELIM + Code.A
+        MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.A
                 + Code.DELIM + assigncounter + Code.DELIM
-                + MCodeGeneratorB.locationToString(node));      
+                + MCodePythonGenerator.locationToString(node));      
         
         long auxcounter2 = counter;
 
         Object assignValue = visit(node.value);
-        value = MCodeUtilitiesB.getValue(assignValue);
+        value = MCodeUtilities.getValue(assignValue);
         
-        MCodeUtilitiesB.write("" + Code.TO + Code.DELIM + counter);
+        MCodeUtilities.write("" + Code.TO + Code.DELIM + counter);
                 
         auxcounter = counter;
         if (node.targets.length == 1) {                                	
         	my_scope.addValue((String)set(node.targets[0]), assignValue);
         	
-        	MCodeGeneratorB.generateCodeA(assigncounter, auxcounter2,
+        	MCodePythonGenerator.generateCodeA(assigncounter, auxcounter2,
             		auxcounter, assignValue, node);
         	        	
         	return null;
@@ -573,7 +569,7 @@ public class CodeEvaluator extends Visitor
 System.out.println("In print");
 
 //TODO: move to the launcher
-//MCodeUtilitiesB.setWriter(new PrintWriter(System.out));
+//MCodeUtilities.setWriter(new PrintWriter(System.out));
         // Go over the arguments
         if (node.values != null)
         {
@@ -582,31 +578,36 @@ System.out.println("In print");
         	for (int i = 0; i < node.values.length; i++) {
         		long outputCounter = counter;
         		
-                MCodeUtilitiesB.write("" + Code.BEGIN + Code.DELIM
+                MCodeUtilities.write("" + Code.BEGIN + Code.DELIM
                         + Code.OUTPUT + Code.DELIM + outputCounter
                         + Code.DELIM
-                        + MCodeGeneratorB.locationToString(node));
+                        + MCodePythonGenerator.locationToString(node));
                 
-                args[i] = MCodeUtilitiesB.stringConversion(node.values[i], this);
+            Object result = (node.values[i]).accept(this);    
+            if (MCodeUtilities.stringConversion(result)) { //ask for type implements tree.Literal
+                args[i] =  String.valueOf(result);
+            } else {
+                args[i] =  null; // TODO: added, should be fixed//MCodeGeneratorB.toStringCall(node.values[i], this);
+            }                               
 
         //args[i] = ((Expression) it.next()).acceptVisitor(this);
-        MCodeUtilitiesB.write(""
+        MCodeUtilities.write(""
                 + Code.OUTPUT
                 + Code.DELIM
                 + outputCounter
                 + Code.DELIM
-                + "System.out"
+                + ""
                 + Code.DELIM
                 + node.getClass().getSimpleName()
                 + Code.DELIM
                 //+ args[i].toString() + Code.DELIM
-                + MCodeUtilitiesB.getValue(args[i])
+                + MCodeUtilities.getValue(args[i])
                 + Code.DELIM
                 + args[i].getClass().getSimpleName()
                 + Code.DELIM
                 //To indicate newline or not
                 + "1"
-                + MCodeGeneratorB.locationToString(node));
+                + MCodePythonGenerator.locationToString(node));
         
         		//visit(node.values[i]);
         	}
@@ -1601,16 +1602,16 @@ System.out.println("In print");
     		long addcounter = counter++;
             long auxcounter = counter;
 
-            MCodeUtilitiesB.write("" + Code.BEGIN + Code.DELIM + Code.AE
+            MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AE
                     + Code.DELIM + addcounter + Code.DELIM
-                    + MCodeGeneratorB.locationToString(node));
-            MCodeUtilitiesB.write("" + Code.LEFT + Code.DELIM + counter);
+                    + MCodePythonGenerator.locationToString(node));
+            MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
     		
             PyObject lobj = (PyObject)visit(node.left);
 
             long auxcounter2 = counter;
 
-            MCodeUtilitiesB.write("" + Code.RIGHT + Code.DELIM + counter);
+            MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
             PyObject robj = (PyObject)visit(node.right);          
 
@@ -1619,11 +1620,11 @@ System.out.println("In print");
              o = one.__add__(new PyInteger(2)); */
             o = lobj.__add__(robj);
 
-            MCodeUtilitiesB.write("" + Code.AE + Code.DELIM + addcounter
+            MCodeUtilities.write("" + Code.AE + Code.DELIM + addcounter
                     + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                     + Code.DELIM + o.toString() + Code.DELIM
                     + o.getType().getFullName() + Code.DELIM
-                    + MCodeGeneratorB.locationToString(node));
+                    + MCodePythonGenerator.locationToString(node));
     		
     	}
     	else if (node.op == operatorType.Sub)
@@ -1631,48 +1632,48 @@ System.out.println("In print");
             long substractcounter = counter++;
             long auxcounter = counter;
 
-            MCodeUtilitiesB.write("" + Code.BEGIN + Code.DELIM + Code.SE
+            MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.SE
                     + Code.DELIM + substractcounter + Code.DELIM
-                    + MCodeGeneratorB.locationToString(node));
-            MCodeUtilitiesB.write("" + Code.LEFT + Code.DELIM + counter);
+                    + MCodePythonGenerator.locationToString(node));
+            MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
             PyObject lobj = (PyObject)visit(node.left);
             long auxcounter2 = counter;
 
-            MCodeUtilitiesB.write("" + Code.RIGHT + Code.DELIM + counter);
+            MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
             PyObject robj = (PyObject)visit(node.right);
             o = lobj.__sub__(robj);            
 
-            MCodeUtilitiesB.write("" + Code.SE + Code.DELIM + substractcounter
+            MCodeUtilities.write("" + Code.SE + Code.DELIM + substractcounter
                     + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
                     + Code.DELIM + o.toString() + Code.DELIM
                     + o.getType().getFullName() + Code.DELIM
-                    + MCodeGeneratorB.locationToString(node));
+                    + MCodePythonGenerator.locationToString(node));
     	}
     	else if (node.op == operatorType.Mult)
     	{
 	        long multiplycounter = counter++;
 	        long auxcounter = counter;
 
-	        MCodeUtilitiesB.write("" + Code.BEGIN + Code.DELIM + Code.ME
+	        MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.ME
 	                + Code.DELIM + multiplycounter + Code.DELIM
-	                + MCodeGeneratorB.locationToString(node));
-	        MCodeUtilitiesB.write("" + Code.LEFT + Code.DELIM + counter);
+	                + MCodePythonGenerator.locationToString(node));
+	        MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
 
 	        PyObject lobj = (PyObject)visit(node.left);
 	        long auxcounter2 = counter;
 
-	        MCodeUtilitiesB.write("" + Code.RIGHT + Code.DELIM + counter);
+	        MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
 	        PyObject robj = (PyObject)visit(node.right);
 	        o = lobj.__mul__(robj);
 
-	        MCodeUtilitiesB.write("" + Code.ME + Code.DELIM + multiplycounter
+	        MCodeUtilities.write("" + Code.ME + Code.DELIM + multiplycounter
 	                + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
 	                + Code.DELIM + o.toString() + Code.DELIM
                     + o.getType().getFullName() + Code.DELIM
-                    + MCodeGeneratorB.locationToString(node));	      
+                    + MCodePythonGenerator.locationToString(node));	      
     	}
     	return o;
     	
@@ -2445,10 +2446,10 @@ System.out.println("In print");
         }
     	
     	if (value != null)
-    		MCodeUtilitiesB.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
-                + MCodeUtilitiesB.getValue(value) + Code.DELIM                
+    		MCodeUtilities.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
+                + MCodeUtilities.getValue(value) + Code.DELIM                
                 + value.getClass().getName() + Code.DELIM   //TODO: should wrap the node.getType
-                + MCodeGeneratorB.locationToString(node));
+                + MCodePythonGenerator.locationToString(node));
     	
     	return result;
       /*  if (node.n instanceof PyInteger) {
@@ -2552,11 +2553,11 @@ System.out.println("In print");
             }
             
             // TODO: added
-            MCodeUtilitiesB.write("" + Code.QN + Code.DELIM + (counter++)
+            MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                     + Code.DELIM + name
                     //+ node.getRepresentation()
                     + Code.DELIM + val_tbl.get(name) + Code.DELIM + "int" // c.getName()
-                    + Code.DELIM + MCodeGeneratorB.locationToString(node));
+                    + Code.DELIM + MCodePythonGenerator.locationToString(node));
             
             code.ldc(name);
             if (mrefs.getlocal1 == 0) {
@@ -2575,19 +2576,19 @@ System.out.println("In print");
             if (val_tbl.get(name) == null)
             {
             	// First time decleration of the variable
-            	MCodeUtilitiesB.write("" + Code.VD + Code.DELIM + name
+            	MCodeUtilities.write("" + Code.VD + Code.DELIM + name
                         + Code.DELIM + Code.NO_REFERENCE + Code.DELIM + Code.UNKNOWN + Code.DELIM
                         + "int" + Code.DELIM + Code.NOT_FINAL + Code.DELIM
-                        + MCodeGeneratorB.locationToString(node));
+                        + MCodePythonGenerator.locationToString(node));
             	
             			my_scope.addValue(name, Code.UNKNOWN);
             }
             // TODO: added
-            MCodeUtilitiesB.write("" + Code.QN + Code.DELIM + (counter++)
+            MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                     + Code.DELIM + name
                     //+ node.getRepresentation()
                     + Code.DELIM + val_tbl.get(name) + Code.DELIM + "int" // c.getName()
-                    + Code.DELIM + MCodeGeneratorB.locationToString(node));
+                    + Code.DELIM + MCodePythonGenerator.locationToString(node));
             
             
             if (syminf != null && (syminf.flags&ScopeInfo.GLOBAL) != 0) {
@@ -2709,10 +2710,10 @@ System.out.println("In print");
         String s = node.s;
         if (s != null)
         {
-        	MCodeUtilitiesB.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
-                    + MCodeUtilitiesB.getValue(node.s) + Code.DELIM
+        	MCodeUtilities.write(Code.L + Code.DELIM + (counter++) + Code.DELIM
+                    + MCodeUtilities.getValue(node.s) + Code.DELIM
                     + node.s.getClass().getName() + Code.DELIM   //TODO: should wrap the node.getType
-                    + MCodeGeneratorB.locationToString(node));
+                    + MCodePythonGenerator.locationToString(node));
         	
         	return s.toString();
         }

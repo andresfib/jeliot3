@@ -16,8 +16,8 @@ import org.python.parser.SimpleNode;
  * 
  * @author nmyller
  */
-public class MCodeGeneratorB extends MCodeGenerator {
-	private MCodeGeneratorB()
+public class MCodePythonGenerator extends MCodeGenerator {
+	private MCodePythonGenerator()
 	{
 		
 	}
@@ -37,20 +37,20 @@ public class MCodeGeneratorB extends MCodeGenerator {
     
     public static void generateCodeA(long assigncounter, long from, long to,
             Object result, SimpleNode node) {
-        generateCodeA(assigncounter, from, to, MCodeUtilitiesB.getValue(result),
-                ((PyObject)result).getType().getFullName(), MCodeGeneratorB
+        generateCodeA(assigncounter, from, to, MCodeUtilities.getValue(result),
+                ((PyObject)result).getType().getFullName(), MCodePythonGenerator
                         .locationToString(node));
     }
 
-    public static void generateCodeA(long assigncounter, long from, long to,
+/*    public static void generateCodeA(long assigncounter, long from, long to,
             String result, String className, String location) {
-        MCodeUtilitiesB.write("" + Code.A + Code.DELIM + assigncounter
+        MCodeUtilities.write("" + Code.A + Code.DELIM + assigncounter
                 + Code.DELIM + from + Code.DELIM + to + Code.DELIM + result
                 + Code.DELIM + className + Code.DELIM + location);
     }
 
   
-/*
+
     /**
      * @param visitor
      * @param robj
