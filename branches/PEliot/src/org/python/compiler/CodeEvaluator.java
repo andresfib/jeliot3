@@ -11,6 +11,8 @@ import jeliot.mcode.Code;
 import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodePythonGenerator;
 import jeliot.mcode.MCodeUtilities;
+import koala.dynamicjava.interpreter.throwable.BreakException;
+import koala.dynamicjava.interpreter.throwable.ContinueException;
 
 
 import org.python.core.CompilerFlags;
@@ -567,10 +569,7 @@ public class CodeEvaluator extends Visitor
         setline(node);
         int tmp = -1;
         int printcomma, printlnv, println;
-System.out.println("In print");
 
-//TODO: move to the launcher
-//MCodeUtilities.setWriter(new PrintWriter(System.out));
         // Go over the arguments
         if (node.values != null)
         {
@@ -1098,11 +1097,11 @@ System.out.println("In print");
     
         setline(node.test);
     	long condcounter = counter;
+    	Object condResult = visit(node.test);
     	
         if (node.orelse == null)
-        {
-        	// TODO: added. should raise an exeption that the condition must be boolean 
-        	Object condResult = visit(node.test);
+        {        
+        	// TODO: added. should raise an exeption that the condition must be boolean         	
             if (MCodeUtilities.getBoolValue(condResult).booleanValue()) {
 
                 MCodeUtilities.write("" + Code.IFT + Code.DELIM + condcounter
@@ -1124,24 +1123,27 @@ System.out.println("In print");
 
         }
         else
-        {
-        	
+        {        	
+        	if (MCodeUtilities.getBoolValue(condResult).booleanValue()) {
+                MCodeUtilities.write("" + Code.IFTE + Code.DELIM + condcounter
+                        + Code.DELIM + Code.TRUE + Code.DELIM
+                        + MCodePythonGenerator.locationToString(node.body[0]));
+
+                Object exit = suite(node.body);
+
+                if (end_of_if != null && exit == null)
+                    code.goto_(end_of_if);
+
+                end_of_suite.setPosition();
+            } else {
+                MCodeUtilities.write("" + Code.IFTE + Code.DELIM + condcounter
+                        + Code.DELIM + Code.FALSE + Code.DELIM
+                        + MCodePythonGenerator.locationToString(node.orelse[0]));
+
+                return suite(node.orelse);
+            }
         }
         return null;
-        
-/*        if (mrefs.nonzero == 0) {
-            mrefs.nonzero = code.pool.Methodref("org/python/core/PyObject",
-                                                "__nonzero__", "()Z");
-        }
-        code.invokevirtual(mrefs.nonzero);
-        code.ifeq(end_of_suite);
-
-        
-        if (node.orelse != null) {
-            return suite(node.orelse) != null ? exit : null;
-        } else {
-            return null;
-        }*/
     }
 
     public Object visitIf(If node) throws Exception {
@@ -1180,20 +1182,53 @@ System.out.println("In print");
         code.goto_(continue_loop);
         start_loop.setPosition();
 
-        //Do suite
-        suite(node.body);
-
-        continue_loop.setPosition();
-        setline(node);
-
-        //Do test
-        visit(node.test);
-        if (mrefs.nonzero == 0) {
-            mrefs.nonzero = code.pool.Methodref("org/python/core/PyObject",
-                                                "__nonzero__", "()Z");
-        }
-        code.invokevirtual(mrefs.nonzero);
-        code.ifne(start_loop);
+        
+        
+        long condcounter = counter; //Reference number for the condition
+        // expression
+        long round = 0; // Number of iterations in the loop
+        boolean breakc = false; // Exiting while loop because of break
+        try {        	
+        	Object condResult = visit(node.test);
+        	
+        	// TODO: added. should raise an exeption that the condition must be boolean         	
+            while (MCodeUtilities.getBoolValue(condResult).booleanValue()) 
+            {            
+                try {
+                	continue_loop.setPosition();
+                    setline(node);
+                    
+                    MCodeUtilities.write("" + Code.WHI + Code.DELIM
+                            + condcounter + Code.DELIM + Code.TRUE + Code.DELIM
+                            + round + Code.DELIM
+                            + MCodePythonGenerator.locationToString(node.body[0]));
+                    suite(node.body);
+                    condcounter = counter;
+                    round++;
+            		condResult = visit(node.test);
+                } catch (ContinueException e) {
+                    MCodeUtilities.write("" + Code.CONT + Code.DELIM + Code.WHI
+                            + Code.DELIM
+                            + MCodePythonGenerator.locationToString(node.body[0]));
+                    condcounter = counter;
+                    // 'continue' statement management
+//                    if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
+//                        throw e;
+                    }
+                }            
+        } catch (BreakException e) {
+            // 'break' statement management
+            MCodeUtilities.write("" + Code.BR + Code.DELIM + Code.WHI
+                    + Code.DELIM
+                    + MCodePythonGenerator.locationToString(node.body[0]));
+            breakc = true;
+         /*   if (e.isLabeled() && !node.hasLabel(e.getLabel())) {
+                throw e;*/
+            }
+        if (!breakc)
+            MCodeUtilities.write("" + Code.WHI + Code.DELIM + condcounter
+                    + Code.DELIM + Code.FALSE + Code.DELIM + round + Code.DELIM
+                    + MCodePythonGenerator.locationToString(node.body[0]));
 
         finishLoop(savebcf);
 
@@ -1203,8 +1238,18 @@ System.out.println("In print");
         }
         break_loop.setPosition();
 
-        // Probably need to detect "guaranteed exits"
         return null;
+
+        /*if (mrefs.nonzero == 0) {
+            mrefs.nonzero = code.pool.Methodref("org/python/core/PyObject",
+                                                "__nonzero__", "()Z");
+        }
+        code.invokevirtual(mrefs.nonzero);
+        code.ifne(start_loop);
+
+        
+        // Probably need to detect "guaranteed exits"
+        return null;*/
     }
 
     public int iter=0;
