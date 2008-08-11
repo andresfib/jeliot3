@@ -187,6 +187,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
      */
     private Vector animWidgets = new Vector();
 
+    /*
+     * Helping to disable the press once components.
+     */
+    private Vector onceWidgets = new Vector();
     /**
      * The user directory.
      */
@@ -1171,7 +1175,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
             }
         });
         menu.add(langmenuItem);
-
+        this.onceWidgets.add(langmenuItem);
         
         
         return menu;
@@ -1834,13 +1838,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
             // TODO: added !bLook..
             if (!bLookForMain || methodCall != null) {
 
-                //Reader r = new BufferedReader(new
-                // StringReader(programCode));
-                //jeliot.createLauncher(r);
-                //Reader s = new BufferedReader(new
-                // StringReader(methodCall));
-
-                changeTheatrePane(tabbedPane);
+            	// TODO: added. Because of MCodeUtilities language cannot be changed after compile was pressed once
+            	enableWidgets(onceWidgets.elements(), false);
+            
+            	changeTheatrePane(tabbedPane);
                 tabbedPane.setSelectedIndex(0);
                 jeliot.setSourceCode(programCode, methodCall);
                 panelController.slide(true, new Runnable() {
@@ -1848,8 +1849,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     public void run() {
                         SwingUtilities.invokeLater(new Runnable() {
 
-                            public void run() {
-
+                            public void run() {                            	                            	
                                 enterAnimate(line);
                                 //Buttons are enables just after the animation mode is not before
                                 enableWidgets(animWidgets.elements(), true);
