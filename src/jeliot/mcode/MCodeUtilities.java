@@ -41,7 +41,7 @@ public abstract class MCodeUtilities {
 	private static MCodeLangUtilities createLangUtils()
 	{
 		try{
-	    	String utilClass = ResourceBundles.getInterpreterInfo().getString("MCodeUtilities.class");
+	    	String utilClass = ResourceBundles.getLangInterpreterInfo().getStringProperty("MCodeUtilities.class");
 	        MCodeLangUtilities result =  (MCodeLangUtilities)Class.forName(utilClass).newInstance();	               
 	        return result;
     	}catch(Exception e)
@@ -1519,7 +1519,7 @@ System.out.println("MCODE WRITE:" + str);
      * @return
      */
     public static Boolean stringConversion(Object expType) {
-        return isConvertedToString(expType) || langUtil.isConvertedToString(expType);
+        return expType == null || isConvertedToString(expType) || langUtil.isConvertedToString(expType);
     }
 
     /**

@@ -306,7 +306,7 @@ public class Jeliot {
      */
     public void setSourceCode(String srcCode, String methodCall) {
     	// TODO: added
-    	boolean bUseIOImport = Boolean.getBoolean(langBundle.getString("jeliot.window.useIOImport"));
+    	boolean bUseIOImport = Boolean.parseBoolean(ResourceBundles.getLangInterpreterInfo().getStringProperty("jeliot.window.useIOImport"));
         if (!bUseIOImport || hasIOImport(srcCode)) {
             this.sourceCode = srcCode;
         } else {
@@ -323,7 +323,7 @@ public class Jeliot {
      * This method handles the compilation process and
      * it should not be called directly!
      */
-    public void compile() {
+    public void compile() throws Exception{
 
         if (!compiled) {
 

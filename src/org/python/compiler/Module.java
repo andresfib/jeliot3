@@ -680,7 +680,7 @@ public class Module implements ClassConstants, CompilationContext
                                boolean setFile,
                                org.python.core.CompilerFlags cflags)
         throws Exception
-    {
+    {    
         Module module = new Module(name, filename, linenumbers);
         module.setFile = setFile;
         module.futures.preprocessFutures(node, cflags);
@@ -694,6 +694,6 @@ public class Module implements ClassConstants, CompilationContext
                                       module.getScopeInfo(node),
                                       cflags);
         module.mainCode = main;
-        module.write(ostream);
+        module.write(ostream);    
     }
 }

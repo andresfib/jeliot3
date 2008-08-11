@@ -20,6 +20,7 @@ import koala.dynamicjava.util.LibraryFinder;
  * @version 1.0, 02/23/97
  */
 
+// TODO: added, now extends the generic jeliot Interpreter so reflection could be used
 public class PythonInterpreter implements Interpreter{
     PyModule module;
     protected PySystemState systemState;
