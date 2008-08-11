@@ -150,9 +150,6 @@ public class Launcher extends Thread {
         reader = new BufferedReader(pipedReader);
         inputReader = new BufferedReader(getInput);
 
-        /*MCodeUtilities.setWriter(writer);
-        MCodeUtilities.setReader(inputReader);
-        MCodeUtilities.setAccessingThread(this);*/
         MCodeUtilities.setWriter(writer);
         MCodeUtilities.setReader(inputReader);
         MCodeUtilities.setAccessingThread(this);
@@ -182,8 +179,12 @@ public class Launcher extends Thread {
                 if (compiling) {
                     compile();
 
-       //             o = interpreter.interpret(new BufferedReader(new StringReader(methodCall)),
-       //                     "buffer");
+                    // TODO: added. Only need to interpret when a method exists, otherwise intrpret at the compile
+                    // phase
+                    o = interpreter.interpret(new ByteArrayInputStream(methodCall.getBytes()),
+                    "buffer");                    
+                    /*o = interpreter.interpret(new BufferedReader(new StringReader(methodCall)),
+                            "buffer");*/
 
                     if (!(o instanceof StoppingRequestedError)) {
                         /*
