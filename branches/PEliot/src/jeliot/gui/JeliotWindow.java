@@ -103,12 +103,20 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
     // TODO: added 
     static private ResourceBundle interpreterProperties = ResourceBundles.getInterpreterInfo();
+    
+    static private UserProperties langInterpreterProperties = ResourceBundles.getLangInterpreterInfo();
     /**
      * User properties that were saved from previous run.
      */
     private UserProperties jeliotUserProperties = ResourceBundles
             .getJeliotUserProperties();
     {
+    	// TODO: added. For interpreter language support
+    	/* If a method call should be asked from the user */
+        if (!jeliotUserProperties.containsKey("interpreter_lang")) {
+            jeliotUserProperties.setStringProperty("interpreter_lang", ResourceBundles.getInterpreterInfo().getString("interpreter.defaultLanguage"));
+        }
+        
         /* If a method call should be asked from the user */
         if (!jeliotUserProperties.containsKey("ask_for_method")) {
             jeliotUserProperties.setBooleanProperty("ask_for_method", false);
@@ -1136,6 +1144,36 @@ public class JeliotWindow implements PauseListener, MouseListener {
         });
         menu.add(menuItem);
 
+      // TODO: added.   
+      //Select language for interpreting
+        final String langSelectString = messageBundle
+        .getString("menu.options.lang_select");
+        JMenuItem langmenuItem = new JMenuItem(langSelectString);
+        langmenuItem.setMnemonic(KeyEvent.VK_V);
+        langmenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
+                ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        langmenuItem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                String choosenLang = null;
+                try {
+                	// get the languages options from the properties file
+                	String[] langList = interpreterProperties.getString("interpreter.languages").split(";");
+                	choosenLang = (String)JOptionPane.showInputDialog(frame, langSelectString, langSelectString, JOptionPane.PLAIN_MESSAGE, null, langList, langList[0]);
+                	
+                	// TODO: patch...
+                	jeliotUserProperties.setStringProperty("interpreter_lang", choosenLang);
+                	langInterpreterProperties = ResourceBundles.refreshLangInterpreter();
+                } catch (Exception e1) {
+                    DebugUtil.handleThrowable(e1);                    
+                }                
+                codeNest.getLeftComponent().requestFocusInWindow();
+            }
+        });
+        menu.add(langmenuItem);
+
+        
+        
         return menu;
     }
 
@@ -1757,7 +1795,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
             //System.out.println(line);
 
             // TODO: added parameter - lookForMain
-            boolean bLookForMain = Boolean.getBoolean(interpreterProperties.getString("jeliot.window.lookForMain"));
+            boolean bLookForMain = Boolean.parseBoolean(langInterpreterProperties.getStringProperty("jeliot.window.lookForMain"));
             
             if (methodCall == null) {
                 methodCall = SourceCodeUtilities
@@ -2142,6 +2180,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
+             try{
                 jeliot.stopThreads();
                 try {
                     Thread.sleep(100);
@@ -2200,8 +2239,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
                         messageBundle.getString("menu.animation.rewind"),
                         messageBundle.getString("menu.animation.pause") };
                 setEnabledMenuItems(false, s3);
+            }catch (Exception e) {
+                e.printStackTrace(System.out);
             }
-        });
+            }
+        });        
     }
 
     /**

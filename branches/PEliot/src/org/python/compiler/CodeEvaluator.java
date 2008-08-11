@@ -8,20 +8,17 @@ import java.util.Stack;
 import java.util.Vector;
 
 import jeliot.mcode.Code;
-import jeliot.mcode.MCodeGenerator;
 import jeliot.mcode.MCodePythonGenerator;
 import jeliot.mcode.MCodeUtilities;
+import jeliot.util.DebugUtil;
 import koala.dynamicjava.interpreter.throwable.BreakException;
 import koala.dynamicjava.interpreter.throwable.ContinueException;
-
-
 import org.python.core.CompilerFlags;
 import org.python.core.PyComplex;
 import org.python.core.PyFloat;
 import org.python.core.PyInteger;
 import org.python.core.PyLong;
 import org.python.core.PyObject;
-
 import org.python.parser.ParseException;
 import org.python.parser.SimpleNode;
 import org.python.parser.Visitor;
@@ -89,8 +86,7 @@ public class CodeEvaluator extends Visitor
 	/**
      * Identifies each expression
      */
-    private static long counter = 2;  // TODO: Should be at the generic father class
-    								  // change the init value = 1
+    private static long counter = 1;  
 	
     public static final Object Exit=new Integer(1);
     public static final Object NoExit=null;
@@ -325,7 +321,7 @@ public class CodeEvaluator extends Visitor
     public Object visitModule(org.python.parser.ast.Module suite)
         throws Exception
     {
-    	
+    	try{
     	// TODO: added for the variable definitions - had to fake a main method
     	// TODO: added
     	/*MCodeUtilities.write("58§MyClass§java.lang.Object");
@@ -360,11 +356,29 @@ public class CodeEvaluator extends Visitor
         }
         traverse(suite);
         
-        //TODO: added
-        MCodeUtilities.write("38");
+    	}catch (ParseException e)
+    	{
+            DebugUtil.handleThrowable(e);            
+
+            String code = "" + Code.ERROR + Code.DELIM + e.getMessage()
+                    + Code.DELIM;            
+
+                code += "" + e.currentToken.beginLine
+                        + Code.LOC_DELIM
+                        + e.currentToken.beginColumn
+                        + Code.LOC_DELIM + e.currentToken.beginLine
+                        + Code.LOC_DELIM
+                        + e.currentToken.beginColumn;
+            
+            MCodeUtilities.write(code);
+
+            //throw new InterpreterException(e);
+            return e;
+        //return null;
+    }    	
         return null;
     }
-
+	
     public Object visitExpression(Expression node) throws Exception {
         if (my_scope.generator && node.body != null) {
             module.error("'return' with argument inside generator",
@@ -606,7 +620,7 @@ public class CodeEvaluator extends Visitor
                 + args[i].getClass().getSimpleName()
                 + Code.DELIM
                 //To indicate newline or not
-                + "1"
+                + "1" + Code.DELIM
                 + MCodePythonGenerator.locationToString(node));
         
         		//visit(node.values[i]);
@@ -1171,7 +1185,7 @@ public class CodeEvaluator extends Visitor
         bcfLevel = savebcf;
     }
 
-
+// TODO: added
     public Object visitWhile(While node) throws Exception {
         int savebcf = beginLoop();
         Label continue_loop = (Label)continueLabels.peek();
@@ -1181,9 +1195,7 @@ public class CodeEvaluator extends Visitor
 
         code.goto_(continue_loop);
         start_loop.setPosition();
-
-        
-        
+                
         long condcounter = counter; //Reference number for the condition
         // expression
         long round = 0; // Number of iterations in the loop
@@ -1544,32 +1556,81 @@ public class CodeEvaluator extends Visitor
         return null;
     }
     
+    // TODO: added. Currently dont deal with evaluation conditions (if left OR = true, no need to continue)
     public Object visitBoolOp(BoolOp node) throws Exception {
-        Label end = code.getLabel();        
-        visit(node.values[0]);
-        for (int i = 1; i < node.values.length; i++) {
-            code.dup();
+        long bitAndcounter = counter++;
+        long auxcounter = counter;
+        int expression;
+        boolean bbreak = false;
+        Label end = code.getLabel();
+        
+        Object lobj = visit(node.values[0]);
+        Object robj = null;
+        PyObject o = null;
+        
+        switch (node.op) {
+        case BoolOp.Or :
+            expression = Code.OR;
+        //    code.ifne(end);
+            break;
+        case BoolOp.And :
+            expression = Code.AND;
+          //  code.ifeq(end);
+            break;
+        default:        
+        	expression = -1;
+        	throw new ParseException("Bool op not supported", node);
+        }
+        
+        if (lobj instanceof Boolean)
+        	lobj = new PyInteger(((Boolean)lobj).booleanValue() ? 1 : 0);
+        
+        for (int i = 1; i < node.values.length && !bbreak; i++) {
+            /*code.dup();
             if (mrefs.nonzero == 0) {
                 mrefs.nonzero = code.pool.Methodref("org/python/core/PyObject",
                                                     "__nonzero__", "()Z");
             }
-            code.invokevirtual(mrefs.nonzero);
-            switch (node.op) {
-            case BoolOp.Or : 
-                code.ifne(end);
-                break;
-            case BoolOp.And : 
-                code.ifeq(end);
-                break;
-            }
-            code.pop();
-            visit(node.values[i]);
-        }
+            code.invokevirtual(mrefs.nonzero);*/
+            
+	        
+	        //code.pop();
+
+        MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + expression
+                + Code.DELIM + bitAndcounter + Code.DELIM
+                + MCodePythonGenerator.locationToString(node));
+        MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
+
+        
+        long auxcounter2 = counter;
+
+        MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
+
+        robj = visit(node.values[i]);
+        if (robj instanceof Boolean)
+        	robj = new PyInteger(((Boolean)robj).booleanValue() ? 1 : 0);
+        
+        if (expression == Code.AND)
+        	o = ((PyObject)lobj).__and__((PyObject)robj);
+        else if (expression == Code.OR)
+        	o = ((PyObject)lobj).__or__((PyObject)robj);
+
+        MCodeUtilities.write("" + expression + Code.DELIM + bitAndcounter
+                + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
+                + Code.DELIM + MCodeUtilities.getValue(o) + Code.DELIM
+                + o.getType().getFullName() + Code.DELIM
+                + MCodePythonGenerator.locationToString(node));
+        
         end.setPosition();
-        return null;
+        lobj = o;        
+        /*if (true && (expression == Code.OR))
+        	bbreak = true;*/
+        }
+        
+        return o;   
     }
 
-
+// TODO: ADDED.
     public Object visitCompare(Compare node) throws Exception {
 //        int tmp1 = code.getLocal("org/python/core/PyObject");
 //        int tmp2 = code.getLocal("org/python/core/PyObject");
@@ -1601,8 +1662,7 @@ public class CodeEvaluator extends Visitor
         	mcodeOpCode = Code.LQE;
         	break;
         default:
-        		//TODO: added. Raise exception! bool op not supported
-        		System.out.println("Error");
+        	throw new ParseException("Bool op not supported", node);
         }
         
 	       long opcounter = counter++;
@@ -1724,42 +1784,82 @@ public class CodeEvaluator extends Visitor
         return bin_ops[op];
     }
 
+    // TODO: added
     public Object visitBinOp(BinOp node) throws Exception {
     	PyObject o = null;
     	
-    	if (node.op == operatorType.Add)
-    	{
-    		// TODO: added Handle the case of + of strings
-    		//if (node.left.)
-    		long addcounter = counter++;
-            long auxcounter = counter;
+    	int mcodeOpCode = -1;
+        
+        switch(node.op)
+        {
+        case (operatorType.Add):
+        	mcodeOpCode = Code.AE;
+        	break;
+        case (operatorType.Sub):
+        	mcodeOpCode = Code.SE;
+        	break;
+        case(operatorType.Mult):
+        	mcodeOpCode = Code.ME;
+        	break;
+        case(operatorType.Mod):
+        	mcodeOpCode = Code.RE;
+        	break;
+        case(operatorType.Div):
+        	mcodeOpCode = Code.DE;
+        	break;        
+        default:
+        	throw new ParseException("Bool op not supported", node);        	
+        }
+        	
+	
+		// TODO: added Handle the case of + of strings
+		//if (node.left.)
+		long addcounter = counter++;
+        long auxcounter = counter;
 
-            MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + Code.AE
-                    + Code.DELIM + addcounter + Code.DELIM
-                    + MCodePythonGenerator.locationToString(node));
-            MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
-    		
-            PyObject lobj = (PyObject)visit(node.left);
+        MCodeUtilities.write("" + Code.BEGIN + Code.DELIM + mcodeOpCode
+                + Code.DELIM + addcounter + Code.DELIM
+                + MCodePythonGenerator.locationToString(node));
+        MCodeUtilities.write("" + Code.LEFT + Code.DELIM + counter);
+		
+        PyObject lobj = (PyObject)visit(node.left);
 
-            long auxcounter2 = counter;
+        long auxcounter2 = counter;
 
-            MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
+        MCodeUtilities.write("" + Code.RIGHT + Code.DELIM + counter);
 
-            PyObject robj = (PyObject)visit(node.right);          
+        PyObject robj = (PyObject)visit(node.right);          
 
-            code.invokevirtual(make_binop(node.op));
-            /*PyInteger one = new PyInteger(3); 
-             o = one.__add__(new PyInteger(2)); */
-            o = lobj.__add__(robj);            
+        code.invokevirtual(make_binop(node.op));
+        
+        switch(mcodeOpCode)
+        {
+        case(Code.AE):
+        	o = lobj.__add__(robj);
+        	break;
+        case(Code.SE):
+            o = lobj.__sub__(robj);
+        	break;
+        case(Code.ME):
+        	o = lobj.__mul__(robj);
+        	break;
+        case(Code.RE):
+        	o = lobj.__mod__(robj);
+        	break;
+        case(Code.DE):
+        	o=lobj.__div__(robj);
+        	break;
+        }
 
-            MCodeUtilities.write("" + Code.AE + Code.DELIM + addcounter
-                    + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
-                    + Code.DELIM + o.toString() + Code.DELIM
-                    + o.getType().getFullName() + Code.DELIM
-                    + MCodePythonGenerator.locationToString(node));
-    		
-    	}
-    	else if (node.op == operatorType.Sub)
+        MCodeUtilities.write("" + mcodeOpCode + Code.DELIM + addcounter
+                + Code.DELIM + auxcounter + Code.DELIM + auxcounter2
+                + Code.DELIM + o.toString() + Code.DELIM
+                + o.getType().getFullName() + Code.DELIM
+                + MCodePythonGenerator.locationToString(node));
+		
+    	
+	return o;
+    	/*else if (node.op == operatorType.Sub)
     	{
             long substractcounter = counter++;
             long auxcounter = counter;
@@ -1806,8 +1906,8 @@ public class CodeEvaluator extends Visitor
 	                + Code.DELIM + o.toString() + Code.DELIM
                     + o.getType().getFullName() + Code.DELIM
                     + MCodePythonGenerator.locationToString(node));	      
-    	}
-    	return o;
+    	}*/
+
     	
     	/*
     	 * 
@@ -2584,16 +2684,6 @@ public class CodeEvaluator extends Visitor
                 + MCodePythonGenerator.locationToString(node));
     	
     	return result;
-      /*  if (node.n instanceof PyInteger) {
-            module.PyInteger(((PyInteger) node.n).getValue()).get(code);
-        } else if (node.n instanceof PyLong) {
-            module.PyLong(((PyObject)node.n).__str__().toString()).get(code);
-        } else if (node.n instanceof PyFloat) {
-            module.PyFloat(((PyFloat) node.n).getValue()).get(code);
-        } else if (node.n instanceof PyComplex) {
-            module.PyComplex(((PyComplex) node.n).imag).get(code);
-        }*/
-    //    return null;
     }
 
     private String getName(String name) {
@@ -2624,6 +2714,7 @@ public class CodeEvaluator extends Visitor
         code.invokevirtual(mrefs.getglobal);
     }
 
+    // TODO: added
     public Object visitName(Name node) throws Exception {
         String name;
         if (fast_locals)
@@ -2687,7 +2778,6 @@ public class CodeEvaluator extends Visitor
             // TODO: added
             MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                     + Code.DELIM + name
-                    //+ node.getRepresentation()
                     + Code.DELIM + val_tbl.get(name) + Code.DELIM + "int" // c.getName()
                     + Code.DELIM + MCodePythonGenerator.locationToString(node));
             
@@ -2703,8 +2793,6 @@ public class CodeEvaluator extends Visitor
         case Name.Store:
             loadFrame();
             
-            // TODO: added remove the module if no longer in use
-            //if (!module.isExists(name))
             if (val_tbl.get(name) == null)
             {
             	// First time decleration of the variable
@@ -2714,11 +2802,9 @@ public class CodeEvaluator extends Visitor
                         + MCodePythonGenerator.locationToString(node));
             	
             			my_scope.addValue(name, Code.UNKNOWN);
-            }
-            // TODO: added
+            }            
             MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
-                    + Code.DELIM + name
-                    //+ node.getRepresentation()
+                    + Code.DELIM + name             
                     + Code.DELIM + val_tbl.get(name) + Code.DELIM + "int" // c.getName()
                     + Code.DELIM + MCodePythonGenerator.locationToString(node));
             
@@ -2829,16 +2915,8 @@ public class CodeEvaluator extends Visitor
         return null;
     }
 
+    // TODO: added
     public Object visitStr(Str node) throws Exception {
-    	 /*if (node.getType() == null) {
-        MCodeUtilities.write("" + Code.L + Code.DELIM + (counter++)
-                + Code.DELIM + MCodeUtilities.getValue(node.getValue())
-                + Code.DELIM + Code.REFERENCE + Code.DELIM
-                + MCodeGenerator.locationToString(node));
-    } else {*/        
-    
-    
-    	// Consider calling a generic VisitLiteral - are they any types that do the same MCOdeUtilities?
         String s = node.s;
         if (s != null)
         {

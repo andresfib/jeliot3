@@ -106,7 +106,7 @@ public class parser {
             node = doparse(kind, cflags, g);
         }
         catch (Throwable t) {
-            throw fixParseError(bufreader, t, filename);
+            throw fixParseError(bufreader, t, filename);        	
         }
         return node;
     }

@@ -83,7 +83,7 @@ import koala.dynamicjava.util.ParamTypes;
  * @version 1.6 - 2001/01/23
  */
 
-public class TreeInterpreter implements Interpreter {
+public class TreeInterpreter implements Interpreter, generic.Interpreter {
 
     private ResourceBundle bundle = ResourceBundle.getBundle(
             "koala.dynamicjava.interpreter.resources.messages", Locale
@@ -138,7 +138,7 @@ public class TreeInterpreter implements Interpreter {
     // TODO: added, add factory, handle exception
     public TreeInterpreter() {
     	try{
-    	String parserName = ResourceBundles.getInterpreterInfo().getString("interpreter.internal.compiler");
+    	String parserName = ResourceBundles.getLangInterpreterInfo().getStringProperty("interpreter.internal.compiler");
     	ParserFactory result =  (ParserFactory)Class.forName(parserName).newInstance();
     	init(result, Thread.currentThread().getContextClassLoader());
     	}catch(Exception e)

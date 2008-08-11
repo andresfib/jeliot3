@@ -68,6 +68,7 @@ public class ResourceBundles {
     
     // TODO:added
     private static ResourceBundle interpreterInfo;
+    private static UserProperties langInterpreterInfo; 
     
     /**
      * @return
@@ -81,11 +82,26 @@ public class ResourceBundles {
         return jeliotUserProperties;
     }
     
-    // TODO:added 
+    // TODO:added
+    public static UserProperties refreshLangInterpreter()
+    {
+    	langInterpreterInfo = new UserProperties("langInterpreter", "jeliot.interpreter.resources." + getJeliotUserProperties().getStringProperty("interpreter_lang"));
+    	return langInterpreterInfo;
+    }
+    
+    public static UserProperties getLangInterpreterInfo()
+    {
+    	if (langInterpreterInfo == null)    	
+    		langInterpreterInfo = new UserProperties("langInterpreter", "jeliot.interpreter.resources." + getJeliotUserProperties().getStringProperty("interpreter_lang"));
+    		//ResourceBundle.getBundle("jeliot.interpreter.resources.properties", Locale.getDefault());
+    	
+    	return langInterpreterInfo;
+    }
+    
     public static ResourceBundle getInterpreterInfo()
     {
-    	if (interpreterInfo == null)
-    		interpreterInfo = ResourceBundle.getBundle("jeliot.interpreter.resources.properties", Locale.getDefault());
+    	if (interpreterInfo == null)    	
+    		interpreterInfo = ResourceBundle.getBundle("jeliot.interpreter.resources.properties", Locale.getDefault()); 
     	
     	return interpreterInfo;
     }

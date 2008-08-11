@@ -14,6 +14,9 @@ import java.io.StreamCorruptedException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 
+import jeliot.mcode.Code;
+import jeliot.mcode.MCodeUtilities;
+
 import org.python.compiler.Module;
 import org.python.core.adapter.ClassicPyObjectAdapter;
 import org.python.core.adapter.ExtensiblePyObjectAdapter;
@@ -1026,19 +1029,34 @@ public final class Py
         }
 
         if (tb instanceof PyTraceback)
-            stderr.print(((PyTraceback) tb).dumpStack());
+        	stderr.print(((PyTraceback) tb).dumpStack());            
         if (__builtin__.isinstance(value, (PyClass) Py.SyntaxError)) {
             stderr.println("  File \""+value.__findattr__("filename")+
                            "\", line "+value.__findattr__("lineno"));
             PyObject text = value.__findattr__("text");
+            int col = 0;
             if (text != Py.None && text.__len__() != 0) {
                 stderr.println("\t"+text);
                 String space = "\t";
-                int col = ((PyInteger)value.__findattr__("offset").__int__()).getValue();
+                col = ((PyInteger)value.__findattr__("offset").__int__()).getValue();
                 for(int j=1; j<col; j++)
                     space = space+" ";
                 stderr.println(space+"^");
             }
+            
+            // TODO: added. Create a error for jeliot
+            String code = "" + Code.ERROR + Code.DELIM + text
+            + Code.DELIM;            
+
+            code += "" + value.__findattr__("lineno")
+                + Code.LOC_DELIM
+                + col
+                + Code.LOC_DELIM + value.__findattr__("lineno")
+                + Code.LOC_DELIM
+                + col;
+
+            MCodeUtilities.write(code);
+
         }
 
         if (value instanceof PyJavaInstance) {
@@ -1048,7 +1066,23 @@ public final class Py
                 stderr.println(getStackTrace((Throwable)javaError));
             }
         }
-        stderr.println(formatException(type, value, tb));
+        String msgFormated = formatException(type, value, tb); 
+        stderr.println(msgFormated);
+        
+        // TODO: added. Create a error for jeliot
+        String code = "" + Code.ERROR + Code.DELIM + "SyntaxError: " + msgFormated
+        + Code.DELIM;            
+
+        code += "" + ((PyTraceback)tb).tb_lineno
+            + Code.LOC_DELIM
+            + 0
+            + Code.LOC_DELIM + 0
+            + Code.LOC_DELIM
+            + 0;
+
+        MCodeUtilities.write(code);
+
+
     }
 
     static String formatException(PyObject type, PyObject value, PyObject tb) {

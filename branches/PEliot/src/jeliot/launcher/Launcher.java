@@ -84,7 +84,7 @@ public class Launcher extends Thread {
     /**
      *
      */
-    private Interpreter interpreter = createInterpreter();
+    private Interpreter interpreter = null;
 
     /**
      *
@@ -94,30 +94,21 @@ public class Launcher extends Thread {
     /**
      * @return
      */
-    protected Interpreter createInterpreter() {
-    	// TODO: create Factory, handle exception
-    	try{
-    	String interpreterClass = ResourceBundles.getInterpreterInfo().getString("interpreter.class");
+    protected Interpreter createInterpreter() throws Exception{
+    	// TODO: Added. create Factory, handle exception
+    	String interpreterClass = ResourceBundles.getLangInterpreterInfo().getStringProperty("interpreter.class");
         Interpreter result =  (Interpreter)Class.forName(interpreterClass).newInstance();
-        	//new TreeInterpreter(new JavaCCParserFactory());
                
-        return result;
-    	}catch(Exception e)
-    	{
-    		System.out.println("Error");
-    		return null;
-    	}
+        return result;    	
     }
     
     // TODO: added
-    private void init(InputStream input)
+    private void init(InputStream input) throws Exception
     {
     	this.r = input;
-
+    	interpreter = createInterpreter();
         makePipedStreams();
-        
-        // TODO: change
-        //MCodeUtilities.initialize();
+            
         MCodeUtilities.initialize();
 
     }
@@ -129,13 +120,13 @@ public class Launcher extends Thread {
     	init(input);
     }*/
     // TODO: added
-    public Launcher(InputStream input)
+    public Launcher(InputStream input) throws Exception
     {
     	init(input);
     }
     
     // TODO: added    
-    public Launcher(String input)
+    public Launcher(String input) throws Exception
     {
     	//init(new BufferedReader(new InputStreamReader(new ByteArrayInputStream(input.getBytes() )))); 
     	init(new ByteArrayInputStream(input.getBytes() ));
