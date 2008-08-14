@@ -1164,10 +1164,13 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 	// get the languages options from the properties file
                 	String[] langList = interpreterProperties.getString("interpreter.languages").split(";");
                 	choosenLang = (String)JOptionPane.showInputDialog(frame, langSelectString, langSelectString, JOptionPane.PLAIN_MESSAGE, null, langList, langList[0]);
-                	
+                            	
                 	// TODO: patch...
                 	jeliotUserProperties.setStringProperty("interpreter_lang", choosenLang);
                 	langInterpreterProperties = ResourceBundles.refreshLangInterpreter();
+                	
+                	editor.setTemplate(langInterpreterProperties.getStringProperty("code_editor.template"));
+                	editor.clearProgram();
                 } catch (Exception e1) {
                     DebugUtil.handleThrowable(e1);                    
                 }                

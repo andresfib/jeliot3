@@ -4,16 +4,15 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PipedReader;
 import java.io.PipedWriter;
 import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringReader;
 
-import jeliot.mcode.*;
+import jeliot.interpreter.Interpreter;
+import jeliot.mcode.Code;
+import jeliot.mcode.MCodeUtilities;
+import jeliot.mcode.StoppingRequestedError;
 import jeliot.util.ResourceBundles;
-import generic.Interpreter;
 
 /**
  * Launcher creates a new thread to handle the DynamicJava Interpreter's
@@ -181,8 +180,9 @@ public class Launcher extends Thread {
 
                     // TODO: added. Only need to interpret when a method exists, otherwise intrpret at the compile
                     // phase
-                    o = interpreter.interpret(new ByteArrayInputStream(methodCall.getBytes()),
-                    "buffer");                    
+                    if (methodCall != null)
+                    	o = interpreter.interpret(new ByteArrayInputStream(methodCall.getBytes()),
+                    	"buffer");                    
                     /*o = interpreter.interpret(new BufferedReader(new StringReader(methodCall)),
                             "buffer");*/
 
@@ -191,7 +191,6 @@ public class Launcher extends Thread {
                          * TODO: If we are allowing open scope execution of statements
                          * we should not send Code.END statements.
                          */
-                        //MCodeUtilities.write("" + Code.END);
                     	MCodeUtilities.write("" + Code.END);
                     }
                     compiling = false;

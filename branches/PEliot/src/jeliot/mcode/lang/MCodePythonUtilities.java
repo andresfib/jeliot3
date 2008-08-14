@@ -1,4 +1,5 @@
-package generic;
+package jeliot.mcode.lang;
+
 
 import org.python.compiler.CodeEvaluator;
 import org.python.core.PyComplex;
@@ -7,7 +8,6 @@ import org.python.core.PyInteger;
 import org.python.core.PyLong;
 import org.python.core.PyObject;
 import org.python.parser.ast.Name;
-import org.python.parser.ast.Num;
 import org.python.parser.ast.Str;
 
 public class MCodePythonUtilities extends MCodeLangUtilities {

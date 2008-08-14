@@ -84,8 +84,8 @@ public class CodeEditor2 extends JComponent {
      * The String for the basic code template that is shown to the user in the
      * beginning.
      */
-    private String template = messageBundle.getString("code_editor.template");
-
+    private String template = ResourceBundles.getLangInterpreterInfo().getStringProperty("code_editor.template");
+    private String templeteComment = messageBundle.getString("code_editor.template");
     /**
      * Comment for <code>title</code>
      */
@@ -314,10 +314,16 @@ public class CodeEditor2 extends JComponent {
     /**
      * Sets the layout and adds the JScrollPane with JTextArea area and JToolbar
      * in it. Initializes the FileChooser.
-     */
+     */    
     public CodeEditor2(String udir, String defaultIO) {
         this.udir = udir;
-        this.template = defaultIO + "\n\n" + template;
+        
+        // TODO: added. 
+        if (ResourceBundles.getLangInterpreterInfo().getBooleanProperty("jeliot.window.useIOImport"))        		
+        		this.template = defaultIO + "\n\n" + template.replaceFirst("comment", templeteComment);
+        else
+        	this.template = template.replaceFirst("comment", templeteComment);
+        
         initFileChooser();
 
         //Special for JEditTextArea for syntax highlighting
@@ -1040,4 +1046,12 @@ public class CodeEditor2 extends JComponent {
         //requestFocusInWindow();
         return this.area.requestFocusInWindow();
     }
+
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String template) {
+		this.template = template.replaceFirst("comment", templeteComment);
+	}
 }

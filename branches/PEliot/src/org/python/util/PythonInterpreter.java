@@ -2,11 +2,12 @@
 package org.python.util;
 import org.python.core.*;
 
-import generic.Interpreter;
 
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.*;
+
+import jeliot.interpreter.Interpreter;
 
 import koala.dynamicjava.interpreter.InterpreterException;
 import koala.dynamicjava.parser.wrapper.ParserFactory;

@@ -8,8 +8,8 @@ import java.util.Stack;
 import java.util.Vector;
 
 import jeliot.mcode.Code;
-import jeliot.mcode.MCodePythonGenerator;
 import jeliot.mcode.MCodeUtilities;
+import jeliot.mcode.lang.MCodePythonGenerator;
 import jeliot.util.DebugUtil;
 import koala.dynamicjava.interpreter.throwable.BreakException;
 import koala.dynamicjava.interpreter.throwable.ContinueException;

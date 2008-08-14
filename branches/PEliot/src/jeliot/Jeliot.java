@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.PipedReader;
 import java.io.PipedWriter;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
