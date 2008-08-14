@@ -1,6 +1,5 @@
 package jeliot.mcode;
 
-import generic.MCodeLangUtilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +10,7 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import jeliot.mcode.lang.MCodeLangUtilities;
 import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.Util;
@@ -1022,8 +1022,8 @@ public abstract class MCodeUtilities {
              catch(Exception e){
              e.printStackTrace(System.out);    
              }
-             */
-System.out.println("MCODE WRITE:" + str);            
+             */            
+            //System.out.println(str);
         }
     }
 

@@ -83,7 +83,7 @@ import koala.dynamicjava.util.ParamTypes;
  * @version 1.6 - 2001/01/23
  */
 
-public class TreeInterpreter implements Interpreter, generic.Interpreter {
+public class TreeInterpreter implements Interpreter, jeliot.interpreter.Interpreter {
 
     private ResourceBundle bundle = ResourceBundle.getBundle(
             "koala.dynamicjava.interpreter.resources.messages", Locale

@@ -1,4 +1,4 @@
-package generic;
+package jeliot.interpreter;
 
 // TODO: generics
 import java.io.InputStream;

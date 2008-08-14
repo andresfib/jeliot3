@@ -1,4 +1,4 @@
-package generic;
+package jeliot.mcode.lang;
 
 import jeliot.util.Util;
 

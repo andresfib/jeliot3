@@ -271,7 +271,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     + Code.LOC_DELIM + "0";
         }
         DebugUtil.printDebugInfo(readLine);
-System.out.println("MCODE INTERPRETER:" + readLine);
         return readLine;
     }
 

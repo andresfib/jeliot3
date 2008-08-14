@@ -1,10 +1,14 @@
 /*
  * Created on 22.2.2006
  */
-package jeliot.mcode;
+package jeliot.mcode.lang;
 
 import java.util.Iterator;
 import java.util.List;
+
+import jeliot.mcode.Code;
+import jeliot.mcode.MCodeGenerator;
+import jeliot.mcode.MCodeUtilities;
 
 import org.python.core.PyObject;
 import org.python.parser.SimpleNode;
