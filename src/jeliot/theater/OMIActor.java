@@ -279,4 +279,12 @@ public class OMIActor extends MIActor {
         return sb.toString();
     }
 
+    public boolean isContentResized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void resizeContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

@@ -702,6 +702,10 @@ public abstract class Actor implements Cloneable {
         }
     }
     
+    public int getResizeScale(){
+        return RESIZE_SCALE;
+    }
+    
     /*public void setDoubleSize(){
         width = width * RESIZE_SCALE;
         height = height * RESIZE_SCALE;

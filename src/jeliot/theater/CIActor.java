@@ -31,4 +31,12 @@ public class CIActor extends MIActor {
         return sb.toString();
     }
 
+    public boolean isContentResized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void resizeContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

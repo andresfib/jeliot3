@@ -117,4 +117,12 @@ public class StringObjectActor extends InstanceActor {
         nheight = fm.getHeight();
         nwidth = fm.stringWidth(name);
     }
+
+    public boolean isContentResized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void resizeContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

@@ -423,4 +423,12 @@ public class ObjectStage extends InstanceActor {
     public int getVarCount() {
         return varCount;
     }
+
+    public boolean isContentResized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void resizeContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

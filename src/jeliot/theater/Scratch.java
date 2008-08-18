@@ -255,4 +255,12 @@ public class Scratch extends Actor implements ActorContainer {
 
         return null;
     }
+
+    public boolean isContentResized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void resizeContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

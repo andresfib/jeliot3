@@ -8,21 +8,12 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Vector;
 import java.util.Hashtable;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollBar;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
-import java.awt.Graphics2D;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentListener;
-import javax.swing.JDialog;
 import jeliot.util.ResourceBundles;
 import java.util.ResourceBundle;
 import javax.swing.JScrollPane;
@@ -835,7 +826,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             }
             else if(actor instanceof ClassActor){
                 ClassActor cla = (ClassActor) actor;
-                cla.sizeUpVariableActors();
+                //cla.sizeUpVariableActors();
             }
         }
     }
@@ -857,7 +848,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             }
             else if(actor instanceof ClassActor){
                 ClassActor cla = (ClassActor) actor;
-                cla.sizeDownVariableActors();
+                //cla.sizeDownVariableActors();
             }
         }
     }

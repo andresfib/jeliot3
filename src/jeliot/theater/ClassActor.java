@@ -448,8 +448,16 @@ public class ClassActor extends Actor implements ActorContainer {
         }
         return null;
     }
+
+    public boolean isContentResized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void resizeContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
-    public void sizeUpVariableActors(){
+    /*public void sizeUpVariableActors(){
         Iterator iter = variables.iterator();
         while(iter.hasNext()){
             Actor act = (Actor) iter.next();
@@ -463,5 +471,5 @@ public class ClassActor extends Actor implements ActorContainer {
             Actor act = (Actor) iter.next();
             act.setNormalSize();
         }
-    }
+    }*/
 }

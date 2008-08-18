@@ -291,4 +291,12 @@ public class ArrayActor extends InstanceActor {
     public void setArrayLength(VariableActor arrayLength) {
         this.arrayLength = arrayLength;
     }
+
+    public boolean isContentResized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void resizeContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
