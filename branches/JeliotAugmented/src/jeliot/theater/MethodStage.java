@@ -332,9 +332,9 @@ public class MethodStage extends Actor implements ActorContainer {
     }
 
     public void resizeContainedActors() {
-        Iterator iter = variables.iterator();
-        while(iter.hasNext()){
-            Actor act = (Actor) iter.next();
+        int i = 0;
+        for(i=0;i<variables.size();i++){
+            Actor act = (Actor) variables.elementAt(i);
             act.resize();
         }
         

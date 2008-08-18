@@ -54,15 +54,24 @@ public class ValueActor extends Actor {
 	 * type contains the type of the value
 	 */
 	private String type;
+        
+        /**
+         * Variable that indicate if the actor is currently resized or not.
+         * true -> yes,
+         * false -> no.
+         */
+        private boolean resized = false;
 	
     /**
 	 * 
 	 */
 	public ValueActor() {
-        setFont(new Font(propertiesBundle.getStringProperty("font.value_actor.family"),
-        Font.BOLD,
-        Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size"))));
-        setDescription("ValueActor");
+            this.font = new Font(propertiesBundle.getStringProperty("font.value_actor.family"),        
+            Font.BOLD,
+            Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size")));
+
+            setFont(this.font);
+            setDescription("ValueActor");
     }
 
     /**
@@ -125,9 +134,10 @@ public class ValueActor extends Actor {
 	 * @param g
 	 */
 	public void paintValue(Graphics g) {
-        g.setFont(getFont());
-        g.setColor(fgcolor);
-        g.drawString(valstr, namex, namey-1);
+            
+            g.setFont(getFont());
+            g.setColor(fgcolor);
+            g.drawString(valstr, namex, namey-1);
         /*
          * This works if for some reason valstr would be null
          * which never should be a case but if there is a bug that
@@ -206,5 +216,37 @@ public class ValueActor extends Actor {
 
     public void setValstr(String valstr) {
         this.valstr = valstr;
+    }
+    
+    //@Override
+    public boolean isResized(){
+        return resized;
+    }
+    
+    //@Override
+    public void resize(){
+        int resizedScale = getResizeScale();
+        
+        if(isResized() == true){
+            Font fontaux = new Font(propertiesBundle.getStringProperty("font.value_actor.family"),        
+            Font.BOLD,
+            Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size")));
+            setFont(fontaux);
+            
+            namex = (namex/resizedScale)-(getX()/resizedScale);
+            namey = namey/resizedScale;
+            
+            resized = false;
+        }else{
+            Font fontaux = new Font(propertiesBundle.getStringProperty("font.value_actor.family"),        
+            Font.BOLD,
+            Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size"))*resizedScale);
+            setFont(fontaux);
+            
+            namex = getX()+(namex*resizedScale);
+            namey = namey*resizedScale;
+            
+            resized = true;
+        }
     }
 }

@@ -264,4 +264,12 @@ public class ExpressionActor extends Actor implements ActorContainer {
         }
         return sb.toString();
     }
+
+    public boolean isContentResized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void resizeContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

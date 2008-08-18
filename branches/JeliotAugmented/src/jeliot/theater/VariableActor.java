@@ -8,6 +8,10 @@ import java.awt.Point;
 
 import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
+import jeliot.util.ResourceBundles;
+import jeliot.util.UserProperties;
+import java.lang.Throwable;
+
 
 /**
  * <code>VariableActor</code> represent graphically the language construct
@@ -92,7 +96,14 @@ public class VariableActor extends Actor implements ActorContainer {
      * false -> no.
      */
     public boolean contentResized = false;
-
+    
+    // DOC: Document!
+    /**
+     * The resource bundle for theater package.
+     */
+    private static UserProperties propertiesBundle = ResourceBundles.getTheaterUserProperties();
+    
+    
     /* (non-Javadoc)
      * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
      */
@@ -122,6 +133,12 @@ public class VariableActor extends Actor implements ActorContainer {
         if (value != null) {
             int actx = value.getX();
             int acty = value.getY();
+            
+            System.out.println("el turboNombre del value es: "+value.getDescription());
+            System.out.println("las turboCoordenadas del value son:");
+            System.out.println("X: "+actx);
+            System.out.println("Y: "+acty);
+                       
             g.translate(actx, acty);
             value.paintValue(g);
             g.translate(-actx, -acty);
@@ -183,14 +200,42 @@ public class VariableActor extends Actor implements ActorContainer {
     }
 
     public void resizeContainedActors() {
-        //TODO
-        Actor act = (Actor) value;
-        act.resize();
+        int resizeScale = getResizeScale();
         
-        if(contentResized == true)
-            contentResized = false;
-        else
-            contentResized = true;
+        if(isContentResized() == true){
+            valueh=valueh/resizeScale;
+            valuew=valuew/resizeScale;
+            valuex=valuex/resizeScale;
+            valuey=valuey/resizeScale;
+            
+           
+            namex=namex/resizeScale;
+            namey=namey/resizeScale;
+            Font fontaux = new Font(propertiesBundle
+            .getStringProperty("font.actor.default.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.actor.default.size")));
+            setFont(fontaux);
+            
+            value.resize();
+            contentResized=false;
+        }
+        else{
+            valueh=valueh*resizeScale;
+            valuew=valuew*resizeScale;
+            valuex=valuex*resizeScale;
+            valuey=valuey*resizeScale;
+            
+            
+            namex=namex*resizeScale;
+            namey=namey*resizeScale;
+            Font fontaux = new Font(propertiesBundle
+            .getStringProperty("font.actor.default.family"), Font.BOLD, Integer
+            .parseInt(propertiesBundle.getStringProperty("font.actor.default.size"))*resizeScale);
+            setFont(fontaux);
+            
+            value.resize();
+            contentResized=true;
+        }
     }
 
     /**

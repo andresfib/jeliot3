@@ -34,4 +34,12 @@ public class SMIActor extends MIActor {
         sb.append(parametersToString());
         return sb.toString();
     }
+
+    public boolean isContentResized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void resizeContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
