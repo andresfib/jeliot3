@@ -134,10 +134,10 @@ public class VariableActor extends Actor implements ActorContainer {
             int actx = value.getX();
             int acty = value.getY();
             
-            System.out.println("el turboNombre del value es: "+value.getDescription());
-            System.out.println("las turboCoordenadas del value son:");
+            /*System.out.println("el Nombre del value es: "+value.getDescription());
+            System.out.println("las Coordenadas del value son:");
             System.out.println("X: "+actx);
-            System.out.println("Y: "+acty);
+            System.out.println("Y: "+acty);*/
                        
             g.translate(actx, acty);
             value.paintValue(g);

@@ -66,11 +66,11 @@ public class ValueActor extends Actor {
 	 * 
 	 */
 	public ValueActor() {
-            this.font = new Font(propertiesBundle.getStringProperty("font.value_actor.family"),        
+            Font fontaux  = new Font(propertiesBundle.getStringProperty("font.value_actor.family"),        
             Font.BOLD,
             Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size")));
 
-            setFont(this.font);
+            setFont(fontaux);
             setDescription("ValueActor");
     }
 
@@ -248,5 +248,13 @@ public class ValueActor extends Actor {
             
             resized = true;
         }
+    }
+    
+    public int getNameX(){
+        return namex;
+    }
+    
+    public int getNameY(){
+        return namey;
     }
 }
