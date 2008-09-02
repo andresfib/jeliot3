@@ -16,8 +16,11 @@ public interface ActorContainer {
      * Variable that indicates if the actor is currently resized or not.
      * true -> yes,
      * false -> no.
+     * This variable is not used because the compiler considers it a final variable so,
+     * it doesn't allow us to modify it, so is here only as a warn or indication that would say
+     * that it is good to have it in order to 'standarize' the use of his interface.
      */
-    public boolean contentResized = false;
+    //private boolean contentResized = false;
     
     /**
      * Return true if the contained actors are resized, false if not.
