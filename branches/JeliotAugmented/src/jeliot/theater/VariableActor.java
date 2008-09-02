@@ -95,7 +95,7 @@ public class VariableActor extends Actor implements ActorContainer {
      * true -> yes,
      * false -> no.
      */
-    public boolean contentResized = false;
+    private boolean contentResized = false;
     
     // DOC: Document!
     /**
@@ -261,7 +261,8 @@ public class VariableActor extends Actor implements ActorContainer {
      * @return
      */
     public ValueActor getValue() {
-        return value;
+        ValueActor act = (ValueActor) this.value.clone();
+        return act;
     }
 
     /**

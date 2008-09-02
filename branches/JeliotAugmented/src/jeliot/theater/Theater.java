@@ -160,7 +160,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * true -> yes,
      * false -> no.
      */
-    public boolean contentResized = false;
+    private boolean contentResized = false;
     
     /*
      * ResourceBundle for the messages related with the theater and

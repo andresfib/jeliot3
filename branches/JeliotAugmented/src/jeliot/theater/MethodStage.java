@@ -110,7 +110,7 @@ public class MethodStage extends Actor implements ActorContainer {
      * true -> yes,
      * false -> no.
      */
-    public boolean contentResized = false;
+    private boolean contentResized = false;
 
     /**
      * @param name
