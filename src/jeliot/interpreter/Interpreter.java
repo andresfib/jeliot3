@@ -1,6 +1,5 @@
 package jeliot.interpreter;
 
-// TODO: generics
 import java.io.InputStream;
 import java.io.Reader;
 
