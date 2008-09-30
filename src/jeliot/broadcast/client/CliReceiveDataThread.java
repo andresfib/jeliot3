@@ -12,7 +12,8 @@ public class CliReceiveDataThread extends Thread{
     private ClientServ c = null;
     private Client client = null;
     private CliMessages message = null;
-    private String [] text = null;
+    public String [] text = null;
+    public String data = null;
     public boolean flagExit = true;
     public String programCode = null;
     
@@ -52,6 +53,7 @@ public class CliReceiveDataThread extends Thread{
                 if((text[0].indexOf("INST") != -1)){
                     //Send the rest of the line to buffer that connects with readline in TheaterMCodeInterpreter
                     System.out.println("Instruction from " + text[1] + " --> " + text[3]);
+                    this.data = new String(this.text[3]);
                     //c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
                 } 
                 //Intruction from Server
@@ -86,11 +88,11 @@ public class CliReceiveDataThread extends Thread{
      
     public String sendMCode(){
         String str = null;
-        if(text[3].indexOf(null) != -1){
+        if(data.indexOf(null) != -1){
             return "";
         }
         else{
-            str = new String(text[3]);
+            str = new String(data);
             System.out.println(str);
             return str;
         }
