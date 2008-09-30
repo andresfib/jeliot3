@@ -1,6 +1,7 @@
 package jeliot.mcode;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
 import java.util.Hashtable;
@@ -272,8 +273,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         // else
         if(clientFlag == true){
             //if((this.clientMCode.clientReceiveData.text[0].indexOf("INST") != -1)){
-                //readLine = Client.clientReceiveData.sendMCode();
-                readLine = new String(clientMCode.clientReceiveData.sendMCode());
+                readLine = clientMCode.clientReceiveData.fileToMCode(clientMCode.clientReceiveData.fileMCode);
+                //readLine = new String(clientMCode.clientReceiveData.sendMCode());
+                //readLine = clientMCode.clientReceiveData.text[3];
                 System.out.println("Code in client: " + readLine);
             //}
             return readLine;
@@ -317,6 +319,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void beforeInterpretation(String line) {
         MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
         serverMCode.serverSendData.setMCode(line);
+        System.out.println("Code before: " + line);
     }
 
     /*
