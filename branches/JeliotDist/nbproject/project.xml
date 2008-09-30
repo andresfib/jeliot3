@@ -37,7 +37,7 @@
                     <target>compile</target>
                 </action>
                 <action name="run">
-                    <target>runClient</target>
+                    <target>runServer</target>
                 </action>
                 <action name="debug">
                     <script>nbproject/ide-file-targets.xml</script>
@@ -66,6 +66,14 @@
                     <ide-action name="javadoc"/>
                     <ide-action name="run"/>
                     <ide-action name="debug"/>
+                    <action>
+                        <label>Server</label>
+                        <target>runServer</target>
+                    </action>
+                    <action>
+                        <label>Client</label>
+                        <target>runClient</target>
+                    </action>
                 </context-menu>
             </view>
             <subprojects/>

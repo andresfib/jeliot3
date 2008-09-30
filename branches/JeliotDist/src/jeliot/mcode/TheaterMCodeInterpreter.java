@@ -271,14 +271,18 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         // readline from buffer created at client
         // else
         if(clientFlag == true){
-            readLine = Client.clientReceiveData.sendMCode();
-            System.out.println("Code: " + readLine);
+            //if((this.clientMCode.clientReceiveData.text[0].indexOf("INST") != -1)){
+                //readLine = Client.clientReceiveData.sendMCode();
+                readLine = new String(clientMCode.clientReceiveData.sendMCode());
+                System.out.println("Code in client: " + readLine);
+            //}
             return readLine;
         }
         else{
         if (readNew()) {
             try {
                 readLine = mcode.readLine();
+                System.out.println("Code in server: " + readLine);
             } catch (Exception e) {
             }
         } else {
