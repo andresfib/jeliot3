@@ -5,6 +5,9 @@ package jeliot.broadcast.client;
  */
 import java.io.*;
 import java.net.*;
+import java.nio.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CliReceiveDataThread extends Thread{
     
@@ -16,6 +19,8 @@ public class CliReceiveDataThread extends Thread{
     public String data = null;
     public boolean flagExit = true;
     public String programCode = null;
+    public File fileMCode = new File ("f:\\fileMCode.txt");
+    StringBuffer buffer = new StringBuffer();
     
     public CliReceiveDataThread(Client client, ClientServ c, CliMessages message) {
         this.c = c;
@@ -52,10 +57,12 @@ public class CliReceiveDataThread extends Thread{
                 //Intruction from Server
                 if((text[0].indexOf("INST") != -1)){
                     //Send the rest of the line to buffer that connects with readline in TheaterMCodeInterpreter
-                    System.out.println("Instruction from " + text[1] + " --> " + text[3]);
+                    //System.out.println("Instruction from " + text[1] + " --> " + text[3]);
                     this.data = new String(this.text[3]);
+                    mCodeToFile(data, fileMCode);
                     //c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
-                } 
+                }
+                    //fileErase(fileMCode);
                 //Intruction from Server
                 if((text[0].indexOf("PROG") != -1)){
                     System.out.println("Instruction from " + text[1] + " --> " + text[3]);
@@ -86,16 +93,60 @@ public class CliReceiveDataThread extends Thread{
         return var;
     }
      
-    public String sendMCode(){
-        String str = null;
-        if(data.indexOf(null) != -1){
-            return "";
-        }
-        else{
-            str = new String(data);
-            System.out.println(str);
-            return str;
-        }
+public void fileErase(File file){
+    if(file.delete())
+        System.out.println("File erased\n");
+    else   
+        System.out.println("File cannot be erased\n");
+} 
+
+public boolean fileExists(File file){
+    if (file.exists()){
+        System.out.println("The file " + file + " exists\n");
+        return true;
     }
-    
+    else{
+        System.out.println("The file " + file + " doesn't exists!!!\n");
+    }
+    return false;
+}
+     
+public String fileToMCode(File file){
+    StringBuffer buffer = new StringBuffer();
+    String line;
+    FileReader fReader;
+    BufferedReader bReader;
+
+    try {
+          fReader = new FileReader(file);
+          bReader = new BufferedReader(fReader);
+          while ((line = bReader.readLine()) != null){
+            buffer.append(line);
+          }
+          bReader.close();
+          fReader.close();
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
+    return buffer.toString();
+  }
+
+public void mCodeToFile(String string, File file){
+    FileWriter fWriter;
+    BufferedWriter bWriter;
+
+    try {
+      fWriter = new FileWriter(file);
+      bWriter = new BufferedWriter(fWriter);
+      bWriter.write(string);
+      bWriter.close();
+      fWriter.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
 }//End Thread
