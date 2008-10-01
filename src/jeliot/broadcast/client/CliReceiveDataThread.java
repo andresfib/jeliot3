@@ -16,11 +16,11 @@ public class CliReceiveDataThread extends Thread{
     private Client client = null;
     private CliMessages message = null;
     public String [] text = null;
-    public String data = null;
+    public String data = "";
     public boolean flagExit = true;
     public String programCode = null;
     public File fileMCode = new File ("f:\\fileMCode.txt");
-    StringBuffer buffer = new StringBuffer();
+    public StringBuffer bufferMCode = new StringBuffer();
     
     public CliReceiveDataThread(Client client, ClientServ c, CliMessages message) {
         this.c = c;
@@ -59,7 +59,9 @@ public class CliReceiveDataThread extends Thread{
                     //Send the rest of the line to buffer that connects with readline in TheaterMCodeInterpreter
                     //System.out.println("Instruction from " + text[1] + " --> " + text[3]);
                     this.data = new String(this.text[3]);
-                    mCodeToFile(data, fileMCode);
+                   // mCodeToFile(data, fileMCode);
+                    bufferMCode.append(data);
+                    System.out.println("Reader from buffer: " + bufferMCode.substring(0));
                     //c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
                 }
                     //fileErase(fileMCode);
@@ -94,8 +96,14 @@ public class CliReceiveDataThread extends Thread{
     }
      
 public void fileErase(File file){
-    if(file.delete())
+    if(file.delete()){
         System.out.println("File erased\n");
+        try {
+            file.createNewFile();
+        } catch (IOException ex) {
+            Logger.getLogger(CliReceiveDataThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     else   
         System.out.println("File cannot be erased\n");
 } 
