@@ -339,7 +339,8 @@ public class Jeliot {
      */
     public void compile() {
 
-        if (!compiled) {
+        // We compile if we are only server
+        if (!compiled && serverFlag) {
 
             this.ecodeReader = null;
 
@@ -434,7 +435,7 @@ public class Jeliot {
         mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader,
                 director, gui.getProgram(), inputWriter, serverJeliot, clientJeliot, clientFlag);
         director.setInterpreter(mCodeInterpreterForTheater);
-//Go to MCodeInterpreter and change method "interpret" and put MCode from client
+        //Go to MCodeInterpreter and change method "interpret" and put MCode from client
         try {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);

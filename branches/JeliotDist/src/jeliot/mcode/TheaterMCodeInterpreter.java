@@ -236,6 +236,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
         try {
             line = readLine();
+            System.out.println("Code first: " + line);
+            
             MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
             
             //This is for debugging purposes.
@@ -271,20 +273,24 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         //if we are client then
         // readline from buffer created at client
         // else
+        
         if(clientFlag == true){
             //if((this.clientMCode.clientReceiveData.text[0].indexOf("INST") != -1)){
-                readLine = clientMCode.clientReceiveData.fileToMCode(clientMCode.clientReceiveData.fileMCode);
-                //readLine = new String(clientMCode.clientReceiveData.sendMCode());
-                //readLine = clientMCode.clientReceiveData.text[3];
-                System.out.println("Code in client: " + readLine);
+            //readLine = clientMCode.clientReceiveData.fileToMCode(clientMCode.clientReceiveData.fileMCode);
+            //readLine = clientMCode.clientReceiveData.data;
+            readLine = clientMCode.clientReceiveData.bufferMCode.substring(0);
+            System.out.println("Code in client: " + readLine);
+            int len = clientMCode.clientReceiveData.bufferMCode.length();
+            clientMCode.clientReceiveData.bufferMCode.delete(0, len);
+            //clientMCode.clientReceiveData.fileErase(clientMCode.clientReceiveData.fileMCode);
             //}
-            return readLine;
-        }
-        else{
+        } else{
         if (readNew()) {
             try {
+                
                 readLine = mcode.readLine();
                 System.out.println("Code in server: " + readLine);
+
             } catch (Exception e) {
             }
         } else {
@@ -298,6 +304,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 return readLine();
             }
         }
+        }
         //System.out.println(values.size());
         if (readLine == null) {
             readLine = "" + Code.ERROR + Code.DELIM
@@ -308,7 +315,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         DebugUtil.printDebugInfo(readLine);
 
         return readLine;
-        }
     }
 
     /*
