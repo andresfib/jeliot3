@@ -58,6 +58,7 @@ public class CliReceiveDataThread extends Thread{
                 if((text[0].indexOf("INST") != -1)){
                     //Send the rest of the line to buffer that connects with readline in TheaterMCodeInterpreter
                     //System.out.println("Instruction from " + text[1] + " --> " + text[3]);
+                    bufferMCode.delete(0, bufferMCode.capacity());
                     this.data = new String(this.text[3]);
                    // mCodeToFile(data, fileMCode);
                     bufferMCode.append(data);

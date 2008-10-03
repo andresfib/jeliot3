@@ -328,8 +328,12 @@ public class Jeliot {
 
         this.methodCall = methodCall;
         codePane.installProgram(this.sourceCode);
-
+        
         compiled = false;
+        /*if(clientFlag)
+            compiled = true;
+        else
+            compiled = false;*/
 
     }
 
@@ -339,8 +343,8 @@ public class Jeliot {
      */
     public void compile() {
 
-        // We compile if we are only server
-        if (!compiled && serverFlag) {
+        // We compile if we are only server?
+        if (!compiled) {
 
             this.ecodeReader = null;
 
@@ -422,7 +426,10 @@ public class Jeliot {
      */
     public void rewind() {
 
-        compiled = false;
+        if(clientFlag)
+            compiled = true;
+        else
+            compiled = false;
 
         //create director and the other equipment
         ActorFactory af = new ActorFactory(iLoad);
@@ -431,7 +438,7 @@ public class Jeliot {
 
         director = new Director(theatre, this, engine);
         director.setActorFactory(af);
-
+        System.out.println("Programmm: " + gui.getProgram() + "\n");
         mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader,
                 director, gui.getProgram(), inputWriter, serverJeliot, clientJeliot, clientFlag);
         director.setInterpreter(mCodeInterpreterForTheater);
