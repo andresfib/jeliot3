@@ -1745,6 +1745,8 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * @return The program code from the CodeEditor -object.
      */
     public String getProgram() {
+        if(clientFlag)
+            return clientJeliot.clientReceiveData.programCode;
         return editor.getProgram();
     }
 
@@ -1790,7 +1792,6 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
             final int line = editor.getTextArea().getVerticalScrollBar()
                     .getValue();
-            //System.out.println(line);
 
             if (methodCall == null) {
                 methodCall = SourceCodeUtilities

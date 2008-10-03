@@ -20,7 +20,7 @@ import jeliot.util.UserProperties;
  * during the intepretation in DynamicJava.
  * 
  * @author Niko Myller
- * @author Andrés Moreno
+ * @author Andrï¿½s Moreno
  */
 public abstract class MCodeInterpreter {
 

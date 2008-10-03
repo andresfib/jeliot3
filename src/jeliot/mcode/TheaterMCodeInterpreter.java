@@ -237,7 +237,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         try {
             line = readLine();
             System.out.println("Code first: " + line);
-            
             MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
             
             //This is for debugging purposes.
@@ -274,22 +273,20 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         // readline from buffer created at client
         // else
         
-        if(clientFlag == true){
+        if(clientFlag == true && (clientMCode.clientReceiveData.bufferMCode.length() != 0)){
             //if((this.clientMCode.clientReceiveData.text[0].indexOf("INST") != -1)){
             //readLine = clientMCode.clientReceiveData.fileToMCode(clientMCode.clientReceiveData.fileMCode);
             //readLine = clientMCode.clientReceiveData.data;
             readLine = clientMCode.clientReceiveData.bufferMCode.substring(0);
             System.out.println("Code in client: " + readLine);
-            int len = clientMCode.clientReceiveData.bufferMCode.length();
-            clientMCode.clientReceiveData.bufferMCode.delete(0, len);
             //clientMCode.clientReceiveData.fileErase(clientMCode.clientReceiveData.fileMCode);
+            return readLine();
             //}
         } else{
         if (readNew()) {
-            try {
-                
+            try {                              
                 readLine = mcode.readLine();
-                System.out.println("Code in server: " + readLine);
+                //System.out.println("Code in server second: " + readLine); 
 
             } catch (Exception e) {
             }
@@ -325,7 +322,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void beforeInterpretation(String line) {
         MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
         serverMCode.serverSendData.setMCode(line);
-        System.out.println("Code before: " + line);
+        //System.out.println("Code third: " + line);
     }
 
     /*
