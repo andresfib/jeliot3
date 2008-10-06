@@ -21,6 +21,8 @@ public class CliReceiveDataThread extends Thread{
     public String programCode = null;
     public File fileMCode = new File ("f:\\fileMCode.txt");
     public StringBuffer bufferMCode = new StringBuffer();
+    public PipedOutputStream pouts = new PipedOutputStream();
+    public int len = 0;
     
     public CliReceiveDataThread(Client client, ClientServ c, CliMessages message) {
         this.c = c;
@@ -62,7 +64,15 @@ public class CliReceiveDataThread extends Thread{
                     this.data = new String(this.text[3]);
                    // mCodeToFile(data, fileMCode);
                     bufferMCode.append(data);
-                    System.out.println("Reader from buffer: " + bufferMCode.substring(0));
+                    
+                    len = data.length();
+                    try {
+                        pouts.write(data.getBytes(), 0, len);
+                    } catch (IOException ex) {
+                        Logger.getLogger(CliReceiveDataThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    //System.out.println("Reader from buffer: " + bufferMCode.substring(0));
                     //c.sendToServer(message.getAck(c.idClient, "SERVER", "Ack Client " + c.idClient));
                 }
                     //fileErase(fileMCode);
@@ -95,6 +105,8 @@ public class CliReceiveDataThread extends Thread{
         }
         return var;
     }
+     
+    //public MCodeToPiped (String MCode){
      
 public void fileErase(File file){
     if(file.delete()){
