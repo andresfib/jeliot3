@@ -2,6 +2,9 @@ package jeliot.mcode;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
 import java.util.Hashtable;
@@ -12,6 +15,8 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jeliot.FeatureNotImplementedException;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.lang.ArrayInstance;
@@ -141,6 +146,11 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      *  
      */
     private boolean clientFlag = false;
+    
+    /**
+     *  
+     */
+    public PipedInputStream pins = new PipedInputStream();
 
     /**
      * currentMethodInvocation keeps track of all the information that is
@@ -273,13 +283,25 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         // readline from buffer created at client
         // else
         
-        if(clientFlag == true && (clientMCode.clientReceiveData.bufferMCode.length() != 0)){
+        if(clientFlag == true && clientMCode.clientReceiveData.len != 0){
+            try {
+                pins.connect(clientMCode.clientReceiveData.pouts);
+            } catch (IOException ex) {
+                Logger.getLogger(TheaterMCodeInterpreter.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //if((this.clientMCode.clientReceiveData.text[0].indexOf("INST") != -1)){
             //readLine = clientMCode.clientReceiveData.fileToMCode(clientMCode.clientReceiveData.fileMCode);
             //readLine = clientMCode.clientReceiveData.data;
-            readLine = clientMCode.clientReceiveData.bufferMCode.substring(0);
-            System.out.println("Code in client: " + readLine);
-            //clientMCode.clientReceiveData.fileErase(clientMCode.clientReceiveData.fileMCode);
+            //readLine = clientMCode.clientReceiveData.bufferMCode.substring(0);
+            System.out.println("Lenght : " + clientMCode.clientReceiveData.len + "\n");
+            byte[] inByte = new byte[clientMCode.clientReceiveData.len];
+            try {
+                pins.read(inByte, 0, clientMCode.clientReceiveData.len);
+            } catch (IOException ex) {
+                Logger.getLogger(TheaterMCodeInterpreter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            readLine = new String(inByte);
+            System.out.println("Code in client: " + inByte);
             return readLine();
             //}
         } else{
