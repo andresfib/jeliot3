@@ -357,6 +357,8 @@ public class Jeliot {
             }
             //We get only the Server Source Code
             String source = this.sourceCode;
+            if(clientFlag)
+                System.out.println("Source: " + source + "\n");
             if (jeliotUserProperties.getBooleanProperty("save_unicode")) {
                 source = SourceCodeUtilities.convertNative2Ascii(source);
             }

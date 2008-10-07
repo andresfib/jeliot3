@@ -245,6 +245,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         super.initialize();
 
         try {
+            if(clientFlag)
+                pins.connect(clientMCode.clientReceiveData.pouts);
             line = readLine();
             System.out.println("Code first: " + line);
             MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
@@ -284,11 +286,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         // else
         
         if(clientFlag == true && clientMCode.clientReceiveData.len != 0){
-            try {
-                pins.connect(clientMCode.clientReceiveData.pouts);
-            } catch (IOException ex) {
-                Logger.getLogger(TheaterMCodeInterpreter.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
             //if((this.clientMCode.clientReceiveData.text[0].indexOf("INST") != -1)){
             //readLine = clientMCode.clientReceiveData.fileToMCode(clientMCode.clientReceiveData.fileMCode);
             //readLine = clientMCode.clientReceiveData.data;
@@ -308,7 +306,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (readNew()) {
             try {                              
                 readLine = mcode.readLine();
-                //System.out.println("Code in server second: " + readLine); 
+                System.out.println("Code in server second: " + readLine); 
 
             } catch (Exception e) {
             }
@@ -344,7 +342,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     protected void beforeInterpretation(String line) {
         MCodeUtilities.printlnToRegisteredSecondaryMCodeConnections(line);
         serverMCode.serverSendData.setMCode(line);
-        //System.out.println("Code third: " + line);
+        System.out.println("Code third: " + line);
     }
 
     /*
