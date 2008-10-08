@@ -1846,8 +1846,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
                             public void run() {
 
                                 enterAnimate(line);
+                                
                                 //Buttons are enables just after the animation mode is not before
                                 enableWidgets(animWidgets.elements(), true);
+                                System.out.println("After eneableWidgets\n");
                                 pauseButton.setEnabled(false);
                                 rewindButton.setEnabled(false);
 
@@ -2183,19 +2185,29 @@ public class JeliotWindow implements PauseListener, MouseListener {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                if(clientFlag != true){
+                
+                //if(clientFlag != true){
                     jeliot.compile();
-                }
+                //}
 
                 jeliot.rewind();
                 theater.repaint();
-
+               
+                //Here changed client to set play automatically
+                if(clientFlag){
+                    editButton.setEnabled(false);
+                    stepButton.setEnabled(false);
+                    playButton.setEnabled(false);
+                    pauseButton.setEnabled(false);
+                    rewindButton.setEnabled(false);
+                }
+                else{
                 editButton.setEnabled(true);
                 stepButton.setEnabled(true);
                 playButton.setEnabled(true);
                 pauseButton.setEnabled(false);
                 rewindButton.setEnabled(false);
+                }
 
                 if (runningUntil) {
                     //TODO: Here ask if the user wants to continue with run until.
