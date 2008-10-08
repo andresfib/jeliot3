@@ -285,25 +285,27 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         // readline from buffer created at client
         // else
         
-        if(clientFlag == true && clientMCode.clientReceiveData.len != 0){
-            
-            //if((this.clientMCode.clientReceiveData.text[0].indexOf("INST") != -1)){
-            //readLine = clientMCode.clientReceiveData.fileToMCode(clientMCode.clientReceiveData.fileMCode);
-            //readLine = clientMCode.clientReceiveData.data;
-            //readLine = clientMCode.clientReceiveData.bufferMCode.substring(0);
-            System.out.println("Lenght : " + clientMCode.clientReceiveData.len + "\n");
-            byte[] inByte = new byte[clientMCode.clientReceiveData.len];
-            try {
-                pins.read(inByte, 0, clientMCode.clientReceiveData.len);
-            } catch (IOException ex) {
-                Logger.getLogger(TheaterMCodeInterpreter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            readLine = new String(inByte);
-            System.out.println("Code in client: " + inByte);
-            return readLine();
-            //}
-        } else{
         if (readNew()) {
+            
+            if(clientFlag && clientMCode.clientReceiveData.len != 0){
+                //if((this.clientMCode.clientReceiveData.text[0].indexOf("INST") != -1)){
+                //readLine = clientMCode.clientReceiveData.fileToMCode(clientMCode.clientReceiveData.fileMCode);
+                //readLine = clientMCode.clientReceiveData.data;
+                //readLine = clientMCode.clientReceiveData.bufferMCode.substring(0);
+                System.out.println("Lenght : " + clientMCode.clientReceiveData.len );
+
+                byte[] inByte = new byte[clientMCode.clientReceiveData.len];
+                try {
+                    pins.read(inByte, 0, clientMCode.clientReceiveData.len);
+                } catch (IOException ex) {
+                    Logger.getLogger(TheaterMCodeInterpreter.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                readLine = new String(inByte);
+                
+                System.out.println("Code in client: " + readLine + "\n");
+                return readLine();
+                //}
+            } 
             try {                              
                 readLine = mcode.readLine();
                 System.out.println("Code in server second: " + readLine); 
@@ -321,7 +323,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 return readLine();
             }
         }
-        }
+
         //System.out.println(values.size());
         if (readLine == null) {
             readLine = "" + Code.ERROR + Code.DELIM

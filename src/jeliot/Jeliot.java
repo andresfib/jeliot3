@@ -357,8 +357,6 @@ public class Jeliot {
             }
             //We get only the Server Source Code
             String source = this.sourceCode;
-            if(clientFlag)
-                System.out.println("Source: " + source + "\n");
             if (jeliotUserProperties.getBooleanProperty("save_unicode")) {
                 source = SourceCodeUtilities.convertNative2Ascii(source);
             }
@@ -428,9 +426,9 @@ public class Jeliot {
      */
     public void rewind() {
 
-        if(clientFlag)
-            compiled = true;
-        else
+        //if(clientFlag)
+            //compiled = true;
+        //else
             compiled = false;
 
         //create director and the other equipment
@@ -440,11 +438,11 @@ public class Jeliot {
 
         director = new Director(theatre, this, engine);
         director.setActorFactory(af);
-        System.out.println("Programmm: " + gui.getProgram() + "\n");
+        
         mCodeInterpreterForTheater = new TheaterMCodeInterpreter(ecodeReader,
                 director, gui.getProgram(), inputWriter, serverJeliot, clientJeliot, clientFlag);
         director.setInterpreter(mCodeInterpreterForTheater);
-        //Go to MCodeInterpreter and change method "interpret" and put MCode from client
+        //Go to MCodeInterpreter and change method "interpret" and put MCode from client?
         try {
             PipedReader pr = new PipedReader();
             PipedWriter pw = new PipedWriter(pr);
@@ -486,7 +484,7 @@ public class Jeliot {
         });
 
         controller.addPauseListener(gui);
-
+        
         callTreeThread = new Thread(new Runnable() {
 
             public void run() {
