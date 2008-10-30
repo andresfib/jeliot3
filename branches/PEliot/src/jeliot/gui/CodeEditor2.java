@@ -78,14 +78,19 @@ public class CodeEditor2 extends JComponent {
     /**
      * 
      */
-    private UserProperties jeliotUserProperties = ResourceBundles.getJeliotUserProperties();    
+    private UserProperties jeliotUserProperties = ResourceBundles
+            .getJeliotUserProperties();
 
     /**
      * The String for the basic code template that is shown to the user in the
      * beginning.
      */
-    private String template = ResourceBundles.getLangInterpreterInfo().getStringProperty("code_editor.template");
-    private String templeteComment = messageBundle.getString("code_editor.template");
+    private String template = ResourceBundles.getLangInterpreterInfo()
+            .getStringProperty("code_editor.template");
+
+    private String templateComment = messageBundle
+            .getString("code_editor.template");
+
     /**
      * Comment for <code>title</code>
      */
@@ -147,7 +152,7 @@ public class CodeEditor2 extends JComponent {
      * 
      */
     private UndoRedoSyntaxDocument.UndoRedo undoRedo;
-    
+
     /**
      * returns true if the document is changed and false if it is not changed.
      * This is the value of the changed field.
@@ -314,22 +319,25 @@ public class CodeEditor2 extends JComponent {
     /**
      * Sets the layout and adds the JScrollPane with JTextArea area and JToolbar
      * in it. Initializes the FileChooser.
-     */    
+     */
     public CodeEditor2(String udir, String defaultIO) {
         this.udir = udir;
-        
-        // TODO: added. 
-        if (ResourceBundles.getLangInterpreterInfo().getBooleanProperty("jeliot.window.useIOImport"))        		
-        		this.template = defaultIO + "\n\n" + template.replaceFirst("comment", templeteComment);
-        else
-        	this.template = template.replaceFirst("comment", templeteComment);
-        
+
+        //TODO: added. 
+        if (ResourceBundles.getLangInterpreterInfo().getBooleanProperty(
+                "jeliot.window.useIOImport")) {
+            this.template = defaultIO + "\n\n"
+                    + template.replaceFirst("comment", templateComment);
+        } else {
+            this.template = template.replaceFirst("comment", templateComment);
+        }
+
         initFileChooser();
 
         //Special for JEditTextArea for syntax highlighting
         UndoRedoSyntaxDocument document = new UndoRedoSyntaxDocument();
         this.undoRedo = document.getUndoredo();
-        
+
         area = new JEditTextArea(true, document);
         area.setTokenMarker(new JavaTokenMarker());
         area.getPainter().setFont(
@@ -374,8 +382,8 @@ public class CodeEditor2 extends JComponent {
         //File wd = new File(wdname);
 
         if (currentDirectory == null) {
-            currentDirectory = new File(udir + File.separator + propertiesBundle
-                    .getStringProperty("directory.examples"));
+            currentDirectory = new File(udir + File.separator
+                    + propertiesBundle.getStringProperty("directory.examples"));
         }
 
         fileChooser = new JFileChooser();
@@ -654,7 +662,7 @@ public class CodeEditor2 extends JComponent {
         area.setFirstLine(0);
         area.setCaretPosition(0);
         area.requestFocusInWindow();
-        
+
         //Clear undo/redo
         undoRedo.undo.discardAllEdits();
         undoRedo.undoAction.updateUndoState();
@@ -765,10 +773,11 @@ public class CodeEditor2 extends JComponent {
     private void rememberPath(File file) {
         currentDirectory = file.getParentFile();
         if (currentDirectory != null) {
-            propertiesBundle.setStringProperty("current.user.directory", currentDirectory.getAbsolutePath());
+            propertiesBundle.setStringProperty("current.user.directory",
+                    currentDirectory.getAbsolutePath());
         }
     }
-    
+
     /**
      * Read the given file and sets the text in the given file to the
      * text area and the name of the file to the title of the frame.
@@ -793,7 +802,7 @@ public class CodeEditor2 extends JComponent {
      *
      */
     void saveProgram() {
-        
+
         //This is to keep the caret position after the saving of the file.
         String code = area.getText();
         int tabSize = Integer.parseInt(propertiesBundle
@@ -866,27 +875,28 @@ public class CodeEditor2 extends JComponent {
             String code = replaceTabs(area.getText());
             //Replacing \n or \r\n characters with spaces
             //code = replaceEndOfLines(code);
-            
+
             BufferedWriter w = null;
             if (this.jeliotUserProperties.getBooleanProperty("save_unicode")) {
-                w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8")));
+                w = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(file), Charset.forName("UTF-8")));
             } else {
                 w = new BufferedWriter(new FileWriter(file));
             }
-            
+
             w.write(replaceEndOfLines(code));
             w.flush();
             w.close();
-            
+
             /*
             FileWriter w = new FileWriter(file);
             w.write(code);
             w.flush();
             w.close();
             */
-            
+
             area.setText(code);
-            
+
             currentFile = file; // Jeliot 3
             setChanged(false); //Jeliot 3
             setTitle(file.getName()); // Jeliot 3
@@ -900,7 +910,7 @@ public class CodeEditor2 extends JComponent {
     }
 
     private static String EOL = System.getProperty("line.separator");
-    
+
     private String replaceEndOfLines(String text) {
         text = text.replaceAll("\\r?\\n", EOL);
         return text;
@@ -932,7 +942,8 @@ public class CodeEditor2 extends JComponent {
         try {
             BufferedReader r = null;
             if (this.jeliotUserProperties.getBooleanProperty("save_unicode")) {
-                r = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8")));
+                r = new BufferedReader(new InputStreamReader(
+                        new FileInputStream(file), Charset.forName("UTF-8")));
             } else {
                 r = new BufferedReader(new FileReader(file));
             }
@@ -1041,17 +1052,17 @@ public class CodeEditor2 extends JComponent {
         propertiesBundle.setFontProperty("font.code_editor", font);
 
     }
-    
+
     public boolean requestFocusInWindow() {
         //requestFocusInWindow();
         return this.area.requestFocusInWindow();
     }
 
-	public String getTemplate() {
-		return template;
-	}
+    public String getTemplate() {
+        return template;
+    }
 
-	public void setTemplate(String template) {
-		this.template = template.replaceFirst("comment", templeteComment);
-	}
+    public void setTemplate(String template) {
+        this.template = template.replaceFirst("comment", templateComment);
+    }
 }
