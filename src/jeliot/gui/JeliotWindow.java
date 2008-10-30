@@ -104,17 +104,16 @@ public class JeliotWindow implements PauseListener, MouseListener {
     // TODO: added 
     static private ResourceBundle interpreterProperties = ResourceBundles.getInterpreterInfo();
     
-    static private UserProperties langInterpreterProperties = ResourceBundles.getLangInterpreterInfo();
     /**
      * User properties that were saved from previous run.
      */
-    private UserProperties jeliotUserProperties = ResourceBundles
+    static private UserProperties jeliotUserProperties = ResourceBundles
             .getJeliotUserProperties();
-    {
+    static {
     	// TODO: added. For interpreter language support
     	/* If a method call should be asked from the user */
         if (!jeliotUserProperties.containsKey("interpreter_lang")) {
-            jeliotUserProperties.setStringProperty("interpreter_lang", ResourceBundles.getInterpreterInfo().getString("interpreter.defaultLanguage"));
+            jeliotUserProperties.setStringProperty("interpreter_lang", interpreterProperties.getString("interpreter.defaultLanguage"));
         }
         
         /* If a method call should be asked from the user */
@@ -151,15 +150,15 @@ public class JeliotWindow implements PauseListener, MouseListener {
         if (!jeliotUserProperties.containsKey("save_automatically")) {
             jeliotUserProperties
                     .setBooleanProperty("save_automatically", false);
-
         }
 
         if (!jeliotUserProperties.containsKey("CG")) {
             jeliotUserProperties.setBooleanProperty("CG", true);
-
         }
     }
 
+    static private UserProperties langInterpreterProperties = ResourceBundles.getLangInterpreterInfo();
+    
     /* If a method call should be asked from the user */
     //private boolean askForMethod = false;
     /* If the starting method call is main with command line parameters should the parameters be asked.*/
@@ -1788,7 +1787,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
         // Jeliot 3
         if (editor.isChanged()
-                && this.jeliotUserProperties
+                && jeliotUserProperties
                         .getBooleanProperty("save_automatically")) {
             editor.saveProgram();
         }
