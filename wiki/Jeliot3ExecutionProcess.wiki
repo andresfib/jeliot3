@@ -14,17 +14,17 @@ Other MCodeinterpreters
 
 == What happens when animation starts ==
 
-    1. Compile button is pushed
-    2. JeliotWindow object looks for the class with the main method.
-    3. Control transfers from Jeliot object that creates
-        a. the DynamicJava interpreter through a Launcher object (own thread)
-        b. visualizations in the visualization pane: Theather, Call Tree, and History
-    4. Play button is pushed
-    5. JeliotWindow object transfers the control to Jeliot object and MCode-interpreters for each visualization are created: TheaterMCodeInterpreter, etc. (each in own thread)
-    5. Jeliot object transfers the control to main MCodeInterpreter (TheaterMCodeInterpreter) through Director Object
-    6. For each animation step a line (or a few lines) of MCode is read in  MCodeInterpreter as it arrives through the pipe from the Interpreter (DynamicJava) and for each instruction there is a command method in the corresponding MCodeInterpreter that determines what happens after each instruction. For example, TheatherMCodeInterpreter calls Director in order to produce a visualization in the Theater and saves the created value for further use.
+    # Compile button is pushed
+    # JeliotWindow object looks for the class with the main method.
+    # Control transfers from Jeliot object that creates
+        ## the DynamicJava interpreter through a Launcher object (own thread)
+        ## visualizations in the visualization pane: Theather, Call Tree, and History
+    # Play button is pushed
+    # JeliotWindow object transfers the control to Jeliot object and MCode-interpreters for each visualization are created: TheaterMCodeInterpreter, etc. (each in own thread)
+    # Jeliot object transfers the control to main MCodeInterpreter (TheaterMCodeInterpreter) through Director Object
+    # For each animation step a line (or a few lines) of MCode is read in  MCodeInterpreter as it arrives through the pipe from the Interpreter (DynamicJava) and for each instruction there is a command method in the corresponding MCodeInterpreter that determines what happens after each instruction. For example, TheatherMCodeInterpreter calls Director in order to produce a visualization in the Theater and saves the created value for further use.
 
-<IMAGE: [process diagram http://www.websequencediagrams.com/cgi-bin/cdraw?lz=VXNlci0-SmVsaW90IFdpbmRvdzogQ2xpY2tzIGNvbXBpbGUKABENACUIOiBFeGVjdXRlAB8JKCkAIwctPkxhdW5jaGVyOiBTdGFydHMgbAAKByB0aHJlYWQKbm90ZSByaWdodCBvZiAAJQoKc2V0cyBpbnRlcnByZXRlciBtZXRob2QKY2FsbCBhbmQgcmVhZC93cml0ZSBwaXBlcwplbmQgbm90ZQoAbQgtPkkANgo6AEMKIEphdmEgY29kZQoAFgsAIA4AVAVzIE1Db2RlIHRvAF4FAIEeDwBRDApub2JvZHkgaXMAgRMFaW5nIApmcm9tIHRoAIEZBiB5ZXQAgRgKAIIXCCAAgmEPdHJ5IHRvIGVudGVyIGFuaW1hACILAIJnCHJld2luZACCWgtEaXJlY3RvcjogY3JlYXRlcyBkAAsHAIJ_CQCBQwVUaGVhdGVyAIIIDW5ldwCCdRYAGRkKYWxzbwCDOAdzIGZvciBvdGhlciAKAIMiC3MgaWYgbmVlZACDCwoAhEsVYwCEWgZQbGF5AIRNEACBSwpzaG93IG1lAIJGBWdvb2RzCgCBaQgAgT0bc3RhcnQAgwMJAIJ-DQoAgX0QAIN4CACCPgpkcmF3IGJveGVz&s=default]>
+<IMAGE: [http://www.websequencediagrams.com/cgi-bin/cdraw?lz=VXNlci0-SmVsaW90IFdpbmRvdzogQ2xpY2tzIGNvbXBpbGUKABENACUIOiBFeGVjdXRlAB8JKCkAIwctPkxhdW5jaGVyOiBTdGFydHMgbAAKByB0aHJlYWQKbm90ZSByaWdodCBvZiAAJQoKc2V0cyBpbnRlcnByZXRlciBtZXRob2QKY2FsbCBhbmQgcmVhZC93cml0ZSBwaXBlcwplbmQgbm90ZQoAbQgtPkkANgo6AEMKIEphdmEgY29kZQoAFgsAIA4AVAVzIE1Db2RlIHRvAF4FAIEeDwBRDApub2JvZHkgaXMAgRMFaW5nIApmcm9tIHRoAIEZBiB5ZXQAgRgKAIIXCCAAgmEPdHJ5IHRvIGVudGVyIGFuaW1hACILAIJnCHJld2luZACCWgtEaXJlY3RvcjogY3JlYXRlcyBkAAsHAIJ_CQCBQwVUaGVhdGVyAIIIDW5ldwCCdRYAGRkKYWxzbwCDOAdzIGZvciBvdGhlciAKAIMiC3MgaWYgbmVlZACDCwoAhEsVYwCEWgZQbGF5AIRNEACBSwpzaG93IG1lAIJGBWdvb2RzCgCBaQgAgT0bc3RhcnQAgwMJAIJ-DQoAgX0QAIN4CACCPgpkcmF3IGJveGVz&s=default process diagram ]>
 <---  To be used in  http://www.websequencediagrams.com/ ------>
 User->Jeliot Window: Clicks compile
 Jeliot Window->Jeliot: Executes compile()
