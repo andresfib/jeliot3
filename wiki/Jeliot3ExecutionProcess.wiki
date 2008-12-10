@@ -58,4 +58,5 @@ Decentants of the Actor class are the basic components of the animation. Each Ac
 
 Actors can be combined to other Actors and components that implement the ActorContainer interface.
 
+//Just wondering if you have this image? 
 <IMAGE: Actor and ActorContainer hierarchy>
