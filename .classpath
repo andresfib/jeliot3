@@ -5,5 +5,6 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/junit.jar" sourcepath="lib/src.jar"/>
 	<classpathentry kind="src" path="tests"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/B00000490/Desktop/sablecc-3.2/lib/sablecc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
