@@ -295,7 +295,12 @@ public class VariableActor extends Actor implements ActorContainer {
     }
 
     public String getLabel() {
-        return getType() + " " + getName();
+    	String name = getName();
+    	//We remove the canonical part of the name if it exist
+    	String displayedName = (name.lastIndexOf('.')!=(-1))?
+    			name.substring(name.lastIndexOf('.') + 1, name.length()):
+    			name;
+        return getType() + " " + displayedName;
     }
 
     public String toString() {

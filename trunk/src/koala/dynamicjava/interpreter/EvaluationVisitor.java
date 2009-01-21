@@ -1101,10 +1101,10 @@ public class EvaluationVisitor extends VisitorObject {
                 throw new CatchedExceptionError(e, node);
             }
             String objectValue = MCodeUtilities.getValue(value);
-
+            String name = f.getDeclaringClass().getCanonicalName() + "." + f.getName();
             // fixed by rku, added Modifiers after type.
             MCodeUtilities.write("" + Code.OFA + Code.DELIM + fieldCounter
-                    + Code.DELIM + objectCounter + Code.DELIM + f.getName()
+                    + Code.DELIM + objectCounter + Code.DELIM + name
                     + Code.DELIM + objectValue + Code.DELIM
                     + f.getType().getName() + Code.DELIM + f.getModifiers()
                     + Code.DELIM + MCodeGenerator.locationToString(node));
@@ -1491,7 +1491,22 @@ public class EvaluationVisitor extends VisitorObject {
     public Object visit(SuperFieldAccess node) {
         Field f = (Field) node.getProperty(NodeProperties.FIELD);
         try {
-            return f.get(context.getHiddenArgument());
+        	long fieldCounter = counter;
+            counter++;
+
+            long objectCounter = counter;
+
+            Object o = f.get(context.getHiddenArgument());
+
+            String name = f.getDeclaringClass().getCanonicalName() + "." + f.getName();
+            // fixed by rku, added Modifiers after type.
+            MCodeUtilities.write("" + Code.OFA + Code.DELIM + fieldCounter
+                    + Code.DELIM + objectCounter + Code.DELIM + name
+                    + Code.DELIM + o + Code.DELIM
+                    + f.getType().getName() + Code.DELIM + f.getModifiers()
+                    + Code.DELIM + MCodeGenerator.locationToString(node));
+            
+            return o;
         } catch (Exception e) {
             throw new CatchedExceptionError(e, node);
         }
