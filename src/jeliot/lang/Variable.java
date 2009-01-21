@@ -64,6 +64,7 @@ public class Variable {
      */
     public Variable(String name, String type) {
         this.type = type;
+        //We hide the canonical name if it exists (used in Object Fields (OFA))
         this.name = name;
 //         value = new Value(Code.UNKNOWN, type);
     }

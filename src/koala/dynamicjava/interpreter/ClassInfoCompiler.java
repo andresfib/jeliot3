@@ -1825,7 +1825,7 @@ public class ClassInfoCompiler {
             }
 
             Expression init = node.getInitializer();
-
+            String name = classInfo.getName() +"." + node.getName();
             if (init != null) {
                 if ((init instanceof Literal) && Modifier.isFinal(af)
                         && Modifier.isStatic(af)) {
@@ -1927,16 +1927,17 @@ public class ClassInfoCompiler {
                         addToInstanceInitializer(exp);
                     }
                 }
+
                 if (init instanceof Literal) {
                     MCodeUtilities.write("" + Code.FIELD + Code.DELIM
-                            + node.getName() + Code.DELIM
+                            + name + Code.DELIM
                             + fi.getType().getName() + Code.DELIM + af
                             + Code.DELIM + ((Literal) init).getValue()
                             + Code.DELIM
                             + MCodeGenerator.locationToString(node));
                 } else {
                     MCodeUtilities.write("" + Code.FIELD + Code.DELIM
-                            + node.getName() + Code.DELIM
+                            + name + Code.DELIM
                             + fi.getType().getName() + Code.DELIM + af
                             + Code.DELIM + Code.UNKNOWN + Code.DELIM
                             + MCodeGenerator.locationToString(node));
@@ -1945,7 +1946,7 @@ public class ClassInfoCompiler {
             } else {
                 classFactory.addField(af, rt, fn);
                 MCodeUtilities.write("" + Code.FIELD + Code.DELIM
-                        + node.getName() + Code.DELIM + fi.getType().getName()
+                        + name + Code.DELIM + fi.getType().getName()
                         + Code.DELIM + af + Code.DELIM + Code.UNKNOWN
                         + Code.DELIM + MCodeGenerator.locationToString(node));
             }

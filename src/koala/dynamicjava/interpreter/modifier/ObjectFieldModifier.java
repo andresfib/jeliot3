@@ -115,9 +115,10 @@ public class ObjectFieldModifier extends LeftHandSideModifier {
             }
             String objectValue = MCodeUtilities.getValue(value);
 
-            // fixed by rku, added Modifiers after type.
+            String name = f.getDeclaringClass().getCanonicalName() + "." + f.getName();
+            // fixed by rku, added Modifiers after type.            
             MCodeUtilities.write("" + Code.OFA + Code.DELIM + fieldCounter
-                    + Code.DELIM + objectCounter + Code.DELIM + f.getName()
+                    + Code.DELIM + objectCounter + Code.DELIM + name
                     + Code.DELIM + objectValue + Code.DELIM
                     + f.getType().getName() + Code.DELIM + f.getModifiers()
                     + Code.DELIM + MCodeGenerator.locationToString(node));

@@ -135,6 +135,7 @@ public class Launcher extends Thread {
      * @param methodCall
      */
     public void setMethodCall(String methodCall) {
+    	System.out.println("starting method is "+ methodCall);
         this.methodCall = methodCall;
     }
 
