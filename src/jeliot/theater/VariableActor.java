@@ -10,7 +10,6 @@ import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
-import java.lang.Throwable;
 
 
 /**
@@ -41,22 +40,22 @@ public class VariableActor extends Actor implements ActorContainer {
     /**
      * x-coordinate of the location of the value slot.
      */
-    protected int valuex;
+    protected int valuex = -1;
 
     /**
      * y-coordinate of the location of the value slot.
      */
-    protected int valuey;
+    protected int valuey = -1;
 
     /**
      * the width of the value slot.
      */
-    protected int valuew;
+    protected int valuew = -1;
 
     /**
      * the height of the value slot.
      */
-    protected int valueh;
+    protected int valueh = -1;
 
     /**
      * Value border width.
@@ -97,6 +96,13 @@ public class VariableActor extends Actor implements ActorContainer {
      */
     private boolean contentResized = false;
     
+    /**
+     * Variable that indicates if the contents of the ActorContainer are currently relocated or not.
+     * true -> yes,
+     * false -> no.
+     */
+    private boolean contentRelocated = false;
+    
     // DOC: Document!
     /**
      * The resource bundle for theater package.
@@ -133,11 +139,6 @@ public class VariableActor extends Actor implements ActorContainer {
         if (value != null) {
             int actx = value.getX();
             int acty = value.getY();
-            
-            /*System.out.println("el Nombre del value es: "+value.getDescription());
-            System.out.println("las Coordenadas del value son:");
-            System.out.println("X: "+actx);
-            System.out.println("Y: "+acty);*/
                        
             g.translate(actx, acty);
             value.paintValue(g);
@@ -185,7 +186,9 @@ public class VariableActor extends Actor implements ActorContainer {
         Point rp = getRootLocation();
         int w = actor.width;
         int h = actor.height;
-        rp.translate(valuex + (valuew - w) / 2, valuey + (valueh - h) / 2);
+        
+         rp.translate(valuex + (valuew - w) / 2, valuey + (valueh - h) / 2);
+         
         return rp;
     }
 
@@ -202,51 +205,54 @@ public class VariableActor extends Actor implements ActorContainer {
     public void resizeContainedActors() {
         int resizeScale = getResizeScale();
         
-        if(isContentResized() == true){
+        if(isContentResized()){
+            //resizes the value slot
             valueh=valueh/resizeScale;
             valuew=valuew/resizeScale;
             valuex=valuex/resizeScale;
-            valuey=valuey/resizeScale;
-            
-           
-            namex=namex/resizeScale;
-            namey=namey/resizeScale;
-            Font fontaux = new Font(propertiesBundle
-            .getStringProperty("font.actor.default.family"), Font.BOLD, Integer
-            .parseInt(propertiesBundle.getStringProperty("font.actor.default.size")));
-            setFont(fontaux);
-            
-            value.resize();
+            valuey=valuey/resizeScale;      
+            //resizes the variable's name
+            sizeDownFont();
+            //resizes the ValueActor
+            value.sizeDownFont();           
             contentResized=false;
         }
         else{
+            //resizes the value slot
             valueh=valueh*resizeScale;
             valuew=valuew*resizeScale;
             valuex=valuex*resizeScale;
             valuey=valuey*resizeScale;
-            
-            
-            namex=namex*resizeScale;
-            namey=namey*resizeScale;
-            Font fontaux = new Font(propertiesBundle
-            .getStringProperty("font.actor.default.family"), Font.BOLD, Integer
-            .parseInt(propertiesBundle.getStringProperty("font.actor.default.size"))*resizeScale);
-            setFont(fontaux);
-            
-            value.resize();
+            //resizes the variable's name
+            sizeUpFont();
+            //resizes the ValueActor
+            value.sizeUpFont();
             contentResized=true;
         }
+        
     }
-
+    
+    /**
+     * Repositions the actors contained in the current
+     * one.
+     */
+    public void relocateContainedActors() {
+        repositionValueActor();
+    }
+    
     /**
      * 
      */
     public void bind() {
         this.value = this.reserved;
+        
+        if(isResized()){
+            value.sizeUpFont();
+            value.resized = true;
+            contentResized=true;
+        }
+        repositionValueActor();
         value.setParent(this);
-
-        value.setLocation(valuex + (valuew - value.width) / 2, valuey
-                + (valueh - value.height) / 2);
     }
 
     /**
@@ -367,5 +373,14 @@ public class VariableActor extends Actor implements ActorContainer {
 
     public String toString() {
         return "variable " + getName() + " of type " + getType();
+    }
+
+    public boolean isContentRelocated() {
+        return contentRelocated;
+    }
+    
+    public void repositionValueActor(){
+        value.setLocation(valuex + (valuew - value.width) / 2, valuey
+                  + (valueh - value.height) / 2);
     }
 }

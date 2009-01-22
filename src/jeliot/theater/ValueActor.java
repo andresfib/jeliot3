@@ -44,8 +44,8 @@ public class ValueActor extends Actor {
 	 *
 	 */
 	private int namey;
-    
-    /**
+        
+        /**
 	 *
 	 */
 	private int margin = 2;
@@ -54,15 +54,8 @@ public class ValueActor extends Actor {
 	 * type contains the type of the value
 	 */
 	private String type;
-        
-        /**
-         * Variable that indicate if the actor is currently resized or not.
-         * true -> yes,
-         * false -> no.
-         */
-        private boolean resized = false;
 	
-    /**
+        /**
 	 * 
 	 */
 	public ValueActor() {
@@ -171,7 +164,6 @@ public class ValueActor extends Actor {
 
         namex = (getWidth()-sw)/2;
         namey = (getHeight()+sh)/2-2;
-
     }
 
     /* (non-Javadoc)
@@ -218,43 +210,19 @@ public class ValueActor extends Actor {
         this.valstr = valstr;
     }
     
-    //@Override
-    public boolean isResized(){
-        return resized;
-    }
-    
-    //@Override
-    public void resize(){
-        int resizedScale = getResizeScale();
-        
-        if(isResized() == true){
-            Font fontaux = new Font(propertiesBundle.getStringProperty("font.value_actor.family"),        
-            Font.BOLD,
-            Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size")));
-            setFont(fontaux);
-            
-            namex = (namex/resizedScale)-(getX()/resizedScale);
-            namey = namey/resizedScale;
-            
-            resized = false;
-        }else{
-            Font fontaux = new Font(propertiesBundle.getStringProperty("font.value_actor.family"),        
-            Font.BOLD,
-            Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size"))*resizedScale);
-            setFont(fontaux);
-            
-            namex = getX()+(namex*resizedScale);
-            namey = namey*resizedScale;
-            
-            resized = true;
-        }
-    }
-    
     public int getNameX(){
         return namex;
     }
     
     public int getNameY(){
         return namey;
+    }
+    
+    public void setNameX(int val){
+        namex = val;
+    }
+    
+    public void setNameY(int val){
+        namey = val;
     }
 }

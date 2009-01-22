@@ -162,6 +162,13 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      */
     private boolean contentResized = false;
     
+    /**
+     * Variable that indicates if the contents of the ActorContainer are currently relocated or not.
+     * true -> yes,
+     * false -> no.
+     */
+    private boolean contentRelocated = false;
+    
     /*
      * ResourceBundle for the messages related with the theater and
      * the actors.
@@ -448,10 +455,14 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     public boolean isContentResized() {
         return contentResized;
     }
+    
+    public boolean isContentRelocated() {
+        return contentRelocated;
+    }
 
     public void resizeContainedActors() {
     }
-
+    
     /*
      * (non-Javadoc)
      * 
@@ -749,8 +760,6 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         
         if(act != null && act instanceof MethodStage){
             act.resize();
-            MethodStage msact = (MethodStage) act;
-            msact.repositionVariableActors();
             manager.validateTheater();
             flush();
         }
@@ -878,10 +887,10 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         
         if(actor != null){
             // show the name of the clicked actor
-            /*System.out.println("***+***********");
+            System.out.println("***+***********");
             System.out.println("NAME: " + actor.getDescription());
             System.out.println("CLASS NAME: " + actor.getClass().getCanonicalName());
-            System.out.println("***+***********");*/
+            System.out.println("***+***********");
 
             //code for distinguish between clicks on BUTTON1 and BUTTON3
             switch(evt.getButton()){
@@ -980,4 +989,10 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             }
         }
     }
+    
+    /**
+     * Repositions the actors contained in the current
+     * one.
+     */
+    public void relocateContainedActors(){}
 }

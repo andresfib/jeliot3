@@ -26,7 +26,7 @@ import jeliot.util.UserProperties;
  * @author Pekka Uronen
  * @author Niko Myller
  */
-public abstract class Actor implements Cloneable {
+public abstract class Actor implements Cloneable, Resizable {
 
     // DOC: Document!
     /**
@@ -172,9 +172,7 @@ public abstract class Actor implements Cloneable {
      * true -> yes,
      * false -> no.
      */
-    private boolean resized = false;
-    
-    private static final int RESIZE_SCALE = 2;
+    protected boolean resized = false;
     
     public Actor() {
         super();
@@ -683,20 +681,20 @@ public abstract class Actor implements Cloneable {
     
     public void resize(){
         if(resized == true){
-            width = width/RESIZE_SCALE;
-            height = height/RESIZE_SCALE;
+            setSize(width/RESIZE_SCALE,height/RESIZE_SCALE);
             if(this instanceof ActorContainer){
                 ActorContainer ac = (ActorContainer) this;
                 ac.resizeContainedActors();
+                ac.relocateContainedActors();
             }
             resized = false;
         }
         else{
-            width = width * RESIZE_SCALE;
-            height = height * RESIZE_SCALE;
+            setSize(width * RESIZE_SCALE,height * RESIZE_SCALE);
             if(this instanceof ActorContainer){
                 ActorContainer ac = (ActorContainer) this;
                 ac.resizeContainedActors();
+                ac.relocateContainedActors();
             }
             resized = true;
         }
@@ -704,6 +702,23 @@ public abstract class Actor implements Cloneable {
     
     public int getResizeScale(){
         return RESIZE_SCALE;
+    }
+    
+    public void sizeUpFont(){
+        int resizedScale = getResizeScale();
+        
+        Font fontaux = new Font(propertiesBundle.getStringProperty("font.value_actor.family"),        
+        Font.PLAIN,
+        Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size"))*resizedScale);
+        setFont(fontaux);
+    }
+    
+    public void sizeDownFont(){
+        Font fontaux = new Font(propertiesBundle.getStringProperty("font.value_actor.family"),        
+        Font.BOLD,
+        Integer.parseInt(propertiesBundle.getStringProperty("font.value_actor.size")));
+        setFont(fontaux);
+        calculateSize();
     }
     
     /*public void setDoubleSize(){

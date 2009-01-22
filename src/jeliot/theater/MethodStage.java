@@ -113,6 +113,13 @@ public class MethodStage extends Actor implements ActorContainer {
     private boolean contentResized = false;
 
     /**
+     * Variable that indicates if the contents of the ActorContainer are currently relocated or not.
+     * true -> yes,
+     * false -> no.
+     */
+    private boolean contentRelocated = false;
+    
+    /**
      * @param name
      */
     public MethodStage(String name) {
@@ -149,7 +156,8 @@ public class MethodStage extends Actor implements ActorContainer {
 
         Dimension d = calculateSizeDimensions();
 
-        setSize(d.width, d.height);
+        if(!isResized())
+            setSize(d.width, d.height);
     }
 
     /**
@@ -174,8 +182,10 @@ public class MethodStage extends Actor implements ActorContainer {
             }
         }
         Dimension d = calculateSizeDimensions();
-        setSize(d.width, d.height);
-        repositionVariableActors();
+        
+        if(!isResized())
+            setSize(d.width, d.height);
+        relocateContainedActors();
     }
 
     /**
@@ -193,10 +203,17 @@ public class MethodStage extends Actor implements ActorContainer {
 
         int w = borderWidth * 2 + insets.right + insets.left
                 + Math.max(actWidth, nwidth) + 2 * margin;
-
-        int h = borderWidth * 2 + insets.top + insets.bottom + nheight + 2
+        
+        int h=0;
+        if(!isResized()){
+            h = borderWidth * 2 + insets.top + insets.bottom + nheight + 2
+                    * margin + actorMargin + (actorMargin + actHeight) * varCount;
+        }
+        else{
+            h = TheaterManager.EXTRA_SPACE + borderWidth * 2 + insets.top + insets.bottom + nheight + 2
                 * margin + actorMargin + (actorMargin + actHeight) * varCount;
-
+        }
+        
         return new Dimension(w, h);
     }
 
@@ -275,17 +292,25 @@ public class MethodStage extends Actor implements ActorContainer {
      * 
      */
     public void bind() {
+        if(isResized()==true)
+            reserved.resize();
+        
         reserved.setLocation(resLoc);
+        
         variables.push(reserved);
         reserved.setParent(this);
-
+        
         //Added for Jeliot 3
         totalVarCount++;
         scopeVarCount++;
         calculateSize();
     }
 
-    public void repositionVariableActors() {
+    /**
+     * Repositions the actors contained in the current
+     * one.
+     */
+    public void relocateContainedActors() {
         for (int i = 0; i < variables.size(); i++) {
             Actor prev = i == 0 ? null : (Actor) variables.get(i - 1);
             Actor actor = (Actor) variables.get(i);
@@ -296,6 +321,11 @@ public class MethodStage extends Actor implements ActorContainer {
             int x = getWidth() - insets.right - actor.getWidth();
             actor.setLocation(x, y);
         }
+        
+        if(isContentRelocated())
+            contentRelocated = false;
+        else
+            contentRelocated = true;
     }
 
     /**
@@ -338,7 +368,7 @@ public class MethodStage extends Actor implements ActorContainer {
             act.resize();
         }
         
-        if(contentResized == true)
+        if(isContentResized())
             contentResized = false;
         else
             contentResized = true;
@@ -365,7 +395,7 @@ public class MethodStage extends Actor implements ActorContainer {
      * @see jeliot.theater.Actor#appear(java.awt.Point)
      */
     public Animation appear(final Point loc) {
-
+        
         return new Animation() {
             Dimension size;
 
@@ -418,6 +448,7 @@ public class MethodStage extends Actor implements ActorContainer {
                 size.height = full;
                 setSize(size);
                 paintVars = true;
+                
             }
             
             public void finalFinish() {
@@ -564,5 +595,21 @@ public class MethodStage extends Actor implements ActorContainer {
      */
     public void setName(String name) {
         this.name = name;
+    }
+    
+    /**
+     *  Uses resize from class Actor, and changes 
+     *  the size of actHeight and actWidth 
+     * */
+    public void resize(){
+        super.resize();
+        if(!isResized()){
+            actWidth =actWidth/getResizeScale();
+            actHeight = actHeight/getResizeScale();
+        }
+    }
+
+    public boolean isContentRelocated() {
+        return contentRelocated;
     }
 }

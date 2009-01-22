@@ -41,6 +41,16 @@ public class ReferenceVariableActor extends VariableActor {
      *
      */
     private ReferenceActor reservedRefActor;
+    
+    /**
+     * Variable that indicates if the actor is currently resized or not.
+     * true -> yes,
+     * false -> no.
+     * This variable is not used because the compiler considers it a final variable so,
+     * it doesn't allow us to modify it, so is here only as a warn or indication that would say
+     * that it is good to have it in order to 'standarize' the use of his interface.
+     */
+    private boolean contentResized = false;
 
     /* (non-Javadoc)
      * @see jeliot.theater.Actor#paintActor(java.awt.Graphics)
@@ -227,4 +237,24 @@ public class ReferenceVariableActor extends VariableActor {
       
        return a;
    }
+    
+    /**
+     * Resizes up, or resizes down the actors contained in the given
+     * ActorContainer.
+     */
+    public void resizeContainedActors(){
+        int resizeScale = getResizeScale();
+        
+        if(isContentResized() == true){
+            refLen=refLen/resizeScale;
+            refWidth=refWidth/resizeScale;
+            refActor.resize();
+            contentResized = false;
+        } else {
+            refLen=refLen*resizeScale;
+            refWidth=refWidth*resizeScale;
+            refActor.resize();
+            contentResized = true;
+        }
+    }
 }
