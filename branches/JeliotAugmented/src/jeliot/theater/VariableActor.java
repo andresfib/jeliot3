@@ -214,7 +214,8 @@ public class VariableActor extends Actor implements ActorContainer {
             //resizes the variable's name
             sizeDownFont();
             //resizes the ValueActor
-            value.sizeDownFont();           
+            value.sizeDownFont();
+            value.resized=false;
             contentResized=false;
         }
         else{
@@ -227,9 +228,9 @@ public class VariableActor extends Actor implements ActorContainer {
             sizeUpFont();
             //resizes the ValueActor
             value.sizeUpFont();
+            value.resized=true;
             contentResized=true;
         }
-        
     }
     
     /**
@@ -382,5 +383,17 @@ public class VariableActor extends Actor implements ActorContainer {
     public void repositionValueActor(){
         value.setLocation(valuex + (valuew - value.width) / 2, valuey
                   + (valueh - value.height) / 2);
+    }
+
+    public void setHighActor(Actor ha) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Actor getHighActor() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void cleanHighActor(Theater th) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

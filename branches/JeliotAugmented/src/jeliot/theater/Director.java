@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -840,7 +841,7 @@ public class Director {
     public void setUpMethod(String methodName, Value[] args,
             String[] formalParameters, String[] formalParameterTypes,
             Highlight h, Value thisValue) {
-
+        
         // highlight the method header.
         highlightDeclaration(h);
 
@@ -1043,7 +1044,7 @@ public class Director {
         manager.bind(stage);
 
         updateCapture();
-
+        
         if (args != null && args.length > 0) {
 
             for (int i = 0; i < n; ++i) {

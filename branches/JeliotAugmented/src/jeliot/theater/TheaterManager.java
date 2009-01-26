@@ -308,6 +308,7 @@ public class TheaterManager implements ComponentListener {
     public void removeMethodStage(MethodStage stage) {
         methods.removeElement(stage);
         theatre.removePassive(stage);
+        stage.cleanHighActor(theatre);
     }
 
     /**

@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.util.Iterator;
 import java.util.Stack;
 
+import javax.swing.JMenuItem;
 import jeliot.tracker.Tracker;
 import jeliot.tracker.TrackerClock;
 
@@ -120,6 +121,11 @@ public class MethodStage extends Actor implements ActorContainer {
     private boolean contentRelocated = false;
     
     /**
+     * Reference to highActor contained in the concrete(this) MethodStage.
+     */
+    private Actor highActor = null;
+    
+    /**
      * @param name
      */
     public MethodStage(String name) {
@@ -185,7 +191,6 @@ public class MethodStage extends Actor implements ActorContainer {
         
         if(!isResized())
             setSize(d.width, d.height);
-        relocateContainedActors();
     }
 
     /**
@@ -304,6 +309,7 @@ public class MethodStage extends Actor implements ActorContainer {
         totalVarCount++;
         scopeVarCount++;
         calculateSize();
+        relocateContainedActors();
     }
 
     /**
@@ -425,6 +431,14 @@ public class MethodStage extends Actor implements ActorContainer {
                         new int[] { p.y }, getWidth(), getHeight(), 0, -1,
                         getDescription()));
                 repaint();
+                
+                //this is for controlling the enabling or disabling of certain elements of the methodMenu in Theater
+                Theater parent = (Theater) getParent();
+                JMenuItem jmi=null;
+                if(parent!=null)
+                    jmi = (JMenuItem) parent.getMethodMenu().getComponent(2);
+                if(jmi!=null)
+                    jmi.setEnabled(false);
             }
 
             public void animate(double pulse) {
@@ -443,16 +457,22 @@ public class MethodStage extends Actor implements ActorContainer {
                 this.repaint();
             }
 
-            public void finish() {
+            public void finish() {                
                 setLight(NORMAL);
                 size.height = full;
                 setSize(size);
                 paintVars = true;
-                
             }
             
             public void finalFinish() {
                 this.passivate(MethodStage.this);
+                //this is for controlling the enabling or disabling of certain elements of the methodMenu in Theater
+                Theater parent = (Theater) getParent();
+                JMenuItem jmi=null;
+                if(parent!=null)
+                    jmi = (JMenuItem) parent.getMethodMenu().getComponent(2);
+                if(jmi!=null)
+                    jmi.setEnabled(true);
             }
         };
     }
@@ -482,6 +502,14 @@ public class MethodStage extends Actor implements ActorContainer {
                 setSize(size);
                 paintVars = false;
                 repaint();
+                
+                //this is for controlling the enabling or disabling of certain elements of the methodMenu in Theater
+                Theater parent = (Theater) getParent();
+                JMenuItem jmi=null;
+                if(parent!=null)
+                    jmi = (JMenuItem) parent.getMethodMenu().getComponent(2);
+                if(jmi!=null)
+                    jmi.setEnabled(false);
             }
 
             public void animate(double pulse) {
@@ -516,6 +544,13 @@ public class MethodStage extends Actor implements ActorContainer {
                         getHeight(), 0, -1, getDescription());
 
                 this.removeActor(MethodStage.this);
+                //this is for controlling the enabling or disabling of certain elements of the methodMenu in Theater
+                Theater parent = (Theater) getParent();
+                JMenuItem jmi=null;
+                if(parent!=null)
+                    jmi = (JMenuItem) parent.getMethodMenu().getComponent(2);
+                if(jmi!=null)
+                    jmi.setEnabled(true);
             }
         };
     }
@@ -549,6 +584,14 @@ public class MethodStage extends Actor implements ActorContainer {
                     plus = (full - h) / getDuration();
                     //setLight(HIGHLIGHT);
                     this.repaint();
+                    
+                    //this is for controlling the enabling or disabling of certain elements of the methodMenu in Theater
+                    Theater parent = (Theater) getParent();
+                    JMenuItem jmi=null;
+                    if(parent!=null)
+                        jmi = (JMenuItem) parent.getMethodMenu().getComponent(2);
+                    if(jmi!=null)
+                        jmi.setEnabled(false);
                 }
 
                 public void animate(double pulse) {
@@ -576,6 +619,13 @@ public class MethodStage extends Actor implements ActorContainer {
 
                 public void finalFinish() {
                     //this.passivate((Actor)MethodStage.this);
+                    //this is for controlling the enabling or disabling of certain elements of the methodMenu in Theater
+                    Theater parent = (Theater) getParent();
+                    JMenuItem jmi=null;
+                    if(parent!=null)
+                        jmi = (JMenuItem) parent.getMethodMenu().getComponent(2);
+                    if(jmi!=null)
+                        jmi.setEnabled(true);
                 }
             };
 
@@ -609,7 +659,39 @@ public class MethodStage extends Actor implements ActorContainer {
         }
     }
 
+    /**
+     * Return true if the contained actors are relocated, false if not.
+     */
     public boolean isContentRelocated() {
         return contentRelocated;
+    }
+    
+    /**
+     * Sets the reference of the highActor inside the container.
+     * @param ha
+     */
+    public void setHighActor(Actor ha){
+        this.highActor = ha;
+    }
+    
+    /**
+     * Returns the reference of the highActor inside the container.
+     * @return
+     */
+    public Actor getHighActor(){
+        return this.highActor;
+    }
+    
+    /**
+     * This method does nothing if the actual reference of highActor is 
+     * null in the container. On the other hand, if is not null, it sets to
+     * null its reference and the one of the parent (usually the Theater itself).
+     * @param th
+     */
+    public void cleanHighActor(Theater th){
+        if(this.highActor != null){
+            this.highActor = null;
+            th.cleanHighlight();
+        }
     }
 }
