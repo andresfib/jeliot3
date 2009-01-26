@@ -14,8 +14,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Iterator;
 import jeliot.util.ResourceBundles;
 import java.util.ResourceBundle;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 
 /**
@@ -32,22 +35,18 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * Background image.
      */
     private Image backImage;
-
     /**
      * Captured image of the screen, used on active mode for extra efficiency.
      */
     private Image captScreen;
-
     /**
      * Graphics object for captured image when the animation is going on.
      */
     private Graphics csg;
-
     /**
      * 
      */
     private Rectangle clipRect;
-
     /**
      * True, if the theatre is in active mode or captured. Active mode means
      * that something is or is going to be animated. This means that the extra
@@ -56,28 +55,23 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * @see Animation
      */
     private boolean active;
-
     /**
      * Vector of passive actors which are drawn in passive mode.
      */
     private Vector pasAct = new Vector();
-
     /**
      * Vector of active, moving actors which are drawn in active mode (during
      * animation).
      */
     private Vector actAct = new Vector();
-
     /**
      * Highlighted actor if any.
      */
     private Actor highActor;
-
     /**
      *  
      */
     private TheaterManager manager = new TheaterManager(this);
-
     /**
      * Variable is set true if there are other <code>JComponents</code> on the
      * Theatre component. At the moment this happens only when input is
@@ -87,93 +81,82 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * @see #paint(Graphics g)
      */
     private boolean showComponents;
-
     /**
      *  
      */
     private boolean runUntil = false;
-    
     /*
      * Hashtable destined to save relations ActorName - Description
      * and provide an easier acces to information.
      */
     private Hashtable infoActor = new Hashtable();
-    
     /*
      * Attribute destined to make easier the creation of quick dialogs
      * with some info about the actors.
      */
     //private JOptionPane optionPane;
-    
     /**
      * Constant destined to control the zoomed scale of the components
      */
     private static final int ZOOMED_SCALE = 2;
-    
     /**
      * Control variable for control the size(zoom) on the screen
      */
     private boolean zoomOut = false;
-    
     /**
      * Popup menu for the handling of the variables.
      */
     private JPopupMenu variableMenu;
-    
     /**
      * Popup menu for the handling of the methods.
      */
     private JPopupMenu methodMenu;
-    
     /**
      * Popup menu for the handling of the constant.
      */
     private JPopupMenu constantMenu;
-    
     /**
      * Popup menu for the handling of the bubbles.
      */
     private JPopupMenu bubbleMenu;
-    
     /**
      * Popup menu for the handling of the objects.
      */
     private JPopupMenu objectMenu;
-    
     /**
      * Popup menu for the handling of the classes.
      */
     private JPopupMenu classMenu;
-    
     /**
      * Popup menu for the handling of the references.
      */
     private JPopupMenu referenceMenu;
-    
     /**
      * ScrollPane for control the view in the theater
      */
     private JScrollPane scrollPane;
-    
     /**
      * Variable that indicates if the actor is currently resized or not.
      * true -> yes,
      * false -> no.
      */
     private boolean contentResized = false;
-    
     /**
      * Variable that indicates if the contents of the ActorContainer are currently relocated or not.
      * true -> yes,
      * false -> no.
      */
     private boolean contentRelocated = false;
-    
     /*
      * ResourceBundle for the messages related with the theater and
      * the actors.
      */
     private ResourceBundle theaterDescription = ResourceBundles.getTheaterDescriptionResourceBundle();
+    /**
+     * Vector of MethodStage actors destined to controll the stack of MethodStages existing in the
+     * actual animation.
+     */
+    private Vector MSStack = null;
 
     /**
      * Sets the opaque of the component to be true.
@@ -181,6 +164,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * @see #setOpaque(boolean)
      */
     public Theater() {
+        MSStack = new Vector();
         initAditionalComponents();
         addListeners();
         getDescriptions();
@@ -229,7 +213,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
                 //actors are painted.
                 paintBackground(g);
                 paintActors(g, pasAct);
-                //here was the call to the method paintHighlight(g)
+            //here was the call to the method paintHighlight(g)
             }
             //Finally the active actors are painted.
             paintActors(g, actAct);
@@ -252,11 +236,11 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         // this component and then other components on top of it.
         if (showComponents) {
             super.paint(g);
-            // Otherwise just paint the current component.
+        // Otherwise just paint the current component.
         } else {
             paintComponent(g);
         }
-        //g.dispose();
+    //g.dispose();
     }
 
     /**
@@ -306,13 +290,13 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
                 act.paintActor(g);
                 g.translate(-x, -y);
             }
-            /*
-             * Old version: Not valid code. for (int i = 0; i < n; ++i) { Actor
-             * act = (Actor)actors.elementAt(i);
-             * 
-             * int x = act.getX(); int y = act.getY(); g.translate(x, y);
-             * act.paintActor(g); g.translate(-x, -y); }
-             */
+        /*
+         * Old version: Not valid code. for (int i = 0; i < n; ++i) { Actor
+         * act = (Actor)actors.elementAt(i);
+         * 
+         * int x = act.getX(); int y = act.getY(); g.translate(x, y);
+         * act.paintActor(g); g.translate(-x, -y); }
+         */
         }
     }
 
@@ -323,40 +307,39 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      */
     private void paintHighlight(Graphics g) {
         //if (highActor != null && highActor instanceof ReferenceActor) {
-            
-            //capture info about the actor
+
+        //capture info about the actor
             /*ReferenceActor ha = (ReferenceActor) highActor;
-            Point loc = highActor.getRootLocation();
-            int x = loc.x;
-            int y = loc.y;
-            int w = highActor.getWidth();
-            int h = highActor.getHeight();*/
-            
-            //this highlight the "origin" of the reference actor
+        Point loc = highActor.getRootLocation();
+        int x = loc.x;
+        int y = loc.y;
+        int w = highActor.getWidth();
+        int h = highActor.getHeight();*/
+
+        //this highlight the "origin" of the reference actor
             /*g.setColor(Color.white);
-            g.drawRect(x - 1, y - 1, w + 1, h + 1);
-            g.drawRect(x - 3, y - 3, w + 5, h + 5);
-            g.setColor(Color.black);
-            g.drawRect(x - 2, y - 2, w + 3, h + 3);*/
-            
-            //this try to highlight the rest of the reference actor
+        g.drawRect(x - 1, y - 1, w + 1, h + 1);
+        g.drawRect(x - 3, y - 3, w + 5, h + 5);
+        g.setColor(Color.black);
+        g.drawRect(x - 2, y - 2, w + 3, h + 3);*/
+
+        //this try to highlight the rest of the reference actor
             /*if(ha.getInstanceActor() != null){
-                System.out.println("nada null");
-                g.setColor(Color.white);
-                g.drawRect(x + 3,y + 9,ha.getReferenceWidth()-3,2);
-            }
-            else{
-                g.setColor(Color.white);
-                g.drawRect(x + 3,y + 9,18,2);
-            }*/
-            
-            /*g.setColor(Color.white);
-            if(ha.getArrowPolygon1() != null)
-                g.drawPolygon(ha.getArrowPolygon1());
-            
-            if(ha.getArrowPolygon2() != null)
-                g.drawPolygon(ha.getArrowPolygon2());*/
-            /**************VIKTOR***************************************************************/
+        System.out.println("nada null");
+        g.setColor(Color.white);
+        g.drawRect(x + 3,y + 9,ha.getReferenceWidth()-3,2);
+        }
+        else{
+        g.setColor(Color.white);
+        g.drawRect(x + 3,y + 9,18,2);
+        }*/
+
+        /*g.setColor(Color.white);
+        if(ha.getArrowPolygon1() != null)
+        g.drawPolygon(ha.getArrowPolygon1());
+        if(ha.getArrowPolygon2() != null)
+        g.drawPolygon(ha.getArrowPolygon2());*/
+        /**************VIKTOR***************************************************************/
         //}
         /*else*/ if (highActor != null) {
             Point loc = highActor.getRootLocation();
@@ -389,12 +372,18 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         pasAct.addElement(actor);
         actor.setParent(this);
         promoteHighlightedActor();
+        if (actor instanceof MethodStage && !MSStack.contains(actor)) {
+            MSStack.add(actor);
+        }
     }
 
     /**
      * @param actor
      */
     public void removePassive(Actor actor) {
+        if (actor instanceof MethodStage && MSStack.contains(actor)) {
+            MSStack.remove(actor);
+        }
         pasAct.removeElement(actor);
         if (actor == highActor) {
             highActor = null;
@@ -408,6 +397,57 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         actAct.addElement(actor);
         actor.setParent(this);
         promoteHighlightedActor();
+        if (actor instanceof MethodStage && !MSStack.contains(actor)) {
+            MSStack.add(actor);
+        }
+    }
+
+    /**
+     * Adds new menuItem to the menu Method Stack when called.
+     * @param name
+     */
+    private void addMenuItem(String name) {
+        JMenuItem item = new JMenuItem(name);
+        JMenu submenu = (JMenu) methodMenu.getComponent(3);
+        submenu.add(item);
+    }
+
+    /**
+     * Adds new menuItem to the menu Method Stack when called.
+     * @param name
+     */
+    private void removeMenuItem(String name) {
+        JMenuItem item = new JMenuItem(name);
+        JMenu submenu = (JMenu) methodMenu.getComponent(3);
+        submenu.remove(item);
+    }
+
+    /**
+     * Generates the Stack menu that expands when the user situates the pointer
+     * on the menuItem "Method Stack".
+     */
+    private void generateMethodStackMenu() {
+        JMenu showstack = (JMenu) methodMenu.getComponent(3);
+        showstack.removeAll();
+
+        Iterator iter = MSStack.iterator();
+        while (iter.hasNext()) {
+            Actor act = (Actor) iter.next();
+            JMenuItem showitem = new JMenuItem(act.getDescription());
+            showitem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    promoteActor(aevt);
+                }
+            });
+            showstack.add(showitem);
+        }
+        JMenuItem showitem = new JMenuItem("Reset Stack Order");
+            showitem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent aevt) {
+                    resetStackOrder();
+                }
+            });
+            showstack.add(showitem);
     }
 
     /**
@@ -440,6 +480,9 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * @see jeliot.theater.ActorContainer#removeActor(jeliot.theater.Actor)
      */
     public void removeActor(Actor actor) {
+        if (actor instanceof MethodStage && MSStack.contains(actor)) {
+            MSStack.remove(actor);
+        }
         boolean removed = false;
         if (actAct.contains(actor)) {
             removed = actAct.removeElement(actor);
@@ -451,18 +494,18 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             actor.disappear();
         }
     }
-    
+
     public boolean isContentResized() {
         return contentResized;
     }
-    
+
     public boolean isContentRelocated() {
         return contentRelocated;
     }
 
     public void resizeContainedActors() {
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -487,8 +530,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     public void updateCapture() {
         int w = getWidth();
         int h = getHeight();
-        if (captScreen == null || captScreen.getWidth(this) != w
-                || captScreen.getHeight(this) != h) {
+        if (captScreen == null || captScreen.getWidth(this) != w || captScreen.getHeight(this) != h) {
             captScreen = createImage(w, h);
             csg = captScreen.getGraphics();
         }
@@ -524,6 +566,14 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         pasAct.removeAllElements();
         highActor = null;
         manager.cleanUp();
+        MSStack.clear();
+    }
+
+    /**
+     * 
+     */
+    public void cleanHighlight() {
+        highActor = null;
     }
 
     /**
@@ -564,6 +614,12 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     public void setHighlightedActor(Actor actor) {
         if (actor != highActor) {
             this.highActor = actor;
+            MethodStage ms;
+            ActorContainer ac = findMethodStageParent(highActor);
+            if (ac instanceof MethodStage) {
+                ms = (MethodStage) ac;
+                ms.setHighActor(actor);
+            }
             repaint();
         }
     }
@@ -618,35 +674,39 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     public Vector getPasAct() {
         return pasAct;
     }
-    
-    private void initAditionalComponents(){
-        
+
+    private void initAditionalComponents() {
+
         // Menu for the VariableActors
-        variableMenu = new JPopupMenu(); {
+        variableMenu = new JPopupMenu();
+        {
             JPopupMenu menu = variableMenu;
             JMenuItem menuItem;
 
             menuItem = new JMenuItem("Show declaration");
             menu.add(menuItem);
-            
+
             menuItem = new JMenuItem("Actor Info");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     showActorContext();
                 }
             });
             menu.add(menuItem);
-            
+
             menuItem = new JMenuItem("Zoom in");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     zoomIn(aevt);
                 }
-            }); 
+            });
             menu.add(menuItem);
 
             menuItem = new JMenuItem("Zoom out");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     zoomOut(aevt);
                 }
@@ -655,72 +715,84 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
 
         // Menu for the ConstantBox
-        constantMenu = new JPopupMenu(); {
+        constantMenu = new JPopupMenu();
+        {
             JPopupMenu menu = constantMenu;
             JMenuItem menuItem;
-            
+
             menuItem = new JMenuItem("Show declaration");
             menu.add(menuItem);
-            
+
             menuItem = new JMenuItem("Actor Info");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     showActorContext();
                 }
             });
             menu.add(menuItem);
-            
+
             menuItem = new JMenuItem("Zoom in");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     zoomIn(aevt);
                 }
-            }); 
+            });
             menu.add(menuItem);
 
             menuItem = new JMenuItem("Zoom out");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     zoomOut(aevt);
                 }
             });
             menu.add(menuItem);
         }
-        
+
         // Menu for the MethodStage actors
-        methodMenu = new JPopupMenu(); {
+        methodMenu = new JPopupMenu();
+        {
             JPopupMenu menu = methodMenu;
             JMenuItem menuItem;
-            
+
             menuItem = new JMenuItem("Show declaration");
             menu.add(menuItem);
-            
+
             menuItem = new JMenuItem("Actor Info");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     showActorContext();
                 }
             });
             menu.add(menuItem);
-            
+
             menuItem = new JMenuItem("Resize Actor");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     resizeMethodStage(aevt);
                 }
-            }); 
+            });
             menu.add(menuItem);
-            
+
+            menuItem = new JMenu("Method Stack");
+            menu.add(menuItem);
+
             menuItem = new JMenuItem("Zoom in");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     zoomIn(aevt);
                 }
-            }); 
+            });
             menu.add(menuItem);
 
             menuItem = new JMenuItem("Zoom out");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     zoomOut(aevt);
                 }
@@ -729,151 +801,165 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         }
 
         // Menu for the ReferenceActor actors
-        referenceMenu = new JPopupMenu(); {
+        referenceMenu = new JPopupMenu();
+        {
             JPopupMenu menu = referenceMenu;
             JMenuItem menuItem;
 
             menuItem = new JMenuItem("Show declaration");
             menu.add(menuItem);
-            
+
             menuItem = new JMenuItem("Actor Info");
             menuItem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     showActorContext();
                 }
             });
             menu.add(menuItem);
-            
+
             menuItem = new JMenuItem("Show Origin");
             menu.add(menuItem);
             menuItem = new JMenuItem("Show Destiny");
             menu.add(menuItem);
         }
     }
+
+    /**
+     * This method reorder the stack of MethodStage actors to
+     * its original order of appearing in the theater.
+     * @param aevt
+     */
+    public void resetStackOrder(){
+        Iterator iter = MSStack.iterator();
+        while(iter.hasNext()){
+            ActorContainer stage = (ActorContainer) iter.next();
+            promoteMethodStage(stage);
+            repaint();
+        }
+        setHighlightedActor((Actor) MSStack.lastElement());
+    }
     
     /*
      * This method is destined to resize only the MethodStage
      * actors and their subcomponents.
      */
-    private void resizeMethodStage(ActionEvent aevt){
+    private void resizeMethodStage(ActionEvent aevt) {
         Actor act = highActor;
-        
-        if(act != null && act instanceof MethodStage){
+
+        if (act != null && act instanceof MethodStage) {
             act.resize();
             manager.validateTheater();
             flush();
         }
     }
-    
-    private void showActorContext(){
-        if(highActor == null){
+
+    private void showActorContext() {
+        if (highActor == null) {
             System.out.println("ERROR: No actor selected!");
-        }
-        else{
+        } else {
             String description = (String) infoActor.get(highActor.getClass().getCanonicalName());
-            
-            if(description != null){
-               ActorInfo infoPane = new ActorInfo(description);
-            }
-            else{
-               ActorInfo infoPane = new ActorInfo("The information of this actor is not available.");
+
+            if (description != null) {
+                ActorInfo infoPane = new ActorInfo(description);
+            } else {
+                ActorInfo infoPane = new ActorInfo("The information of this actor is not available.");
             }
         }
     }
-    
+
     private void getDescriptions() {
         // here we got the descriptions and fill the Hashtable (infoActor) with them
-        infoActor.put("jeliot.theater.MethodStage",theaterDescription.getString("description.method_stage"));
-        infoActor.put("jeliot.theater.ConstantBox",theaterDescription.getString("description.constant_box"));
-        infoActor.put("jeliot.theater.VariableActor",theaterDescription.getString("description.variable_actor"));
-        infoActor.put("jeliot.theater.ReferenceVariableActor",theaterDescription.getString("description.reference_variable_actor"));
-        infoActor.put("jeliot.theater.ClassActor",theaterDescription.getString("description.class_actor"));
-        infoActor.put("jeliot.theater.ReferenceActor",theaterDescription.getString("description.reference_actor"));
-        infoActor.put("jeliot.theater.CIActor",theaterDescription.getString("description.ci_actor"));
-        infoActor.put("jeliot.theater.ObjectStage",theaterDescription.getString("description.object_stage_actor"));
-        infoActor.put("jeliot.theater.BubbleActor",theaterDescription.getString("description.bubble_actor"));
-        infoActor.put("jeliot.theater.MessageActor",theaterDescription.getString("description.message_actor"));
-        infoActor.put("jeliot.theater.SMIActor",theaterDescription.getString("description.smi_actor"));
-        infoActor.put("jeliot.theater.OMIActor",theaterDescription.getString("description.omi_actor"));
-        //faltan los array actors
+        infoActor.put("jeliot.theater.MethodStage", theaterDescription.getString("description.method_stage"));
+        infoActor.put("jeliot.theater.ConstantBox", theaterDescription.getString("description.constant_box"));
+        infoActor.put("jeliot.theater.VariableActor", theaterDescription.getString("description.variable_actor"));
+        infoActor.put("jeliot.theater.ReferenceVariableActor", theaterDescription.getString("description.reference_variable_actor"));
+        infoActor.put("jeliot.theater.ClassActor", theaterDescription.getString("description.class_actor"));
+        infoActor.put("jeliot.theater.ReferenceActor", theaterDescription.getString("description.reference_actor"));
+        infoActor.put("jeliot.theater.CIActor", theaterDescription.getString("description.ci_actor"));
+        infoActor.put("jeliot.theater.ObjectStage", theaterDescription.getString("description.object_stage_actor"));
+        infoActor.put("jeliot.theater.BubbleActor", theaterDescription.getString("description.bubble_actor"));
+        infoActor.put("jeliot.theater.MessageActor", theaterDescription.getString("description.message_actor"));
+        infoActor.put("jeliot.theater.SMIActor", theaterDescription.getString("description.smi_actor"));
+        infoActor.put("jeliot.theater.OMIActor", theaterDescription.getString("description.omi_actor"));
+    //faltan los array actors
     }
-    
-    private void zoomIn(ActionEvent aevt){
-        if(zoomOut == true){
-            setSize(getWidth()*ZOOMED_SCALE,getHeight()*ZOOMED_SCALE);
+
+    private void zoomIn(ActionEvent aevt) {
+        if (zoomOut == true) {
+            setSize(getWidth() * ZOOMED_SCALE, getHeight() * ZOOMED_SCALE);
             sizeUpActors();
             zoomOut = false;
             manager.validateTheater();
             flush();
         }
     }
-    
-    private void zoomOut(ActionEvent aevt){
-        if(zoomOut == false){
-            setSize(getWidth()/ZOOMED_SCALE,getHeight()/ZOOMED_SCALE);
+
+    private void zoomOut(ActionEvent aevt) {
+        if (zoomOut == false) {
+            setSize(getWidth() / ZOOMED_SCALE, getHeight() / ZOOMED_SCALE);
             sizeDownActors();
             zoomOut = true;
             manager.validateTheater();
             flush();
         }
     }
-    
+
     private void sizeUpActors() {
-        int i=0;
+        int i = 0;
         Actor actor = null;
         Vector avector = new Vector();
-        
+
         avector.addAll(actAct);
         avector.addAll(pasAct);
-        
-        for(i=0;i<avector.size();i++){
-            actor = (Actor)avector.get(i);
+
+        for (i = 0; i < avector.size(); i++) {
+            actor = (Actor) avector.get(i);
 //TODO            actor.setDoubleSize();
-            if(actor instanceof MethodStage){
+            if (actor instanceof MethodStage) {
                 MethodStage mst = (MethodStage) actor;
 //TODO                mst.sizeUpVariableActors();
-            }
-            else if(actor instanceof ClassActor){
+            } else if (actor instanceof ClassActor) {
                 ClassActor cla = (ClassActor) actor;
-                //cla.sizeUpVariableActors();
+            //cla.sizeUpVariableActors();
             }
         }
     }
 
     private void sizeDownActors() {
-        int i=0;
+        int i = 0;
         Actor actor = null;
         Vector avector = new Vector();
-        
+
         avector.addAll(actAct);
         avector.addAll(pasAct);
-        
-        for(i=0;i<avector.size();i++){
-            actor = (Actor)avector.get(i);
+
+        for (i = 0; i < avector.size(); i++) {
+            actor = (Actor) avector.get(i);
 //TODO            actor.setNormalSize();
-            if(actor instanceof MethodStage){
+            if (actor instanceof MethodStage) {
                 MethodStage mst = (MethodStage) actor;
 //TODO                mst.sizeDownVariableActors();
-            }
-            else if(actor instanceof ClassActor){
+            } else if (actor instanceof ClassActor) {
                 ClassActor cla = (ClassActor) actor;
-                //cla.sizeDownVariableActors();
+            //cla.sizeDownVariableActors();
             }
         }
     }
-    
+
     /**
      * Method for adding interactivity with the actors inside the Theater
      */
-    private void addListeners(){
-        
+    private void addListeners() {
+
         this.addMouseListener(new MouseAdapter() {
+
             public void mouseClicked(MouseEvent evt) {
                 handleMouseEvent(evt);
             }
         });
     }
-    
+
     /**
      * Method that handles the events when the actor should be
      * highlighted.
@@ -884,8 +970,8 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
         int x = evt.getX();
         int y = evt.getY();
         Actor actor = getActorAt(x, y);
-        
-        if(actor != null){
+
+        if (actor != null) {
             // show the name of the clicked actor
             System.out.println("***+***********");
             System.out.println("NAME: " + actor.getDescription());
@@ -893,62 +979,88 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             System.out.println("***+***********");
 
             //code for distinguish between clicks on BUTTON1 and BUTTON3
-            switch(evt.getButton()){
-                case MouseEvent.BUTTON3 : {
-                      showPopup(evt);
-                      break;
+            switch (evt.getButton()) {
+                case MouseEvent.BUTTON3: {
+                    this.generateMethodStackMenu();
+                    showPopup(evt);
+                    break;
                 }
 
-                default : break;
+                default:
+                    break;
             }
             setHighlightedActor(actor);
             promoteHighlightedActor();
         }
     }
-    
+
+    /**
+     * This method relocates the selected MethodStage in the first place to be shown
+     * in the Theater.
+     */
+    private void promoteActor(ActionEvent aevt) {
+        Iterator iter = MSStack.iterator();
+        JMenuItem item = (JMenuItem) aevt.getSource();
+
+        while (iter.hasNext()) {
+            Actor act = (Actor) iter.next();
+            if (act.getDescription().contentEquals(item.getText())) {
+                promoteMethodStage((ActorContainer) act);
+                setHighlightedActor(act);
+            }
+        }
+    }
+
     /*
      * This method relocates the highlighted actor, if this one is a MethodStage
      * instance, inside the passive actors Vector, relocating it into the latest
      * position of the vector.
      */
-    private void promoteHighlightedActor(){
-        if(highActor != null){
-            //ActorContainer parent = highActor.getParent();
-            ActorContainer parent = findMethodStageParent();
-        
-            if(parent != null){
-                if(parent instanceof MethodStage && pasAct.contains(parent)){
+    private void promoteHighlightedActor() {
+        if (highActor != null) {
+            ActorContainer parent = findMethodStageParent(highActor);
+            promoteMethodStage(parent);
+        }
+    }
+    
+    /**
+     * This method relocates the MethodStage itself, or that contains a higlighted
+     * actor into the latest position of the passive actors method.
+     * @param parent
+     */
+    private void promoteMethodStage(ActorContainer parent){
+        if (parent != null) {
+                if (parent instanceof MethodStage && pasAct.contains(parent)) {
                     pasAct.removeElement(parent);
                     pasAct.add(parent);
                 }
             }
-        }
     }
-    
+
     /*
-     * This method checks if the actor container of the highlighted actor is,
+     * This method checks if the actor container of the actor is,
      * apart from the Theatre itself, one MethodStage that could be promoted
      * to the front of the stack of method stages, and in case of finding it,
      * return it.
      */
-    private ActorContainer findMethodStageParent(){
-        Actor act = highActor;
+    private ActorContainer findMethodStageParent(Actor actor) {
+        Actor act = actor;
         Actor actaux = null;
         ActorContainer parent = act.getParent();
-        
-        if(act instanceof MethodStage)
+
+        if (act instanceof MethodStage) {
             parent = (ActorContainer) act;
-        else{
-            if(parent instanceof VariableActor || parent instanceof ReferenceVariableActor || parent instanceof ReferenceActor){
+        } else {
+            if (parent instanceof VariableActor || parent instanceof ReferenceVariableActor || parent instanceof ReferenceActor) {
                 parent = act.getParent();
                 actaux = (Actor) parent;
                 parent = actaux.getParent();
             }
         }
-        
+
         return parent;
     }
-    
+
     /**
      * Method checks what kind of popup menu it should activate or
      * should it activate any kind of popup menu.
@@ -956,13 +1068,13 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * @param   evt The mouse event when mouse button3 is pressed.
      */
     private void showPopup(MouseEvent evt) {
-        
+
         //zoomingMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-        
+
         int x = evt.getX();
         int y = evt.getY();
         Actor actor = getActorAt(x, y);
-        
+
         if (actor != null) {
             JPopupMenu menu = null;
 
@@ -970,29 +1082,46 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
                 menu = variableMenu;
             } else if (actor instanceof MethodStage) {
                 menu = methodMenu;
-            } else if (actor instanceof ReferenceVariableActor){
+            } else if (actor instanceof ReferenceVariableActor) {
                 menu = referenceMenu;
-            } else if (actor instanceof ConstantBox){
+            } else if (actor instanceof ConstantBox) {
                 menu = constantMenu;
-            } else if (actor instanceof BubbleActor){
+            } else if (actor instanceof BubbleActor) {
                 menu = bubbleMenu;
-            } else if (actor instanceof ReferenceActor){
+            } else if (actor instanceof ReferenceActor) {
                 menu = referenceMenu;
-            } else if (actor instanceof ObjectStage){
+            } else if (actor instanceof ObjectStage) {
                 menu = objectMenu;
-            } else if (actor instanceof ClassActor){
+            } else if (actor instanceof ClassActor) {
                 menu = classMenu;
             }
-            
+
             if (menu != null) {
                 menu.show(evt.getComponent(), evt.getX(), evt.getY());
             }
         }
     }
-    
+
     /**
      * Repositions the actors contained in the current
      * one.
      */
-    public void relocateContainedActors(){}
+    public void relocateContainedActors() {
+    }
+
+    public JPopupMenu getMethodMenu() {
+        return methodMenu;
+    }
+
+    public void setHighActor(Actor ha) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Actor getHighActor() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void cleanHighActor(Theater th) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

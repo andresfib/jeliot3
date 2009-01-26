@@ -60,4 +60,24 @@ public interface ActorContainer {
      * one.
      */
     public void relocateContainedActors();
+    
+    /**
+     * Sets the reference of the highActor inside the container.
+     * @param ha
+     */
+    public void setHighActor(Actor ha);
+    
+    /**
+     * Returns the reference of the highActor inside the container.
+     * @return
+     */
+    public Actor getHighActor();
+    
+    /**
+     * This method does nothing if the actual reference of highActor is 
+     * null in the container. On the other hand, if is not null, it sets to
+     * null its reference and the one of the parent (usually the Theater itself).
+     * @param th
+     */
+    public void cleanHighActor(Theater th);
 }

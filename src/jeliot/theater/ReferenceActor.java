@@ -694,4 +694,12 @@ public class ReferenceActor extends ValueActor {
    public Polygon getArrowPolygon2(){
        return this.arrowheadPolygon2;
    }
+   
+   public int getRefWidth(){
+       return refWidth;
+   }
+   
+   public void setRefWidth(int val){
+       refWidth=val;
+   }
 }

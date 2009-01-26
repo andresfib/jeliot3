@@ -19,6 +19,8 @@ import jeliot.util.DebugUtil;
 import jeliot.util.ResourceBundles;
 import jeliot.util.UserProperties;
 
+
+
 /**
  * The base class for all the actors. The Actor class should not be
  * used directly but indirectly with it's subclasses.
@@ -33,7 +35,6 @@ public abstract class Actor implements Cloneable, Resizable {
      * The resource bundle for theater package.
      */
     private static UserProperties propertiesBundle = ResourceBundles.getTheaterUserProperties();
-
     /**
      *
      */
@@ -680,7 +681,7 @@ public abstract class Actor implements Cloneable, Resizable {
     }
     
     public void resize(){
-        if(resized == true){
+        if(isResized()){
             setSize(width/RESIZE_SCALE,height/RESIZE_SCALE);
             if(this instanceof ActorContainer){
                 ActorContainer ac = (ActorContainer) this;

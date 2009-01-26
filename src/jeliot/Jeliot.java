@@ -536,6 +536,7 @@ public class Jeliot {
     public void step() {
         director.setStep(true);
         controller.start();
+        theatre.resetStackOrder();
     }
 
     /**
@@ -545,6 +546,7 @@ public class Jeliot {
     public void play() {
         director.setStep(false);
         controller.start();
+        theatre.resetStackOrder();
     }
 
     /**

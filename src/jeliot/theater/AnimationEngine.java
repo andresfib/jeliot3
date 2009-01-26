@@ -178,7 +178,7 @@ public class AnimationEngine implements Controlled {
             Animation anim = animations[i];
             anim.finalFinish();
         }
-
+        
         // if theatre was captured before animation, release it.
         if (capture) {
             theatre.release();
