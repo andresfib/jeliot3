@@ -26,7 +26,7 @@ public class BubbleActor extends Actor implements ActorContainer {
 	String name;
 
     /**
-	 *
+	 * ActorContainer that pseudo contains the BubbleActor
 	 */
 	Actor speaker;
     
@@ -49,6 +49,10 @@ public class BubbleActor extends Actor implements ActorContainer {
 	 *
 	 */
 	Point loc;
+        
+        private boolean contentResized = false;
+        
+        private boolean contentRelocated = false;
 
     /**
 	 * @param speaker
@@ -198,11 +202,34 @@ public class BubbleActor extends Actor implements ActorContainer {
     }
 
     public boolean isContentResized() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return contentResized;
     }
 
     public void resizeContainedActors() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public boolean isContentRelocated() {
+        return contentRelocated;
+    }
+
+    public void relocateContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setHighActor(Actor ha) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Actor getHighActor() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void cleanHighActor(Theater th) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
+    public Actor getSpeaker(){
+        return speaker;
+    }
 }

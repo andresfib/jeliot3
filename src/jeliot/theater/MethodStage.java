@@ -161,9 +161,7 @@ public class MethodStage extends Actor implements ActorContainer {
         this.actHeight = actHeight;
 
         Dimension d = calculateSizeDimensions();
-
-        if(!isResized())
-            setSize(d.width, d.height);
+         setSize(d.width, d.height);
     }
 
     /**
@@ -188,11 +186,44 @@ public class MethodStage extends Actor implements ActorContainer {
             }
         }
         Dimension d = calculateSizeDimensions();
+        setSize(d.width, d.height);
         
-        if(!isResized())
-            setSize(d.width, d.height);
     }
 
+    /**
+     * Gets the maximun width among the variables 
+     * contained in the MethodStage
+     * @return
+     */
+    private int getVariablesMaxWidth(){
+        int max=0;
+        Iterator iter = variables.iterator();
+        
+        while(iter.hasNext()){
+            Actor act = (Actor) iter.next();
+            if(max<act.getWidth())
+                max=act.getWidth();
+        }
+        return max;
+    }
+    
+    /**
+     * Gets the maximun height among the variables 
+     * contained in the MethodStage
+     * @return
+     */
+    private int getVariablesMaxHeight(){
+        int max=0;
+        Iterator iter = variables.iterator();
+        
+        while(iter.hasNext()){
+            Actor act = (Actor) iter.next();
+            if(max<act.getHeight())
+                max=act.getHeight();
+        }
+        return max;
+    }
+    
     /**
      * @return
      */
@@ -205,20 +236,12 @@ public class MethodStage extends Actor implements ActorContainer {
      * @return
      */
     public Dimension calculateSizeDimensions(int varCount) {
-
         int w = borderWidth * 2 + insets.right + insets.left
                 + Math.max(actWidth, nwidth) + 2 * margin;
         
-        int h=0;
-        if(!isResized()){
-            h = borderWidth * 2 + insets.top + insets.bottom + nheight + 2
-                    * margin + actorMargin + (actorMargin + actHeight) * varCount;
-        }
-        else{
-            h = TheaterManager.EXTRA_SPACE + borderWidth * 2 + insets.top + insets.bottom + nheight + 2
+        int h = borderWidth * 2 + insets.top + insets.bottom + nheight + 2
                 * margin + actorMargin + (actorMargin + actHeight) * varCount;
-        }
-        
+
         return new Dimension(w, h);
     }
 
@@ -297,7 +320,7 @@ public class MethodStage extends Actor implements ActorContainer {
      * 
      */
     public void bind() {
-        if(isResized()==true)
+        if(isResized())
             reserved.resize();
         
         reserved.setLocation(resLoc);
@@ -308,10 +331,11 @@ public class MethodStage extends Actor implements ActorContainer {
         //Added for Jeliot 3
         totalVarCount++;
         scopeVarCount++;
+        
         calculateSize();
         relocateContainedActors();
     }
-
+    
     /**
      * Repositions the actors contained in the current
      * one.
@@ -368,16 +392,19 @@ public class MethodStage extends Actor implements ActorContainer {
     }
 
     public void resizeContainedActors() {
-        int i = 0;
+        int i=0, max=0;
         for(i=0;i<variables.size();i++){
             Actor act = (Actor) variables.elementAt(i);
             act.resize();
         }
-        
         if(isContentResized())
             contentResized = false;
         else
             contentResized = true;
+        
+        this.actWidth = getVariablesMaxWidth();
+        this.actHeight = getVariablesMaxHeight();
+        calculateSize();
     }
 
     /* (non-Javadoc)
@@ -645,18 +672,6 @@ public class MethodStage extends Actor implements ActorContainer {
      */
     public void setName(String name) {
         this.name = name;
-    }
-    
-    /**
-     *  Uses resize from class Actor, and changes 
-     *  the size of actHeight and actWidth 
-     * */
-    public void resize(){
-        super.resize();
-        if(!isResized()){
-            actWidth =actWidth/getResizeScale();
-            actHeight = actHeight/getResizeScale();
-        }
     }
 
     /**

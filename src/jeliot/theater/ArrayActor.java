@@ -299,4 +299,24 @@ public class ArrayActor extends InstanceActor {
     public void resizeContainedActors() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public boolean isContentRelocated() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void relocateContainedActors() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setHighActor(Actor ha) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Actor getHighActor() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void cleanHighActor(Theater th) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
