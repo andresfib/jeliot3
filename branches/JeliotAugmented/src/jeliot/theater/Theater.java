@@ -281,7 +281,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
     private void paintActors(Graphics g, Vector actors) {
         synchronized (actors) {
             int n = actors.size();
-            for (int i = 0; i < n; ++i) {
+            for (int i = 0; i < n; i++) {
                 Actor act = (Actor) actors.elementAt(i);
                 int x = act.getX();
                 int y = act.getY();
@@ -435,6 +435,7 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             Actor act = (Actor) iter.next();
             JMenuItem showitem = new JMenuItem(act.getDescription());
             showitem.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent aevt) {
                     promoteActor(aevt);
                 }
@@ -442,12 +443,13 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             showstack.add(showitem);
         }
         JMenuItem showitem = new JMenuItem("Reset Stack Order");
-            showitem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent aevt) {
-                    resetStackOrder();
-                }
+        showitem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent aevt) {
+                resetStackOrder();
+            }
             });
-            showstack.add(showitem);
+        showstack.add(showitem);
     }
 
     /**
@@ -830,16 +832,16 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
      * its original order of appearing in the theater.
      * @param aevt
      */
-    public void resetStackOrder(){
+    public void resetStackOrder() {
         Iterator iter = MSStack.iterator();
-        while(iter.hasNext()){
+        while (iter.hasNext()) {
             ActorContainer stage = (ActorContainer) iter.next();
             promoteMethodStage(stage);
             repaint();
         }
         setHighlightedActor((Actor) MSStack.lastElement());
     }
-    
+
     /*
      * This method is destined to resize only the MethodStage
      * actors and their subcomponents.
@@ -1022,19 +1024,39 @@ public class Theater extends javax.swing.JComponent implements ActorContainer {
             promoteMethodStage(parent);
         }
     }
-    
+
     /**
      * This method relocates the MethodStage itself, or that contains a higlighted
      * actor into the latest position of the passive actors method.
      * @param parent
      */
-    private void promoteMethodStage(ActorContainer parent){
+    private void promoteMethodStage(ActorContainer parent) {
         if (parent != null) {
-                if (parent instanceof MethodStage && pasAct.contains(parent)) {
-                    pasAct.removeElement(parent);
-                    pasAct.add(parent);
+            if (parent instanceof MethodStage && pasAct.contains(parent)) {
+                pasAct.removeElement(parent);
+                pasAct.add(parent);
+                promoteExistingBubbleActor((MethodStage) parent);
+            }
+        }
+    }
+
+    /**
+     * Promotes the BubbleActor (if exists) to the front of the drawing
+     * domain, into the "assigned" MethodStage.
+     */
+    private void promoteExistingBubbleActor(MethodStage stage) {
+        int i = 0;
+        for (i = 0; i < pasAct.size(); i++) {
+            Object act = pasAct.get(i);
+            if (act instanceof BubbleActor) {
+                BubbleActor bba = (BubbleActor) act;
+                MethodStage ms = (MethodStage) bba.getSpeaker();
+                if (ms == stage) {
+                    pasAct.removeElement(act);
+                    pasAct.add(act);
                 }
             }
+        }
     }
 
     /*

@@ -35,7 +35,7 @@ public class ReferenceActor extends ValueActor {
      * Reference width is the width of the rectangle
      * in the variable end of the reference.
      */
-    protected static int refWidth = ActorFactory.typeValWidth[9];
+    protected int refWidth = ActorFactory.typeValWidth[9];
 
     /**
      * Length of the null reference line and also the base for the
@@ -163,20 +163,21 @@ public class ReferenceActor extends ValueActor {
         Color fc = fgcolor;
 
         int h = height;
+        int w = width;
         //Point p = getRootLocation();
 
         if (instance == ObjectStage.OUTSIDE_OBJECT) {
             // draw reference area
             g.setColor(darkColor);
-            g.fillRect(0, 0, refWidth, h);
+            g.fillRect(0, 0, width, h);
             //g.setColor(bc);
             //g.fillRect(p.x+1, p.y+1, refWidth-2, h-2);
             g.setColor(fc);
-            g.drawRect(0, 0, refWidth, h);
+            g.drawRect(0, 0, width, h);
 
             g.setColor(fgcolor);
 
-            int a = refWidth - 3;
+            int a = width - 3;
             int b = a + refLen;
 
             //Borders
@@ -208,11 +209,11 @@ public class ReferenceActor extends ValueActor {
 
             // draw reference area
             g.setColor(darkColor);
-            g.fillRect(0, 0, refWidth, h);
+            g.fillRect(0, 0, width, h);
             //g.setColor(bc);
             //g.fillRect(p.x+1, p.y+1, refWidth-2, h-2);
             g.setColor(fc);
-            g.drawRect(0, 0, refWidth, h);
+            g.drawRect(0, 0, width, h);
 
             Point vp = this.getRootLocation();
 
@@ -256,15 +257,15 @@ public class ReferenceActor extends ValueActor {
 
             // draw reference area
             g.setColor(darkColor);
-            g.fillRect(0, 0, refWidth, h);
+            g.fillRect(0, 0, width, h);
             //g.setColor(bc);
             //g.fillRect(p.x+1, p.y+1, refWidth-2, h-2);
             g.setColor(fc);
-            g.drawRect(0, 0, refWidth, h);
+            g.drawRect(0, 0, width, h);
 
             g.setColor(fgcolor);
 
-            int a = refWidth - 3;
+            int a = width - 3;
             int b = a + refLen;
             //System.out.println("h = " +h);
 

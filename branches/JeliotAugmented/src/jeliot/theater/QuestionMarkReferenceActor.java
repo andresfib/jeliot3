@@ -14,6 +14,9 @@ import java.awt.Image;
  */
 public class QuestionMarkReferenceActor extends ReferenceActor {
 
+    /**
+     * Image for the representation of the QuestionMark
+     */
     private Image img;
 
     /**

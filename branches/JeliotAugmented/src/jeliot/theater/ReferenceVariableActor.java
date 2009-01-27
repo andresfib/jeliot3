@@ -192,8 +192,18 @@ public class ReferenceVariableActor extends VariableActor {
         
         this.refActor = this.reservedRefActor;
         refActor.setParent(this);
-
-        repositionReferenceActor();
+        
+        if(isResized()){
+            //resizes the variable's name
+            sizeUpFont();
+            refActor.resize();
+            refActor.setRefWidth(refActor.getRefWidth()*getResizeScale());
+            contentResized=true;
+            refActor.setLocation(width - borderWidth - refWidth - 20,
+                (height - refActor.height) / 2 + borderWidth);
+            contentRelocated=true;
+        } else        
+            repositionReferenceActor();
     }
     
     public void repositionReferenceActor(){
