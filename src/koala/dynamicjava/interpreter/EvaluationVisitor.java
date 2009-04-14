@@ -1029,7 +1029,7 @@ public class EvaluationVisitor extends VisitorObject {
             MCodeUtilities.write("" + Code.QN + Code.DELIM + (counter++)
                     + Code.DELIM + node.getName()
                     //+ node.getRepresentation()
-                    + Code.DELIM + value + Code.DELIM + classname // c.getName()
+                    + Code.DELIM + value + Code.DELIM + classname + Code.DELIM// c.getName()
                     + MCodeGenerator.locationToString(node));
             value = MCodeUtilities.getValue(o);
 
