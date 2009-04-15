@@ -1,0 +1,12 @@
+div#jeliot_link{
+    text-align:center;
+   }
+
+div#jeliot_description{
+    }
+#jeliot_description p{
+    text-align:left;
+}
+div#jeliot_sourceCode{
+ font-size:0.9em;   
+}    
