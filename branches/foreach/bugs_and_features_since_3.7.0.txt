@@ -1,0 +1,4 @@
+- Option to enable or disable CG.
+- Stopping the "run until..." in the end of the program
+- Solved an object cast issue (program crashed when casting on assignments)
+- The caret's line number in the editor is remembered when entering into the animation mode.
