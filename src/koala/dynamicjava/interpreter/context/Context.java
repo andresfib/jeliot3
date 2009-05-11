@@ -308,4 +308,8 @@ public interface Context extends SimpleContext {
      */
     Field getSuperField(Node node, String fn) throws NoSuchFieldException,
                                                      AmbiguousFieldException;
+
+	void declarePackageImport(String name, boolean isstatic);
+
+	void declareClassImport(String name, boolean isstatic) throws ClassNotFoundException;
 }
