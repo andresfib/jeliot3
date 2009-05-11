@@ -28,12 +28,15 @@
 
 package koala.dynamicjava.interpreter;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 import koala.dynamicjava.interpreter.context.Context;
+import koala.dynamicjava.interpreter.context.GlobalContext;
 import koala.dynamicjava.interpreter.error.CatchedExceptionError;
 import koala.dynamicjava.interpreter.error.ExecutionError;
 import koala.dynamicjava.tree.AddAssignExpression;
@@ -131,6 +134,8 @@ import koala.dynamicjava.tree.visitor.VisitorObject;
  */
 
 public class NameVisitor extends VisitorObject {
+	// abhishek
+	Expression exptemp;
     /**
      * The context
      */
@@ -575,7 +580,8 @@ public class NameVisitor extends VisitorObject {
      */
     public Object visit(ObjectMethodCall node) {
         // Check the arguments
-        List args = node.getArguments();
+
+    	List args = node.getArguments();
         if (args != null) {
             visitList(args);
         }
@@ -583,15 +589,65 @@ public class NameVisitor extends VisitorObject {
         // Check the expression
         Expression exp = node.getExpression();
         Object o;
-        if (exp == null) {
-            o = context.getDefaultQualifier(node);
+        
+         if (exp == null) {
+        	 TreeInterpreter ti = (TreeInterpreter) this.context.getInterpreter();
+        	 GlobalContext myctx = (GlobalContext) ti.checkVisitorContext;
+        	 List staticImportPackage =  myctx.getImportationManager().getstaticImportOnDemandClauses();
+        	 List staticImportClass = myctx.getImportationManager().getstaticSingleTypeImportClauses();
+        	 
+
+        		  Iterator myit = staticImportPackage.iterator();
+        		  String static_package = null;
+        		  while (myit.hasNext() && static_package == null)
+        		  {
+        			  String current_class = (String) myit.next();
+        			  try
+        			  {
+		        		  Class c = Class.forName(current_class);
+		        		  Method [] a1 = c.getMethods();
+		       			  for (int i=0; a1!= null && i < a1.length; i++)
+		       			  {
+		       				  
+		       				  if(node.getMethodName().equalsIgnoreCase(a1[i].getName()))
+		       				  {
+		       					  
+		       					  static_package = current_class;
+		       					  break;
+		       			
+		       				  }
+		       			  }
+        			  }
+        			  catch (ClassNotFoundException e)
+        			  {
+        				   e.printStackTrace();
+        				  
+        			  }
+        		  }
+     			
+     			  			     	 
+        	 
+        	if (static_package == null)
+        	{
+        		o = context.getDefaultQualifier(node);
+        	}
+        	else
+        	{
+        		o = context.getDefaultQualifier(node);
+        		if (o instanceof ReferenceType)
+        		{
+        			ReferenceType rt = (ReferenceType) o;
+        			rt.setRepresentation(static_package);
+        			o = rt;
+        		}
+        	}
         } else {
-            o = exp.acceptVisitor(this);
+        	    o = exp.acceptVisitor(this);
             if (o == null) {
                 return null;
             }
         }
-
+                
         if (o == null) {
             return new FunctionCall(node.getMethodName(),
                                     node.getArguments(),
