@@ -15,6 +15,7 @@ import java.util.*;
 
 import koala.dynamicjava.parser.wrapper.*;
 import koala.dynamicjava.tree.*;
+import koala.dynamicjava.tree.Type;
 import koala.dynamicjava.tree.visitor.*;
 import koala.dynamicjava.util.*;
 
@@ -996,14 +997,15 @@ ImportDeclaration importDeclaration() :
     List  list;
     Token star = null;
     Token t1, t2;
+    Token isstatic = null;
 }
 {
-    t1="import" list=name() [ "." star="*" ] t2=";"
+    t1="import" [ isstatic="static" ] list=name() [ "." star="*" ] t2=";"
     {
 	return new ImportDeclaration(list, star != null,
 				     filename,
 				     t1.beginLine, t1.beginColumn,
-				     t2.endLine,   t2.endColumn);
+				     t2.endLine,   t2.endColumn, isstatic != null);
     }
 }
 
