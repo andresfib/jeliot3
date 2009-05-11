@@ -170,10 +170,11 @@ public class TypeChecker extends VisitorObject {
     public Object visit(ImportDeclaration node) {
         // Declare the package or class importation
         if (node.isPackage()) {
-            context.declarePackageImport(node.getName());
+            context.declarePackageImport(node.getName(),node.isIsstatic());
+            
         } else {
             try {
-                context.declareClassImport(node.getName());
+                context.declareClassImport(node.getName(),node.isIsstatic());
             } catch (ClassNotFoundException e) {
                 throw new CatchedExceptionError(e, node);
             }
