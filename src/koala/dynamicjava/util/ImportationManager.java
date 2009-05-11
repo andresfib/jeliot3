@@ -53,6 +53,17 @@ public class ImportationManager implements Cloneable {
      */
     protected List importOnDemandClauses = new LinkedList();
 
+    
+    /**
+     * This list contains the static import-on-demand clauses.
+     */
+    protected List staticImportOnDemandClauses = new LinkedList();
+    /**
+     * This set contains the static single-type-import clauses.
+     */
+    protected List staticSingleTypeImportClauses = new LinkedList();
+
+    
     /**
      * This set contains the single-type-import clauses.
      */
@@ -126,6 +137,19 @@ public class ImportationManager implements Cloneable {
     }
 
     /**
+     * Returns the static import-on-demand clauses
+     */
+    public List getstaticImportOnDemandClauses () {
+        return staticImportOnDemandClauses;
+    }
+    /**
+     * Returns the static single-type-import clauses
+     */
+    public List getstaticSingleTypeImportClauses () {
+        return staticSingleTypeImportClauses ;
+    }
+   
+    /**
      * Declares a new import-on-demand clause
      * @param pkg the package name
      */
@@ -133,6 +157,14 @@ public class ImportationManager implements Cloneable {
         if (importOnDemandClauses.size() == 0 || !importOnDemandClauses.get(0).equals(pkg)) {
             importOnDemandClauses.remove(pkg);
             importOnDemandClauses.add(0, pkg);
+        }
+    }
+  //added
+    public void declareStaticPackageImport(String pkg) {
+        if (staticImportOnDemandClauses.size() == 0 || !staticImportOnDemandClauses.get(0).equals(pkg)) {
+        	staticImportOnDemandClauses.remove(pkg);
+        	staticImportOnDemandClauses.add(0, pkg);
+            
         }
     }
 
@@ -157,6 +189,25 @@ public class ImportationManager implements Cloneable {
             singleTypeImportClauses.add(0, cname);
         }
     }
+    //added
+	public void declareStaticClassImport(String cname)throws ClassNotFoundException {
+		// TODO Auto-generated method stub
+						 try {
+	            // A previous importation of this class is removed to avoid a new
+	            // existance verification and to speed up further loadings.
+	            if (!staticSingleTypeImportClauses.remove(cname)) {
+	                Class.forName(cname, true, classLoader);
+	            }
+	        } catch (ClassNotFoundException e) {
+	            // try to find an inner class with this name
+	            Class c = findInnerClass(cname);
+	            staticSingleTypeImportClauses.remove((c == null) ? c.getName() : cname);
+	            staticSingleTypeImportClauses.add(0, (c == null) ? c.getName() : cname);
+	        } finally {
+	        	staticSingleTypeImportClauses.add(0, cname);
+	        }
+		
+	}
 
     /**
      * Loads the class that match to the given name in the source file
