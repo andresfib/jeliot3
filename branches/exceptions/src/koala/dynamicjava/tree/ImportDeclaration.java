@@ -40,7 +40,11 @@ import koala.dynamicjava.tree.visitor.Visitor;
  */
 
 public class ImportDeclaration extends Node {
-    /**
+	/**
+     * The isstatic name
+     */
+    public final static String ISSTATIC = "isstatic";
+/**
      * The name property name
      */
     public final static String NAME = "name";
@@ -59,16 +63,26 @@ public class ImportDeclaration extends Node {
      * Is this declaration import a class or a package
      */
     private boolean pckage;
-
-    /**
+    private boolean isstatic; //implemented for import static
+    public boolean isIsstatic() {
+		return isstatic;
+	}
+	public void setIsstatic(boolean isstatic) {
+		this.isstatic = isstatic;
+	}
+	/**
      * Creates a new import declaration node
      * @param ident a list of tokens that represents a package or a class name
      * @param pkg   true if this declaration imports a package
      * @exception IllegalArgumentException if ident is null
      */
+    // implemented for import static
     public ImportDeclaration(List ident, boolean pkg) {
-	this(ident, pkg, null, 0, 0, 0, 0);
+	this(ident, pkg, null, 0, 0, 0, 0 , false);
     }
+    public ImportDeclaration(List ident,boolean pkg,boolean isstatic) {
+    	this(ident, pkg, null, 0, 0, 0, 0, isstatic);
+        }    
 
     /**
      * Creates a new import declaration node
@@ -79,16 +93,22 @@ public class ImportDeclaration extends Node {
      * @param bc    the begin column
      * @param el    the end line
      * @param ec    the end column
+     * @param isstatic the isstatic 
      * @exception IllegalArgumentException if ident is null
+     * 
      */
+    // implemented for import static
     public ImportDeclaration(List ident, boolean pkg,
-			     String fn, int bl, int bc, int el, int ec) {
+			     String fn, int bl, int bc, int el, int ec, boolean isstatic) {
+    	
 	super(fn, bl, bc, el, ec);
 
 	if (ident == null) throw new IllegalArgumentException("ident == null");
 
 	pckage     = pkg;
 	name       = TreeUtilities.listToName(ident);
+	
+	this.isstatic = isstatic;
     }
 
     /**
