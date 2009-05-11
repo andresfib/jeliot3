@@ -341,6 +341,18 @@ public class GlobalContext extends VariableContext implements Context {
      */
     public void declarePackageImport(String pkg) {
         importationManager.declarePackageImport(pkg);
+            }
+    
+    public void declarePackageImport(String pkg, boolean isStatic) {
+    	
+    	if(isStatic)
+    	{
+    		importationManager.declareStaticPackageImport(pkg);
+    	}
+    	else{
+    		importationManager.declarePackageImport(pkg);	
+    	}
+        
     }
 
     /**
@@ -1068,4 +1080,26 @@ public class GlobalContext extends VariableContext implements Context {
             }
         }
     }
+
+	
+	public void declareClassImport(String name, boolean isstatic)throws ClassNotFoundException {
+
+		importationManager.setClassLoader(new PseudoClassLoader());
+        try {
+        	if(isstatic)
+        	{
+        		importationManager.declareStaticClassImport(name);	
+        	}else{
+        		importationManager.declareClassImport(name);	
+        	}
+            
+        } catch (PseudoError e) {
+        } finally {
+            if (classLoader == null) {
+                importationManager.setClassLoader(interpreter.getClassLoader());
+            } else {
+                importationManager.setClassLoader(classLoader);
+            }
+        }
+	}
 }
