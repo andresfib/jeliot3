@@ -41,11 +41,14 @@ To display the available targets type:
 
 -->
 
-<project default="help" basedir=".">
+<project default="run" basedir=".">
 	<target name="init-args" unless="args">
 		<property name="args" value="" />
 	</target>
-
+	
+	<target name="run" depends="dist" >
+	        	<java jar="Jeliot3/jeliot.jar" fork="true"/>
+	    	</target>
 	<target name="init" depends="init-args">
 		<tstamp />
 
