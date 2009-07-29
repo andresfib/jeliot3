@@ -1,0 +1,22 @@
+<html>
+<head>
+</head>
+<body>
+<h2>Troubleshooting Java Web Start</h2>
+<p> If clicking the "Start Jeliot" link does not work, it can be one or more the following reasons. Please check that you have the right setup in your computer</p>
+<dl>
+  <dt>Browser MIME types</dt>
+  <dd>For the browser to start jeliot it has to know in advance that JNLP files are to be opened by Java Web Start program (javaws). To do so you have to proceed as follows:
+  <ol>
+    <li>Go to the preferences or options of your favorite browser and select the MIME types configuration (e.g., in Firefox Preferences->Downloads->Download Actions->View and Edit Actions).</li>
+    <li> Check that there is a MIME type with the name jnlp, application/x-java-jnlp-file and that it opens with the java webstart executable (i.e.,javaws).</li>
+    <li>Add it if it is not there!</li>
+  </dd>
+  <dt>Java Installed</dt>
+  <dd>Please, be sure that Sun Java is installed in your system.</dd>
+</dl>
+<p>If none of these solutions work, please read the <a href="http://www.vamphq.com/download/jwsfaq.pdf">Unofficial FAQ</a>, or write to <a href="mailto:jeliot@cs.joensuu.fi">Jeliot Team</>.
+</p>
+
+</body>
+</html>
