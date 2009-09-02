@@ -739,6 +739,7 @@ public class Director {
      */
     public Value[] animateConstructorInvocation(String methodCall,
             Value[] args, Highlight h) {
+    	//ExplanationDisplay();
         highlightExpression(h);
         // Create the actor for the invocation.
         int n = 0;
@@ -748,7 +749,9 @@ public class Director {
         CIActor actor = factory.produceCIActor(methodCall, n);
         return animateMInvocation(methodCall, args, h, actor);
     }
-
+//public ExplanationDisplay(){
+//   JOptionPane.showMessageDialog(null,"","",JOptionPane.PLAIN_MESSAGE);
+//   }
     public Value[] animateSMInvocation(String methodName, Value[] args,
             Highlight h) {
         highlightExpression(h);
