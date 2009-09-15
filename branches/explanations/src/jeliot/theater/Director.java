@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import jeliot.Jeliot;
+import jeliot.annotation.AnnotationEngine;
 import jeliot.explanations.ExplanationGenerator;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.MethodFrame;
@@ -40,7 +41,11 @@ import jeliot.util.Util;
  * @see jeliot.mcode.TheaterMCodeIntepreter
  */
 public class Director {
-
+	
+	/**
+	 * This class is for explanation of different steps.
+	 */
+	AnnotationEngine annotationengine = new AnnotationEngine();
     /**
      * The resource bundle for theater package.
      */
@@ -738,8 +743,11 @@ public class Director {
      * @return
      */
     public Value[] animateConstructorInvocation(String methodCall,
-            Value[] args, Highlight h) {
-    	//ExplanationDisplay();
+            Value[] args, Highlight h){
+    	
+    	//Show message box to explain when Method calls happen. 
+    	annotationengine.explanationMCDisplay();
+
         highlightExpression(h);
         // Create the actor for the invocation.
         int n = 0;
@@ -749,9 +757,7 @@ public class Director {
         CIActor actor = factory.produceCIActor(methodCall, n);
         return animateMInvocation(methodCall, args, h, actor);
     }
-//public ExplanationDisplay(){
-//   JOptionPane.showMessageDialog(null,"","",JOptionPane.PLAIN_MESSAGE);
-//   }
+
     public Value[] animateSMInvocation(String methodName, Value[] args,
             Highlight h) {
         highlightExpression(h);
@@ -1386,6 +1392,9 @@ public class Director {
      */
     public Variable declareVariable(String name, String type, Highlight h) {
 
+    	//Show message box to explain. 
+    	annotationengine.explanationVDDisplay();
+    	
         highlightStatement(h);
 
         // Create a new variable and its actor.
