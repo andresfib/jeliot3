@@ -3173,6 +3173,7 @@ public class Director {
      */
     public void showClassCreation(jeliot.lang.Class c) {
 
+    	annotationengine.explanationSADisplay();
         highlightDeclaration(null);
 
         ClassActor ca = factory.produceClassActor(c);
