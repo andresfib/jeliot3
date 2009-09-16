@@ -2750,6 +2750,9 @@ public class Director {
             ArrayInstance[][] level2, Value[] lenVal, long expressionCounter,
             int actualDimension, Highlight h) {
 
+    	//Show message box to explain when Array Allocation happens. 
+    	annotationengine.explanationAADisplay();    	
+    	
         highlightExpression(h);
 
         //Array creation here
@@ -2924,6 +2927,9 @@ public class Director {
     public void showArrayAccess(VariableInArray[] vars, Value[] indexVal,
             Value returnVal, Highlight h) {
 
+    	//Show message box to explain that now the array can be accessed. 
+    	annotationengine.explanationAACDisplay(); 
+    	
         highlightExpression(h);
         int n = vars.length;
 
