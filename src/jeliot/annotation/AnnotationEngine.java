@@ -14,5 +14,10 @@ public class AnnotationEngine {
 
 	public void explanationAACDisplay(){
 		JOptionPane.showMessageDialog(null,"The following step is about that array can be accessed","Explanation",JOptionPane.PLAIN_MESSAGE);  }
+	
+	public void explanationRDisplay(){
+		JOptionPane.showMessageDialog(null,"The following step indicates it will return a value","Explanation",JOptionPane.PLAIN_MESSAGE);  }
 
+	public void explanationSADisplay(){
+		JOptionPane.showMessageDialog(null,"The following step is about class allocation","Explanation",JOptionPane.PLAIN_MESSAGE);  }
 }
