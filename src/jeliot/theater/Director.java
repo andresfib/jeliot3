@@ -745,8 +745,9 @@ public class Director {
     public Value[] animateConstructorInvocation(String methodCall,
             Value[] args, Highlight h){
     	
-    	//Show message box to explain when Method calls happen. 
-    	annotationengine.explanationMCDisplay();
+    	//Show message box to explain when Method calls happen.
+    	
+    	annotationengine.explanationMCDisplay(methodCall);
 
         highlightExpression(h);
         // Create the actor for the invocation.
@@ -1392,8 +1393,10 @@ public class Director {
      */
     public Variable declareVariable(String name, String type, Highlight h) {
 
+    	/*
     	//Show message box to explain. 
     	annotationengine.explanationVDDisplay();
+    	*/
     	
         highlightStatement(h);
 
@@ -2749,10 +2752,10 @@ public class Director {
             jeliot.lang.Reference ref, ArrayInstance[] level1,
             ArrayInstance[][] level2, Value[] lenVal, long expressionCounter,
             int actualDimension, Highlight h) {
-
+        /*
     	//Show message box to explain when Array Allocation happens. 
     	annotationengine.explanationAADisplay();    	
-    	
+    	*/
         highlightExpression(h);
 
         //Array creation here
@@ -2926,10 +2929,10 @@ public class Director {
      */
     public void showArrayAccess(VariableInArray[] vars, Value[] indexVal,
             Value returnVal, Highlight h) {
-
+        /*
     	//Show message box to explain that now the array can be accessed. 
     	annotationengine.explanationAACDisplay(); 
-    	
+    	*/
         highlightExpression(h);
         int n = vars.length;
 
@@ -3172,10 +3175,10 @@ public class Director {
      * @param h
      */
     public void showClassCreation(jeliot.lang.Class c) {
-
+        /*
     	annotationengine.explanationSADisplay();
         highlightDeclaration(null);
-
+        */
         ClassActor ca = factory.produceClassActor(c);
         c.setClassActor(ca);
 
