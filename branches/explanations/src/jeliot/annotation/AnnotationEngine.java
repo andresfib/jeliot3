@@ -1,12 +1,24 @@
 package jeliot.annotation;
 
 import javax.swing.JOptionPane;
- 
-public class AnnotationEngine {
-	public void explanationMCDisplay(){
-		JOptionPane.showMessageDialog(null,"The following step is a method call,including main method,super method and etc.","Explanation",JOptionPane.PLAIN_MESSAGE);  }
 
-	public void explanationVDDisplay(){
+public class AnnotationEngine {
+	private String name;
+	/*private boolean isInConstructor()throws Exception{
+		
+		return true;
+	}*/
+	private void setConstructorCall(String methodCall){
+		this.name = methodCall;
+	}
+	private String getConstructorCall(){
+		return name;
+	}
+	public void explanationMCDisplay(String methodCall){
+		setConstructorCall(methodCall);
+		JOptionPane.showMessageDialog(null,"Constructor of the object of the class: " + getConstructorCall()+ "() is called","Explanation",JOptionPane.PLAIN_MESSAGE);  }
+
+	/*public void explanationVDDisplay(){
 		JOptionPane.showMessageDialog(null,"The following step is a variable declaration","Explanation",JOptionPane.PLAIN_MESSAGE);  }
 
 	public void explanationAADisplay(){
@@ -20,4 +32,5 @@ public class AnnotationEngine {
 
 	public void explanationSADisplay(){
 		JOptionPane.showMessageDialog(null,"The following step is about class allocation","Explanation",JOptionPane.PLAIN_MESSAGE);  }
+	*/
 }
