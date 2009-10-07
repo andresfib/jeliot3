@@ -8,15 +8,15 @@ public class AnnotationEngine {
 		
 		return true;
 	}*/
-	private void setConstructorCall(String methodCall){
+	public void setConstructorCall(String methodCall){
 		this.name = methodCall;
 	}
-	private String getConstructorCall(){
+	public String getConstructorCall(){
 		return name;
 	}
-	public void explanationMCDisplay(String methodCall){
-		setConstructorCall(methodCall);
-		JOptionPane.showMessageDialog(null,"Constructor of the object of the class: " + getConstructorCall()+ "() is called","Explanation",JOptionPane.PLAIN_MESSAGE);  }
+	public void explanationMCDisplay(){
+		
+		JOptionPane.showMessageDialog(null,"Constructor of the object of the class: " + name+ "() is called","Explanation",JOptionPane.PLAIN_MESSAGE);  }
 
 	/*public void explanationVDDisplay(){
 		JOptionPane.showMessageDialog(null,"The following step is a variable declaration","Explanation",JOptionPane.PLAIN_MESSAGE);  }
