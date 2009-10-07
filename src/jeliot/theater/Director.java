@@ -747,7 +747,7 @@ public class Director {
     	
     	//Show message box to explain when Method calls happen.
     	
-    	annotationengine.explanationMCDisplay(methodCall);
+    	annotationengine.setConstructorCall(methodCall);
 
         highlightExpression(h);
         // Create the actor for the invocation.
