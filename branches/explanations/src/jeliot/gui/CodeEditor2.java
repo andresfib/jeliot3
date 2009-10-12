@@ -556,7 +556,7 @@ public class CodeEditor2 extends JComponent {
 
         menu.addSeparator();
 
-        Action findAction = new AbstractAction("Find...") {
+        Action findAction = new AbstractAction(messageBundle.getString("menu.edit.find")) {
 
             public void actionPerformed(ActionEvent e) {
                 if (findDialog == null) {
@@ -582,7 +582,7 @@ public class CodeEditor2 extends JComponent {
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
                 KeyEvent.CTRL_MASK));
 
-        Action replaceAction = new AbstractAction("Replace...") {
+        Action replaceAction = new AbstractAction(messageBundle.getString("menu.edit.replace")) {
 
             public void actionPerformed(ActionEvent e) {
                 if (findDialog == null) {

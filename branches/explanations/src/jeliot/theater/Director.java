@@ -746,7 +746,7 @@ public class Director {
             Value[] args, Highlight h){
     	
     	//Show message box to explain when Method calls happen.
-    	
+    	//annotationengine.explanationMCDisplay(methodCall);
     	annotationengine.setConstructorCall(methodCall);
 
         highlightExpression(h);
