@@ -57,6 +57,7 @@ public class AnnotationEngine {
         text.setLineWrap (true);
         //wrapped at word boundaries
         text.setWrapStyleWord (true);
+        text.setEditable(false);
 
         JScrollPane scroller =
             new JScrollPane (text, 

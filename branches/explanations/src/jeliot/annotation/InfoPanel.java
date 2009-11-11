@@ -7,26 +7,27 @@ import java.awt.event.MouseEvent;
 public class InfoPanel extends JPanel {
 		 
         public Component first;
-        protected SpinWidget spin;
         public Component second;
-
-        public static final int SPIN_WIDGET_HEIGHT = 14;
+        private JButton show = new JButton("Less details");
+        
+        
+       
 
         public InfoPanel (Component top, Component bottom) {
             first = top;
-            spin = new SpinWidget( );
             second = bottom;
+            ControlDetails control = new ControlDetails(second);
+            show.addActionListener(control);
             myLayout( );
         }
 
         protected void myLayout( ) {
             setLayout (new BoxLayout (this, BoxLayout.Y_AXIS));
             add (first);
-            add (spin);
+            add (show);
             add (second);
-            controlVisibility( );
         }
-
+        /*
          protected void controlVisibility( ) {
              if ((second == null) ||
                 (spin == null))
@@ -49,7 +50,7 @@ public class InfoPanel extends JPanel {
               return spin.isOpen( );
           }
           
-  // 
+  
       public class SpinWidget extends JPanel{
       boolean open;
       Dimension mySize = new Dimension (SPIN_WIDGET_HEIGHT,
@@ -103,7 +104,7 @@ public class InfoPanel extends JPanel {
               g.fillPolygon (closedTriangle); 
       } 
 }
-
+*/
 }
 
 
