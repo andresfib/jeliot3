@@ -1,3 +1,5 @@
+/*Refer to <Swing Hacks>,Chapter 5,Hack 39 Spin Open a Detail Pane.
+ * The writers of this book are Chris Adamson and Joshua Marinacci.*/
 package jeliot.annotation;
 
 import java.awt.*; 
@@ -5,12 +7,16 @@ import javax.swing.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
+
+import jeliot.util.ResourceBundles;
 
 public class InfoPanel extends JPanel {
+        static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
 	    private boolean show = true; 
         public Component first;
         public Component second;
-        private JButton button = new JButton("Less details");
+        private JButton button = new JButton(messageBundle.getString("message.button1"));
         
        
         public InfoPanel (Component top, Component bottom) {
@@ -22,26 +28,34 @@ public class InfoPanel extends JPanel {
                 public void actionPerformed(ActionEvent e) { 
              	            
              	     String label = e.getActionCommand();
-             	     if(label.equals("Less details"))
-             	{
+             	     if(label.equals(messageBundle.getString("message.button1")))
+             	    {
              	     second.setVisible(!show);
-             	     button.setText("More details");
-             	     
-             	     if (isShowing( )) {
-                        Container ancestor = getTopLevelAncestor( ); 
-                        if ((ancestor != null) && (ancestor instanceof Window))        
-                            ((Window) ancestor).pack( );
-                        repaint( );
-                     }
-             	}
+             	     button.setText(messageBundle.getString("message.button2"));
+            	     if (isShowing()) 
+            	     {
+                         Container ancestor = getTopLevelAncestor( ); 
+                         if ((ancestor != null) && (ancestor instanceof Window))        
+                             ((Window) ancestor).pack( );
+                         repaint( );
+                      }
+             	    }
              	     else 
-             	 	{
-             	    	 second.setVisible(show);        	 	 
-             	 	     button.setText("Less details");
-             	 	     
-             	 	   
+             	 	{    
+
+             	 	     button.setText(messageBundle.getString("message.button1"));
+             	 	     //show the bottom part again
+             	 	     second.setVisible(show);
+                	     if (isVisible()) 
+                	     {
+                             Container ancestor = getTopLevelAncestor( ); 
+                             if ((ancestor != null) && (ancestor instanceof Window))        
+                                 ((Window) ancestor).pack( );
+                             repaint( );
+                          }
+
              	 	}	 
-             		}
+                }
                 };
             button.addActionListener(al);
             myLayout( );
@@ -52,92 +66,13 @@ public class InfoPanel extends JPanel {
             add (first);
             add (button);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
-            add (second);
-            
+            add (second);   
         }
+        
+ 
+
 }
-       /* protected void resetBottom( ) {
-             if ((second == null))
-                 return;
-             second.setVisible (show);
-             //button.setBounds(1, 1, 12, 12);
-             revalidate( );
-             if (isShowing( )) {
-                 Container ancestor = getTopLevelAncestor( ); 
-                 if ((ancestor != null) && (ancestor instanceof Window))        
-                     ((Window) ancestor).pack( );
-             repaint( );
-             }
-           
-        }
 
-* /
-
-         
-			
-        /* public void showSecond (boolean b) {
-             spin.setOpen (b);
-         }
-
-          public boolean isSecondShowing ( ) {
-              return spin.isOpen( );
-          }
-          
-  
-      public class SpinWidget extends JPanel{
-      boolean open;
-      Dimension mySize = new Dimension (SPIN_WIDGET_HEIGHT,
-                                        SPIN_WIDGET_HEIGHT);
-      final int HALF_HEIGHT = SPIN_WIDGET_HEIGHT / 2;
-      
-      //coordinate when the triangle is open
-      int[] openXPoints = { 1, HALF_HEIGHT, SPIN_WIDGET_HEIGHT-1};
-      int[] openYPoints = { HALF_HEIGHT, SPIN_WIDGET_HEIGHT-1, HALF_HEIGHT};
-     
-      //coordinate when the triangle is closed
-      int[] closedXPoints = { 1, 1, HALF_HEIGHT};
-      int[] closedYPoints = { 1, SPIN_WIDGET_HEIGHT-1, HALF_HEIGHT };
-     
-      Polygon openTriangle =
-          new Polygon (openXPoints, openYPoints, 3);
-      Polygon closedTriangle =
-          new Polygon (closedXPoints, closedYPoints, 3);
-
-      public SpinWidget( ) {
-          setOpen (false);
-          addMouseListener (new MouseAdapter( ) {
-
-                  public void mouseClicked (MouseEvent e) {
-                      handleClick( );
-                  }
-              });
-      }
-
-      public void handleClick( ) {
-          setOpen (! isOpen( ));
-      }
-
-      public boolean isOpen( ) {
-          return open;
-      }
-
-      public void setOpen (boolean o) {
-          open = o;
-          controlVisibility( );
-      }
-
-      public Dimension getMinimumSize( ) { return mySize; }
-      public Dimension getPreferredSize( ) { return mySize; }
-
-      //set the triangle
-      public void paint (Graphics g) {    
-          if (isOpen( )) 
-              g.fillPolygon (openTriangle); 
-          else 
-              g.fillPolygon (closedTriangle); 
-      } 
-}
-*/
 
 
 
