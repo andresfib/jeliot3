@@ -13,7 +13,7 @@ import jeliot.util.ResourceBundles;
 
 public class InfoPanel extends JPanel {
         static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
-	    private boolean show = true; 
+	    public boolean show = false; 
         public Component first;
         public Component second;
         private JButton button = new JButton(messageBundle.getString("message.button1"));
@@ -27,8 +27,8 @@ public class InfoPanel extends JPanel {
            	 
                 public void actionPerformed(ActionEvent e) { 
              	            
-             	     String label = e.getActionCommand();
-             	     if(label.equals(messageBundle.getString("message.button1")))
+             	     show =! show;
+             	     if(show)
              	    {
              	     second.setVisible(!show);
              	     button.setText(messageBundle.getString("message.button2"));
@@ -42,10 +42,10 @@ public class InfoPanel extends JPanel {
              	    }
              	     else 
              	 	{    
-
+             	    	 second.setVisible(!show);
              	 	     button.setText(messageBundle.getString("message.button1"));
              	 	     //show the bottom part again
-             	 	     second.setVisible(show);
+             	 	     
                 	     if (isVisible()) 
                 	     {
                              Container ancestor = getTopLevelAncestor( ); 
