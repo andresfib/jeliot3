@@ -2,6 +2,7 @@ package jeliot.annotation;
 
 
 import javax.swing.*;
+
 import java.awt.*;
 import jeliot.util.ResourceBundles;
 import java.util.ResourceBundle;
@@ -46,10 +47,11 @@ public class AnnotationEngine {
 	        }
 	    }*/
 	public void explanationMCDisplay(){
+		
 		//First part:dialog part
 		JOptionPane pane = new JOptionPane (name+"(): "+messageBundle.getString("message.constructor_call"), JOptionPane.INFORMATION_MESSAGE);
         JDialog dialog = pane.createDialog (null, messageBundle.getString("dialog.message.title"));
-        Container content = dialog.getContentPane( );
+        Container container = dialog.getContentPane( );
         
         //Second part:text area for more information
         JTextArea text = new JTextArea (messageBundle.getString("message.constructor_explanation"), 8, 40);
@@ -64,11 +66,12 @@ public class AnnotationEngine {
                              ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, 
                              ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         //mix the first and second part 
-        InfoPanel mix = new InfoPanel (content, scroller);
+        InfoPanel mix = new InfoPanel (container, scroller);
         dialog.setContentPane (mix);
         //Window to be sized to fit the preferred size 
         dialog.pack( );
         dialog.setVisible(true);
+  
     } 
 }
 	
