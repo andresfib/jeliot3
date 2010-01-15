@@ -2,37 +2,65 @@ package jeliot.annotation;
 
 import java.awt.*; 
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class InfoPanel extends JPanel {
-		 
+	    private boolean show = true; 
         public Component first;
         public Component second;
-        private JButton show = new JButton("Less details");
-        
+        private JButton button = new JButton("Less details");
         
        
-
         public InfoPanel (Component top, Component bottom) {
             first = top;
             second = bottom;
-            ControlDetails control = new ControlDetails(second);
-            show.addActionListener(control);
+            //ControlDetails control = new ControlDetails(button,second);
+            ActionListener al = new ActionListener(){
+           	 
+                public void actionPerformed(ActionEvent e) { 
+             	            
+             	     String label = e.getActionCommand();
+             	     if(label.equals("Less details"))
+             	{
+             	     second.setVisible(!show);
+             	     button.setText("More details");
+             	     
+             	     if (isShowing( )) {
+                        Container ancestor = getTopLevelAncestor( ); 
+                        if ((ancestor != null) && (ancestor instanceof Window))        
+                            ((Window) ancestor).pack( );
+                        repaint( );
+                     }
+             	}
+             	     else 
+             	 	{
+             	    	 second.setVisible(show);        	 	 
+             	 	     button.setText("Less details");
+             	 	     
+             	 	   
+             	 	}	 
+             		}
+                };
+            button.addActionListener(al);
             myLayout( );
         }
 
-        protected void myLayout( ) {
+        protected void myLayout() {
             setLayout (new BoxLayout (this, BoxLayout.Y_AXIS));
             add (first);
-            add (show);
+            add (button);
+            button.setAlignmentX(Component.CENTER_ALIGNMENT);
             add (second);
+            
         }
-        /*
-         protected void controlVisibility( ) {
-             if ((second == null) ||
-                (spin == null))
+}
+       /* protected void resetBottom( ) {
+             if ((second == null))
                  return;
-             second.setVisible (spin.isOpen( ));
+             second.setVisible (show);
+             //button.setBounds(1, 1, 12, 12);
              revalidate( );
              if (isShowing( )) {
                  Container ancestor = getTopLevelAncestor( ); 
@@ -40,9 +68,14 @@ public class InfoPanel extends JPanel {
                      ((Window) ancestor).pack( );
              repaint( );
              }
-         }
+           
+        }
+
+* /
+
+         
 			
-         public void showSecond (boolean b) {
+        /* public void showSecond (boolean b) {
              spin.setOpen (b);
          }
 
@@ -105,6 +138,6 @@ public class InfoPanel extends JPanel {
       } 
 }
 */
-}
+
 
 
