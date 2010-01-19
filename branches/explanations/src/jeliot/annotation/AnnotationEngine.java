@@ -4,15 +4,25 @@ package jeliot.annotation;
 import javax.swing.*;
 
 import java.awt.*;
+
+
 import jeliot.util.ResourceBundles;
 import java.util.ResourceBundle;
 
 
 public class AnnotationEngine {
     static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
-
+	
+    /**
+	 * This class is used to show the pass the different events to the InfoPanel.
+	 */
+    ExplanationEvent explanationevent = new ExplanationEvent();
 
 	private String name;
+	private String value;
+	private String variable;
+	
+	//private Value[] arguments;
 	/*private boolean isInConstructor()throws Exception{
 		
 		return true;
@@ -21,8 +31,20 @@ public class AnnotationEngine {
 		this.name = methodCall;
 	}
 	public String getConstructorCall(){
-		return name;
+		return name + "( ):" + messageBundle.getString("message.constructor_call");
 	}
+    public void setArgument(String val,String var){
+        this.value = val;
+        this.variable = var;
+    }
+    public String getArgument(){
+    	return value + messageBundle.getString("message.argument") + variable + ".";
+    }
+
+
+	/**
+	 * TabbedPane is not fit in this situation.
+	 */
 	/*public void createTabbedPane(){
 	ImageIcon icon = createImageIcon("/images/middle.gif");
     JFrame frame = new JFrame("Tabbed Pane Frame");
@@ -46,7 +68,26 @@ public class AnnotationEngine {
 	            return null;
 	        }
 	    }*/
-	public void explanationMCDisplay(){
+    
+    //This method is used to give different events to InfoPanel. 
+    public void explainConstructor(String name){
+    	setConstructorCall(name);
+    	String a = getConstructorCall();
+    	String b = messageBundle.getString("message.constructor_explanation");
+    	 
+    	explanationevent.explanationDisplay(a,b);
+
+    }
+    public void explainArgument(String val,String var){
+    	setArgument(val,var);
+    	
+    	String a = getArgument();
+    	String b = messageBundle.getString("message.argument_explanation");
+    	
+    	explanationevent.explanationDisplay(a,b);
+
+    }
+	/*public void explanationMCDisplay(){
 		
 		//First part:dialog part
 		JOptionPane pane = new JOptionPane (name+"(): "+messageBundle.getString("message.constructor_call"), JOptionPane.INFORMATION_MESSAGE);
@@ -72,14 +113,15 @@ public class AnnotationEngine {
         dialog.pack( );
         dialog.setVisible(true);
   
-    } 
-}
+    } */
+
 	
 
-	/*public void explanationVDDisplay(){
-		JOptionPane.showMessageDialog(null,"The following step is a variable declaration","Explanation",JOptionPane.PLAIN_MESSAGE);  }
 
-	public void explanationAADisplay(){
+		
+
+}
+	/*public void explanationAADisplay(){
 		JOptionPane.showMessageDialog(null,"The following step is a array allocation","Explanation",JOptionPane.PLAIN_MESSAGE);  }
 
 	public void explanationAACDisplay(){
