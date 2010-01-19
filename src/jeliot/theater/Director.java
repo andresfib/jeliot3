@@ -46,6 +46,7 @@ public class Director {
 	 * This class is for explanation of different steps.
 	 */
 	AnnotationEngine annotationengine = new AnnotationEngine();
+	
     /**
      * The resource bundle for theater package.
      */
@@ -655,7 +656,9 @@ public class Director {
     public Value[] animateOMInvocation(String methodCall, Value[] args,
             Highlight h, Value thisValue) {
         highlightExpression(h);
-
+        
+        
+        
         // Remember the scratch of current expression.
         // scratchStack.push(currentScratch);
 
@@ -668,7 +671,9 @@ public class Director {
                         .getInstanceActor().getRootLocation());
             }
         }
-
+        
+        
+        
         // Create the actor for the invocation.
         int n = 0;
         if (args != null) {
@@ -745,11 +750,12 @@ public class Director {
     public Value[] animateConstructorInvocation(String methodCall,
             Value[] args, Highlight h){
     	
-    	//Show message box to explain when Method calls happen.
+    	//Show message box to explain when Constructor calls happen.
     	/*annotationengine.explanationMCDisplay(methodCall);
     	  annotationengine.createTabbedPane();*/
-    	annotationengine.setConstructorCall(methodCall);
-    	annotationengine.explanationMCDisplay();
+    	annotationengine.explainConstructor(methodCall);
+    	
+
 
         highlightExpression(h);
         // Create the actor for the invocation.
@@ -757,8 +763,14 @@ public class Director {
         if (args != null) {
             n = args.length;
         }
+        
+        
+        
+        
+        
         CIActor actor = factory.produceCIActor(methodCall, n);
         return animateMInvocation(methodCall, args, h, actor);
+
     }
 
     public Value[] animateSMInvocation(String methodName, Value[] args,
@@ -787,6 +799,10 @@ public class Director {
     public Value[] animateMInvocation(String methodName, Value[] args,
             Highlight h, MIActor actor) {
 
+    	
+    	//annotationengine.explanationVDDisplay(args.toString());
+    	
+    	
         // Remember the scratch of current expression.
         // scratchStack.push(currentScratch);
 
@@ -805,7 +821,7 @@ public class Director {
             args[i].setActor(argact[i]);
             fly[i] = argact[i].fly(actor.reserve(argact[i]));
         }
-
+        
         // Calculate the size of the invocation actor, taking into account
         // the argument actors.
         actor.calculateSize();
@@ -853,6 +869,8 @@ public class Director {
             String[] formalParameters, String[] formalParameterTypes,
             Highlight h, Value thisValue) {
 
+
+    	
         // highlight the method header.
         highlightDeclaration(h);
 
@@ -907,7 +925,7 @@ public class Director {
         }
 
         capture();
-
+        
         Point sLoc = manager.reserve(stage);
         engine.showAnimation(stage.appear(sLoc));
         manager.bind(stage);
@@ -1257,6 +1275,7 @@ public class Director {
             Highlight h) {
         highlightExpression(h);
         animateCastExpression(fromValue, toValue);
+
     }
 
     /**
@@ -1300,6 +1319,7 @@ public class Director {
         theatre.removeActor(castActor);
         theatre.addPassive(toActor);
         currentScratch.registerCrap(toActor);
+
     }
 
     /**
@@ -1588,6 +1608,8 @@ public class Director {
         VariableActor variableAct = variable.getActor();
         ValueActor valueAct = value.getActor();
 
+        
+        
         if (MCodeUtilities.isPrimitive(type)) {
 
             // Get/create actors.
@@ -1608,6 +1630,8 @@ public class Director {
             theatre.removePassive(valueAct);
             release();
 
+            annotationengine.explainArgument(valueAct.toString(),variableAct.toString());
+            
             if (returnValue != null) {
                 ValueActor returnAct = factory.produceValueActor(returnValue);
 
@@ -1619,6 +1643,7 @@ public class Director {
             if (eg != null) {
                 eg.addAssignmentExplanation(variableAct.toString(), valueAct
                         .toString(), h);
+                
             }
 
         } else {
@@ -1627,7 +1652,7 @@ public class Director {
             //refAct.calculateBends();
             ReferenceActor ra = factory.produceReferenceActor(refAct);
             casted.setActor(ra);
-
+            
             if (variableAct instanceof ReferenceVariableActor) {
                 ReferenceVariableActor rva = (ReferenceVariableActor) variableAct;
 
@@ -1636,7 +1661,7 @@ public class Director {
                 //rva.setReference(refAct);
                 //instAct.addReference(refAct);
                 Point valueLoc = rva.reserve(ra);
-
+                
                 capture();
                 engine.showAnimation(refAct.fly(valueLoc));
                 rva.bind();

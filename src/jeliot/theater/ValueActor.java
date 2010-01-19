@@ -190,7 +190,7 @@ public class ValueActor extends Actor {
 	}
 	/**
 	 * @param type The type to set.
-	 */
+	 */  
 	public void setType(String type) {
 		this.type = type;
 	}
