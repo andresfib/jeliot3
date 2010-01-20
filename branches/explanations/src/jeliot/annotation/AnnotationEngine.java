@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 
+import jeliot.lang.Value;
 import jeliot.util.ResourceBundles;
 import java.util.ResourceBundle;
 
@@ -19,7 +20,7 @@ public class AnnotationEngine {
     ExplanationEvent explanationevent = new ExplanationEvent();
 
 	private String name;
-	private String value;
+	private Value value;
 	private String variable;
 	
 	//private Value[] arguments;
@@ -31,14 +32,16 @@ public class AnnotationEngine {
 		this.name = methodCall;
 	}
 	public String getConstructorCall(){
-		return name + "( ):" + messageBundle.getString("message.constructor_call");
+		
+		   return name + "( ):" + messageBundle.getString("message.constructor_call");
+		
 	}
-    public void setArgument(String val,String var){
+    public void setArgument(Value val,String var){
         this.value = val;
         this.variable = var;
     }
     public String getArgument(){
-    	return value + messageBundle.getString("message.argument") + variable + ".";
+    	return value.toString() + messageBundle.getString("message.argument") + variable + "().";
     }
 
 
@@ -69,8 +72,10 @@ public class AnnotationEngine {
 	        }
 	    }*/
     
-    //This method is used to give different events to InfoPanel. 
+    //This method is used to give information of Constructor to InfoPanel. 
     public void explainConstructor(String name){
+    	
+    	
     	setConstructorCall(name);
     	String a = getConstructorCall();
     	String b = messageBundle.getString("message.constructor_explanation");
@@ -78,7 +83,8 @@ public class AnnotationEngine {
     	explanationevent.explanationDisplay(a,b);
 
     }
-    public void explainArgument(String val,String var){
+    //This method is used to give information of arguments to Ifo Panel.
+    public void explainArgument(Value val,String var){
     	setArgument(val,var);
     	
     	String a = getArgument();
