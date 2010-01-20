@@ -754,7 +754,7 @@ public class Director {
     	/*annotationengine.explanationMCDisplay(methodCall);
     	  annotationengine.createTabbedPane();*/
     	annotationengine.explainConstructor(methodCall);
-    	
+    	 
 
 
         highlightExpression(h);
@@ -762,7 +762,10 @@ public class Director {
         int n = 0;
         if (args != null) {
             n = args.length;
+           
         }
+         
+        	
         
         
         
@@ -796,7 +799,7 @@ public class Director {
      * @param h
      * @return
      */
-    public Value[] animateMInvocation(String methodName, Value[] args,
+    public Value[] animateMInvocation(String methodName, Value[] args,		
             Highlight h, MIActor actor) {
 
     	
@@ -937,6 +940,7 @@ public class Director {
         ValueActor thisCastAct = factory.produceValueActor(thisCasted);
         thisValueActor = thisValue.getActor();
 
+
         if (thisValueActor == null) {
             thisValueActor = factory.produceValueActor(thisValue);
             if (thisValueActor instanceof ReferenceActor) {
@@ -969,6 +973,8 @@ public class Director {
                 ValueActor castact = factory.produceValueActor(casted);
                 valact[i] = args[i].getActor();
                 anim[i] = valact[i].fly(varact[i].reserve(castact));
+                
+                annotationengine.explainArgument(casted,methodName);
             }
 
             engine.showAnimation(anim);
@@ -1059,6 +1065,8 @@ public class Director {
                 //stage.extend();
                 stage.bind();
                 theatre.getManager().validateTheater();
+                
+                
             }
 
             Animation a = stage.extend();
@@ -1082,6 +1090,8 @@ public class Director {
                 ValueActor castact = factory.produceValueActor(casted);
                 valact[i] = args[i].getActor();
                 anim[i] = valact[i].fly(varact[i].reserve(castact));
+                
+                
             }
 
             engine.showAnimation(anim);
@@ -1107,6 +1117,8 @@ public class Director {
             Point p = new Point(scratch.getX(), -scratch.getHeight());
             updateCapture();
             Animation a = scratch.fly(p);
+            
+            
             //System.out.println(scratch.getHeight());
             if (scratch.getHeight() < 5) {
                 a.setDuration(50);
@@ -1630,7 +1642,7 @@ public class Director {
             theatre.removePassive(valueAct);
             release();
 
-            annotationengine.explainArgument(valueAct.toString(),variableAct.toString());
+            //annotationengine.explainArgument(valueAct.toString(),variableAct.toString());
             
             if (returnValue != null) {
                 ValueActor returnAct = factory.produceValueActor(returnValue);

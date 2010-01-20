@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
+
 import jeliot.util.ResourceBundles;
 
 public class ExplanationEvent {
