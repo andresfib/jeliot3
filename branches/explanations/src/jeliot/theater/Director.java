@@ -753,7 +753,7 @@ public class Director {
     	//Show message box to explain when Constructor calls happen.
     	/*annotationengine.explanationMCDisplay(methodCall);
     	  annotationengine.createTabbedPane();*/
-    	annotationengine.explainConstructor(methodCall);
+    	annotationengine.explainConstructor(args,methodCall);
     	 
 
 
@@ -974,7 +974,9 @@ public class Director {
                 valact[i] = args[i].getActor();
                 anim[i] = valact[i].fly(varact[i].reserve(castact));
                 
+
                 annotationengine.explainArgument(casted,methodName);
+                
             }
 
             engine.showAnimation(anim);
@@ -1091,6 +1093,7 @@ public class Director {
                 valact[i] = args[i].getActor();
                 anim[i] = valact[i].fly(varact[i].reserve(castact));
                 
+                //annotationengine.explainArgument(casted,methodName);
                 
             }
 

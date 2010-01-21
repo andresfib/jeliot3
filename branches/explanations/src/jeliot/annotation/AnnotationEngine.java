@@ -7,6 +7,7 @@ import java.awt.*;
 
 
 import jeliot.lang.Value;
+import jeliot.mcode.MCodeUtilities;
 import jeliot.util.ResourceBundles;
 import java.util.ResourceBundle;
 
@@ -31,17 +32,21 @@ public class AnnotationEngine {
 	public void setConstructorCall(String methodCall){
 		this.name = methodCall;
 	}
-	public String getConstructorCall(){
-		
+	public String getConstructorCall(Value[] v){
+		//Determining if the constructor is a non-parameter one. 
+		if(v.length != 0)
 		   return name + "( ):" + messageBundle.getString("message.constructor_call");
-		
+		else
+		   return name + "( ):" + messageBundle.getString("message.constructor_call")+messageBundle.getString("message.nonparamconstructor_call");
 	}
     public void setArgument(Value val,String var){
         this.value = val;
         this.variable = var;
     }
     public String getArgument(){
-    	return value.toString() + messageBundle.getString("message.argument") + variable + "().";
+ 
+    	   return value.toString() + messageBundle.getString("message.argument") + variable + "().";
+
     }
 
 
@@ -73,11 +78,11 @@ public class AnnotationEngine {
 	    }*/
     
     //This method is used to give information of Constructor to InfoPanel. 
-    public void explainConstructor(String name){
+    public void explainConstructor(Value[] value,String name){
     	
     	
     	setConstructorCall(name);
-    	String a = getConstructorCall();
+    	String a = getConstructorCall(value);
     	String b = messageBundle.getString("message.constructor_explanation");
     	 
     	explanationevent.explanationDisplay(a,b);
@@ -85,12 +90,21 @@ public class AnnotationEngine {
     }
     //This method is used to give information of arguments to Ifo Panel.
     public void explainArgument(Value val,String var){
-    	setArgument(val,var);
     	
-    	String a = getArgument();
-    	String b = messageBundle.getString("message.argument_explanation");
     	
-    	explanationevent.explanationDisplay(a,b);
+    	String type = val.getType();
+    	//Determining if the argument is a primitive type.
+        if (MCodeUtilities.isPrimitive(type)) {
+        	setArgument(val,var);    	
+            String a = getArgument();
+        	String b = messageBundle.getString("message.argument_explanation");
+        	explanationevent.explanationDisplay(a,b); 
+        	}  
+        else { 
+           String c = messageBundle.getString("message.pointerargument");
+           String d = messageBundle.getString("message.pointerarg_explanation");
+           explanationevent.explanationDisplay(c,d);
+            }
 
     }
 	/*public void explanationMCDisplay(){
