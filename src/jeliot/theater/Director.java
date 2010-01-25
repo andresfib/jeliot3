@@ -958,6 +958,8 @@ public class Director {
         Animation thisAnim = thisValueActor.fly(thisVariableActor
                 .reserve(thisCastAct));
 
+        
+        
         engine.showAnimation(thisAnim);
 
         thisVariableActor.bind();
@@ -1480,6 +1482,8 @@ public class Director {
         VariableActor actor = factory.produceObjectVariableActor(v);
         v.setActor(actor);
 
+        //annotationengine.explainObjectField(name,type);
+        annotationengine.explainArrow(name);
         ObjectStage stage = of.getObjectStage();
 
         Point loc = stage.reserve(actor);
@@ -1575,6 +1579,9 @@ public class Director {
         capture();
         Animation appear = act.appear(loc);
         appear.setDuration(200);
+        
+        
+        
         engine.showAnimation(appear);
         release();
 

@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import jeliot.FeatureNotImplementedException;
+import jeliot.annotation.AnnotationEngine;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.lang.ArrayInstance;
 import jeliot.lang.Class;
@@ -38,6 +39,13 @@ import jeliot.util.Util;
 public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
     //DOC: document!
+	
+	/**
+	 * This class is for explanation of different steps.
+	 */
+	AnnotationEngine annotationengine = new AnnotationEngine();
+	
+	
     /**
      * 
      */
@@ -3315,7 +3323,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             //director: create object
             director.showObjectCreation(of, h);
-
+            
         } else {
             of = new ObjectFrame("-1", ci.getName(), ci
                     .getNonStaticFieldsAmount());
@@ -3323,6 +3331,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             //director: create object
             director.showObjectCreation(of, h);
 
+            annotationengine.explainObject(ci.getName());
+
+            
             //director: create variables and initialize them
             Hashtable fields = ci.getFields();
             ListIterator i = ci.getFieldNamesInDeclarationOrder()
@@ -3339,6 +3350,9 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 String mods = st.nextToken();
                 String type = st.nextToken();
                 String value = "";
+                
+              annotationengine.explainObjectField(name);
+                
                 if ((st.countTokens() >= 2 && extended == false)
                         || (st.countTokens() >= 3 && extended == true)) {
                     value = st.nextToken();

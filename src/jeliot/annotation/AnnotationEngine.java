@@ -7,6 +7,7 @@ import java.awt.*;
 
 
 import jeliot.lang.Value;
+import jeliot.lang.Variable;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.util.ResourceBundles;
 import java.util.ResourceBundle;
@@ -20,9 +21,14 @@ public class AnnotationEngine {
 	 */
     ExplanationEvent explanationevent = new ExplanationEvent();
 
-	private String name;
-	private Value value;
+	private String constructorname;
+	private Value argumentvalue;
 	private String variable;
+	private String object;
+	private String objectfield;
+	
+	private String value;
+	
 	
 	//private Value[] arguments;
 	/*private boolean isInConstructor()throws Exception{
@@ -30,26 +36,52 @@ public class AnnotationEngine {
 		return true;
 	}*/
 	public void setConstructorCall(String methodCall){
-		this.name = methodCall;
+		this.constructorname = methodCall;
 	}
 	public String getConstructorCall(Value[] v){
 		//Determining if the constructor is a non-parameter one. 
 		if(v.length != 0)
-		   return name + "( ):" + messageBundle.getString("message.constructor_call");
+		   return constructorname + "( ):" + messageBundle.getString("message.constructor_call");
 		else
-		   return name + "( ):" + messageBundle.getString("message.constructor_call")+messageBundle.getString("message.nonparamconstructor_call");
+		   return constructorname + "( ):" + messageBundle.getString("message.constructor_call")+messageBundle.getString("message.nonparamconstructor_call");
 	}
+	
+	
     public void setArgument(Value val,String var){
-        this.value = val;
+        this.argumentvalue = val;
         this.variable = var;
     }
     public String getArgument(){
  
-    	   return value.toString() + messageBundle.getString("message.argument") + variable + "().";
+    	   return argumentvalue.toString() + messageBundle.getString("message.argument") + variable + "().";
 
     }
-
-
+    
+    
+    public void setObject(String name){
+    	this.object = name;
+    	
+    }
+    public String getObject(){
+    	return object + " " + messageBundle.getString("message.object");
+    }
+    
+    
+    public void setObjectField(String name){
+    	this.objectfield = name;
+    }
+    public String getObjectField(){
+    	return messageBundle.getString("message.objectfield")+ objectfield + ".";
+    }
+    
+    public void setArrow(String v){
+    	
+    	this.value = v;
+    }
+    public String getArrow(){
+    	return  value + " " +messageBundle.getString("message.arrow");
+    }
+    
 	/**
 	 * TabbedPane is not fit in this situation.
 	 */
@@ -107,6 +139,27 @@ public class AnnotationEngine {
             }
 
     }
+    //This method is to show information when object is instantiated.
+    public void explainObject(String name){
+    	setObject(name);
+    	String a = getObject();
+    	String b = messageBundle.getString("message.object_explanation");
+    	explanationevent.explanationDisplay(a,b);
+    }
+    public void explainObjectField(String name){
+    	setObjectField(name);
+    	String a = getObjectField();
+    	String b = messageBundle.getString("message.objectfield_explanation");
+    	explanationevent.explanationDisplay(a,b);	
+    	
+    }
+    //This is for explaining arrow when it happens.
+    public void explainArrow(String value){
+    	setArrow(value);
+    	String a = getArrow();
+    	String b = messageBundle.getString("message.arrow_explanation");
+    	explanationevent.explanationDisplay(a,b);
+    }
 	/*public void explanationMCDisplay(){
 		
 		//First part:dialog part
@@ -134,11 +187,6 @@ public class AnnotationEngine {
         dialog.setVisible(true);
   
     } */
-
-	
-
-
-		
 
 }
 	/*public void explanationAADisplay(){
