@@ -36,6 +36,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import jeliot.adapt.Adapt2Interaction;
 import jeliot.adapt.BasicInternalUM;
 import jeliot.adapt.UMInteraction;
+
+import jeliot.annotation.AnnotationEngine;
 import jeliot.avinteraction.AVInteractionEngine;
 import jeliot.calltree.TreeDraw;
 import jeliot.gui.CodePane2;
@@ -439,6 +441,8 @@ public class Jeliot {
             mCodeInterpreterForAVInteraction = initializeInteractionEngine((TheaterMCodeInterpreter) mCodeInterpreterForTheater);
         }
 
+
+        
         // create the main loop for visualization
         controller = new ThreadController(new Runnable() {
 
@@ -1003,4 +1007,7 @@ public class Jeliot {
 		// TODO Auto-generated method stub
 		gui.setAskingQuestions(value);
 	}
+	/*public void setShowAnnotations(boolean value) {
+		gui.setShowAnnotations(value);
+	}*/
 }

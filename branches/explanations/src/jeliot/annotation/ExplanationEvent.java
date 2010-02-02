@@ -15,7 +15,7 @@ import jeliot.util.ResourceBundles;
 public class ExplanationEvent {
 	static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
 
-	
+
 	public void explanationDisplay(String name,String explanation){
 		//First part:dialog part
 		JOptionPane pane = new JOptionPane (name, JOptionPane.INFORMATION_MESSAGE);

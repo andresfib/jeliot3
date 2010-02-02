@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.Stack;
 import java.util.Vector;
 
+import jeliot.annotation.AnnotationEngine;
+
 /**
  * <code>TheaterManager</code> allocates the space for all
  * <code>InstanceActor</code>s, <code>MethodStage</code>s,
@@ -127,7 +129,7 @@ public class TheaterManager implements ComponentListener {
 
     /**
      *
-     */
+     */    
     //private int minInstanceY = Integer.MAX_VALUE;
     /**
      *
@@ -308,6 +310,7 @@ public class TheaterManager implements ComponentListener {
     public void removeMethodStage(MethodStage stage) {
         methods.removeElement(stage);
         theatre.removePassive(stage);
+        
     }
 
     /**
