@@ -25,20 +25,23 @@ public class AnnotationEngine {
     private UserProperties jeliotUserProperties = ResourceBundles
     .getJeliotUserProperties();
     private Boolean show = jeliotUserProperties.getBooleanProperty("show_annotations");
-	private String constructorname;
-	private String nonprimitiveargument;
+	
+    //for explaining constructor
+    private String constructorname;
+	
+    //for explaining arguments
 	private String argumentexplanation;
-	private Variable[] argumentvalue;
-	private String arguments;
-	//private Value[]  argumentvalue;
+	private String argumentshow;
 	private String variable;
+	
+	//for explain object
 	private String object;
 	
+	//for explain field
 	private String objectfield;	
-	private String value;
 	
-
-	//private Value[] arguments;
+	//for explain arrow
+	private String value;
 	/*private boolean isInConstructor()throws Exception{
 		
 		return true;
@@ -56,25 +59,28 @@ public class AnnotationEngine {
 	
 
     public void setArgument(Variable[] val,int n,String var){
+    	String arguments = messageBundle.getString("message.argument1");
     	this.variable = var;
+    	this.argumentexplanation = messageBundle.getString("message.argument_explanation");
+    	String pointerargument = messageBundle.getString("message.pointerargument");
     	for(int i=0;i<n;i++){
         String type = val[i].getType();
         //Determining if the argument is a primitive type.
         if (MCodeUtilities.isPrimitive(type)) {
-    	    this.argumentvalue[i] = val[i];
-    	    this.arguments += argumentvalue[i].toString();
-    	    this.argumentexplanation = messageBundle.getString("message.argument_explanation");
+    	    Value argumentvalue = val[i].getValue();
+    	    String value = argumentvalue.toString();
+    	    arguments = arguments + " " + value + ",";
+    	    this.argumentshow = arguments;
         }
-        else{
-        	this.nonprimitiveargument = messageBundle.getString("message.pointerargument");
-        	this.arguments += nonprimitiveargument;
+        else{       	
+        	arguments += pointerargument;
         	this.argumentexplanation += messageBundle.getString("message.pointerarg_explanation");
         }
     }
     }
     public String getArgument(){
  
-    	   return arguments + messageBundle.getString("message.argument") + variable + "().";
+    	   return argumentshow + " "+ messageBundle.getString("message.argument2")+ " " + variable + "().";
 
     }
     
@@ -147,15 +153,15 @@ public class AnnotationEngine {
     		return ;
     }
     //This method is used to give information of arguments to Info Panel.
-    public void explainArgument(Variable[] val,int n,String var){
+    public void explainArgument(Variable[] val,Value[] args,String var){
     	
     	
     	if(show){
-    	setArgument(val,n,var);
-        String a = getArgument();
-        
+    		//determining whether arguments are not null 
+    	if (args != null && args.length > 0){
+    	setArgument(val,args.length,var);
+        String a = getArgument();      
     	String b = argumentexplanation.toString();
- 
     	explanationevent.explanationDisplay(a,b);
     	/*String type = val[i].getType();
     	//Determining if the argument is a primitive type.
@@ -172,6 +178,7 @@ public class AnnotationEngine {
            explanationevent.explanationDisplay(c,d);
             }
     		}*/
+    	}
     	}
     	else 
     		return ;

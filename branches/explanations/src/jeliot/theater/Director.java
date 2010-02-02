@@ -969,26 +969,21 @@ public class Director {
             }
 
             engine.showAnimation(anim);
-            annotationengine.explainArgument(vars,args.length,methodName);
-            /*//explain the arguments when they are passed to method
-            Value arguments = vars[i]
-            for (int i = 0; i < n; ++i) {
-                vars[i].assign(args[i]);
-                Value casted = vars[i].getValue();
-            
-            }*/
-           
-            
+                     
             for (int i = 0; i < n; ++i) {
                 varact[i].bind();
                 theatre.removeActor(valact[i]);
             }
+
         }
 
         theatre.getManager().validateTheater();
 
         updateCapture();
-
+        
+        //explain the arguments when they are passed to method
+        annotationengine.explainArgument(vars,args,methodName);
+        
         if (currentScratch != null) {
             Scratch scratch = currentScratch;
             //scratchStack.push(scratch);
