@@ -3351,21 +3351,24 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 String type = st.nextToken();
                 String value = "";
                 
-              annotationengine.explainObjectField(name);
+                
                 
                 if ((st.countTokens() >= 2 && extended == false)
                         || (st.countTokens() >= 3 && extended == true)) {
                     value = st.nextToken();
+                                       
                 }
                 Highlight highlight = MCodeUtilities.makeHighlight(st
                         .nextToken());
-
+                
                 if (!Modifier.isStatic(Integer.parseInt(mods))
                         && name.indexOf("$") < 0) {
 
                     Variable var = director.declareObjectVariable(of, name,
                             type, highlight);
                 }
+                //explain when the field is shown.
+                annotationengine.explainObjectField(name);
                 /*
                  * if (!value.equals(Code.UNKNOWN)) {
                  * 
@@ -3432,10 +3435,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             Object obj = i.next();
             Instance inst = (Instance) instances.get(obj);
             if (inst != null) {
-                annotationengine.explainGarbage(inst.getType());
                 //instances.remove(obj);
                 i.remove();
                 director.removeInstance(inst.getActor());
+                
+                //explain when garbage collection happens.
+                annotationengine.explainGarbage(inst.getType());
+                
                 inst.setActor(null);
                 inst = null;
                 //System.out.println("instance removed!");
