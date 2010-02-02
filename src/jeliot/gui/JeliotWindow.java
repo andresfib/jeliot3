@@ -58,6 +58,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import jeliot.Jeliot;
+import jeliot.annotation.AnnotationEngine;
 import jeliot.calltree.TreeDraw;
 import jeliot.historyview.HistoryView;
 import jeliot.mcode.InterpreterError;
@@ -87,7 +88,7 @@ import edu.unika.aifb.components.JFontChooser;
  * @author Niko Myller
  */
 public class JeliotWindow implements PauseListener, MouseListener {
-
+	
     /**
      * The resource bundle for gui package
      */
@@ -142,7 +143,11 @@ public class JeliotWindow implements PauseListener, MouseListener {
                     .setBooleanProperty("save_automatically", false);
 
         }
-
+        /* determining whether show annotations during the animation */
+        if (!jeliotUserProperties.containsKey("show_annotations")) {
+            jeliotUserProperties.setBooleanProperty("show_annotations", false);
+        }
+        
         if (!jeliotUserProperties.containsKey("CG")) {
             jeliotUserProperties.setBooleanProperty("CG", true);
 
@@ -1040,6 +1045,25 @@ public class JeliotWindow implements PauseListener, MouseListener {
         });
         menu.add(enableQuestionAskingMenuItem);
         this.editWidgets.add(enableQuestionAskingMenuItem);
+
+      //User determines whether annotations is shown during animation
+        final JCheckBoxMenuItem enableShowAnnotationMenuItem = new JCheckBoxMenuItem(
+                messageBundle.getString("menu.options.show_annotations"),
+                jeliotUserProperties.getBooleanProperty("show_annotations"));
+        enableShowAnnotationMenuItem.setMnemonic(KeyEvent.VK_E);
+        enableShowAnnotationMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_E, ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        enableShowAnnotationMenuItem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                jeliotUserProperties.setBooleanProperty("show_annotations",
+                		enableShowAnnotationMenuItem.getState());
+                
+            }
+        });
+        menu.add(enableShowAnnotationMenuItem);
+        this.editWidgets.add(enableShowAnnotationMenuItem);
+        
 
         //Show history view        
         final Jeliot j = jeliot;
@@ -2443,6 +2467,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
     public void setAskingQuestions(boolean value) {
         jeliotUserProperties.setBooleanProperty("ask_questions", value);
     }
+
     
     public JButton getPlayButton() {
         return playButton;

@@ -10,6 +10,8 @@ import jeliot.lang.Value;
 import jeliot.lang.Variable;
 import jeliot.mcode.MCodeUtilities;
 import jeliot.util.ResourceBundles;
+import jeliot.util.UserProperties;
+
 import java.util.ResourceBundle;
 
 
@@ -20,21 +22,27 @@ public class AnnotationEngine {
 	 * This class is used to show the pass the different events to the InfoPanel.
 	 */
     ExplanationEvent explanationevent = new ExplanationEvent();
-
+    private UserProperties jeliotUserProperties = ResourceBundles
+    .getJeliotUserProperties();
+    private Boolean show = jeliotUserProperties.getBooleanProperty("show_annotations");
 	private String constructorname;
-	private Value argumentvalue;
+	private String nonprimitiveargument;
+	private String argumentexplanation;
+	private Variable[] argumentvalue;
+	private String arguments;
+	//private Value[]  argumentvalue;
 	private String variable;
 	private String object;
-	private String objectfield;
 	
+	private String objectfield;	
 	private String value;
 	
-	
+
 	//private Value[] arguments;
 	/*private boolean isInConstructor()throws Exception{
 		
 		return true;
-	}*/
+	}*/ 
 	public void setConstructorCall(String methodCall){
 		this.constructorname = methodCall;
 	}
@@ -46,14 +54,27 @@ public class AnnotationEngine {
 		   return constructorname + "( ):" + messageBundle.getString("message.constructor_call")+messageBundle.getString("message.nonparamconstructor_call");
 	}
 	
-	
-    public void setArgument(Value val,String var){
-        this.argumentvalue = val;
-        this.variable = var;
+
+    public void setArgument(Variable[] val,int n,String var){
+    	this.variable = var;
+    	for(int i=0;i<n;i++){
+        String type = val[i].getType();
+        //Determining if the argument is a primitive type.
+        if (MCodeUtilities.isPrimitive(type)) {
+    	    this.argumentvalue[i] = val[i];
+    	    this.arguments += argumentvalue[i].toString();
+    	    this.argumentexplanation = messageBundle.getString("message.argument_explanation");
+        }
+        else{
+        	this.nonprimitiveargument = messageBundle.getString("message.pointerargument");
+        	this.arguments += nonprimitiveargument;
+        	this.argumentexplanation += messageBundle.getString("message.pointerarg_explanation");
+        }
+    }
     }
     public String getArgument(){
  
-    	   return argumentvalue.toString() + messageBundle.getString("message.argument") + variable + "().";
+    	   return arguments + messageBundle.getString("message.argument") + variable + "().";
 
     }
     
@@ -62,8 +83,11 @@ public class AnnotationEngine {
     	this.object = name;
     	
     }
-    public String getObject(){
-    	return object + " " + messageBundle.getString("message.object");
+    public String getObject(boolean a){
+    	if(a == true)
+    	   return object + " " + messageBundle.getString("message.object");
+    	else 
+    	   return object + " " + messageBundle.getString("message.objectdelete");
     }
     
     
@@ -112,53 +136,87 @@ public class AnnotationEngine {
     //This method is used to give information of Constructor to InfoPanel. 
     public void explainConstructor(Value[] value,String name){
     	
-    	
+    	if(show){
     	setConstructorCall(name);
     	String a = getConstructorCall(value);
     	String b = messageBundle.getString("message.constructor_explanation");
     	 
     	explanationevent.explanationDisplay(a,b);
-
+    	}
+    	else 
+    		return ;
     }
-    //This method is used to give information of arguments to Ifo Panel.
-    public void explainArgument(Value val,String var){
+    //This method is used to give information of arguments to Info Panel.
+    public void explainArgument(Variable[] val,int n,String var){
     	
     	
-    	String type = val.getType();
+    	if(show){
+    	setArgument(val,n,var);
+        String a = getArgument();
+        
+    	String b = argumentexplanation.toString();
+ 
+    	explanationevent.explanationDisplay(a,b);
+    	/*String type = val[i].getType();
     	//Determining if the argument is a primitive type.
         if (MCodeUtilities.isPrimitive(type)) {
-        	setArgument(val,var);    	
+        	setArgument(val[i],var);    	
             String a = getArgument();
         	String b = messageBundle.getString("message.argument_explanation");
         	explanationevent.explanationDisplay(a,b); 
         	}  
-        else { 
+        else {
+           
            String c = messageBundle.getString("message.pointerargument");
            String d = messageBundle.getString("message.pointerarg_explanation");
            explanationevent.explanationDisplay(c,d);
             }
-
+    		}*/
+    	}
+    	else 
+    		return ;
     }
     //This method is to show information when object is instantiated.
     public void explainObject(String name){
+    	if(show){
     	setObject(name);
-    	String a = getObject();
+    	String a = getObject(true);
     	String b = messageBundle.getString("message.object_explanation");
     	explanationevent.explanationDisplay(a,b);
+    	}
+    	else 
+    		return ;
     }
     public void explainObjectField(String name){
+    	if(show){
     	setObjectField(name);
     	String a = getObjectField();
     	String b = messageBundle.getString("message.objectfield_explanation");
     	explanationevent.explanationDisplay(a,b);	
-    	
+    	}
+    	else 
+    		System.out.println();
     }
     //This is for explaining arrow when it happens.
     public void explainArrow(String value){
+    	if(show){
     	setArrow(value);
     	String a = getArrow();
     	String b = messageBundle.getString("message.arrow_explanation");
     	explanationevent.explanationDisplay(a,b);
+    	}
+    	else 
+    		return ;
+    }
+    public void explainGarbage(String name){
+    	if(show){
+    	setObject(name);
+    	String a = getObject(false);
+    	String b = messageBundle.getString("message.objectdelete_explanation");
+    	explanationevent.explanationDisplay(a,b);
+    	}
+    	else 		
+    		return ;
     }
 	/*public void explanationMCDisplay(){
 		

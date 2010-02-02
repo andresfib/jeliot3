@@ -3432,12 +3432,14 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
             Object obj = i.next();
             Instance inst = (Instance) instances.get(obj);
             if (inst != null) {
+                annotationengine.explainGarbage(inst.getType());
                 //instances.remove(obj);
                 i.remove();
                 director.removeInstance(inst.getActor());
                 inst.setActor(null);
                 inst = null;
                 //System.out.println("instance removed!");
+                
             }
         }
         this.instances.clear();

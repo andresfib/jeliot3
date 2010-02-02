@@ -750,27 +750,19 @@ public class Director {
     public Value[] animateConstructorInvocation(String methodCall,
             Value[] args, Highlight h){
     	
-    	//Show message box to explain when Constructor calls happen.
-    	/*annotationengine.explanationMCDisplay(methodCall);
-    	  annotationengine.createTabbedPane();*/
-    	annotationengine.explainConstructor(args,methodCall);
-    	 
-
-
         highlightExpression(h);
+        //Show message box to explain when Constructor calls happen.
         // Create the actor for the invocation.
-        int n = 0;
+        /*annotationengine.explanationMCDisplay(methodCall);
+  	    annotationengine.createTabbedPane();*/
+  	    annotationengine.explainConstructor(args,methodCall);
+        
+  	    int n = 0;
         if (args != null) {
             n = args.length;
            
         }
          
-        	
-        
-        
-        
-        
-        
         CIActor actor = factory.produceCIActor(methodCall, n);
         return animateMInvocation(methodCall, args, h, actor);
 
@@ -802,8 +794,6 @@ public class Director {
     public Value[] animateMInvocation(String methodName, Value[] args,		
             Highlight h, MIActor actor) {
 
-    	
-    	//annotationengine.explanationVDDisplay(args.toString());
     	
     	
         // Remember the scratch of current expression.
@@ -974,15 +964,21 @@ public class Director {
                 Value casted = vars[i].getValue();
                 ValueActor castact = factory.produceValueActor(casted);
                 valact[i] = args[i].getActor();
-                anim[i] = valact[i].fly(varact[i].reserve(castact));
-                
-
-                annotationengine.explainArgument(casted,methodName);
+                anim[i] = valact[i].fly(varact[i].reserve(castact));  
                 
             }
 
             engine.showAnimation(anim);
-
+            annotationengine.explainArgument(vars,args.length,methodName);
+            /*//explain the arguments when they are passed to method
+            Value arguments = vars[i]
+            for (int i = 0; i < n; ++i) {
+                vars[i].assign(args[i]);
+                Value casted = vars[i].getValue();
+            
+            }*/
+           
+            
             for (int i = 0; i < n; ++i) {
                 varact[i].bind();
                 theatre.removeActor(valact[i]);
@@ -1159,7 +1155,9 @@ public class Director {
 
         // Get the stage and remove it.
         MethodStage stage = ((MethodFrame) frameStack.pop()).getMethodStage();
+        
         manager.removeMethodStage(stage);
+        
         Animation stageDisappear = stage.disappear();
 
         if (returnAct != null) {
@@ -1222,7 +1220,7 @@ public class Director {
 
         theatre.removeActor(currentScratch);
         manager.addScratch(currentScratch);
-
+        
         release();
 
         if (returnAct != null) {
@@ -1482,18 +1480,18 @@ public class Director {
         VariableActor actor = factory.produceObjectVariableActor(v);
         v.setActor(actor);
 
-        //annotationengine.explainObjectField(name,type);
-        annotationengine.explainArrow(name);
+        
+        
         ObjectStage stage = of.getObjectStage();
-
+        
         Point loc = stage.reserve(actor);
         theatre.getManager().validateTheater();
         capture();
-
         engine.showAnimation(actor.appear(loc));
         stage.bind();
         theatre.getManager().validateTheater();
-
+        
+        annotationengine.explainArrow(name);
         release();
 
         return v;
@@ -2135,6 +2133,7 @@ public class Director {
         //highlight(null);
         //showMessage(bundle.getString("message.open_scope"));
         getCurrentMethodFrame().openScope();
+           
     }
 
     /**
@@ -2144,6 +2143,7 @@ public class Director {
         //highlight(null);
         //showMessage(bundle.getString("message.close_scope"));
         getCurrentMethodFrame().closeScope();
+    
     }
 
     /**
@@ -2801,10 +2801,7 @@ public class Director {
             jeliot.lang.Reference ref, ArrayInstance[] level1,
             ArrayInstance[][] level2, Value[] lenVal, long expressionCounter,
             int actualDimension, Highlight h) {
-        /*
-    	//Show message box to explain when Array Allocation happens. 
-    	annotationengine.explanationAADisplay();    	
-    	*/
+
         highlightExpression(h);
 
         //Array creation here
@@ -2978,10 +2975,7 @@ public class Director {
      */
     public void showArrayAccess(VariableInArray[] vars, Value[] indexVal,
             Value returnVal, Highlight h) {
-        /*
-    	//Show message box to explain that now the array can be accessed. 
-    	annotationengine.explanationAACDisplay(); 
-    	*/
+
         highlightExpression(h);
         int n = vars.length;
 
@@ -3159,6 +3153,7 @@ public class Director {
         showDisappearing(actor);
         manager.removeInstance(actor);
         theatre.getManager().validateTheater();
+        
     }
 
     /**
@@ -3225,7 +3220,6 @@ public class Director {
      */
     public void showClassCreation(jeliot.lang.Class c) {
         /*
-    	annotationengine.explanationSADisplay();
         highlightDeclaration(null);
         */
         ClassActor ca = factory.produceClassActor(c);
