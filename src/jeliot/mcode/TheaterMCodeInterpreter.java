@@ -1470,6 +1470,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                             (Value[]) currentMethodInvocation[2],
                             (Highlight) currentMethodInvocation[5],
                             (Value) currentMethodInvocation[8]);
+                   
                 }
 
                 String call;
@@ -1489,13 +1490,13 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                             + (String) currentMethodInvocation[0];
                     //System.out.println("METHOD: " + call);
                 }
-
+                
                 director.setUpMethod(call, args,
                         (String[]) currentMethodInvocation[4],
                         (String[]) currentMethodInvocation[3],
                         (Highlight) currentMethodInvocation[6],
                         (Value) currentMethodInvocation[8]);
-
+                
                 //Static method invocation
             } else {
                 Value[] args = null;

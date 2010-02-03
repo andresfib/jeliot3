@@ -669,6 +669,7 @@ public class Director {
             if (valAct instanceof jeliot.theater.ReferenceActor) {
                 valAct.setLocation(((jeliot.theater.ReferenceActor) valAct)
                         .getInstanceActor().getRootLocation());
+               
             }
         }
         
@@ -701,6 +702,7 @@ public class Director {
             argact[i] = args[i].getActor();
             args[i].setActor(argact[i]);
             fly[i] = argact[i].fly(actor.reserve(argact[i]));
+            
         }
 
         // Calculate the size of the invocation actor, taking into account
@@ -709,7 +711,7 @@ public class Director {
 
         // Show the animation.
         capture();
-
+       
         // Introduce the invocation and the this Value fly.
         engine
                 .showAnimation(new Animation[] { actor.appear(invoLoc), thisFly });
@@ -875,7 +877,7 @@ public class Director {
         frame.setMethodStage(stage);
         currentMethodFrame = frame;
         frameStack.push(frame);
-
+        
         Variable thisVariable = null;
         VariableActor thisVariableActor = null;
         ValueActor thisValueActor = null;
@@ -924,7 +926,7 @@ public class Director {
         manager.bind(stage);
 
         updateCapture();
-
+        
         thisVariable.assign(thisValue);
         Value thisCasted = thisVariable.getValue();
         ValueActor thisCastAct = factory.produceValueActor(thisCasted);
@@ -947,11 +949,14 @@ public class Director {
 
         Animation thisAnim = thisValueActor.fly(thisVariableActor
                 .reserve(thisCastAct));
-
+        
         
         
         engine.showAnimation(thisAnim);
-
+        
+        //explain arrow when it happens during animation.
+        annotationengine.explainArrow(methodName);
+        
         thisVariableActor.bind();
         theatre.removeActor(thisValueActor);
 
@@ -1486,9 +1491,9 @@ public class Director {
         stage.bind();
         theatre.getManager().validateTheater();
         
-        annotationengine.explainArrow(name);
+        //annotationengine.explainArrow(name);
         release();
-
+        
         return v;
     }
 
@@ -1570,6 +1575,7 @@ public class Director {
         Point loc = va.getRootLocation();
 
         capture();
+        
         Animation appear = act.appear(loc);
         appear.setDuration(200);
         
@@ -1636,7 +1642,7 @@ public class Director {
             //copiedValueAct.setLocation(valueAct.getRootLocation());
 
             Point valueLoc = variableAct.reserve(castAct);
-
+            
             //theatre.addActor(copiedValueAct);
             capture();
             theatre.removeActor(copiedValueAct);
@@ -1644,7 +1650,7 @@ public class Director {
             variableAct.bind();
             theatre.removePassive(valueAct);
             release();
-
+            
             //annotationengine.explainArgument(valueAct.toString(),variableAct.toString());
             
             if (returnValue != null) {
