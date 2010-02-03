@@ -204,7 +204,8 @@ public class AnnotationEngine {
     	else 
     		System.out.println();
     }
-    //This is for explaining arrow when it happens.
+    //This is for explaining arrow when it happens.When arrow appears,
+    //that means method can be accessed by the reference to the object of the class.
     public void explainArrow(String value){
     	if(show){
     	setArrow(value);
