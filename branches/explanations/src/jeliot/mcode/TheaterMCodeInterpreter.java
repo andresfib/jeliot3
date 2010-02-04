@@ -1457,6 +1457,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                         ref.makeReference();
                         currentMethodInvocation[8] = ref;
                         objectCreation.push(new Reference(of));
+                        
                     } else {
                         //TODO: Make the constructor call work for
                         // semi-primitive types (wrappers and String)
@@ -2076,7 +2077,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (currentMethodInvocation != null) {
             invokingMethod = true;
         }
-
+        annotationengine.explainReturnReference();
     }
 
     /**
@@ -2155,7 +2156,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         //just to wait for the Method Declaration to be read
         //and the object can be created from this method info.
         currentMethodInvocation[8] = ci /*ref*/;
-
         /* objectCreation.push(new Reference(of)); */
     }
 
@@ -3162,7 +3162,8 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 expressionValue, h);
 
         toVariable.assign(casted);
-
+        
+       
         values.put(new Long(expressionCounter), expressionValue);
 
         postIncDec = (Object[]) postIncsDecs.remove(new Long(toExpression));
@@ -3172,7 +3173,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
 
         exprs.pop();
-
+        annotationengine.explainAssignReference(type);
         /*
          director.closeScratch();
          director.openScratch();
@@ -3217,6 +3218,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
      */
     protected void handleCodeLEFT(long token1) {
         commands.push("" + Code.LEFT + Code.DELIM + token1);
+      
     }
 
     /**
@@ -3549,7 +3551,6 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         //If operator is assignment we just store the value
         if (oper == Code.A) {
             values.put(new Long(expressionCounter), val);
-
             //If oper is other binary operator we will show it
             //on the screen with operator
         } else if (MCodeUtilities.isBinary(oper)) {
@@ -3595,6 +3596,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         } else {
             values.put(new Long(expressionCounter), val);
         }
+
     }
 
     /**

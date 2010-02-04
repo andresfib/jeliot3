@@ -42,6 +42,10 @@ public class AnnotationEngine {
 	
 	//for explain arrow
 	private String value;
+	
+	//for explaining reference to the object of the class
+	private String reference;
+	
 	/*private boolean isInConstructor()throws Exception{
 		
 		return true;
@@ -112,6 +116,12 @@ public class AnnotationEngine {
     	return  value + " " +messageBundle.getString("message.arrow");
     }
     
+    public void setReference(String ref){
+    	this.reference = ref;
+    }
+    public String getReference(){
+    	return reference;
+    }
 	/**
 	 * TabbedPane is not fit in this situation.
 	 */
@@ -216,6 +226,36 @@ public class AnnotationEngine {
     	else 
     		return ;
     }
+    
+   //when return reference happens,show explanation.
+    public void explainReturnReference(){
+    	if(show){
+    		
+    		String a = messageBundle.getString("message.returnreference");
+    		String b = messageBundle.getString("message.returnref_explanation");
+    		explanationevent.explanationDisplay(a,b);
+    	}
+    	else 		
+    		return ;
+    }
+    
+    
+    
+    //when reference to the object of the class is assigned,explanation will be happened.
+    public void explainAssignReference(String type){
+    	if(show){
+    		if (MCodeUtilities.isPrimitive(type) || type.equals("null")) {}
+    		else{
+    		String a = messageBundle.getString("message.assignreference");
+    		String b = messageBundle.getString("message.assignref_explanation");
+    		explanationevent.explanationDisplay(a,b);
+    	}
+    	}
+    	else 		
+    		return ;
+    }
+    
+    //When the object of the class is deleted,message dialog will be shown.
     public void explainGarbage(String name){
     	if(show){
     	setObject(name);
