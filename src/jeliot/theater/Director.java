@@ -583,6 +583,7 @@ public class Director {
             engine.showAnimation(resultAct.fly(resultLoc));
             ref.setActor(resultAct);
             theatre.getManager().validateTheater();
+            
         } else {
             resultAct = factory.produceValueActor(result);
             Point resultLoc = expr.reserve(resultAct);
@@ -592,7 +593,7 @@ public class Director {
         // Make the result appear.
 
         updateCapture();
-
+       
         // Make the expression dark.
         expr.setLight(Actor.SHADED);
 
@@ -823,7 +824,8 @@ public class Director {
 
         // Show the animation.
         capture();
-
+        
+       
         // Introduce the invocation.
         engine.showAnimation(actor.appear(invoLoc));
         theatre.passivate(actor);
@@ -954,14 +956,14 @@ public class Director {
         
         engine.showAnimation(thisAnim);
         
-        //explain arrow when it happens during animation.
-        annotationengine.explainArrow(methodName);
+
         
         thisVariableActor.bind();
         theatre.removeActor(thisValueActor);
 
         updateCapture();
-
+        //explain arrow when it happens during animation.
+        annotationengine.explainArrow(methodName);
         if (args != null && args.length > 0) {
 
             for (int i = 0; i < n; ++i) {
@@ -1272,12 +1274,11 @@ public class Director {
         bubble.removeTip();
         capture();
         engine.showAnimation(bubble.appear(bubbleLoc));
-        engine.showAnimation(valueAct.fly(valueLoc));
+        engine.showAnimation(valueAct.fly(valueLoc));        
         bubble.bind();
-        //stage.bind();
+        //stage.bind();        
         theatre.removePassive(valueAct);
         release();
-
         return bubble;
     }
 
@@ -1683,11 +1684,12 @@ public class Director {
                 //instAct.addReference(refAct);
                 Point valueLoc = rva.reserve(ra);
                 
-                capture();
+                capture();               
                 engine.showAnimation(refAct.fly(valueLoc));
                 rva.bind();
                 theatre.removePassive(refAct);
                 release();
+                
             } else if (variableAct instanceof ReferenceVariableInArrayActor) {
                 ReferenceVariableInArrayActor rva = (ReferenceVariableInArrayActor) variableAct;
 
@@ -3267,7 +3269,7 @@ public class Director {
         }
 
         capture();
-
+        
         engine.showAnimation(actor.appear(loc2));
         ca.bind();
         release();
@@ -3286,6 +3288,7 @@ public class Director {
             animateAssignment(var, val, copiedValue, casted, returned, var
                     .getLocationInCode());
             var.assign(casted);
+ 
         }
     }
 
