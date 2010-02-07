@@ -17,11 +17,18 @@ public class InfoPanel extends JPanel {
         public Component first;
         public Component second;
         private JButton button = new JButton(messageBundle.getString("message.button1"));
+
+
+
+
         
-       
+        
         public InfoPanel (Component top, Component bottom) {
             first = top;
             second = bottom;
+  
+            
+
             //ControlDetails control = new ControlDetails(button,second);
             ActionListener al = new ActionListener(){
            	 
@@ -62,6 +69,7 @@ public class InfoPanel extends JPanel {
         }
 
         protected void myLayout() {
+        	
             setLayout (new BoxLayout (this, BoxLayout.Y_AXIS));
             add (first);
             add (button);
@@ -69,7 +77,7 @@ public class InfoPanel extends JPanel {
             add (second);   
         }
         
- 
+
 
 }
 
