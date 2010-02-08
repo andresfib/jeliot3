@@ -12,23 +12,16 @@ import java.util.ResourceBundle;
 import jeliot.util.ResourceBundles;
 
 public class InfoPanel extends JPanel {
-        static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
+        static private ResourceBundle messageBundle = ResourceBundles.getAnnotationMessageResourceBundle();
 	    public boolean show = false; 
         public Component first;
         public Component second;
         private JButton button = new JButton(messageBundle.getString("message.button1"));
 
-
-
-
-        
-        
         public InfoPanel (Component top, Component bottom) {
             first = top;
             second = bottom;
   
-            
-
             //ControlDetails control = new ControlDetails(button,second);
             ActionListener al = new ActionListener(){
            	 
@@ -77,8 +70,6 @@ public class InfoPanel extends JPanel {
             add (second);   
         }
         
-
-
 }
 
 
