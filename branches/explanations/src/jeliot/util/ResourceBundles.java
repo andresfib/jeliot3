@@ -54,7 +54,12 @@ public class ResourceBundles {
      * Comment for <code>theaterMessages</code>
      */
     private static ResourceBundle theaterMessages;
-
+    
+    /**
+     * 
+     */
+    private static ResourceBundle annotationMessages;
+    
     /**
      * 
      */
@@ -162,6 +167,18 @@ public class ResourceBundles {
         return theaterMessages;
     }
 
+    /**
+     * @return
+     */
+    public static ResourceBundle getAnnotationMessageResourceBundle() {
+        if (annotationMessages == null) {
+            annotationMessages = ResourceBundle.getBundle(
+                    "jeliot.annotation.resources.messages", Locale.getDefault());
+        }
+
+        return annotationMessages;
+    }
+    
     /**
      * 
      */

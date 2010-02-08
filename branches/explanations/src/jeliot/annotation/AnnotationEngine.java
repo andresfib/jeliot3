@@ -1,10 +1,6 @@
 package jeliot.annotation;
 
 
-import javax.swing.*;
-
-import java.awt.*;
-
 
 import jeliot.lang.Value;
 import jeliot.lang.Variable;
@@ -16,12 +12,16 @@ import java.util.ResourceBundle;
 
 
 public class AnnotationEngine {
-    static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
+    static private ResourceBundle messageBundle = ResourceBundles.getAnnotationMessageResourceBundle();
 	
     /**
-	 * This class is used to show the pass the different events to the InfoPanel.
+	 * This class is used to pass the different events to the InfoPanel.
 	 */
     ExplanationEvent explanationevent = new ExplanationEvent();
+    
+    /**
+    *This is determined whether showing the message dialog or not,show is the trigger. 
+    */
     private UserProperties jeliotUserProperties = ResourceBundles
     .getJeliotUserProperties();
     private Boolean show = jeliotUserProperties.getBooleanProperty("show_annotations");

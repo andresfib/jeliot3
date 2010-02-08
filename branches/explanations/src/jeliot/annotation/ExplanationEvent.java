@@ -15,10 +15,14 @@ import javax.swing.ScrollPaneConstants;
 import jeliot.util.ResourceBundles;
 
 public class ExplanationEvent {
-	static private ResourceBundle messageBundle = ResourceBundles.getTheaterMessageResourceBundle();
-	Dimension d_screen = Toolkit.getDefaultToolkit ().getScreenSize();
+	static private ResourceBundle messageBundle = ResourceBundles.getAnnotationMessageResourceBundle();
 	
-	//Set coordinates for message dialog to make it closed to the top-right of the screen.
+	Dimension d_screen = Toolkit.getDefaultToolkit ().getScreenSize();
+    /**
+    *Set coordinates for message dialog to make it closed to the top-right of the screen.After
+	*trying several fractions for the width of the screen,it is proved the fraction should be bigger than 
+	*3/5,and smaller than 2/3.
+    */ 
 	double x1= 5*d_screen.getWidth()/8;
 	double y1= d_screen.getHeight()/22;
 	int x= new Double(x1).intValue();
