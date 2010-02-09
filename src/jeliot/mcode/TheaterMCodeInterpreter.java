@@ -41,7 +41,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
     //DOC: document!
 	
 	/**
-	 * This class is for explanation of different steps.
+	 * 
 	 */
 	AnnotationEngine annotationengine = new AnnotationEngine();
 	
@@ -2077,6 +2077,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         if (currentMethodInvocation != null) {
             invokingMethod = true;
         }
+        //show explanation when return 'this' reference. 
         annotationengine.explainReturnReference();
     }
 
@@ -3173,6 +3174,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
         }
 
         exprs.pop();
+       //show explanation when assign reference to the new object.
         annotationengine.explainAssignReference(type);
         /*
          director.closeScratch();
@@ -3333,7 +3335,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
 
             //director: create object
             director.showObjectCreation(of, h);
-
+            //show explanation when object is instantiated.
             annotationengine.explainObject(ci.getName());
 
             
@@ -3370,7 +3372,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                     Variable var = director.declareObjectVariable(of, name,
                             type, highlight);
                 }
-                //explain when the field is shown.
+                //show explanation when memory is allocated for the field.
                 annotationengine.explainObjectField(name);
                 /*
                  * if (!value.equals(Code.UNKNOWN)) {
@@ -3442,7 +3444,7 @@ public class TheaterMCodeInterpreter extends MCodeInterpreter {
                 i.remove();
                 director.removeInstance(inst.getActor());
                 
-                //explain when garbage collection happens.
+                //show explanation when garbage collection happens.
                 annotationengine.explainGarbage(inst.getType());
                 
                 inst.setActor(null);

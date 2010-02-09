@@ -18,7 +18,7 @@ public class ExplanationEvent {
 	static private ResourceBundle messageBundle = ResourceBundles.getAnnotationMessageResourceBundle();
 	
 	Dimension d_screen = Toolkit.getDefaultToolkit ().getScreenSize();
-    /**
+    /*
     *Set coordinates for message dialog to make it closed to the top-right of the screen.After
 	*trying several fractions for the width of the screen,it is proved the fraction should be bigger than 
 	*3/5,and smaller than 2/3.
@@ -54,8 +54,8 @@ public class ExplanationEvent {
         //Window to be sized to fit the preferred size 
         dialog.pack( );
         
-        //Setlocation() method only has been put before Setvisible() method 
-        //because the size of the dialog has not been determined.
+        /*Setlocation() method only has been put before Setvisible() method 
+          because the size of the dialog has not been determined.*/
         dialog.setLocation(x, y);
         dialog.setVisible(true);
 
