@@ -754,10 +754,12 @@ public class Director {
             Value[] args, Highlight h){
     	
         highlightExpression(h);
-        //Show message box to explain when Constructor calls happen.
+        
         // Create the actor for the invocation.
+        
         /*annotationengine.explanationMCDisplay(methodCall);
   	    annotationengine.createTabbedPane();*/
+      //Show explanation when Constructor calls happen.
   	    annotationengine.explainConstructor(args,methodCall);
         
   	    int n = 0;
@@ -962,7 +964,7 @@ public class Director {
         theatre.removeActor(thisValueActor);
 
         updateCapture();
-        //explain arrow when it happens during animation.
+        //Show explanation when arrow appears during animation.
         annotationengine.explainArrow(methodName);
         if (args != null && args.length > 0) {
 
@@ -988,7 +990,7 @@ public class Director {
 
         updateCapture();
         
-        //explain the arguments when they are passed to method
+        //Show explanation when the arguments are passed to method.
         annotationengine.explainArgument(vars,args,methodName);
         
         if (currentScratch != null) {
@@ -1093,7 +1095,7 @@ public class Director {
                 valact[i] = args[i].getActor();
                 anim[i] = valact[i].fly(varact[i].reserve(castact));
                 
-                //annotationengine.explainArgument(casted,methodName);
+                
                 
             }
 
@@ -1431,10 +1433,6 @@ public class Director {
      */
     public Variable declareVariable(String name, String type, Highlight h) {
 
-    	/*
-    	//Show message box to explain. 
-    	annotationengine.explanationVDDisplay();
-    	*/
     	
         highlightStatement(h);
 
@@ -1492,7 +1490,6 @@ public class Director {
         stage.bind();
         theatre.getManager().validateTheater();
         
-        //annotationengine.explainArrow(name);
         release();
         
         return v;
@@ -1651,8 +1648,7 @@ public class Director {
             variableAct.bind();
             theatre.removePassive(valueAct);
             release();
-            
-            //annotationengine.explainArgument(valueAct.toString(),variableAct.toString());
+
             
             if (returnValue != null) {
                 ValueActor returnAct = factory.produceValueActor(returnValue);
