@@ -244,23 +244,31 @@ public class AnnotationEngine {
     //when reference to the object of the class is assigned,explanation will be happened.
     public void explainAssignReference(String type){
     	if(show){
-    		if (MCodeUtilities.isPrimitive(type) || type.equals("null")) {}
+    		if (MCodeUtilities.isPrimitive(type) || type.equals("null")) {
+    		}
     		else{
     		String a = messageBundle.getString("message.assignreference");
     		String b = messageBundle.getString("message.assignref_explanation");
+    		if(type.charAt(0)=='['){        		
+    		       a = messageBundle.getString("message.arrayinstantiated");
+    		       b = messageBundle.getString("message.arrayinstan_explanation");}
     		explanationevent.explanationDisplay(a,b);
     	}
     	}
     	else 		
     		return ;
     }
-    
+     
     //When the object of the class is deleted,message dialog will be shown.
     public void explainGarbage(String name){
     	if(show){
     	setObject(name);
     	String a = getObject(false);
     	String b = messageBundle.getString("message.objectdelete_explanation");
+    	// Symbol '[' means array.If the array is deleted,assign different arguments. 
+    	if(name.charAt(0)=='['){
+    		a = messageBundle.getString("message.array");
+    		b = messageBundle.getString("message.arraydeleted_explanation");}
     	explanationevent.explanationDisplay(a,b);
     	}
     	else 		
