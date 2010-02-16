@@ -16,13 +16,13 @@ public class Square{
       w = new Side();
       h = new Side();
     }
-    Square(int s){
+    Square(int s,int t){
       w = new Side(s);
-      h = new Side(s);
+      h = new Side(t);
     }
 }
 public class MyClass {
     public static void main() {
-        Square square = new Square();
+        Square square = new Square(5,5);
     }
 }
