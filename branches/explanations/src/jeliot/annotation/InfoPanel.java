@@ -3,6 +3,7 @@
 package jeliot.annotation;
 
 import java.awt.*; 
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +13,7 @@ import jeliot.util.ResourceBundles;
 
 public class InfoPanel extends JPanel {
 	
-
+	ImageIcon icon = new ImageIcon("misc040.jpg");
 	static private ResourceBundle messageBundle = ResourceBundles.getAnnotationMessageResourceBundle();
 	public boolean show = false;
 	public Component first;
@@ -68,9 +69,31 @@ public class InfoPanel extends JPanel {
 		add (button);
 		button.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add (second); 
-		//AWTUtilities.setWindowOpacity(this,0.6f);
 	}
-
+	
+	//make background of Jbutton grey
+	protected void paintComponent(Graphics g){  
+		Graphics2D g2d = (Graphics2D)g.create();
+		Paint p = new GradientPaint(
+                0, 0, new Color(0,0,0,0),
+                getWidth()/2, 0, new Color(66,66,66),
+                true
+            );
+        g2d.setPaint(p);
+        g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g2d.dispose();
+		/*setOpaque(false);
+		Graphics2D g2d = (Graphics2D) g.create();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,            
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		//g2d.setColor(new Color(0,0,0,0));
+		//;
+		Composite old = (Composite) g2d.getComposite();
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+		g2d.fillRect(0,0, this.getWidth(),this.getHeight());
+		g2d.setComposite((java.awt.Composite) old);
+		g2d.dispose();*/
+	}
 }
 
 
