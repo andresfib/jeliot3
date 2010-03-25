@@ -149,7 +149,7 @@ public class AnnotationEngine {
 	        }
 	    }*/
     
-    //This method is used to give information of Constructor to InfoPanel. 
+    //This method is used to give information of Constructor to Info Panel. 
     public void explainConstructor(Value[] value,String name){
     	
     	if(show){
@@ -204,6 +204,7 @@ public class AnnotationEngine {
     	else 
     		return ;
     }
+    //This method is to explain field when it is allocated. 
     public void explainObjectField(String name){
     	if(show){
     	setObjectField(name);
@@ -259,7 +260,7 @@ public class AnnotationEngine {
     		return ;
     }
      
-    //When the object of the class is deleted,message dialog will be shown.
+    //When the object of the class or array is deleted,message dialog will be shown.
     public void explainGarbage(String name){
     	if(show){
     	setObject(name);
@@ -267,7 +268,7 @@ public class AnnotationEngine {
     	String b = messageBundle.getString("message.objectdelete_explanation");
     	// Symbol '[' means array.If the array is deleted,assign different arguments. 
     	if(name.charAt(0)=='['){
-    		a = messageBundle.getString("message.array");
+    		a = messageBundle.getString("message.arraydeleted");
     		b = messageBundle.getString("message.arraydeleted_explanation");}
     	explanationevent.explanationDisplay(a,b);
     	}
