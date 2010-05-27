@@ -51,7 +51,7 @@ To display the available targets type:
 
 		<!-- This properties modify the output of the build process-->
 		<property name="versionJ" value="3" />
-		<property name="minor" value=".7.1" />
+		<property name="minor" value=".7.3" />
 		<property name="versionMoodle" value="0.1" />
 
 		<!-- dist: Used to create the folder where to place the binary distribuition, jar files and images-->
@@ -88,7 +88,7 @@ To display the available targets type:
 
 	<!-- Compilation ==================================================== -->
 	<target name="compile" depends="init">
-		<javac target="1.4" source="1.4" sourcepath="" destdir="${dest}" deprecation="on" srcdir="${src}">
+		<javac target="5" source="5" sourcepath="" destdir="${dest}" deprecation="on" srcdir="${src}">
 			<classpath>
 				<fileset dir="lib">
 					<include name="*.jar" />
@@ -235,7 +235,7 @@ To display the available targets type:
 
 	<!--create the jeliot extension for bluej -->
 	<target name="blueJExt" depends="compile,jars">
-		<javac sourcepath="blueJExtension/" target="1.4" source="1.4" destdir="${dest}/blueJExtension/" srcdir="blueJExtension/" classpath="${dist}/jeliot.jar;lib/bluejext.jar">
+		<javac sourcepath="blueJExtension/" target="1.5" source="1.5" destdir="${dest}/blueJExtension/" srcdir="blueJExtension/" classpath="${dist}/jeliot.jar;lib/bluejext.jar">
 			<classpath>
 				<fileset dir="lib">
 					<include name="*.jar" />
@@ -258,7 +258,7 @@ To display the available targets type:
 	</target>
 	<!--create the jeliot extension for bluej -->
 	<target name="blueJExtDebug" depends="debug">
-		<javac sourcepath="blueJExtension/" destdir="blueJExtension/" srcdir="blueJExtension/" classpath="${dist}/jeliot.jar;lib/bluejext.jar">
+		<javac sourcepath="blueJExtension/" target="1.5" source="1.5" destdir="blueJExtension/" srcdir="blueJExtension/" classpath="${dist}/jeliot.jar;lib/bluejext.jar" debug="on" >
 			<classpath>
 				<fileset dir="lib">
 					<include name="*.jar" />
@@ -283,7 +283,7 @@ To display the available targets type:
 	<!-- Debugging target ==========================================-->
 	<target name="debug" depends="prepare-dist">
 		<!-- Compile with debug flag -->
-		<javac sourcepath="" target="1.4" destdir="${dest}" deprecation="on" srcdir="${src}" debug="on" source="1.4">
+		<javac sourcepath="" target="5" destdir="${dest}" deprecation="on" srcdir="${src}" debug="on" source="5">
 			<classpath>
 				<fileset dir="lib">
 					<include name="*.jar" />

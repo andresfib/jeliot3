@@ -2,3 +2,8 @@
 - Stopping the "run until..." in the end of the program
 - Solved an object cast issue (program crashed when casting on assignments)
 - The caret's line number in the editor is remembered when entering into the animation mode.
+
+Fixes in 3.7.2
+arithmetic ops with Char fixed. Specially ++ (Ronit)
+Replaced ascii2unicode program call with an auxiliary function
+Random color for references
