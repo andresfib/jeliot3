@@ -144,32 +144,26 @@ public class MenuBuilder extends MenuGenerator {
         public String getClassName() {
             return className;
         }
-
-        /**
-         * returns a string containing all parameters and puting a coma between each parameter
-         * 
-         * @return 
-         */
         public String printParameters() {
-            String param = new String("");
-            if (parameters == null) {
-                return param;
-            }
-            if (parameters.length == 1) {
-                return parameters[0];
-            }
-            if (parameters.length == 2) {
-                return parameters[0] + ", " + parameters[1];
-            }
-
-            else {
-                param += parameters[0];
-                for (int i = 1; i <= parameters.length - 1; i++) {
-                    param += "," + parameters[i];
-                }
-            }
-            return param;
+            return MenuBuilder.printParameters(parameters);
         }
+
+
+        
+    }
+    /**
+     * returns a string containing all parameters and puting a coma between each parameter
+     * 
+     * @return 
+     */
+    public static String printParameters(String[] parameters) {
+        String param = new String("");
+        for (int i = 0; i < parameters.length; i++) {
+                param += parameters[i];
+                if(i != (parameters.length - 1))
+                	param += ",";                
+        }
+        return param;
     }
 
     /**
@@ -359,26 +353,30 @@ public class MenuBuilder extends MenuGenerator {
             System.out.println("method name: " + event.getMethodName() + "\n");
 
             //we print the parameters in the debugfile
-            //if it´s a constructor with parameters
-            if (event.getClassName() != null && event.getParameters() != null) {
-                System.out.println("new object with parameters:" + event.getParameters()[0] + "\n");
+            //if it's a constructor with parameters
+            String[] param = event.getParameters();
+            if (event.getClassName() != null && param.length > 0) {
+            	System.out.print("new object with parameters: ");
+                System.out.println(param[0] + "\n");
 
-                for (int i = 0; i < event.getParameters().length; i++) {
-                    System.out.println("constructor parameter[" + i + "]"
-                            + event.getParameters()[i] + "\n");
+                for (int i = 0; i < param.length; i++) {
+                    System.out.print("constructor parameter[" + i + "]");
+                    System.out.println(param[i]);
                 }
             }
-            if (event.getParameters() == null)
+            if (param.length == 0)
                 System.out.println("new object without parameter\n");
 
-            //if it´s a constructor, we add it in the hashtable 
+            //if it's a constructor, we add it in the hashtable 
             if (event.getClassName() != null && event.getMethodName() == null) {
-                hash.put(event.getObjectName(), new Value(event.getClassName(), event
-                        .getParameters()));
+ 
+            	hash.put(event.getObjectName(), new Value(event.getClassName(), param));
                 System.out.println("object " + event.getObjectName() + " inserted\n");
-
+                //we launch the animation
+                jeliot.recompile(generateJeliotString(), "new "+ event.getClassName()
+                        +"(" + printParameters(param) + ");");
             }
-
+            
             //we call the main method of an object
             if (event.getMethodName() == "main") {
                 String paramMethod = new String("");//string of the parameters
@@ -389,37 +387,18 @@ public class MenuBuilder extends MenuGenerator {
 
                 //we launch the animation
                 jeliot.recompile(generateJeliotString(), event.getClassName()
-                        + ".main(new String[]" + event.getParameters()[0] + ");");
+                        + ".main(new String[]" + param[0] + ");");
             }
 
-            //it´s a method called on an object
+            //it's a method called on an object
             if (event.getMethodName() != null && event.getMethodName() != "main") {//we call a method of an existing object
-                String paramMethod = new String("");//string of the parameters
+               
 
                 //we get the object from the hashtable
                 Object obj = hash.get((Object) event.getObjectName());
                 Value val = (Value) obj;
+                String paramMethod = printParameters(param);
                 System.out.println("call of method\n");
-
-                //we get the parameters of the method called
-                //we check if there is at least one parameter, it returns null otherwise
-                if (event.getParameters() != null) {
-
-                    //we write the parameters in a string, all parameters are separated by coma
-
-                    //1 parameter   
-                    if (event.getParameters().length == 1) {
-                        paramMethod = event.getParameters()[0];
-                    }
-                    //several parameters
-                    else {
-                        for (int i = 0; i <= event.getParameters().length - 2; i++) {
-                            paramMethod += event.getParameters()[i] + ",";
-                        }
-                        paramMethod += event.getParameters()[event.getParameters().length - 1];
-                    }
-                }
-
                 //trace in the debug file
                 System.out.println("(new " + val.getClassName() + "(" + val.printParameters()
                         + "))." + event.getMethodName() + "(" + paramMethod + ")");

@@ -71,7 +71,7 @@ import jeliot.util.UserProperties;
  * @author Pekka Uronen
  * @author Niko Myller
  */
-public class Jeliot {
+public class Jeliot{
 
     /**
      * The resource bundle for gui package
@@ -389,6 +389,17 @@ public class Jeliot {
         }
         return false;
     }
+
+    /**
+    *
+    */
+   public boolean playStepAnimation() {
+       if (gui.getStepButton().isEnabled()) {
+           gui.getStepButton().doClick();
+           return true;
+       }
+       return false;
+   }
 
     /**
      * 

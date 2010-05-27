@@ -222,9 +222,12 @@ public class InterpreterUtilities {
 	} else if (c == float.class) {
 	    return new Float
 		(o.invoke(((Number)l).floatValue(), ((Number)r).floatValue()));
-	} else {
+	} else if (c == double.class){
 	    return new Double
 		(o.invoke(((Number)l).doubleValue(), ((Number)r).doubleValue()));
+	} else{ // if (c == char.class){
+		return new Character
+		((char)(o.invoke(((Number)l).intValue(), ((Number)r).intValue())));
 	}
     }
 
@@ -236,6 +239,7 @@ public class InterpreterUtilities {
 	abstract long   invoke(long    l, long    r);
 	abstract float  invoke(float   l, float   r);
 	abstract double invoke(double  l, double  r);
+	abstract char invoke(char  l, char  r);
     }
 
     /**
@@ -254,6 +258,9 @@ public class InterpreterUtilities {
 	}
 	double  invoke(double  l, double  r) {
 	    return l + r;
+	}
+	char  invoke(char  l, char  r) {
+	    return (char) (l + r);
 	}
     }
 
@@ -274,6 +281,10 @@ public class InterpreterUtilities {
 	double  invoke(double  l, double  r) {
 	    return l - r;
 	}
+	char  invoke(char  l, char  r) {
+	    return (char) (l - r);
+	}
+
     }
 
     /**
@@ -293,6 +304,10 @@ public class InterpreterUtilities {
 	double  invoke(double  l, double  r) {
 	    return l * r;
 	}
+	char  invoke(char  l, char  r) {
+	    return (char) (l * r);
+	}
+
     }
 
     /**
@@ -312,6 +327,10 @@ public class InterpreterUtilities {
 	double  invoke(double  l, double  r) {
 	    return l / r;
 	}
+	char  invoke(char  l, char  r) {
+	    return (char) (l / r);
+	}
+
     }
 
     /**
@@ -331,6 +350,10 @@ public class InterpreterUtilities {
 	double  invoke(double  l, double  r) {
 	    return l % r;
 	}
+	char  invoke(char  l, char  r) {
+	    return (char) (l % r);
+	}
+
     }
 
     // Relational operations /////////////////////////////////////////////

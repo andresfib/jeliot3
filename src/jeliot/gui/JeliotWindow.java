@@ -2448,6 +2448,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
         return playButton;
     }
 
+    public JButton getStepButton() {
+        return stepButton;
+    }
+
     public JButton getRewindButton() {
         return rewindButton;
     }

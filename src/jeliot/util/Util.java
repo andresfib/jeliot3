@@ -3,8 +3,10 @@
  */
 package jeliot.util;
 
+import java.awt.Color;
 import java.io.File;
 import java.net.URL;
+import java.util.Random;
 
 /**
  * @author nmyller
@@ -57,5 +59,8 @@ public class Util {
         }
         return imageURL;
     }
-
+    public static Color getRandomColor() {
+    	Random component = new Random();
+    	return new Color (component.nextInt(255),component.nextInt(255),component.nextInt(255));     	
+    }
 }

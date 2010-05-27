@@ -12,7 +12,7 @@ public class SourceCodeTests {
     }
     
     public static void main(String[] args) {
-        System.out.println(SourceCodeUtilities.removeComments("/*\n*\nsdfasdf\\dfsasf\nadfsasf*/va\n/* // */in // tämä ei tuu\n//*********> Algorithm starts here\n// Define the interval [a,b] in which you expect\n// a root\n tämä ja /* // */ tämä pitäisi /*   */ jäädä /*\n tämä ei tuu\n // */\n"));
+        System.out.println(SourceCodeUtilities.removeCommentsAndStrings("/*\n*\nsdfasdf\\dfsasf\nadfsasf*/va\n/* // */in // tï¿½mï¿½ ei tuu\n//*********> Algorithm starts here\n// Define the interval [a,b] in which you expect\n// a root\n tï¿½mï¿½ ja /* // */ tï¿½mï¿½ pitï¿½isi /*   */ jï¿½ï¿½dï¿½ /*\n tï¿½mï¿½ ei tuu\n // */\n"));
     }
 
 }
