@@ -822,7 +822,7 @@ public class ActorFactory {
                     //refAct.setName(resolvedType + " " + v.getName());
                 }
                 //refAct.setName(resolvedType + " " + v.getName());
-                refAct.setBackground(varColor[typeInfo]);
+                 refAct.setBackground(varColor[typeInfo]);
                 //Tracking purposes
 
             }
@@ -1026,6 +1026,7 @@ public class ActorFactory {
         } else {
             actor = new ReferenceActor();
         }
+        //Color backgroundColor = Util.changeShadeOfColor();
         actor.setBackground(valColor[typeInfo]);
         actor.calculateSize();
         actor.setForeground(valueForegroundColor);

@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
 
+import jeliot.util.Util;
+
 /**
  * ReferenceActor shows the reference to some InstanceActor (e.g. ArrayActor or
  * ObjectStage). They can be assigned to the ReferenceVariableActor instances or any
@@ -198,7 +200,8 @@ public class ReferenceActor extends ValueActor {
 
         } else if (instance != null) {
 
-            bc = instance.bgcolor;
+            //bc = instance.bgcolor;
+        	bc = instance.referenceColor;
             fc = instance.fgcolor;
 
             // draw reference area
