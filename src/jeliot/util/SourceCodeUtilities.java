@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.Charset;
@@ -41,6 +43,7 @@ public class SourceCodeUtilities {
     private static final Pattern class1 = Pattern.compile("\\s+class\\s+");
 
     private static final Pattern class2 = Pattern.compile("\\s");
+    private static final Pattern newLine = Pattern.compile("\\n");
 
     /**
      * Tries to find the main method declaration
@@ -53,7 +56,7 @@ public class SourceCodeUtilities {
             boolean askForMainMethodParameters, JFrame frame,
             boolean useNullInMainMethodCall) {
 
-        String commentsRemoved = removeComments(programCode);
+        String commentsRemoved = removeCommentsAndStrings(programCode);
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\n", " ");
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\r", " ");
         commentsRemoved = MCodeUtilities.replace(commentsRemoved, "\t", " ");
@@ -128,13 +131,49 @@ public class SourceCodeUtilities {
     private static final String SPACE = " ";
 
     /**
+     * Returns the program code without strings delimited by " "
+     * @param programCode
+     * @return
+     */
+    public static String removeStrings(String programCode) {
+
+        if (programCode == null) {
+            return null;
+        }
+        StringBuffer output = new StringBuffer();
+        BufferedReader in = new BufferedReader(new StringReader(programCode));
+    
+        try {
+            while (true) {
+                String line = in.readLine();
+                if (line == null) {
+                    break;
+                }
+                int stringStart = line.indexOf('"');
+                if (stringStart!=-1){
+                	line = line.substring(0, stringStart-1);
+                }
+                output.append(line);
+                output.append('\n');
+
+            }
+
+        } catch (IOException ex) {
+            throw new RuntimeException("IOExecption unexpected."); //$NON-NLS-1$
+        }
+
+        return output.toString();
+                	
+    }	
+
+    /**
      * Removes the comments from the source code.
      * 
      * @param programCode
      *            the source code
      * @return the source code without comments
      */
-    public static String removeComments(String programCode) {
+    public static String removeCommentsAndStrings(String programCode) {
 
         if (programCode == null) {
             return null;
@@ -164,6 +203,12 @@ public class SourceCodeUtilities {
                         if (cstart >= 0 && (mlcstart < 0 || cstart < mlcstart)) {
                             line = line.substring(0, cstart);
                         }
+                        //Let's remove strings as well!!
+                        int stringStart = line.indexOf('"'); 
+                        if(stringStart >= 0){
+                        	line = line.substring(0, stringStart);
+                        }
+                        
                     }
 
                     if (!inMultiLine) {
@@ -241,74 +286,43 @@ public class SourceCodeUtilities {
          */
     }
 
+    /*
+     * Created on 08-Apr-2006 at 19:19:50.
+     * 
+     * Copyright (c) 2006 Robert Virkus / Enough Software
+     *
+     * This file is part of J2ME Polish.
+     * Distributed according the GPL */
+    
+	/**
+	 * Translates the given String into ASCII code.
+	 * 
+	 * @param input the input which contains native characters like umlauts etc
+	 * @return the input in which native characters are replaced through ASCII code
+	 */
+	public static String nativeToAscii( String input ) {
+		if (input == null) {
+			return null;
+		}
+		StringBuffer buffer = new StringBuffer( input.length() + 60 );
+		for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (c <= 0x7E) { 
+                buffer.append(c);
+            }
+            else {
+            	buffer.append("\\u");
+            	String hex = Integer.toHexString(c);
+            	for (int j = hex.length(); j < 4; j++ ) {
+            		buffer.append( '0' );
+            	}
+            	buffer.append( hex );
+            }
+        }
+		return buffer.toString();
+	}
+	
     public static String convertNative2Ascii(String nativeString) {
-        if (DebugUtil.DEBUGGING) {
-            System.out.println("Converting Native to Ascii");
-        }
-        File tempDir = new File(Util.createUserPath(), "temp" + File.separator);
-        if (!tempDir.exists()) {
-            tempDir.mkdir();
-        }
-        
-        File tempFile = null;
-        File tempFileAscii = null;
-        do {
-            tempFile = new File(tempDir, "tempFile"
-                    + (int) (Math.random() * 10000) + ".txt");
-        } while (tempFile == null && tempFile.exists());
-        OutputStreamWriter w = null;
-        try {
-            w = new OutputStreamWriter(new FileOutputStream(
-                    tempFile), Charset.forName("UTF-8"));
-            w.write(nativeString);
-            w.flush();
-            w.close();
-            
-            Process process = Runtime.getRuntime().exec("native2ascii -encoding UTF-8 \"" + tempFile.getAbsolutePath() + "\" \"" + tempFile.getAbsolutePath() + ".asc\"");
-            int returnValue = process.waitFor();
-            tempFileAscii = new File(tempFile.getAbsolutePath() + ".asc");
-            if (DebugUtil.DEBUGGING) {
-                System.out.println("return value " + returnValue);
-            }
-            if (DebugUtil.DEBUGGING) {
-                System.out.println("Ascii temp file exists: " + tempFileAscii.exists());
-            }
-
-            if (returnValue == 0 && tempFileAscii.exists()) {
-                BufferedReader in = new BufferedReader(new FileReader(tempFileAscii));
-                String str = null;
-                StringBuffer sb = new StringBuffer();
-                while ((str = in.readLine()) != null) {
-                    sb.append(str);
-                    sb.append("\n");
-                }                    
-                in.close();
-                
-                if (DebugUtil.DEBUGGING) {
-                    System.out.println("Converted Native to Ascii");
-                }
-                
-                return sb.toString().trim();
-            }
-        } catch (IOException e) {
-            if (DebugUtil.DEBUGGING) {
-                e.printStackTrace();
-            }
-        } catch (InterruptedException e) {
-            if (DebugUtil.DEBUGGING) {
-                e.printStackTrace();
-            }
-        } finally {
-            if (tempFile != null && tempFile.exists()) {
-                tempFile.delete();
-            }
-            if (tempFileAscii != null && tempFileAscii.exists()) {
-                tempFileAscii.delete();
-            }
-        }
-        if (DebugUtil.DEBUGGING) {
-            System.out.println("Error in convertion from Native to Ascii");
-        }
-        return nativeString;
+    	return nativeToAscii(nativeString);
     }
 }
