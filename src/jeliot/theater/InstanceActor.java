@@ -1,7 +1,10 @@
 package jeliot.theater;
 
+import java.awt.Color;
 import java.util.Enumeration;
 import java.util.Vector;
+
+import jeliot.util.Util;
 
 /**
  * InstanceActor is a base class for all the instances: ArrayActors and
@@ -25,11 +28,17 @@ public abstract class InstanceActor extends Actor implements ActorContainer {
      * Comment for <code>position</code>
      */
     private int referencePosition;
+    /**
+     * Random background color for the arrow of the reference
+     */
+	protected Color referenceColor;
+
 
     /**
      * 
      */
     protected InstanceActor() {
+        referenceColor = Util.getRandomColor();
     }
 
     /**
