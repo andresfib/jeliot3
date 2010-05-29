@@ -81,18 +81,7 @@ public class InfoPanel extends JPanel {
             );
         g2d.setPaint(p);
         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
-        g2d.dispose();
-		/*setOpaque(false);
-		Graphics2D g2d = (Graphics2D) g.create();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,            
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		//g2d.setColor(new Color(0,0,0,0));
-		//;
-		Composite old = (Composite) g2d.getComposite();
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-		g2d.fillRect(0,0, this.getWidth(),this.getHeight());
-		g2d.setComposite((java.awt.Composite) old);
-		g2d.dispose();*/
+        g2d.dispose();		
 	}
 }
 

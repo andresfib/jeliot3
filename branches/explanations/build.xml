@@ -88,7 +88,7 @@ To display the available targets type:
 
 	<!-- Compilation ==================================================== -->
 	<target name="compile" depends="init">
-		<javac target="1.4" source="1.4" sourcepath="" destdir="${dest}" deprecation="on" srcdir="${src}">
+		<javac target="5" source="5" sourcepath="" destdir="${dest}" deprecation="on" srcdir="${src}">
 			<classpath>
 				<fileset dir="lib">
 					<include name="*.jar" />
