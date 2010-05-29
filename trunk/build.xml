@@ -64,7 +64,9 @@ To display the available targets type:
 		<property name="resources" value="resources" />
 		<property name="dest" value="classes" />
 		<property name="release" value="Release" />
-
+		<property name="lojel" value="LOVisualization" />
+		<property name="lojel-src" value="${lojel}/src" />
+		<property name="lojel-dest" value="${lojel}/classes" />
 		<!-- dest : Compiled classes will be stored here, if no exists, create it -->
 		<mkdir dir="${dest}" />
 		<mkdir dir="${dest}/blueJExtension" />
@@ -72,6 +74,7 @@ To display the available targets type:
 		<mkdir dir="${release}" />
 		<mkdir dir="${release}/ws" />
 		<mkdir dir="${release}/moodle" />
+		<mkdir dir="${lojel-dest}" />
 	</target>
 
 	<!-- Help ==================================================== -->
@@ -320,5 +323,18 @@ To display the available targets type:
 		    <zipfileset dir="${release}/moodle/jeliot" includes="**/*"/>
 		</zip>		
 	</target>
+	<!-- ================================= 
+          target: loviz              
+         ================================= -->
+	<target name="lojel-compile" depends="compile">
+		<javac target="5" source="5" classpath="${dest}" sourcepath="" destdir="${lojel-dest}" deprecation="on" srcdir="${lojel-src}">	
+			<include name="**/*.java" />
+		</javac>
+	</target>
+	<target name="lojel-jar" depends="jars, lojel-compile" description="Creates jar that runs Jeliot within loviz environment">
+    	
+        <jar destfile="${dist}/lojel.jar" basedir="${lojel-dest}" includes="**/*.class" manifest="${lojel-src}/jeliot.mf">        
+        </jar>
+    </target>
 
 </project>
