@@ -1,7 +1,7 @@
 package edu.unika.aifb.components;
 
 /*
- * Copyright (c) 2004 Roland Küstermann. All Rights Reserved.
+ * Copyright (c) 2004 Roland KÃ¼stermann. All Rights Reserved.
  */
 
 import java.awt.BorderLayout;
