@@ -23,6 +23,9 @@ public interface Visualization {
   public abstract javax.swing.JFrame initialize(
     String args[]) throws Exception;
 
+  public abstract javax.swing.JComponent initializeVisualization(
+		    String args[]) throws Exception;
+
   // Load a file such as a program or algorithm to visualize
   public abstract void load(String fileName) throws java.io.IOException;
 

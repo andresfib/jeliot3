@@ -594,7 +594,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
      * Initializes the JFrame frame. Sets up all the basic things for the
      * window. (Panels, Panes, Menubars) Things for debugging.
      */
-    public void setUp() {
+    public void setUp(boolean showJFrame) {
         try {
             this.theaterScrollPane = new JScrollPane(this.theater);
             this.theaterScrollPane.getHorizontalScrollBar()
@@ -701,7 +701,7 @@ public class JeliotWindow implements PauseListener, MouseListener {
 
             frame.pack();
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setVisible(true);
+            frame.setVisible(showJFrame);
             //if (jeliot.isExperiment()) {
             //}
 
@@ -2471,6 +2471,10 @@ public class JeliotWindow implements PauseListener, MouseListener {
         return selectedIndexInTabbedPane;
     }
 
+    public JSplitPane getTopSplitPane() {
+    	return this.codeNest;
+    }
+    
     /* (non-Javadoc)
      * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
      */

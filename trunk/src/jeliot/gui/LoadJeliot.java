@@ -42,7 +42,10 @@ public class LoadJeliot {
 	 */
 	public static void start(final Jeliot jeliot) {
 		// Get the splash screen image
-		final Image image = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(propertiesBundle.getStringProperty("directory.images") + messageBundle.getString("image.splash_screen"))).getImage();
+		final Image image = new ImageIcon(Thread.currentThread().getContextClassLoader()
+				.getResource(
+						propertiesBundle.getStringProperty("directory.images")
+								+ messageBundle.getString("image.splash_screen"))).getImage();
 
 		// create the splash screen window
 		Component splash = new Component() {
@@ -67,14 +70,17 @@ public class LoadJeliot {
 
 		window.setBounds((screen.width - iw) / 2, (screen.height - ih) / 2, iw, ih);
 		window.setVisible(true);
-		//window.show();
+		// window.show();
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				jeliot.run();
+				jeliot.run(true);
 				window.dispose();
 			}
 		});
 	}
-}
 
+	public static void simpleStart(final Jeliot jeliot) {
+		jeliot.run(false);
+	}
+}

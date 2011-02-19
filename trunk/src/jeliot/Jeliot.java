@@ -256,7 +256,7 @@ public class Jeliot{
      * @param udir
      * 
      */
-    public Jeliot(String defaultIO) {
+	public Jeliot(String defaultIO) {
         setIOPackageName(defaultIO);
 
         //Set LookAndFeel
@@ -281,7 +281,6 @@ public class Jeliot{
 
         gui = new JeliotWindow(this, codePane, theatre, engine, iLoad,
                 userDirectory, callTree, hv);
-
     }
 
     /**
@@ -294,8 +293,8 @@ public class Jeliot{
     /**
      * Sets up the user interface.
      */
-    public void run() {
-        gui.setUp();
+    public void run(boolean showJFrame) {
+        gui.setUp(showJFrame);
     }
 
     /**
@@ -893,7 +892,7 @@ public class Jeliot{
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
-                jeliot.run();
+                jeliot.run(true);
             }
         });
         //LoadJeliot.start(jeliot);
