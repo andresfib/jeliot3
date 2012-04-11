@@ -56,11 +56,56 @@ public class AnnotationEngine {
 	public String getConstructorCall(Value[] v){
 		//Determining if the constructor is a non-parameter one. 
 		if(v.length != 0)
-			return constructorname + "( ):" + messageBundle.getString("message.constructor_call");
+
+		   return messageBundle.getString("message.constructor_call")+ " " + constructorname +" "+messageBundle.getString("message.constructor_call2");
+
+			//return constructorname + "( ):" + messageBundle.getString("message.constructor_call");
+
 		else
-			return constructorname + "( ):" + messageBundle.getString("message.constructor_call")+messageBundle.getString("message.nonparamconstructor_call");
+
+		   return messageBundle.getString("message.constructor_call")+ " " + constructorname + "."+messageBundle.getString("message.nonparamconstructor_call");
+
+			//return constructorname + "( ):" + messageBundle.getString("message.constructor_call")+messageBundle.getString("message.nonparamconstructor_call");
+
 	}
 
+
+
+    
+       
+    public void setObject(String name){
+    	this.object = name;
+    	
+    }
+    public String getObject(boolean a){
+    	if(a == true)
+    	   return object + " " + messageBundle.getString("message.object");
+    	else 
+    	   return object + " " + messageBundle.getString("message.objectdelete");
+    }
+    
+    
+    public void setObjectField(String name){
+    	this.objectfield = name;
+    }
+    public String getObjectField(){
+    	return messageBundle.getString("message.objectfield")+ objectfield + ".";
+    }
+    
+    public void setArrow(String v){
+    	
+    	this.value = v;
+    }
+    public String getArrow(){
+    	return  messageBundle.getString("message.arrow1")+" "+value+" "+messageBundle.getString("message.arrow2");
+    }
+    
+    public void setReference(String ref){
+    	this.reference = ref;
+    }
+    public String getReference(){
+    	return reference;
+    }
 
 	public void setArgument(Variable[] val,int n,String var){
 		String arguments = messageBundle.getString("message.argument1");
@@ -89,39 +134,7 @@ public class AnnotationEngine {
 	}
 
 
-	public void setObject(String name){
-		this.object = name;
 
-	}
-	public String getObject(boolean a){
-		if(a == true)
-			return object + " " + messageBundle.getString("message.object");
-		else 
-			return object + " " + messageBundle.getString("message.objectdelete");
-	}
-
-
-	public void setObjectField(String name){
-		this.objectfield = name;
-	}
-	public String getObjectField(){
-		return messageBundle.getString("message.objectfield")+ objectfield + ".";
-	}
-
-	public void setArrow(String v){
-
-		this.value = v;
-	}
-	public String getArrow(){
-		return  value + " " +messageBundle.getString("message.arrow");
-	}
-
-	public void setReference(String ref){
-		this.reference = ref;
-	}
-	public String getReference(){
-		return reference;
-	}
 	/**
 	 * TabbedPane is not fit in this situation.
 	 */
