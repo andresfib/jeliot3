@@ -1,0 +1,29 @@
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+
+import koala.dynamicjava.interpreter.TreeInterpreter;
+
+public class Rectangle
+{
+
+    public double getArea()
+    {
+        Object aobj[] = new Object[0];
+        return ((Number)TreeInterpreter.invokeMethod("Rectangle#getArea()koala.dynamicjava.interpreter.TreeClassLoader@7cc9c9", this, aobj)).doubleValue();
+    }
+
+    Rectangle(double d, double d1)
+    {
+        Object aobj1[];
+        aobj1 = new Object[2];
+        aobj1[0] = new Double(d);
+        aobj1[1] = new Double(d1);
+        Object aobj[] = TreeInterpreter.interpretArguments("Rectangle#<init>(double,double)koala.dynamicjava.interpreter.TreeClassLoader@7cc9c9", aobj1);
+        super();
+        TreeInterpreter.invokeMethod("Rectangle#<init>(double,double)koala.dynamicjava.interpreter.TreeClassLoader@7cc9c9", this, aobj1);
+    }
+
+    double width;
+    double heigth;
+}

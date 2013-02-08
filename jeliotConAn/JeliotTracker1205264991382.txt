@@ -1,0 +1,159 @@
+Recording date: 2008.03.11
+Recording time: 21.49.51.0384 (corresponds to time 0)
+
+
+Timestamp	Action	Number Type	X,Y	Width	Height	Angle	Life	Description
+
+576	Appear	0	Rectangle	38,101	255	15	0.0	-1	Code Highlight:0,20
+673	Scroll	1		313	71	1308	871			Scroll: Theater: On screen at: 313,71,1308,871
+674	Scroll	2		313	71	1308	871			Scroll: Theater: On screen at: 313,71,1308,871
+718	Disappear	0	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+719	Appear	3	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2039	Disappear	3	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2039	Appear	4	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2169	Disappear	4	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2170	Appear	5	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2669	Disappear	5	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2669	Appear	6	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+3153	Button	7							AnimationButton
+3317	Disappear	6	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+3317	Appear	8	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+4622	Disappear	9	Rectangle	313,71	1308	871	0.0	-1	null
+5306	Other	10							Slider:10
+5307	Other	11							Slider:12
+5362	Other	12							Slider:18
+5366	Other	13							Slider:19
+5391	Other	14							Slider:22
+5410	Other	15							Slider:24
+5439	Other	16							Slider:25
+5453	Other	17							Slider:27
+5466	Other	18							Slider:28
+5481	Other	19							Slider:29
+5508	Other	20							Slider:30
+5523	Other	21							Slider:31
+5536	Other	22							Slider:32
+5537	Other	23							Slider:33
+5551	Other	24							Slider:34
+5565	Other	25							Slider:36
+5579	Other	26							Slider:37
+5593	Other	27							Slider:38
+5664	Other	28							Slider:39
+5682	Other	29							Slider:40
+5694	Other	30							Slider:41
+5721	Other	31							Slider:42
+5723	Other	32							Slider:43
+5736	Other	33							Slider:44
+5750	Other	34							Slider:45
+5763	Other	35							Slider:46
+5777	Other	36							Slider:47
+5777	Other	37							Slider:48
+5805	Other	38							Slider:49
+5807	Other	39							Slider:50
+5820	Other	40							Slider:51
+5835	Other	41							Slider:52
+5852	Other	42							Slider:53
+5852	Other	43							Slider:54
+5863	Other	44							Slider:55
+5876	Other	45							Slider:57
+5891	Other	46							Slider:61
+5891	Other	47							Slider:61
+7616	Button	48							StepButton
+7621	Other	49							AnimationStarted
+7736	Appear	50	Rectangle	323,389	124	46	0.0	-1	ConstantBox
+8695	Other	51							AnimationStopped
+9609	Button	52							StepButton
+9635	Other	53							AnimationStarted
+9696	Appear	54	Rectangle	583,91	116	33	0.0	-1	static method invocation: MyClass.main
+9935	Other	55							AnimationStopped
+10944	Button	56							StepButton
+10951	Other	57							AnimationStarted
+11025	Appear	58	Rectangle	323,91	212	23	0.0	-1	method frameMyClass.maincreatd
+11026	Modify	58	Rectangle	323,91	212	30	0.0	-1	method frameMyClass.maincreatd
+11030	Appear	59	Rectangle	69,466	222	15	0.0	-1	Code Highlight:454,482
+11031	Appear	60	Rectangle	36,481	255	15	0.0	-1	Code Highlight:482,521
+11033	Appear	61	Rectangle	36,496	255	15	0.0	-1	Code Highlight:521,561
+11034	Appear	62	Rectangle	36,511	40	15	0.0	-1	Code Highlight:561,567
+11076	Modify	58	Rectangle	323,91	212	37	0.0	-1	method frameMyClass.maincreatd
+11076	Modify	58	Rectangle	323,91	212	44	0.0	-1	method frameMyClass.maincreatd
+11126	Modify	58	Rectangle	323,91	212	51	0.0	-1	method frameMyClass.maincreatd
+11127	Modify	58	Rectangle	323,91	212	58	0.0	-1	method frameMyClass.maincreatd
+11177	Modify	58	Rectangle	323,91	212	66	0.0	-1	method frameMyClass.maincreatd
+11177	Modify	58	Rectangle	323,91	212	69	0.0	-1	method frameMyClass.maincreatd
+11261	Disappear	54	Rectangle	583,91	116	33	0.0	-1	static method invocation: MyClass.main
+11261	Disappear	54	Rectangle	583,91	116	33	0.0	-1	static method invocation: MyClass.main
+11262	Disappear	63	Rectangle	583,91	0	0	0.0	-1	Expression: 
+11264	Appear	64	Rectangle	583,91	0	0	0.0	-1	null
+11265	Modify	64	Rectangle	583,91	0	0	0.0	-1	null
+11336	Other	65							AnimationStopped
+12046	Button	66							StepButton
+12049	Other	67							AnimationStarted
+12101	Disappear	59	Rectangle	69,466	222	15	0.0	-1	Code Highlight:454,482
+12101	Disappear	60	Rectangle	36,481	255	15	0.0	-1	Code Highlight:482,521
+12102	Disappear	61	Rectangle	36,496	255	15	0.0	-1	Code Highlight:521,561
+12102	Disappear	62	Rectangle	36,511	40	15	0.0	-1	Code Highlight:561,567
+12109	Appear	68	Rectangle	76,481	203	15	0.0	-1	Code Highlight:490,521
+12124	Appear	69	Rectangle	404,119	125	33	0.0	-1	local variable: Square square
+12345	Disappear	69	Rectangle	394,99	125	33	0.0	-1	local variable: Square square
+12526	Appear	70	Rectangle	323,389	22	22	0.0	-1	value: (int) 3
+12729	Appear	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12731	Modify	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12781	Modify	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12781	Modify	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12832	Modify	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12832	Modify	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12882	Modify	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12882	Modify	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12882	Disappear	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12956	Disappear	70	Rectangle	323,389	22	22	0.0	-1	value: (int) 3
+12957	Disappear	71	Rectangle	323,389	22	22	0.0	-1	variable casted from int to double
+12981	Other	72							AnimationStopped
+14153	Button	73							StepButton
+14156	Other	74							AnimationStarted
+14192	Appear	75	Rectangle	583,91	123	34	0.0	-1	constructor invocation: Square
+14247	Disappear	68	Rectangle	76,481	203	15	0.0	-1	Code Highlight:490,521
+14247	Appear	76	Rectangle	188,481	91	15	0.0	-1	Code Highlight:506,521
+14395	Appear	77	Rectangle	323,389	22	22	0.0	-1	value: (double) 3
+14396	Modify	77	Rectangle	319,385	22	22	0.0	-1	value: (double) 3
+14446	Modify	77	Rectangle	373,340	22	22	0.0	-1	value: (double) 3
+14448	Modify	77	Rectangle	427,295	22	22	0.0	-1	value: (double) 3
+14496	Modify	77	Rectangle	481,251	22	22	0.0	-1	value: (double) 3
+14498	Modify	77	Rectangle	535,206	22	22	0.0	-1	value: (double) 3
+14547	Modify	77	Rectangle	589,162	22	22	0.0	-1	value: (double) 3
+14551	Modify	77	Rectangle	643,117	22	22	0.0	-1	value: (double) 3
+14597	Disappear	77	Rectangle	678,97	22	22	0.0	-1	value: (double) 3
+14597	Modify	75	Rectangle	583,91	123	34	0.0	-1	constructor invocation: Square
+14631	Other	78							AnimationStopped
+22607	Button	79							ConflictButton
+30705	Other	80							ConflictChecked
+32261	Button	81							StepButton
+32262	Other	82							AnimationStarted
+32296	Disappear	76	Rectangle	188,481	91	15	0.0	-1	Code Highlight:506,521
+32296	Appear	83	Rectangle	188,481	91	15	0.0	-1	Code Highlight:506,521
+32318	Appear	84	Rectangle	588,359	202	23	0.0	-1	object stage: Object of the class Square
+32319	Modify	84	Rectangle	588,359	202	41	0.0	-1	object stage: Object of the class Square
+32370	Modify	84	Rectangle	588,359	202	59	0.0	-1	object stage: Object of the class Square
+32370	Modify	84	Rectangle	588,359	202	77	0.0	-1	object stage: Object of the class Square
+32420	Modify	84	Rectangle	588,359	202	95	0.0	-1	object stage: Object of the class Square
+32420	Modify	84	Rectangle	588,359	202	113	0.0	-1	object stage: Object of the class Square
+32470	Modify	84	Rectangle	588,359	202	131	0.0	-1	object stage: Object of the class Square
+32471	Modify	84	Rectangle	588,359	202	139	0.0	-1	object stage: Object of the class Square
+32541	Other	85							AnimationStopped
+34064	Button	86							StepButton
+34065	Other	87							AnimationStarted
+34082	Disappear	83	Rectangle	188,481	91	15	0.0	-1	Code Highlight:506,521
+34082	Appear	88	Rectangle	48,121	84	15	0.0	-1	Code Highlight:70,91
+34103	Appear	89	Rectangle	602,387	186	33	0.0	-1	object variable: double width
+34306	Disappear	90	Rectangle	451,105	34	22	0.0	-1	value: (double) 0.0
+34306	Disappear	89	Rectangle	327,99	186	33	0.0	-1	object variable: double width
+34329	Other	91							AnimationStopped
+35880	Button	92							StepButton
+35883	Other	93							AnimationStarted
+35915	Appear	94	Rectangle	602,423	191	33	0.0	-1	object variable: double heigth
+35971	Disappear	88	Rectangle	48,121	84	15	0.0	-1	Code Highlight:70,91
+35971	Appear	95	Rectangle	48,121	133	15	0.0	-1	Code Highlight:70,91
+36118	Disappear	96	Rectangle	456,141	34	22	0.0	-1	value: (double) 0.0
+36118	Disappear	94	Rectangle	327,135	191	33	0.0	-1	object variable: double heigth
+36145	Other	97							AnimationStopped
+43346	Button	98							ConflictButton
+55130	Other	99							ConflictChecked
+67783	Other	100							JeliotClose

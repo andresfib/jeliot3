@@ -1,0 +1,2749 @@
+Recording date: 2008.03.12
+Recording time: 11.27.31.0258 (corresponds to time 0)
+
+
+Timestamp	Action	Number Type	X,Y	Width	Height	Angle	Life	Description
+
+121	Appear	0	Rectangle	38,101	255	15	0.0	-1	Code Highlight:0,20
+1276	Scroll	1		313	71	1308	871			Scroll: Theater: On screen at: 313,71,1308,871
+1284	Scroll	2		313	71	1308	871			Scroll: Theater: On screen at: 313,71,1308,871
+1352	Disappear	0	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+1353	Appear	3	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+1587	Disappear	3	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+1587	Appear	4	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+1646	Disappear	4	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+1646	Appear	5	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2079	Disappear	5	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2080	Appear	6	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2578	Disappear	6	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+2578	Appear	7	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+3078	Disappear	7	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+3079	Appear	8	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+3578	Disappear	8	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+3579	Appear	9	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+4079	Disappear	9	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+4080	Appear	10	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+4579	Disappear	10	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+4579	Appear	11	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+4871	Disappear	11	Rectangle	36,100	255	15	0.0	-1	Code Highlight:0,20
+4873	Appear	12	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+5372	Disappear	12	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+5372	Appear	13	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+5872	Disappear	13	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+5873	Appear	14	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+6372	Disappear	14	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+6373	Appear	15	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+6871	Disappear	15	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+6872	Appear	16	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+7017	Disappear	16	Rectangle	36,145	255	15	0.0	-1	Code Highlight:45,70
+7018	Appear	17	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,105
+7168	Disappear	17	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,105
+7169	Appear	18	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,105
+7182	Disappear	18	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,105
+7182	Appear	19	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,105
+7197	Disappear	19	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,105
+7198	Appear	20	Rectangle	258,160	7	15	0.0	-1	Code Highlight:101,105
+7208	Disappear	20	Rectangle	258,160	7	15	0.0	-1	Code Highlight:101,105
+7209	Appear	21	Rectangle	258,160	7	15	0.0	-1	Code Highlight:101,105
+7212	Disappear	21	Rectangle	258,160	7	15	0.0	-1	Code Highlight:101,105
+7212	Appear	22	Rectangle	258,160	7	15	0.0	-1	Code Highlight:101,105
+7225	Disappear	22	Rectangle	258,160	7	15	0.0	-1	Code Highlight:101,105
+7225	Appear	23	Rectangle	258,160	7	15	0.0	-1	Code Highlight:101,105
+7239	Disappear	23	Rectangle	258,160	7	15	0.0	-1	Code Highlight:101,105
+7240	Appear	24	Rectangle	251,160	14	15	0.0	-1	Code Highlight:100,105
+7254	Disappear	24	Rectangle	251,160	14	15	0.0	-1	Code Highlight:100,105
+7254	Appear	25	Rectangle	251,160	14	15	0.0	-1	Code Highlight:100,105
+7267	Disappear	25	Rectangle	251,160	14	15	0.0	-1	Code Highlight:100,105
+7268	Appear	26	Rectangle	251,160	14	15	0.0	-1	Code Highlight:100,105
+7281	Disappear	26	Rectangle	251,160	14	15	0.0	-1	Code Highlight:100,105
+7282	Appear	27	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7301	Disappear	27	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7302	Appear	28	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7310	Disappear	28	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7311	Appear	29	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7325	Disappear	29	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7325	Appear	30	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7339	Disappear	30	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7339	Appear	31	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7353	Disappear	31	Rectangle	244,160	21	15	0.0	-1	Code Highlight:99,105
+7353	Appear	32	Rectangle	237,160	28	15	0.0	-1	Code Highlight:98,105
+7366	Disappear	32	Rectangle	237,160	28	15	0.0	-1	Code Highlight:98,105
+7366	Appear	33	Rectangle	237,160	28	15	0.0	-1	Code Highlight:98,105
+7380	Disappear	33	Rectangle	237,160	28	15	0.0	-1	Code Highlight:98,105
+7381	Appear	34	Rectangle	237,160	28	15	0.0	-1	Code Highlight:98,105
+7394	Disappear	34	Rectangle	237,160	28	15	0.0	-1	Code Highlight:98,105
+7394	Appear	35	Rectangle	237,160	28	15	0.0	-1	Code Highlight:98,105
+7409	Disappear	35	Rectangle	237,160	28	15	0.0	-1	Code Highlight:98,105
+7409	Appear	36	Rectangle	230,160	35	15	0.0	-1	Code Highlight:97,105
+7412	Disappear	36	Rectangle	230,160	35	15	0.0	-1	Code Highlight:97,105
+7413	Appear	37	Rectangle	230,160	35	15	0.0	-1	Code Highlight:97,105
+7423	Disappear	37	Rectangle	230,160	35	15	0.0	-1	Code Highlight:97,105
+7424	Appear	38	Rectangle	230,160	35	15	0.0	-1	Code Highlight:97,105
+7439	Disappear	38	Rectangle	230,160	35	15	0.0	-1	Code Highlight:97,105
+7439	Appear	39	Rectangle	223,160	42	15	0.0	-1	Code Highlight:96,105
+7452	Disappear	39	Rectangle	223,160	42	15	0.0	-1	Code Highlight:96,105
+7452	Appear	40	Rectangle	216,160	49	15	0.0	-1	Code Highlight:95,105
+7464	Disappear	40	Rectangle	216,160	49	15	0.0	-1	Code Highlight:95,105
+7465	Appear	41	Rectangle	216,160	49	15	0.0	-1	Code Highlight:95,105
+7470	Disappear	41	Rectangle	216,160	49	15	0.0	-1	Code Highlight:95,105
+7470	Appear	42	Rectangle	209,160	56	15	0.0	-1	Code Highlight:94,105
+7480	Disappear	42	Rectangle	209,160	56	15	0.0	-1	Code Highlight:94,105
+7480	Appear	43	Rectangle	209,160	56	15	0.0	-1	Code Highlight:94,105
+7493	Disappear	43	Rectangle	209,160	56	15	0.0	-1	Code Highlight:94,105
+7493	Appear	44	Rectangle	202,160	63	15	0.0	-1	Code Highlight:93,105
+7496	Disappear	44	Rectangle	202,160	63	15	0.0	-1	Code Highlight:93,105
+7496	Appear	45	Rectangle	202,160	63	15	0.0	-1	Code Highlight:93,105
+7509	Disappear	45	Rectangle	202,160	63	15	0.0	-1	Code Highlight:93,105
+7510	Appear	46	Rectangle	195,160	70	15	0.0	-1	Code Highlight:92,105
+7523	Disappear	46	Rectangle	195,160	70	15	0.0	-1	Code Highlight:92,105
+7523	Appear	47	Rectangle	195,160	70	15	0.0	-1	Code Highlight:92,105
+7537	Disappear	47	Rectangle	195,160	70	15	0.0	-1	Code Highlight:92,105
+7537	Appear	48	Rectangle	195,160	70	15	0.0	-1	Code Highlight:92,105
+7540	Disappear	48	Rectangle	195,160	70	15	0.0	-1	Code Highlight:92,105
+7541	Appear	49	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7551	Disappear	49	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7552	Appear	50	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7564	Disappear	50	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7565	Appear	51	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7567	Disappear	51	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7568	Appear	52	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7579	Disappear	52	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7579	Appear	53	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7592	Disappear	53	Rectangle	188,160	77	15	0.0	-1	Code Highlight:91,105
+7593	Appear	54	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7607	Disappear	54	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7607	Appear	55	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7621	Disappear	55	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7621	Appear	56	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7624	Disappear	56	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7625	Appear	57	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7648	Disappear	57	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7648	Appear	58	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7652	Disappear	58	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7652	Appear	59	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7664	Disappear	59	Rectangle	181,160	84	15	0.0	-1	Code Highlight:90,105
+7665	Appear	60	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7677	Disappear	60	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7678	Appear	61	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7692	Disappear	61	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7693	Appear	62	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7707	Disappear	62	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7708	Appear	63	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7721	Disappear	63	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7721	Appear	64	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7724	Disappear	64	Rectangle	174,160	91	15	0.0	-1	Code Highlight:89,105
+7724	Appear	65	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7736	Disappear	65	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7736	Appear	66	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7748	Disappear	66	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7749	Appear	67	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7751	Disappear	67	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7752	Appear	68	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7763	Disappear	68	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7763	Appear	69	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7777	Disappear	69	Rectangle	167,160	98	15	0.0	-1	Code Highlight:88,105
+7777	Appear	70	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7783	Disappear	70	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7783	Appear	71	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7792	Disappear	71	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7793	Appear	72	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7806	Disappear	72	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7807	Appear	73	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7820	Disappear	73	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7821	Appear	74	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7835	Disappear	74	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7835	Appear	75	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7849	Disappear	75	Rectangle	160,160	105	15	0.0	-1	Code Highlight:87,105
+7850	Appear	76	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7877	Disappear	76	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7878	Appear	77	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7905	Disappear	77	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7906	Appear	78	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7933	Disappear	78	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7933	Appear	79	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7948	Disappear	79	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7948	Appear	80	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7962	Disappear	80	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7962	Appear	81	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7990	Disappear	81	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+7990	Appear	82	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+8062	Disappear	82	Rectangle	153,160	112	15	0.0	-1	Code Highlight:86,105
+8062	Appear	83	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8089	Disappear	83	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8089	Appear	84	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8161	Disappear	84	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8161	Appear	85	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8317	Disappear	85	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8318	Appear	86	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8465	Disappear	86	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8466	Appear	87	Rectangle	146,145	145	15	0.0	-1	Code Highlight:60,70
+8466	Appear	88	Rectangle	36,160	229	15	0.0	-1	Code Highlight:70,105
+8758	Disappear	87	Rectangle	146,145	145	15	0.0	-1	Code Highlight:60,70
+8758	Disappear	88	Rectangle	36,160	229	15	0.0	-1	Code Highlight:70,105
+8758	Appear	89	Rectangle	146,145	145	15	0.0	-1	Code Highlight:60,70
+8759	Appear	90	Rectangle	36,160	229	15	0.0	-1	Code Highlight:70,105
+8799	Disappear	89	Rectangle	146,145	145	15	0.0	-1	Code Highlight:60,70
+8799	Disappear	90	Rectangle	36,160	229	15	0.0	-1	Code Highlight:70,105
+8799	Appear	91	Rectangle	146,145	145	15	0.0	-1	Code Highlight:60,70
+8800	Appear	92	Rectangle	36,160	229	15	0.0	-1	Code Highlight:70,105
+8842	Disappear	91	Rectangle	146,145	145	15	0.0	-1	Code Highlight:60,70
+8843	Disappear	92	Rectangle	36,160	229	15	0.0	-1	Code Highlight:70,105
+8843	Appear	93	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8870	Disappear	93	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8870	Appear	94	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8884	Disappear	94	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8884	Appear	95	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8898	Disappear	95	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8899	Appear	96	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8913	Disappear	96	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8914	Appear	97	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8940	Disappear	97	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8941	Appear	98	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8943	Disappear	98	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8944	Appear	99	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8956	Disappear	99	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8956	Appear	100	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8968	Disappear	100	Rectangle	146,160	119	15	0.0	-1	Code Highlight:85,105
+8969	Appear	101	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+8974	Disappear	101	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+8974	Appear	102	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+8984	Disappear	102	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+8984	Appear	103	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+8996	Disappear	103	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+8997	Appear	104	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+9054	Disappear	104	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+9055	Appear	105	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+9555	Disappear	105	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+9555	Appear	106	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+9873	Disappear	106	Rectangle	139,160	126	15	0.0	-1	Code Highlight:84,105
+9876	Appear	107	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,87
+10370	Disappear	107	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,87
+10371	Appear	108	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,87
+10429	Disappear	108	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,87
+10430	Appear	109	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+10773	Disappear	109	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+10773	Appear	110	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+11273	Disappear	110	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+11273	Appear	111	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+11772	Disappear	111	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+11773	Appear	112	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+12273	Disappear	112	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+12274	Appear	113	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+12774	Disappear	113	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+12774	Appear	114	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+13274	Disappear	114	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+13274	Appear	115	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+13476	Disappear	115	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+13477	Appear	116	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,103
+13976	Disappear	116	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,103
+13977	Appear	117	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,103
+14477	Disappear	117	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,103
+14477	Appear	118	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,103
+14977	Disappear	118	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,103
+14977	Appear	119	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,103
+15117	Keyboard	120							KeyTyped: 3
+15120	Disappear	119	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,103
+15120	Appear	121	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+15537	Disappear	121	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+15537	Appear	122	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+15769	Disappear	122	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+15769	Appear	123	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+16173	Disappear	123	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+16174	Appear	124	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,121
+16334	Keyboard	125							KeyTyped: 3
+16337	Disappear	124	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,121
+16337	Appear	126	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+16835	Disappear	126	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+16835	Appear	127	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+16904	Disappear	127	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+16905	Appear	128	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+17186	Disappear	128	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+17187	Appear	129	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+17409	Disappear	129	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+17409	Appear	130	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+17622	Disappear	130	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+17623	Appear	131	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+17823	Disappear	131	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+17830	Appear	132	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+18018	Disappear	132	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+18020	Appear	133	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+18192	Disappear	133	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+18193	Appear	134	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+18372	Disappear	134	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+18373	Appear	135	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+18531	Disappear	135	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+18531	Appear	136	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+18723	Disappear	136	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+18724	Appear	137	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,297
+19223	Disappear	137	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,297
+19223	Appear	138	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,297
+19352	Disappear	138	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,297
+19352	Appear	139	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,297
+19801	Disappear	139	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,297
+19801	Appear	140	Rectangle	41,340	133	15	0.0	-1	Code Highlight:277,297
+20075	Disappear	140	Rectangle	41,340	133	15	0.0	-1	Code Highlight:277,297
+20076	Appear	141	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,278
+20575	Disappear	141	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,278
+20575	Appear	142	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,278
+20617	Disappear	142	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,278
+20622	Appear	143	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21118	Disappear	143	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21119	Appear	144	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21270	Disappear	144	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21270	Appear	145	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,87
+21311	Disappear	145	Rectangle	36,160	255	15	0.0	-1	Code Highlight:70,87
+21312	Appear	146	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21312	Appear	147	Rectangle	36,175	96	15	0.0	-1	Code Highlight:87,104
+21325	Disappear	146	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21325	Disappear	147	Rectangle	36,175	96	15	0.0	-1	Code Highlight:87,104
+21325	Appear	148	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21326	Appear	149	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21326	Appear	150	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21326	Appear	151	Rectangle	36,205	40	15	0.0	-1	Code Highlight:122,128
+21332	Disappear	148	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21332	Disappear	149	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21332	Disappear	150	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21332	Disappear	151	Rectangle	36,205	40	15	0.0	-1	Code Highlight:122,128
+21332	Appear	152	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21333	Appear	153	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21333	Appear	154	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21333	Appear	155	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21333	Appear	156	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21334	Appear	157	Rectangle	36,235	75	15	0.0	-1	Code Highlight:157,186
+21341	Disappear	152	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21341	Disappear	153	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21341	Disappear	154	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21341	Disappear	155	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21341	Disappear	156	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21341	Disappear	157	Rectangle	36,235	75	15	0.0	-1	Code Highlight:157,186
+21342	Appear	158	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21342	Appear	159	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21342	Appear	160	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21342	Appear	161	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21343	Appear	162	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21343	Appear	163	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21344	Appear	164	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21344	Appear	165	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21344	Appear	166	Rectangle	36,280	33	15	0.0	-1	Code Highlight:194,199
+21356	Disappear	158	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21356	Disappear	159	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21356	Disappear	160	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21356	Disappear	161	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21357	Disappear	162	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21357	Disappear	163	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21357	Disappear	164	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21357	Disappear	165	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21357	Disappear	166	Rectangle	36,280	33	15	0.0	-1	Code Highlight:194,199
+21357	Appear	167	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21358	Appear	168	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21358	Appear	169	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21358	Appear	170	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21358	Appear	171	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21359	Appear	172	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21359	Appear	173	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21360	Appear	174	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21360	Appear	175	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+21360	Appear	176	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+21361	Appear	177	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+21361	Appear	178	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21361	Appear	179	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+21362	Appear	180	Rectangle	36,355	33	15	0.0	-1	Code Highlight:293,299
+21371	Disappear	167	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21371	Disappear	168	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21371	Disappear	169	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21371	Disappear	170	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21372	Disappear	171	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21372	Disappear	172	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21372	Disappear	173	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21372	Disappear	174	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21372	Disappear	175	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+21373	Disappear	176	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+21373	Disappear	177	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+21373	Disappear	178	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21373	Disappear	179	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+21373	Disappear	180	Rectangle	36,355	33	15	0.0	-1	Code Highlight:293,299
+21373	Appear	181	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21374	Appear	182	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21374	Appear	183	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21374	Appear	184	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21384	Appear	185	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21385	Appear	186	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21385	Appear	187	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21385	Appear	188	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21386	Appear	189	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+21386	Appear	190	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+21387	Appear	191	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+21387	Appear	192	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21387	Appear	193	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+21388	Appear	194	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+21388	Appear	195	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+21388	Appear	196	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+21389	Appear	197	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+21389	Appear	198	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+21389	Appear	199	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+21389	Appear	200	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+21390	Appear	201	Rectangle	36,460	12	15	0.0	-1	Code Highlight:368,391
+21392	Disappear	181	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21392	Disappear	182	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21392	Disappear	183	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21392	Disappear	184	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21392	Disappear	185	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21392	Disappear	186	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21393	Disappear	187	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21393	Disappear	188	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21393	Disappear	189	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+21393	Disappear	190	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+21393	Disappear	191	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+21393	Disappear	192	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21393	Disappear	193	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+21394	Disappear	194	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+21394	Disappear	195	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+21394	Disappear	196	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+21394	Disappear	197	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+21394	Disappear	198	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+21394	Disappear	199	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+21394	Disappear	200	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+21394	Disappear	201	Rectangle	36,460	12	15	0.0	-1	Code Highlight:368,391
+21395	Appear	202	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21399	Appear	203	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21399	Appear	204	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21399	Appear	205	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21400	Appear	206	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21400	Appear	207	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21400	Appear	208	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21401	Appear	209	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21401	Appear	210	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+21401	Appear	211	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+21402	Appear	212	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+21402	Appear	213	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21402	Appear	214	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+21403	Appear	215	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+21403	Appear	216	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+21403	Appear	217	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+21404	Appear	218	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+21404	Appear	219	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+21404	Appear	220	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+21405	Appear	221	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+21405	Appear	222	Rectangle	36,460	255	15	0.0	-1	Code Highlight:368,391
+21405	Appear	223	Rectangle	36,475	255	15	0.0	-1	Code Highlight:391,423
+21406	Appear	224	Rectangle	36,490	255	15	0.0	-1	Code Highlight:423,462
+21406	Appear	225	Rectangle	36,505	255	15	0.0	-1	Code Highlight:462,502
+21407	Appear	226	Rectangle	36,520	255	15	0.0	-1	Code Highlight:502,508
+21407	Appear	227	Rectangle	36,535	5	15	0.0	-1	Code Highlight:508,510
+21409	Disappear	202	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21409	Disappear	203	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21409	Disappear	204	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21409	Disappear	205	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21410	Disappear	206	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21410	Disappear	207	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21410	Disappear	208	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21410	Disappear	209	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21410	Disappear	210	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+21410	Disappear	211	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+21410	Disappear	212	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+21415	Disappear	213	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21416	Disappear	214	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+21416	Disappear	215	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+21416	Disappear	216	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+21416	Disappear	217	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+21416	Disappear	218	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+21416	Disappear	219	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+21416	Disappear	220	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+21416	Disappear	221	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+21417	Disappear	222	Rectangle	36,460	255	15	0.0	-1	Code Highlight:368,391
+21417	Disappear	223	Rectangle	36,475	255	15	0.0	-1	Code Highlight:391,423
+21417	Disappear	224	Rectangle	36,490	255	15	0.0	-1	Code Highlight:423,462
+21417	Disappear	225	Rectangle	36,505	255	15	0.0	-1	Code Highlight:462,502
+21417	Disappear	226	Rectangle	36,520	255	15	0.0	-1	Code Highlight:502,508
+21417	Disappear	227	Rectangle	36,535	5	15	0.0	-1	Code Highlight:508,510
+21418	Appear	228	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21418	Appear	229	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21418	Appear	230	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21418	Appear	231	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21419	Appear	232	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21422	Appear	233	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21422	Appear	234	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21423	Appear	235	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21423	Appear	236	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+21424	Appear	237	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+21424	Appear	238	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+21426	Appear	239	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21426	Appear	240	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+21426	Appear	241	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+21427	Appear	242	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+21427	Appear	243	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+21427	Appear	244	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+21428	Appear	245	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+21428	Appear	246	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+21428	Appear	247	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+21428	Appear	248	Rectangle	36,460	255	15	0.0	-1	Code Highlight:368,391
+21429	Appear	249	Rectangle	36,475	255	15	0.0	-1	Code Highlight:391,423
+21429	Appear	250	Rectangle	36,490	255	15	0.0	-1	Code Highlight:423,462
+21431	Appear	251	Rectangle	36,505	255	15	0.0	-1	Code Highlight:462,502
+21432	Appear	252	Rectangle	36,520	255	15	0.0	-1	Code Highlight:502,508
+21432	Appear	253	Rectangle	36,535	255	15	0.0	-1	Code Highlight:508,510
+21433	Appear	254	Rectangle	36,550	5	15	0.0	-1	Code Highlight:510,511
+21909	Disappear	228	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21909	Disappear	229	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21909	Disappear	230	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21910	Disappear	231	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21910	Disappear	232	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21910	Disappear	233	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21910	Disappear	234	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21910	Disappear	235	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21910	Disappear	236	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+21910	Disappear	237	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+21911	Disappear	238	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+21911	Disappear	239	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21911	Disappear	240	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+21911	Disappear	241	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+21911	Disappear	242	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+21911	Disappear	243	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+21911	Disappear	244	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+21912	Disappear	245	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+21912	Disappear	246	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+21912	Disappear	247	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+21912	Disappear	248	Rectangle	36,460	255	15	0.0	-1	Code Highlight:368,391
+21912	Disappear	249	Rectangle	36,475	255	15	0.0	-1	Code Highlight:391,423
+21912	Disappear	250	Rectangle	36,490	255	15	0.0	-1	Code Highlight:423,462
+21912	Disappear	251	Rectangle	36,505	255	15	0.0	-1	Code Highlight:462,502
+21912	Disappear	252	Rectangle	36,520	255	15	0.0	-1	Code Highlight:502,508
+21913	Disappear	253	Rectangle	36,535	255	15	0.0	-1	Code Highlight:508,510
+21913	Disappear	254	Rectangle	36,550	5	15	0.0	-1	Code Highlight:510,511
+21913	Appear	255	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+21913	Appear	256	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+21914	Appear	257	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+21914	Appear	258	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+21914	Appear	259	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+21915	Appear	260	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+21917	Appear	261	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+21918	Appear	262	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+21918	Appear	263	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+21918	Appear	264	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+21919	Appear	265	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+21919	Appear	266	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+21920	Appear	267	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+21920	Appear	268	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+21920	Appear	269	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+21920	Appear	270	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+21921	Appear	271	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+21921	Appear	272	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+21921	Appear	273	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+21922	Appear	274	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+21922	Appear	275	Rectangle	36,460	255	15	0.0	-1	Code Highlight:368,391
+21922	Appear	276	Rectangle	36,475	255	15	0.0	-1	Code Highlight:391,423
+21929	Appear	277	Rectangle	36,490	255	15	0.0	-1	Code Highlight:423,462
+21929	Appear	278	Rectangle	36,505	255	15	0.0	-1	Code Highlight:462,502
+21930	Appear	279	Rectangle	36,520	255	15	0.0	-1	Code Highlight:502,508
+21930	Appear	280	Rectangle	36,535	255	15	0.0	-1	Code Highlight:508,510
+21930	Appear	281	Rectangle	36,550	5	15	0.0	-1	Code Highlight:510,511
+22410	Disappear	255	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+22410	Disappear	256	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+22410	Disappear	257	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+22410	Disappear	258	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+22410	Disappear	259	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+22411	Disappear	260	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+22411	Disappear	261	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+22411	Disappear	262	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+22411	Disappear	263	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+22411	Disappear	264	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+22411	Disappear	265	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+22411	Disappear	266	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+22411	Disappear	267	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+22412	Disappear	268	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+22412	Disappear	269	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+22412	Disappear	270	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+22412	Disappear	271	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+22412	Disappear	272	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+22412	Disappear	273	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+22412	Disappear	274	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+22412	Disappear	275	Rectangle	36,460	255	15	0.0	-1	Code Highlight:368,391
+22413	Disappear	276	Rectangle	36,475	255	15	0.0	-1	Code Highlight:391,423
+22413	Disappear	277	Rectangle	36,490	255	15	0.0	-1	Code Highlight:423,462
+22413	Disappear	278	Rectangle	36,505	255	15	0.0	-1	Code Highlight:462,502
+22413	Disappear	279	Rectangle	36,520	255	15	0.0	-1	Code Highlight:502,508
+22413	Disappear	280	Rectangle	36,535	255	15	0.0	-1	Code Highlight:508,510
+22413	Disappear	281	Rectangle	36,550	5	15	0.0	-1	Code Highlight:510,511
+22413	Appear	282	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+22414	Appear	283	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+22414	Appear	284	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+22414	Appear	285	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+22414	Appear	286	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+22419	Appear	287	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+22420	Appear	288	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+22420	Appear	289	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+22420	Appear	290	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+22421	Appear	291	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+22421	Appear	292	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+22422	Appear	293	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+22422	Appear	294	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+22422	Appear	295	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+22423	Appear	296	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+22423	Appear	297	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+22423	Appear	298	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+22424	Appear	299	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+22424	Appear	300	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+22424	Appear	301	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+22424	Appear	302	Rectangle	36,460	255	15	0.0	-1	Code Highlight:368,391
+22425	Appear	303	Rectangle	36,475	255	15	0.0	-1	Code Highlight:391,423
+22425	Appear	304	Rectangle	36,490	255	15	0.0	-1	Code Highlight:423,462
+22426	Appear	305	Rectangle	36,505	255	15	0.0	-1	Code Highlight:462,502
+22426	Appear	306	Rectangle	36,520	255	15	0.0	-1	Code Highlight:502,508
+22426	Appear	307	Rectangle	36,535	255	15	0.0	-1	Code Highlight:508,510
+22427	Appear	308	Rectangle	36,550	5	15	0.0	-1	Code Highlight:510,511
+22681	Disappear	282	Rectangle	139,160	152	15	0.0	-1	Code Highlight:84,87
+22681	Disappear	283	Rectangle	36,175	255	15	0.0	-1	Code Highlight:87,104
+22681	Disappear	284	Rectangle	36,190	255	15	0.0	-1	Code Highlight:104,122
+22681	Disappear	285	Rectangle	36,205	255	15	0.0	-1	Code Highlight:122,128
+22681	Disappear	286	Rectangle	36,220	255	15	0.0	-1	Code Highlight:128,157
+22681	Disappear	287	Rectangle	36,235	255	15	0.0	-1	Code Highlight:157,186
+22681	Disappear	288	Rectangle	36,250	255	15	0.0	-1	Code Highlight:186,192
+22681	Disappear	289	Rectangle	36,265	255	15	0.0	-1	Code Highlight:192,194
+22682	Disappear	290	Rectangle	36,280	255	15	0.0	-1	Code Highlight:194,199
+22682	Disappear	291	Rectangle	36,295	255	15	0.0	-1	Code Highlight:199,238
+22682	Disappear	292	Rectangle	36,310	255	15	0.0	-1	Code Highlight:238,255
+22682	Disappear	293	Rectangle	36,325	255	15	0.0	-1	Code Highlight:255,277
+22682	Disappear	294	Rectangle	36,340	255	15	0.0	-1	Code Highlight:277,293
+22682	Disappear	295	Rectangle	36,355	255	15	0.0	-1	Code Highlight:293,299
+22682	Disappear	296	Rectangle	36,370	255	15	0.0	-1	Code Highlight:299,304
+22682	Disappear	297	Rectangle	36,385	255	15	0.0	-1	Code Highlight:304,333
+22682	Disappear	298	Rectangle	36,400	255	15	0.0	-1	Code Highlight:333,359
+22683	Disappear	299	Rectangle	36,415	255	15	0.0	-1	Code Highlight:359,365
+22683	Disappear	300	Rectangle	36,430	255	15	0.0	-1	Code Highlight:365,367
+22683	Disappear	301	Rectangle	36,445	255	15	0.0	-1	Code Highlight:367,368
+22683	Disappear	302	Rectangle	36,460	255	15	0.0	-1	Code Highlight:368,391
+22683	Disappear	303	Rectangle	36,475	255	15	0.0	-1	Code Highlight:391,423
+22683	Disappear	304	Rectangle	36,490	255	15	0.0	-1	Code Highlight:423,462
+22683	Disappear	305	Rectangle	36,505	255	15	0.0	-1	Code Highlight:462,502
+22683	Disappear	306	Rectangle	36,520	255	15	0.0	-1	Code Highlight:502,508
+22684	Disappear	307	Rectangle	36,535	255	15	0.0	-1	Code Highlight:508,510
+22684	Disappear	308	Rectangle	36,550	5	15	0.0	-1	Code Highlight:510,511
+22689	Appear	309	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+23181	Disappear	309	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+23181	Appear	310	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+23681	Disappear	310	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+23681	Appear	311	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+24181	Disappear	311	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+24181	Appear	312	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+24681	Disappear	312	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+24681	Appear	313	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+25180	Disappear	313	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+25181	Appear	314	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+25680	Disappear	314	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+25681	Appear	315	Rectangle	36,550	255	15	0.0	-1	Code Highlight:510,511
+26035	Scroll	316		316	71	590	416			Scroll: Theater: On screen at: 316,71,1308,871
+26035	Scroll	317		316	71	590	416			Scroll: Theater: On screen at: 316,71,1308,871
+26035	Scroll	318		316	71	590	416			Scroll: Theater: On screen at: 316,71,590,416
+26036	Scroll	319		316	71	590	416			Scroll: Theater: On screen at: 316,71,590,416
+26098	Disappear	315	Rectangle	39,550	255	15	0.0	-1	Code Highlight:510,511
+30214	Button	320							AnimationButton
+31487	Disappear	321	Rectangle	316,71	590	416	0.0	-1	null
+45954	Button	322							StepButton
+45975	Other	323							AnimationStarted
+46071	Appear	324	Rectangle	326,389	124	46	0.0	-1	ConstantBox
+61845	Other	325							Slider:10
+61845	Other	326							Slider:12
+61859	Other	327							Slider:13
+61872	Other	328							Slider:14
+61888	Other	329							Slider:15
+61888	Other	330							Slider:16
+61902	Other	331							Slider:21
+61916	Other	332							Slider:27
+61995	Other	333							Slider:43
+62175	Other	334							Slider:44
+62175	Other	335							Slider:47
+62177	Other	336							Slider:48
+62177	Other	337							Slider:49
+62180	Other	338							Slider:50
+62191	Other	339							Slider:51
+62193	Other	340							Slider:52
+62194	Other	341							Slider:52
+62236	Other	342							AnimationStopped
+80221	Button	343							StepButton
+80225	Other	344							AnimationStarted
+80265	Appear	345	Rectangle	586,91	116	33	0.0	-1	static method invocation: MyClass.main
+80490	Other	346							AnimationStopped
+81087	Button	347							StepButton
+81090	Other	348							AnimationStarted
+81131	Appear	349	Rectangle	72,361	222	15	0.0	-1	Code Highlight:416,444
+81131	Appear	350	Rectangle	39,376	255	15	0.0	-1	Code Highlight:444,483
+81132	Appear	351	Rectangle	39,391	255	15	0.0	-1	Code Highlight:483,523
+81132	Appear	352	Rectangle	39,406	40	15	0.0	-1	Code Highlight:523,529
+81147	Appear	353	Rectangle	326,91	212	23	0.0	-1	method frameMyClass.maincreatd
+81148	Modify	353	Rectangle	326,91	212	29	0.0	-1	method frameMyClass.maincreatd
+81198	Modify	353	Rectangle	326,91	212	35	0.0	-1	method frameMyClass.maincreatd
+81198	Modify	353	Rectangle	326,91	212	41	0.0	-1	method frameMyClass.maincreatd
+81249	Modify	353	Rectangle	326,91	212	47	0.0	-1	method frameMyClass.maincreatd
+81249	Modify	353	Rectangle	326,91	212	53	0.0	-1	method frameMyClass.maincreatd
+81299	Modify	353	Rectangle	326,91	212	59	0.0	-1	method frameMyClass.maincreatd
+81299	Modify	353	Rectangle	326,91	212	65	0.0	-1	method frameMyClass.maincreatd
+81349	Modify	353	Rectangle	326,91	212	67	0.0	-1	method frameMyClass.maincreatd
+81371	Disappear	345	Rectangle	586,91	116	33	0.0	-1	static method invocation: MyClass.main
+81372	Disappear	345	Rectangle	586,91	116	33	0.0	-1	static method invocation: MyClass.main
+81372	Disappear	354	Rectangle	586,91	0	0	0.0	-1	Expression: 
+81381	Appear	355	Rectangle	586,91	0	0	0.0	-1	null
+81382	Modify	355	Rectangle	586,91	0	0	0.0	-1	null
+81454	Other	356							AnimationStopped
+82008	Button	357							StepButton
+82011	Other	358							AnimationStarted
+82038	Disappear	349	Rectangle	72,361	222	15	0.0	-1	Code Highlight:416,444
+82038	Disappear	350	Rectangle	39,376	255	15	0.0	-1	Code Highlight:444,483
+82038	Disappear	351	Rectangle	39,391	255	15	0.0	-1	Code Highlight:483,523
+82038	Disappear	352	Rectangle	39,406	40	15	0.0	-1	Code Highlight:523,529
+82041	Appear	359	Rectangle	79,376	203	15	0.0	-1	Code Highlight:452,483
+82087	Appear	360	Rectangle	407,119	125	33	0.0	-1	local variable: Square square
+82288	Disappear	360	Rectangle	397,99	125	33	0.0	-1	local variable: Square square
+82397	Appear	361	Rectangle	326,389	22	22	0.0	-1	value: (int) 3
+82600	Appear	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82601	Modify	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82654	Modify	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82655	Modify	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82705	Modify	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82705	Modify	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82755	Modify	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82756	Modify	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82806	Modify	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82806	Disappear	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82827	Disappear	361	Rectangle	326,389	22	22	0.0	-1	value: (int) 3
+82827	Disappear	362	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+82831	Other	363							AnimationStopped
+83611	Button	364							StepButton
+83615	Other	365							AnimationStarted
+83640	Disappear	359	Rectangle	79,376	203	15	0.0	-1	Code Highlight:452,483
+83640	Appear	366	Rectangle	191,376	91	15	0.0	-1	Code Highlight:468,483
+83652	Appear	367	Rectangle	586,91	123	34	0.0	-1	constructor invocation: Square
+83854	Appear	368	Rectangle	326,389	22	22	0.0	-1	value: (double) 3
+83856	Modify	368	Rectangle	322,385	22	22	0.0	-1	value: (double) 3
+83906	Modify	368	Rectangle	368,347	22	22	0.0	-1	value: (double) 3
+83906	Modify	368	Rectangle	414,309	22	22	0.0	-1	value: (double) 3
+83959	Modify	368	Rectangle	460,271	22	22	0.0	-1	value: (double) 3
+83959	Modify	368	Rectangle	506,233	22	22	0.0	-1	value: (double) 3
+84010	Modify	368	Rectangle	552,195	22	22	0.0	-1	value: (double) 3
+84010	Modify	368	Rectangle	598,157	22	22	0.0	-1	value: (double) 3
+84061	Modify	368	Rectangle	645,119	22	22	0.0	-1	value: (double) 3
+84061	Disappear	368	Rectangle	681,97	22	22	0.0	-1	value: (double) 3
+84061	Modify	367	Rectangle	586,91	123	34	0.0	-1	constructor invocation: Square
+84091	Other	369							AnimationStopped
+84505	Button	370							StepButton
+84508	Other	371							AnimationStarted
+84540	Disappear	366	Rectangle	191,376	91	15	0.0	-1	Code Highlight:468,483
+84540	Appear	372	Rectangle	191,376	91	15	0.0	-1	Code Highlight:468,483
+84563	Scroll	373		316	71	575	401			Scroll: Theater: On screen at: 316,71,590,416
+84563	Scroll	374		316	71	575	401			Scroll: Theater: On screen at: 316,71,590,416
+84564	Scroll	375		316	71	575	401			Scroll: Theater: On screen at: 316,71,590,470
+84567	Appear	376	Rectangle	591,359	202	23	0.0	-1	object stage: Object of the class Square
+84570	Modify	376	Rectangle	591,359	202	38	0.0	-1	object stage: Object of the class Square
+84622	Modify	376	Rectangle	591,359	202	53	0.0	-1	object stage: Object of the class Square
+84622	Modify	376	Rectangle	591,359	202	69	0.0	-1	object stage: Object of the class Square
+84672	Modify	376	Rectangle	591,359	202	84	0.0	-1	object stage: Object of the class Square
+84672	Modify	376	Rectangle	591,359	202	100	0.0	-1	object stage: Object of the class Square
+84722	Modify	376	Rectangle	591,359	202	115	0.0	-1	object stage: Object of the class Square
+84729	Modify	376	Rectangle	591,359	202	131	0.0	-1	object stage: Object of the class Square
+84772	Modify	376	Rectangle	591,359	202	136	0.0	-1	object stage: Object of the class Square
+84800	Other	377							AnimationStopped
+85880	Button	378							StepButton
+85884	Other	379							AnimationStarted
+85898	Disappear	372	Rectangle	191,376	91	15	0.0	-1	Code Highlight:468,483
+85899	Appear	380	Rectangle	51,91	84	15	0.0	-1	Code Highlight:70,91
+85910	Scroll	381		316	71	575	416			Scroll: Theater: On screen at: 316,71,590,470
+85911	Scroll	382		316	71	575	416			Scroll: Theater: On screen at: 316,71,575,470
+85931	Appear	383	Rectangle	605,387	186	33	0.0	-1	object variable: double width
+86313	Disappear	384	Rectangle	454,105	34	22	0.0	-1	value: (double) 0.0
+86313	Disappear	383	Rectangle	330,99	186	33	0.0	-1	object variable: double width
+86334	Other	385							AnimationStopped
+87157	Button	386							StepButton
+87164	Other	387							AnimationStarted
+87210	Appear	388	Rectangle	605,423	191	33	0.0	-1	object variable: double heigth
+87212	Disappear	380	Rectangle	51,91	84	15	0.0	-1	Code Highlight:70,91
+87214	Appear	389	Rectangle	51,91	133	15	0.0	-1	Code Highlight:70,91
+87414	Disappear	390	Rectangle	459,141	34	22	0.0	-1	value: (double) 0.0
+87414	Disappear	388	Rectangle	330,135	191	33	0.0	-1	object variable: double heigth
+87436	Other	391							AnimationStopped
+87922	Button	392							StepButton
+87926	Other	393							AnimationStarted
+87953	Appear	394	Rectangle	621,459	175	33	0.0	-1	object variable: double side
+87955	Disappear	389	Rectangle	51,91	133	15	0.0	-1	Code Highlight:70,91
+87959	Appear	395	Rectangle	51,256	77	15	0.0	-1	Code Highlight:263,276
+88158	Disappear	396	Rectangle	459,177	34	22	0.0	-1	value: (double) 0.0
+88158	Disappear	394	Rectangle	346,171	175	33	0.0	-1	object variable: double side
+88189	Other	397							AnimationStopped
+88745	Button	398							StepButton
+88748	Other	399							AnimationStarted
+88771	Disappear	395	Rectangle	51,256	77	15	0.0	-1	Code Highlight:263,276
+88772	Appear	400	Rectangle	51,271	243	15	0.0	-1	Code Highlight:280,298
+88772	Appear	401	Rectangle	39,286	255	15	0.0	-1	Code Highlight:300,314
+88772	Appear	402	Rectangle	39,301	19	15	0.0	-1	Code Highlight:316,320
+88777	Modify	403	Rectangle	316,71	212	79	0.0	-1	method frameSquarecreatd
+88828	Modify	404	Rectangle	316,71	212	88	0.0	-1	method frameSquarecreatd
+88828	Modify	405	Rectangle	316,71	212	98	0.0	-1	method frameSquarecreatd
+88878	Modify	406	Rectangle	316,71	212	107	0.0	-1	method frameSquarecreatd
+88878	Modify	407	Rectangle	316,71	212	116	0.0	-1	method frameSquarecreatd
+88929	Modify	408	Rectangle	316,71	212	126	0.0	-1	method frameSquarecreatd
+88929	Modify	409	Rectangle	316,71	212	135	0.0	-1	method frameSquarecreatd
+88979	Modify	410	Rectangle	316,71	212	138	0.0	-1	method frameSquarecreatd
+89022	Appear	411	Rectangle	336,101	212	23	0.0	-1	method frameSquarecreatd
+89024	Modify	411	Rectangle	336,101	212	38	0.0	-1	method frameSquarecreatd
+89074	Modify	411	Rectangle	336,101	212	53	0.0	-1	method frameSquarecreatd
+89075	Modify	411	Rectangle	336,101	212	69	0.0	-1	method frameSquarecreatd
+89125	Modify	411	Rectangle	336,101	212	84	0.0	-1	method frameSquarecreatd
+89125	Modify	411	Rectangle	336,101	212	100	0.0	-1	method frameSquarecreatd
+89175	Modify	411	Rectangle	336,101	212	115	0.0	-1	method frameSquarecreatd
+89176	Modify	411	Rectangle	336,101	212	131	0.0	-1	method frameSquarecreatd
+89226	Modify	411	Rectangle	336,101	212	136	0.0	-1	method frameSquarecreatd
+89229	Appear	412	Rectangle	591,359	11	20	0.0	-1	reference: (Square) -1
+89240	Modify	412	Rectangle	587,355	11	20	0.0	-1	reference: (Square) -1
+89290	Modify	412	Rectangle	578,326	11	20	0.0	-1	reference: (Square) -1
+89290	Modify	412	Rectangle	569,297	11	20	0.0	-1	reference: (Square) -1
+89341	Modify	412	Rectangle	561,268	11	20	0.0	-1	reference: (Square) -1
+89341	Modify	412	Rectangle	552,239	11	20	0.0	-1	reference: (Square) -1
+89391	Modify	412	Rectangle	544,210	11	20	0.0	-1	reference: (Square) -1
+89391	Modify	412	Rectangle	535,181	11	20	0.0	-1	reference: (Square) -1
+89441	Modify	412	Rectangle	526,152	11	20	0.0	-1	reference: (Square) -1
+89442	Disappear	412	Rectangle	525,137	11	20	0.0	-1	reference: (Square) -1
+89446	Modify	368	Rectangle	677,93	22	22	0.0	-1	value: (double) 3
+89496	Modify	368	Rectangle	651,102	22	22	0.0	-1	value: (double) 3
+89499	Modify	368	Rectangle	626,112	22	22	0.0	-1	value: (double) 3
+89546	Modify	368	Rectangle	600,121	22	22	0.0	-1	value: (double) 3
+89549	Modify	368	Rectangle	575,131	22	22	0.0	-1	value: (double) 3
+89597	Modify	368	Rectangle	550,141	22	22	0.0	-1	value: (double) 3
+89599	Modify	368	Rectangle	524,150	22	22	0.0	-1	value: (double) 3
+89647	Modify	368	Rectangle	499,160	22	22	0.0	-1	value: (double) 3
+89650	Disappear	368	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+89670	Disappear	368	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+89671	Disappear	368	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+89671	Disappear	367	Rectangle	586,91	123	34	0.0	-1	constructor invocation: Square
+89671	Disappear	368	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+89671	Disappear	367	Rectangle	586,91	123	34	0.0	-1	constructor invocation: Square
+89673	Appear	413	Rectangle	586,91	0	0	0.0	-1	null
+89680	Modify	413	Rectangle	586,91	0	0	0.0	-1	null
+89730	Modify	413	Rectangle	586,88	0	0	0.0	-1	null
+89731	Modify	413	Rectangle	586,85	0	0	0.0	-1	null
+89781	Modify	413	Rectangle	586,83	0	0	0.0	-1	null
+89781	Modify	413	Rectangle	586,80	0	0	0.0	-1	null
+89831	Modify	413	Rectangle	586,78	0	0	0.0	-1	null
+89832	Modify	413	Rectangle	586,75	0	0	0.0	-1	null
+89882	Modify	413	Rectangle	586,72	0	0	0.0	-1	null
+89990	Other	414							AnimationStopped
+93661	Button	415							StepButton
+93664	Other	416							AnimationStarted
+93674	Disappear	400	Rectangle	51,271	243	15	0.0	-1	Code Highlight:280,298
+93674	Disappear	401	Rectangle	39,286	255	15	0.0	-1	Code Highlight:300,314
+93675	Disappear	402	Rectangle	39,301	19	15	0.0	-1	Code Highlight:316,320
+93675	Appear	417	Rectangle	79,286	42	15	0.0	-1	Code Highlight:306,314
+93704	Disappear	418	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+93704	Appear	419	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+93707	Modify	419	Rectangle	482,167	22	22	0.0	-1	value: (double) 3
+93760	Modify	419	Rectangle	514,205	22	22	0.0	-1	value: (double) 3
+93761	Modify	419	Rectangle	546,243	22	22	0.0	-1	value: (double) 3
+93810	Modify	419	Rectangle	578,281	22	22	0.0	-1	value: (double) 3
+93814	Modify	419	Rectangle	610,319	22	22	0.0	-1	value: (double) 3
+93864	Modify	419	Rectangle	643,358	22	22	0.0	-1	value: (double) 3
+93864	Modify	419	Rectangle	675,396	22	22	0.0	-1	value: (double) 3
+93914	Modify	419	Rectangle	707,434	22	22	0.0	-1	value: (double) 3
+94048	Other	420							AnimationStopped
+95661	Button	421							ConflictButton
+97508	Other	422							ConflictChecked
+102702	Button	423							StepButton
+102704	Other	424							AnimationStarted
+102715	Disappear	417	Rectangle	79,286	42	15	0.0	-1	Code Highlight:306,314
+102718	Appear	425	Rectangle	191,406	91	15	0.0	-1	Code Highlight:468,483
+102769	Appear	426	Rectangle	515,201	27	36	0.0	-1	null
+102974	Modify	412	Rectangle	521,133	11	20	0.0	-1	reference: (Square) -1
+103024	Modify	412	Rectangle	520,142	11	20	0.0	-1	reference: (Square) -1
+103025	Modify	412	Rectangle	520,151	11	20	0.0	-1	reference: (Square) -1
+103075	Modify	412	Rectangle	520,161	11	20	0.0	-1	reference: (Square) -1
+103081	Modify	412	Rectangle	519,170	11	20	0.0	-1	reference: (Square) -1
+103125	Modify	412	Rectangle	519,179	11	20	0.0	-1	reference: (Square) -1
+103132	Modify	412	Rectangle	519,189	11	20	0.0	-1	reference: (Square) -1
+103187	Modify	412	Rectangle	519,198	11	20	0.0	-1	reference: (Square) -1
+103209	Other	427							AnimationStopped
+103907	Button	428							StepButton
+103909	Other	429							AnimationStarted
+104026	Modify	411	Rectangle	336,101	212	134	0.0	-1	method frameSquarecreatd
+104027	Modify	426	Rectangle	511,197	27	36	0.0	-1	null
+104076	Modify	411	Rectangle	336,101	212	117	0.0	-1	method frameSquarecreatd
+104076	Modify	426	Rectangle	511,197	27	36	0.0	-1	null
+104079	Modify	411	Rectangle	336,101	212	101	0.0	-1	method frameSquarecreatd
+104079	Modify	426	Rectangle	511,197	27	36	0.0	-1	null
+104126	Modify	411	Rectangle	336,101	212	84	0.0	-1	method frameSquarecreatd
+104127	Modify	426	Rectangle	511,197	27	36	0.0	-1	null
+104142	Modify	411	Rectangle	336,101	212	67	0.0	-1	method frameSquarecreatd
+104142	Modify	426	Rectangle	511,197	27	36	0.0	-1	null
+104177	Modify	411	Rectangle	336,101	212	51	0.0	-1	method frameSquarecreatd
+104178	Modify	426	Rectangle	511,197	27	36	0.0	-1	null
+104192	Modify	411	Rectangle	336,101	212	34	0.0	-1	method frameSquarecreatd
+104192	Modify	426	Rectangle	511,197	27	36	0.0	-1	null
+104228	Modify	411	Rectangle	336,101	212	29	0.0	-1	method frameSquarecreatd
+104229	Disappear	430	Rectangle	437,129	105	33	0.0	-1	local variable: Square this
+104229	Disappear	431	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+104229	Disappear	432	Rectangle	389,165	153	33	0.0	-1	local variable: double s
+104229	Disappear	411	Rectangle	336,101	212	29	0.0	-1	method frameSquarecreatd
+104229	Modify	426	Rectangle	511,197	27	36	0.0	-1	null
+104311	Modify	413	Rectangle	586,71	29	36	0.0	-1	null
+104311	Modify	426	Rectangle	511,197	27	36	0.0	-1	null
+104361	Modify	413	Rectangle	586,73	29	36	0.0	-1	null
+104362	Modify	426	Rectangle	520,182	27	36	0.0	-1	null
+104362	Modify	413	Rectangle	586,76	29	36	0.0	-1	null
+104362	Modify	426	Rectangle	529,168	27	36	0.0	-1	null
+104412	Modify	413	Rectangle	586,78	29	36	0.0	-1	null
+104413	Modify	426	Rectangle	538,154	27	36	0.0	-1	null
+104413	Modify	413	Rectangle	586,81	29	36	0.0	-1	null
+104413	Modify	426	Rectangle	547,139	27	36	0.0	-1	null
+104463	Modify	413	Rectangle	586,84	29	36	0.0	-1	null
+104463	Modify	426	Rectangle	557,125	27	36	0.0	-1	null
+104464	Modify	413	Rectangle	586,86	29	36	0.0	-1	null
+104464	Modify	426	Rectangle	566,111	27	36	0.0	-1	null
+104514	Modify	413	Rectangle	586,89	29	36	0.0	-1	null
+104514	Modify	426	Rectangle	575,96	27	36	0.0	-1	null
+104514	Disappear	433	Rectangle	594,99	11	20	0.0	-1	reference: (Square) 3d12a6
+104515	Disappear	426	Rectangle	586,91	27	36	0.0	-1	null
+104515	Appear	434	Rectangle	586,91	29	36	0.0	-1	Expression: null: 
+104515	Disappear	435	Rectangle	594,99	11	20	0.0	-1	reference: (Square) 3d12a6
+104515	Disappear	426	Rectangle	586,91	27	36	0.0	-1	null
+104515	Disappear	434	Rectangle	586,91	29	36	0.0	-1	Expression: null: 
+104537	Other	436							AnimationStopped
+105156	Button	437							StepButton
+105158	Other	438							AnimationStarted
+105182	Disappear	425	Rectangle	191,406	91	15	0.0	-1	Code Highlight:468,483
+105182	Appear	439	Rectangle	79,406	203	15	0.0	-1	Code Highlight:452,483
+105195	Appear	440	Rectangle	594,99	11	20	0.0	-1	reference: (Square) 3d12a6
+105197	Modify	440	Rectangle	590,95	11	20	0.0	-1	reference: (Square) 3d12a6
+105247	Modify	440	Rectangle	579,98	11	20	0.0	-1	reference: (Square) 3d12a6
+105247	Modify	440	Rectangle	569,102	11	20	0.0	-1	reference: (Square) 3d12a6
+105297	Modify	440	Rectangle	559,105	11	20	0.0	-1	reference: (Square) 3d12a6
+105298	Modify	440	Rectangle	548,109	11	20	0.0	-1	reference: (Square) 3d12a6
+105348	Modify	440	Rectangle	538,113	11	20	0.0	-1	reference: (Square) 3d12a6
+105348	Modify	440	Rectangle	528,116	11	20	0.0	-1	reference: (Square) 3d12a6
+105398	Modify	440	Rectangle	518,120	11	20	0.0	-1	reference: (Square) 3d12a6
+105421	Other	441							AnimationStopped
+106107	Button	442							StepButton
+106110	Other	443							AnimationStarted
+106133	Disappear	439	Rectangle	79,406	203	15	0.0	-1	Code Highlight:452,483
+106136	Appear	444	Rectangle	72,406	210	15	0.0	-1	Code Highlight:491,523
+106152	Modify	353	Rectangle	326,91	212	74	0.0	-1	method frameMyClass.maincreatd
+106202	Modify	353	Rectangle	326,91	212	79	0.0	-1	method frameMyClass.maincreatd
+106208	Modify	353	Rectangle	326,91	212	84	0.0	-1	method frameMyClass.maincreatd
+106253	Modify	353	Rectangle	326,91	212	88	0.0	-1	method frameMyClass.maincreatd
+106259	Modify	353	Rectangle	326,91	212	93	0.0	-1	method frameMyClass.maincreatd
+106304	Modify	353	Rectangle	326,91	212	98	0.0	-1	method frameMyClass.maincreatd
+106309	Modify	353	Rectangle	326,91	212	102	0.0	-1	method frameMyClass.maincreatd
+106354	Modify	353	Rectangle	326,91	212	104	0.0	-1	method frameMyClass.maincreatd
+106405	Appear	445	Rectangle	357,155	175	33	0.0	-1	local variable: double area
+106611	Disappear	446	Rectangle	472,145	9	13	0.0	-1	null
+106612	Disappear	445	Rectangle	347,135	175	33	0.0	-1	local variable: double area
+106632	Disappear	447	Rectangle	594,99	11	20	0.0	-1	reference: (Square) 3d12a6
+106632	Disappear	426	Rectangle	586,91	27	36	0.0	-1	null
+106632	Disappear	434	Rectangle	586,91	29	36	0.0	-1	Expression: null: 
+106680	Other	448							AnimationStopped
+107370	Button	449							StepButton
+107372	Other	450							AnimationStarted
+107394	Disappear	444	Rectangle	72,406	210	15	0.0	-1	Code Highlight:491,523
+107394	Appear	451	Rectangle	170,406	112	15	0.0	-1	Code Highlight:505,523
+107419	Appear	452	Rectangle	586,91	135	33	0.0	-1	object method invocation: .getArea
+107419	Appear	453	Rectangle	515,127	11	20	0.0	-1	reference: (null) null
+107420	Modify	453	Rectangle	511,123	11	20	0.0	-1	reference: (null) null
+107471	Modify	453	Rectangle	521,119	11	20	0.0	-1	reference: (null) null
+107471	Modify	453	Rectangle	531,115	11	20	0.0	-1	reference: (null) null
+107521	Modify	453	Rectangle	541,111	11	20	0.0	-1	reference: (null) null
+107523	Modify	453	Rectangle	551,107	11	20	0.0	-1	reference: (null) null
+107571	Modify	453	Rectangle	561,103	11	20	0.0	-1	reference: (null) null
+107573	Modify	453	Rectangle	571,99	11	20	0.0	-1	reference: (null) null
+107622	Modify	453	Rectangle	581,95	11	20	0.0	-1	reference: (null) null
+107623	Disappear	453	Rectangle	592,97	11	20	0.0	-1	reference: (null) null
+107623	Modify	452	Rectangle	586,91	135	33	0.0	-1	object method invocation: .getArea
+107650	Other	454							AnimationStopped
+108378	Button	455							StepButton
+108380	Other	456							AnimationStarted
+108396	Disappear	451	Rectangle	170,406	112	15	0.0	-1	Code Highlight:505,523
+108396	Appear	457	Rectangle	44,121	250	15	0.0	-1	Code Highlight:153,178
+108397	Appear	458	Rectangle	39,136	255	15	0.0	-1	Code Highlight:181,207
+108398	Appear	459	Rectangle	39,151	12	15	0.0	-1	Code Highlight:210,213
+108415	Appear	460	Rectangle	336,101	212	23	0.0	-1	method framesquare.getAreacreatd
+108416	Modify	460	Rectangle	336,101	212	29	0.0	-1	method framesquare.getAreacreatd
+108467	Modify	460	Rectangle	336,101	212	35	0.0	-1	method framesquare.getAreacreatd
+108467	Modify	460	Rectangle	336,101	212	41	0.0	-1	method framesquare.getAreacreatd
+108517	Modify	460	Rectangle	336,101	212	47	0.0	-1	method framesquare.getAreacreatd
+108517	Modify	460	Rectangle	336,101	212	53	0.0	-1	method framesquare.getAreacreatd
+108567	Modify	460	Rectangle	336,101	212	59	0.0	-1	method framesquare.getAreacreatd
+108568	Modify	460	Rectangle	336,101	212	65	0.0	-1	method framesquare.getAreacreatd
+108617	Modify	460	Rectangle	336,101	212	67	0.0	-1	method framesquare.getAreacreatd
+108635	Modify	453	Rectangle	588,93	11	20	0.0	-1	reference: (null) null
+108685	Modify	453	Rectangle	579,98	11	20	0.0	-1	reference: (null) null
+108686	Modify	453	Rectangle	570,103	11	20	0.0	-1	reference: (null) null
+108736	Modify	453	Rectangle	561,108	11	20	0.0	-1	reference: (null) null
+108736	Modify	453	Rectangle	553,113	11	20	0.0	-1	reference: (null) null
+108786	Modify	453	Rectangle	544,119	11	20	0.0	-1	reference: (null) null
+108786	Modify	453	Rectangle	535,124	11	20	0.0	-1	reference: (null) null
+108836	Modify	453	Rectangle	527,129	11	20	0.0	-1	reference: (null) null
+108842	Disappear	453	Rectangle	525,137	11	20	0.0	-1	reference: (null) null
+108846	Disappear	452	Rectangle	586,91	135	33	0.0	-1	object method invocation: .getArea
+108846	Disappear	452	Rectangle	586,91	135	33	0.0	-1	object method invocation: .getArea
+108848	Appear	461	Rectangle	586,91	0	0	0.0	-1	null
+108849	Modify	461	Rectangle	586,91	0	0	0.0	-1	null
+108900	Modify	461	Rectangle	586,88	0	0	0.0	-1	null
+108901	Modify	461	Rectangle	586,85	0	0	0.0	-1	null
+108951	Modify	461	Rectangle	586,83	0	0	0.0	-1	null
+108951	Modify	461	Rectangle	586,80	0	0	0.0	-1	null
+109001	Modify	461	Rectangle	586,78	0	0	0.0	-1	null
+109002	Modify	461	Rectangle	586,75	0	0	0.0	-1	null
+109052	Modify	461	Rectangle	586,72	0	0	0.0	-1	null
+109120	Other	462							AnimationStopped
+109540	Button	463							StepButton
+109542	Other	464							AnimationStarted
+109561	Disappear	457	Rectangle	44,121	250	15	0.0	-1	Code Highlight:153,178
+109571	Disappear	458	Rectangle	39,136	255	15	0.0	-1	Code Highlight:181,207
+109571	Disappear	459	Rectangle	39,151	12	15	0.0	-1	Code Highlight:210,213
+109572	Appear	465	Rectangle	121,136	84	15	0.0	-1	Code Highlight:193,207
+109620	Appear	466	Rectangle	734,393	34	22	0.0	-1	value: (double) 0.0
+109633	Modify	466	Rectangle	730,389	34	22	0.0	-1	value: (double) 0.0
+109684	Modify	466	Rectangle	710,349	34	22	0.0	-1	value: (double) 0.0
+109690	Modify	466	Rectangle	691,310	34	22	0.0	-1	value: (double) 0.0
+109739	Modify	466	Rectangle	672,271	34	22	0.0	-1	value: (double) 0.0
+109740	Modify	466	Rectangle	653,231	34	22	0.0	-1	value: (double) 0.0
+109789	Modify	466	Rectangle	633,192	34	22	0.0	-1	value: (double) 0.0
+109795	Modify	466	Rectangle	614,153	34	22	0.0	-1	value: (double) 0.0
+109839	Modify	466	Rectangle	595,114	34	22	0.0	-1	value: (double) 0.0
+109846	Disappear	466	Rectangle	586,91	34	22	0.0	-1	value: (double) 0.0
+109846	Appear	467	Rectangle	586,91	80	22	0.0	-1	Expression: value: (double) 0.0: multiplication: ellipsis: 
+109849	Appear	468	Rectangle	622,91	18	21	0.0	-1	multiplication
+110051	Disappear	468	Rectangle	622,91	18	21	0.0	-1	multiplication
+110051	Modify	467	Rectangle	586,91	80	22	0.0	-1	Expression: value: (double) 0.0: multiplication: ellipsis: 
+110053	Appear	469	Rectangle	642,91	22	21	0.0	-1	ellipsis
+110265	Disappear	469	Rectangle	642,91	22	21	0.0	-1	ellipsis
+110266	Modify	467	Rectangle	586,91	80	22	0.0	-1	Expression: value: (double) 0.0: multiplication: ellipsis: 
+110288	Other	470							AnimationStopped
+110705	Button	471							StepButton
+110707	Other	472							AnimationStarted
+110709	Modify	467	Rectangle	586,91	56	22	0.0	-1	Expression: value: (double) 0.0: multiplication: 
+110736	Disappear	465	Rectangle	121,136	84	15	0.0	-1	Code Highlight:193,207
+110736	Appear	473	Rectangle	121,136	84	15	0.0	-1	Code Highlight:193,207
+110740	Appear	474	Rectangle	734,429	34	22	0.0	-1	value: (double) 3.0
+110742	Modify	474	Rectangle	730,425	34	22	0.0	-1	value: (double) 3.0
+110792	Modify	474	Rectangle	718,381	34	22	0.0	-1	value: (double) 3.0
+110792	Modify	474	Rectangle	706,337	34	22	0.0	-1	value: (double) 3.0
+110843	Modify	474	Rectangle	694,293	34	22	0.0	-1	value: (double) 3.0
+110843	Modify	474	Rectangle	682,249	34	22	0.0	-1	value: (double) 3.0
+110893	Modify	474	Rectangle	670,205	34	22	0.0	-1	value: (double) 3.0
+110893	Modify	474	Rectangle	658,161	34	22	0.0	-1	value: (double) 3.0
+110944	Modify	474	Rectangle	646,117	34	22	0.0	-1	value: (double) 3.0
+110944	Disappear	474	Rectangle	642,91	34	22	0.0	-1	value: (double) 3.0
+110944	Modify	467	Rectangle	586,91	92	22	0.0	-1	Expression: value: (double) 0.0: multiplication: value: (double) 3.0: 
+110966	Other	475							AnimationStopped
+118429	Button	476							StepButton
+118431	Other	477							AnimationStarted
+118440	Disappear	473	Rectangle	121,136	84	15	0.0	-1	Code Highlight:193,207
+118440	Appear	478	Rectangle	121,136	84	15	0.0	-1	Code Highlight:193,207
+118468	Appear	479	Rectangle	678,91	18	21	0.0	-1	equals
+118671	Disappear	479	Rectangle	678,91	18	21	0.0	-1	equals
+118671	Modify	467	Rectangle	586,91	112	22	0.0	-1	Expression: value: (double) 0.0: multiplication: value: (double) 3.0: equals: 
+118675	Appear	480	Rectangle	698,91	34	22	0.0	-1	value: (double) 9.0
+118878	Disappear	480	Rectangle	698,91	34	22	0.0	-1	value: (double) 9.0
+118878	Modify	467	Rectangle	586,91	148	22	0.0	-1	Expression: value: (double) 0.0: multiplication: value: (double) 3.0: equals: value: (double) 9.0: 
+118880	Modify	467	Rectangle	586,91	148	22	0.0	-1	Expression: value: (double) 0.0: multiplication: value: (double) 3.0: equals: value: (double) 9.0: 
+118902	Other	481							AnimationStopped
+119649	Button	482							StepButton
+119651	Other	483							AnimationStarted
+119673	Disappear	478	Rectangle	121,136	84	15	0.0	-1	Code Highlight:193,207
+119673	Appear	484	Rectangle	72,136	140	15	0.0	-1	Code Highlight:186,207
+119676	Modify	460	Rectangle	336,101	212	80	0.0	-1	method framesquare.getAreacreatd
+119726	Modify	460	Rectangle	336,101	212	85	0.0	-1	method framesquare.getAreacreatd
+119726	Modify	460	Rectangle	336,101	212	90	0.0	-1	method framesquare.getAreacreatd
+119777	Modify	460	Rectangle	336,101	212	96	0.0	-1	method framesquare.getAreacreatd
+119777	Modify	460	Rectangle	336,101	212	101	0.0	-1	method framesquare.getAreacreatd
+119827	Modify	460	Rectangle	336,101	212	106	0.0	-1	method framesquare.getAreacreatd
+119827	Modify	460	Rectangle	336,101	212	112	0.0	-1	method framesquare.getAreacreatd
+119878	Modify	460	Rectangle	336,101	212	113	0.0	-1	method framesquare.getAreacreatd
+119920	Appear	485	Rectangle	492,165	50	38	0.0	-1	null
+120132	Appear	486	Rectangle	698,91	34	22	0.0	-1	value: (double) 9.0
+120134	Modify	486	Rectangle	694,87	34	22	0.0	-1	value: (double) 9.0
+120184	Modify	486	Rectangle	668,97	34	22	0.0	-1	value: (double) 9.0
+120184	Modify	486	Rectangle	642,108	34	22	0.0	-1	value: (double) 9.0
+120239	Modify	486	Rectangle	616,118	34	22	0.0	-1	value: (double) 9.0
+120239	Modify	486	Rectangle	591,129	34	22	0.0	-1	value: (double) 9.0
+120290	Modify	486	Rectangle	565,140	34	22	0.0	-1	value: (double) 9.0
+120290	Modify	486	Rectangle	539,150	34	22	0.0	-1	value: (double) 9.0
+120340	Modify	486	Rectangle	513,161	34	22	0.0	-1	value: (double) 9.0
+120361	Disappear	480	Rectangle	698,91	34	22	0.0	-1	value: (double) 9.0
+120361	Disappear	480	Rectangle	698,91	34	22	0.0	-1	value: (double) 9.0
+120361	Disappear	466	Rectangle	586,91	34	22	0.0	-1	value: (double) 0.0
+120361	Disappear	468	Rectangle	622,91	18	21	0.0	-1	multiplication
+120361	Disappear	474	Rectangle	642,91	34	22	0.0	-1	value: (double) 3.0
+120362	Disappear	479	Rectangle	678,91	18	21	0.0	-1	equals
+120362	Disappear	480	Rectangle	698,91	34	22	0.0	-1	value: (double) 9.0
+120362	Disappear	467	Rectangle	586,91	148	22	0.0	-1	Expression: value: (double) 0.0: multiplication: value: (double) 3.0: equals: value: (double) 9.0: 
+120384	Other	487							AnimationStopped
+124674	Button	488							StepButton
+124686	Other	489							AnimationStarted
+124815	Modify	460	Rectangle	336,101	212	103	0.0	-1	method framesquare.getAreacreatd
+124815	Modify	485	Rectangle	488,161	50	38	0.0	-1	null
+124866	Modify	460	Rectangle	336,101	212	91	0.0	-1	method framesquare.getAreacreatd
+124866	Modify	485	Rectangle	488,161	50	38	0.0	-1	null
+124866	Modify	460	Rectangle	336,101	212	79	0.0	-1	method framesquare.getAreacreatd
+124866	Modify	485	Rectangle	488,161	50	38	0.0	-1	null
+124916	Modify	460	Rectangle	336,101	212	67	0.0	-1	method framesquare.getAreacreatd
+124917	Modify	485	Rectangle	488,161	50	38	0.0	-1	null
+124917	Modify	460	Rectangle	336,101	212	55	0.0	-1	method framesquare.getAreacreatd
+124917	Modify	485	Rectangle	488,161	50	38	0.0	-1	null
+124967	Modify	460	Rectangle	336,101	212	43	0.0	-1	method framesquare.getAreacreatd
+124967	Modify	485	Rectangle	488,161	50	38	0.0	-1	null
+124968	Modify	460	Rectangle	336,101	212	31	0.0	-1	method framesquare.getAreacreatd
+124968	Modify	485	Rectangle	488,161	50	38	0.0	-1	null
+125018	Modify	460	Rectangle	336,101	212	27	0.0	-1	method framesquare.getAreacreatd
+125018	Disappear	490	Rectangle	437,129	105	33	0.0	-1	local variable: Square this
+125018	Disappear	460	Rectangle	336,101	212	27	0.0	-1	method framesquare.getAreacreatd
+125018	Modify	485	Rectangle	488,161	50	38	0.0	-1	null
+125082	Modify	461	Rectangle	586,71	52	38	0.0	-1	null
+125082	Modify	485	Rectangle	488,161	50	38	0.0	-1	null
+125132	Modify	461	Rectangle	586,73	52	38	0.0	-1	null
+125133	Modify	485	Rectangle	500,151	50	38	0.0	-1	null
+125133	Modify	461	Rectangle	586,76	52	38	0.0	-1	null
+125133	Modify	485	Rectangle	512,141	50	38	0.0	-1	null
+125183	Modify	461	Rectangle	586,78	52	38	0.0	-1	null
+125183	Modify	485	Rectangle	524,132	50	38	0.0	-1	null
+125184	Modify	461	Rectangle	586,81	52	38	0.0	-1	null
+125184	Modify	485	Rectangle	536,122	50	38	0.0	-1	null
+125234	Modify	461	Rectangle	586,84	52	38	0.0	-1	null
+125234	Modify	485	Rectangle	549,112	50	38	0.0	-1	null
+125234	Modify	461	Rectangle	586,86	52	38	0.0	-1	null
+125235	Modify	485	Rectangle	561,103	50	38	0.0	-1	null
+125284	Modify	461	Rectangle	586,89	52	38	0.0	-1	null
+125284	Modify	485	Rectangle	573,93	50	38	0.0	-1	null
+125285	Disappear	491	Rectangle	594,99	34	22	0.0	-1	value: (double) 9.0
+125285	Disappear	485	Rectangle	586,91	50	38	0.0	-1	null
+125286	Appear	492	Rectangle	586,91	52	38	0.0	-1	Expression: null: 
+125286	Disappear	493	Rectangle	594,99	34	22	0.0	-1	value: (double) 9.0
+125286	Disappear	485	Rectangle	586,91	50	38	0.0	-1	null
+125286	Disappear	492	Rectangle	586,91	52	38	0.0	-1	Expression: null: 
+125308	Other	494							AnimationStopped
+136757	Button	495							EditButton
+136823	Disappear	484	Rectangle	72,136	140	15	0.0	-1	Code Highlight:186,207
+136824	Appear	496	Rectangle	72,136	140	15	0.0	-1	Code Highlight:186,207
+137755	Disappear	497	Rectangle	316,71	575	470	0.0	-1	null
+137849	Other	498							AnimationEnded
+139892	Appear	499	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140013	Disappear	499	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140014	Appear	500	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140027	Disappear	500	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140027	Appear	501	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140040	Disappear	501	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140040	Appear	502	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140042	Disappear	502	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140042	Appear	503	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140055	Disappear	503	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140056	Appear	504	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140068	Disappear	504	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,104
+140068	Appear	505	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140068	Appear	506	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140071	Disappear	505	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140071	Disappear	506	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140071	Appear	507	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140071	Appear	508	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140084	Disappear	507	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140084	Disappear	508	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140084	Appear	509	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140084	Appear	510	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140090	Disappear	509	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140090	Disappear	510	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140090	Appear	511	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140090	Appear	512	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140099	Disappear	511	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140099	Disappear	512	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140099	Appear	513	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140099	Appear	514	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140112	Disappear	513	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140112	Disappear	514	Rectangle	39,160	5	15	0.0	-1	Code Highlight:104,122
+140112	Appear	515	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140113	Appear	516	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140114	Disappear	515	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140114	Disappear	516	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140114	Appear	517	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140115	Appear	518	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140127	Disappear	517	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140127	Disappear	518	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140127	Appear	519	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140127	Appear	520	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140140	Disappear	519	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140140	Disappear	520	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140140	Appear	521	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140141	Appear	522	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140142	Disappear	521	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140142	Disappear	522	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140142	Appear	523	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140143	Appear	524	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140168	Disappear	523	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140168	Disappear	524	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140168	Appear	525	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140169	Appear	526	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140170	Disappear	525	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140170	Disappear	526	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140171	Appear	527	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140171	Appear	528	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140190	Disappear	527	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140190	Disappear	528	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140190	Appear	529	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140191	Appear	530	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140198	Disappear	529	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140198	Disappear	530	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140199	Appear	531	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140199	Appear	532	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140212	Disappear	531	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140212	Disappear	532	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140213	Appear	533	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140213	Appear	534	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140240	Disappear	533	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140240	Disappear	534	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140240	Appear	535	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140241	Appear	536	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140254	Disappear	535	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140254	Disappear	536	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140255	Appear	537	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140255	Appear	538	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140296	Disappear	537	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140297	Disappear	538	Rectangle	39,160	12	15	0.0	-1	Code Highlight:104,122
+140297	Appear	539	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140297	Appear	540	Rectangle	39,160	255	15	0.0	-1	Code Highlight:104,122
+140297	Appear	541	Rectangle	39,175	12	15	0.0	-1	Code Highlight:122,128
+140397	Disappear	539	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140397	Disappear	540	Rectangle	39,160	255	15	0.0	-1	Code Highlight:104,122
+140397	Disappear	541	Rectangle	39,175	12	15	0.0	-1	Code Highlight:122,128
+140397	Appear	542	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140397	Appear	543	Rectangle	39,160	255	15	0.0	-1	Code Highlight:104,122
+140398	Appear	544	Rectangle	39,175	12	15	0.0	-1	Code Highlight:122,128
+140410	Disappear	542	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140410	Disappear	543	Rectangle	39,160	255	15	0.0	-1	Code Highlight:104,122
+140410	Disappear	544	Rectangle	39,175	12	15	0.0	-1	Code Highlight:122,128
+140410	Appear	545	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140411	Appear	546	Rectangle	39,160	255	15	0.0	-1	Code Highlight:104,122
+140411	Appear	547	Rectangle	39,175	12	15	0.0	-1	Code Highlight:122,128
+140910	Disappear	545	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140910	Disappear	546	Rectangle	39,160	255	15	0.0	-1	Code Highlight:104,122
+140911	Disappear	547	Rectangle	39,175	12	15	0.0	-1	Code Highlight:122,128
+140911	Appear	548	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+140911	Appear	549	Rectangle	39,160	255	15	0.0	-1	Code Highlight:104,122
+140912	Appear	550	Rectangle	39,175	12	15	0.0	-1	Code Highlight:122,128
+141184	Disappear	548	Rectangle	44,145	250	15	0.0	-1	Code Highlight:87,104
+141185	Disappear	549	Rectangle	39,160	255	15	0.0	-1	Code Highlight:104,122
+141185	Disappear	550	Rectangle	39,175	12	15	0.0	-1	Code Highlight:122,128
+141186	Appear	551	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,92
+141242	Disappear	551	Rectangle	39,145	255	15	0.0	-1	Code Highlight:87,92
+141242	Appear	552	Rectangle	39,145	255	15	0.0	-1	Code Highlight:70,91
+141746	Disappear	552	Rectangle	39,145	255	15	0.0	-1	Code Highlight:70,91
+141746	Appear	553	Rectangle	39,145	255	15	0.0	-1	Code Highlight:70,91
+141925	Disappear	553	Rectangle	39,145	255	15	0.0	-1	Code Highlight:70,91
+141937	Appear	554	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,96
+142425	Disappear	554	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,96
+142426	Appear	555	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,96
+142926	Disappear	555	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,96
+142926	Appear	556	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,96
+143231	Disappear	556	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,96
+143232	Appear	557	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,95
+143731	Disappear	557	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,95
+143731	Appear	558	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,94
+144034	Disappear	558	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,94
+144035	Appear	559	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,93
+144535	Disappear	559	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,93
+144535	Appear	560	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,93
+145034	Disappear	560	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,93
+145034	Appear	561	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,93
+145036	Disappear	561	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,93
+145037	Appear	562	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,93
+145280	Disappear	562	Rectangle	39,160	255	15	0.0	-1	Code Highlight:87,93
+145280	Appear	563	Rectangle	39,175	255	15	0.0	-1	Code Highlight:93,122
+145605	Disappear	563	Rectangle	39,175	255	15	0.0	-1	Code Highlight:93,122
+145606	Appear	564	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+146106	Disappear	564	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+146106	Appear	565	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+146605	Disappear	565	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+146606	Appear	566	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+146874	Disappear	566	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+146875	Appear	567	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+147040	Disappear	567	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+147040	Appear	568	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+147225	Disappear	568	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+147226	Appear	569	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+147441	Disappear	569	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+147442	Appear	570	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+147917	Disappear	570	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+147918	Appear	571	Rectangle	39,175	255	15	0.0	-1	Code Highlight:93,122
+148418	Disappear	571	Rectangle	39,175	255	15	0.0	-1	Code Highlight:93,122
+148418	Appear	572	Rectangle	39,175	255	15	0.0	-1	Code Highlight:93,122
+148482	Disappear	572	Rectangle	39,175	255	15	0.0	-1	Code Highlight:93,122
+148482	Appear	573	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+148983	Disappear	573	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+148983	Appear	574	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+149482	Disappear	574	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+149482	Appear	575	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+149527	Disappear	575	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+149528	Appear	576	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+149754	Disappear	576	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+149754	Appear	577	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+149939	Disappear	577	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+149939	Appear	578	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+150402	Disappear	578	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+150402	Appear	579	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+150901	Disappear	579	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+150902	Appear	580	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151049	Disappear	580	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151049	Appear	581	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151301	Disappear	581	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151301	Appear	582	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151337	Disappear	582	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151337	Appear	583	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151373	Disappear	583	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151373	Appear	584	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151409	Disappear	584	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151409	Appear	585	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151445	Disappear	585	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151445	Appear	586	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151481	Disappear	586	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151481	Appear	587	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151517	Disappear	587	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151517	Appear	588	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151553	Disappear	588	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+151553	Appear	589	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152053	Disappear	589	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152053	Appear	590	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152309	Disappear	590	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152309	Appear	591	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152560	Disappear	591	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152561	Appear	592	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152725	Disappear	592	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152725	Appear	593	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152920	Disappear	593	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+152921	Appear	594	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+153093	Disappear	594	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+153093	Appear	595	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+153593	Disappear	595	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+153593	Appear	596	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+153790	Disappear	596	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+153791	Appear	597	Rectangle	170,190	49	15	0.0	-1	Code Highlight:112,123
+154290	Disappear	597	Rectangle	170,190	49	15	0.0	-1	Code Highlight:112,123
+154291	Appear	598	Rectangle	170,190	49	15	0.0	-1	Code Highlight:112,123
+154790	Disappear	598	Rectangle	170,190	49	15	0.0	-1	Code Highlight:112,123
+154790	Appear	599	Rectangle	170,190	49	15	0.0	-1	Code Highlight:112,123
+155074	Keyboard	600							KeyTyped: s
+155075	Disappear	599	Rectangle	170,190	49	15	0.0	-1	Code Highlight:112,123
+155075	Appear	601	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,117
+155165	Keyboard	602							KeyTyped: e
+155165	Disappear	601	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,117
+155166	Appear	603	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,118
+155378	Keyboard	604							KeyTyped: t
+155378	Disappear	603	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,118
+155379	Appear	605	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,119
+155878	Disappear	605	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,119
+155879	Appear	606	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,119
+155987	Keyboard	607							KeyTyped: W
+155988	Disappear	606	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,119
+155988	Appear	608	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,120
+156221	Keyboard	609							KeyTyped: i
+156221	Disappear	608	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,120
+156222	Appear	610	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,121
+156319	Keyboard	611							KeyTyped: d
+156319	Disappear	610	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,121
+156319	Appear	612	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,122
+156607	Keyboard	613							KeyTyped: t
+156608	Disappear	612	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,122
+156608	Appear	614	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+156725	Keyboard	615							KeyTyped: h
+156726	Disappear	614	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+156726	Appear	616	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+157226	Disappear	616	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+157226	Appear	617	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+157725	Disappear	617	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+157725	Appear	618	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+158225	Disappear	618	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+158226	Appear	619	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+158726	Disappear	619	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+158726	Appear	620	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+159226	Disappear	620	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+159227	Appear	621	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+159726	Disappear	621	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+159726	Appear	622	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+160227	Disappear	622	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+160227	Appear	623	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+160616	Disappear	623	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+160616	Appear	624	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+160814	Disappear	624	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+160815	Appear	625	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,122
+160989	Disappear	625	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,122
+160989	Appear	626	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,121
+161158	Disappear	626	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,121
+161158	Appear	627	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,120
+161315	Disappear	627	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,120
+161316	Appear	628	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,119
+161815	Disappear	628	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,119
+161816	Appear	629	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,119
+161957	Keyboard	630							KeyTyped: F
+161958	Disappear	629	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,119
+161958	Appear	631	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,120
+162268	Keyboard	632							KeyTyped: i
+162268	Disappear	631	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,120
+162268	Appear	633	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,121
+162349	Keyboard	634							KeyTyped: e
+162349	Disappear	633	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,121
+162349	Appear	635	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,122
+162542	Keyboard	636							KeyTyped: l
+162542	Disappear	635	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,122
+162543	Appear	637	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+162670	Keyboard	638							KeyTyped: d
+162670	Disappear	637	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,123
+162671	Appear	639	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+163170	Disappear	639	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+163171	Appear	640	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+163670	Disappear	640	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+163670	Appear	641	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+164149	Keyboard	642							KeyTyped: s
+164149	Disappear	641	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,124
+164149	Appear	643	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+164650	Disappear	643	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+164650	Appear	644	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+165149	Disappear	644	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+165149	Appear	645	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+165650	Disappear	645	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+165650	Appear	646	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+166150	Disappear	646	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+166150	Appear	647	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+166650	Disappear	647	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+166650	Appear	648	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+167150	Disappear	648	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+167151	Appear	649	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+167411	Disappear	649	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+167412	Appear	650	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+167910	Disappear	650	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+167911	Appear	651	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+168411	Disappear	651	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+168411	Appear	652	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+168910	Disappear	652	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+168911	Appear	653	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+169411	Disappear	653	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+169411	Appear	654	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+169641	Keyboard	655							KeyTyped: i
+169642	Disappear	654	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+169642	Appear	656	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+169737	Keyboard	657							KeyTyped: n
+169738	Disappear	656	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+169738	Appear	658	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+169779	Keyboard	659							KeyTyped: t
+169780	Disappear	658	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+169780	Appear	660	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,128
+169947	Keyboard	661							KeyTyped:  
+169953	Disappear	660	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,128
+169953	Appear	662	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,129
+170448	Disappear	662	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,129
+170448	Appear	663	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,129
+170819	Disappear	663	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,129
+170819	Appear	664	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,128
+170993	Disappear	664	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,128
+170994	Appear	665	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+171170	Disappear	665	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+171171	Appear	666	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+171481	Disappear	666	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+171481	Appear	667	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+171723	Keyboard	668							KeyTyped: d
+171724	Disappear	667	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,125
+171724	Appear	669	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+171838	Keyboard	670							KeyTyped: o
+171838	Disappear	669	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,126
+171838	Appear	671	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+171951	Keyboard	672							KeyTyped: u
+171952	Disappear	671	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,127
+171952	Appear	673	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,128
+172082	Keyboard	674							KeyTyped: b
+172082	Disappear	673	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,128
+172083	Appear	675	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,129
+172340	Keyboard	676							KeyTyped: l
+172340	Disappear	675	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,129
+172341	Appear	677	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,130
+172589	Keyboard	678							KeyTyped: e
+172590	Disappear	677	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,130
+172590	Appear	679	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,131
+172846	Keyboard	680							KeyTyped:  
+172847	Disappear	679	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,131
+172848	Appear	681	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,132
+173346	Disappear	681	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,132
+173347	Appear	682	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,132
+173813	Keyboard	683							KeyTyped: w
+173814	Disappear	682	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,132
+173814	Appear	684	Rectangle	39,190	255	15	0.0	-1	Code Highlight:95,133
+174313	Disappear	684	Rectangle	39,190	255	15	0.0	-1	Code Highlight:95,133
+174314	Appear	685	Rectangle	39,190	255	15	0.0	-1	Code Highlight:95,133
+174814	Disappear	685	Rectangle	39,190	255	15	0.0	-1	Code Highlight:95,133
+174814	Appear	686	Rectangle	39,190	255	15	0.0	-1	Code Highlight:95,133
+175223	Keyboard	687							KeyTyped: ,
+175224	Disappear	686	Rectangle	39,190	255	15	0.0	-1	Code Highlight:95,133
+175224	Appear	688	Rectangle	39,190	255	15	0.0	-1	Code Highlight:96,134
+175341	Keyboard	689							KeyTyped:  
+175342	Disappear	688	Rectangle	39,190	255	15	0.0	-1	Code Highlight:96,134
+175342	Appear	690	Rectangle	39,190	255	15	0.0	-1	Code Highlight:97,135
+175547	Keyboard	691							KeyTyped: d
+175548	Disappear	690	Rectangle	39,190	255	15	0.0	-1	Code Highlight:97,135
+175548	Appear	692	Rectangle	39,190	255	15	0.0	-1	Code Highlight:98,136
+175813	Keyboard	693							KeyTyped: u
+175813	Disappear	692	Rectangle	39,190	255	15	0.0	-1	Code Highlight:98,136
+175814	Appear	694	Rectangle	39,190	255	15	0.0	-1	Code Highlight:99,137
+176313	Disappear	694	Rectangle	39,190	255	15	0.0	-1	Code Highlight:99,137
+176314	Appear	695	Rectangle	39,190	255	15	0.0	-1	Code Highlight:99,137
+176644	Disappear	695	Rectangle	39,190	255	15	0.0	-1	Code Highlight:99,137
+176645	Appear	696	Rectangle	39,190	255	15	0.0	-1	Code Highlight:99,136
+176861	Keyboard	697							KeyTyped: o
+176861	Disappear	696	Rectangle	39,190	255	15	0.0	-1	Code Highlight:99,136
+176862	Appear	698	Rectangle	39,190	255	15	0.0	-1	Code Highlight:99,137
+176993	Keyboard	699							KeyTyped: u
+176994	Disappear	698	Rectangle	39,190	255	15	0.0	-1	Code Highlight:99,137
+176995	Appear	700	Rectangle	39,190	255	15	0.0	-1	Code Highlight:100,138
+177200	Keyboard	701							KeyTyped: b
+177201	Disappear	700	Rectangle	39,190	255	15	0.0	-1	Code Highlight:100,138
+177202	Appear	702	Rectangle	39,190	255	15	0.0	-1	Code Highlight:101,139
+177315	Keyboard	703							KeyTyped: l
+177316	Disappear	702	Rectangle	39,190	255	15	0.0	-1	Code Highlight:101,139
+177317	Appear	704	Rectangle	39,190	255	15	0.0	-1	Code Highlight:102,140
+177816	Disappear	704	Rectangle	39,190	255	15	0.0	-1	Code Highlight:102,140
+177816	Appear	705	Rectangle	39,190	255	15	0.0	-1	Code Highlight:102,140
+178315	Disappear	705	Rectangle	39,190	255	15	0.0	-1	Code Highlight:102,140
+178316	Appear	706	Rectangle	39,190	255	15	0.0	-1	Code Highlight:102,140
+178516	Keyboard	707							KeyTyped: e
+178516	Disappear	706	Rectangle	39,190	255	15	0.0	-1	Code Highlight:102,140
+178517	Appear	708	Rectangle	39,190	255	15	0.0	-1	Code Highlight:103,141
+178844	Keyboard	709							KeyTyped:  
+178845	Disappear	708	Rectangle	39,190	255	15	0.0	-1	Code Highlight:103,141
+178846	Appear	710	Rectangle	39,190	255	15	0.0	-1	Code Highlight:104,142
+179345	Disappear	710	Rectangle	39,190	255	15	0.0	-1	Code Highlight:104,142
+179345	Appear	711	Rectangle	39,190	255	15	0.0	-1	Code Highlight:104,142
+179421	Keyboard	712							KeyTyped: h
+179422	Disappear	711	Rectangle	39,190	255	15	0.0	-1	Code Highlight:104,142
+179422	Appear	713	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+179921	Disappear	713	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+179922	Appear	714	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+180422	Disappear	714	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+180422	Appear	715	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+180921	Disappear	715	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+180922	Appear	716	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+181422	Disappear	716	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+181422	Appear	717	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+181724	Disappear	717	Rectangle	39,190	255	15	0.0	-1	Code Highlight:105,143
+181724	Appear	718	Rectangle	39,205	255	15	0.0	-1	Code Highlight:154,172
+182224	Disappear	718	Rectangle	39,205	255	15	0.0	-1	Code Highlight:154,172
+182225	Appear	719	Rectangle	39,205	255	15	0.0	-1	Code Highlight:154,172
+182725	Disappear	719	Rectangle	39,205	255	15	0.0	-1	Code Highlight:154,172
+182725	Appear	720	Rectangle	39,205	255	15	0.0	-1	Code Highlight:154,172
+182917	Disappear	720	Rectangle	39,205	255	15	0.0	-1	Code Highlight:154,172
+182918	Appear	721	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,172
+183379	Disappear	721	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,172
+183380	Appear	722	Rectangle	39,205	196	15	0.0	-1	Code Highlight:143,172
+183879	Disappear	722	Rectangle	39,205	196	15	0.0	-1	Code Highlight:143,172
+183880	Appear	723	Rectangle	39,205	196	15	0.0	-1	Code Highlight:143,172
+184200	Disappear	723	Rectangle	39,205	196	15	0.0	-1	Code Highlight:143,172
+184201	Appear	724	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,145
+184701	Disappear	724	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,145
+184701	Appear	725	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,145
+184802	Disappear	725	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,145
+184803	Appear	726	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+185303	Disappear	726	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+185303	Appear	727	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+185803	Disappear	727	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+185804	Appear	728	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+185961	Keyboard	729							KeyTyped: r
+185962	Disappear	728	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+185962	Appear	730	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,147
+186018	Keyboard	731							KeyTyped: e
+186018	Disappear	730	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,147
+186019	Appear	732	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,148
+186518	Disappear	732	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,148
+186519	Appear	733	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,148
+186561	Disappear	733	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,148
+186561	Appear	734	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,147
+186726	Disappear	734	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,147
+186727	Appear	735	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+187227	Disappear	735	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+187227	Appear	736	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+187726	Disappear	736	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+187726	Appear	737	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+188226	Disappear	737	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+188227	Appear	738	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+188331	Disappear	738	Rectangle	39,205	255	15	0.0	-1	Code Highlight:143,146
+188332	Appear	739	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+188832	Disappear	739	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+188832	Appear	740	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+188894	Disappear	740	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+188894	Appear	741	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+189394	Disappear	741	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+189394	Appear	742	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+189893	Disappear	742	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+189894	Appear	743	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+189909	Disappear	743	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+189909	Appear	744	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+190269	Disappear	744	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,143
+190269	Appear	745	Rectangle	116,190	42	15	0.0	-1	Code Highlight:105,143
+190769	Disappear	745	Rectangle	116,190	42	15	0.0	-1	Code Highlight:105,143
+190770	Appear	746	Rectangle	116,190	42	15	0.0	-1	Code Highlight:105,143
+191270	Disappear	746	Rectangle	116,190	42	15	0.0	-1	Code Highlight:105,143
+191270	Appear	747	Rectangle	116,190	42	15	0.0	-1	Code Highlight:105,143
+191518	Keyboard	748							KeyTyped: v
+191518	Disappear	747	Rectangle	116,190	42	15	0.0	-1	Code Highlight:105,143
+191518	Appear	749	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,138
+191714	Keyboard	750							KeyTyped: o
+191715	Disappear	749	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,138
+191715	Appear	751	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,139
+191820	Keyboard	752							KeyTyped: i
+191821	Disappear	751	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,139
+191821	Appear	753	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,140
+191874	Keyboard	754							KeyTyped: d
+191875	Disappear	753	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,140
+191875	Appear	755	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,141
+192375	Disappear	755	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,141
+192375	Appear	756	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,141
+192591	Disappear	756	Rectangle	39,190	255	15	0.0	-1	Code Highlight:94,141
+192592	Appear	757	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,144
+193091	Disappear	757	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,144
+193092	Appear	758	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,144
+193454	Keyboard	759							KeyTyped: w
+193455	Disappear	758	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,144
+193455	Appear	760	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,145
+193651	Keyboard	761							KeyTyped: i
+193651	Disappear	760	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,145
+193652	Appear	762	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,146
+193909	Keyboard	763							KeyTyped: d
+193910	Disappear	762	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,146
+193910	Appear	764	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,147
+194292	Keyboard	765							KeyTyped: h
+194293	Disappear	764	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,147
+194293	Appear	766	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,148
+194322	Keyboard	767							KeyTyped: t
+194323	Disappear	766	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,148
+194323	Appear	768	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,149
+194709	Keyboard	769							KeyTyped: =
+194710	Disappear	768	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,149
+194710	Appear	770	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+195210	Disappear	770	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+195210	Appear	771	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+195709	Disappear	771	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+195709	Appear	772	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+196210	Disappear	772	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+196210	Appear	773	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+196710	Disappear	773	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+196710	Appear	774	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+197025	Disappear	774	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+197025	Appear	775	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,149
+197189	Keyboard	776							KeyTyped:  
+197193	Disappear	775	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,149
+197193	Appear	777	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+197356	Keyboard	778							KeyTyped: w
+197356	Disappear	777	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+197356	Appear	779	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,151
+197856	Disappear	779	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,151
+197857	Appear	780	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,151
+197902	Disappear	780	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,151
+197902	Appear	781	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+198402	Disappear	781	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+198402	Appear	782	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+198583	Keyboard	783							KeyTyped: =
+198583	Disappear	782	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,150
+198584	Appear	784	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,151
+198700	Keyboard	785							KeyTyped:  
+198700	Disappear	784	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,151
+198701	Appear	786	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,152
+199200	Disappear	786	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,152
+199200	Appear	787	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,152
+199328	Keyboard	788							KeyTyped: w
+199329	Disappear	787	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,152
+199329	Appear	789	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,153
+199829	Disappear	789	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,153
+199829	Appear	790	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,153
+200229	Keyboard	791							KeyTyped: ;
+200230	Disappear	790	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,153
+200230	Appear	792	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,154
+200575	Disappear	792	Rectangle	39,205	255	15	0.0	-1	Code Highlight:141,154
+200576	Appear	793	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,157
+201076	Disappear	793	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,157
+201076	Appear	794	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,157
+201575	Disappear	794	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,157
+201575	Appear	795	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,157
+201873	Keyboard	796							KeyTyped: h
+201873	Disappear	795	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,157
+201874	Appear	797	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,158
+201957	Keyboard	798							KeyTyped: e
+201958	Disappear	797	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,158
+201958	Appear	799	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,159
+202096	Keyboard	800							KeyTyped: i
+202097	Disappear	799	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,159
+202097	Appear	801	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,160
+202182	Keyboard	802							KeyTyped: g
+202183	Disappear	801	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,160
+202183	Appear	803	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,161
+202432	Keyboard	804							KeyTyped: h
+202433	Disappear	803	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,161
+202434	Appear	805	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,162
+202551	Keyboard	806							KeyTyped: t
+202551	Disappear	805	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,162
+202552	Appear	807	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,163
+203051	Disappear	807	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,163
+203052	Appear	808	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,163
+203526	Keyboard	809							KeyTyped:  
+203526	Disappear	808	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,163
+203527	Appear	810	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,164
+203869	Keyboard	811							KeyTyped: =
+203869	Disappear	810	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,164
+203870	Appear	812	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,165
+204034	Keyboard	813							KeyTyped:  
+204034	Disappear	812	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,165
+204034	Appear	814	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,166
+204534	Disappear	814	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,166
+204534	Appear	815	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,166
+204823	Keyboard	816							KeyTyped: h
+204823	Disappear	815	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,166
+204823	Appear	817	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,167
+205135	Keyboard	818							KeyTyped: ;
+205135	Disappear	817	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,167
+205135	Appear	819	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+205635	Disappear	819	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+205636	Appear	820	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+206136	Disappear	820	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+206137	Appear	821	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+206636	Disappear	821	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+206636	Appear	822	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+207136	Disappear	822	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+207136	Appear	823	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+207635	Disappear	823	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+207636	Appear	824	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+208136	Disappear	824	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+208136	Appear	825	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+208465	Disappear	825	Rectangle	39,220	255	15	0.0	-1	Code Highlight:154,168
+208466	Appear	826	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+208950	Disappear	826	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+208951	Appear	827	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+209378	Disappear	827	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+209379	Appear	828	Rectangle	39,265	255	15	0.0	-1	Code Highlight:176,181
+209731	Disappear	828	Rectangle	39,265	255	15	0.0	-1	Code Highlight:176,181
+209732	Appear	829	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+209962	Disappear	829	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+209963	Appear	830	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+210462	Disappear	830	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+210463	Appear	831	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+210963	Disappear	831	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+210963	Appear	832	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+211462	Disappear	832	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+211462	Appear	833	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+211484	Disappear	833	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+211484	Appear	834	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+211983	Disappear	834	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+211983	Appear	835	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+212483	Disappear	835	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+212484	Appear	836	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+212984	Disappear	836	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+212984	Appear	837	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+213484	Disappear	837	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+213484	Appear	838	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+213984	Disappear	838	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+213985	Appear	839	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+214484	Disappear	839	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+214485	Appear	840	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+214985	Disappear	840	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+214985	Appear	841	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+215484	Disappear	841	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+215484	Appear	842	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+215984	Disappear	842	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+215985	Appear	843	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+216485	Disappear	843	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+216485	Appear	844	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+216985	Disappear	844	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+216985	Appear	845	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+217484	Disappear	845	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+217485	Appear	846	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+217985	Disappear	846	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+217985	Appear	847	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+218423	Disappear	847	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+218424	Appear	848	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+218924	Disappear	848	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+218924	Appear	849	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+219424	Disappear	849	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+219424	Appear	850	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+219461	Disappear	850	Rectangle	39,235	255	15	0.0	-1	Code Highlight:168,174
+219462	Appear	851	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+219713	Disappear	851	Rectangle	39,250	255	15	0.0	-1	Code Highlight:174,176
+219714	Appear	852	Rectangle	39,265	255	15	0.0	-1	Code Highlight:176,181
+219749	Disappear	852	Rectangle	39,265	255	15	0.0	-1	Code Highlight:176,181
+219749	Appear	853	Rectangle	39,280	255	15	0.0	-1	Code Highlight:181,220
+219785	Disappear	853	Rectangle	39,280	255	15	0.0	-1	Code Highlight:181,220
+219785	Appear	854	Rectangle	39,295	255	15	0.0	-1	Code Highlight:220,237
+219821	Disappear	854	Rectangle	39,295	255	15	0.0	-1	Code Highlight:220,237
+219821	Appear	855	Rectangle	39,310	255	15	0.0	-1	Code Highlight:237,259
+219857	Disappear	855	Rectangle	39,310	255	15	0.0	-1	Code Highlight:237,259
+219857	Appear	856	Rectangle	39,325	255	15	0.0	-1	Code Highlight:259,275
+219893	Disappear	856	Rectangle	39,325	255	15	0.0	-1	Code Highlight:259,275
+219894	Appear	857	Rectangle	39,340	255	15	0.0	-1	Code Highlight:275,281
+219928	Disappear	857	Rectangle	39,340	255	15	0.0	-1	Code Highlight:275,281
+219929	Appear	858	Rectangle	39,355	255	15	0.0	-1	Code Highlight:281,286
+219964	Disappear	858	Rectangle	39,355	255	15	0.0	-1	Code Highlight:281,286
+219965	Appear	859	Rectangle	39,370	255	15	0.0	-1	Code Highlight:286,315
+220001	Disappear	859	Rectangle	39,370	255	15	0.0	-1	Code Highlight:286,315
+220001	Appear	860	Rectangle	39,385	255	15	0.0	-1	Code Highlight:315,341
+220036	Disappear	860	Rectangle	39,385	255	15	0.0	-1	Code Highlight:315,341
+220037	Appear	861	Rectangle	39,400	255	15	0.0	-1	Code Highlight:341,347
+220073	Disappear	861	Rectangle	39,400	255	15	0.0	-1	Code Highlight:341,347
+220076	Appear	862	Rectangle	39,415	255	15	0.0	-1	Code Highlight:347,349
+220110	Disappear	862	Rectangle	39,415	255	15	0.0	-1	Code Highlight:347,349
+220112	Appear	863	Rectangle	39,415	255	15	0.0	-1	Code Highlight:349,350
+220145	Disappear	863	Rectangle	39,415	255	15	0.0	-1	Code Highlight:349,350
+220146	Appear	864	Rectangle	39,415	255	15	0.0	-1	Code Highlight:350,373
+220184	Disappear	864	Rectangle	39,415	255	15	0.0	-1	Code Highlight:350,373
+220186	Appear	865	Rectangle	39,415	255	15	0.0	-1	Code Highlight:373,405
+220561	Disappear	865	Rectangle	39,415	255	15	0.0	-1	Code Highlight:373,405
+220561	Appear	866	Rectangle	39,400	255	15	0.0	-1	Code Highlight:350,373
+220752	Disappear	866	Rectangle	39,400	255	15	0.0	-1	Code Highlight:350,373
+220752	Appear	867	Rectangle	39,385	255	15	0.0	-1	Code Highlight:349,350
+220943	Disappear	867	Rectangle	39,385	255	15	0.0	-1	Code Highlight:349,350
+220944	Appear	868	Rectangle	39,370	255	15	0.0	-1	Code Highlight:347,349
+221318	Disappear	868	Rectangle	39,370	255	15	0.0	-1	Code Highlight:347,349
+221319	Appear	869	Rectangle	39,355	255	15	0.0	-1	Code Highlight:341,347
+221761	Disappear	869	Rectangle	39,355	255	15	0.0	-1	Code Highlight:341,347
+221762	Appear	870	Rectangle	172,340	122	15	0.0	-1	Code Highlight:334,341
+221762	Appear	871	Rectangle	39,355	35	15	0.0	-1	Code Highlight:341,347
+221921	Disappear	870	Rectangle	172,340	122	15	0.0	-1	Code Highlight:334,341
+221922	Disappear	871	Rectangle	39,355	35	15	0.0	-1	Code Highlight:341,347
+221922	Appear	872	Rectangle	172,325	122	15	0.0	-1	Code Highlight:305,315
+221922	Appear	873	Rectangle	39,340	255	15	0.0	-1	Code Highlight:315,341
+221922	Appear	874	Rectangle	39,355	35	15	0.0	-1	Code Highlight:341,347
+222093	Disappear	872	Rectangle	172,325	122	15	0.0	-1	Code Highlight:305,315
+222093	Disappear	873	Rectangle	39,340	255	15	0.0	-1	Code Highlight:315,341
+222093	Disappear	874	Rectangle	39,355	35	15	0.0	-1	Code Highlight:341,347
+222093	Appear	875	Rectangle	67,310	227	15	0.0	-1	Code Highlight:285,286
+222094	Appear	876	Rectangle	39,325	255	15	0.0	-1	Code Highlight:286,315
+222094	Appear	877	Rectangle	39,340	255	15	0.0	-1	Code Highlight:315,341
+222094	Appear	878	Rectangle	39,355	35	15	0.0	-1	Code Highlight:341,347
+222594	Disappear	875	Rectangle	67,310	227	15	0.0	-1	Code Highlight:285,286
+222594	Disappear	876	Rectangle	39,325	255	15	0.0	-1	Code Highlight:286,315
+222594	Disappear	877	Rectangle	39,340	255	15	0.0	-1	Code Highlight:315,341
+222594	Disappear	878	Rectangle	39,355	35	15	0.0	-1	Code Highlight:341,347
+222594	Appear	879	Rectangle	67,310	227	15	0.0	-1	Code Highlight:285,286
+222594	Appear	880	Rectangle	39,325	255	15	0.0	-1	Code Highlight:286,315
+222595	Appear	881	Rectangle	39,340	255	15	0.0	-1	Code Highlight:315,341
+222595	Appear	882	Rectangle	39,355	35	15	0.0	-1	Code Highlight:341,347
+222684	Disappear	879	Rectangle	67,310	227	15	0.0	-1	Code Highlight:285,286
+222684	Disappear	880	Rectangle	39,325	255	15	0.0	-1	Code Highlight:286,315
+222684	Disappear	881	Rectangle	39,340	255	15	0.0	-1	Code Highlight:315,341
+222684	Disappear	882	Rectangle	39,355	35	15	0.0	-1	Code Highlight:341,347
+222685	Appear	883	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+223185	Disappear	883	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+223185	Appear	884	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+223685	Disappear	884	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+223685	Appear	885	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+223751	Disappear	885	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+223751	Appear	886	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+224250	Disappear	886	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+224251	Appear	887	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+224673	Disappear	887	Rectangle	39,310	255	15	0.0	-1	Code Highlight:281,286
+224673	Appear	888	Rectangle	39,295	255	15	0.0	-1	Code Highlight:275,285
+225172	Disappear	888	Rectangle	39,295	255	15	0.0	-1	Code Highlight:275,285
+225173	Appear	889	Rectangle	39,295	255	15	0.0	-1	Code Highlight:275,285
+225340	Disappear	889	Rectangle	39,295	255	15	0.0	-1	Code Highlight:275,285
+225341	Appear	890	Rectangle	39,310	255	15	0.0	-1	Code Highlight:285,287
+225584	Disappear	890	Rectangle	39,310	255	15	0.0	-1	Code Highlight:285,287
+225585	Appear	891	Rectangle	39,325	255	15	0.0	-1	Code Highlight:287,288
+225945	Disappear	891	Rectangle	39,325	255	15	0.0	-1	Code Highlight:287,288
+225945	Appear	892	Rectangle	39,340	255	15	0.0	-1	Code Highlight:288,311
+226132	Disappear	892	Rectangle	39,340	255	15	0.0	-1	Code Highlight:288,311
+226132	Appear	893	Rectangle	39,355	255	15	0.0	-1	Code Highlight:311,343
+226309	Disappear	893	Rectangle	39,355	255	15	0.0	-1	Code Highlight:311,343
+226309	Appear	894	Rectangle	39,370	255	15	0.0	-1	Code Highlight:343,382
+226499	Disappear	894	Rectangle	39,370	255	15	0.0	-1	Code Highlight:343,382
+226500	Appear	895	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227000	Disappear	895	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227000	Appear	896	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227028	Disappear	896	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227030	Appear	897	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227301	Disappear	897	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227301	Appear	898	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227483	Disappear	898	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227483	Appear	899	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227983	Disappear	899	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+227984	Appear	900	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+228484	Disappear	900	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+228484	Appear	901	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+228550	Disappear	901	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,422
+228550	Appear	902	Rectangle	95,385	42	15	0.0	-1	Code Highlight:390,422
+228805	Disappear	902	Rectangle	95,385	42	15	0.0	-1	Code Highlight:390,422
+228805	Appear	903	Rectangle	95,385	49	15	0.0	-1	Code Highlight:390,422
+229101	Disappear	903	Rectangle	95,385	49	15	0.0	-1	Code Highlight:390,422
+229101	Appear	904	Rectangle	95,385	77	15	0.0	-1	Code Highlight:390,422
+229468	Disappear	904	Rectangle	95,385	77	15	0.0	-1	Code Highlight:390,422
+229469	Appear	905	Rectangle	95,385	98	15	0.0	-1	Code Highlight:390,422
+229968	Disappear	905	Rectangle	95,385	98	15	0.0	-1	Code Highlight:390,422
+229969	Appear	906	Rectangle	95,385	98	15	0.0	-1	Code Highlight:390,422
+230169	Disappear	906	Rectangle	95,385	98	15	0.0	-1	Code Highlight:390,422
+230170	Appear	907	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+230669	Disappear	907	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+230669	Appear	908	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+230913	Disappear	908	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+230913	Appear	909	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231190	Disappear	909	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231190	Appear	910	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231441	Disappear	910	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231441	Appear	911	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231477	Disappear	911	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231477	Appear	912	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231513	Disappear	912	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231513	Appear	913	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231548	Disappear	913	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231549	Appear	914	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231584	Disappear	914	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231584	Appear	915	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231623	Disappear	915	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231623	Appear	916	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231953	Disappear	916	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+231953	Appear	917	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+232313	Disappear	917	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,408
+232313	Appear	918	Rectangle	144,385	49	15	0.0	-1	Code Highlight:397,408
+232814	Disappear	918	Rectangle	144,385	49	15	0.0	-1	Code Highlight:397,408
+232814	Appear	919	Rectangle	144,385	49	15	0.0	-1	Code Highlight:397,408
+233225	Keyboard	920							KeyTyped: s
+233225	Disappear	919	Rectangle	144,385	49	15	0.0	-1	Code Highlight:397,408
+233226	Appear	921	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,402
+233344	Keyboard	922							KeyTyped: e
+233344	Disappear	921	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,402
+233344	Appear	923	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,403
+233557	Keyboard	924							KeyTyped: t
+233558	Disappear	923	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,403
+233558	Appear	925	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,404
+233789	Disappear	925	Rectangle	39,385	255	15	0.0	-1	Code Highlight:382,404
+233789	Appear	926	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,168
+233789	Appear	927	Rectangle	39,190	255	15	0.0	-1	Code Highlight:168,174
+233789	Appear	928	Rectangle	39,205	255	15	0.0	-1	Code Highlight:174,176
+233789	Appear	929	Rectangle	39,220	255	15	0.0	-1	Code Highlight:176,181
+233789	Appear	930	Rectangle	39,235	255	15	0.0	-1	Code Highlight:181,220
+233790	Appear	931	Rectangle	39,250	255	15	0.0	-1	Code Highlight:220,237
+233790	Appear	932	Rectangle	39,265	255	15	0.0	-1	Code Highlight:237,259
+233790	Appear	933	Rectangle	39,280	255	15	0.0	-1	Code Highlight:259,275
+233790	Appear	934	Rectangle	39,295	255	15	0.0	-1	Code Highlight:275,285
+233790	Appear	935	Rectangle	39,310	255	15	0.0	-1	Code Highlight:285,287
+233790	Appear	936	Rectangle	39,325	255	15	0.0	-1	Code Highlight:287,288
+233791	Appear	937	Rectangle	39,340	255	15	0.0	-1	Code Highlight:288,311
+233791	Appear	938	Rectangle	39,355	255	15	0.0	-1	Code Highlight:311,343
+233792	Appear	939	Rectangle	39,370	255	15	0.0	-1	Code Highlight:343,382
+233792	Appear	940	Rectangle	39,385	126	15	0.0	-1	Code Highlight:382,404
+233869	Keyboard	941							KeyTyped: F
+233869	Disappear	926	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,168
+233869	Disappear	927	Rectangle	39,190	255	15	0.0	-1	Code Highlight:168,174
+233869	Disappear	928	Rectangle	39,205	255	15	0.0	-1	Code Highlight:174,176
+233869	Disappear	929	Rectangle	39,220	255	15	0.0	-1	Code Highlight:176,181
+233869	Disappear	930	Rectangle	39,235	255	15	0.0	-1	Code Highlight:181,220
+233869	Disappear	931	Rectangle	39,250	255	15	0.0	-1	Code Highlight:220,237
+233869	Disappear	932	Rectangle	39,265	255	15	0.0	-1	Code Highlight:237,259
+233869	Disappear	933	Rectangle	39,280	255	15	0.0	-1	Code Highlight:259,275
+233870	Disappear	934	Rectangle	39,295	255	15	0.0	-1	Code Highlight:275,285
+233870	Disappear	935	Rectangle	39,310	255	15	0.0	-1	Code Highlight:285,287
+233870	Disappear	936	Rectangle	39,325	255	15	0.0	-1	Code Highlight:287,288
+233870	Disappear	937	Rectangle	39,340	255	15	0.0	-1	Code Highlight:288,311
+233870	Disappear	938	Rectangle	39,355	255	15	0.0	-1	Code Highlight:311,343
+233870	Disappear	939	Rectangle	39,370	255	15	0.0	-1	Code Highlight:343,382
+233870	Disappear	940	Rectangle	39,385	126	15	0.0	-1	Code Highlight:382,404
+233870	Appear	942	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,159
+234106	Keyboard	943							KeyTyped: i
+234107	Disappear	942	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,159
+234108	Appear	944	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,160
+234187	Keyboard	945							KeyTyped: e
+234187	Disappear	944	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,160
+234187	Appear	946	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,161
+234355	Keyboard	947							KeyTyped: l
+234355	Disappear	946	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,161
+234355	Appear	948	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,162
+234468	Keyboard	949							KeyTyped: d
+234468	Disappear	948	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,162
+234468	Appear	950	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,163
+234559	Keyboard	951							KeyTyped: s
+234559	Disappear	950	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,163
+234560	Appear	952	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+235060	Disappear	952	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+235060	Appear	953	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+235560	Disappear	953	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+235560	Appear	954	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+236059	Disappear	954	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+236059	Appear	955	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+236559	Disappear	955	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+236560	Appear	956	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+237059	Disappear	956	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+237060	Appear	957	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+237482	Disappear	957	Rectangle	39,175	255	15	0.0	-1	Code Highlight:154,164
+237482	Appear	958	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+237982	Disappear	958	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+237983	Appear	959	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+238483	Disappear	959	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+238483	Appear	960	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+238701	Disappear	960	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+240773	Appear	961	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+241274	Disappear	961	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+241274	Appear	962	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+241300	Disappear	962	Rectangle	39,100	255	15	0.0	-1	Code Highlight:0,20
+241302	Appear	963	Rectangle	39,460	255	15	0.0	-1	Code Highlight:412,413
+241801	Disappear	963	Rectangle	39,460	255	15	0.0	-1	Code Highlight:412,413
+241801	Appear	964	Rectangle	39,460	255	15	0.0	-1	Code Highlight:412,413
+242007	Disappear	964	Rectangle	39,460	255	15	0.0	-1	Code Highlight:412,413
+242007	Appear	965	Rectangle	39,445	255	15	0.0	-1	Code Highlight:410,412
+242457	Disappear	965	Rectangle	39,445	255	15	0.0	-1	Code Highlight:410,412
+242457	Appear	966	Rectangle	39,430	255	15	0.0	-1	Code Highlight:404,410
+242618	Disappear	966	Rectangle	39,430	255	15	0.0	-1	Code Highlight:404,410
+242618	Appear	967	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+242899	Disappear	967	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+242900	Appear	968	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+243078	Disappear	968	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+243078	Appear	969	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+243213	Disappear	969	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+243213	Appear	970	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+243714	Disappear	970	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+243714	Appear	971	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+244112	Keyboard	972							KeyTyped: F
+244112	Disappear	971	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,404
+244112	Appear	973	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,405
+244359	Keyboard	974							KeyTyped: i
+244359	Disappear	973	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,405
+244360	Appear	975	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,406
+244550	Keyboard	976							KeyTyped: e
+244550	Disappear	975	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,406
+244551	Appear	977	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,407
+244689	Keyboard	978							KeyTyped: l
+244690	Disappear	977	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,407
+244690	Appear	979	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,408
+244829	Keyboard	980							KeyTyped: d
+244830	Disappear	979	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,408
+244830	Appear	981	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,409
+244894	Keyboard	982							KeyTyped: s
+244894	Disappear	981	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,409
+244894	Appear	983	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+245394	Disappear	983	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+245394	Appear	984	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+245584	Disappear	984	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+245584	Appear	985	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+246083	Disappear	985	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+246083	Appear	986	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+246583	Disappear	986	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+246583	Appear	987	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+247083	Disappear	987	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+247084	Appear	988	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+247591	Disappear	988	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+247591	Appear	989	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+248083	Disappear	989	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+248083	Appear	990	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+248583	Disappear	990	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+248584	Appear	991	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+249084	Disappear	991	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+249084	Appear	992	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+249206	Keyboard	993							KeyTyped: 3
+249207	Disappear	992	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,410
+249207	Appear	994	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,411
+249392	Keyboard	995							KeyTyped: ,
+249392	Disappear	994	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,411
+249392	Appear	996	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,412
+249539	Keyboard	997							KeyTyped: 3
+249540	Disappear	996	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,412
+249540	Appear	998	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+250040	Disappear	998	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+250040	Appear	999	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+250539	Disappear	999	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+250539	Appear	1000	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+251039	Disappear	1000	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+251040	Appear	1001	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+251540	Disappear	1001	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+251540	Appear	1002	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+251751	Button	1003							SaveButton
+251876	Disappear	1002	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+251876	Appear	1004	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+272667	Other	1005							File: Square3.java
+272668	Disappear	1004	Rectangle	39,415	255	15	0.0	-1	Code Highlight:382,413
+272670	Appear	1006	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+272701	Disappear	1006	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+272701	Appear	1007	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+273169	Disappear	1007	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+273169	Appear	1008	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+273668	Disappear	1008	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+273669	Appear	1009	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+274168	Disappear	1009	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+274169	Appear	1010	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+274450	Disappear	1010	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+274450	Appear	1011	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+274485	Button	1012							AnimationButton
+274527	Disappear	1011	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+274529	Appear	1013	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+275695	Disappear	1014	Rectangle	316,71	575	470	0.0	-1	null
+275748	Disappear	496	Rectangle	72,136	140	15	0.0	-1	Code Highlight:186,207
+278176	Button	1015							StepButton
+278178	Other	1016							AnimationStarted
+278235	Appear	1017	Rectangle	326,389	124	46	0.0	-1	ConstantBox
+278262	Scroll	1018		316	71	590	416			Scroll: Theater: On screen at: 316,71,590,416
+278262	Scroll	1019		316	71	590	416			Scroll: Theater: On screen at: 316,71,590,416
+278605	Other	1020							AnimationStopped
+290491	Button	1021							EditButton
+291737	Disappear	1022	Rectangle	316,71	590	416	0.0	-1	null
+291792	Other	1023							AnimationEnded
+291842	Disappear	1013	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+291843	Appear	1024	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+291849	Disappear	1024	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+291849	Appear	1025	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+292349	Disappear	1025	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+292350	Appear	1026	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+292849	Disappear	1026	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+292849	Appear	1027	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+292905	Disappear	1027	Rectangle	39,415	255	15	0.0	-1	Code Highlight:394,425
+292905	Appear	1028	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+293404	Disappear	1028	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+293404	Appear	1029	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+293591	Disappear	1029	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+293591	Appear	1030	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+293907	Disappear	1030	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+293908	Appear	1031	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,159
+294319	Disappear	1031	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,159
+294319	Appear	1032	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,159
+294819	Disappear	1032	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,159
+294819	Appear	1033	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,159
+294925	Keyboard	1034							KeyTyped: h
+294925	Disappear	1033	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,159
+294925	Appear	1035	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+295425	Disappear	1035	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+295425	Appear	1036	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+295925	Disappear	1036	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+295926	Appear	1037	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+296370	Button	1038							SaveButton
+296374	Other	1039							File: Square3.java
+296374	Disappear	1037	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+296376	Appear	1040	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+296874	Disappear	1040	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+296875	Appear	1041	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+297374	Disappear	1041	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+297374	Appear	1042	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+297874	Disappear	1042	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+297875	Appear	1043	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+298375	Disappear	1043	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+298375	Appear	1044	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+298666	Disappear	1044	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+298666	Appear	1045	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+298727	Button	1046							AnimationButton
+298767	Disappear	1045	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+298768	Appear	1047	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+299903	Disappear	1048	Rectangle	316,71	590	416	0.0	-1	null
+304359	Button	1049							EditButton
+305402	Disappear	1050	Rectangle	316,71	590	416	0.0	-1	null
+306223	Disappear	1047	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+306224	Appear	1051	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+306230	Disappear	1051	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+306231	Appear	1052	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+306238	Disappear	1052	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+306239	Appear	1053	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+306550	Disappear	1053	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+306550	Appear	1054	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+306626	Button	1055							AnimationButton
+306658	Disappear	1054	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+306659	Appear	1056	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+307844	Disappear	1057	Rectangle	316,71	590	416	0.0	-1	null
+309346	Button	1058							StepButton
+309349	Other	1059							AnimationStarted
+309413	Appear	1060	Rectangle	326,389	124	46	0.0	-1	ConstantBox
+309818	Other	1061							AnimationStopped
+310614	Button	1062							StepButton
+310615	Other	1063							AnimationStarted
+310661	Appear	1064	Rectangle	586,91	116	33	0.0	-1	static method invocation: MyClass.main
+310884	Other	1065							AnimationStopped
+326471	MouseButton	1066		23,564					MouseButton 1 pressed
+326977	Button	1067							EditButton
+327950	Disappear	1068	Rectangle	316,71	590	416	0.0	-1	null
+327997	Disappear	1056	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+327998	Appear	1069	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+328005	Disappear	1069	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+328005	Appear	1070	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+328055	Other	1071							AnimationEnded
+328549	Disappear	1070	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+328549	Appear	1072	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+328812	Disappear	1072	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+328812	Appear	1073	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+329313	Disappear	1073	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+329313	Appear	1074	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+329693	Disappear	1074	Rectangle	39,190	255	15	0.0	-1	Code Highlight:141,160
+329693	Appear	1075	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+330194	Disappear	1075	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+330194	Appear	1076	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+330694	Disappear	1076	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+330694	Appear	1077	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+331194	Disappear	1077	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+331195	Appear	1078	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+331695	Disappear	1078	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+331695	Appear	1079	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+332195	Disappear	1079	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+332195	Appear	1080	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+332694	Disappear	1080	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+332694	Appear	1081	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+333195	Disappear	1081	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+333195	Appear	1082	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+333695	Disappear	1082	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+333695	Appear	1083	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+334195	Disappear	1083	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+334195	Appear	1084	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+334695	Disappear	1084	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+334696	Appear	1085	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+335196	Disappear	1085	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+335196	Appear	1086	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+335695	Disappear	1086	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+335695	Appear	1087	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+335734	Disappear	1087	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+335734	Appear	1088	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,179
+336070	Disappear	1088	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,179
+336070	Appear	1089	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,179
+336571	Disappear	1089	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,179
+336571	Appear	1090	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,179
+337032	Keyboard	1091							KeyTyped: h
+337032	Disappear	1090	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,179
+337032	Appear	1092	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+337532	Disappear	1092	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+337532	Appear	1093	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+338032	Disappear	1093	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+338033	Appear	1094	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+338533	Disappear	1094	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+338533	Appear	1095	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+338672	Disappear	1095	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+338673	Appear	1096	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+366650	Disappear	1096	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+366650	Appear	1097	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+367050	Disappear	1097	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+367050	Appear	1098	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+367550	Disappear	1098	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+367550	Appear	1099	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+368049	Disappear	1099	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+368049	Appear	1100	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+368549	Disappear	1100	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+368550	Appear	1101	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+368868	Disappear	1101	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+368869	Appear	1102	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,70
+369369	Disappear	1102	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,70
+369369	Appear	1103	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,70
+369705	Disappear	1103	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,70
+369705	Appear	1104	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,69
+370205	Disappear	1104	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,69
+370205	Appear	1105	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,69
+370269	Disappear	1105	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,69
+370269	Appear	1106	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,69
+370768	Disappear	1106	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,69
+370769	Appear	1107	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,69
+371204	Keyboard	1108							KeyTyped: t
+371205	Disappear	1107	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,69
+371205	Appear	1109	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,70
+371581	Disappear	1109	Rectangle	39,145	255	15	0.0	-1	Code Highlight:45,70
+371581	Appear	1110	Rectangle	39,160	255	15	0.0	-1	Code Highlight:70,87
+372081	Disappear	1110	Rectangle	39,160	255	15	0.0	-1	Code Highlight:70,87
+372081	Appear	1111	Rectangle	39,160	255	15	0.0	-1	Code Highlight:70,87
+372203	Disappear	1111	Rectangle	39,160	255	15	0.0	-1	Code Highlight:70,87
+372203	Appear	1112	Rectangle	39,175	255	15	0.0	-1	Code Highlight:87,93
+372507	Disappear	1112	Rectangle	39,175	255	15	0.0	-1	Code Highlight:87,93
+372507	Appear	1113	Rectangle	39,190	255	15	0.0	-1	Code Highlight:93,94
+372674	Disappear	1113	Rectangle	39,190	255	15	0.0	-1	Code Highlight:93,94
+372674	Appear	1114	Rectangle	39,205	255	15	0.0	-1	Code Highlight:94,141
+372861	Disappear	1114	Rectangle	39,205	255	15	0.0	-1	Code Highlight:94,141
+372861	Appear	1115	Rectangle	39,220	255	15	0.0	-1	Code Highlight:141,160
+373057	Disappear	1115	Rectangle	39,220	255	15	0.0	-1	Code Highlight:141,160
+373057	Appear	1116	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+373232	Disappear	1116	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+373232	Appear	1117	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+373484	Disappear	1117	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+373484	Appear	1118	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+373691	Disappear	1118	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+373691	Appear	1119	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+373850	Disappear	1119	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+373850	Appear	1120	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+374017	Disappear	1120	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+374017	Appear	1121	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+374181	Disappear	1121	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+374181	Appear	1122	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+374303	Disappear	1122	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+374303	Appear	1123	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+374804	Disappear	1123	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+374804	Appear	1124	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+375246	Disappear	1124	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+375247	Appear	1125	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,179
+375746	Disappear	1125	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,179
+375746	Appear	1126	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,179
+376058	Disappear	1126	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,179
+376058	Appear	1127	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,179
+376222	Keyboard	1128							KeyTyped: t
+376223	Disappear	1127	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,179
+376223	Appear	1129	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+376722	Disappear	1129	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+376723	Appear	1130	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+377223	Disappear	1130	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+377223	Appear	1131	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+377483	Button	1132							SaveButton
+377486	Other	1133							File: Square3.java
+377487	Disappear	1131	Rectangle	39,235	255	15	0.0	-1	Code Highlight:160,180
+377488	Appear	1134	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+377987	Disappear	1134	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+377987	Appear	1135	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+378487	Disappear	1135	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+378487	Appear	1136	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+378987	Disappear	1136	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+378988	Appear	1137	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+379504	Disappear	1137	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+379508	Appear	1138	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+379995	Disappear	1138	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+379996	Appear	1139	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+380176	Disappear	1139	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+380176	Appear	1140	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+380250	Button	1141							AnimationButton
+380287	Disappear	1140	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+380287	Appear	1142	Rectangle	39,205	255	15	0.0	-1	Code Highlight:160,180
+381482	Disappear	1143	Rectangle	316,71	590	416	0.0	-1	null
+383721	Button	1144							StepButton
+383721	Other	1145							AnimationStarted
+383741	Appear	1146	Rectangle	326,389	124	46	0.0	-1	ConstantBox
+384113	Other	1147							AnimationStopped
+384349	Button	1148							StepButton
+384350	Other	1149							AnimationStarted
+384382	Appear	1150	Rectangle	586,91	116	33	0.0	-1	static method invocation: MyClass.main
+384621	Other	1151							AnimationStopped
+385108	Button	1152							StepButton
+385108	Other	1153							AnimationStarted
+385132	Appear	1154	Rectangle	67,361	227	15	0.0	-1	Code Highlight:348,376
+385132	Appear	1155	Rectangle	39,376	255	15	0.0	-1	Code Highlight:376,415
+385132	Appear	1156	Rectangle	39,391	255	15	0.0	-1	Code Highlight:415,446
+385133	Appear	1157	Rectangle	39,406	35	15	0.0	-1	Code Highlight:446,452
+385156	Appear	1158	Rectangle	326,91	212	23	0.0	-1	method frameMyClass.maincreatd
+385157	Modify	1158	Rectangle	326,91	212	29	0.0	-1	method frameMyClass.maincreatd
+385207	Modify	1158	Rectangle	326,91	212	35	0.0	-1	method frameMyClass.maincreatd
+385207	Modify	1158	Rectangle	326,91	212	41	0.0	-1	method frameMyClass.maincreatd
+385257	Modify	1158	Rectangle	326,91	212	47	0.0	-1	method frameMyClass.maincreatd
+385258	Modify	1158	Rectangle	326,91	212	53	0.0	-1	method frameMyClass.maincreatd
+385308	Modify	1158	Rectangle	326,91	212	59	0.0	-1	method frameMyClass.maincreatd
+385308	Modify	1158	Rectangle	326,91	212	65	0.0	-1	method frameMyClass.maincreatd
+385358	Modify	1158	Rectangle	326,91	212	67	0.0	-1	method frameMyClass.maincreatd
+385360	Disappear	1150	Rectangle	586,91	116	33	0.0	-1	static method invocation: MyClass.main
+385360	Disappear	1150	Rectangle	586,91	116	33	0.0	-1	static method invocation: MyClass.main
+385360	Disappear	1159	Rectangle	586,91	0	0	0.0	-1	Expression: 
+385360	Appear	1160	Rectangle	586,91	0	0	0.0	-1	null
+385361	Modify	1160	Rectangle	586,91	0	0	0.0	-1	null
+385453	Other	1161							AnimationStopped
+385898	Button	1162							StepButton
+385898	Other	1163							AnimationStarted
+385909	Disappear	1154	Rectangle	67,361	227	15	0.0	-1	Code Highlight:348,376
+385909	Disappear	1155	Rectangle	39,376	255	15	0.0	-1	Code Highlight:376,415
+385909	Disappear	1156	Rectangle	39,391	255	15	0.0	-1	Code Highlight:415,446
+385909	Disappear	1157	Rectangle	39,406	35	15	0.0	-1	Code Highlight:446,452
+385910	Appear	1164	Rectangle	79,376	203	15	0.0	-1	Code Highlight:384,415
+385921	Appear	1165	Rectangle	407,119	125	33	0.0	-1	local variable: Square square
+386122	Disappear	1165	Rectangle	397,99	125	33	0.0	-1	local variable: Square square
+386206	Appear	1166	Rectangle	326,389	22	22	0.0	-1	value: (int) 3
+386408	Appear	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386409	Modify	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386459	Modify	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386460	Modify	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386518	Modify	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386518	Modify	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386568	Modify	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386568	Modify	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386618	Modify	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386619	Disappear	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386639	Disappear	1166	Rectangle	326,389	22	22	0.0	-1	value: (int) 3
+386639	Disappear	1167	Rectangle	326,389	22	22	0.0	-1	variable casted from int to double
+386640	Other	1168							AnimationStopped
+386823	Button	1169							StepButton
+386823	Other	1170							AnimationStarted
+386833	Disappear	1164	Rectangle	79,376	203	15	0.0	-1	Code Highlight:384,415
+386833	Appear	1171	Rectangle	191,376	91	15	0.0	-1	Code Highlight:400,415
+386846	Appear	1172	Rectangle	586,91	123	34	0.0	-1	constructor invocation: Square
+387047	Appear	1173	Rectangle	326,389	22	22	0.0	-1	value: (double) 3
+387048	Modify	1173	Rectangle	322,385	22	22	0.0	-1	value: (double) 3
+387098	Modify	1173	Rectangle	368,347	22	22	0.0	-1	value: (double) 3
+387098	Modify	1173	Rectangle	414,309	22	22	0.0	-1	value: (double) 3
+387151	Modify	1173	Rectangle	460,271	22	22	0.0	-1	value: (double) 3
+387151	Modify	1173	Rectangle	506,233	22	22	0.0	-1	value: (double) 3
+387201	Modify	1173	Rectangle	552,195	22	22	0.0	-1	value: (double) 3
+387202	Modify	1173	Rectangle	598,157	22	22	0.0	-1	value: (double) 3
+387252	Modify	1173	Rectangle	645,119	22	22	0.0	-1	value: (double) 3
+387253	Disappear	1173	Rectangle	681,97	22	22	0.0	-1	value: (double) 3
+387253	Modify	1172	Rectangle	586,91	123	34	0.0	-1	constructor invocation: Square
+387274	Other	1174							AnimationStopped
+388543	Button	1175							StepButton
+388544	Other	1176							AnimationStarted
+388570	Disappear	1171	Rectangle	191,376	91	15	0.0	-1	Code Highlight:400,415
+388571	Appear	1177	Rectangle	191,376	91	15	0.0	-1	Code Highlight:400,415
+388592	Appear	1178	Rectangle	591,359	202	23	0.0	-1	object stage: Object of the class Square
+388593	Modify	1178	Rectangle	591,359	202	38	0.0	-1	object stage: Object of the class Square
+388594	Scroll	1179		316	71	575	401			Scroll: Theater: On screen at: 316,71,590,416
+388594	Scroll	1180		316	71	575	401			Scroll: Theater: On screen at: 316,71,590,416
+388594	Scroll	1181		316	71	575	401			Scroll: Theater: On screen at: 316,71,590,470
+388643	Modify	1178	Rectangle	591,359	202	53	0.0	-1	object stage: Object of the class Square
+388644	Modify	1178	Rectangle	591,359	202	69	0.0	-1	object stage: Object of the class Square
+388693	Modify	1178	Rectangle	591,359	202	84	0.0	-1	object stage: Object of the class Square
+388695	Modify	1178	Rectangle	591,359	202	100	0.0	-1	object stage: Object of the class Square
+388743	Modify	1178	Rectangle	591,359	202	115	0.0	-1	object stage: Object of the class Square
+388745	Modify	1178	Rectangle	591,359	202	131	0.0	-1	object stage: Object of the class Square
+388794	Modify	1178	Rectangle	591,359	202	136	0.0	-1	object stage: Object of the class Square
+388820	Other	1182							AnimationStopped
+390095	Button	1183							StepButton
+390095	Other	1184							AnimationStarted
+390310	Scroll	1185		316	71	575	416			Scroll: Theater: On screen at: 316,71,590,470
+390311	Scroll	1186		316	71	575	416			Scroll: Theater: On screen at: 316,71,575,470
+390312	Disappear	1177	Rectangle	191,376	91	15	0.0	-1	Code Highlight:400,415
+390312	Appear	1187	Rectangle	51,91	84	15	0.0	-1	Code Highlight:70,91
+390353	Appear	1188	Rectangle	605,387	186	33	0.0	-1	object variable: double width
+390556	Disappear	1189	Rectangle	454,105	34	22	0.0	-1	value: (double) 0.0
+390556	Disappear	1188	Rectangle	330,99	186	33	0.0	-1	object variable: double width
+390577	Other	1190							AnimationStopped
+391092	Button	1191							StepButton
+391093	Other	1192							AnimationStarted
+391105	Disappear	1187	Rectangle	51,91	84	15	0.0	-1	Code Highlight:70,91
+391105	Appear	1193	Rectangle	51,91	133	15	0.0	-1	Code Highlight:70,91
+391116	Appear	1194	Rectangle	605,423	191	33	0.0	-1	object variable: double height
+391317	Disappear	1195	Rectangle	459,141	34	22	0.0	-1	value: (double) 0.0
+391317	Disappear	1194	Rectangle	330,135	191	33	0.0	-1	object variable: double height
+391338	Other	1196							AnimationStopped
+392074	Button	1197							StepButton
+392075	Other	1198							AnimationStarted
+392088	Disappear	1193	Rectangle	51,91	133	15	0.0	-1	Code Highlight:70,91
+392089	Appear	1199	Rectangle	51,256	77	15	0.0	-1	Code Highlight:257,270
+392098	Appear	1200	Rectangle	621,459	175	33	0.0	-1	object variable: double side
+392300	Disappear	1201	Rectangle	459,177	34	22	0.0	-1	value: (double) 0.0
+392300	Disappear	1200	Rectangle	346,171	175	33	0.0	-1	object variable: double side
+392321	Other	1202							AnimationStopped
+393204	Button	1203							StepButton
+393205	Other	1204							AnimationStarted
+393218	Disappear	1199	Rectangle	51,256	77	15	0.0	-1	Code Highlight:257,270
+393218	Appear	1205	Rectangle	51,271	243	15	0.0	-1	Code Highlight:274,292
+393218	Appear	1206	Rectangle	39,286	255	15	0.0	-1	Code Highlight:294,308
+393219	Appear	1207	Rectangle	39,301	19	15	0.0	-1	Code Highlight:310,318
+393228	Modify	1208	Rectangle	316,71	212	79	0.0	-1	method frameSquarecreatd
+393279	Modify	1209	Rectangle	316,71	212	88	0.0	-1	method frameSquarecreatd
+393279	Modify	1210	Rectangle	316,71	212	98	0.0	-1	method frameSquarecreatd
+393329	Modify	1211	Rectangle	316,71	212	107	0.0	-1	method frameSquarecreatd
+393329	Modify	1212	Rectangle	316,71	212	116	0.0	-1	method frameSquarecreatd
+393379	Modify	1213	Rectangle	316,71	212	126	0.0	-1	method frameSquarecreatd
+393379	Modify	1214	Rectangle	316,71	212	135	0.0	-1	method frameSquarecreatd
+393430	Modify	1215	Rectangle	316,71	212	138	0.0	-1	method frameSquarecreatd
+393472	Appear	1216	Rectangle	336,101	212	23	0.0	-1	method frameSquarecreatd
+393473	Modify	1216	Rectangle	336,101	212	38	0.0	-1	method frameSquarecreatd
+393523	Modify	1216	Rectangle	336,101	212	53	0.0	-1	method frameSquarecreatd
+393523	Modify	1216	Rectangle	336,101	212	69	0.0	-1	method frameSquarecreatd
+393574	Modify	1216	Rectangle	336,101	212	84	0.0	-1	method frameSquarecreatd
+393574	Modify	1216	Rectangle	336,101	212	100	0.0	-1	method frameSquarecreatd
+393624	Modify	1216	Rectangle	336,101	212	115	0.0	-1	method frameSquarecreatd
+393624	Modify	1216	Rectangle	336,101	212	131	0.0	-1	method frameSquarecreatd
+393674	Modify	1216	Rectangle	336,101	212	136	0.0	-1	method frameSquarecreatd
+393677	Appear	1217	Rectangle	591,359	11	20	0.0	-1	reference: (Square) -1
+393678	Modify	1217	Rectangle	587,355	11	20	0.0	-1	reference: (Square) -1
+393728	Modify	1217	Rectangle	578,326	11	20	0.0	-1	reference: (Square) -1
+393729	Modify	1217	Rectangle	569,297	11	20	0.0	-1	reference: (Square) -1
+393779	Modify	1217	Rectangle	561,268	11	20	0.0	-1	reference: (Square) -1
+393779	Modify	1217	Rectangle	552,239	11	20	0.0	-1	reference: (Square) -1
+393829	Modify	1217	Rectangle	544,210	11	20	0.0	-1	reference: (Square) -1
+393829	Modify	1217	Rectangle	535,181	11	20	0.0	-1	reference: (Square) -1
+393879	Modify	1217	Rectangle	526,152	11	20	0.0	-1	reference: (Square) -1
+393885	Disappear	1217	Rectangle	525,137	11	20	0.0	-1	reference: (Square) -1
+393889	Modify	1173	Rectangle	677,93	22	22	0.0	-1	value: (double) 3
+393943	Modify	1173	Rectangle	651,102	22	22	0.0	-1	value: (double) 3
+393943	Modify	1173	Rectangle	626,112	22	22	0.0	-1	value: (double) 3
+393994	Modify	1173	Rectangle	600,121	22	22	0.0	-1	value: (double) 3
+393994	Modify	1173	Rectangle	575,131	22	22	0.0	-1	value: (double) 3
+394044	Modify	1173	Rectangle	550,141	22	22	0.0	-1	value: (double) 3
+394044	Modify	1173	Rectangle	524,150	22	22	0.0	-1	value: (double) 3
+394094	Modify	1173	Rectangle	499,160	22	22	0.0	-1	value: (double) 3
+394094	Disappear	1173	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+394096	Disappear	1173	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+394096	Disappear	1173	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+394096	Disappear	1172	Rectangle	586,91	123	34	0.0	-1	constructor invocation: Square
+394096	Disappear	1173	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+394096	Disappear	1172	Rectangle	586,91	123	34	0.0	-1	constructor invocation: Square
+394098	Appear	1218	Rectangle	586,91	0	0	0.0	-1	null
+394108	Modify	1218	Rectangle	586,91	0	0	0.0	-1	null
+394158	Modify	1218	Rectangle	586,88	0	0	0.0	-1	null
+394158	Modify	1218	Rectangle	586,85	0	0	0.0	-1	null
+394208	Modify	1218	Rectangle	586,83	0	0	0.0	-1	null
+394208	Modify	1218	Rectangle	586,80	0	0	0.0	-1	null
+394258	Modify	1218	Rectangle	586,78	0	0	0.0	-1	null
+394264	Modify	1218	Rectangle	586,75	0	0	0.0	-1	null
+394308	Modify	1218	Rectangle	586,72	0	0	0.0	-1	null
+394438	Other	1219							AnimationStopped
+395476	Button	1220							StepButton
+395477	Other	1221							AnimationStarted
+395482	Disappear	1205	Rectangle	51,271	243	15	0.0	-1	Code Highlight:274,292
+395482	Disappear	1206	Rectangle	39,286	255	15	0.0	-1	Code Highlight:294,308
+395482	Disappear	1207	Rectangle	39,301	19	15	0.0	-1	Code Highlight:310,318
+395482	Appear	1222	Rectangle	79,286	42	15	0.0	-1	Code Highlight:300,308
+395505	Disappear	1223	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+395505	Appear	1224	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+395506	Modify	1224	Rectangle	482,167	22	22	0.0	-1	value: (double) 3
+395557	Modify	1224	Rectangle	514,205	22	22	0.0	-1	value: (double) 3
+395557	Modify	1224	Rectangle	546,243	22	22	0.0	-1	value: (double) 3
+395607	Modify	1224	Rectangle	578,281	22	22	0.0	-1	value: (double) 3
+395607	Modify	1224	Rectangle	610,319	22	22	0.0	-1	value: (double) 3
+395657	Modify	1224	Rectangle	643,358	22	22	0.0	-1	value: (double) 3
+395658	Modify	1224	Rectangle	675,396	22	22	0.0	-1	value: (double) 3
+395712	Modify	1224	Rectangle	707,434	22	22	0.0	-1	value: (double) 3
+395754	Other	1225							AnimationStopped
+397608	Button	1226							ConflictButton
+398386	Other	1227							ConflictChecked
+399547	Button	1228							StepButton
+399553	Other	1229							AnimationStarted
+399564	Disappear	1222	Rectangle	79,286	42	15	0.0	-1	Code Highlight:300,308
+399564	Appear	1230	Rectangle	191,376	91	15	0.0	-1	Code Highlight:400,415
+399614	Appear	1231	Rectangle	515,201	27	36	0.0	-1	null
+399818	Modify	1217	Rectangle	521,133	11	20	0.0	-1	reference: (Square) -1
+399868	Modify	1217	Rectangle	520,142	11	20	0.0	-1	reference: (Square) -1
+399870	Modify	1217	Rectangle	520,151	11	20	0.0	-1	reference: (Square) -1
+399918	Modify	1217	Rectangle	520,161	11	20	0.0	-1	reference: (Square) -1
+399925	Modify	1217	Rectangle	519,170	11	20	0.0	-1	reference: (Square) -1
+399968	Modify	1217	Rectangle	519,179	11	20	0.0	-1	reference: (Square) -1
+399981	Modify	1217	Rectangle	519,189	11	20	0.0	-1	reference: (Square) -1
+400026	Modify	1217	Rectangle	519,198	11	20	0.0	-1	reference: (Square) -1
+400079	Other	1232							AnimationStopped
+401509	Button	1233							StepButton
+401509	Other	1234							AnimationStarted
+401627	Modify	1216	Rectangle	336,101	212	134	0.0	-1	method frameSquarecreatd
+401627	Modify	1231	Rectangle	511,197	27	36	0.0	-1	null
+401678	Modify	1216	Rectangle	336,101	212	117	0.0	-1	method frameSquarecreatd
+401678	Modify	1231	Rectangle	511,197	27	36	0.0	-1	null
+401678	Modify	1216	Rectangle	336,101	212	101	0.0	-1	method frameSquarecreatd
+401678	Modify	1231	Rectangle	511,197	27	36	0.0	-1	null
+401728	Modify	1216	Rectangle	336,101	212	84	0.0	-1	method frameSquarecreatd
+401729	Modify	1231	Rectangle	511,197	27	36	0.0	-1	null
+401729	Modify	1216	Rectangle	336,101	212	67	0.0	-1	method frameSquarecreatd
+401729	Modify	1231	Rectangle	511,197	27	36	0.0	-1	null
+401779	Modify	1216	Rectangle	336,101	212	51	0.0	-1	method frameSquarecreatd
+401779	Modify	1231	Rectangle	511,197	27	36	0.0	-1	null
+401779	Modify	1216	Rectangle	336,101	212	34	0.0	-1	method frameSquarecreatd
+401779	Modify	1231	Rectangle	511,197	27	36	0.0	-1	null
+401829	Modify	1216	Rectangle	336,101	212	29	0.0	-1	method frameSquarecreatd
+401830	Disappear	1235	Rectangle	437,129	105	33	0.0	-1	local variable: Square this
+401830	Disappear	1236	Rectangle	486,171	22	22	0.0	-1	value: (double) 3
+401830	Disappear	1237	Rectangle	389,165	153	33	0.0	-1	local variable: double s
+401830	Disappear	1216	Rectangle	336,101	212	29	0.0	-1	method frameSquarecreatd
+401830	Modify	1231	Rectangle	511,197	27	36	0.0	-1	null
+401893	Modify	1218	Rectangle	586,71	29	36	0.0	-1	null
+401894	Modify	1231	Rectangle	511,197	27	36	0.0	-1	null
+401947	Modify	1218	Rectangle	586,73	29	36	0.0	-1	null
+401948	Modify	1231	Rectangle	520,182	27	36	0.0	-1	null
+401948	Modify	1218	Rectangle	586,76	29	36	0.0	-1	null
+401948	Modify	1231	Rectangle	529,168	27	36	0.0	-1	null
+401998	Modify	1218	Rectangle	586,78	29	36	0.0	-1	null
+401998	Modify	1231	Rectangle	538,154	27	36	0.0	-1	null
+401998	Modify	1218	Rectangle	586,81	29	36	0.0	-1	null
+401998	Modify	1231	Rectangle	547,139	27	36	0.0	-1	null
+402048	Modify	1218	Rectangle	586,84	29	36	0.0	-1	null
+402049	Modify	1231	Rectangle	557,125	27	36	0.0	-1	null
+402049	Modify	1218	Rectangle	586,86	29	36	0.0	-1	null
+402049	Modify	1231	Rectangle	566,111	27	36	0.0	-1	null
+402099	Modify	1218	Rectangle	586,89	29	36	0.0	-1	null
+402099	Modify	1231	Rectangle	575,96	27	36	0.0	-1	null
+402099	Disappear	1238	Rectangle	594,99	11	20	0.0	-1	reference: (Square) 16cdbb8
+402100	Disappear	1231	Rectangle	586,91	27	36	0.0	-1	null
+402100	Appear	1239	Rectangle	586,91	29	36	0.0	-1	Expression: null: 
+402100	Disappear	1240	Rectangle	594,99	11	20	0.0	-1	reference: (Square) 16cdbb8
+402100	Disappear	1231	Rectangle	586,91	27	36	0.0	-1	null
+402100	Disappear	1239	Rectangle	586,91	29	36	0.0	-1	Expression: null: 
+402121	Other	1241							AnimationStopped
+402621	Button	1242							StepButton
+402621	Other	1243							AnimationStarted
+402630	Disappear	1230	Rectangle	191,376	91	15	0.0	-1	Code Highlight:400,415
+402631	Appear	1244	Rectangle	79,376	203	15	0.0	-1	Code Highlight:384,415
+402658	Appear	1245	Rectangle	594,99	11	20	0.0	-1	reference: (Square) 16cdbb8
+402659	Modify	1245	Rectangle	590,95	11	20	0.0	-1	reference: (Square) 16cdbb8
+402709	Modify	1245	Rectangle	579,98	11	20	0.0	-1	reference: (Square) 16cdbb8
+402710	Modify	1245	Rectangle	569,102	11	20	0.0	-1	reference: (Square) 16cdbb8
+402767	Modify	1245	Rectangle	559,105	11	20	0.0	-1	reference: (Square) 16cdbb8
+402768	Modify	1245	Rectangle	548,109	11	20	0.0	-1	reference: (Square) 16cdbb8
+402818	Modify	1245	Rectangle	538,113	11	20	0.0	-1	reference: (Square) 16cdbb8
+402818	Modify	1245	Rectangle	528,116	11	20	0.0	-1	reference: (Square) 16cdbb8
+402868	Modify	1245	Rectangle	518,120	11	20	0.0	-1	reference: (Square) 16cdbb8
+402889	Disappear	1246	Rectangle	594,99	11	20	0.0	-1	reference: (Square) 16cdbb8
+402889	Disappear	1231	Rectangle	586,91	27	36	0.0	-1	null
+402889	Disappear	1239	Rectangle	586,91	29	36	0.0	-1	Expression: null: 
+402946	Appear	1247	Rectangle	326,389	22	22	0.0	-1	value: (int) 3
+403160	Appear	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403161	Modify	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403211	Modify	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403211	Modify	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403261	Modify	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403262	Modify	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403312	Modify	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403312	Modify	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403362	Modify	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403362	Disappear	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403383	Disappear	1247	Rectangle	326,389	22	22	0.0	-1	value: (int) 3
+403383	Disappear	1248	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403405	Appear	1249	Rectangle	326,389	22	22	0.0	-1	value: (int) 3
+403608	Appear	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403609	Modify	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403660	Modify	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403660	Modify	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403715	Modify	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403715	Modify	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403765	Modify	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403766	Modify	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403816	Modify	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403816	Disappear	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403836	Disappear	1249	Rectangle	326,389	22	22	0.0	-1	value: (int) 3
+403836	Disappear	1250	Rectangle	326,389	22	34	0.0	-1	variable casted from int to double
+403837	Other	1251							AnimationStopped
+404777	Button	1252							ConflictButton
+405837	Other	1253							ConflictChecked
+406742	Button	1254							StepButton
+406744	Other	1255							AnimationStarted
+406760	Disappear	1244	Rectangle	79,376	203	15	0.0	-1	Code Highlight:384,415
+406760	Appear	1256	Rectangle	79,391	147	15	0.0	-1	Code Highlight:423,446
+406773	Appear	1257	Rectangle	586,91	230	34	0.0	-1	object method invocation: .setFields
+406773	Appear	1258	Rectangle	515,127	11	20	0.0	-1	reference: (null) null
+406774	Modify	1258	Rectangle	511,123	11	20	0.0	-1	reference: (null) null
+406825	Modify	1258	Rectangle	521,119	11	20	0.0	-1	reference: (null) null
+406825	Modify	1258	Rectangle	531,115	11	20	0.0	-1	reference: (null) null
+406875	Modify	1258	Rectangle	541,111	11	20	0.0	-1	reference: (null) null
+406875	Modify	1258	Rectangle	551,107	11	20	0.0	-1	reference: (null) null
+406925	Modify	1258	Rectangle	561,103	11	20	0.0	-1	reference: (null) null
+406926	Modify	1258	Rectangle	571,99	11	20	0.0	-1	reference: (null) null
+406976	Modify	1258	Rectangle	581,95	11	20	0.0	-1	reference: (null) null
+406976	Disappear	1258	Rectangle	592,97	11	20	0.0	-1	reference: (null) null
+406976	Modify	1257	Rectangle	586,91	230	34	0.0	-1	object method invocation: .setFields
+406978	Appear	1259	Rectangle	326,389	34	22	0.0	-1	value: (double) 3.0
+406978	Appear	1260	Rectangle	326,389	34	22	0.0	-1	value: (double) 3.0
+406987	Modify	1259	Rectangle	322,385	34	22	0.0	-1	value: (double) 3.0
+406987	Modify	1260	Rectangle	322,385	34	22	0.0	-1	value: (double) 3.0
+407156	Modify	1259	Rectangle	374,347	34	22	0.0	-1	value: (double) 3.0
+407156	Modify	1260	Rectangle	379,347	34	22	0.0	-1	value: (double) 3.0
+407156	Modify	1259	Rectangle	426,309	34	22	0.0	-1	value: (double) 3.0
+407156	Modify	1260	Rectangle	437,309	34	22	0.0	-1	value: (double) 3.0
+407206	Modify	1259	Rectangle	479,271	34	22	0.0	-1	value: (double) 3.0
+407206	Modify	1260	Rectangle	495,271	34	22	0.0	-1	value: (double) 3.0
+407206	Modify	1259	Rectangle	531,233	34	22	0.0	-1	value: (double) 3.0
+407206	Modify	1260	Rectangle	553,233	34	22	0.0	-1	value: (double) 3.0
+407256	Modify	1259	Rectangle	583,195	34	22	0.0	-1	value: (double) 3.0
+407256	Modify	1260	Rectangle	611,195	34	22	0.0	-1	value: (double) 3.0
+407257	Modify	1259	Rectangle	636,157	34	22	0.0	-1	value: (double) 3.0
+407257	Modify	1260	Rectangle	669,157	34	22	0.0	-1	value: (double) 3.0
+407307	Modify	1259	Rectangle	688,119	34	22	0.0	-1	value: (double) 3.0
+407307	Modify	1260	Rectangle	726,119	34	22	0.0	-1	value: (double) 3.0
+407307	Disappear	1259	Rectangle	729,97	34	22	0.0	-1	value: (double) 3.0
+407307	Modify	1257	Rectangle	586,91	230	34	0.0	-1	object method invocation: .setFields
+407308	Disappear	1260	Rectangle	771,97	34	22	0.0	-1	value: (double) 3.0
+407308	Modify	1257	Rectangle	586,91	230	34	0.0	-1	object method invocation: .setFields
+407336	Other	1261							AnimationStopped
+408577	Button	1262							StepButton
+408579	Other	1263							AnimationStarted
+408607	Disappear	1256	Rectangle	79,391	147	15	0.0	-1	Code Highlight:423,446
+408608	Appear	1264	Rectangle	51,151	243	15	0.0	-1	Code Highlight:119,162
+408608	Appear	1265	Rectangle	39,166	255	15	0.0	-1	Code Highlight:164,181
+408608	Appear	1266	Rectangle	39,181	255	15	0.0	-1	Code Highlight:183,201
+408608	Appear	1267	Rectangle	39,196	19	15	0.0	-1	Code Highlight:203,207
+408609	Modify	1268	Rectangle	316,71	212	84	0.0	-1	method framesquare.setFieldscreatd
+408660	Modify	1269	Rectangle	316,71	212	98	0.0	-1	method framesquare.setFieldscreatd
+408660	Modify	1270	Rectangle	316,71	212	112	0.0	-1	method framesquare.setFieldscreatd
+408710	Modify	1271	Rectangle	316,71	212	126	0.0	-1	method framesquare.setFieldscreatd
+408710	Modify	1272	Rectangle	316,71	212	140	0.0	-1	method framesquare.setFieldscreatd
+408760	Modify	1273	Rectangle	316,71	212	154	0.0	-1	method framesquare.setFieldscreatd
+408760	Modify	1274	Rectangle	316,71	212	168	0.0	-1	method framesquare.setFieldscreatd
+408811	Modify	1275	Rectangle	316,71	212	172	0.0	-1	method framesquare.setFieldscreatd
+408853	Appear	1276	Rectangle	336,101	212	23	0.0	-1	method framesquare.setFieldscreatd
+408854	Modify	1276	Rectangle	336,101	212	43	0.0	-1	method framesquare.setFieldscreatd
+408907	Modify	1276	Rectangle	336,101	212	63	0.0	-1	method framesquare.setFieldscreatd
+408907	Modify	1276	Rectangle	336,101	212	83	0.0	-1	method framesquare.setFieldscreatd
+408957	Modify	1276	Rectangle	336,101	212	103	0.0	-1	method framesquare.setFieldscreatd
+408958	Modify	1276	Rectangle	336,101	212	123	0.0	-1	method framesquare.setFieldscreatd
+409008	Modify	1276	Rectangle	336,101	212	143	0.0	-1	method framesquare.setFieldscreatd
+409008	Modify	1276	Rectangle	336,101	212	164	0.0	-1	method framesquare.setFieldscreatd
+409058	Modify	1276	Rectangle	336,101	212	170	0.0	-1	method framesquare.setFieldscreatd
+409062	Modify	1258	Rectangle	588,93	11	20	0.0	-1	reference: (null) null
+409113	Modify	1258	Rectangle	579,98	11	20	0.0	-1	reference: (null) null
+409113	Modify	1258	Rectangle	570,103	11	20	0.0	-1	reference: (null) null
+409163	Modify	1258	Rectangle	561,108	11	20	0.0	-1	reference: (null) null
+409163	Modify	1258	Rectangle	553,113	11	20	0.0	-1	reference: (null) null
+409213	Modify	1258	Rectangle	544,119	11	20	0.0	-1	reference: (null) null
+409214	Modify	1258	Rectangle	535,124	11	20	0.0	-1	reference: (null) null
+409264	Modify	1258	Rectangle	527,129	11	20	0.0	-1	reference: (null) null
+409264	Disappear	1258	Rectangle	525,137	11	20	0.0	-1	reference: (null) null
+409268	Modify	1259	Rectangle	725,93	34	22	0.0	-1	value: (double) 3.0
+409268	Modify	1260	Rectangle	767,93	34	22	0.0	-1	value: (double) 3.0
+409318	Modify	1259	Rectangle	692,102	34	22	0.0	-1	value: (double) 3.0
+409318	Modify	1260	Rectangle	729,107	34	22	0.0	-1	value: (double) 3.0
+409318	Modify	1259	Rectangle	660,112	34	22	0.0	-1	value: (double) 3.0
+409318	Modify	1260	Rectangle	691,121	34	22	0.0	-1	value: (double) 3.0
+409368	Modify	1259	Rectangle	627,121	34	22	0.0	-1	value: (double) 3.0
+409369	Modify	1260	Rectangle	653,135	34	22	0.0	-1	value: (double) 3.0
+409369	Modify	1259	Rectangle	595,131	34	22	0.0	-1	value: (double) 3.0
+409369	Modify	1260	Rectangle	615,150	34	22	0.0	-1	value: (double) 3.0
+409424	Modify	1259	Rectangle	563,141	34	22	0.0	-1	value: (double) 3.0
+409424	Modify	1260	Rectangle	577,164	34	22	0.0	-1	value: (double) 3.0
+409424	Modify	1259	Rectangle	530,150	34	22	0.0	-1	value: (double) 3.0
+409425	Modify	1260	Rectangle	540,178	34	22	0.0	-1	value: (double) 3.0
+409474	Modify	1259	Rectangle	498,160	34	22	0.0	-1	value: (double) 3.0
+409474	Modify	1260	Rectangle	502,193	34	22	0.0	-1	value: (double) 3.0
+409475	Disappear	1259	Rectangle	480,171	34	22	0.0	-1	value: (double) 3.0
+409475	Disappear	1260	Rectangle	480,207	34	22	0.0	-1	value: (double) 3.0
+409477	Disappear	1259	Rectangle	480,171	34	22	0.0	-1	value: (double) 3.0
+409477	Disappear	1260	Rectangle	480,207	34	22	0.0	-1	value: (double) 3.0
+409477	Disappear	1259	Rectangle	480,171	34	22	0.0	-1	value: (double) 3.0
+409477	Disappear	1260	Rectangle	480,207	34	22	0.0	-1	value: (double) 3.0
+409477	Disappear	1257	Rectangle	586,91	230	34	0.0	-1	object method invocation: .setFields
+409477	Disappear	1259	Rectangle	480,171	34	22	0.0	-1	value: (double) 3.0
+409477	Disappear	1260	Rectangle	480,207	34	22	0.0	-1	value: (double) 3.0
+409477	Disappear	1257	Rectangle	586,91	230	34	0.0	-1	object method invocation: .setFields
+409477	Disappear	1277	Rectangle	586,91	0	0	0.0	-1	Expression: 
+409483	Appear	1278	Rectangle	586,91	0	0	0.0	-1	null
+409485	Modify	1278	Rectangle	586,91	0	0	0.0	-1	null
+409535	Modify	1278	Rectangle	586,88	0	0	0.0	-1	null
+409535	Modify	1278	Rectangle	586,85	0	0	0.0	-1	null
+409585	Modify	1278	Rectangle	586,83	0	0	0.0	-1	null
+409586	Modify	1278	Rectangle	586,80	0	0	0.0	-1	null
+409636	Modify	1278	Rectangle	586,78	0	0	0.0	-1	null
+409636	Modify	1278	Rectangle	586,75	0	0	0.0	-1	null
+409686	Modify	1278	Rectangle	586,72	0	0	0.0	-1	null
+409774	Other	1279							AnimationStopped
+410528	Button	1280							StepButton
+410530	Other	1281							AnimationStarted
+410546	Disappear	1264	Rectangle	51,151	243	15	0.0	-1	Code Highlight:119,162
+410546	Disappear	1265	Rectangle	39,166	255	15	0.0	-1	Code Highlight:164,181
+410546	Disappear	1266	Rectangle	39,181	255	15	0.0	-1	Code Highlight:183,201
+410546	Disappear	1267	Rectangle	39,196	19	15	0.0	-1	Code Highlight:203,207
+410546	Appear	1282	Rectangle	79,166	63	15	0.0	-1	Code Highlight:170,181
+410565	Disappear	1283	Rectangle	480,171	34	22	0.0	-1	value: (double) 3.0
+410565	Appear	1284	Rectangle	480,171	34	22	0.0	-1	value: (double) 3.0
+410567	Modify	1284	Rectangle	476,167	34	22	0.0	-1	value: (double) 3.0
+410617	Modify	1284	Rectangle	509,195	34	22	0.0	-1	value: (double) 3.0
+410617	Modify	1284	Rectangle	542,224	34	22	0.0	-1	value: (double) 3.0
+410667	Modify	1284	Rectangle	575,253	34	22	0.0	-1	value: (double) 3.0
+410667	Modify	1284	Rectangle	608,282	34	22	0.0	-1	value: (double) 3.0
+410717	Modify	1284	Rectangle	641,311	34	22	0.0	-1	value: (double) 3.0
+410718	Modify	1284	Rectangle	674,340	34	22	0.0	-1	value: (double) 3.0
+410767	Modify	1284	Rectangle	707,369	34	22	0.0	-1	value: (double) 3.0
+410816	Other	1285							AnimationStopped
+412043	Button	1286							StepButton
+412045	Other	1287							AnimationStarted
+412062	Disappear	1282	Rectangle	79,166	63	15	0.0	-1	Code Highlight:170,181
+412062	Appear	1288	Rectangle	79,181	70	15	0.0	-1	Code Highlight:189,201
+412079	Disappear	1289	Rectangle	480,207	34	22	0.0	-1	value: (double) 3.0
+412079	Appear	1290	Rectangle	480,207	34	22	0.0	-1	value: (double) 3.0
+412081	Modify	1290	Rectangle	476,203	34	22	0.0	-1	value: (double) 3.0
+412131	Modify	1290	Rectangle	509,231	34	22	0.0	-1	value: (double) 3.0
+412131	Modify	1290	Rectangle	542,260	34	22	0.0	-1	value: (double) 3.0
+412181	Modify	1290	Rectangle	575,289	34	22	0.0	-1	value: (double) 3.0
+412182	Modify	1290	Rectangle	608,318	34	22	0.0	-1	value: (double) 3.0
+412232	Modify	1290	Rectangle	641,347	34	22	0.0	-1	value: (double) 3.0
+412232	Modify	1290	Rectangle	674,376	34	22	0.0	-1	value: (double) 3.0
+412282	Modify	1290	Rectangle	707,405	34	22	0.0	-1	value: (double) 3.0
+412324	Other	1291							AnimationStopped
+412880	Button	1292							StepButton
+412885	Other	1293							AnimationStarted
+413008	Modify	1276	Rectangle	336,101	212	157	0.0	-1	method framesquare.setFieldscreatd
+413058	Modify	1276	Rectangle	336,101	212	137	0.0	-1	method framesquare.setFieldscreatd
+413058	Modify	1276	Rectangle	336,101	212	117	0.0	-1	method framesquare.setFieldscreatd
+413109	Modify	1276	Rectangle	336,101	212	97	0.0	-1	method framesquare.setFieldscreatd
+413109	Modify	1276	Rectangle	336,101	212	77	0.0	-1	method framesquare.setFieldscreatd
+413159	Modify	1276	Rectangle	336,101	212	57	0.0	-1	method framesquare.setFieldscreatd
+413160	Modify	1276	Rectangle	336,101	212	36	0.0	-1	method framesquare.setFieldscreatd
+413210	Modify	1276	Rectangle	336,101	212	30	0.0	-1	method framesquare.setFieldscreatd
+413210	Disappear	1294	Rectangle	437,129	105	33	0.0	-1	local variable: Square this
+413210	Disappear	1295	Rectangle	480,171	34	22	0.0	-1	value: (double) 3.0
+413210	Disappear	1296	Rectangle	385,165	157	33	0.0	-1	local variable: double w
+413210	Disappear	1297	Rectangle	480,207	34	22	0.0	-1	value: (double) 3.0
+413210	Disappear	1298	Rectangle	388,201	154	33	0.0	-1	local variable: double h
+413210	Disappear	1276	Rectangle	336,101	212	30	0.0	-1	method framesquare.setFieldscreatd
+413278	Modify	1278	Rectangle	586,71	0	0	0.0	-1	null
+413328	Modify	1278	Rectangle	586,73	0	0	0.0	-1	null
+413328	Modify	1278	Rectangle	586,76	0	0	0.0	-1	null
+413378	Modify	1278	Rectangle	586,78	0	0	0.0	-1	null
+413379	Modify	1278	Rectangle	586,81	0	0	0.0	-1	null
+413429	Modify	1278	Rectangle	586,84	0	0	0.0	-1	null
+413429	Modify	1278	Rectangle	586,86	0	0	0.0	-1	null
+413481	Modify	1278	Rectangle	586,89	0	0	0.0	-1	null
+413572	Other	1299							AnimationStopped
+414765	Button	1300							ConflictButton
+415639	Other	1301							ConflictChecked
+418072	Other	1302							JeliotClose

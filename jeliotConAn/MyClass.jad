@@ -1,0 +1,24 @@
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+
+import koala.dynamicjava.interpreter.TreeInterpreter;
+
+public class MyClass
+{
+
+    public static void main()
+    {
+        Object aobj[] = new Object[0];
+        TreeInterpreter.invokeMethod("MyClass#main()koala.dynamicjava.interpreter.TreeClassLoader@7cc9c9", null, aobj);
+    }
+
+    public MyClass()
+    {
+        Object aobj1[];
+        aobj1 = new Object[0];
+        Object aobj[] = TreeInterpreter.interpretArguments("MyClass#<init>()koala.dynamicjava.interpreter.TreeClassLoader@7cc9c9", aobj1);
+        super();
+        TreeInterpreter.invokeMethod("MyClass#<init>()koala.dynamicjava.interpreter.TreeClassLoader@7cc9c9", this, aobj1);
+    }
+}
