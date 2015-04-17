@@ -1,0 +1,3 @@
+Jeliot 3 is a Program Visualization application. It visualizes how a Java program is interpreted. Method calls, variables, operation are displayed on a screen as the animation goes on, allowing the student to follow step by step the execution of a program.
+
+Programs in Jeliot can be created from scratch or they can be modifyed from previously stored code examples. The Java program being animated does not need any kind of additional calls, all the visualization is automatically generated. Jeliot 3 understands most of the Java constructs and it is able to animate them. Especial effort is currenlty being addressed to animate object oriented features, such as inheritance.
